@@ -1,0 +1,431 @@
+- Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
+- Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
+- CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
+
+- Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
+- https://funcall.blogspot.com/
+- https://google.github.io/styleguide/lispguide.xml?showone=Pathnames#Macros
+- Diferentiation in lisp (resume at 11:00)
+  https://www.youtube.com/watch?v=EyhL1DNrSME
+- Reader Macros in Common Lisp
+  https://gist.github.com/chaitanyagupta/9324402
+- nes https://ahefner.livejournal.com/20528.html
+- https://z0ltan.wordpress.com/2016/09/02/basic-concurrency-and-parallelism-in-common-lisp-part-3-concurrency-using-bordeaux-and-sbcl-threads/
+- https://github.com/emacs-helm/helm-sly
+- https://ambrevar.xyz/modern-common-lisp/index.html
+- https://lainchan.org/~lisp/textdumps-and-videos.txt
+- defun-inline
+- (princ-to-string :this)
+- defgeneric, you can put the default method in it under (:method (arg arg) nil)
+- readonly is a slot defstruct arg
+- One can use reinitialize-instance to avoid allocating a new instance of
+  a thing and instead reset the values to the default initargs
+  http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
+- golang slices
+  https://github.com/tpapp/cl-slice
+- haskell list functions
+  https://github.com/Dimercel/listopia
+- clojure
+  https://github.com/ruricolist/cloture
+  https://github.com/joinr/clclojure
+#+begin_src
+(define-test in-lisp-many-things-are-true
+  ;; In Common Lisp, the canonical values for truth is T.
+  ;; However, everything that is non-NIL is true, too.
+  (true-or-false? t 5)
+  (true-or-false? nil (not 5))
+  (true-or-false? t "a string")
+  ;; Even an empty string...
+  (true-or-false? t "")
+  ;; ...or a list containing a NIL...
+  (true-or-false? t (list nil))
+  ;; ...or an array with no elements...
+  (true-or-false? t (make-array 0))
+  ;; ...or the number zero.
+  (true-or-false? t 0))
+#+end_src
+* youtube
+- Common LISP Object Standard
+  https://www.youtube.com/watch?v=IrmHp1rRQ68
+- Lisp NYC
+  https://vimeo.com/lispnyc
+  https://www.youtube.com/channel/UCv33UlfX5S4PKxozGwUY_pA
+- Patrik Stein -  https://vimeo.com/nklein
+- ELS https://www.youtube.com/channel/UC55S8D_44ge2cV10aQmxNVQ/
+- MIT 6.001 Structure and Interpretation, 1986
+  https://www.youtube.com/playlist?list=PLE18841CABEA24090
+- kraklisp https://www.youtube.com/channel/UCymtXMj1M7cKiV9TKLoTtEg
+- INF4820 https://www.youtube.com/c/INF4820/
+- Baggers https://www.youtube.com/user/CBaggers
+- Neil Munro https://www.youtube.com/user/njalmunro
+- Allegro CL https://www.youtube.com/c/FranzAllegroCL/
+- Fare https://www.youtube.com/c/Fran%C3%A7oisRen%C3%A9Rideau/
+- "afp" https://www.youtube.com/channel/UCYg6qFXDE5SGT_YXhuJPU0A/
+** AFP Concurrency on Lisp - https://www.youtube.com/watch?v=3c7LwUjb-DU
+- Bourdeux Threads
+  - Initial bindings, to control the local environment.
+  - Locks: (with-lock-held ())
+  - Recursive locks: multiple operations on the same thread, take/release/take/release..
+  - Semaphores: "a thread safe counter", signal and wait
+  - Condition Locks: A lock + A conditional variable (not thread safe)
+- Atomics
+  - incf: use a cons and FIXNUM
+  - cas: COMPARE-AND-SWAP on sbcl works on (slot-value)
+- Memory order, "it prevents re-ordering across the fence"
+  - (sb-thread:barrier)
+- lparallel: channels/workers support, priority, queue, pmap, promises
+* cffi
+- function argument is a pointer to something
+#+begin_src
+iplCreateContext(IPLLogFunction     logCallback,
+                IPLAllocateFunction allocateCallback,
+                IPLFreeFunction     freeCallback,
+                IPLhandle*          context)
+#+end_src
+#+begin_src
+(let ((context (cffi:foreign-alloc :pointer)))
+  (format t "raw: ~a pointer: ~a~%" context (cffi:mem-ref context :pointer))
+  (ipl-create-context (cffi:null-pointer)
+                      (cffi:null-pointer)
+                      (cffi:null-pointer)
+                      context)
+  (format t "daw: ~a pointer: ~a~%" context (cffi:mem-ref context :pointer))
+  context)
+#+end_src
+- function that returns a pointer to a pointer
+  https://stackoverflow.com/questions/35841771/common-lisp-cffi-pointer-to-the-pointer
+- cffi: array of c struct accessing
+#+begin_src
+(cffi:defcstruct tryout
+  (low  :float)
+  (high :int))
+(cffi:with-foreign-object (thing '(:struct tryout) 2)
+  (cffi:with-foreign-slots ((low high) (cffi:mem-aptr thing '(:struct tryout) 0) (:struct tryout))
+    (setf low 1s0)
+    (setf high 10))
+  (cffi:with-foreign-slots ((low high) (cffi:mem-aptr thing '(:struct tryout) 1) (:struct tryout))
+    (setf low 2s0)
+    (setf high 20))
+  (print (cffi:mem-aref thing '(:struct tryout) 1))
+  (print (cffi:mem-aref thing '(:struct tryout) 0)))
+#+end_src
+* koans
+- string and array are atoms
+- a string is NOT a list
+- nil is both a list and an atom
+- (let) binds to nil by default
+- (block TAG) and (return-from TAG RETURN-VALUE) exists..
+  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node85.html
+- CLOSURE takes precedence over local vars
+- dynamic vars exists...can be (declare (special VAR)), changes binding (outer takes precedence)
+  http://clhs.lisp.se/Body/d_specia.htm
+- to match a T or NIL on a (case), put them between parentheses
+- eql: numbers, characters and objects (if they are the same instance)
+- equal: strings...
+- (cons) can be used to preppend something to a list
+- (push) does it inplace
+- one can think on (push) and (pop) as acting on CAR and CDR
+- (append) and (nconc), do the same but one is desctructive
+- (last) returns the last CONS cell
+- proper lists end with NIL on the last CDR
+- (list*) builds a non-proper list
+- (list-length) exists and works on cyclic lists
+- cyclic-lists exists in standards CL, where the last CDR refers to another cons cell (from the same list i guess)
+  #+begin_src
+  (let ((list        (list 1 2 3 4 5))
+        (cyclic-list (list 1 2 3 4 5)))
+    (setf (cdr (last cyclic-list)) cyclic-list))
+  #+end_src
+- (array-) rank, dimensions, total-size = 2, '(8 8), 64
+* CLOS
+** Common Lisp Recipies
+ - &key arguments on (initialize-instance :after) are valid on (make-instance)
+ - 13.4 - Providing Constructors for your classes
+   All generic with &allow-other-key
+   - (make-instance) - where :default-initargs are combined with :initform and :initarg
+   - (allocate-instance) - new empty object
+   - (initialize-instance) - does nothing but call...
+   - (shared-initialize) -
+ - Change class, from classa to classb:
+   See: https://www.snellman.net/blog/archive/2015-07-27-use-cases-for-change-class-in-common-lisp/
+   specialize main method below, to doset new values, common/new are already merged
+   #+begin_src lisp
+   (defmethod update-instance-for-different-class ((old classa) (new classb) &key)
+     (setf (slot-value new 'name)
+           (format nil "~A ~A"
+                   (slot-value old 'fname)
+                   (slot-value old 'lname))))
+   #+end_src
+ - Change definition of class (of the same class)
+   #+begin_src lisp
+   (defmethod update-instance-for-redefined-class ((old classa) added deleted plist &key
+     (declare (ignore added deleted))
+     (setf (slot-value obj 'name)
+           (format nil "~A ~A"
+                   (getf plist 'fname)
+                   (getf plist 'lname))))
+   #+end_src
+ - 13.7 Whenever you’re attempting to read the value of an unbound slot of a CLOS object,
+   the function SLOT-UNBOUND is called, which by default signals an error.
+   #+begin_src lisp
+   (defmethod slot-unbound (class (object classa) (slot-name (eql 'first-access)))
+     (setf (slot-value object 'first-access)
+           (get-universal-time))))
+   #+end_src
+** https://franz.com/lab/intermediate/
+ - https://www.youtube.com/watch?v=aCNhmcXF8nw
+ - (princ-to-string :this)
+ - (defgeneric amethod (a1 a2)
+ :argument-precedence-order a2 a1)
+ - All *before-methods* in most-specific-*first* order.
+ The most specific *primary* method.
+ All *after-methods* in most-specific-*last* order.
+ - Each class in the list of superclasses can contribute a component of the
+ effective method
+ - Primary method performs the bulk of the work and returns values
+ – Before methods do error checking and preparation
+ – After methods perform side-effects and cleanup
+ - Most specific :around first
+ - on primary method, using (call-next-method) is all the :before :after :around methods
+** Libraries
+- Efficiently represent several finite sets or small integers as a single non-negative integer.
+  https://github.com/marcoheisig/bitfield
+- Naive generators for Common Lisp
+  https://github.com/cbeo/gtwiwtg
+- https://github.com/EuAndreh/defclass-std
+  shorthand
+- https://github.com/pcostanza/filtered-functions
+  "wrapper around eql for defmethod arguments, adding a filter function before method call"
+- https://github.com/fisxoj/sanity-clause
+  "validates proper initialization data types"
+- https://github.com/kennytilton/cells
+  https://github.com/kennytilton/cells/wiki
+  "reactive, creates virtual slots that are really a call to slot or global"
+- https://github.com/sellout/quid-pro-quo
+  "contract programming, "requirements" before execute and "guarantees" after,
+   as well as "invariants" for the whole class.
+   Beyond type checking is a check of state local or global"
+* Other
+ - https://github.com/hipeta/arrow-macros
+ - https://github.com/dlowe-net/local-time
+ - Portable CL:*FEATURES* - https://github.com/trivial-features/trivial-features
+ - https://common-lisp-libraries.readthedocs.io/
+ - https://github.com/eschulte/memoize
+   Thread safe memoized defuns, using a synchronized type of hash table
+   See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
+ - https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
+ - https://common-lisp.net/project/metabang-bind/user-guide.html
+ - https://gitlab.com/mbabich/cl-chess   - (chess GUI)
+ - https://github.com/html/clache        - can be used for file score saving on game
+ - https://github.com/orivej/defmemo     - cache function call
+ - https://github.com/slyrus/opticl      - image
+ - https://github.com/Shinmera/flow      - graph
+ - https://github.com/Shinmera/flare - value transition
+ - https://github.com/lmj/global-vars/
+ - Pileup provides a portable, performant, and thread-safe binary heap
+   https://github.com/nikodemus/pileup
+   https://nikodemus.github.io/pileup/
+** incandescent
+- actor container: idea being position depend on the container not actors,
+  like and object and a particle system. Or an object and his hitbox (this one
+  is inherence)
+* web
+|         | desc                 | url                                                             |
+|---------+----------------------+-----------------------------------------------------------------|
+| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
+| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
+| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
+| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
+
+* chip-8
+http://stevelosh.com/blog/2016/12/chip8-cpu/
+* books
+- https://leanpub.com/lovinglisp/read
+  https://github.com/mark-watson/loving-common-lisp
+* Binary/stream
+** Franz
+- bits of integer:
+  > #b10
+- print in base 2 (let ((*print-base* 2)) (print #b10))
+  (logior #b100 #b110) ; OR
+  (logand #b100 #b110) ; AND
+- logxor, logeqv, lognand, lognor, logandc1, logandc2, logorc1, logorc2
+- Bit Testing
+  #+begin_src lisp
+  (logtest FLAGS MASK) ; T if bits in mask are 1
+  (logbitp 1 FLAGS)    ; T if second bit is 1
+  (logcount FLAGS)     ; count 1 bits
+  #+end_src
+- Vector bit, aref-able
+  (make-array 32 :element-type 'bit :initial-element 0)
+- Note: Shifting to infity (to bignum)
+  #+begin_src lisp
+  (ash #b10 +1) -> #b100
+  (ash #b10 -1) -> #b1
+  #+end_src
+- Subseq like thing for bits, setf-able
+  #+begin_src lisp
+  (ldb (byte SIZE POSITION) #b111000111)
+  (ldb (byte 4 0)           #b0111)     ; rightmost 4 bits
+  (ldb (byte 4 4)           #b1100)     ; next 4 bits
+  (ldb (byte 8 0)           #b11000111) ; lowest  bits
+  #+end_src
+** Libraries
+|                | desc                                           | url                                        |
+|----------------+------------------------------------------------+--------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8) | https://github.com/cl-babel/babel          |
+| bit-smasher    | utilities for bit vectors                      | https://github.com/thephoeron/bit-smasher  |
+| bitio          | read multiples of 8 bits                       | https://github.com/psilord/bitio           |
+| conspack       | encode and decode data types                   | https://github.com/conspack/cl-conspack    |
+| fast-io        |                                                | https://github.com/rpav/fast-io/           |
+| flexi-streams  | read/write, octects                            | https://github.com/edicl/flexi-streams/    |
+| nibbles        | read/write 16/32/64 bits from octet vectors    | https://github.com/froydnj/nibbles         |
+| static-vectors | vectors from lisp to C                         | https://github.com/sionescu/static-vectors |
+| swap-bytes     | changing endianness of unsigned integers       | https://github.com/sionescu/swap-bytes     |
+* event
+- GOTO 2017 • The Many Meanings of Event-Driven Architecture • Martin Fowler
+  https://www.youtube.com/watch?v=STKCRSUsyP0
+- Usages:
+  - event-driven: cascade update of things based on a single change (reverse dependencies)
+  - event vs command
+  - observers/emitters architecture
+  - async tasks
+- Programming a MessageBus in Common Lisp https://www.youtube.com/watch?v=CNFr7zIfyeM
+** lparallel - https://github.com/lmj/lparallel
+- doc https://lparallel.org/kernel/
+- kind of like go channels (might be can be called jobs)
+  #+begin_src lisp
+  (let ((channel (make-channel)))
+    (submit-task channel '+ 3 4)
+    (submit-task channel (lambda () (+ 5 6)))
+    (list (receive-result channel)
+          (receive-result channel)))
+  ; => (7 11) or (11 7)
+  #+end_src
+- blocking queue
+  #+begin_src lisp
+  (defpackage :queue-example (:use :cl :lparallel :lparallel.queue))
+  (in-package :queue-example)
+
+  (let ((queue   (make-queue))
+        (channel (make-channel)))
+    (submit-task channel (lambda () (list (pop-queue queue)
+                                     (pop-queue queue))))
+    (push-queue "hello" queue)
+    (push-queue "world" queue)
+    (receive-result channel))
+  ;; => ("hello" "world")
+  #+end_src
+- example using channels and queue
+  https://github.com/mfiano/pyx/blob/6c77101741b006db343391a4ec8cafb34ed7728f/src/base/thread-pool.lisp
+**  eventbus - https://github.com/noloop/eventbus
+- eventbus
+  - make-eventbus
+  - get-all-events-name
+  - get-all-listeners-of-event
+  - get-listener-count-of-event
+  - remove-all-listeners-of-event
+  - off
+  - on
+  - once
+  - emit
+- example
+  #+begin_src lisp
+  EVENTBUS> (let ((e (make-eventbus)))
+              (once e :my-event-name
+                    (lambda ()
+                      (print "ONCE")))
+              (on e :my-event-name
+                  (lambda ()
+                    (print "ON")))
+              (once e :my-event-name
+                    (lambda ()
+                      (print "ONCE?")))
+              (emit e :my-event-name)
+              t)
+  "ONCE?"
+  "ON"
+  "ONCE"
+  T
+  #+end_src
+**     deeds - https://github.com/Shinmera/deeds
+- doc https://shinmera.github.io/deeds/
+- example https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0151-deeds.org
+* Testing
+https://lisp-lang.org/learn/writing-libraries
+https://lisp-lang.org/learn/continuous-integration
+** parachute - https://github.com/Shinmera/parachute
+:perform (asdf:test-op (op c) (uiop:symbol-call :parachute :test :test-package))
+** fiveam    - https://github.com/sionescu/fiveam
+:perform (asdf:test-op (o s) (uiop:symbol-call :fiveam :run! 'quasirpg-tests:all-tests))
+- Game of Life TDD in Common Lisp
+  https://www.youtube.com/watch?v=-7QRrUpWR34
+- https://github.com/Ferada/cl-mock/
+  - count the nr of e
+  http://turtleware.eu/posts/Tutorial-Working-with-FiveAM.html
+  #+begin_src common-lisp
+  (test test-+
+    "Test the + function"     ;optional description
+    (is (= 0 (+ 0 0)))
+    (is (= 4 (+ 2 2)))
+    (is (= 1/2 (+ 1/4 1/4))))
+  #+end_src
+** quickproject
+- fiveam, travis, gitignore, coc
+  https://github.com/fisxoj/fishproject/tree/master/template
+- fiasco or cacau with assert-p
+  https://github.com/maruks/quickproject-templates
+  https://github.com/noloop/cacau http://quickdocs.org/assert-p/
+  https://github.com/joaotavora/fiasco
+* Binary Release
+- https://github.com/fiddlerwoaroof/daydreamer
+- https://github.com/zodmaner/cl-makefile-template
+- https://github.com/phoe-trash/furcadia-post-splitter/
+- gitignore of ./bin
+- Makefile
+- .travis.yml
+- use deploy
+* Documentation
+- staple
+- git config for ./doc ?
+* Logging
+- verbose
+* Logic Programming
+ - https://github.com/sjl/temperance
+   docs https://docs.stevelosh.com/temperance/usage/
+ - https://github.com/nikodemus/screamer - logic programming
+   - https://unwindprotect.com/constraint-programming
+   - https://i-need-closures.blogspot.com/2006/03/
+   - https://engineering.purdue.edu/~qobi/papers/aaai93.pdf
+   - https://www.youtube.com/watch?v=z7V5BL6W3CA
+ - Behind the Scenes with Auto Layout - iOS Conf SG 2019 https://www.youtube.com/watch?v=gxfyb3ipUFg
+ - https://github.com/Shinmera/classowary
+   https://shinmera.github.io/classowary/
+* Design Patterns
+** Peter Norvig - in Dynamic Programming
+   First-class types     : Abstract-Factory, Flyweight, Factory-Method, State, Proxy, Chain-Of-Responsibility
+   First-class functions : Command, Strategy, Template-Method, Visitor
+   Macros                : Interpreter, Iterator
+   Method Combination    : Mediator, Observer
+   Multimethods          : Builder
+   Modules               : Facade
+** https://wiki.c2.com/?AreDesignPatternsMissingLanguageFeatures
+  Visitor.................. GenericFunctions (MultipleDispatch)
+  Factory.................. MetaClasses, closures
+  Singleton................ MetaClasses
+  Iterator................. AnonymousFunctions, (used with HigherOrderFunctions, MapFunction, FilterFunction, etc.)
+  Interpreter.............. Macros (extending the language) EvalFunction, MetaCircularInterpreter Support for parser generation (for differing syntax)
+  Command.................. Closures, LexicalScope, AnonymousFunctions, FirstClassFunctions
+  HandleBody............... Delegation, Macros, MetaClasses
+  RunAndReturnSuccessor.... TailCallOptimization
+  Abstract-Factory
+  Flyweight
+  Factory-Method
+  State
+  Proxy
+  Chain-of-Responsibility.. FirstClass types (Norvig)
+  Mediator, Observer....... Method combination (Norvig)
+  Builder.................. Multi Methods (Norvig)
+  Facade................... Modules (Norvig)
+  Strategy................. higher order functions (Gene Michael Stover?), ControlTable
+  AssociationList.......... Dictionaries, maps, HashTables (these go by numerous names in different languages)

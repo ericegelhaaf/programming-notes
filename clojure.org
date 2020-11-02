@@ -1,0 +1,187 @@
+- Simulating Machines in Clojure https://stopa.io/post/255
+- Podcast - https://clojuredesign.club/
+- Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
+- Podcast - Eric Normad - https://www.youtube.com/channel/UC2riBMG3qf1Di20ouRc76BA/videos
+- Course - Brian Will - the Clojure language - https://www.youtube.com/playlist?list=PLAC43CFB134E85266
+- Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
+- ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW
+- Fulcro – Part 1: Getting Started https://www.youtube.com/watch?v=wEjNWUMCX78
+- https://github.com/functional-koans/clojure-koans/
+- https://github.com/bbatsov/clojure-style-guide
+- https://clojuredocs.org/quickref
+* Personalities
+** Rich Hickey
+- Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr
+- https://github.com/tallesl/Rich-Hickey-fanclub
+* Tools
+- nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
+  https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
+* Web
+- https://www.youtube.com/watch?v=wEjNWUMCX78&list=PLVi9lDx-4C_T7jkihlQflyqGqU4xVtsfi
+** threeagent
+- https://martin.varela.fi/2019/11/01/webgl-react-and-no-javascript/
+  https://www.youtube.com/watch?v=myigRnZHhTw
+** quil
+- https://github.com/quil/quil-templates/
+- https://gist.github.com/mmzsource/340322e6ff4b17be8b7dcb84d16d5172
+#+begin_src
+:profiles {:dev {:source-paths ["src"]
+                   :repl-options {:nrepl-middleware
+                                  [cider.piggieback/wrap-cljs-repl]}
+                   :dependencies [[figwheel-sidecar "0.5.19"]
+                                  [cider/piggieback "0.4.1"]]}}
+#+end_src
+- https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/
+* Overtone
+- https://github.com/pjagielski/disclojure
+* Books
+** TODO Book: Clojurescript unraveled
+|       |           |                   |                 | predicate? | function?    |
+|-------+-----------+-------------------+-----------------+------------+--------------|
+| list  | ()        | (list 1 2 3 4)    | '(1 2 3 4)      | false      |              |
+| map   | {}        | (hash-map :foo 1) | {:foo 1 :bar 2} | true       | lookup/nil   |
+| array | []        | (vector 1 2 3 1)  | [1 2 3]         | true       | lookup/error |
+| set   | #{}       | (set [1 2 3 1])   | #{1 2 3 4}      | true       |              |
+| queue | #queue [] |                   | #queue [1 2 3]  |            |              |
+*** 3.1 First steps
+- Lisp has ~no operators~, it only has functions.
+*** 3.2 The base data typs
+- Types: symbols, keywords, regexes, vars, atoms, volatiles
+  - Tries to use host language provided types
+    - integers are JS floating points
+  - symbols: start with a non-numeric character
+  - strings: are immutable
+  - chars: get converted to single char JS string \a \newline
+  - arrays: like lists can contain any type
+*** 3.3 Vars
+- vars are always ~top level~ in the namespace
+*** 3.4 Functions
+- lambdas: (fn [p1 p2] (+ p1 p2))
+           (def addme (fn [p1 p2] (+ p1 p2)))
+           (defn addme [p1 p2] (+ p1 p2)))
+- ~defn~ is a macro
+- multiple arity support
+- variadic support: in the form of a list
+- Lambdas:
+  #()
+  #(+ %1 %2)
+  #(* % %)
+  #(set %&)
+*** 3.5 Flow control
+- ~(if)~ is an expression and not a statement
+- (cond & clausules)
+  static branches, uses =
+- (condp pred expr & clausules)
+  on each clausule evals (pred TEST-EXPR expr)
+*** 3.6 Truthfulness
+- nil and false are the 2 ONLY false values
+- nil is not the empty list
+- Datastructures can be used as predicates
+  - (filter MAP/SET (range 1 10))
+  - (MAP/SET (range 1 10))
+*** 3.7 Locals, blocks and loops
+- ~(do)~ blocks are usually used for side effects
+- ~(loop)~
+  (loop [x 1]
+    (if (= x 2)
+      (println "done!")
+      (recur (inc x))))
+- ~(recur)~
+  (defn afunc
+    [x 1]
+    (if (= x 2)
+      (println "done!")
+      (recur (inc x))))
+- ~(for)~ is NOT used for iteration but for ~sequence comprehension~
+  aka generating sequences
+  - :let - local bindings, to bind nonseq values (?) let*?
+  - :when - stop the generation when is not valid
+  - :while
+- ~(doseq)~ is analogous to (for) but always returns nil
+- ~(run!)~ (run! println [1 2 3]) -  uses fast reduction
+*** 3.8 Collection types
+- either indexed or associative sequences (lists?)
+- ~(conj)~ (conj [1 2 3] 4) => [1 2 3 4]
+- clojure does with immutable collection by ~structural sharing~
+  thus not creating new memory for the same data
+- ~(rest)~ is just like ~(next)~ except for empty seqs
+ (rest []) => ()
+ (next []) => nil
+- (~seq~) - (seq []) => nil
+- ~nil-punning~ is testing for nil
+- (~map~) - can work on any sequence for maps, it receive a 2 item vector, key and value
+- (~conj~) - adds element/s to a collection
+- (~take-while~ #(< % 10) (range 100))
+- (~peek~) (~pop~)
+- (~vector~ 1 2 3 N) (~vec~ COLL)
+- (~assoc~ COLL IDX NEW) - sets instead of looking up
+- (~mapv~) and (~filterv~) - variants that return vector
+- (sorted-map) (sorted-map-by)
+  (sorted-set) (sorted-set-by)
+- (compare a b) =>
+  -1 if less
+   0 if equal
+   1 if greater
+- queues pop from the front and push from the back
+*** 3.9 Destructuring
+- everwhere when binding happens
+- ~:as~ support to keep the original
+- positional
+  - can happen on arguments, matches any seq(?)
+  #+begin_src clojure
+    (defn swap-pair [[fst snd]]
+      [snd fst])
+    (swap-pair [1 2]) ; => [2 1]
+    (swap-pair '(3 4)); => [4 3]
+  #+end_src
+  - support & for varying length
+- associative (maps,vectors)
+  - keys the are binding symbols (!
+    (let [{lang :language} {:language "Clojurescript"}]
+       lang)
+  - support for default on missing with ~:or~
+    (let [{name :name :or {name "Anon"}} {:language "Clojurescript"}]
+       name)
+  - shorthand with ~:keys~ or :strs or :syms
+    (let [{:keys [name surname]} {:name "Ciri" :surname "Fio"}]
+       [name surname])
+*** 3.10 Threading Macros
+- optional parents on threading funcs
+- in clojure/script, functions for...
+  - datastructures transformations consistently uses 1st arg
+  - sequences or collections transformations consistently use the last argument
+- -> first
+  ->> last
+  as-> replace with $
+  some-> they shortcircuit after the first nil
+  some->>
+  cond-> conditionally threads, conditions are separate from combination code
+  cond->>
+*** 3.11 Reader Conditionals
+*** 3.12 Namespaces
+- default ns "cljs.user"
+- (ns NS3 (~:require~ NS1 NS2))
+- (ns NS3 (:require [NS1 ~:as~ WHA]))
+- (ns NS3 (:require NS1 ~:refer~ [FUNC]))
+- :refer-clojure :exclude []
+*** 3.13 Abstractions and Polymorphism
+
+*** 3.14 Data types
+*** 3.15 Host interoperability
+*** 3.16 State management
+
+** Book: Etudes for Clojurescript
+*** 1
+- (in 'formulas.core)
+- (require 'formulas.core :reload)
+- (.pow js/Math NUMBER POWER)
+  (js/Math.pow NUMBER POWER)
+** Web development with Clojure - 2nd Edition
+*** 1
+- in (defproject) we can set the *entry point* with :main, :main myapp.core/foo, unset by default
+  you can it with:
+  > lein run
+- add/use luminus template for a quick webapp template
+  > lein new luminus guestbook +h2
+- hardcode a version by adding in ~/.lein/profiles.clj
+  {:user {:plugins [[luminus/lein-template "2.9.9.2"]]}}

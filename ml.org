@@ -1,0 +1,26 @@
+- https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi
+- Dialects:
+  - F
+  - Elm
+- https://en.wikipedia.org/wiki/Standard_ML
+- Introduction to SML
+  https://cs.lmu.edu/~ray/notes/introml/
+- ReasonML (mirageOS)
+  https://github.com/dysinger/restack
+* Video
+- Playlist: Functional Programming with Standard ML (University of Trento)
+  https://www.youtube.com/playlist?list=PLbdi8aNvDqlKKXdG7qn0rQsfH0z1hf7FC
+- Channel: Reason Vienna
+  https://www.youtube.com/channel/UCVVeX_-gN0sV51VAfayIrKA/videos?view=0&sort=dd&shelf_id=0
+** Video: Unikernels: the rise of the library hypervisor in MirageOS - https://www.youtube.com/watch?v=dn4ARS4lDlQ
+- slides: https://www.slideshare.net/Docker/unikernels-the-rise-of-the-library-hypervisor-in-mirageos
+- Hypervisors:
+  - run full OS emulation
+  - sit at the bottom of everything make it hard to compose into the whole architecture.
+- Unikernels:
+  - OS broken down into individual "libraries" (tcp/ip, device drivers, schedulers)
+  - linked by conf file and a bootloader
+- RESUME: 8:00
+** Video: How to make a Netcat (with OCaml/MirageOS) - Oskar M Grande
+  - https://www.youtube.com/watch?v=37cLNsnLozE
+    https://github.com/musha68k/chill-netcat

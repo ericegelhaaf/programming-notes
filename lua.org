@@ -1,0 +1,32 @@
+- love2d tutorials https://www.youtube.com/channel/UCcq3KOawHtjyN0ibjL4RzXQ
+- https://learnxinyminutes.com/docs/lua/
+- https://lua.programmingpedia.net/
+- http://lua-users.org/wiki/VarargTheSecondClassCitizen
+* mpv
+- https://mpv.io/manual/master/#lua-scripting
+  https://mpv.io/manual/master/#list-of-input-commands
+- https://github.com/davidde/mpv-autosub
+- https://github.com/CounterPillow/mpv-quack
+* youtube chat
+- https://github.com/vincasmiliunas/lua-basic-oauth2
+- https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/list
+- https://developers.google.com/youtube/v3/live/registering_an_application
+* Packaging
+- https://github.com/siffiejoe/lua-amalg/
+- https://gist.github.com/Penguinum/a251002ffd79ba9975a0aecbe8515b80
+* autocomplete
+** vscode
+- https://github.com/jalovatt/reaper-vs-code
+** emacs
+- stylesheet
+  https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html
+  https://orgmode.org/manual/Formula-syntax-for-Calc.html#Formula-syntax-for-Calc
+  http://ergoemacs.org/emacs/elisp_call_shell_command.html
+
+- http://p.hagelb.org/pnh-lua-completion.el.html
+  https://www.reddit.com/r/emacs/comments/4mmgny/best_practice_of_lua_programming_in_emacs/
+  "other autocompletion on emacs"
+- https://github.com/ptrv/company-lua/pull/6/files
+  "company-lua torch backend addition"
+- https://github.com/Lazzle/ZBS-REAPER-API-Gen/blob/master/zbs-reaper-api-gen.lua
+  "extract ZBS doc from reaper api"

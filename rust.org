@@ -1,0 +1,180 @@
+- https://github.com/bevyengine/bevy
+- tut dns server https://github.com/EmilHernvall/dnsguide
+- Implementing TCP in Rust (part 1) https://www.youtube.com/watch?v=bzja9fQWzdA
+- 4k demo https://github.com/janiorca/sphere_dance
+  https://www.codeslow.com/2020/07/writing-winning-4k-intro-in-rust.html
+  https://www.youtube.com/watch?v=SIkkYRQ07tU
+- https://research.mozilla.org/rust/
+* Video: Build a cryptocurrency! - Blockchain in Rust #01: Blocks & Hashing - https://www.youtube.com/watch?v=vJdT05zl6jk
+#+begin_src rust
+use supper:**; // import all files on project
+pub struct Block {
+  pub field1: u32,
+}
+[u8; 16]
+[0; 16]
+#+end_src
+- Create      [u8; 16]
+  Instantiate [0; 16]
+- use supper:**;
+* Video: 12 Things to Help You Learn Rust - https://www.youtube.com/watch?v=a8abW3RlOn8
+- println!
+  - basic:      {}
+  - alias(?:    {valx}
+  - debug:      {:?}
+  - positional: {0}
+- ALL variables are immutable by default
+- HOWEVER, shadowing of variables with the same name is possible with immutable vars
+* Video: Considering Rust - Jon Gjengset - https://www.youtube.com/watch?v=DnT-LUQgc7s
+- Generics
+  #+begin_src rust
+  struct MyVect<T> {
+  }
+  impl<T> MyVect<T> {
+    pub fn find<P>(&self, predicate: P) -> Option<&T>
+     where P: Fn(&T) -> bool
+    {
+      for v in self {
+        if predicate(v) {
+          return Some(v);
+        }
+      }
+      None
+    }
+  }
+  #+end_src
+- Algebraic data types: A type that contains other types
+- Zero-cost abstraction
+- ? "try operator" a error match, catch error
+- FREE ffi calls, given there is no interpreter that needs to be noticed of an external call
+- unsafe{} free compiler checks
+- bindgen - generates rust code from C header
+  cbindgen - generates a header file that you can use from other languages
+- tools that work with rust: perf, gdb/lldb, valgrind, llvm sanitizers
+* Video: Rust 101 - 2017 - E. Dunham - https://www.youtube.com/watch?v=FMqydRampuo
+- "Go is a SysAdmins programming language, Rust is language for system level programming."
+- Compiler can output:
+  - LLVM IR
+  - ASM
+- Macro syntax
+  - "shorthand for funftions with variable number of arguments." ???????
+  - end with "!", ex: println!
+- Rust team compiles all public projects (?) and PR breaking changes on code in Stable to those projects.
+* Video: Why would a python programmer learn rust when there are no jobs in it - 2019 - https://www.youtube.com/watch?v=IYLf8lUqR40
+- C++ has no stable ABI
+- Enumerated types can contain variables
+- Structures+Traits VS Objects
+- No exceptions
+- Does NOT support inheritance
+- Use the *has a* not the *is a* model
+- OO - Binding a method to a structure
+  #+begin_src rust
+  struct Point {
+    x: f64,
+    y: f64,
+  }
+  // A freestanding function - Borrowed point to a string
+  fn point_to_string(point: &Point) -> String { ... }
+  // an "inherent impl"
+  impl Point {
+    // automatically borrows the Point
+    fn to_string(&self) -> String { ... }
+  }
+  #+end_src
+- OO - Traits: A common method to multiple types
+  #+begin_src rust
+  trait Hash {
+    fn hash(&self) -> u64;
+  }
+  impl Hash for bool {
+    fn hash(&self) -> u64 {
+      if *self { 0 } else { 1 }
+    }
+  }
+  impl Hash for i64 {
+    fn hash(&self) -> u64 {
+      *self as u64
+    }
+  }
+  #+end_src
+* Video: All about rust - 2019 - Microsoft Developer - https://www.youtube.com/watch?v=FYGS2q1bljE
+- "Cost on the compiler"
+- linkerd "proxy" is written in Rust, the rest (cli, webservice) in Go
+- Libraries:
+  - Tokio: async run-time (similar to getty in Go)
+  - Hyper: http library that uses Tokio
+  - Tower: service framework
+- Microsoft IOT does some rust: https://github.com/Azure/iotedge/
+* Learn
+- https://github.com/sger/RustBooks
+- https://github.com/mre/idiomatic-rust
+- https://rams3s.github.io/rust-ebookshelf/
+- examples https://github.com/rust-lang/rust-by-example
+- examples https://github.com/rust-lang-nursery/rust-cookbook
+** Tutorial: EasyRust https://github.com/Dhghomon/easy_rust
+- usize, isize, are architecture dependant i32 or i64
+- usize are index size type
+- ~as~ used for casting, can be used twice
+- ~char~
+  - use single quotes for char
+  - chars are 4 bytes
+  - some characters are 1,2,3 or 4 bytes long
+  - len()
+  - chars().count()
+- type inference
+  #+begin_src rust
+  let a = 100_000; // default to i32
+  let b = 5.; // default to f64 ... but depending of context used it might choose f32...
+  let c: u8 = 1;
+  let d = 1u8;
+  #+end_src
+- return
+  #+begin_src rust
+  fn beta() -> i32 {
+    8 // without a ; it can be used like this, otherwise it would return ()
+    // return 8;
+  }
+  #+end_src
+- {} code blocks can be def anywhere, and return values from it
+- {}, {:?}, {:#?}
+- std::i8::MIN, std::i8::MAX
+- let mut x = 10; - mutability
+- let x = 2;      - shadowing, always the same type
+  let x = 10;
+- memory pointer
+  - stack is fixed size
+    heap is of undefined size
+  - let x = 3;
+    let b = &x; // b is a reference to x, b borrows x
+- format
+  - r#"raw\tlines\n"#
+  - b"this string bytes"
+  - \u{D589} - unicode printing
+  - {:P} - pointer
+    {:X}
+    {:b} {:x} {:o}, binary, hexa, and octal
+  - {variable:padding alignment minimum.maximum}
+    - alignment <>^
+- pointer
+|        | ownership | alloc? | initialization                 |
+|--------+-----------+--------+--------------------------------|
+| &str   | borrowed  | data?  | let a = "hello";               |
+| String | owned     | heap   | let a = String::from("hello"); |
+- std::mem::size_of::<String>() = 24bytes
+*** Weird
+- "Type inference means that if you don't tell the compiler the type, but it can decide by itself, it will decide."
+** Medium
+- https://doc.rust-lang.org/nightly/nomicon/
+- https://rust-unofficial.github.io/too-many-lists/
+- https://os.phil-opp.com/
+- https://github.com/dtolnay/proc-macro-workshop
+** Algorithms
+- Common data structures and algorithms in Rust
+  https://github.com/EbTech/rust-algorithms
+- Small exercises to get you used to reading and writing Rust code!
+  https://github.com/rust-lang/rustlings
+- Implementing Rosetta Code problems in Rust.
+  https://github.com/rust-rosetta/rust-rosetta
+* youtube
+- Jon Gjengset https://www.youtube.com/channel/UC_iD0xppBwwsrM9DegC5cQQ/
+- Crazcalm's Tech Stack https://www.youtube.com/channel/UCfgXeSss8LaDtlK0ohwUX_w

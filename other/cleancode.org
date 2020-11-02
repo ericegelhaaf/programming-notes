@@ -1,0 +1,111 @@
+* 1
+- Online: https://www.youtube.com/watch?v=Wibk0IfjfaI
+- Book: Implementation Patterns, by Kent Beck
+  https://www.goodreads.com/book/show/781559.Implementation_Patterns
+- Book: Object oriented analysis & Design with applications, by Grady Booch
+  https://www.goodreads.com/book/show/424923.Object_Oriented_Analysis_and_Design_with_Applications
+- Book: Working Affectively with Legacy Code, by Michael Feathers
+  https://www.goodreads.com/book/show/44919.Working_Effectively_with_Legacy_Code
+** "The productivity trap"
+- Of how developing on a new project **green field** is fast at the
+  the beggining but then it gets slower and slower.
+- Due the "mess" build into the code.
+- The harder you work the slower you go (in this scenarios)
+- **Brooke's Law** applies here, as if you add programers to a late project makes it later
+  Problem is also that old people and old code teach the new people.
+** "The Big redesign in the sky"
+- Start again, redesign
+- Starts promising, tho usually in charge of a "tiger team" (people who made the original thing)
+  Problem is that requirements are clutter into the "mess" of the current code, no documented.
+  These creates two separate systems for a while that could last years until both are on par.
+- It doesn't work
+
+** "Code rot"
+- "It was more complicated than I thought"
+- 1) Rigidity: resist change. Requires many changes to fix a bug or add a new behaviour.
+     Fragility: break when small changes are made.
+- 2) Inseparability: parts of the system can't be re-used in other parts of other systems.
+     Are impredictable, you never know if you can re-use components.
+- 3) Opacity: offuscated coded, bad designed
+** "Why does code rot?"
+- We write it
+- If we rush we would slow down
+- The only way to go fast is to keep **clean code**
+** "What is clean code?"
+- C++ Creator
+  - elegant (does a lot in few word)
+  - efficient (uses few cpu cycles)
+  - should do one thing
+- Grady Booch
+  - simple and direct
+  - reads like well written prose
+- Michael Feathers
+  - looks like is written for someone that cares
+- Cunningam, Inventor of Wiki's
+  - when every routine you reads what you expected
+** Addenum
+- "The boy scout rule": leave the code better than we found it
+- "Period luminosity relationship"
+  - Given the period you can predict the luminosity.
+  - Discovered from pulsating stars in Magallanes clouds.
+  - You can measure the distance with luminosity and period.
+
+* 2 - Names
+- Article: Ottinger's Rules for Variable and Class Naming
+  By Tim Ottinger
+  https://www.maultech.com/chrislott/resources/cstyle/ottinger-naming.html
+** Story: "Distance to the sun"
+- Distance from earth to sun, Aristarco de Samos.
+  Using a triangle between earth, moon and sun.
+  Distance to the moon was calculated using:
+  - the projection of the earth on the moon during eclipses
+  - Earth's circumference
+** "Reveal your intent"
+- If your name needs a comment, then the name doesn't sufficient reveal intent.
+- Adding **explanatory variables** can add intent.
+  Form a kind of "compilable comment".
+- True cost of software nowadays is on maintenance.
+** "Describe the problem"
+- Revealing implementation does NOT reveal intent.
+- When you have to read the code in order to understand the name, the name failed.
+- Communicating intent is the 1st priority, even before that if the code works.
+** "Avoid Desinformation"
+- Do not give names that create confusion.
+- The name should be as abstract as the class.
+- If the meanings of a function/class/variable changes, you should change the name
+** "Pronounceable Names"
+- Convenient for the authors AND readers
+- Not getYYYY, PC_GWDA, m_qdox(), ppp()
+  Not qty_tests, qty_pass, qty_pass_s, qty_skip, qty_fail
+** "Avoid encodings"
+- Like made up prefixes for types (especially on languages with type checking at compilation)
+    they obscure the code
+** "Parts of speech"
+| type              | name       | example                |
+|-------------------+------------+------------------------|
+| Enums             | adjetives  | isEmpty                |
+| Booleans          | predicates |                        |
+| Methods           | verbs      | postPayment/isPostable |
+| Variables/Classes | nouns      |                        |
+- Ignore/avoid some words like: "manager", "processor", "data" or "info"
+- do not use **nouns** for accessor (? use the **verb** getFirstName
+- properties in c# are methods pretending to be vars so they are **Nouns**
+- well writen prose
+* 3 - Functions
+- "Find all the classes on a design."
+  - Classes might be hidding in large functions
+- "A function should do only 1 thing, do it well, and do it only"
+** Story: What makes the sun shine
+- Kelvin: "The sun could derive his power from his own gravitational colapse.
+           It only needs to contract 15ms century to keep his energy output."
+- 1895 Bill Hermer? got the first Xray from his hand
+- Radioactivity is the source of the sun's power
+** The first rule of functions
+- Small
+  - up to 8 lines
+  - originally a screenfold: originally about 20 lines
+  - The argument for large functions lies on the recognition of the "shape" of the function
+     - It works for regulars, but new people will get lost
+    - Also from "efficiency" arguments
+      - Holds true, if only, on the core loop of your program
+  - A long function is where classes go to hide

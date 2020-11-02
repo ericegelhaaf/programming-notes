@@ -1,0 +1,116 @@
+- https://www.erlang-solutions.com/blog/the-sound-of-erlang-how-to-use-erlang-as-an-instrument.html?utm_source=twitter&utm_medium=social+
+- examples https://rosettacode.org/wiki/Category:Erlang
+- #{akey = AValue, ...} = AMap
+- [A,B|C]   = [1,2,3,4,5,6]
+  [A,B,C|D] = [1,2,3,4,5,6]
+- f({athing,{A,B},N}=C) ->
+    C
+- concurrency is an abstraction, parallelism is the real thing
+- from pattern matching with multiple signatures to "recieve"
+- doc https://erlang.org/doc/reference_manual/users_guide.html
+- doc https://erlang.org/doc/apps/stdlib/index.html
+* videos
+  - CodeSync - https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw
+  - ErlangSolutions - https://www.youtube.com/user/ErlangSolutions
+  - EMPEX - https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q
+  - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
+  - erlang español - https://www.youtube.com/playlist?list=PLmoxkf3gS-juT5cDrzP_ARdkqqSFU5X_3
+  - master 3 - https://www.youtube.com/playlist?list=PLR812eVbehlx6vgWGf2FLHjkksAEDmFjc
+  - master 2 - https://www.youtube.com/playlist?list=PLR812eVbehlwq4qbqswOWH7NLKjodnTIn
+  - erlang mooc - https://www.youtube.com/playlist?list=PLlML6SMLMRgAooeL26mW502jCgWikqx_n
+* libs
+  - https://github.com/whatsapp/erlfmt - code formatter
+  - https://github.com/erlang-ls/erlang_ls ls server
+  - https://github.com/g-andrade/locus ASN
+  - https://github.com/savonarola/agent  (otp agent implementation)
+  - https://github.com/aerosol/gen_cycle (otp recurring task)
+  - https://github.com/eproxus/grapherl  (graph otp system)
+* Learn
+  - https://github.com/ericdouglas/distributed-systems-journey
+  - https://github.com/zkessin/testing-erlang-book
+  - https://github.com/heroku/erlang-in-anger (book)
+  - https://github.com/oreillymedia/etudes-for-erlang
+  - https://github.com/inaka/erlang_guidelines
+  - https://github.com/Telichkin/otp_cheatsheet (cheatsheet of otp behaviours)
+  - https://adoptingerlang.org/
+  - https://spawnedshelter.com/ (links)
+  - https://github.com/0xAX/erlang-bookmarks/blob/master/ErlangBookmarks.md (links)
+** beam
+  - https://github.com/happi/theBeamBook
+  - http://beam-wisdoms.clau.se/en/latest/
+* misc
+  - https://bugzilla.redhat.com/show_bug.cgi?id=1672916
+    rebar is broken on redhat/fedora use rebar3
+  - about erlang:length (avoid it, especially on guards)
+    https://groups.google.com/forum/#!msg/erlang-programming/Qg4-AU7J5mM/DEM9MWvLdK4J
+* Books
+** Book: Learn some erlang for greater good
+- *_test() suffix run with eunit
+- *_test.erl suffix to a file name to test that file with eunit
+- *?assert() family to test and get nice error output
+- *_test_() suffix and ?_assert() to use ~Test Generators~ for failed/succeded output
+- return {setup,...} from suffixed _test_() to lifecycle a test generator
+- return {foreach,...} for doing individual lifecycles for the test generators
+- spawn,timeout,inorder,inparallel are some other test generator options
+* LFE https://github.com/rvirding/lfe/
+- https://en.wikipedia.org/wiki/LFE_(programming_language)
+  many back to back comparisons
+- https://github.com/lfe-rebar3/rebar3_lfe
+- https://github.com/arpunk/lchain
+  https://web.archive.org/web/20170725083457/https://www.makcorps.com/blog/lets-build-tiniest-blockchain-less-50-lines-python/
+- https://github.com/rvirding/lfe/wiki/Get-started---Macros
+- examples https://github.com/rvirding/lfe/tree/develop/examples
+- examples https://github.com/exercism/lfe
+- examples https://rosettacode.org/wiki/Category:LFE
+- utils https://github.com/lfex/lutil
+- testing https://github.com/lfex/ltest
+- https://github.com/cnbbooks/
+- doc https://lfe.io/books/tutorial/index.html
+- doc http://docs.lfe.io/current/index.html
+- doc https://github.com/cnbbooks/lfe-style-guide
+- SICP https://lfe.gitbooks.io/sicp/content/
+  https://github.com/cnbbooks/lfe-sicp
+https://lfe.io/books/casting-spels/
+- We can abuse (? defmacro to create complex guards and make it clear.
+  Due by design, on guards, we can only have kernel functions.
+** Type Creation
+|                 | ERLANG                      | LFE (short)                  | LFE (long)                                 |
+|-----------------+-----------------------------+------------------------------+--------------------------------------------|
+| list            | [1,2,3,4]                   | '(1 2 3 4)                   | (list 1 2 3 4)                             |
+| tuple           | {ok,2}                      | #(ok 2)                      | (tuple 'ok 2)                              |
+| proplist        | [{debug,1},{verbose,3}]     | '(#(debug 1) #(verbose 3))   | (list (tuple 'debug 1) (tuple 'verbose 3)) |
+| map             | #{foo=>1,bar=>2}            | #M(foo 1 bar 2)              | (map 'foo 1 'bar 2)                        |
+| record define   | -record(record_name,{name}) | (defrecord record-name name) |                                            |
+| record instance | #record_name{name=Name}     | #(record-name Name)          | (make-record-name name Name)               |
+** Type Access
+|          | ERLANG                     | LFE                         |
+|----------+----------------------------+-----------------------------|
+| list     | lists:nth(1,L)             | (lists:nth 1 L)             |
+| tuple    | element(1,T)               | (element 1 T)               |
+| proplist | proplist:get_value(key, L) | (proplist:get_value 'key L) |
+| map      | maps:get(field, M)         | (maps:get 'field M)         |
+| record   | X#record_name.field        | (record-name-name Record)   |
+** Type Destructure
+|          | ERLANG               | LFE              | LFE                           |
+|----------+----------------------+------------------+-------------------------------|
+| list     | [H¦T]                | `(,H . ,T)       | (cons first rest)             |
+| tuple    | {key,Value}          | `#(key ,Value)   | (tuple 'key value)            |
+| proplist | [{key, Value}]       | `(#(key ,Value)) | (list (tuple 'key value))     |
+| map      | #{key := Value}      |                  |                               |
+| record   | #dns_rr{type = Type} |                  | (match-record-name name Name) |
+
+** Videos
+*** Wherefore art thou LFE? - Robert Virding - https://www.youtube.com/watch?v=BvCBTpnlqs8
+- Erlang language *became* functional as they were working trying to solve other problems.
+- Data types:
+  - Numbers
+  - Atoms (lisp symbols)
+  - Lists
+  - Tuples (lisp vectors) ??
+  - Maps
+  - Binaries
+  - Opaque types
+- Syntax:
+[[./lfe.png]]
+
+https://www.proyectoelectronico.com/amplificadores-audio/amplificador-lm1875.html

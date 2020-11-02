@@ -1,0 +1,259 @@
+- Write web applications in Go without using a framework
+  https://www.youtube.com/playlist?list=PL41psiCma00wgiTKkAZwJiwtLTdcyEyc4
+- https://www.youtube.com/playlist?list=PLJbE2Yu2zumCe9cO3SIyragJ8pLmVv0z9
+- Will contracts replace interfaces? / Francesc Campoy
+  https://www.youtube.com/watch?v=E75b9kuyRKw
+  You can translate some of the behaviour of something (an object in other languages)
+    to an interface with methods associated. Like a Stack which has Pop, Push, Empty methods.
+  And then you have algoritms that can work with that interface.
+  However there are types that are not completely defined by JUST an interface. So it is
+   kind of an incomplete idea.
+  - Call Dispatch: f.Do()
+  - Interception Points: when an interface is provided for a struct type, the methods
+    of the interface are the interception points.
+- https://www.youtube.com/watch?v=29LLRKIL_TI
+  - Types can express State and Behavior
+    - State = struct
+    - Behavior = interface
+  - 1) Accept interfaces parameters
+  - 2) Use io.Reader, io.Writer
+  - 3) Do not abuse broader interfaces
+  - 4) on a broad sense:
+       functions do not depend of state or do not change, same input same output
+       method defines a behaviour of a type, depend of the state
+  - 5) pointer vs value
+  - 6) Custom error
+- flags custom arg http://blog.ralch.com/tutorial/golang-custom-flags/
+- SOCKS5 https://play.golang.org/p/l0iLtkD1DV (it also support HTTP_PROXY)
+- a set of vulnerable Golang programs https://github.com/trailofbits/not-going-anywhere
+- https://blog.golang.org/maps
+- Going Infinite, handling 1M websockets connections in Go
+  https://github.com/eranyanay/1m-go-websockets
+- Source analysis of sync.Mutex in golang
+  https://programmer.group/source-analysis-of-sync.mutex-in-golang.html
+- sync.RWMutex
+  https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
+- https://github.com/guardrailsio/awesome-golang-security
+- https://github.com/parsiya/Hacking-with-Go
+* Rob Pike
+https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
+- GopherFest 2015: Rob Pike on the move from C to Go in the toolchain
+  https://www.youtube.com/watch?v=cF1zJYkBW4A
+  - llvm was slow
+  - writing a compiler for your own language makes a language good for that...
+  - own abi
+  - own file format
+  - translated the C code of the compiler to Go using a "translator"
+* Learn
+- Learn Go Programming - Golang Tutorial for Beginners
+  https://www.youtube.com/watch?v=YS4e4q9oBaU
+- https://github.com/GoesToEleven/GolangTraining
+- https://github.com/ardanlabs/gotraining/tree/master/reading
+- https://github.com/SuperPaintman/the-evolution-of-a-go-programmer
+- https://github.com/Alikhll/golang-developer-roadmap
+- https://learnxinyminutes.com/docs/go/
+- https://github.com/dariubs/GoBooks
+- https://github.com/smallnest/go-best-practices
+- https://github.com/hoanhan101/ultimate-go
+- https://github.com/inancgumus/learngo/
+- https://github.com/quii/learn-go-with-tests
+- https://github.com/re4lity/Hacking-With-Golang
+- https://go101.org/article/tips.html#force-to-use-keyed-struct-literals
+- Style
+  https://github.com/dgryski/awesome-go-style lists of good practices
+  https://golang.org/doc/effective_go.html
+  https://github.com/golang/go/wiki/CodeReviewComments
+** Practical Go: Real world advice for writing maintainable Go programs
+   https://www.youtube.com/watch?v=gi7t6Pl9rxE
+   https://dave.cheney.net/practical-go/presentations/qcon-china.html
+   - Avoid naming with type, or  ex:
+     - companiesMap map[string]*Company
+     - config Config* // c Config* or conf *Config
+     - config1 Config*, config2 Config* // original Config*, updated Config*
+     - context context.Context // ctx context.Context
+* Book: Go in practice
+** 4.1
+- errors.New
+  fmt.Errorf
+- Sometimes, when returning a meaningful non-nil value we can ignore the error check
+- Custom error types
+  - When we need to return more than a string
+  - packages can export errors (errors.New) instances that can be ~err ==~
+  - Custom error, to add more data to the error
+     #+begin_src go
+type ParseError struct {
+    Message    string,
+    Line, Char int
+}
+func (p *ParseError) Error() string {
+   format := "%s on Line %d, Char %d"
+   return fmt.Sprintf(format, p.Message, p.Line, p.Char)
+}
+  #+end_src
+  - Default interface
+     #+begin_src go
+type error interface {
+    Error() string
+}
+     #+end_src
+- panics
+  - unwind the stack
+  - if unhandled unwind the whole stack
+  - signature is ~panic(interface{})~
+* Book: Black Hat Go - https://github.com/blackhat-go/bhg/
+** Chapter 5 DNS
+- with "net" package you can't set the resolver or run deep inspection (? on the result
+- RR interface doesn't have methods to get the response IP
+- to get the IP from a RR struct we use *type assertion* to create the data
+- you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
+* Book: Effective Go - https://golang.org/doc/effective_go.html
+- "go fmt" uses tabs
+- Unlike C, is OK return the address of a local variable (!
+** Control structures
+- if and switch accept an optional initialization statement like that of for
+- break and continue statements take an optional label to identify what to break or continue
+- for
+  - Go's for has no comma operator
+  - ++ and -- are statements not expressions.
+  - for pos, char := range "ANUTF8STRING"
+    works and steps over each unicode code points
+- switch
+  - do not need to be constants
+  - if no expression, it switches true, so if-else-if-else chain is possible ina switch
+  - cases can be comma separated
+  - case or default
+** Functions
+- named result parameters: get zeroed and if return has not args they are returned
+- defer: runs just before function returns, arguments are evaluated when defer executes not when call executes (immediatly)
+** Data
+*** New(T) allocates a zeroed pointer of type *T, often ready to use.
+    but different than a mere var
+  #+begin_src
+  p := new(SyncedBuffer)  // type *SyncedBuffer
+  var v SyncedBuffer      // type  SyncedBuffer
+  #+end_src
+*** when just New() isn't enough a constructor is provided, which calls New()
+    and initiializes the struct with some values.
+*** Composite Literal
+  - Can be used for arrays, slices and maps.
+    [4]string
+    []string
+    map[int]string
+  #+begin_src go
+  a := [...]string    {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+  s := []string       {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+  m := map[int]string {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+  #+end_src
+  - On a map, for a constructor
+  #+begin_src go
+    f := new(File)
+    f.fd = fd
+    f.name = name
+    f.dirinfo = nil
+    f.nepipe = 0
+    return f
+
+    File{fd, name, nil, 0}
+    return &F
+
+    return &File{fd, name, nil, 0}
+
+    return &File{fd: fd, name: name}
+
+    new(File) .. is the same as .. &File{} .. which is a .. *File
+  #+end_src
+*** make(T,...)
+  - for slices, maps and channels
+  - returns a not zeroed value of type T (not *T)
+*** arrays (building blocks for slices)
+  - arrays are values, you assign the whole thing
+    - or pass to a function a copy the whole thing not a reference
+  - [10]int and [20]int are different datatypes
+*** slices
+  - cap() returns the max length or capacity it might have
+  - Slices hold references to an underlying array,
+      and if you assign one slice to another, both refer to the same array.
+  - If a function takes a slice argument,
+      changes it makes to the elements of the slice will be visible to the caller.
+  - However, the metadata (structure holding the pointer, length and capacity) is passed
+      by value. So we need to return the slice again.
+*** 2d slices...
+*** Maps
+  - Like slices, maps hold references to an underlying data structure.
+     If you pass a map to a function that changes the contents of the map,
+     the changes will be visible in the caller.
+  - An attempt to fetch a map value with a key that is not present in the map
+     will return the zero value for the type of the entries in the map.
+  - Indexing also returns a second boolean value if is or isn't on the map.
+  - delete(Map, Key)
+*** Printing
+  - fmt.Print() fmt.Println() accept multiple args and print default format
+  - fmt.Print(), adds space between each
+  - fmt.Println(), adds space between each IF an arg is not a string, and adds newlin
+  - fmt.FPrint.. functions prints to a buffer (an object that implements the io.Writer interface)
+  - Format
+    -  %d format prints based on the type (uint/int)
+    -  %v prints the default...what fmt.Print() will show
+    - %+v prints with struct field names
+    - %#v prints in full Go syntax
+    -  %q quotes string or []byte
+          creates a rune from integer or rune
+    - %#q backquotes
+    -  %x hexa
+    -  %x spaced hexa
+    -  %T type
+  - to change the default printing define, *T is more effective to use than T for structs
+      func (t *T) String() string
+  - We write ...v after v in the nested call to Sprintln to tell the compiler
+      to treat v as a list of arguments; otherwise it would just pass v
+      as a single slice argument.
+  - There is also ...T for a variadic number of arguments of type T
+*** Append
+  - You can't actually write a function in Go where the type T is determined by the caller.
+** Initialization
+- Constants
+  - Defined at compile time.
+  - Either: numbers, charachters, strings or booleans.
+- init() function on each file, to verify or repair correctness of the program state.
+    packages initialization >
+** Interfaces and other types
+- Interfaces
+  - if something can do this, then it can be used here.
+  - Interfaces with only one or two methods are common in Go code
+  - A type can implement multiple interfaces.
+  - For instance, a collection can be sorted by the routines in package sort if it implements
+    - sort.Interface
+      - Len()
+      - Less(i, j int) bool
+      - Swap(i, j int)
+- Convertions
+  - It's an idiom in Go programs to convert the type of an expression to access a different set of methods. 
+** Blank Identifier
+  - unused import AND variables
+    #+begin_src go
+   var _ = fmt.Println
+   _ = fd
+    #+end_src
+  - Import for side effects
+    #+begin_src go
+    import _ "net/http/pprof"
+    #+end_src
+  - Interface checks
+* Language features
+** slices
+- http://blog.golang.org/go-slices-usage-and-internals
+** errors
+- http://blog.golang.org/error-handling-and-go
+** everything is pass-by-value in Go.
+** interfaces: different from classes as they not hold data
+https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go
+#+begin_src
+This is a core concept in Go’s type system;
+instead of designing our abstractions in terms of what kind of data our types
+can hold, we design our abstractions in terms of what actions our types can
+execute.
+#+end_src
+* Interview questions
+  https://github.com/shomali11/go-interview
+  https://github.com/hoanhan101/algo
+  https://github.com/goquiz/goquiz.github.io

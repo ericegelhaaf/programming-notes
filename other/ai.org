@@ -1,0 +1,27 @@
+- https://www.youtube.com/channel/UCfxnrdBM1YRV9j2MB8aiy4Q
+- Deeplearning - Udacity - https://www.youtube.com/playlist?list=PLAwxTw4SYaPn_OWPFT9ulXLuQrImzHfOV
+- https://www.youtube.com/c/SirajRaval/videos
+- https://www.youtube.com/c/YannicKilcher/videos
+- https://www.edx.org/course/artificial-intelligence-for-everyone?source=aw&awc=6798_1596893433_4b4c0888ce9c6d92a5a2ae929d88d9c7&utm_source=aw&utm_medium=affiliate_partner&utm_content=text-link&utm_term=301045_https%3A%2F%2Fwww.class-central.com%2F
+- [Coursera] Neural Networks for Machine Learning — Geoffrey Hinton
+  https://www.youtube.com/playlist?list=PLoRl3Ht4JOcdU872GhiYWf6jwrk_SNhz9
+- Vincent Warmerdam: Winning with Simple, even Linear, Models | PyData London 2018
+  https://www.youtube.com/watch?v=68ABAU_V8qI
+- https://github.com/mrdbourke/machine-learning-roadmap
+- https://github.com/visenger/awesome-mlops
+- CS50's Introduction to Artificial Intelligence with Python 2020
+  https://www.youtube.com/playlist?list=PLhQjrBD2T382Nz7z1AEXmioc27axa19Kv
+- NARDOZ MARZO - Fairness en Machine Learning + Testing en desarrollo de software
+  https://www.youtube.com/watch?v=rrwrornKhjM
+- https://github.com/mitmath/18337
+- Toward ethical, transparent and fair AI/ML:
+  a critical reading list for engineers, designers, and policy makers
+  https://github.com/rockita/criticalML
+- https://www.youtube.com/playlist?list=PLl8OlHZGYOQ7bkVbuRthEsaLr7bONzbXS
+* Practical Deep Learning for Coders (2020) https://www.youtube.com/playlist?list=PLfYUBJiXbdtRL3FMB3GoWHRI8ieU6FhfM
+** Lesson 1 https://www.youtube.com/watch?v=_QUEXsHfsA0
+- Neural networks have limited range of things it can do with 1 layer (by Minsky research)
+- But with more layers the problem is solved (also by minsky)
+- People used just 2 layers which limited performance
+- Usinge more layers makes it "DEEP" learning
+

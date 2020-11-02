@@ -1,0 +1,5 @@
+https://github.com/AnthonyCalandra/modern-cpp-features
+- Video: How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
+- https://github.com/rhysd/vim-clang-format
+- https://github.com/junegunn/fzf
+- https://tek256.com/posts/code-hardening/

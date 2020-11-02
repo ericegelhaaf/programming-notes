@@ -1,0 +1,125 @@
+- https://github.com/jozefg/learn-tt
+- https://www.youtube.com/playlist?list=PLruBu5BI5n4aFpG32iMbdWoRVAA-Vcso6
+- https://www.youtube.com/playlist?list=PL2AD004D035C24F21
+- Podcast - History of computing https://open.spotify.com/show/1wdCnbj68DbWinQjmEwUaC
+- Coding with Some Guy
+  https://www.youtube.com/channel/UCBwH4Xj7s5C9tkeYxI3dIzA/about
+- https://news.ycombinator.com/item?id=24281195
+- https://www.youtube.com/c/WhatsACreel/videos
+- https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00-introduction-to-computer-science-and-programming-fall-2008/video-lectures/
+-  Continuous Delivery https://www.youtube.com/channel/UCCfqyGl3nq_V0bo64CjZh8g/videos
+- https://ourmachinery.com/post/data-structures-part-1-bulk-data/
+- Ask HN: What are some of the best technical talks you've heard?
+  https://news.ycombinator.com/item?id=18217762
+- Structure and Interpretation of a Computer Revolution https://www.youtube.com/playlist?list=PLoRl3Ht4JOcfcnpf79R9f80bqjMvsOpeg
+- http://matt.might.net/articles/by-example-continuation-passing-style/
+- https://github.com/dwmkerr/hacker-laws
+- https://github.com/hemanth/functional-programming-jargon
+  https://github.com/jmesyou/functional-programming-jargon.py
+
+- Logic
+  https://thesearch.space/
+- Bash
+  https://github.com/dylanaraps/pure-bash-bible
+  https://github.com/mrzool/bash-sensible
+  https://github.com/joseluisq/awesome-bash-commands
+- APL
+  talks, pure functional https://github.com/Co-dfns/Co-dfns
+  reference https://github.com/jpellegrini/gnu-apl-refcard
+- ASM
+  examples https://github.com/cirosantilli/x86-bare-metal-examples
+* Missing Semester - https://www.youtube.com/c/MissingSemester/videos
+** Lecture 6: Version Control (git) (2020) - https://www.youtube.com/watch?v=2sjqTHE0zok
+- blobs, trees, commits - all are git objects with an id hash
+- blobs are the files
+  trees directories (subdir or subblobs)
+  commits (msg,author,parent commits,tree)
+- HEAD is the current commit pointer
+- git log --all --graph --decorate --oneline
+- git cat-file -p HASH
+- git push <remote> <localbranch>:<remotebranch>
+*** Merge 2 branches
+- git checkout -b newbranch
+- ...vim, add, commit...
+- git checkout master
+- git checkout -b otherbranch
+- ...vim, add, commit....
+- git checkout master
+- git merge newbranch
+- git merge otherbranch
+  - fails so I can git merge --abort OR
+  - git mergetool OR
+  - vim...git add...git merge --continue
+*** remote
+- git pull == git fetch; git merge
+- git push origin master:master
+- git branch --set-upstream-to-origin=origin/master
+- git branch -vv
+* gamelisp.rs
+https://gamelisp.rs/reference/overview.html
+* Racket
+https://beautifulracket.com/
+* William Byrd on "The Most Beautiful Program Ever Written" [PWL NYC]
+  https://www.youtube.com/watch?v=OyfBQmvr2Hc
+  - "Programming Should Eat Itself" by Nada Amin
+    https://www.youtube.com/watch?v=SrKj4hYic5A
+* SICP
+- MIT 6.001 Structure and Interpretation, 1986 - https://www.youtube.com/playlist?list=PLE18841CABEA24090
+  Gerald Jay Sussman
+** Video: Lecture 1A: Overview and Introduction to Lisp - https://www.youtube.com/watch?v=-J_xL4IGhJA&list=PLE18841CABEA24090
+*** Part 1
+- Computer engineer deals with idealized components.
+  That means there is no much difference into what I could build and what can I imagine.
+  The constrains are not physics, but the constrains of our minds.
+- Techniques to control complexity:
+  1) Black-box abstraction: functions that return values or other functions
+  2) Conventional interfaces: generic operations
+  3) Metalinguistic abstraction: DSL
+*** Part 2
+- Elements of programming languages:
+  1) Primitive elements:              + 3 17.5 5
+  2) means of combination:           (+ 3 17.5 5) (if) (cond)
+  3) means of abstraction: (define a (+ 3 17.5 5))
+     (define (square x) (* x x)) OR (define square (lambda (x) (* x x)))
+*** Part 3
+- You don't need any more constructs to loop. If you have recursive definitions.
+- Block structure: for defining local sub functions aka flet, labels
+  #+begin_src scheme
+  (define (sqrt x)
+    (define (try a b))
+    (define (improve-guess a b))
+    (define (good-enough-? a b))
+    (try 1)) ; Don't have to define X again as it is in scope
+  #+end_src
+** Video: Lecture 1B: Procedures and Processes; Substitution Model
+*** Part 1
+- "At any level of detail, if you look inside this machine, you are gonna find that there is multiple levels below that you don't know about."
+- "We have to learn to ignore details."
+- "The key to understanding complicated things is know what not to look at. And not to compute.
+- Peano Arithmetics
+  #+begin_src scheme
+  (define (+ x y)
+    (if (= x 0)
+        y
+        (+ (-1 x) (+1 y))))
+  (define (+ x y)
+    (if (= x 0)
+        y
+        (1+ (+ (-1 x) y))))
+  #+end_src
+*** Part 2
+- "The key to being a creative person, partly, is to do analysis at some level."
+- "How do I know what I am going to get on a film before I push a button."
+- both Peano sums have different "shapes", of time(vertical)/space(horizontal/memory)
+- First one has time=O(x), space=O(1)...called Iteration...iteration is "recoverable"
+  Second: time=O(x), space=O(x)...called (Linear) Recursion
+*** Part 3
+- time=O(fib(n))
+  space=O(n)
+  #+begin_src scheme
+  (define (fib n)
+    (if (< n 2)
+      n
+      (+ (fib (- n 1)
+         (fib (- n 2))))))
+  #+end_src
