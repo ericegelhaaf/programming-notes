@@ -71,6 +71,19 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
      - config Config* // c Config* or conf *Config
      - config1 Config*, config2 Config* // original Config*, updated Config*
      - context context.Context // ctx context.Context
+* Book: Learn go with tests
+** Hello world
+- Rules for "testing" package
+  - files should be {file}_test.go
+  - functions should be prefix TestSOMETHING()
+  - functions only argument should be (t *testing.T)
+- t.Errorf - formated output and fail test
+  t.Run - Subtests
+  t.Helper() - used by helper functions inside TestSOMETHING() to clean stacktrace
+- Named return values are a thing, they create the var
+- functions naming:
+  - public functions start with CAPITAL letter
+  - private functions start with a lowercase letter
 * Book: Go in practice
 ** 4.1
 - errors.New
