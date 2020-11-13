@@ -1,3 +1,4 @@
+- cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
 - http://www.cis.syr.edu/~sueo/cis252/emacs.html
 - https://hoogle.haskell.org/
@@ -34,9 +35,9 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
 * Setup
   - https://github.com/haskell/haskell-ide-engine
   - https://github.com/soupi/minimal-haskell-emacs (setup)
-  - https://github.com/ndmitchell/ghcid (continuous building)
-  - https://github.com/ndmitchell/hlint (bashate like)
-  - https://github.com/chrisdone/hindent (formatter)
+  - https://github.com/ndmitchell/ghcid "flymake"
+  - https://github.com/ndmitchell/hlint "flycheck"
+  - https://github.com/chrisdone/hindent "gofmt"
 * Libraries
 - A fast, light-weight web server for WAI applications.
   https://hackage.haskell.org/package/warp
@@ -106,6 +107,31 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
     https://www.youtube.com/watch?v=JJv74IJUp4E
   - NYC Haskell User's Group
     https://www.youtube.com/channel/UCzNYHE7Kj6pBqq5h8LG9Zcg
+* DONE Book: Seven Languages in 7 weeks
+** Haskell
+- "In Haskell, indentation is significant." (?
+- on Haskell, IF is a function, not a control structure, it returns a value.
+- "." for function composition
+  second = head . tail
+- On ghci console
+  > :set +t
+- A partial applied function is called ~section~
+- ~where~ on function definition can define local functions too
+- every function does have 1(one) parameter
+  - the process of reducing a function of N parameters to N of 1 param is ~currying~
+#+NAME: single-line vs multi-line pattern-matching vs guards
+#+begin_src haskell
+fact x = if x == 0 then 1 else fact (x - 1) * x
+
+factorial :: Integer -> Integer
+factorial 0 = 1
+factorial x = x * factorial (x - 1)
+
+factorio :: Integer -> Integer
+factorio x
+  | x > 1     = x * factorio (x - 1)
+  | otherwise = 1
+#+end_src
 * TODO Book: Haskell School of Music
 ** 1 Computer Music, Euterpea, and Haskell
 *** 1.1 The Note versus Signal Dichotomy
@@ -318,23 +344,44 @@ data InstrumentName = AcousticGrandPiano | BrightAcousticPiano ...
 *** 4.4 Simple Algorithmic Composition
 
 * TODO Book: Real World Haskell
-- Updated code version
-  https://github.com/tssm/up-to-date-real-world-haskell/
-- Real World Haskell outdated parts
-  https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
+- Updated code version https://github.com/tssm/up-to-date-real-world-haskell/
+- Real World Haskell outdated parts https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
 ** 6 Using Typeclasses
+*** Defining
 - Different implementation depending on the type of data given.
-- Defining a new ~Typeclass~ named "BasicEq".
+- Defining a new ~Typeclass~ named "BasicEq3".
+  We can provide *default implementations* for Typeclasses, and make one depend on the other.
 #+begin_src haskell
-class BasicEq a where
-    isEqual :: a -> a -> Bool
+class BasicEq3 a where
+  isEqual3 :: a -> a -> Bool
+  isEqual3 x y = not (isNotEqual3 x y)
+
+  isNotEqual3 :: a -> a -> Bool
+  isNotEqual3 x y = not (isEqual3 x y)
 #+end_src
-- An ~Instance Type~ of this typeclass, is any function that implements the functions defined in it.
-- isEqual :: (BasicEq a) => a -> a -> Bool
+- An ~Instance Type~ of this typeclass, is any type that implements the functions defined in it.
+- isEqual :: BasicEq a => a -> a -> Bool
   Reads:
-  "For all types of a,
-   so long as a is an instance of BasicEq,
-   isEqual takes two parameters of type a and returns Bool""
+  "For all types of *a*,
+   so long as *a* is an instance of BasicEq,
+   isEqual takes two parameters of type *a* and returns Bool""
+*** Type Instancing
+#+begin_src haskell
+instance BasicEq3 Color where
+  isEqual3 Red   Red   = True
+  isEqual3 Green Green = True
+  isEqual3 Blue  Blue  = True
+  isEqual3 _     _     = False
+#+end_src
+*** Build-in
+- Show, and the function show which returns a string from something showable
+  show :: (Show a) => a -> String
+  (you can derive it or explicitly Type Instance it)
+  - To define your own show redefine ~show~
+- Read, and the function read which takes a string and returns something readable
+  read :: (Read a) => String -> a
+  e.g. (read readVar)::Double
+  - To define your own parser redefine ~readsPrec~
 ** 7
 - ~Type classes~ provide ad-hoc polymorphism
   - Can define default "implementations" for the class
@@ -394,31 +441,6 @@ sierpinskiTri w x y size
 - Many indirect graphics functions, to:
   1) being able to work with each shape properties
 ** 5 Polymorphic and High-order Funtions
-* DONE Book: Seven Languages in 7 weeks
-** Haskell
-- "In Haskell, indentation is significant." (?
-- on Haskell, IF is a function, not a control structure, it returns a value.
-- "." for function composition
-  second = head . tail
-- On ghci console
-  > :set +t
-- A partial applied function is called ~section~
-- ~where~ on function definition can define local functions too
-- every function does have 1(one) parameter
-  - the process of reducing a function of N parameters to N of 1 param is ~currying~
-#+NAME: single-line vs multi-line pattern-matching vs guards
-#+begin_src haskell
-fact x = if x == 0 then 1 else fact (x - 1) * x
-
-factorial :: Integer -> Integer
-factorial 0 = 1
-factorial x = x * factorial (x - 1)
-
-factorio :: Integer -> Integer
-factorio x
-  | x > 1     = x * factorio (x - 1)
-  | otherwise = 1
-#+end_src
 * TODO Interview: Michael Snoyman: From Haskell to Rust?
   #+DATE: Sep 13, 2020
   #+URL: https://www.youtube.com/watch?v=HKXmEFvsi6M
@@ -433,7 +455,7 @@ factorio x
 - TALK ABOUT MONADS????
 - RESUME 20:00
 * TODO Videos: HaskellRank by tsoding
-https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
+  playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
 ** DONE HackerRank in Haskell
 - interact :: (String -> String) -> IO ()
 - We go from an expression that we can use on the repl to a function. By replacing ($) with (.)
@@ -598,12 +620,52 @@ main = do
   [[_, k], bill, [b]] <- replicateM 3 getList
   putStrLn $ maybe "Bon appetit" show $ solve k bill b
 #+end_src
-** Tracking Hikes with Haskell
-** Treating Lists as Monads
+** DONE Tracking Hikes with Haskell
+*** Hiking
+- scanl, groupBy (Data.List), filter, all
+- scanl (+) 0 [1 .. 4]
+  => [0,1,3,6,10,15]
+- groupBy (\x y -> x /= 0 && y /= 0) [0,1,2,3,4]
+  groupBy, will iterate over the list by 2 elements at the time
+           when the function returns false, it separates that group
+- filter (all (< 0))
+*** Drawing Book
+- interact $ show . resolve . map read . words
+** DONE Treating Lists as Monads
+- fromMaybe, sortBy, listToMaybe, liftM2
+- fromMaybe - Takes a default and a maybe
+  fromMaybe 5 Nothing  => 5
+  fromMaybe 5 $ Just 6 => 6
+- sortBy (Data.List)
+- listToMaybe (Data.Maybe) -- returns Nothing or Just of the head
+- liftM2 (Control.Monad)
+  let keyboards = [3,1]
+  let drives = [5,2,8]
+  liftM2 (,) keyboards drives
+- ^ generates the same than list comprehension
+  AKA the ~cartesian product~
+- Changing to (+) instead adds then directly
+  liftM2 (+) keyboards drives
+- map read . words <$> getLine -- Threat the result of getLine as a functor
 ** Solving Magic Square using Functional Programming
+#+begin_src haskell
+type Square = [[Int]]
+magic :: Square
+magic = [[8,1,6],
+         [3,5,7],
+         [4,9,2]]
+
+rot90 :: Square -> Square
+rot90 = map reverse
+
+pp :: Square -> IO ()
+pp = putStrLn . unlines . map (unwords . map show)
+
+#+end_src
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
-* TODO Course: Haskell by Bartosz Milewski https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
+* TODO Course: Haskell by Bartosz Milewski
+  playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
 ** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
 - Course based on "Parallel and concurrent programming" Oreilly book
 - Based on math, lambda calculus
@@ -697,7 +759,7 @@ inc   = (+ 1)    -- "x" cancells out
   > f (P x y) = x + y
 - When you have more than 2 components, you are better using a ~record~ where fields are named
 - 2 ways of constructing new data types??
-** 3-1 => Laziness https://www.youtube.com/watch?v=jWrRs-l8C1U
+** DONE 3-1 => Laziness https://www.youtube.com/watch?v=jWrRs-l8C1U
 :set -Wall
 :set -fforce-recomp
 *** Kinds
@@ -845,3 +907,12 @@ add (Minutes x) (Minutes y) = Minutes $ x + y
 - Point free style: is when we define functions without defining the arguments.
                     Because it doesn't use the (.) operator.
 ** Haskell 102 https://www.youtube.com/watch?v=Ug9yJnOYR4U
+- If a library has 2 versions of a function, with (') is called "f prime".
+  The one with the (') is ~eager~
+  The one without the (') ~lazy~
+- Type Constrains
+- Cascading Maybe's, nested case's
+- IO
+  Can't apply regular functions
+  Can't pattern match
+  Can't get values from it
