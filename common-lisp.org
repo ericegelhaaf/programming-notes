@@ -1,3 +1,5 @@
+- ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
+- zap https://malisper.me/zap/
 - Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
 - Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
 - CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
@@ -378,6 +380,8 @@ https://lisp-lang.org/learn/continuous-integration
   https://github.com/noloop/cacau http://quickdocs.org/assert-p/
   https://github.com/joaotavora/fiasco
 * Binary Release
+- https://nyxt.atlas.engineer/article/continuous-testing-and-packaging.org
+- https://gitlab.com/ralt/linux-packaging
 - https://github.com/fiddlerwoaroof/daydreamer
 - https://github.com/zodmaner/cl-makefile-template
 - https://github.com/phoe-trash/furcadia-post-splitter/

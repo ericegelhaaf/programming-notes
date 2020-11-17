@@ -1,3 +1,4 @@
+- https://www.cs.utexas.edu/users/novak/cs378contents.html
 - Simulating Machines in Clojure https://stopa.io/post/255
 - Podcast - https://clojuredesign.club/
 - Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
@@ -36,13 +37,12 @@
 - https://github.com/pjagielski/disclojure
 * Books
 ** TODO Book: Clojurescript unraveled
-|       |           |                   |                 | predicate? | function?    |
-|-------+-----------+-------------------+-----------------+------------+--------------|
-| list  | ()        | (list 1 2 3 4)    | '(1 2 3 4)      | false      |              |
-| map   | {}        | (hash-map :foo 1) | {:foo 1 :bar 2} | true       | lookup/nil   |
-| array | []        | (vector 1 2 3 1)  | [1 2 3]         | true       | lookup/error |
-| set   | #{}       | (set [1 2 3 1])   | #{1 2 3 4}      | true       |              |
-| queue | #queue [] |                   | #queue [1 2 3]  |            |              |
+|        |     | New                       | pred? | IFn | Lookup        |
+|--------+-----+---------------------------+-------+-----+---------------|
+| map    | {}  | (hash-map :name 1)        | false | yes | (assoc)       |
+| list   | ()  | (list 1 2) (cons 0 '(1 2) | false |     | (peek) (pop)  |
+| vector | []  | (vector 1 2) (vec '(1 2)) | true  | yes | (nth) (assoc) |
+| set    | #{} | (set [1 2 3 1])           | true  | yes | (get)         |
 *** 3.1 First steps
 - Lisp has ~no operators~, it only has functions.
 *** 3.2 The base data typs
@@ -100,22 +100,27 @@
 - ~(doseq)~ is analogous to (for) but always returns nil
 - ~(run!)~ (run! println [1 2 3]) -  uses fast reduction
 *** 3.8 Collection types
-- either indexed or associative sequences (lists?)
-- ~(conj)~ (conj [1 2 3] 4) => [1 2 3 4]
-- clojure does with immutable collection by ~structural sharing~
-  thus not creating new memory for the same data
+- ~structural sharing~ is used to avoid creating new memory for the same data
+
 - ~(rest)~ is just like ~(next)~ except for empty seqs
  (rest []) => ()
  (next []) => nil
-- (~seq~) - (seq []) => nil
+ (seq  []) => nil
 - ~nil-punning~ is testing for nil
-- (~map~) - can work on any sequence for maps, it receive a 2 item vector, key and value
-- (~conj~) - adds element/s to a collection
-- (~take-while~ #(< % 10) (range 100))
-- (~peek~) (~pop~)
-- (~vector~ 1 2 3 N) (~vec~ COLL)
-- (~assoc~ COLL IDX NEW) - sets instead of looking up
-- (~mapv~) and (~filterv~) - variants that return vector
+
+- ~(map)~ - can work on any sequence.
+  For maps, it receive a 2 item vector, key and value.
+
+- ~(coll?)~ ~(seq?)~  ~(seqable?)~
+- Collection: ~(count)~ ~(empty)~ ~(empty?)~
+              ~(conj)~ (conj [1 2 3] 4) => [1 2 3 4]
+- Maps: ~(vals)~ returns the values of a map
+- Lazyness: (~range~)
+            (~take-while~ #(< % 10) (range 100))
+- List: peek, pop, cons
+- Vector: vector, vector?, vec, nth, assoc
+  (~assoc~ COLL IDX NEW) - sets instead of looking up
+  (~mapv~) and (~filterv~) - variants that return vector
 - (sorted-map) (sorted-map-by)
   (sorted-set) (sorted-set-by)
 - (compare a b) =>
@@ -123,53 +128,234 @@
    0 if equal
    1 if greater
 - queues pop from the front and push from the back
-*** 3.9 Destructuring
+*** DONE 3.9 Destructuring
 - everwhere when binding happens
-- ~:as~ support to keep the original
-- positional
-  - can happen on arguments, matches any seq(?)
-  #+begin_src clojure
-    (defn swap-pair [[fst snd]]
-      [snd fst])
-    (swap-pair [1 2]) ; => [2 1]
-    (swap-pair '(3 4)); => [4 3]
-  #+end_src
-  - support & for varying length
-- associative (maps,vectors)
-  - keys the are binding symbols (!
-    (let [{lang :language} {:language "Clojurescript"}]
-       lang)
-  - support for default on missing with ~:or~
-    (let [{name :name :or {name "Anon"}} {:language "Clojurescript"}]
-       name)
-  - shorthand with ~:keys~ or :strs or :syms
-    (let [{:keys [name surname]} {:name "Ciri" :surname "Fio"}]
-       [name surname])
-*** 3.10 Threading Macros
-- optional parents on threading funcs
-- in clojure/script, functions for...
-  - datastructures transformations consistently uses 1st arg
-  - sequences or collections transformations consistently use the last argument
-- -> first
-  ->> last
-  as-> replace with $
-  some-> they shortcircuit after the first nil
+**** indexed sequences
+- can happen on arguments, matches any seq(?)
+#+begin_src clojure
+  (let [[fst _ thrd] [0 1 2]]
+    [thrd fst])
+  (defn swap-pair [[fst snd]]
+    [snd fst])
+  (swap-pair [1 2]) ; => [2 1]
+  (swap-pair '(3 4)); => [4 3]
+#+end_src
+- ~&~ for varying length
+- ~:as~ to keep the original
+**** associative sequences (maps,vectors)
+- ~:as~
+- keys the are binding symbols (!
+  (let [{lang :language} {:language "Clojurescript"}]
+     lang)
+- ~:or~ support for default on missing keys
+  (let [{name :name :or {name "Anon"}} {:language "Clojurescript"}]
+     name)
+- shorthand with ~:keys~ or :strs or :syms
+  (let [{:keys [name surname]} {:name "Ciri" :surname "Fio"}]
+     [name surname])
+*** DONE 3.10 Threading Macros
+- function call parens are *optional* on threading macros
+- in Clojure(script), transformation functions use...
+  - 1st arg for...datastructures
+  - last arg for...sequences or collections
+- ->      first
+  ->>     last
+  as->    replace any position marked with $
+  some->  they shortcircuit after the first nil
   some->>
-  cond-> conditionally threads, conditions are separate from combination code
+  cond->  conditionally threads, optionally thread for each step based on a cond
   cond->>
-*** 3.11 Reader Conditionals
-*** 3.12 Namespaces
-- default ns "cljs.user"
-- (ns NS3 (~:require~ NS1 NS2))
-- (ns NS3 (:require [NS1 ~:as~ WHA]))
-- (ns NS3 (:require NS1 ~:refer~ [FUNC]))
-- :refer-clojure :exclude []
-*** 3.13 Abstractions and Polymorphism
+*** DONE 3.11 Reader Conditionals
+- #? and #?@
+- .clj vs .cljs vs .cljc AKA conditional, ONLY work on that extension
+#+begin_src clojure
 
-*** 3.14 Data types
-*** 3.15 Host interoperability
-*** 3.16 State management
+;; Standard (#?)
+(defn parse-int [v]
+  #?(:clj  (Integer/parseInt v)
+     :cljs (js/parseInt v)))
 
+;; Splicing (#?@)
+(defn make-list
+  []
+  (list #?@(:clj  [5 6 7 8]
+            :cljs [1 2 3 4])))
+;; Multiple
+#?(:cljs
+   (do
+     (defn func-a [] :a)
+     (defn func-b [] :b)))
+#+end_src
+*** DONE 3.12 Namespaces
+- myapp.core and myapp.main
+- myapp/src/myapp/core.cljs
+                 /main.cljs
+- "cljs.core" is loaded by default
+- "cljs.user" is the default ns
+#+begin_src clojure
+(ns N1 "docstring for the namespace")
+(ns N1 (:require N2 N3))
+(ns N1 (:require [N2 :as N2ALIAS] [N3 :as N3ALIAS]))
+(ns N1 (:require NS2 :refer [FUNC]))
+(ns N1 (:refer-clojure :exclude [min]))
+#+end_src
+*** DONE 3.13 Abstractions and Polymorphism
+**** Protocols    - TYPES
+- defprotocol, satisfies?, extend-protocol, extend-type
+- Consists of a name(I) AND a set of functions.
+  Each function with at least 1 argument, the "self" or "this".
+  aka "type based dispatching"
+- Checks if instance satisfies the protocol
+  (satisfies? IFn #{1})
+  => true
+#+begin_src clojure
+(ns myapp.testproto)
+
+(defprotocol IProtocolName
+  "A docstring"
+  (sample-method [this] "A docstring"))
+
+(extend-type TYPE
+  PROTOCOL
+  (FUNC-NAME [this] (FUNC-IMPL)))
+
+(extend-protocol PROTOCOL
+  TYPE
+  (FUNC-NAME [this] (FUNC-IMPL)))
+#+end_src
+**** Multimethods - DISPATCHER
+- defmulti, defmethod
+- Like "filtered-functions" in CL library
+  You define a dispatcher function (defmulti) and multiple matching functions (defmethod)
+#+begin_src clojure
+(defmulti say-hello
+  "docstring"
+  (fn [param] (:locale param))
+  :default :en)
+
+(defmethod say-hello :en
+  [person]
+  (str "Hello " (:name person "Anonymous")))
+
+(defmethod say-hello :es
+  [person]
+  (str "Hola " (:name person "Anonimo")))
+#+end_src
+**** Hierarchies  - INHERITANCE
+- derive, ancestors, descendants, isa?, make-hierarchy
+  :hierarchy
+- defmulti, defmethod
+  By default multimethods call isa? without passing a local hierarchy
+#+begin_src clojure
+;; GLOBAL HIERARCHY
+;;(derive ::circle ::shape)
+;;(derive ::box    ::shape)
+
+;; LOCAL HIERARCHY
+(def h (-> (make-hierarchy)
+           (derive :box :shape)
+           (derive :circle :shape))
+
+(defmulti stringify-shape
+  "docstring"
+  identity
+  :hierarchy #'h)
+
+(defmethod stringify-shape :box
+  [_]
+  "A box")
+
+(defmethod stringify-shape :shape
+  [_]
+  "A Shape")
+
+(defmethod stringify-shape :default
+  [_]
+  "Unexpected object")
+#+end_src
+*** DONE 3.14 Data types
+- reify: create an protocol without a type beforehand
+- specify: add a proto to an already existent instance
+**** deftype
+- deftype, defrecord(preferred), ->NAME, map->NAME
+  reify
+  specify, specify!
+#+begin_src clojure
+(deftype User [firstname lastname])
+(def person (User. "Triss" "Merigold"))
+(.-firstname person) ; => "Triss"
+(defn make-user      ; Custom constructor
+  [firstname lastname]
+  (User. firstname lastname))
+#+end_src
+**** defrecord
+- records implement the *map protocol*
+          do NOT implement IFn
+          support assoc
+          dissoc! returns a dict if it is a mandatory field
+#+begin_src clojure
+(defrecord User [firstname lastname])
+(def person (User. "Yeneffer" "of Vengerberg"))
+(:firstname person)    ; => "Yeneffer"
+(get person :firstname); => "Yeneffer"
+#+end_src
+**** Implementing protocols
+- protocols, both types and records support inline proto implementations
+#+begin_src clojure
+(defprotocol IUser
+  "docstring"
+  (full-name [_] "docstring"))
+(defrecord User [firstname lastname]
+  IUser
+  (full-name [_]
+    (str firstname " " lastname)))
+#+end_src
+*** DONE 3.15 Host interoperability
+- "ClojureScript is *not interpreted*; it is always compiled down to JavaScript."
+- ~js/~ namespace interacts with platform
+- ~#js~ reader macro for literal js declaration
+  (def myobj #js {:country "FR"})
+  translates to kind of
+  var myobj = {country: "FR"};
+- ~.-~ prefix for object properties
+  e.g.
+  (.-PI js/Math)
+- ~.~ prefix for methods or properties
+  e.g.
+  (.sqrt js/Math 2)
+  (js/Math.sqrt 2)
+   js/Math.PI
+- ~clj->js~ and ~js->clj~
+  ~into-array~
+  make-array, count, aset, aget
+*** DONE 3.16 State management
+**** Vars
+cannot be changed outside their namespace
+**** Atoms
+- atoms: atom, deref, @, swap!, reset!
+#+begin_src clojure
+(def ciri (atom {:name "Cirilla"
+                 :lastname "Fiona"
+                 :age 20}))
+(deref ciri) ; GET value
+@ciri        ; GET value
+(swap! ciri update :age inc) ; UPDATE age
+(reset! ciri {:name "Cirilla", ; SET ciri
+              :lastname "Fiona",
+              :age 22})
+#+end_src
+**** Observers
+- observers: for atoms, triggered when swap! or reset! are used
+#+begin_src clojure
+(def a (atom))
+(add-watch a :logger
+  (fn [key the-atom old-value new-value]
+    (println "Key: " key "Old:" old-value "New:" new-value)))
+(remove-watch a :logger)
+#+end_src
+**** Volatiles
+- like atoms, without valiators or observers
+- volatile!, volatile?, deref, vswap!, vreset!
 ** Book: Etudes for Clojurescript
 *** 1
 - (in 'formulas.core)
