@@ -380,20 +380,61 @@ https://lisp-lang.org/learn/continuous-integration
   https://github.com/noloop/cacau http://quickdocs.org/assert-p/
   https://github.com/joaotavora/fiasco
 * Binary Release
+ "sbcl --disable-debugger --no-sysinit --no-userinit"
+            Use an existing SBCL binary as a cross-compilation
+            host even though you have stuff in your
+            initialization files which makes it behave in such a
+            non-standard way that it keeps the build from
+            working. Also disable the debugger instead of
+            waiting endlessly for a programmer to help it out
+            with input on *DEBUG-IO*. (This is the default.)
 - https://nyxt.atlas.engineer/article/continuous-testing-and-packaging.org
+- https://github.com/Shinmera/deploy
+** sbcl build
+- sh make.sh --fancy --with-sb-linkable-runtime --with-sb-dynamic-core
+  --fancy is
+    - sb-core-compression
+    - sb-xref-for-internals
+    - sb-after-xc-core
+** linux-packaging
+- ASDF .config/common-lisp/.../asdf.conf
 - https://gitlab.com/ralt/linux-packaging
+  https://gitlab.com/ralt/linux-packaging/-/blob/master/.ci/build.sh
+- Deps, asdf latest, cffi, wild
+  https://github.com/privet-kitty/wild-package-inferred-system
+  https://github.com/cffi/cffi
+  https://gitlab.common-lisp.net/asdf/asdf
+*** sbcl sb-linkable-runtime
+    https://sourceforge.net/p/sbcl/sbcl/ci/402a8fab
+#+begin_src markdown
+  Add the new feature sb-linkable-runtime, that depends on **sb-dynamic-core**,
+the sbcl build will create a file sbcl.o or libsbcl.a that you can link
+with additional other object files and libraries to deliver your applications
+as a single executable (after combining with a core file) that contains
+whatever statically linked C libraries you need as extensions.
+CFFI-toolchain and Bazel will be know how to use this features.
+
+Support this feature on Linux, macOS and Windows, on x86 and x86-64.
+
+  Dump the parameters to compile C code and link it into a file sbcl.mk.
+This new file will be included even if sb-linkable-runtime isn't present,
+so CFFI and other software will not have to guess with what compiler and
+what options to build dynamically linkable extensions.
+
+  Note that without a sb-linkable-runtime, SBCL can still dlopen the C code, but
+then you need at least two files to deliver an application with non-Lisp code,
+and that doesn't work if the code is provided as a *.a or *.o file
+(not a *.so) compiled without -fPIC.
+#+end_src
+** templates
 - https://github.com/fiddlerwoaroof/daydreamer
 - https://github.com/zodmaner/cl-makefile-template
 - https://github.com/phoe-trash/furcadia-post-splitter/
-- gitignore of ./bin
-- Makefile
-- .travis.yml
-- use deploy
 * Documentation
-- staple
+- https://github.com/Shinmera/staple
 - git config for ./doc ?
 * Logging
-- verbose
+- https://github.com/Shinmera/verbose
 * Logic Programming
  - https://github.com/sjl/temperance
    docs https://docs.stevelosh.com/temperance/usage/

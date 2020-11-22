@@ -35,14 +35,14 @@
 - https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/
 * Overtone
 - https://github.com/pjagielski/disclojure
-* Books
-** TODO Book: Clojurescript unraveled
+* TODO Book: Clojurescript unraveled
 |        |     | New                       | pred? | IFn | Lookup        |
 |--------+-----+---------------------------+-------+-----+---------------|
 | map    | {}  | (hash-map :name 1)        | false | yes | (assoc)       |
-| list   | ()  | (list 1 2) (cons 0 '(1 2) | false |     | (peek) (pop)  |
+| list   | ()  | (list 1 2) (cons 0 '(1 2) | false | no  | (peek) (pop)  |
 | vector | []  | (vector 1 2) (vec '(1 2)) | true  | yes | (nth) (assoc) |
 | set    | #{} | (set [1 2 3 1])           | true  | yes | (get)         |
+** 3 Language (the basics)
 *** 3.1 First steps
 - Lisp has ~no operators~, it only has functions.
 *** 3.2 The base data typs
@@ -356,13 +356,49 @@ cannot be changed outside their namespace
 **** Volatiles
 - like atoms, without valiators or observers
 - volatile!, volatile?, deref, vswap!, vreset!
-** Book: Etudes for Clojurescript
+** 4 Tooling & Compiler
+*** 4.1 Build
+- Can be build for nodejs (needs an entrypoint) or browser
+- (require '[cljs.build.api :as b])
+- b/build b/watch
+- Build options:
+  ~:source-map~ connects the source to the generated javascript, for errors
+  ~:optimizations~ closure opts are none, whitespace, simple, advanced
+- *clj* uses rlwrap unlike *clojure* cli command
+*** 4.2 REPL
+- nashorn
+- nodejs (no DOM access)
+- browser: build project, then start repl connected to browser
+- rebel: repl with signature of functions
+*** 4.3 Closure
+- As a Javascript library, cross-browser functions for DOM
+- As a compiler
+- Clojurescript NS are Closure modules.
+*** 4.3 Dependency managment
+- deps.edn
+- tools.clj : repl, build, watch
+- src/ : Can contain clojurscript ns OR javascript closure modules
+** 5 Language (advanced topics)
+*** 5.1 Transducers
+- map,filter,mapcat can be written as reduce funtions
+- when you have several transformations (map, filter, mapcat) you can:
+  - ~comp~ the ~partial~ of each: but each step will generate intermediate results that will be dropped
+  - ~comp~ the 1 arg of each: they return the transducer version of it
+**** Transients
+- map,vectors and sets have a transient counterpart
+*** 5.5 CSP (with core.async)
+**** Channels
+- chan, put!, take!, close!
+- if we close a channel with pending takes, it returns nil
+- channels ~limit~ of 1024 take/put pending per channel
+- ~buffers~ extend it by adding a queue
+* Book: Etudes for Clojurescript
 *** 1
 - (in 'formulas.core)
 - (require 'formulas.core :reload)
 - (.pow js/Math NUMBER POWER)
   (js/Math.pow NUMBER POWER)
-** Web development with Clojure - 2nd Edition
+* Web development with Clojure - 2nd Edition
 *** 1
 - in (defproject) we can set the *entry point* with :main, :main myapp.core/foo, unset by default
   you can it with:
