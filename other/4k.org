@@ -1,0 +1,38 @@
+- http://bruxy.regnet.cz/web/linux/EN/linux-demoscene/
+- http://www.sizecoding.org/wiki/Main_Page
+- https://github.com/baines/demostuff
+- https://github.com/faemiyah/dnload
+- https://github.com/lnqs/intrusion
+- Demo: 4k demo written in D
+  https://github.com/kubo39/tiny-d-demo
+- Tool: Audio engine for 4k and 8k
+  https://github.com/askeksa/Oidos
+* Video: (2006) Linux 4k coding
+  slides http://ftp.kameli.net/pub/fit/misc/presis_asm06.pdf
+  talk https://www.youtube.com/watch?v=-UQSiRg8Ra0
+- Languages: ASM, C, C++(too much overhead)
+- They used ASM for soft synth, synth code and startup.
+  Effect code in C.
+- GCC: -Os was worst than -O1
+       -ffast-math
+       -fshort-double (dangerous!)
+       -nostdlib
+       -fno-inline, -fmove-all-movables, -fpeephole2
+                    -fforce-mem, -fexpensive-optimizations
+- gcc version 3.2 (unlike 3.3)
+- Libraries:
+  - "Using an external library function generates about 70byte overhead
+     if done via standard dynamic linkage"
+  - reduced to 20bytes by opening the library manually with *dlsym* and *dlopen*
+- resume 22:00
+* Video: (2019) Size coding på Linux – Knut Arild Erstad – RevolverConf 2019.2
+  https://github.com/knutae/revolverconf-2019.2
+  https://www.youtube.com/watch?v=UgNLULCwKgo
+* Video: (2019) Revision - Intricacies of sizecoding on Linux
+  https://www.youtube.com/watch?v=a03HXo8a_Io
+  https://github.com/Shizmob/smol
+  https://pcy.ulyssis.be/pres/Lin.pdf
+* Video: (2019) Executable Code Golf: Making Tiny Binaries for Constrained Systems
+  for ~8k demos
+  https://www.youtube.com/watch?v=J5WX-wN_RKY
+  https://github.com/negge/xlink
