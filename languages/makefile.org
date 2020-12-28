@@ -1,0 +1,47 @@
+* Tutorial: makefile tutorial
+  http://makefiletutorial.com/
+- can be more than 1 *target* separated by space (usually 1)
+- the *DEFAULT* target is always the first target
+- use backslash (\) for too long *commands*
+- it knows if a target is out to date (I guess it knows if the file was modified)
+- ~.PHONY~ target is to let make know that is not a file (like for clean)
+- variables can ONLY be strings
+- the implicit command if you not put a command is
+    blah: "cc blah.o -o blah"
+    blah.o: cc -c blah.c -o blah.o
+  .o is implicit if you define blah: alone
+  it accepts CFLAGS
+- Can use wildcards on the dependencies
+  blah: *.c
+- Other wildcards, like in vars use $(wildcard *.c)
+- vpath!???!?!
+- an ~all~ target is just some custom phony one, ommiting the clean part
+- multiple targets
+  - $@ can be used to ID the current target
+  - % is the target wildcard
+- commands, prefixed with @ will not be printed
+- each *command* line runs on a new shell, use (;) and/or (\)
+- ~.DELETE_ON_ERROR:~ will delete the target if a command fails (no default)
+- Errors:
+  - fails if a command returns 1
+  - -k to make to continue on error
+  - - add to suppress command error
+  - -i add - to all commands
+** The Shell function (Section 8.8)
+#+begin_src makefile
+all:
+    @echo $(shell ls -la) # replaces new lines with spaces
+#+end_src
+** Arguments to make (Section 9)
+- Can be multiple *targets*
+- --dry-run
+  --touch
+  --old-file
+** Implicit Rules (Section 10)
+- .c   $(CC) -c $(CPPFLAGS) $(CFLAGS)
+- .cpp $(CXX) -c $(CPPFLAGS) $(CXXFLAGS)
+- .o   $(CC) $(LDFLAGS) n.o $(LOADLIBES) $(DLIBS)
+** Automatic variables (Section 10.5)
+- $@ - current target name
+- $? - prerequisits
+- $^ - ? prerequisits
