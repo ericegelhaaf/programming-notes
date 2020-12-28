@@ -10,15 +10,20 @@
 - from pattern matching with multiple signatures to "recieve"
 - doc https://erlang.org/doc/reference_manual/users_guide.html
 - doc https://erlang.org/doc/apps/stdlib/index.html
-* videos
-  - CodeSync - https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw
-  - ErlangSolutions - https://www.youtube.com/user/ErlangSolutions
-  - EMPEX - https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q
+* Videos
   - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
+** Channels
+  - https://www.twitch.tv/josevalim/videos
+  - zxq9 (erlang) https://www.youtube.com/channel/UCMnRVG50iFEpkgbUu1mZrMA/videos
+  - CodeSync https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw
+  - EMPEX https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q
+  - ErlangSolutions https://www.youtube.com/user/ErlangSolutions
+** Courses
   - erlang español - https://www.youtube.com/playlist?list=PLmoxkf3gS-juT5cDrzP_ARdkqqSFU5X_3
-  - master 3 - https://www.youtube.com/playlist?list=PLR812eVbehlx6vgWGf2FLHjkksAEDmFjc
-  - master 2 - https://www.youtube.com/playlist?list=PLR812eVbehlwq4qbqswOWH7NLKjodnTIn
-  - erlang mooc - https://www.youtube.com/playlist?list=PLlML6SMLMRgAooeL26mW502jCgWikqx_n
+  - Erlang MOOC
+    Language https://www.youtube.com/playlist?list=PLlML6SMLMRgAooeL26mW502jCgWikqx_n
+    Concurrency https://www.youtube.com/playlist?list=PLR812eVbehlwq4qbqswOWH7NLKjodnTIn
+    OTP https://www.youtube.com/playlist?list=PLR812eVbehlx6vgWGf2FLHjkksAEDmFjc
 * libs
   - https://github.com/whatsapp/erlfmt - code formatter
   - https://github.com/erlang-ls/erlang_ls ls server
@@ -44,74 +49,278 @@
     rebar is broken on redhat/fedora use rebar3
   - about erlang:length (avoid it, especially on guards)
     https://groups.google.com/forum/#!msg/erlang-programming/Qg4-AU7J5mM/DEM9MWvLdK4J
-* Books
-** Book: Learn some erlang for greater good
-- *_test() suffix run with eunit
-- *_test.erl suffix to a file name to test that file with eunit
-- *?assert() family to test and get nice error output
-- *_test_() suffix and ?_assert() to use ~Test Generators~ for failed/succeded output
+* Book: Learn some erlang for greater good
 - return {setup,...} from suffixed _test_() to lifecycle a test generator
 - return {foreach,...} for doing individual lifecycles for the test generators
 - spawn,timeout,inorder,inparallel are some other test generator options
-* LFE https://github.com/rvirding/lfe/
-- https://en.wikipedia.org/wiki/LFE_(programming_language)
-  many back to back comparisons
-- https://github.com/lfe-rebar3/rebar3_lfe
-- https://github.com/arpunk/lchain
-  https://web.archive.org/web/20170725083457/https://www.makcorps.com/blog/lets-build-tiniest-blockchain-less-50-lines-python/
-- https://github.com/rvirding/lfe/wiki/Get-started---Macros
-- examples https://github.com/rvirding/lfe/tree/develop/examples
-- examples https://github.com/exercism/lfe
-- examples https://rosettacode.org/wiki/Category:LFE
-- utils https://github.com/lfex/lutil
-- testing https://github.com/lfex/ltest
-- https://github.com/cnbbooks/
-- doc https://lfe.io/books/tutorial/index.html
-- doc http://docs.lfe.io/current/index.html
-- doc https://github.com/cnbbooks/lfe-style-guide
-- SICP https://lfe.gitbooks.io/sicp/content/
-  https://github.com/cnbbooks/lfe-sicp
-https://lfe.io/books/casting-spels/
-- We can abuse (? defmacro to create complex guards and make it clear.
-  Due by design, on guards, we can only have kernel functions.
-** Type Creation
-|                 | ERLANG                      | LFE (short)                  | LFE (long)                                 |
-|-----------------+-----------------------------+------------------------------+--------------------------------------------|
-| list            | [1,2,3,4]                   | '(1 2 3 4)                   | (list 1 2 3 4)                             |
-| tuple           | {ok,2}                      | #(ok 2)                      | (tuple 'ok 2)                              |
-| proplist        | [{debug,1},{verbose,3}]     | '(#(debug 1) #(verbose 3))   | (list (tuple 'debug 1) (tuple 'verbose 3)) |
-| map             | #{foo=>1,bar=>2}            | #M(foo 1 bar 2)              | (map 'foo 1 'bar 2)                        |
-| record define   | -record(record_name,{name}) | (defrecord record-name name) |                                            |
-| record instance | #record_name{name=Name}     | #(record-name Name)          | (make-record-name name Name)               |
-** Type Access
-|          | ERLANG                     | LFE                         |
-|----------+----------------------------+-----------------------------|
-| list     | lists:nth(1,L)             | (lists:nth 1 L)             |
-| tuple    | element(1,T)               | (element 1 T)               |
-| proplist | proplist:get_value(key, L) | (proplist:get_value 'key L) |
-| map      | maps:get(field, M)         | (maps:get 'field M)         |
-| record   | X#record_name.field        | (record-name-name Record)   |
-** Type Destructure
-|          | ERLANG               | LFE              | LFE                           |
-|----------+----------------------+------------------+-------------------------------|
-| list     | [H¦T]                | `(,H . ,T)       | (cons first rest)             |
-| tuple    | {key,Value}          | `#(key ,Value)   | (tuple 'key value)            |
-| proplist | [{key, Value}]       | `(#(key ,Value)) | (list (tuple 'key value))     |
-| map      | #{key := Value}      |                  |                               |
-| record   | #dns_rr{type = Type} |                  | (match-record-name name Name) |
+** TODO 16 Event Handlers
+- Used when there is no need to wait in standby for new events
+- In the shape of a ~event manager~ or ~event forwarder~
+- No new process spawned for short-lived tasks
+- ~gen_event~
+- Event handlers run in the same process as their managers
+- Might be useful when there are many "listener" for the event
+- the handler is a gen_event too, where the important part is the ~handle_event~
+** 18 Building an Application
+- Types of State: static, recomputable dynamic, uncomputable dynamic
+- "The idea of an onion-layered system is to allow all of these different
+   states to be protected correctly by isolating *different* kinds of code from
+   each other. In other words, it’s process segregation."
+- The ~error kernel~ of your application is the place where your app is
+  not allowed to fail, due non recomputable data loss.
+  You use try ..  catch expressions here.
+- Keep things on different supervision trees
+** 19 Building Applications the OTP way
+- Properties on .app.src file are optional.
+  But some applications might use them...
+- ~application_controller~ process starts with the erlang vm.
+  It indirectly starts all other applications supervisers
+    by starting an application master for each app.
+- start/2
+  start(Type, Args)
+        Type: normal for local apps
+        Args: What was put on the app file ({mod, {YourMod, Args}})
+- stop/1
+  stop(State)
+  Clean up
+- Application start/2 strategies
+  temporary: abnormal ending, no restart
+  transient: abnormal ending, no restart, stop all other apps, shutdown vm
+  permanent: normal ending, stop all other apps shutdowns vm
+             abnormal ending, ditto
+** TODO 24 EUnited Nations Council
+- -include_lib("eunit/include/eunit.hrl").
+- Automatically:
+   - Exports and runs functions ending with *_test()*
+   - Looks for *_tests* module.
+*** Macros
+  ?assert(Exp), ?assertNot(Exp)
+  ?assertEqual(A,B)
+  ?assertMatch(Pattern, Exp), ?assertNotMatch(Pattern, Exp)
+  ?assertError(Pattern, Exp)
+  ?assertThrow(Pattern, Exp)
+  ?assertExit(Pattern, Exp)
+  ?assertException(Class,Pattern, Exp)
+*** Test Generators:
+  - ~test generator functions~ that end with *_test_()*
+  - ~test generator~ macros like *?_assertSomething*
+  - It allows eunit:test() to select those tests generators with a
+    ~test representation~
+    - {module, Mod}
+      {dir, Path}
+      {file, Path}
+      {generator, Fun}
+      {application, AppName}
+*** Fixtures
+** 25 Bears, ETS, Beets: In-Memory NoSQL for Free!
+- Use case: when you need to share data with more processes.
+  And want to avoid the msg passing.
+- Soft Limit of 1400 tables
+- Store tuples, and only tuples.
+  - 1 of the elements, will act as a primary key
+- atoms starting with "$" are special like
+  $end_of_table
+- ETS has no transactions, unsafe operations are better handled by the owner itself
+*** Types
+  - set: unique primary key
+  - ordered set: sorted and unique primary key. Useful when doing range ops
+  - bag: non unique primary key, while the rest of the values are different
+  - duplicate bag: non unique primary, and non different values
+*** Modes
+|           | Read   | Write  |
+|-----------+--------+--------|
+| public    | anyone | anyone |
+| protected | anyone | owner  |
+| private   | owner  | owner  |
+*** New
+- ets:new(Name, Opts) or ets:setopts()
+  - named_table       : if the Name will refer the table later
+  - {keypos, Position}: primary key position
+  - {heir, Pid,
+     Data} : ownership to Pid
+  - {read_concurrency , true} : tune for burst write/reads, can be both enabled
+    {write_concurrency, true}
+  - compressed: compress non primary key fields
+*** Insert/Del
+- ets:delete(Table, Key)
+- ets:insert(Table, Key, Values)
+  ets:insert(Table, Key, [Values])
+  on sets and ordered set replace key if provideda an existing key
+- ets:insert_new()
+  on set and ordered sets insert only if primary key is missing
+*** Lookup
+- ets:lookup(Table, Key) % Returns a List
+  ets:lookup_element(Table, Key, Position)
+- ets: first, next, last, prev
+*** Match
+- ~high order pattern-matching~ is NOT available on Erlang
+  That is passing a pattern to a function to return the match.
+- We do have however a special syntax for mach a ets query
+  {atom, '$1', '_'}
+- ets:match        % ret variables of the pattern
+  ets:match_object % ret the whole entry
+  ets:match_delete
+*** (match) Select
+- there is an extended query language to create
+  "guard" like statements for the matchs
+- ~parser transformer~ that can be used to transform
+  a function to a matcher spec
+- - At compile time, it replaces the function definition with the MS
+  -include("stlib/include/ms_transform.hrl").
+  ets:fun2ms(fun (X) -> when X > 4 -> X end).
+- Requires, single variable OR tuple.
+  Can destructure records.
+- ets:select
+  ets:select_reverse
+  ets:select_count
+  ets:select_delete
+*** DETS
+- no ordered_set support
+- dets:open_file
+  dets:close
+** 26 Distribunomicon
+- A computer can run up to 50 erlang VMs/Nodes
+- Each node is named
+- They connect to 1 EPMD (nameserver process)
+*** Fallacies of distributed computing:
+  1) The network is reliable: add redundancy, monitor down hosts
+  2) There is no latency: timeout accordingly
+  3) Bandwith is Infinite: send messages about what happened, not what happened
+  4) The Network Is Secure: ssl distribution, or your own communication protocol
+  5) Topology Doesn't Change: there are libraries that let us forget about nodenames
+  6) There is Only One Administrator: NO library can help
+  7) Transport Cost is Zero: time(serialize/deserialize) and money (bandwith usage). Communication between nodes can be changed (?)
+  8) The Network is Homogeneous: related to the Erlang node protocol. Can exists "C nodes". Or BERT-RPC
+- For erlang: Unreachables nodes are dead nodes. Reachable nodes are alive.
+*** CAP.
+  - Consistency: same data across nodes
+  - Availability: get a response for each request
+  - Partition Tolerance: parts of the "whole" can keep working while others can't communicate
+ - CP: is about stopping modifications, to keep consistency.
+       While keeping the partitions read-only operational.
+   AP: will allow each partition to update. Resulting on inconsistent data.
+- IRL quorum bases system can decide to modify data based on how many % nodes are alive.
+  Trading off only some of the consistency in favor of availability.
+*** Node names need to be UNIQUE
+  - -sname (without dots)
+  - -name (with dots)
+- net_kernel:connect_node(NAME@HOST).
+  net_adm:ping(NAME@HOST).
+- node().
+  nodes().
+- {registeredid, NODE} ! {a,tuple,of,whatever}
+- erlang:monitor_node(NODE, Bool) (link, and monitor still work across nodes)
+- PID
+  - 1st number where the node really comes from, 0 if it comes from the current node
+  - 2nd a counter (?)
+  - 3rd a second counter
+- process_flag(trap_exit, true).
+  link(OtherShell).
+  erlang:monitor(process, OtherShell).
+- spawn/2 spawn(NODE,function) aka a RPC
+- net_kernel:start([foo, shortname])
+  net_kernel:set_net_ticktime(5).
+  net_kernel:stop().
+*** Hidden Node
+- erlang:send(Dest, Msg, [noconnect])
+- erl -sname foo -hidden
+  Will create all connections in the "hidden" pool
+*** Firewall
+- port 4369 for EPMD
+- -kernel inet_dist_listen_min 9100
+  -kernel inet_dist_listen_max 9115
+- ports.conf
+  [{kernel, [{inet_dist_listen_min, 9100},
+             {inet_dist_listen_max, 9115}]}].
+  erl -sname foo -config ports
+*** Cookie
+- A ~cookie~ is more akin to a username than a password.
+  That allows to only nodes that know the cookie to comunicate to each other.
+  Like dividing nodes in different cluster on the same hardware.
+- -setcookie 'mYcOokie'
+-  erlang:set_cookie/2
+- created automaticaly if not set, and stored in .erlang.cookie
+*** Creating a remote shell, and connecting to it
+local > ^G
+  > r remote@localhost
+  > j 2
+remote >
+*** global:
+- process registry that replicates data, handles node failure
+- global:register_name/2
+  global:unregister_name/1
+  global:whereis_name/1
+  global:send/2
+- name conflict resolution
+  - global:register_name/3
+  - global:random_exit_name/3
+    global:random_notify_name/3
+    global:notify_all_name/3
+*** rpc:
+- rpc:multicall(Nodes, Mod, Fun, Args)       -- Call
+  rpc:eval_everywhere(Nodes, Mod, Fun, Args) -- Cast
+- rpc:cast(Node, Mod, Fun, Args)
+- Key = rpc:async_call(Node, Module, Function, Args)
+  rpc:yield(Key)
+  rpc:nb_yield(Key, Timeout)
+  rpc:nb_yield(Key)          -- Pooling
+- execute remotely but get the result locally
+#+begin_src erlang
+rpc:call/4
+rpc:call/5 /4 + Timeout
+rpc:call(Node, Module, Function, Args)
+#+end_src
+** 27 Distributed OTP Application
+- a single ~application controler~
+    over many ~application masters~
+      over supervisors of each app
+- On a distributed application, a ~distributed application controller~ aka ~dist_ac~ is started (on the other nodes?)
+  - An application can then be started or running. Whether is running on the node or waiting (started) for the node to die.
+- failover: run the app in the case of a node dead
+  takeover: force the app to run on your node again
+- Coding an application:
+  - The interface (single argument function) goes (?) on the application file
+  - To make it distributed add start(normal. []) and start({takeover, _OtherNode}, []) to start_link()
+    - Also add config/SNAME.config for each node and add the:
+      - distributed
+      - sync_nodes_mandatory
+      - sync_nodes_timeout
+** TODO 29 Mnesia and the Art of Remembering
+- Mnesia is a layer built on top of ETS and DETS.
+  DETS persistance and ETS performance.
+  Automatically replicate data across nodes.
+  Transactions support.
+  For "small data" on a limited number of nodes.
+- Mnesia tables
+  - Have no built-in type constrains
+  - Are global to all nodes in the cluster (add a prefix)
+* Rebar3 projects
+** lib (built-in): Complete OTP Library application (no processes) structure
+> rebar3 new lib alibrary
+ src/alibrary.erl
+ src/alibrary.app.src
+ rebar.config
+ .gitignore
+ LICENSE
+ README.md
+** app (built-in): Complete OTP Application structure.
+> rebar3 new app anapp
+ src/anapp_app.erl
+ src/anapp_sup.erl
+ src/anapp.app.src
+ rebar.config
+ .gitignore
+ LICENSE
+ README.md
+** release (built-in): OTP Release structure for executable programs
+> rebar3 new release arelease
+ apps/arelease/src/arelease_app.erl
+ apps/arelease/src/arelease_sup.erl
+ apps/arelease/src/arelease.app.src
+ rebar.config
+ config/sys.config
+ config/vm.args
+ .gitignore
+ LICENSE
+ README.md
 
-** Videos
-*** Wherefore art thou LFE? - Robert Virding - https://www.youtube.com/watch?v=BvCBTpnlqs8
-- Erlang language *became* functional as they were working trying to solve other problems.
-- Data types:
-  - Numbers
-  - Atoms (lisp symbols)
-  - Lists
-  - Tuples (lisp vectors) ??
-  - Maps
-  - Binaries
-  - Opaque types
-- Syntax:
-[[./lfe.png]]
-
-https://www.proyectoelectronico.com/amplificadores-audio/amplificador-lm1875.html

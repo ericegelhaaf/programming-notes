@@ -1,0 +1,62 @@
+https://github.com/rvirding/lfe/
+- https://en.wikipedia.org/wiki/LFE_(programming_language)
+  many back to back comparisons
+- https://github.com/lfe-rebar3/rebar3_lfe
+- https://github.com/arpunk/lchain
+  https://web.archive.org/web/20170725083457/https://www.makcorps.com/blog/lets-build-tiniest-blockchain-less-50-lines-python/
+- https://github.com/rvirding/lfe/wiki/Get-started---Macros
+- examples https://github.com/rvirding/lfe/tree/develop/examples
+- examples https://github.com/exercism/lfe
+- examples https://rosettacode.org/wiki/Category:LFE
+- utils https://github.com/lfex/lutil
+- testing https://github.com/lfex/ltest
+- https://github.com/cnbbooks/
+- doc https://lfe.io/books/tutorial/index.html
+- doc http://docs.lfe.io/current/index.html
+- doc https://github.com/cnbbooks/lfe-style-guide
+- SICP https://lfe.gitbooks.io/sicp/content/
+  https://github.com/cnbbooks/lfe-sicp
+https://lfe.io/books/casting-spels/
+- We can abuse (? defmacro to create complex guards and make it clear.
+  Due by design, on guards, we can only have kernel functions.
+* Type Creation
+|                 | ERLANG                      | LFE (short)                  | LFE (long)                                 |
+|-----------------+-----------------------------+------------------------------+--------------------------------------------|
+| list            | [1,2,3,4]                   | '(1 2 3 4)                   | (list 1 2 3 4)                             |
+| tuple           | {ok,2}                      | #(ok 2)                      | (tuple 'ok 2)                              |
+| proplist        | [{debug,1},{verbose,3}]     | '(#(debug 1) #(verbose 3))   | (list (tuple 'debug 1) (tuple 'verbose 3)) |
+| map             | #{foo=>1,bar=>2}            | #M(foo 1 bar 2)              | (map 'foo 1 'bar 2)                        |
+| record define   | -record(record_name,{name}) | (defrecord record-name name) |                                            |
+| record instance | #record_name{name=Name}     | #(record-name Name)          | (make-record-name name Name)               |
+* Type Access
+|          | ERLANG                     | LFE                         |
+|----------+----------------------------+-----------------------------|
+| list     | lists:nth(1,L)             | (lists:nth 1 L)             |
+| tuple    | element(1,T)               | (element 1 T)               |
+| proplist | proplist:get_value(key, L) | (proplist:get_value 'key L) |
+| map      | maps:get(field, M)         | (maps:get 'field M)         |
+| record   | X#record_name.field        | (record-name-name Record)   |
+* Type Destructure
+|          | ERLANG               | LFE              | LFE                           |
+|----------+----------------------+------------------+-------------------------------|
+| list     | [H¦T]                | `(,H . ,T)       | (cons first rest)             |
+| tuple    | {key,Value}          | `#(key ,Value)   | (tuple 'key value)            |
+| proplist | [{key, Value}]       | `(#(key ,Value)) | (list (tuple 'key value))     |
+| map      | #{key := Value}      |                  |                               |
+| record   | #dns_rr{type = Type} |                  | (match-record-name name Name) |
+
+* Videos
+** Wherefore art thou LFE? - Robert Virding - https://www.youtube.com/watch?v=BvCBTpnlqs8
+- Erlang language *became* functional as they were working trying to solve other problems.
+- Data types:
+  - Numbers
+  - Atoms (lisp symbols)
+  - Lists
+  - Tuples (lisp vectors) ??
+  - Maps
+  - Binaries
+  - Opaque types
+- Syntax:
+[[./lfe.png]]
+
+https://www.proyectoelectronico.com/amplificadores-audio/amplificador-lm1875.html

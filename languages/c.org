@@ -1,5 +1,67 @@
-https://github.com/AnthonyCalandra/modern-cpp-features
+- https://not.cafe/2020/10/12/getting-started-with-c-programming.html
+- http://www.tendra.org/tdfc2-config/#S11.2
+  https://github.com/tendra/tendra/wiki/About
+- https://github.com/AnthonyCalandra/modern-cpp-features
 - Video: How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
 - https://github.com/rhysd/vim-clang-format
 - https://github.com/junegunn/fzf
 - https://tek256.com/posts/code-hardening/
+* Book: Effective C
+** 1 Getting Started with C
+- C defines 2 possible execution environments:
+  - Freestanding: no OS, embedded programming
+  - Hosted
+- A ~return~ from the initial call to the ~main~ function
+  is equivalent to calling ~exit~
+- Passing user supplied data to ~printf~ first argument, can result in a secvul (seacord 2013)
+- https://github.com/Valloric/YouCompleteMe/
+  https://github.com/Shougo/deoplete.nvim/
+- Compilers: gcc, clang, visual studio
+- Kinds of Portability issues:
+  . Implementation-defined behavior: not on the C standard, but on a particular impl
+  . Unspecified behavior: on the standard, but with >1 behavior defined
+  . Undefined behavior: not on the C standard, explicit or implicit
+  . Locale-specific behavior
+  . Common Extensions
+- -pedantic, notify portability issues
+** 2 Objects, Functions, and Types
+- "Every type in C is either an ~object~ type or a ~function~ type."
+- IEEE 754-2008: the Standard for Floating-Point Arithmetic.
+- The ~referenced type~ T derives a ~pointer to~ T
+- A code block {} is know as a ~compound statement~
+- C is ~call-by-value~ (aka ~pass-by-value~) language
+*** Scopes:
+  - file: declared outside a block or param list
+  - block: declared inside a block or param list
+  - prototype: on function prototype params
+  - function: on function definition, between {}, only labels(?)
+*** Storage duration
+  - automatic: block scope
+  - static: file scope (the word *static* can make block vars into static scope)
+            Must be initialized wth a constant value, not a variable
+  - thread:
+  - allocated: dynamic allocated
+*** Alignment
+    Number of bytes between suuccessive addresses of objs.
+  - CPU's might behave differently with aligned or unaligned data
+    - They access data by word, and might be able to access multiwords with a perf cost
+    - Depending of the CPU's word (16,32,64 bits)
+  - malloc() is sufficiently aligned for all standard types
+  - _Alignas(struct S) can be used on C11 to align by the type provided
+    In the example for a buffer which is then casted to a struct
+  - Can be weaker or stronger (aka stricter). Stronger have larger alignment values.
+*** Object Types
+- Boolean Types:
+  _Bool introduced on C99, can store 0 or 1
+  can be spelled just ~bool~
+  defined in <stdbool.h>
+- Character Types
+  - char, signed char, unsigned char
+  - All have the same alignment, size range, representation, and behavior
+  - satisfies a minimum et of characters aka ~basic execution character set~
+  - wchar_t is a chart type that takes more space (16 32 bits) to represent more chars
+- Numerical Types
+  - signed char, short int, int, long int, long long int
+  - int word can be ommited on declaration
+* Book: Modern C
+- C is an imperative programming language.

@@ -1,3 +1,5 @@
+- https://github.com/Shizmob/liner/
+- https://gitlab.com/PoroCYon/linux-4k-intro-template
 - http://bruxy.regnet.cz/web/linux/EN/linux-demoscene/
 - http://www.sizecoding.org/wiki/Main_Page
 - https://github.com/baines/demostuff
@@ -32,6 +34,18 @@
   https://www.youtube.com/watch?v=a03HXo8a_Io
   https://github.com/Shizmob/smol
   https://pcy.ulyssis.be/pres/Lin.pdf
+** Environment (OS)
+  - default: libopus, imagemagick, fftw, espeak, SDL, libgompl
+  - glibc uses ld.so as dynamic linked
+  - you can reduce the size by compiling to 32bits
+  - libGL needs to be dynamic linked
+  - apt-rdepends -d --state-follow=Installed <pkg>
+** Elf
+   https://cseweb.ucsd.edu/~ricko/CSE131/teensyELF.htm
+   https://www.pouet.net/prod.php?which=3696
+   - Both kernel and ld.so don't care about every ELF header field
+   - Static: kernel parses directly
+     Dynamic: ld.so loads binary instead
 * Video: (2019) Executable Code Golf: Making Tiny Binaries for Constrained Systems
   for ~8k demos
   https://www.youtube.com/watch?v=J5WX-wN_RKY

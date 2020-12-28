@@ -1,3 +1,14 @@
+- https://twitter.com/cfiesler/status/1336317217034612737
+  Algorithms of Oppresion
+  The Age of Surveillance Capitalism
+  Race After Technology
+  Weapons of Math Destruction
+  Automating Inequality
+  Technically Wrong
+  Ghost Work
+  Design Justice
+- https://ml4code.github.io/papers.html
+- https://medium.com/@satnalikamayank12/on-automated-generation-of-commit-messages-from-code-differences-7ab205ae580
 - Will Kwan https://www.youtube.com/c/WillKwan/videos
 - Instituto de Calculo Secretaria https://www.youtube.com/channel/UCzcbeaNQEIhOFBRBdYx1NEA
 - https://www.youtube.com/user/MinisterioDeCiencia/videos

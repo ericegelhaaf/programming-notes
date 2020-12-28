@@ -1,3 +1,4 @@
+- https://leanpub.com/readevalprintlove001/read
 - ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
 - zap https://malisper.me/zap/
 - Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html

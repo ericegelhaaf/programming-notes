@@ -1,3 +1,4 @@
+- https://www.youtube.com/channel/UCNp-DVb8cQRIOo32sZhWgNg
 - cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
 - http://www.cis.syr.edu/~sueo/cis252/emacs.html

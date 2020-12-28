@@ -1,28 +1,7 @@
+- https://talks.golang.org/2013/bestpractices.slide  Francesc Campoy Flores 
 - Write web applications in Go without using a framework
   https://www.youtube.com/playlist?list=PL41psiCma00wgiTKkAZwJiwtLTdcyEyc4
 - https://www.youtube.com/playlist?list=PLJbE2Yu2zumCe9cO3SIyragJ8pLmVv0z9
-- Will contracts replace interfaces? / Francesc Campoy
-  https://www.youtube.com/watch?v=E75b9kuyRKw
-  You can translate some of the behaviour of something (an object in other languages)
-    to an interface with methods associated. Like a Stack which has Pop, Push, Empty methods.
-  And then you have algoritms that can work with that interface.
-  However there are types that are not completely defined by JUST an interface. So it is
-   kind of an incomplete idea.
-  - Call Dispatch: f.Do()
-  - Interception Points: when an interface is provided for a struct type, the methods
-    of the interface are the interception points.
-- https://www.youtube.com/watch?v=29LLRKIL_TI
-  - Types can express State and Behavior
-    - State = struct
-    - Behavior = interface
-  - 1) Accept interfaces parameters
-  - 2) Use io.Reader, io.Writer
-  - 3) Do not abuse broader interfaces
-  - 4) on a broad sense:
-       functions do not depend of state or do not change, same input same output
-       method defines a behaviour of a type, depend of the state
-  - 5) pointer vs value
-  - 6) Custom error
 - flags custom arg http://blog.ralch.com/tutorial/golang-custom-flags/
 - SOCKS5 https://play.golang.org/p/l0iLtkD1DV (it also support HTTP_PROXY)
 - a set of vulnerable Golang programs https://github.com/trailofbits/not-going-anywhere
@@ -35,7 +14,8 @@
   https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
 - https://github.com/guardrailsio/awesome-golang-security
 - https://github.com/parsiya/Hacking-with-Go
-* Rob Pike
+* Personalities
+** Rob Pike
 https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - GopherFest 2015: Rob Pike on the move from C to Go in the toolchain
   https://www.youtube.com/watch?v=cF1zJYkBW4A
@@ -47,23 +27,26 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 * Learn
 - Learn Go Programming - Golang Tutorial for Beginners
   https://www.youtube.com/watch?v=YS4e4q9oBaU
-- https://github.com/GoesToEleven/GolangTraining
-- https://github.com/ardanlabs/gotraining/tree/master/reading
-- https://github.com/SuperPaintman/the-evolution-of-a-go-programmer
 - https://github.com/Alikhll/golang-developer-roadmap
-- https://learnxinyminutes.com/docs/go/
+- https://github.com/GoesToEleven/GolangTraining
+- https://github.com/SuperPaintman/the-evolution-of-a-go-programmer
+- https://github.com/ardanlabs/gotraining/tree/master/reading
 - https://github.com/dariubs/GoBooks
-- https://github.com/smallnest/go-best-practices
 - https://github.com/hoanhan101/ultimate-go
 - https://github.com/inancgumus/learngo/
 - https://github.com/quii/learn-go-with-tests
 - https://github.com/re4lity/Hacking-With-Golang
+- https://github.com/smallnest/go-best-practices
 - https://go101.org/article/tips.html#force-to-use-keyed-struct-literals
+- https://learnxinyminutes.com/docs/go/
 - Style
   https://github.com/dgryski/awesome-go-style lists of good practices
-  https://golang.org/doc/effective_go.html
-  https://github.com/golang/go/wiki/CodeReviewComments
-** Practical Go: Real world advice for writing maintainable Go programs
+  https://github.com/golang/go/wiki/CodeReviewComment
+** Interview questions
+  https://github.com/shomali11/go-interview
+  https://github.com/hoanhan101/algo
+  https://github.com/goquiz/goquiz.github.io
+* Video: Practical Go: Real world advice for writing maintainable Go programs
    https://www.youtube.com/watch?v=gi7t6Pl9rxE
    https://dave.cheney.net/practical-go/presentations/qcon-china.html
    - Avoid naming with type, or  ex:
@@ -71,6 +54,48 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
      - config Config* // c Config* or conf *Config
      - config1 Config*, config2 Config* // original Config*, updated Config*
      - context context.Context // ctx context.Context
+* Video: Will contracts replace interfaces? / Francesc Campoy
+  https://www.youtube.com/watch?v=E75b9kuyRKw
+  - Go has 2 types, abstract or concrete.
+  - Interfaces
+    - Canonical examples of interfaces are Reader/Writer with Read/Write methods.
+    - They create a "set" of types
+      - Can define an "union" interface of those interfaces
+    - You can translate some of the behaviour of something (an object in other languages)
+      to an interface with methods associated. Like a Stack which has Pop, Push, Empty methods.
+    - And then you have algoritms that can work with that interface.
+    - However there are types that are not completely defined by JUST an interface. So it is
+      kind of an incomplete idea.
+    - "Return concrete types, accept interfaces"
+  - Call Dispatch: f.Do()
+  - Interception Points: when an interface is provided for a struct type, the methods
+    of the interface are the interception points.
+  - ~Implicit interface satisfaction~ no implements. Instead of import the type of the interface you can declare it
+    locally. "give me something that can Eval() or Pop() ... etc"
+* Video: 7 common mistakes in Go and when to avoid them / Steve Francia
+  https://www.youtube.com/watch?v=29LLRKIL_TI
+  - Types can express State and Behavior
+    - State = struct
+    - Behavior = interface
+  - 1) Accept interfaces parameters
+  - 2) Use io.Reader, io.Writer
+  - 3) Do not abuse broader interfaces
+  - 4) Methods vs Functions
+       - functions do not depend of state or do not change, same input same output. Can accept interfaces
+       - method defines a behaviour of a type, depend of the state. Bound to a type.
+  - 5) pointer vs value
+  - 6) Custom error
+* Book: Get Programming with Go
+** 25 Interfaces
+- var of a interface type.
+Ex: both martian and laser are defined types with talk methonnds
+#+begin_src go
+var t interface {
+    talk() string
+}
+t = martian{}
+t = laser(3)
+#+end_src
 * Book: Learn go with tests
 ** Hello world
 - Rules for "testing" package
@@ -113,13 +138,15 @@ type error interface {
   - unwind the stack
   - if unhandled unwind the whole stack
   - signature is ~panic(interface{})~
-* Book: Black Hat Go - https://github.com/blackhat-go/bhg/
+* Book: Black Hat Go
+  https://github.com/blackhat-go/bhg/
 ** Chapter 5 DNS
 - with "net" package you can't set the resolver or run deep inspection (? on the result
 - RR interface doesn't have methods to get the response IP
 - to get the IP from a RR struct we use *type assertion* to create the data
 - you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
-* Book: Effective Go - https://golang.org/doc/effective_go.html
+* Book: Effective Go
+  https://golang.org/doc/effective_go.html
 - "go fmt" uses tabs
 - Unlike C, is OK return the address of a local variable (!
 ** Control structures
@@ -252,6 +279,9 @@ type error interface {
     import _ "net/http/pprof"
     #+end_src
   - Interface checks
+* Book: The Go Programming Language
+** 7 Interfaces
+
 * Language features
 ** slices
 - http://blog.golang.org/go-slices-usage-and-internals
@@ -266,7 +296,3 @@ instead of designing our abstractions in terms of what kind of data our types
 can hold, we design our abstractions in terms of what actions our types can
 execute.
 #+end_src
-* Interview questions
-  https://github.com/shomali11/go-interview
-  https://github.com/hoanhan101/algo
-  https://github.com/goquiz/goquiz.github.io

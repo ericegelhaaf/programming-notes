@@ -16,3 +16,7 @@ git log --oneline -1 $revision
 - on vim
 :!./script.sh
 :map ,t :w\|:!./script.sh<cr>
+* TODO 2 How and Why to avoid NIL
+- Is a problem when it percolates faaar beyond one expect it to happen.
+  - The introduction of the nil is not local to the use of it.
+  - We might lose the line of the error

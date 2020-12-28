@@ -1,3 +1,22 @@
+
+Guys what about?:
+Core:
+Official Website: https://clojure.org/
+Documentation: https://clojuredocs.org/
+Cheat-sheet: https://clojure.org/api/cheatsheet
+Community Resources: https://clojure.org/community/resources
+Clojure Libraries: https://clojars.org/
+Libraries Documentation: https://cljdoc.org/
+
+Practice:
+4Clojure: https://www.4clojure.com/
+Koans: https://github.com/functional-koans/clojure-koans
+Clojure problems on Exercism: https://exercism.io/tracks/clojure
+
+Tools:
+Clojure Toolbox: https://www.clojure-toolbox.com/
+EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-api.html
+
 - https://www.cs.utexas.edu/users/novak/cs378contents.html
 - Simulating Machines in Clojure https://stopa.io/post/255
 - Podcast - https://clojuredesign.club/
