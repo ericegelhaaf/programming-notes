@@ -1,3 +1,4 @@
+- http://wcp.sdf-eu.org/software/index.html
 - https://leanpub.com/readevalprintlove001/read
 - ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
 - zap https://malisper.me/zap/
@@ -389,6 +390,7 @@ https://lisp-lang.org/learn/continuous-integration
             working. Also disable the debugger instead of
             waiting endlessly for a programmer to help it out
             with input on *DEBUG-IO*. (This is the default.)
+- https://www.timmons.dev/posts/static-executables-with-sbcl.html
 - https://nyxt.atlas.engineer/article/continuous-testing-and-packaging.org
 - https://github.com/Shinmera/deploy
 ** sbcl build

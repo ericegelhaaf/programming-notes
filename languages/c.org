@@ -6,6 +6,9 @@
 - https://github.com/rhysd/vim-clang-format
 - https://github.com/junegunn/fzf
 - https://tek256.com/posts/code-hardening/
+* clang-format
+  https://emacs.stackexchange.com/questions/55635/how-can-i-set-up-clang-format-in-emacs
+  clang-format -style=llvm -dump-config > .clang-format
 * Book: Effective C
 ** 1 Getting Started with C
 - C defines 2 possible execution environments:
@@ -51,17 +54,34 @@
     In the example for a buffer which is then casted to a struct
   - Can be weaker or stronger (aka stricter). Stronger have larger alignment values.
 *** Object Types
-- Boolean Types:
-  _Bool introduced on C99, can store 0 or 1
-  can be spelled just ~bool~
-  defined in <stdbool.h>
-- Character Types
+- Boolean:
+  - <stdbool.h>
+  _Bool (or just bool) introduced on C99, stores 0 or 1
+- Character:
   - char, signed char, unsigned char
   - All have the same alignment, size range, representation, and behavior
   - satisfies a minimum et of characters aka ~basic execution character set~
   - wchar_t is a chart type that takes more space (16 32 bits) to represent more chars
-- Numerical Types
+- Numerical:
   - signed char, short int, int, long int, long long int
-  - int word can be ommited on declaration
+  - *int* word can be ommited on declaration
+  - <limits.h> has the maximun and minumun of each type
+  - <inttypes.h> or <stdinit.h> to define uint32_t or uintmax_t
+- Enum: enum day {sun = 1, mon, tue}
+- Floating-point: float, double, long double
+- void
+- Functions:
+  - list the param types or use *void* when no args
+  - A function with a param type list is known as a *function prototype*
+- Derived:
+  - Pointers:
+    - operators &* used together cancell each other
+    - * (indirection, operates only on pointers)
+    - & (address-of)
+  - Arrays:
+    - str[i]   is identical to *(str + i)
+    - &str[10] is the same as    str + 10
+* Book: An Introduction to C GUI Programming
+
 * Book: Modern C
 - C is an imperative programming language.

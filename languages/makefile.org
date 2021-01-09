@@ -1,3 +1,5 @@
+- 10.3 Variables Used by Implicit Rules
+  https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
 * Tutorial: makefile tutorial
   http://makefiletutorial.com/
 - can be more than 1 *target* separated by space (usually 1)
