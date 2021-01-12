@@ -1,3 +1,4 @@
+- http://technosophos.com/2019/08/07/writing-a-kubernetes-controller-in-rust.html
 - https://github.com/unknownue/vulkan-tutorial-rust
 - https://hackernoon.com/programming-in-rust-the-good-the-bad-the-ugly-d06f8d8b7738
 - Type on destructuring = instead of :
@@ -331,7 +332,7 @@ enum AnimalType {
 #+begin_src rust
 fn afunction<T>(name: T) -> T {
    T
-e}
+}
 #+end_src
 - We can also ensure certain traits on it.
 #+begin_src rust

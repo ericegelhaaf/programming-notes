@@ -1,3 +1,5 @@
+- http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
+  https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
 - https://not.cafe/2020/10/12/getting-started-with-c-programming.html
 - http://www.tendra.org/tdfc2-config/#S11.2
   https://github.com/tendra/tendra/wiki/About
