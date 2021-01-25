@@ -8,7 +8,7 @@
 - https://blog.golang.org/maps
 - Going Infinite, handling 1M websockets connections in Go
   https://github.com/eranyanay/1m-go-websockets
-- Source analysis of sync.Mutex in golang
+n- Source analysis of sync.Mutex in golang
   https://programmer.group/source-analysis-of-sync.mutex-in-golang.html
 - sync.RWMutex
   https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
@@ -86,16 +86,89 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
   - 5) pointer vs value
   - 6) Custom error
 * Book: Get Programming with Go
-** 25 Interfaces
-- var of a interface type.
-Ex: both martian and laser are defined types with talk methonnds
-#+begin_src go
-var t interface {
-    talk() string
-}
-t = martian{}
-t = laser(3)
-#+end_src
+** DONE 22 GO's got no class
+- assigning methods to types
+** DONE 23 Composition
+- On ~inheritence~, you create hierarchies.
+  Which can be tricky to think about and change.
+- On ~composition~, you create methods and associate them to each "class".
+- Instead of *clog* different kind of fields into a single structure.
+  Use separate and smaller structures/types.
+  And compose them into one.
+- Forwarding methods:
+  // Naive
+  func (r report) avg() celsius {
+    return r.temperature.avg()
+  }
+  ~Struct embedding~: makes all methods/subfields accessible from the main
+  type report struct {
+    sol int
+    temperature
+    location
+  }
+  ~Name Collision~, compiler warns ONLY on ambiguous usage
+** DONE 24 Interfaces
+- ~Interfaces~  are about what a type *can do* not what they store
+- var t with an interface
+  #+begin_src go
+  var t interface {
+      talk() string
+  }
+  #+end_src
+- *satisfing the interface* with new types, interface is NOT mentioned
+  #+begin_src go
+  type martian struct{}
+  func (m martian) talk() string {
+      return "nack nack"
+  }
+  type laser int
+  func (l laser) talk() string {
+      return strings.Repeat("pew ", int(1))
+  }
+  #+end_src
+- assigning var interface
+  #+begin_src go
+  t = martian{}
+  fmt.Println(t.talk())
+  t = laser(3)
+  fmt.Println(t.talk())
+  #+end_src
+- declaring a *interface type*, usually ended with "-er"
+  #+begin_src go
+  type talker interface {
+      talk() string
+  }
+  #+end_src
+- for example: fmt.Stringer
+  which needs a type that implements the method String()
+- ~interface embedding~ is a thing
+** DONE 26 A few pointers
+- A ~Pointer~ is a variable that points to the address of another variable.
+- ~Maps~ are pointers in disguise, no need to dereference on a function arg
+  ~Slices~ are, in part, pointers to elements on an array.
+           A pointer to a slice is only needed when modifing the cap/length/offset.
+           Though, it might been better return a new slice.
+- & address operator, can't take addresses of literal strings, number or booleans
+- * dereference operator, also used in pointer types (like *int)
+  can be assigned: *adminpoint = "new admin"
+- ~Automatic dereferencing~
+  - struct fields
+  - array indexes
+- Unlike C:
+  - Arrays and pointers are different types altogether
+  - GO avoids potential unsafe operations with pointers
+    a *int pointer can only point to a memory position where there is a int
+  - parameters are ALWAYS passed by value, pointers enable ~mutation~
+- Methods who have a *pointer receiver* (mutable), can be sent from a struct or a pointer
+  #+begin_src go
+  func (p *person) book (){
+     p.foo += 1
+  }
+  p1 := person{}  // struct
+  p2 := &person{} // pointer
+  p1.book()
+  p2.book()
+  #+end_src
 * Book: Learn go with tests
 ** Hello world
 - Rules for "testing" package

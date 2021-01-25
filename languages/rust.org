@@ -1,8 +1,8 @@
+- https://www.fpcomplete.com/blog/philosophies-rust-haskell/
 - http://technosophos.com/2019/08/07/writing-a-kubernetes-controller-in-rust.html
 - https://github.com/unknownue/vulkan-tutorial-rust
 - https://hackernoon.com/programming-in-rust-the-good-the-bad-the-ugly-d06f8d8b7738
 - Type on destructuring = instead of :
-
 - https://github.com/bevyengine/bevy
 - tut dns server https://github.com/EmilHernvall/dnsguide
 - Implementing TCP in Rust (part 1) https://www.youtube.com/watch?v=bzja9fQWzdA
@@ -118,6 +118,23 @@ pub struct Block {
 - Microsoft IOT does some rust: https://github.com/Azure/iotedge/
 * Tutorial: EasyRust
   https://github.com/Dhghomon/easy_rust
+
+|                | UpperCamelCase | snake_case |   |   |
+|----------------+----------------+------------+---+---|
+| Implementation | YES            |            |   |   |
+| Struct         | YES            |            |   |   |
+| Enum           | YES            |            |   |   |
+| Variables      |                | YES        |   |   |
+| Functions      |                | YES        |   |   |
+
+
+|         | Create         | Access    | Match        | Insert            |
+|---------+----------------+-----------+--------------+-------------------|
+| Tuple   |                | .0        | (a,_b)       |                   |
+| struct  |                | .FIELD    |              |                   |
+| enum    |                |           | ENUM::Val(a) |                   |
+| HashMap | HashMap::new() | .get(key) | (key,val)    | .insert(key, val) |
+| Vector  | vec![]         |           |              |                   |
 ** Comments
 #+begin_src rust
 // Comment
@@ -189,10 +206,10 @@ let d = 1u8;     // uses type u8
   - alignment <>^ (left/right/middle)
 ** Strings
 - Types of string
-| type   | ownership | alloc? | initialization                 | speed   |
-|--------+-----------+--------+--------------------------------+---------|
-| &str   | borrowed  | data?  | let a = "hello";               | fastest |
-| String | owned     | heap   | let a = String::from("hello"); | fast    |
+| type   | initialization                 | ownership | alloc? | speed   |
+|--------+--------------------------------+-----------+--------+---------|
+| &str   | let a = "hello";               | borrowed  | data?  | fastest |
+| String | let a = String::from("hello"); | owned     | heap   | fast    |
 - std::mem::size_of::<String>() = 24bytes
   std::mem::size_of::<i8>()     =  1bytes
   std::mem::size_of_val("abc")  =  3bytes
@@ -259,18 +276,21 @@ fn main() {
   - let mut avector = Vec::with_capacity(100)
 - array/vector slicing &a[1..2]
                has exclusive index slicing
-** Control flow
+** DONE Control flow
+- both must return the same type
 - if
-  - must return the same type
+  else if
+  else
 - match
-  - mandatory "else" with _
-  - support for guards
+  - mandatory to cover all, "else" with _
+  - each line is called *arm*
+    - => separate match and action
+    - ,  comma between each line
+    - ;  semicolon after the braces to return a value
+  - support for guards (if)
   - support tuples, creating it on the argument or on the matches
-  - must return the same type
   - @ can be used to name the match
-** Structs
-- creates a type
-- UpperCamelCased
+** DONE Structs
 #+begin_src rust
 struct AUnit;         // "unit struct"
 struct ATuple(i8,i8); // "tuple struct" or "unnamed struct"
@@ -280,119 +300,332 @@ struct ANamed {       // "named struct"
 } // DO NOT add a semicolon after, "there is whole block of code after it"
 #+end_src
 ** Enums
-- UpperCamelCase
-- can destructure (on a match) the content of the enum, if any
-- can import (with ~use ENUMNAME::*~) the enum, in a function, to avoid writing the enum name
+- let a = ThingsInsky::Sun; // Assign a *variant*
 - each member gets a number from 0 to 10
-- each member can have different types
+  - can be given different numbers
 #+begin_src rust
 enum ThingsInSky {
     Sun,
     Stars,
 }
-let a = ThingsInsky::Sun;
-
+enum ThingsInSky {
+    Sun = 10,
+    Stars = 100,
+}
+#+end_src
+- can add content to each
+#+begin_src rust
 enum ThingsInSky {
     Sun(String),
     Stars(String),
 }
 let b = ThingsInSky::Stars("I can see the Sky");
 #+end_src
-** Loops
+- can destructure (on a match), the content of the enum
+- can import (with ~use ENUMNAME::*~) the enum
+  (in a function) to avoid writing the ENUMNAME
+- each member can have different types
+  - can be (mis?)used to return different types, while being that enum
+** DONE Loops
 - loop {break}
-  loop {break RETURNVALUE}
-  'namedloop: loop {break 'namedloop}
+  loop {break RETURNVALUE;}
+  'named_loop: loop {break 'named_loop}
 - while 1==1 {}
 - for n in 1..3 {}
-** Implementing structs and enums
+** DONE Implementing (on) structs and enums
+- impl
+- #[] are attributes
 - Methods
   - Regular: take &self(or &mut self), use .methoname() to call them
   - Associated/Static: do NOT take &self, use ::methodname() to cal them
 - ~Self~ and ~self~ can be replaced with the literal StructName
-- derived ~attributes~
-#+begin_src rust
-#[derive(Debug)]
-struct Animal {
-    age: u8,
-    animal_type: AnimalType,
-}
-#[derive(Debug)]
-enum AnimalType {
-    Cat,
-    Dog,
-}
-#+end_src
-** Destructuring
+   fn new() -> Self
+   fn new() -> Animal
+   fn change(&mut self)
+   fn change(&mut Animal)
+   fn change(&self)
+   fn change(&Animal)
+   #+begin_src rust
+   #[derive(Debug)]
+   struct Animal {
+       age: u8,
+       animal_type: AnimalType,
+   }
+   #[derive(Debug)]
+   enum AnimalType {
+       Cat,
+       Dog,
+   }
+   impl Animal {
+      new() -> Self {
+          Self {
+            age: 10,
+            animal_type: AnimalType::Cat,
+          }
+      }
+   }
+   #+end_src
+** DONE Destructuring
 - a Struct can be destructure on a let
-** References and the dot operator
+** DONE References and the dot operator
 - ~*~ dereferencing happens automatically with the ~.~ operator in struct fields
-- just reference the whole struct instead of the single field
-** Generics
+  - from &i32 to i32
+** DONE Generics
 - We can make a function to take any type. Usually name T.
-#+begin_src rust
-fn afunction<T>(name: T) -> T {
-   T
-}
-#+end_src
+  #+begin_src rust
+  fn afunction<T>(name: T) -> T {
+     T
+  }
+  #+end_src
 - We can also ensure certain traits on it.
-#+begin_src rust
-use std::fmt::Debug;
-fn afunction<T: Debug>(name: T) -> T {
-   T
-}
-#+end_src
+  #+begin_src rust
+  use std::fmt::Debug;
+  fn afunction<T: Debug>(name: T) -> T {
+     T
+  }
+  #+end_src
 - We can have multiple types for multiple arguments, with different traits
-#+begin_src rust
-use std::fmt::Display;
-use std::cmp::PartialOrd;
-fn afunction<T: Display, U: Display + PartialOrd>(name: T, num_1: U) -> T {
-   T
-}
-// Alternative format
-fn afunction<T,U>(name: T, num_1: U)
-where
-    T: Display,
-    U: Display + PartialOrd,
-{
-    println!("WHAAAT")
-}
-#+end_src
-** Option and Result
-- ~Panic~ means that the program stopped before a problem happened
-*** Option
-#+begin_src rust
-enum Option<T> {
-   None,
-   Some(T),
-}
-#+end_src
-- """type wrapper""" to get either ~Some()~ or ~None~ from a type
-- Used when we might or might not return anything
-- eg: i32 to Option<i32>
-- if it is Some it can be .unwrap()
-  - None can't be unwrapped
-- .is_some() and .is_none()
-*** Result
+   #+begin_src rust
+   use std::fmt::Display;
+   use std::cmp::PartialOrd;
+   fn afunction<T: Display, U: Display + PartialOrd>(name: T, num_1: U) -> T {
+      T
+   }
+   // Alternative format
+   fn afunction<T,U>(name: T, num_1: U)
+   where
+       T: Display,
+       U: Display + PartialOrd,
+   {
+       println!("WHAAAT")
+   }
+   #+end_src
+** DONE Option and Result
+- Make rust code safer
+- ~Panic~ means that the program stopped before a problem happened.
+  And the stack has been unwinded.
+- ~.unwrap()~  if there is Some/Ok
+  - None/Err CANNOT be
+- ~if let~ do something if matches
+  ~while let~ loop while it matches
+*** Option<T>
+- Internal shape of Option
+  #+begin_src rust
+  enum Option<T> {
+     None,
+     Some(T),
+  }
+  #+end_src
+- can use match to destructure with Some(_)
+- .is_some()
+  .is_none()
+*** Result<T,E>
 #+begin_src rust
 enum Result<T, E> {
     Ok(T),
     Err(E),
 }
 #+end_src
-- .is_ok() and .is_err()
-** Other Collections
-** The ? Operator
-** Traits
-** Chaining methods
-** The dbg! macro and .inspect
-** Types of &str
-** Lifetimes
-** RefCell
-** Mutex
-** RwLock
-** Cow
-** The todo! macro
-** Rc
+- .is_ok()
+  .is_err()
+** DONE Other Collections
+   https://doc.rust-lang.org/beta/std/collections/
+- all under
+  use std::collections::
+*** HashMap<T,T> (and BTreeMap)
+- .entry() returns an *enum* called *Entry*
+#+begin_src rust
+enum Entry<K,V> {
+    Occupied(OccupiedEntry<K,V>),
+    Vacant(VacantEntry<K,V>),
+}
+#+end_src
+- .or_insert(VALUE) inserts it if the Entry is Vacant,
+   otherwise returns a *mut* of the entry
+*** HashSet
+- A HashMap with ONLY keys
+- Used to check the existence of a key on a group.
+*** BinaryHeap<T>
+- .pop()
+- A mostly unsorted collection where the front always has the bigger value
+  - works with tuples
+- Use case: priority queue
+*** VecDeque
+- A vector that is fast/good for removing things from both sides
+- .pop_front() .pop_back()
+  .push_front()
+** DONE The ? Operator
+- Unwraps if Ok otherwise, returns Error and ends (function)
+- panic!()
+  assert!()
+  assert_eq!()
+  assert_ne!()
+- ~.expect()~ instead of using a lot of .unwrap() to explain the error
+- ~.unwrap_or()~ to provide a default when a normal unwrap fails
+** DONE Traits
+- Traits about what a struct *can do*
+- Once defined a *trait* you can *impl* for a type
+  - On the *impl* you can redefine the default implementation
+    - You cannot redefine with a new signature
+- use std::fmt;
+  impl fmt::Display for T {...}
+- ~Trait bounds~, where neither the trait or the impl have method
+  instead traits are used as *restrictions* for regular functions
+- ~From<T>~
+  - use std::convert::From
+  - impl From<T> for S {
+      fn from (a: T) -> Self {
+         Self { a }
+      }
+    }
+- ~AsRef~
+  - We can use the trait Asref<str> + Display to accept both &str and String on a function
+** DONE Chaining methods
+- aka functional style
+- let new_vec = (1..=10).collect::<Vec<i32>>()
+  OR
+  let new_vec: Vec<i32> = (1..=10).collect()
+- .into_iter()
+  .skip()
+  .take()
+  .collect()
+** DONE Iterators
+- .iter()      - iterator of references
+  .iter_mut()  - iterator of mutable references (a for loop for example)
+  .into_iter() - iterator of values (not references) as a result it destroys the values (ownage)
+- .map()     - iters over each element and pass it on
+  .for_each()- iters over each element
+- An iterator in the backend are calling .next()
+    which gives an Option.
+- ~Associated Type~ means "a type that goes together"
+    they might be required to define for impl (?)
+  #+begin_src rust
+  // Item is the Assoc. Type
+  impl Iterator for T {
+    type Item = S;
+    fn next(&mut self) -> Option<i32> {
+    }
+  }
+   #+end_src
+** DONE Closures
+- aka lambdas
+- no argument:   || println!("This is a closure");
+  typed arg:     |x: i32| println!("{}", x);
+  multiple line: || {}
+  unused arg:    |_| println!("I dont use the argument")
+- normal call: my_closure();
+- *closures* vs *anonymous functions*: wheter ~||~ encloses external vars or not
+  the later gets compiled to the same of a regular function
+- Take a closure: .unwrap_or_else() .map() .for_each()
+*** Iterators
+- Iterators are ~lazy~, you have to collect() them to process them
+  #+begin_src rust
+  num_vec         //                Vec<i32>
+    .iter()       //               Iter<i32>
+    .enumerate()  //     Enumerate<Iter<i32>>
+    .map()        // Map<Enumerate<Iter<i32>>>
+  #+end_src
+- There are times where the type of collect is not needed so these are the same:
+  .collect::<HashMap<i32, &str>>();
+  .collect::<HashMap<_, _>>();
+  .collect();
+- .enumerate(), vec![10,20,30] -> (0,10),(1,20),(2,30)
+  .char_indices(), for strings
+  .match_indices(), for strings, but finds the provided substring
+                    ex: find number of spaces .collect().len()
+- .filter()    , takes a closure returns a boolean
+  .filter_map(), takes a closure must return an Option
+- .ok()    - Result<> into Option<>
+  .parse::<T>().ok()
+- .ok_or() - Option<> into Result<>
+  .ok_or_else()
+- .and_then()  - Option<> into Option<>, like a "safe" unwrap
+- .and()       - A boolean for Option<>
+- .any() all() - Take a boolean closure
+- .rev()       - to reverse an *iterator*
+- .find()      - return an Option<>
+  .position()
+- .cycle()     - makes an infinite iterator
+- .skip()
+  .take()
+- .fold()
+- .chars()     - makes an iterator from a string
+- .take_while()
+  .skip_while()
+  .map_while()
+- .cloned()  - Reference into a Value
+  .by_ref()  - Makes and iterator take a reference
+- .sum()
+- .chunks()  - Consume by chunks
+  .windows() - Slide by window
+- .peekable() makes an iterator able to use .peek(),
+              moving forward with .next()
+** DONE The dbg! macro and .inspect
+- dbg!() can print variables OR expressions
+- .inspect() is like map (!?)
+** DONE Types of &str
+- Literals: they last the whole program, are ~&'static str~
+- Borrowed: a String being referenced (&)
+** DONE Lifetimes
+- Can be provided on a struct or a field, as a requirement
+  struct Name<'a> {
+    name: &'a str,
+  }
+- &'static - if lives for the whole program
+  &'a      - if lives as long as
+  &'_      - anonymous lifetime, used by impl <'_>
+             to indicate that a reference is being used
+- avoid lifetimes by staying with "owned types", "cloning"m
+- avoid &str in favor or String on structs
+** DONE Interior Mutability
+|                    | Define     | New               | Set                          |
+|--------------------+------------+-------------------+------------------------------|
+| std::cell::Cell    | Cell<T>    | Cell::new(VAL)    | .set(VAL)                    |
+| std::cell::RefCell | RefCell<T> | RefCell::new(VAL) | .replace(VAL)                |
+|                    |            |                   | .replace_with(CLOSURE)       |
+| std::sync::Mutex   |            | Mutex::new(VAL)   | *mutex.lock().unwrap() = VAL |
+| std::sync::RwLock  |            | RwLock::new(VAL)  | .write().unwrap();           |
+|                    |            |                   | *writer = VAL;               |
+*** RefCell
+- .borrow()
+  .borrow_mut()
+- Checks borrows at *runtime* not compilation time
+- Borrowing:
+  1) Many borrows are fine
+  2) 1 Mutable borrows is fine
+  3) mutable AND immutable are not fine
+*** Mutex (Mutual Exclusion)
+- .try_lock()
+- chan = mutex.lock().unwrap();
+  *chan = VAL;
+- Locks lasts until the scope is finished
+- Unlock manually
+  std::mem::drop(mutex_changer)
+*** RwLock
+- .try_read() .try_write()
+- Unlock with std::mem::drop
+- Adquires writers/readers same as RefCell
+- .read().unwrap()
+  let mut writer = .write().unwrap(); *writer = VAL; drop(writer);
+** Cow (Clone On Write)
+** DONE Type Aliases
+- It does NOT create a new type.
+  #+begin_src rust
+  type CharacterVec = Vec<char>;
+  use std::iter::{Take, Skip};
+  use std::slice::Iter;
+  type SkipFourTakeFive<'a> = Take<Skip<Iter<'a, char>>>
+  #+end_src
+- If you want the type to be *seen* by the compiler...
+  An accepted hack is wrap it on a struct.
+- Can use *as* to alias an import
+** DONE The todo! macro
+- same as ~unimplemented!()~
+- Put it inside some function implementation, to silence compiler
+** Rc (Reference Counter)
+- Reminder: a variable can only have ONE owner
+- With *Rc*, a variable can have >1 owner
+  - When you CANNOT .clone() it
 ** Multiple threads
 ** Closures in functions
 ** impl Trait
@@ -404,6 +637,14 @@ enum Result<T, E> {
 ** Default and the builder pattern
 ** Deref and DerefMut
 ** Crates and modules
+* Video: Rust Programming Techniques
+  https://www.youtube.com/watch?v=vqavdUGKeb4
+  Year: 2018
+  By: Nicholas Cameron
+- A rust a reference is a pointer, but references can never be NULL
+- *match* the compiler checks that the matching type gets ~exhausted~
+- *if let* on the other hand does ~non-exhaustive~ pattern matching
+- A macro can hide a return
 * Learn
 - https://github.com/sger/RustBooks
 - https://github.com/mre/idiomatic-rust
