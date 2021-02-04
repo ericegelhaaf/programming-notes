@@ -1,0 +1,17 @@
+https://www.coursera.org/specializations/algorithms
+
+* Others people repos
+| Language   | Course    | URL                                                                                     |
+|------------+-----------+-----------------------------------------------------------------------------------------|
+| Java       | 1/2       | https://github.com/rajeshsurana/Algorithm                                               |
+| Jupiter    | 1/2       | https://github.com/ztyzhangtianyu/stanford-algorithms/                                  |
+| Jupyter    | 1/2       | https://github.com/LuketheDukeBates/Algorithms-and-Data-Structures/                     |
+| Jupyter    | 1/2       | https://github.com/MLunov/Algorithms-Specialization-Stanford                            |
+| Jupyter    | 1/2       | https://github.com/nkthiebaut/algorithms                                                |
+| Python     | Karatsuba | https://github.com/Surya97/Standford-Algorithms-Specialization/blob/master/Karatsuba.py |
+| Python     | 1         | https://github.com/justinas-marozas/coursera-algorithms-specialization                  |
+| Python     | 1/2/3/4   | https://github.com/SteffenHaeussler/algorithms_specialization/                          |
+| Ruby       | 2         | https://github.com/ras123/alg2_standford                                                |
+| Ruby       | 2         | https://github.com/jacindaz/stanford_algorithms/blob/master/week2/hw_week_2.rb          |
+| TypeScript | 1/2       | https://github.com/ferueda/stanford-
+
