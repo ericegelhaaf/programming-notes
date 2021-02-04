@@ -17,6 +17,8 @@ Tools:
 Clojure Toolbox: https://www.clojure-toolbox.com/
 EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-api.html
 
+- Transforming Data with ClojureScript¶ https://langintro.com/cljsbook/
+- https://github.com/magomimmo/modern-cljs
 - https://www.cs.utexas.edu/users/novak/cs378contents.html
 - Simulating Machines in Clojure https://stopa.io/post/255
 - Podcast - https://clojuredesign.club/

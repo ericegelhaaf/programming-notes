@@ -25,6 +25,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
   - own file format
   - translated the C code of the compiler to Go using a "translator"
 * Learn
+- https://github.com/golang-standards/project-layout/
 - Learn Go Programming - Golang Tutorial for Beginners
   https://www.youtube.com/watch?v=YS4e4q9oBaU
 - https://github.com/Alikhll/golang-developer-roadmap

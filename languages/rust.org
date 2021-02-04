@@ -116,6 +116,15 @@ pub struct Block {
   - Hyper: http library that uses Tokio
   - Tower: service framework
 - Microsoft IOT does some rust: https://github.com/Azure/iotedge/
+* Video: Rust Programming Techniques
+  https://www.youtube.com/watch?v=vqavdUGKeb4
+  Year: 2018
+  By: Nicholas Cameron
+- A rust a reference is a pointer, but references can never be NULL
+- *match* the compiler checks that the matching type gets ~exhausted~
+- *if let* on the other hand does ~non-exhaustive~ pattern matching
+- A macro can hide a return
+
 * Tutorial: EasyRust
   https://github.com/Dhghomon/easy_rust
 
@@ -164,7 +173,7 @@ let d = 1u8;     // uses type u8
 *** Floats
 - Can't add f32 and f64 directly
 - Defaults to f64
-- Rust compiler miiiight infer to use f32
+- Rust compiler miiiight infer to use f32n
 ** Printing 'hello, world!'
 - ~macros~ have a ~!~ after them
 - return and ~;~
@@ -626,25 +635,206 @@ enum Entry<K,V> {
 - Reminder: a variable can only have ONE owner
 - With *Rc*, a variable can have >1 owner
   - When you CANNOT .clone() it
-** Multiple threads
-** Closures in functions
+** DONE Multiple threads
+- std::thread::spawn()
+  - returns a JoinHandle
+  - we can .join() the handle to have the program wait for the thread
+- Closure types, takes
+  - FnOnce: the whole values
+    FnMut: a mutable reference
+    Fn: a regualar reference
+- Values from outside the thread into the tread need to use
+  *move* on the closure to take ownership
+** TODO Closures in functions
+- A closure is a generic because every time it is a different type
 ** impl Trait
 ** Arc
 ** Channels
+** Reading Rust documentation
 ** Attributes
-** Box
-** Box around traits
-** Default and the builder pattern
+** DONE Box
+- Box<T>, wraps a type
+- Box::new(), creates the Box<T> instance
+- AKA ~smart pointer~
+  - Can use * operator with Box, just like with an &
+  - Stored on the *heap* instead of the *stack*
+- Has not Copy, you need to .clone() it
+- Can be used to create *recursive structs* not allowed by default
+** DONE Box around traits
+- Box can be used to return Traits from functions
+  Otherwise the compiler won't allow return something of size unknown.
+  JustATrait
+  to
+  Box<dyn JustATrait>
+- Seen often as
+  Box<dyn Error>
+- Creating an Error
+#+begin_src rust
+use std::error::Error;
+use std::fmt;
+
+#[derive(Debug)]
+struct ErrorOne
+impl Error for ErrorOne{} // ONE
+impl fmt::Display for ErrorOne { // TWO
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "You got the first error!")
+    }
+}
+fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
+    Err(Box::new(ErrorOne))
+}
+#+end_src
+** DONE Default and the builder pattern
+- impl Default for T {
+     fn default() -> Self
+  }
+- let char = T::default();
+- The so called *builder pattern* comes into picture with methods that take ownership
+  impl Character {
+      fn name(mut self, name: &str) -> Self {
+          self.name = name.to_string();
+          self
+      }
+  }
+  Which can be called like
+  let char = T::default().name("WILLY");
+- Sanity validations can happen on a method, that is called last on the creation.
+  By creating a boolean field on the struct and
+    - TRUE on new() and build()
+    - FALSE on any other builder method
+  fn build(mut self) -> Result<Character, String>
 ** Deref and DerefMut
-** Crates and modules
-* Video: Rust Programming Techniques
-  https://www.youtube.com/watch?v=vqavdUGKeb4
-  Year: 2018
-  By: Nicholas Cameron
-- A rust a reference is a pointer, but references can never be NULL
-- *match* the compiler checks that the matching type gets ~exhausted~
-- *if let* on the other hand does ~non-exhaustive~ pattern matching
-- A macro can hide a return
+** DONE Crates and modules
+- crate>mod
+  std::collections::HashMap
+       ^ module
+
+- *fn* inside a *mod* are ~private~ by default
+  - they can't be imported/use either
+  - *pub* on fn, struct (on each item), enum, trait, mod
+
+- Create module
+  #+begin_src rust
+  mod print_things {
+    use std::fmt::Display;
+    fn prints_one_thing<T: Display>(input: T) {
+      println!("{}", input)
+    }
+  }
+  #+end_src
+- You can nest *mod* (a child mod), can *use* anything from the parent mod
+  - When we are inside a module we can use *super* to bring in items from above.
+** Testing
+** DONE External Crates
+- Cargo.toml on root dir
+  - code into src/main.rs by default
+  - cargo run
+- *rand* to generate random numbers,
+  within a range with .gen_range()
+  use rand::{thread_rng, Rng}
+- *rayon* (like cl-parallel),
+  it provides parallel alternatives to .iter() methods, like:
+  .par_iter()
+  .par_iter_mut()
+  .par_into_iter()
+  .par_chars()
+  use rayon::prelude::*;
+- *serde*, to convert from/to JSON/YAML
+  add Serialize and Deserialize traits to a struct #[]
+  Then you can call methods to serialize the struct.
+- *regex*
+- *chrono* functions for time outside stdlib
+** A Tour of the Standard Library
+** Writing Macros
+** DONE cargo
+- cargo>crate
+- cargo build/run/check/new/clean
+- --release
+  longer to compile
+  runs faster
+- generics take longer to compile, because it needs
+  to figure them out, and make it concrete.
+** DONE Taking user input
+- use std::io
+  io::stdin().read_line(&mut something).unwrap()
+- .trim()
+  .clear()
+- std::env::args()
+  can be turned into_iter() or just *for*
+- std::env::vars()
+  for environment variables
+  - These do the same
+    option_env!()
+    env!()
+** TODO Using Files
+- ? needs to be used on a function that returns Result
+- main can return result
+  - Ok(())                   // on last time
+  - Result<(),ParseIntError> // return value for main()
+- special Result for files
+  std::io::Result
+  which is
+  type Result<T> = Result<T,Error>
+- std::fs // Where all the functions for files are at
+  std::io::Write
+- fs::File::create("myfile.txt")?
+      .write_all(b"These are bytes written to the file")?
+  - same functionality of
+  std::fs::write
+- std::fs::File::open()
+  .read_to_string()
+** cargo doc
+** The end?
+* Tutorial: Rust In Action
+** DONE 1 Introducing Rust
+- Not all security bugs can be solved
+  - Hearthbleed: buffer reutilization bug
+  - goto fail: extra goto, variable initialized with success
+- println!() exists as a macro since it does a bunch of type detection
+- Integer overflow checks on debug mode
+** DONE 2 Language Foundations
+- Words: lifetime elision, hygienic macros, algebraic datatypes
+- ->, "dagger" or "thin arrow"
+- {:b} 0b11 {:x} 0xff {:o} 0o11
+- floats have special values for:
+  infinity
+  negative infinity
+  not a number
+- fn add<T: Add<Output = T>>(i: T, j: T)
+  - Type T should have the *trait* Add and the Output should be of type T
+- ~lifetime elision~, happens when we explicitly provide the lifetime of some variables
+  - The use of references is neccesary when using lifetimes, as lifetimes are not required for normal arguments
+- u8.saturating_sub() is substraction that returns 0 on integer underflow
+- String.lines()
+        .contains()
+        .truncate(0) // shrink back to 0
+- cargo doc
+  generates html documentation for all crates used by this project
+- rustup doc
+  opens local stdlib html doc
+- *clap* crate for command line arguments
+- .lines() iterator for files
+- io::stdin()
+  io::stdin().lock()
+*** String vs str
+  - str is not copied
+    - Usually seen as &str, aka string slice
+  - String is an owned type
+*** Array, fixed size
+  - Type: [T; 3]
+  - Taking an reference of an Array, returns a slice (support iteration without .iter())
+  - Stack allocated
+*** Slices
+  - Dynamic size: not specified at compile time
+  - Type: [T]
+  - Both slices and references to slices are called slices
+  - Easier to implement Traits than Arrays
+  - Made from two u8, an pointer and a length
+*** Vector, dynamic size
+  - Type: Vec<T>
+  - Vec::with_capacity(N) size allocation hint
+** 3 Compound Data Types
 * Learn
 - https://github.com/sger/RustBooks
 - https://github.com/mre/idiomatic-rust

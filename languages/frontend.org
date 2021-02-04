@@ -17,6 +17,15 @@ unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   #+end_src
 * javascript
+- JavaScript function hoisting by example
+  https://gist.github.com/maxogden/4bed247d9852de93c94c
+- Formatter: https://standardjs.com/
+- Node.js Intro: https://github.com/maxogden/art-of-node
+- browserify: https://github.com/browserify/browserify-handbook
+- http://callbackhell.com/
+  - name lambdas OR use separate functions
+  - use modules
+  - catch errors as the first argument
 - https://frontendmasters.com/
 - https://rallycoding.com/
 - https://javascript30.com/

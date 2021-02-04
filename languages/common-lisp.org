@@ -1,3 +1,4 @@
+- https://stevelosh.com/blog/2016/08/lisp-jam-postmortem/
 - http://wcp.sdf-eu.org/software/index.html
 - https://leanpub.com/readevalprintlove001/read
 - ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
