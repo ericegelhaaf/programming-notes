@@ -1,5 +1,10 @@
-https://www.coursera.org/specializations/algorithms
 
+https://www.coursera.org/specializations/algorithms
+2012
+* Preconceptions
+- Perfect oportunity to use a testing framework.
+- Some algorithms don't work/translate well on some languages
+- Needed for jobs interviews
 * Others people repos
 | Language   | Course    | URL                                                                                     |
 |------------+-----------+-----------------------------------------------------------------------------------------|
@@ -11,7 +16,54 @@ https://www.coursera.org/specializations/algorithms
 | Python     | Karatsuba | https://github.com/Surya97/Standford-Algorithms-Specialization/blob/master/Karatsuba.py |
 | Python     | 1         | https://github.com/justinas-marozas/coursera-algorithms-specialization                  |
 | Python     | 1/2/3/4   | https://github.com/SteffenHaeussler/algorithms_specialization/                          |
+| Python     | 1/2/3/4   | https://github.com/SSQ/Coursera-Stanford-Algorithms-Specialization                      |
+| Python     | Template  | https://github.com/karenk1010/Coursera-Algorithms-Specialization/                       |
 | Ruby       | 2         | https://github.com/ras123/alg2_standford                                                |
 | Ruby       | 2         | https://github.com/jacindaz/stanford_algorithms/blob/master/week2/hw_week_2.rb          |
-| TypeScript | 1/2       | https://github.com/ferueda/stanford-
+| TypeScript | 1/2       | https://github.com/ferueda/stanford-                                                    |
+* Quiz Assignments
+  https://github.com/AlessandroCorradini/Stanford-University-Algorithms-Design-and-Analysis/
+* Supporting Material
+- Algorithm Design (2005) - Kleinberg
+  https://www.cs.princeton.edu/~wayne/kleinberg-tardos/
+  https://www.cs.princeton.edu/~wayne/kleinberg-tardos/pearson/
+- Algorithms (2006) - Dasgupta
+- Algorithms (2009) - Cormen
+- Algorithms and Data Structures: The basic toolbox (2008) - Mehlhorn
+* Week 1
+** Part 1
+*** Glosary
+*Upper Bound*: number of operation needed to complete the algorithm.
+*Divide and Conquer*: paradigm
+*Worst-case behaviour*
+*Asymptotic Analysis*
+*** Merge Sort
+Recursive algorithm.
+- Input: array (distinct for this course)
+- Output: array sorted
+** Part 2 - Asymptotic Analysis
+*** The Gist
+- Provides ~vocabulary~, for *design* and *analysis* of altorithms.
+- ~Coarse~ to supress details you want to ignore
+  - ~Supress~
+   - constant factors: too system dependant (compiler, language)
+   - lower-order terms: irrelevant with large inputs
+- ~Sharp~ to be able to make comparisons between algoritms.
+- Example:
+  6n . logn + 6n
+  - . 6  : constant factor
+  - + 6n : grows slower
+  Running time: O(nlogn)
+- O (big "o") notation doesn't mind the number of actual operations,
+  as that is constant usually
+*** Big-Oh
+- Usually, the ~worst-case~ running time of an algo
+- Concerns functions defined on the positive int numbers(aka T(n))
+- T(n)=O(f(n)) "T(n) is big-oh of f(n)"
+  - if for any sufficient large n
+    T(n) is ~bounded above~ by a constant multiple (C) of f(n)
+- C.f(n) > T(n) > f(n)
+  C.f(n) is then an ~upper bound~ of T(n)
+
+*** Basic Examples
 

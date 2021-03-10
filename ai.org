@@ -39,3 +39,32 @@
 - People used just 2 layers which limited performance
 - Usinge more layers makes it "DEEP" learning
 
+* 2011 - Machine Learning for the Web - Hilary Mason
+** 1 Introduction
+- Classification problems:
+  - Clustering of categorical data
+  - Named Entity Disambiguation: separate different entities (similar)
+- Recommendation systems
+- Special data (uses domain knowledge)
+  - Geographic
+  - Timeseries
+- Approaches from:
+  - Having data
+  - Having a problem
+  - Have infrastructure
+- Methodology:
+  1) Obtain
+  2) Scrub
+  3) Explore
+  4) Model
+  5) Interpret
+** 2 Classifying Web Documents - The Theory
+- Problems harder to classify (write logic)
+- Supervised learning
+  - Examples:
+    - SPAM classification
+    - language identification
+    - Face detection
+- Book: "Data Source Handbook"
+- NYT has <meta> tags with information about the article.
+

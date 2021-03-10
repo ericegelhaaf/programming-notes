@@ -24,26 +24,32 @@
 - commands, prefixed with @ will not be printed
 - each *command* line runs on a new shell, use (;) and/or (\)
 - ~.DELETE_ON_ERROR:~ will delete the target if a command fails (no default)
-- Errors:
-  - fails if a command returns 1
-  - -k to make to continue on error
-  - - add to suppress command error
-  - -i add - to all commands
-** The Shell function (Section 8.8)
+- fails if a command returns 1
+|----+-------------------------------|
+| -k | keep going on errors          |
+| -n | dry run                       |
+| -s | silent command print          |
+| -i | ignore errors                 |
+| -  | add to suppress command error |
+|----+-------------------------------|
+** 5.2 Recipe Echoing
+https://www.gnu.org/software/make/manual/html_node/Echoing.html
+- Adding an @ to a command, like @echo, suppress the print of the command (just the command, not the output)
+** 8.8 The Shell function
 #+begin_src makefile
 all:
     @echo $(shell ls -la) # replaces new lines with spaces
 #+end_src
-** Arguments to make (Section 9)
+** 9 Arguments to make
 - Can be multiple *targets*
 - --dry-run
   --touch
   --old-file
-** Implicit Rules (Section 10)
+** 10 Implicit Rules
 - .c   $(CC) -c $(CPPFLAGS) $(CFLAGS)
 - .cpp $(CXX) -c $(CPPFLAGS) $(CXXFLAGS)
 - .o   $(CC) $(LDFLAGS) n.o $(LOADLIBES) $(DLIBS)
-** Automatic variables (Section 10.5)
+** 10.5 Automatic variables
 - $@ - current target name
 - $? - prerequisits
 - $^ - ? prerequisits

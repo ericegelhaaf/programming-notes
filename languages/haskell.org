@@ -81,6 +81,8 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
 - [Discord + Twitch] Double Platform ... https://www.twitch.tv/videos/764093623
 - Backend Web Programming in Haskell https://www.twitch.tv/videos/743607386
 ** Courses
+   - Haskell for imperative programmers
+     https://www.youtube.com/channel/UC3xdLFFsqG701QAyGJIPT1g/videos
    - Haskell Summer Course
      https://www.youtube.com/playlist?list=PLaAHmR4OoQXcrQl7kgkraWQAgQ-8FpEmS
    - 2018 Haskell School in the Networked Imagination Laboratory

@@ -19,7 +19,23 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 * javascript
 - JavaScript function hoisting by example
   https://gist.github.com/maxogden/4bed247d9852de93c94c
-- Formatter: https://standardjs.com/
+- Formatter
+  https://standardjs.com/
+- Style Guide
+  https://github.com/airbnb/javascript
+  https://github.com/ryanmcdermott/clean-code-javascript
+- Algorithms and Patterns
+  https://github.com/shichuan/javascript-patterns
+  https://github.com/TheAlgorithms/Javascript
+  https://github.com/trekhleb/javascript-algorithms
+  https://github.com/humanwhocodes/computer-science-in-javascript
+- Questions
+  https://github.com/sudheerj/angular-interview-questions
+  https://github.com/sudheerj/javascript-interview-questions
+  https://github.com/lydiahallie/javascript-questions
+  https://github.com/sudheerj/reactjs-interview-questions
+- Libraries
+  https://github.com/sorrycc/awesome-javascript
 - Node.js Intro: https://github.com/maxogden/art-of-node
 - browserify: https://github.com/browserify/browserify-handbook
 - http://callbackhell.com/

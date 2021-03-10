@@ -276,17 +276,20 @@ http://stevelosh.com/blog/2016/12/chip8-cpu/
   (ldb (byte 8 0)           #b11000111) ; lowest  bits
   #+end_src
 ** Libraries
-|                | desc                                           | url                                        |
-|----------------+------------------------------------------------+--------------------------------------------|
-| babel          | charset enc/dec, strings and (unsigned-byte 8) | https://github.com/cl-babel/babel          |
-| bit-smasher    | utilities for bit vectors                      | https://github.com/thephoeron/bit-smasher  |
-| bitio          | read multiples of 8 bits                       | https://github.com/psilord/bitio           |
-| conspack       | encode and decode data types                   | https://github.com/conspack/cl-conspack    |
-| fast-io        |                                                | https://github.com/rpav/fast-io/           |
-| flexi-streams  | read/write, octects                            | https://github.com/edicl/flexi-streams/    |
-| nibbles        | read/write 16/32/64 bits from octet vectors    | https://github.com/froydnj/nibbles         |
-| static-vectors | vectors from lisp to C                         | https://github.com/sionescu/static-vectors |
-| swap-bytes     | changing endianness of unsigned integers       | https://github.com/sionescu/swap-bytes     |
+|                | desc                                                 | url                                        |
+|----------------+------------------------------------------------------+--------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8)       | https://github.com/cl-babel/babel          |
+| bit-smasher    | utilities for bit vectors                            | https://github.com/thephoeron/bit-smasher  |
+| bitio          | read multiples of 8 bits                             | https://github.com/psilord/bitio           |
+| conspack       | encode and decode data types                         | https://github.com/conspack/cl-conspack    |
+| fast-io        |                                                      | https://github.com/rpav/fast-io/           |
+| flexi-streams  | read/write, octects                                  | https://github.com/edicl/flexi-streams/    |
+| nibbles        | read/write 16/32/64 bits from octet vectors          | https://github.com/froydnj/nibbles         |
+| static-vectors | vectors from lisp to C                               | https://github.com/sionescu/static-vectors |
+| swap-bytes     | changing endianness of unsigned integers             | https://github.com/sionescu/swap-bytes     |
+| mmap           | read file into memory (mmap, munmap, msync,mprotect) | https://github.com/Shinmera/mmap           |
+| ieee-floats    | read float values from strings                       | https://github.com/marijnh/ieee-floats     |
+|                |                                                      |                                            |
 * event
 - GOTO 2017 • The Many Meanings of Event-Driven Architecture • Martin Fowler
   https://www.youtube.com/watch?v=STKCRSUsyP0

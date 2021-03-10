@@ -1,3 +1,5 @@
+- https://github.com/kuchin/awesome-cto
+- Microservices: https://www.youtube.com/playlist?list=PLzERW_Obpmv81N-F8yBowb_QHvf9ISG7y
 - https://github.com/mtdvio/every-programmer-should-know
 - https://github.com/jozefg/learn-tt
 - https://www.youtube.com/playlist?list=PLruBu5BI5n4aFpG32iMbdWoRVAA-Vcso6

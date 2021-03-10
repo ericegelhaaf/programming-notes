@@ -109,3 +109,6 @@
     - Also from "efficiency" arguments
       - Holds true, if only, on the core loop of your program
   - A long function is where classes go to hide
+* 6 - TDD Test Driven Development (Part 1)
+- Code Rot
+  - When you touch some code it becomes "yours".

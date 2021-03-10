@@ -30,7 +30,7 @@
   . Locale-specific behavior
   . Common Extensions
 - -pedantic, notify portability issues
-** 2 Objects, Functions, and Types
+** TODO 2 Objects, Functions, and Types
 - "Every type in C is either an ~object~ type or a ~function~ type."
 - IEEE 754-2008: the Standard for Floating-Point Arithmetic.
 - The ~referenced type~ T derives a ~pointer to~ T
@@ -84,7 +84,11 @@
   - Arrays:
     - str[i]   is identical to *(str + i)
     - &str[10] is the same as    str + 10
-* Book: An Introduction to C GUI Programming
+** 5 Control Flow
+
+* Book: An Introduction to C & GUI Programming
 
 * Book: Modern C
 - C is an imperative programming language.
+** Level 0. Encounter
+

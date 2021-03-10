@@ -1,3 +1,4 @@
+- https://docs.python-guide.org/
 - https://github.com/realpython/python-guide
 - https://github.com/sfermigier/awesome-functional-python
 - https://github.com/Suor/funcy

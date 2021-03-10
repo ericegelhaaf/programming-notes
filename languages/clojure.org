@@ -24,6 +24,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Podcast - https://clojuredesign.club/
 - Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
 - Podcast - Eric Normad - https://www.youtube.com/channel/UC2riBMG3qf1Di20ouRc76BA/videos
+- re:clojure https://www.youtube.com/c/reclojure/videos
 - Course - Brian Will - the Clojure language - https://www.youtube.com/playlist?list=PLAC43CFB134E85266
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
 - ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW
@@ -56,7 +57,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/
 * Overtone
 - https://github.com/pjagielski/disclojure
-* TODO Book: Clojurescript unraveled
+* Book: Clojurescript unraveled
 |        |     | New                       | pred? | IFn | Lookup        |
 |--------+-----+---------------------------+-------+-----+---------------|
 | map    | {}  | (hash-map :name 1)        | false | yes | (assoc)       |
@@ -379,26 +380,90 @@ cannot be changed outside their namespace
 - volatile!, volatile?, deref, vswap!, vreset!
 ** 4 Tooling & Compiler
 *** 4.1 Build
-- Can be build for nodejs (needs an entrypoint) or browser
-- (require '[cljs.build.api :as b])
-- b/build b/watch
+| Target  | Print                       | Entrypoint                 |   |   |
+|---------+-----------------------------+----------------------------+---+---|
+| Node    | (nodejs/enable-util-print!) | (set! *main-cli-fn* -main) |   |   |
+| Browser | (enable-console-print!)     | NO                         |   |   |
+- Compiler tooling: leiningen, cljsbuild, boot
+- ~execution environment~, where JavaScript code can executed.
+  - Web Browser (firefox, chrome, etc...)
+  - nodejs (needs an entry point)
+  - rhino (jdk6+)
+  - nashorn (jdk8+)
+  - qtquick (qt)
+- Basic project structure:
+  * deps.edn: define the version of clojure/script
+  * build.clj: define input and output dir, target environment, entrypoint
+  * src/myapp/core.cljs
+- Build:
+  > clojure build.clj
+  > node main.js
+- cljs.build.api/build
+  cljs.build.api/watch
 - Build options:
   ~:source-map~ connects the source to the generated javascript, for errors
   ~:optimizations~ closure opts are none, whitespace, simple, advanced
+- Compilation process:
+  - Reader phase, static analysis?
+  - Clojuscript compiler emits javascript code
+  - Closure Compiler takes the JS code and does some optimizations
 - *clj* uses rlwrap unlike *clojure* cli command
+- Optimizations levels: none, whitespace, simple, advanced
 *** 4.2 REPL
-- nashorn
-- nodejs (no DOM access)
-- browser: build project, then start repl connected to browser
-- rebel: repl with signature of functions
-*** 4.3 Closure
+| Env     | deps | DOM | Completion |   |
+|---------+------+-----+------------+---|
+| nashorn |      |     |            |   |
+| nodejs  |      | NO  |            |   |
+| browser |      |     |            |   |
+| rebel   | YES  |     | YES        |   |
+- browser: needs a browser to run the js code connect back to the CLI repl.
+- rebel: works over node
+*** 4.3 Google Closure
+- Using a module of the Closure library
+#+begin_src clojure
+(ns yourapp.core
+  (:require [goog.dom :as dom]))
+
+(def element (dom/getElement "body"))
+#+end_src
+- Using modules that behave like a class or object
+#+begin_src clojure
+(ns yourapp.core
+  (:import goog.History))
+
+(def instance (History.))
+#+end_src
+- :require are used for user defined types (classes)
 - As a Javascript library, cross-browser functions for DOM
-- As a compiler
-- Clojurescript NS are Closure modules.
 *** 4.3 Dependency managment
-- deps.edn
-- tools.clj : repl, build, watch
-- src/ : Can contain clojurscript ns OR javascript closure modules
+- src/ : Can contain clojurescript ns OR javascript goog closure compatible modules
+- :externs (?)
+**** Clojure Libraries https://clojars.org/
+  - Add into dep.edn
+  - (require)
+**** Javascript Libraries https://cljsjs.github.io/
+  - Add into dep.edn
+  - (require) but not alias
+    - call it from the js namespace (js/call-it)
+  - (require) and alias
+    - call just with the alias
+**** figwheel
+  - add into dep.edn
+  - add into tools.clj
+  - It does:
+    - return a repl with completion
+    - starts a ring server on :output-dir
+    - with code reloading
+**** Unit Testing
+- Advantage: ClojureScript tends to use plain data instead of complex objects
+- In namespace *cljs.test*, also *test.check*
+- main.cljs
+- :target :nodejs
+- Separate b/build
+  - Added b/inputs "src" "test"
+  - Different :main, :output-to/dir
+- Separate b/watch
+- Async Testing???
 ** 5 Language (advanced topics)
 *** 5.1 Transducers
 - map,filter,mapcat can be written as reduce funtions
@@ -413,13 +478,50 @@ cannot be changed outside their namespace
 - if we close a channel with pending takes, it returns nil
 - channels ~limit~ of 1024 take/put pending per channel
 - ~buffers~ extend it by adding a queue
+* Book: Reactive with ClojureScript Recipies
+** 2 - ClojureScript
+*** Elements
+|               | Javascript              | Clojure                       |
+|---------------+-------------------------+-------------------------------|
+| new*          | document.createElement  |                               |
+|               | document.createTextNode |                               |
+|               | node.cloneNode          |                               |
+|---------------+-------------------------+-------------------------------|
+| remove        |                         | (.removeChild parent child)   |
+|---------------+-------------------------+-------------------------------|
+| attach        | node.appendChild        |                               |
+|               | node.insertBefore       |                               |
+|               | node.replaceChild       |                               |
+|---------------+-------------------------+-------------------------------|
+| get           | getElementById          | (.getElementById js/document) |
+|               | getElementsByTagName    |                               |
+|               | getElementsByClassName  |                               |
+|---------------+-------------------------+-------------------------------|
+| get attribute |                         | (aget) (.-)                   |
+| set attribute |                         | (aset)                        |
+- new nodes still need to get attached to the DOM tree on a separate step
+- *innerHTML* is a property on all nodes that take a string of the childrens
+*** Events
+- Input events: blur, change, focus, submit reset, keypress
+- Mouse events: click, dbclick, mousedown, mousemove, mouseover
+- (.addEventListener element eventtype function boolean)
+*** Window Object
+- "Link" between the DOM and JS.
+  - Each tab, each frame has a Window Object
+  - alert, confirm, prompt, setTimeout, setInterval uses it
+  - access it with *js/window*
+- (.addEventListener
+   (.getElementById js/document "neko.gif")
+   "mouseover"
+   #(.alert js/window "mouse detected")
+   false)
 * Book: Etudes for Clojurescript
 *** 1
 - (in 'formulas.core)
 - (require 'formulas.core :reload)
 - (.pow js/Math NUMBER POWER)
   (js/Math.pow NUMBER POWER)
-* Web development with Clojure - 2nd Edition
+* Book: Web development with Clojure - 2nd Edition
 *** 1
 - in (defproject) we can set the *entry point* with :main, :main myapp.core/foo, unset by default
   you can it with:
