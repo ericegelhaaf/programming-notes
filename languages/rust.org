@@ -144,6 +144,7 @@ pub struct Block {
 | enum    |                |           | ENUM::Val(a) |                   |
 | HashMap | HashMap::new() | .get(key) | (key,val)    | .insert(key, val) |
 | Vector  | vec![]         |           |              |                   |
+| Array   | []             |           |              |                   |
 ** Comments
 #+begin_src rust
 // Comment
@@ -413,8 +414,7 @@ let b = ThingsInSky::Stars("I can see the Sky");
 - Make rust code safer
 - ~Panic~ means that the program stopped before a problem happened.
   And the stack has been unwinded.
-- ~.unwrap()~  if there is Some/Ok
-  - None/Err CANNOT be
+- ~.unwrap()~ returns the T of Some(T) or panics if None
 - ~if let~ do something if matches
   ~while let~ loop while it matches
 *** Option<T>
@@ -435,7 +435,7 @@ enum Result<T, E> {
     Err(E),
 }
 #+end_src
-- .is_ok()
+- .is_ok(), Result<> to a bool
   .is_err()
 ** DONE Other Collections
    https://doc.rust-lang.org/beta/std/collections/
@@ -516,12 +516,12 @@ enum Entry<K,V> {
     }
   }
    #+end_src
-** DONE Closures
+** DONE Closures (and iterators)
 - aka lambdas
-- no argument:   || println!("This is a closure");
+- no argument:   ||       println!("This is a closure");
   typed arg:     |x: i32| println!("{}", x);
-  multiple line: || {}
-  unused arg:    |_| println!("I dont use the argument")
+  unused arg:    |_|      println!("I dont use the argument")
+  multiple line: ||       {}
 - normal call: my_closure();
 - *closures* vs *anonymous functions*: wheter ~||~ encloses external vars or not
   the later gets compiled to the same of a regular function
@@ -534,41 +534,49 @@ enum Entry<K,V> {
     .enumerate()  //     Enumerate<Iter<i32>>
     .map()        // Map<Enumerate<Iter<i32>>>
   #+end_src
-- There are times where the type of collect is not needed so these are the same:
+- There are times where *the type* of collect is NOT needed so these are the same:
   .collect::<HashMap<i32, &str>>();
   .collect::<HashMap<_, _>>();
   .collect();
-- .enumerate(), vec![10,20,30] -> (0,10),(1,20),(2,30)
-  .char_indices(), for strings
-  .match_indices(), for strings, but finds the provided substring
-                    ex: find number of spaces .collect().len()
-- .filter()    , takes a closure returns a boolean
-  .filter_map(), takes a closure must return an Option
-- .ok()    - Result<> into Option<>
-  .parse::<T>().ok()
-- .ok_or() - Option<> into Result<>
-  .ok_or_else()
-- .and_then()  - Option<> into Option<>, like a "safe" unwrap
-- .and()       - A boolean for Option<>
-- .any() all() - Take a boolean closure
-- .rev()       - to reverse an *iterator*
-- .find()      - return an Option<>
-  .position()
-- .cycle()     - makes an infinite iterator
-- .skip()
-  .take()
-- .fold()
-- .chars()     - makes an iterator from a string
-- .take_while()
-  .skip_while()
-  .map_while()
-- .cloned()  - Reference into a Value
-  .by_ref()  - Makes and iterator take a reference
-- .sum()
-- .chunks()  - Consume by chunks
-  .windows() - Slide by window
-- .peekable() makes an iterator able to use .peek(),
-              moving forward with .next()
+|--------------------+----------------------------------------|
+| .enumerate()       | vec![10,20,30] -> (0,10),(1,20),(2,30) |
+| .char_indices()    | for strings                            |
+| .match_indices()   | for strings, find substring            |
+|--------------------+----------------------------------------|
+| .filter()          | takes closure, returns bool            |
+| .filter_map()      | takes closure, returns Option          |
+|--------------------+----------------------------------------|
+| .unwrap()          | Option<> to value if Some or panic!()  |
+| .ok()              | Result<> into Option<>                 |
+| .ok_or()           | Option<> into Result<>                 |
+| .ok_or_else()      | Option<> into Result<>                 |
+| .parse::<T>().ok() |                                        |
+| .and_then()        | Option<> into Option<>, "safe" unwrap  |
+| .and()             | ?????                                  |
+| .any()             | Take a boolean closure                 |
+| .all()             | Take a boolean closure                 |
+|--------------------+----------------------------------------|
+| .find()            | return and Option<>                    |
+| .position()        | return and Option<>                    |
+|--------------------+----------------------------------------|
+| .rev()             | iterator inversed                      |
+| .skip()            |                                        |
+| .take()            |                                        |
+|--------------------+----------------------------------------|
+| .fold()            |                                        |
+| .sum()             |                                        |
+|--------------------+----------------------------------------|
+| .cycle()           | makes and infinite iterator            |
+| .chars()           | makes and iterator from a string       |
+| .peekable()        | a .next() .peek() able iterator        |
+|--------------------+----------------------------------------|
+| .take_while()      |                                        |
+| .skip_while()      |                                        |
+| .map_whilte()      |                                        |
+| .cloned()          | reference into value                   |
+| .by_ref()          | reference into iterator                |
+| .chunks()          |                                        |
+| .windows()         |                                        |
 ** DONE The dbg! macro and .inspect
 - dbg!() can print variables OR expressions
 - .inspect() is like map (!?)
@@ -631,33 +639,74 @@ enum Entry<K,V> {
 ** DONE The todo! macro
 - same as ~unimplemented!()~
 - Put it inside some function implementation, to silence compiler
-** Rc (Reference Counter)
+** DONE Rc (Reference Counter)
+use std::rc::Rc
+Rc<T>
+Rc::new(t)
+Rc::clone(&t) or just t.clone()
+Rc::strong_count(&t)
 - Reminder: a variable can only have ONE owner
-- With *Rc*, a variable can have >1 owner
-  - When you CANNOT .clone() it
+- With *Rc*, a variable can have more then 1(one) owner
+- When you CANNOT .clone()
+  - Too much data
+  - Is inside a struct that can't be clone
+- Weak references??!?!?!??!?!?! TODO
 ** DONE Multiple threads
-- std::thread::spawn()
-  - returns a JoinHandle
-  - we can .join() the handle to have the program wait for the thread
-- Closure types, takes
-  - FnOnce: the whole values
-    FnMut: a mutable reference
-    Fn: a regualar reference
-- Values from outside the thread into the tread need to use
-  *move* on the closure to take ownership
-** TODO Closures in functions
-- A closure is a generic because every time it is a different type
-** impl Trait
-** Arc
-** Channels
+- std::thread::spawn() -> JoinHandle<T>
+  - we can .join() the JoinHandle to wait for the thread to finish
+- Closures, by what type of argument they take...
+  | FnOnce | the whole value     |
+  | FnMut  | a mutable reference |
+  | Fn     | a reference         |
+- To use an external value in a closure, even by reference. We need to *move||* the closure.
+  Since the variable can, for example die before the closure ends.
+** DONE Closures in functions (...arguments)
+- A closure is always a generic because every time it is a different type
+  - We still need to define the "closure type" and what returns.
+** DONE impl Trait
+- Almost the same as *generics*
+- Used in function arguments,
+  Instead of:
+    fn function<T: Display>(one: T)
+  Is:
+    fn function(T: impl std::fmt::Display)
+- Or in return values, let us return closures (because their function signature are traits)
+    fn function() -> impl FnMut(T1) -> T2
+** DONE Arc (Atomic Reference Counter)
+use std::sync::Arc
+Arc<Mutex<T>>
+Arc::new(Mutex::new(0))
+Arc::clone()
+- If you want a *Rc* for a thread, you need this
+  - wrapping a *Mutex*
+  - cloned
+  - *move ||* it into the thread
+- Tip: make a constructor
+** DONE Channels
+std::sync::mpsc || mpsc = Multiple Producer, Single Consumer
+fn channel<T>() -> (Sender<T>, Receiver<T>)
+.send(T) -> Result<(),SendError<i32>>
+.recv()  -> Result<i32, RecvError>
+.clone()
+.try_recv()
+- Can clone it and send/move it to other threads (like Arc)
 ** Reading Rust documentation
-** Attributes
+** DONE Attributes #[]
+#[] is for the next line
+#![] is for the whole file
+#[allow(dead_code)]
+#[allow(unused_variables)]
+#[derive(Trait)]
+#[cfg(test)]
+#[cfg(target_os = "windows")]
+#![no_std]
+https://doc.rust-lang.org/reference/attributes.html
 ** DONE Box
 - Box<T>, wraps a type
 - Box::new(), creates the Box<T> instance
 - AKA ~smart pointer~
   - Can use * operator with Box, just like with an &
-  - Stored on the *heap* instead of the *stack*
+  - *heap* stored, instead of the *stack*
 - Has not Copy, you need to .clone() it
 - Can be used to create *recursive structs* not allowed by default
 ** DONE Box around traits
@@ -704,7 +753,35 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
     - TRUE on new() and build()
     - FALSE on any other builder method
   fn build(mut self) -> Result<Character, String>
-** Deref and DerefMut
+** DONE Deref and DerefMut
+- We can implement it for our struct, called "smart pointer"
+  - In fact, only limit it to that use case
+*** std::ops::Deref
+Deref is a Trait that allows you to use *
+ - implement deref()
+   #+begin_src rust
+   use std::ops::Deref;
+   struct HoldsANumber(u8);
+   impl Deref for HoldsANumber {
+       type Target = u8;
+       fn deref(&self) -> &Self::Target {
+         &self.0
+       }
+   }
+   #+end_src
+ - We can also access the methods of:
+   - the deferenced struct, without actually dereferencing
+   - new methods you define for the struct
+*** std::ops::DerefMut
+DerefMut, allows to modify with *
+  - requires to have implemented Deref
+#+begin_src rust
+impl DerefMut for HoldsANumber {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+#+end_src
 ** DONE Crates and modules
 - crate>mod
   std::collections::HashMap
@@ -725,7 +802,16 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
   #+end_src
 - You can nest *mod* (a child mod), can *use* anything from the parent mod
   - When we are inside a module we can use *super* to bring in items from above.
-** Testing
+** DONE Testing
+- #[test] Anotate a function with this
+  #[should_panic]
+- assert_eq!()
+- cargo test
+- Usually on a separate module
+  - under #[cfg(test)]
+  - using super::* on the module
+- test functions usually have a descriptive long names
+- Writting "just enough" code for the tests to pass first is recommended
 ** DONE External Crates
 - Cargo.toml on root dir
   - code into src/main.rs by default
@@ -746,6 +832,14 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
 - *regex*
 - *chrono* functions for time outside stdlib
 ** A Tour of the Standard Library
+- Arrays:
+  - don't have an iterator, but can be .iter() or borrowed (&)
+  - Can be destructured
+- Char
+  - char::from(u8)
+    char::try_from(u32)
+- Integer
+  - .checked_add() .checked_sub() .checked_mul() .checked_div()  
 ** Writing Macros
 ** DONE cargo
 - cargo>crate
@@ -757,7 +851,8 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
   to figure them out, and make it concrete.
 ** DONE Taking user input
 - use std::io
-  io::stdin().read_line(&mut something).unwrap()
+   bandcamp
+io::stdin().read_line(&mut something).unwrap()
 - .trim()
   .clear()
 - std::env::args()
@@ -786,7 +881,7 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
   .read_to_string()
 ** cargo doc
 ** The end?
-* Tutorial: Rust In Action
+* Book: Rust In Action (Manning)
 ** DONE 1 Introducing Rust
 - Not all security bugs can be solved
   - Hearthbleed: buffer reutilization bug
@@ -795,6 +890,7 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
 - Integer overflow checks on debug mode
 ** DONE 2 Language Foundations
 - Words: lifetime elision, hygienic macros, algebraic datatypes
+  Crates: clap, for cli tools
 - ->, "dagger" or "thin arrow"
 - {:b} 0b11 {:x} 0xff {:o} 0o11
 - floats have special values for:
@@ -813,7 +909,6 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
   generates html documentation for all crates used by this project
 - rustup doc
   opens local stdlib html doc
-- *clap* crate for command line arguments
 - .lines() iterator for files
 - io::stdin()
   io::stdin().lock()
@@ -834,7 +929,236 @@ fn returns_errors(input: u8) -> Result<String, Box<dyn Error>> {
 *** Vector, dynamic size
   - Type: Vec<T>
   - Vec::with_capacity(N) size allocation hint
-** 3 Compound Data Types
+
+* Book: Rust Programming By Example (PACKT)
+** 2 Starting with SDL
+- You need to import a Trait to use his methods
+- io::Result definition
+  type Result<T> = Result<T, Error>;
+- Ok(()) is the Rust equivalet to *void*
+- Equivalent:
+  - try!()
+  - match of Ok() and Err()
+  - ? operator
+- collect() calls next()
+** 3 Events and Basic Game Mechanisms
+- Game:
+  - Tetrimino: A tetris piece, all are 4 blocks
+  - Grid: 16 height and 10 width
+- match _ branch can use *unreachable!()* macro
+- *static* variables, don't die when the scope dies
+  - changing the value of it is an *unsafe{}* operation
+- Tetramino: impl and traits
+  #+begin_src rust
+  struct Tetrimino {..}
+
+  // trait, struct, impl..for
+  trait TeGenerator {
+    fn new() -> Tetrimino;
+  }
+  struct TeI;
+  impl TeGenerator for TeI {
+    fn new() -> Tetrimino {..}
+  }
+
+  // Random function
+  fn create_random_tetrimino() -> Tetrimino {..}
+
+  // Method
+  impl Tetrimino {
+    fn rotate(&mut self) {..}
+  }
+  #+end_src
+- When you send a non-mutable reference over a vector
+  Vec<T> is deferenced into a &[T]
+- Tetris: impl and structs
+  #+begin_src rust
+  struct Tetris {..}
+  impl Tetris {
+    fn new() -> Tetris {..}
+    fn check_lines(&mut self) {..}
+    fn make_permanent(&mut self) {..}
+  }
+  #+end_src
+- An example on *borrow* and *ownership*
+  On: for line in self.game_map
+  game_map is non-mutably borrowed by *for* and we cannot mutate it in the loop.
+- ref sidetrack https://doc.rust-lang.org/rust-by-example/scope/borrow/ref.html
+  - same on the left side of = as & on the right side
+  - can be pared with *mut* to take mutable references *ref mut*
+  - used on let or destruring
+- Another example of *ownership*:
+  if an element of a type(struct) is borrowed the parent is also borrowed
+** Implementing the engine for the music player
+- Trait bounds can be added to a type as well than as a generic param of a function
+* Book: Practial Rust Projects (Apress)
+** 5 Physical Computing in Rust
+Crate: rust_gpiozero
+*** Hardware
+Raspberry Pi 3+
+- /dev/gpiomem virtual memory mapping of pins
+  You can call mmap() on that device you can map it to the designated virtual memory addresses
+    ptr::write_volatile() or std::mem::transmute()
+  You can also access it through /dev/mem (!) but that requires root
+- /sys/class/gpio/* virtual fs mapping of pins
+                 /export
+                 /gpio2/direction
+                 /gpio2/value
+- Pins
+  - Power supply (5v and 3V3)
+  - GND
+  - GPIO (on the BCM order) 3.3v
+    - BCM: Broadcom SOC Channel, pinout order of the CPU
+    - Some Configurable to work as PWM, SPI, I2C, Serial
+- LED: Anode(+), Cathode(-)
+*** rust_gpiozero
+crate: rust_gpiozero (build on top of rppal crate)
+- std::thread::sleep;
+  std::time::Duration;  Duration::from_secs()
+                                ::new(1,0)
+  std::time::Instant;   Instant::now().elapsed()
+**** Output
+- let mut led LED::new(PIN);
+          led.on();
+             .off()
+             .toggle()
+             .blink(1.0,1.0)
+             .wait()
+  sleep(Duration::from_secs(1));
+**** Input
+- let mut button = Button::new(4) // pull-up
+                // Button::new_with_pulldown(4)
+          button.wait_for_press(TIMEOUT)
+- By default input gpio voltage fluctuates between 0-3v
+- Internal pull up/down resistors can be enabled
+- Pull down resistor: default 0v
+  Pull-up   resistor: default 3V3
+- Input can be *debounced* by measuring how long has passed since the last click
+  Instant::now().elapsed()
+*** Cross-compile
+- Install the rust target compiler:
+  > rustup target add armv7-unkown-linux-gnueabihf
+- install the gcc linker
+  On debian is: gcc-5-multilib-arm-linux-gnuebihf
+- Let cargo know the linker name
+  On ~/.cargo/config
+  #+begin_src
+  [target.armv7-unknown-linux-gnueabihf]
+  linker = "arm-linux-gnuebihf-gcc-5"
+  #+end_src
+- build against the target
+  > cargo build --target=armv7-unknown-linux-gnuebihf
+- execute
+  On: target/armv7-unknown-linux-gnueabihf/debug/NAMEHERE
+
+** 6 Artificial Intelligence and Machine Learning
+Crate: rusty-machine (rulinalg)
+- An example of AI can be an "expert system" when WE define all the rules.
+    Like Prolog. But it cannot be called ML.
+- Supervised vs Unsupervised learning (aka use of labeled vs unlabeled data)
+  - Other: Reinforced Learning, Semi-supervised Learning
+*** Unsupervised (K-Means)
+**** K-Means
+Used when categorization is needed aka *clustering*
+Consists on keep updating nth "centroids" until they can't be moved
+1) Randomly assign k points as the centroids
+2) Assign each point to a nearest centroid
+3) Update centroids, find the mean point of all points of the group
+4) repeat 2 and 3 until 3 doesn't move the centroid (they *converge*)
+
+**** K-Means++
+Extra: https://www.youtube.com/watch?v=HatwtJSsj5Q
+Randomly picking the initial centroids have issues:
+- Too long to end the algorithm
+- A poor result (aka local optimum)
+Solved by picking far apart centrids.
+1) Pick 1 random centroid
+2) For each point, calculate the distance to his nearest centroid as D(x)
+3) Pick a new centroid from all the other points, weighted random
+   where the probability is D(x)^2
+4) repeat 2 and 3 until we selected the amount of centroid we desire
+Then, we will run K-Means
+
+**** Generating (Fake) Data
+Crates: rusty-machine, rand, rand_distr, csv
+use rand::thread_rng                   function
+use rand::distributions::Distribution  for using .sample()
+use rand_distr::Normal                 ::new(floor, max)
+- src/bin/some.rs
+  > cargo run --bin some
+let mut writer = csv::Writer::from_writer()
+       writer.write_record()
+             .serialize()
+*** Supervised (Neural Network)
+* Book: The Rust Programming Language (nostarch)
+** 10 Generic Types, Traits, and lifetimes
+impl Type
+impl Trait for Type
+*** Generics
+Generics are abstract stand-ins for concrete types
+- Generic arguments (trait restricted)
+- Generics in struct/enums definitions
+  #+begin_src rust
+  struct Point<T> {
+    x: T,
+    y: T,
+  }
+  #+end_src
+  - TIP: When you need a lot of generic types in your code,
+         it could indicate that your code needs restructuring
+         into smaller pieces.
+- Generics in Method Definition (+struct)
+  #+begin_src rust
+  impl<T> Point<T> {
+     fn x(&self) -> &T {
+       &self.x
+     }
+  }
+  #+end_src
+Speed is guaranteed, as Rust compiler does "Monomorphization" of the code used
+by generics to the concrete for the type.
+*** Traits: Defining Shared Behavior
+  #+begin_src rust
+  pub trait Summary { // pub as it will be imported elsewhere
+    fn summarize(&self) -> String;
+  }
+  #+end_src
+- Similar to a feature often called *interfaces* in other languages.
+  We can define a default implementation of the functions
+  We can impl functions for a type with different trait requirements (on different impl blocks)
+  We CANNOT implement external traits on external types (coherence property, aka orphan rule)
+  We CANNOT call the default implementation if we override the default one
+- Implementing for a Type
+  #+begin_src rust
+  impl Summary for Type {
+    fn summarize(&self) -> String {
+      format!("{}", self.fieldnamehere)
+    }
+  }
+  impl Summary for OtherType {}; // If default implementation was provided
+  impl<T: Display> ToString for T {..} // Conditionally create a trait
+  #+end_src
+- Traits as Parameters
+  - Syntatic sugar way (allows for any type)
+     #+begin_src rust
+     pub fn notify(item: impl Summary) {
+       println!("Breaking news! {}", item.summarize())
+     }
+     #+end_src
+  - Using Trait Bounds (enforce type to be T)
+    #+begin_src rust
+    pub fn notify<T: Summary>(item: T) {
+      println!("Breaking news! {}", item.summarize());
+    }
+    #+end_src
+- Returning Types that implement a trait, ONLY if it is the same type
+  #+begin_src rust
+  fn returns_summarizable() -> impl Summary {
+    Tweet { .. }
+  }
+  #+end_src
+
+*** Lifetimes: Validating references with it
 * Learn
 - https://github.com/sger/RustBooks
 - https://github.com/mre/idiomatic-rust

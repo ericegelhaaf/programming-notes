@@ -86,91 +86,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
        - method defines a behaviour of a type, depend of the state. Bound to a type.
   - 5) pointer vs value
   - 6) Custom error
-* Book: Get Programming with Go
-** DONE 22 GO's got no class
-- assigning methods to types
-** DONE 23 Composition
-- On ~inheritence~, you create hierarchies.
-  Which can be tricky to think about and change.
-- On ~composition~, you create methods and associate them to each "class".
-- Instead of *clog* different kind of fields into a single structure.
-  Use separate and smaller structures/types.
-  And compose them into one.
-- Forwarding methods:
-  // Naive
-  func (r report) avg() celsius {
-    return r.temperature.avg()
-  }
-  ~Struct embedding~: makes all methods/subfields accessible from the main
-  type report struct {
-    sol int
-    temperature
-    location
-  }
-  ~Name Collision~, compiler warns ONLY on ambiguous usage
-** DONE 24 Interfaces
-- ~Interfaces~  are about what a type *can do* not what they store
-- var t with an interface
-  #+begin_src go
-  var t interface {
-      talk() string
-  }
-  #+end_src
-- *satisfing the interface* with new types, interface is NOT mentioned
-  #+begin_src go
-  type martian struct{}
-  func (m martian) talk() string {
-      return "nack nack"
-  }
-  type laser int
-  func (l laser) talk() string {
-      return strings.Repeat("pew ", int(1))
-  }
-  #+end_src
-- assigning var interface
-  #+begin_src go
-  t = martian{}
-  fmt.Println(t.talk())
-  t = laser(3)
-  fmt.Println(t.talk())
-  #+end_src
-- declaring a *interface type*, usually ended with "-er"
-  #+begin_src go
-  type talker interface {
-      talk() string
-  }
-  #+end_src
-- for example: fmt.Stringer
-  which needs a type that implements the method String()
-- ~interface embedding~ is a thing
-** DONE 26 A few pointers
-- A ~Pointer~ is a variable that points to the address of another variable.
-- ~Maps~ are pointers in disguise, no need to dereference on a function arg
-  ~Slices~ are, in part, pointers to elements on an array.
-           A pointer to a slice is only needed when modifing the cap/length/offset.
-           Though, it might been better return a new slice.
-- & address operator, can't take addresses of literal strings, number or booleans
-- * dereference operator, also used in pointer types (like *int)
-  can be assigned: *adminpoint = "new admin"
-- ~Automatic dereferencing~
-  - struct fields
-  - array indexes
-- Unlike C:
-  - Arrays and pointers are different types altogether
-  - GO avoids potential unsafe operations with pointers
-    a *int pointer can only point to a memory position where there is a int
-  - parameters are ALWAYS passed by value, pointers enable ~mutation~
-- Methods who have a *pointer receiver* (mutable), can be sent from a struct or a pointer
-  #+begin_src go
-  func (p *person) book (){
-     p.foo += 1
-  }
-  p1 := person{}  // struct
-  p2 := &person{} // pointer
-  p1.book()
-  p2.book()
-  #+end_src
-* Book: Learn go with tests
+* Tutorial: Learn go with tests
 ** Hello world
 - Rules for "testing" package
   - files should be {file}_test.go
@@ -183,43 +99,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - functions naming:
   - public functions start with CAPITAL letter
   - private functions start with a lowercase letter
-* Book: Go in practice
-** 4.1
-- errors.New
-  fmt.Errorf
-- Sometimes, when returning a meaningful non-nil value we can ignore the error check
-- Custom error types
-  - When we need to return more than a string
-  - packages can export errors (errors.New) instances that can be ~err ==~
-  - Custom error, to add more data to the error
-     #+begin_src go
-type ParseError struct {
-    Message    string,
-    Line, Char int
-}
-func (p *ParseError) Error() string {
-   format := "%s on Line %d, Char %d"
-   return fmt.Sprintf(format, p.Message, p.Line, p.Char)
-}
-  #+end_src
-  - Default interface
-     #+begin_src go
-type error interface {
-    Error() string
-}
-     #+end_src
-- panics
-  - unwind the stack
-  - if unhandled unwind the whole stack
-  - signature is ~panic(interface{})~
-* Book: Black Hat Go
-  https://github.com/blackhat-go/bhg/
-** Chapter 5 DNS
-- with "net" package you can't set the resolver or run deep inspection (? on the result
-- RR interface doesn't have methods to get the response IP
-- to get the IP from a RR struct we use *type assertion* to create the data
-- you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
-* Book: Effective Go
+* Tutorial: Effective Go
   https://golang.org/doc/effective_go.html
 - "go fmt" uses tabs
 - Unlike C, is OK return the address of a local variable (!
@@ -353,9 +233,224 @@ type error interface {
     import _ "net/http/pprof"
     #+end_src
   - Interface checks
-* Book: The Go Programming Language
-** 7 Interfaces
+* Book: Get Programming with Go (Manning)
+Code: https://github.com/nathany/get-programming-with-go
+** 5 State and behavior
+*** DONE 21 A little Structure
+- For things that go together (ex: latitude and longitude)
+- New structs can either:
+  #+begin_src go
+  var curiosity struct {
+    lat  float64
+    long float64
+  }
+  // OR
+  type location struct {
+    lat  float64
+    long float64
+  }
+  var curiosity location
+  #+end_src
+- ~Composite literals~
+  location{lat: 1.3, long: 231.4}
+  location{1.3, 231.4}
+- Copied on :=
+- ~Struct tags~ are the comments that go right of struct fields
+*** DONE 22 GO's got no class
+- Attaching methods to structures (types)
+- Struct constructors are idiomatic
+  func newLocation(lat, long coordinate) location {}
+  func newLocationDMS()..
+  func newLocationDD()..
+- Sometimes just New(), if the package name is self descriptive
+*** DONE 23 Composition
+- "In OO, objects are *composed* of smaller objects in the same way."
+- Behavior:
+  On ~inheritence~, you create hierarchies. Which can be tricky to think about and change.
+  On ~composition~, you create methods and associate them to each "class".
+  Example: classifing animals by families *VS* creating attributes (walk, swim, nursing) and attach it to each animal
+- State:
+  ~Composition~ also takes place on structures.
+   Break down a dispair structure into smaller ones. And combine them.
+- Forwarding methods:
+  // Naive
+  type report struct {
+    sol         int
+    temperature temperature
+    location    location
+  }
+  func (r report) avg() celsius {
+    return r.temperature.avg()
+  }
+  ~Struct embedding~: makes all methods/subfields accessible from the main
+                      the fields still exists
+  type report struct {
+    sol int
+    temperature
+    location
+  }
+  ~Name Collision~, compiler warns ONLY on ambiguous usage
+*** DONE 24 Interfaces
+- ~Interfaces~ A way to express an ~abstract~ concept, a *Writer*. In place of a ~concrete~ thing.
+   A common behavior shared between "things".
+- declaring var t with an *interface type*
+  #+begin_src go
+  var t interface {
+      talk() string
+  }
+  #+end_src
+  ~Polimorphysm~ The var can be (re)assigned anything, which type satisfies the interface.
+- declaring a named *interface type*, usually ended with ~-er~, like fmt.Stringer
+  #+begin_src go
+  type talker interface {
+      talk() string
+  }
+  #+end_src
+  - They can be used anywhere a type is used.
+- Interfaces work along with ~structure embedding~.
+  Regular functions that take the interface, would take structure embedded ones.
+     (unlike with just using methods).
+- Interfaces in go are *satisfied implicitly*.
+  We don't need to explicitly say that a struct would satisfy our own interface.
+- ~Interface embedding~ is a thing, like with io.ReadWriter
+  They save some typing, but not much else.
+- Try to keep interface small
+** 6 Down the gopher hole
+*** DONE 26 A few pointers
+- A ~Pointer~ is a variable that points to the address of another variable.
+- ~Maps~ are pointers in disguise, no need to dereference on a function arg
+  ~Slices~ are, in part, pointers to elements on an array.
+           A pointer to a slice is only needed when modifing the cap/length/offset.
+           Though, it might been better return a new slice.
+- & address operator, can't take addresses of literal strings, number or booleans
+- * dereference operator, also used in pointer types (like *int)
+  can be assigned: *adminpoint = "new admin"
+- ~Automatic dereferencing~
+  - struct fields
+  - array indexes
+- Unlike C:
+  - Arrays and pointers are different types altogether
+  - GO avoids potential unsafe operations with pointers
+    a *int pointer can only point to a memory position where there is a int
+  - parameters are ALWAYS passed by value, pointers enable ~mutation~
+- Methods who have a *pointer receiver* (mutable), can be sent from a struct or a pointer
+  #+begin_src go
+  func (p *person) book (){
+     p.foo += 1
+  }
+  p1 := person{}  // struct
+  p2 := &person{} // pointer
+  p1.book()
+  p2.book()
+  #+end_src
+* Book: Go in practice (Manning)
+** 4.1
+- errors.New
+  fmt.Errorf
+- Sometimes, when returning a meaningful non-nil value we can ignore the error check
+- Custom error types
+  - When we need to return more than a string
+  - packages can export errors (errors.New) instances that can be ~err ==~
+  - Custom error, to add more data to the error
+     #+begin_src go
+type ParseError struct {
+    Message    string,
+    Line, Char int
+}
+func (p *ParseError) Error() string {
+   format := "%s on Line %d, Char %d"
+   return fmt.Sprintf(format, p.Message, p.Line, p.Char)
+}
+  #+end_src
+  - Default interface
+     #+begin_src go
+type error interface {
+    Error() string
+}
+     #+end_src
+- panics
+  - unwind the stack
+  - if unhandled unwind the whole stack
+  - signature is ~panic(interface{})~
+* Book: Black Hat Go (nostarch)
+  https://github.com/blackhat-go/bhg/
+** Chapter 5 DNS
+- with "net" package you can't set the resolver or run deep inspection (? on the result
+- RR interface doesn't have methods to get the response IP
+- to get the IP from a RR struct we use *type assertion* to create the data
+- you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
+* Book: The Go Programming Language (Addison)
+Code: https://github.com/adonovan/gopl.io/
+** DONE 6 Methods
+*** Method Declaration
+- ~Method receiver~, is the extra parameter from a regular function definition.
+- ~Selector~, is the obj.MethodName alone
+- No special *self* name being used
+- Methods and (struct) Fields inhabit the same namespace
+- Can define methods on slices, if they are declared a type.
+*** Methods with a Pointer Receiver
+For methods that need to update the receiver, or the variable is too big to copy.
+- CONVENTION: if a method of the type has a pointer receiver, all should use point receiver
+  - If any method has ~*T~ avoid copying instances of ~T~
+  - Unless the type is a pointer (slice/map)
+- ~receiver parameter~ what the method declares (p Point) func ...
+  ~receiver argument~  what the method receives Point{1,2}
+- Method calls:
+  - Same type of receiver arg and receiver param
+  - Receiver arg is ~T~ and receiver param is ~*T~ (implicit &)
+  - Receiver arg is ~*T~ and receiver param is ~T~ (implicit *)
+- Receiver can accept nil (empty maps/slices)
+*** Structure Embedding
+- Embedding != Subclassing
+- Language facilities:
+  - Field access: I can access the fields of the embedded struct directly
+  - Method access/promotion: can access methods of the embedded struct directly
+  - No Inheritance: I still can't use it inplace of the embedded
+- Works with pointers to a named type on the ~anonymous field~ (aka "child")
+- Works with unnamed struct types too
+*** Method Values and Expressions
+**** Method Values
+distanceP = p.Distance
+Is a function that bind the method to a specific receiver.
+- You can ~select~ the method, bind it, and use it later
+- sometimes we can shorter code
+  #+begin_src go
+  time.AfterFunc(10 * time.Second, func() { r.Launch() })
+  time.AfterFunc(10 * time.Second, r.Launch)
+  #+end_src
+**** Method Expression
+distance = Point.Distance (or (*Point).Distance )
+Is a function where the first argument is the receiver.
+Can be useful when the value can be a choice between many others.
+#+begin_src go
+if add {
+    op = Point.Add
+} else {
+    op = Point.Sub
+}
+...
+op(p[0], offset)
+#+end_src
 
+*** Example: Bit Vector for set operations
+instead of using map[T]bool
+Bit-vector: uses a slice of unsigned integer,
+            each bit represents a element present
+- bytes.Buffer, is often used in String() methods
+  buf.WriteByte()
+  fmt.Fprintf(&buf,,)
+- while declaring String(), for ~*T~ won't make it for ~T~
+  use & accordingly
+- binary operators:
+  << (binary left shift), &(binary and), |= (bitwise inclusive or and assignment)
+*** Encapsulation
+aka getters and setters
+- The unit of encapsulation is the ~package~
+- We encapsulate on a struct, even if it is ONE field
+** 7 Interfaces
+- ~satisfied implicitly~ is a key feature of GO.
+  No need to write all interfaces it satisfy on the type.
+- are an ~abstract type~
 * Language features
 ** slices
 - http://blog.golang.org/go-slices-usage-and-internals

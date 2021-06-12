@@ -9,7 +9,9 @@
 - https://github.com/rhysd/vim-clang-format
 - https://github.com/junegunn/fzf
 - https://tek256.com/posts/code-hardening/
-* clang-format
+* Projects
+- https://github.com/isometimes/rpi4-osdev
+** clang-format
   https://emacs.stackexchange.com/questions/55635/how-can-i-set-up-clang-format-in-emacs
   clang-format -style=llvm -dump-config > .clang-format
 * Book: Effective C

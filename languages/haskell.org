@@ -444,6 +444,22 @@ sierpinskiTri w x y size
 - Many indirect graphics functions, to:
   1) being able to work with each shape properties
 ** 5 Polymorphic and High-order Funtions
+* Book: Haskell Tutorial and Cookbook
+** 1
+#+begin_src haskell
+module Main where
+module Main (main) where
+#+end_src
+- : concatenates Char to [Char]
+- !! for list index access
+- ++ concatenate lists
+- length of tuples will always be one (1)
+|       |       |           | destructuring     |   |
+|-------+-------+-----------+-------------------+---|
+| tuple | (A,B) | fst/snd   | let (a,b)=('a',1) |   |
+| list  | [T]   | head/tail |                   |   |
+
+
 * TODO Interview: Michael Snoyman: From Haskell to Rust?
   #+DATE: Sep 13, 2020
   #+URL: https://www.youtube.com/watch?v=HKXmEFvsi6M
@@ -457,6 +473,7 @@ sierpinskiTri w x y size
   - Like overload of operators
 - TALK ABOUT MONADS????
 - RESUME 20:00
+
 * TODO Videos: HaskellRank by tsoding
   playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
 ** DONE HackerRank in Haskell
@@ -667,6 +684,7 @@ pp = putStrLn . unlines . map (unwords . map show)
 #+end_src
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
+
 * TODO Course: Haskell by Bartosz Milewski
   playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
 ** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
@@ -919,3 +937,4 @@ add (Minutes x) (Minutes y) = Minutes $ x + y
   Can't apply regular functions
   Can't pattern match
   Can't get values from it
+
