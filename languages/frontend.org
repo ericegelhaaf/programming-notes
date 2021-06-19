@@ -1,3 +1,4 @@
+https://egghead.io/courses/the-beginner-s-guide-to-react
 https://github.com/30-seconds/30-seconds-of-interviews
 - How to npm install global not as root?
   https://stackoverflow.com/questions/18088372/how-to-npm-install-global-not-as-root
