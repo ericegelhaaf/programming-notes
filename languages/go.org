@@ -1,13 +1,7 @@
-- https://talks.golang.org/2013/bestpractices.slide  Francesc Campoy Flores
-- flags custom arg http://blog.ralch.com/tutorial/golang-custom-flags/
-- SOCKS5 https://play.golang.org/p/l0iLtkD1DV (it also support HTTP_PROXY)
-- a set of vulnerable Golang programs https://github.com/trailofbits/not-going-anywhere
-- https://blog.golang.org/maps
-- Source analysis of sync.Mutex in golang
-  https://programmer.group/source-analysis-of-sync.mutex-in-golang.html
-- sync.RWMutex
-  https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
 * Videos
+- Gaming with GO https://www.youtube.com/user/Velovix
+- Learn Go Programming - Golang Tutorial for Beginners
+  https://www.youtube.com/watch?v=YS4e4q9oBaU
 - Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay https://www.youtube.com/watch?v=LI1YTFMi8W4
   https://github.com/eranyanay/1m-go-websockets
 - Make a chess program https://www.youtube.com/watch?v=zlPDWBLhn6c
@@ -38,11 +32,18 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
   - translated the C code of the compiler to Go using a "translator"
 ** Dave Ceney
 * Learn
+- https://talks.golang.org/2013/bestpractices.slide  Francesc Campoy Flores
+- flags custom arg http://blog.ralch.com/tutorial/golang-custom-flags/
+- SOCKS5 https://play.golang.org/p/l0iLtkD1DV (it also support HTTP_PROXY)
+- a set of vulnerable Golang programs https://github.com/trailofbits/not-going-anywhere
+- https://blog.golang.org/maps
+- Source analysis of sync.Mutex in golang
+  https://programmer.group/source-analysis-of-sync.mutex-in-golang.html
+- sync.RWMutex
+  https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
 - https://github.com/geektutu/7days-golang
 - https://github.com/astaxie/build-web-application-with-golang/blob/master/en/09.3.md
 - https://github.com/golang-standards/project-layout/
-- Learn Go Programming - Golang Tutorial for Beginners
-  https://www.youtube.com/watch?v=YS4e4q9oBaU
 - https://github.com/guardrailsio/awesome-golang-security
 - https://github.com/Alikhll/golang-developer-roadmap
 - https://github.com/GoesToEleven/GolangTraining
@@ -52,15 +53,13 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - https://github.com/hoanhan101/ultimate-go
   https://github.com/ardanlabs/gotraining-studyguide
 - https://github.com/inancgumus/learngo/
-- https://github.com/quii/learn-go-with-tests
 - https://github.com/re4lity/Hacking-With-Golang
 - https://github.com/parsiya/Hacking-with-Go
-- https://github.com/smallnest/go-best-practices
+- Links https://github.com/smallnest/go-best-practices
 - https://go101.org/article/tips.html#force-to-use-keyed-struct-literals
 - https://learnxinyminutes.com/docs/go/
 - Style
   https://github.com/dgryski/awesome-go-style lists of good practices
-  https://github.com/golang/go/wiki/CodeReviewComment
 - Going Infinite, handling 1M websockets connections in Go
   https://github.com/eranyanay/1m-go-websockets
 ** Interview questions
@@ -182,6 +181,7 @@ func (l +lookup) process() {
     6) Custom error: implement the interface when needed
     7) Know what is Safe and what is Unsafe
 * TODO Tutorial: Learn go with tests
+  https://github.com/quii/learn-go-with-tests
 ** Hello world
 - Rules for "testing" package
   - files should be {file}_test.go
@@ -919,6 +919,7 @@ scheme://authority/path?query=abc&d=1#fragment
       use the .Result() methos to return a pointer to http.Response
 * Book: Distributed Services with Go (Pragmatic Bookshelf) Travis Jefferey
 Source: https://pragprog.com/titles/tjgo/distributed-services-with-go/
+Source: https://github.com/travisjeffery/proglog
 - Author: Works at Confluence (kafka)
   https://twitter.com/travisjeffery
   https://travisjeffery.com/
@@ -929,7 +930,96 @@ Source: https://pragprog.com/titles/tjgo/distributed-services-with-go/
   Covers data structures and algorithms for distributed services, abstractly.
 ** Chapter 1: Let's Go
 - On C, author was bugged by the lack of modules
-
+- Author's project *Jocko*, and implementation of Kafka in Go
+- JSON over HTTP, most common APIs on the web.
+  - For internal web APIs, might use *protobuf/gRPC* for features not provided by it.
+    Like type checking and versioning. (performance?)
+- $ go mod init github.com/travisjeffery/proglog
+  $ ls
+  go.mod
+- ~internal/server/log.go~ (package server)
+  With the append log datastructure and basic .Append() .Read() methods
+- Each JSON/HTTP handler should
+  1. *Unmarshall* the JSON request into a struct
+  2. *Run* the endpoint logic with the request
+  3. *Marshal* and write that result to the response
+  If handlers become much more complicated, move code out
+- ~internal/server/http.go~ (package server)
+  - Uses https://github.com/gorilla/mux
+    Like http.ServMux, mux.Router implements http.Handler but provides easier ways to match different things on the URI
+  - The producer and consumer handler code
+- ~cmd/server/main.go~ (package main)
+   - just .NewHTTPserver() and .ListenAndServe()
+- encoding/json package encodes []byte as a base64 string
+** Chapter 2: Structure with Protocol Buffers
+- For internal APIs (with control of the clients)
+  * Guarentees type-safety
+  * Prevents schema-violations (across several microservices/teams)
+  * Enables fast serialization (six times faster than JSON)
+  * Offers backward compatibility
+  * Language agnosticism
+- From a .proto file you generate/compile to .go code
+  #+begin_src
+  syntax = "proto3"
+  package twitter;
+  message Tweet {
+    string message = 1
+  }
+  #+end_src
+- *protoc* is the compiler binary name
+- Go convention is to put the .proto files on the *api/v1* directory
+  - Using the *repeated* protobuf keyword to describe the slice of Records
+  - You assign an "unique field number" to each field of the Message
+- History: gogoprobuf was a fork of googles runtime to run protobuf, later replaced with Go API (APIv2)
+- $ go get google.golang.org/protobuf/...@v1.25.0
+  $ protoc api/v1/*.proto --go_out=. --go_opt=source_relative --proto_path=.
+- Use a ~Makefile~
+- You will end up creating *interfaces*, to handle the *getters* you get from the autogenerated code
+  Or you will end up writting plugins for the protobuf generator (like to generate setters?)
+** Chapter 3: Write a Log Package
+- Other names:
+  * write-ahead logs
+  * transaction logs
+  * commit logs
+- Examples: ext journal, postgres WAL, raft append logs, Redux logs (?
+- "Logs not only holds the latest state, but all states that have existed."
+- Some implemetations split logs into *segments*, 1 active one.
+  The index part of the logs can be *memory-map*
+- Name convention:
+  * Record: the data stored in our log.
+  * Store: the file we store records in.
+  * Index: the file we store index entries in.
+  * Segment: the abstraction that ties a *store* and an *index* together.
+  * Log: the abstraction that ties all the *segments* together.
+- ~internal/log/store.go~
+  - creates the filestorage abstraction struct
+  - .Append()
+    We write to the buffered writer instead of directly to the file
+    to reduce the number of system calls and improve performance.
+  - .Read()
+    Call to .Flush() to clear the write buffer
+    make() buffers to read from, in the memory stack
+    We read directly from disk with s.File.ReadAt()
+    We enc.Uint64 to get it from a read []byte
+  - .ReadAt()
+    wrapper over .File.ReadAt() that calls buf.Flush()
+  - .Close()
+    wrapper over .File.Close() that cals to buf.Flush()
+- ~internal/log/store_test.go~
+  Uses https://github.com/stretchr/testify for require.NoError() require.Equal()
+  ioutil.TempFile(os.TempDir(), "some_extra_stuff")
+- ~internal/log/index.go~
+  Uses https://github.com/tysonmote/gommap to use the gommap.MMap
+  - Once memory mapped we can't resize it, so we grow/os.Truncate() the file before mapping it.
+  - .Close() syncs the mmap and file, and truncates back the file
+  - NewIndex() reads and maps the index file, growing it before hand
+  - .Read(in) (out, pos, error), *enc.Uint32(src)*
+  - .Write(off, pos) *appends* off and pos to the index, *enc.PutUint32(dst,src)*
+- ~internal/log/index_test.go~
+- ~internal/log/config.go~
+  - Place for the Config struct
+- ~internal/log/segment.go~
+  Integrates both the *store* and *log* part
 * DONE Article: I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,
@@ -1043,9 +1133,18 @@ Arg2: While primitives are there, the patterns that put them together are up to 
     Problem: 3rd party libraries (ab)use of interface{}
 11) append() "might" do an implace replacement, or not
     Problem: compiler used to not warn for not assigning the append()
-* TODO Article: Down the Golang nil Rabbit Hole (2021)
-- Use case: doing integration test with https://github.com/houseabsolute/detest
+* DONE Article: Down the Golang nil Rabbit Hole (2021)
+Scenario: doing integration test with https://github.com/houseabsolute/detest
 - Go has multiple "types" of nil. Both typed and untyped nil variables.
+- reflect.ValueOf(nil) returns an invalid nil (untyped nil?)
+         .IsValid()
+         .IsNil()
+         .Type()
+- Sometimes, Go types the untyped nil, if it goes through a function argument typed.
+- Sometimes, it won't type the untyped nil. If it goes through a function argument interface.
+- Other Languages
+  + *strict* in Perl
+  + *Option<T>* in Rust
 * Language features
 ** slices
 - http://blog.golang.org/go-slices-usage-and-internals
