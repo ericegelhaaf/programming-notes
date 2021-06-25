@@ -1,15 +1,16 @@
+- Video: How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
+- https://github.com/AnthonyCalandra/modern-cpp-features
 - https://github.com/gerasdf/InsecureProgramming/
+- https://github.com/junegunn/fzf
+- https://github.com/oz123/awesome-c
+- https://github.com/rhysd/vim-clang-format
+- https://not.cafe/2020/10/12/getting-started-with-c-programming.html
+- https://tek256.com/posts/code-hardening/
 - http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
   https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
-- https://not.cafe/2020/10/12/getting-started-with-c-programming.html
+* Projects
 - http://www.tendra.org/tdfc2-config/#S11.2
   https://github.com/tendra/tendra/wiki/About
-- https://github.com/AnthonyCalandra/modern-cpp-features
-- Video: How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
-- https://github.com/rhysd/vim-clang-format
-- https://github.com/junegunn/fzf
-- https://tek256.com/posts/code-hardening/
-* Projects
 - https://github.com/isometimes/rpi4-osdev
 ** clang-format
   https://emacs.stackexchange.com/questions/55635/how-can-i-set-up-clang-format-in-emacs
@@ -26,12 +27,12 @@
   https://github.com/Shougo/deoplete.nvim/
 - Compilers: gcc, clang, visual studio
 - Kinds of Portability issues:
-  . Implementation-defined behavior: not on the C standard, but on a particular impl
-  . Unspecified behavior: on the standard, but with >1 behavior defined
-  . Undefined behavior: not on the C standard, explicit or implicit
-  . Locale-specific behavior
-  . Common Extensions
-- -pedantic, notify portability issues
+  + Implementation-defined behavior: not on the C standard, but on a particular impl
+  + Unspecified behavior: on the standard, but with >1 behavior defined
+  + Undefined behavior: not on the C standard, explicit or implicit
+  + Locale-specific behavior
+  + Common Extensions
+- ~-pedantic~, notify portability issues
 ** TODO 2 Objects, Functions, and Types
 - "Every type in C is either an ~object~ type or a ~function~ type."
 - IEEE 754-2008: the Standard for Floating-Point Arithmetic.
@@ -86,11 +87,6 @@
   - Arrays:
     - str[i]   is identical to *(str + i)
     - &str[10] is the same as    str + 10
-** 5 Control Flow
 
-* Book: An Introduction to C & GUI Programming
 
-* Book: Modern C
-- C is an imperative programming language.
-** Level 0. Encounter
 

@@ -1,5 +1,7 @@
-- 10.3 Variables Used by Implicit Rules
-  https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+- POSIX Make https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html
+- GNU Make https://www.gnu.org/software/make/manual/html_node/index.html#Top
+  - 10.3 Variables Used by Implicit Rules
+    https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
 * Tutorial: makefile tutorial
   http://makefiletutorial.com/
 - can be more than 1 *target* separated by space (usually 1)
@@ -53,3 +55,62 @@ all:
 - $@ - current target name
 - $? - prerequisits
 - $^ - ? prerequisits
+* DONE Article: A Tutorial on Portable Makefiles
+https://nullprogram.com/blog/2017/08/20/
+- POSIX Make https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html
+- GNU Make, on BSD is named *gmake*
+** Example
+  #+begin_src makefile
+.POSIX:
+.SUFFIXES:
+CC     = cc
+CFLAGS = -W -O
+LDLIBS = -lm
+
+all: game
+game: graphic.so physics.o input.o
+    $(CC) $(LDFLAGS) -o game graphics.o physics.o input.o
+graphics.o: graphics.c graphics.h
+physics.o: physics.c physics.h
+input.o: input.c input.h graphics.h physics.h
+clean:
+    rm -f game graphics.o physics.o input.o
+
+.SUFFIXES: .c .o # Adds them to the suffix list
+.c.o:
+    $(CC) $(CFLAGS) -c $<
+  #+end_src
+** Target
+- Build from *dependency trees* constructed from *rules*
+  - Each vertex, is called a *target*
+  - The final product (executable, document, etc) are the tree *roots*
+- The order does NOT matter. The whole file is parsed before actions are taken.
+  - An expected *install:* target should use the *PREFIX* and *DESTDIR* macros
+    - PREFIX should default to /usr/local
+    - DESTDIR is used for staged builds, when is installed on a fake root directory
+  - mostlyclean>clean>distclean
+  - test/check/dist
+  - The first target is the *default target*
+    - It is convention for a phony *all* target to be the default target
+- Targets can be written multiple times to append prerequisites.
+- Targets with no dependencies are human made, like (.c or .h files)
+  - Putting a .h file would make it recompile on changes on .h
+- A target is *out-of-date* if it is older than any of its prerequisites
+- When using *subdirectories*, just include them on the target name.
+- When keeping objects out of the source dir, you can do it (obj/input.o: src/input.c) BUT *inference rules* won't work
+  - Cmake Solves that, along with deps
+- Special Targets
+  - ~.POSIX:~ In order to get POSIX behavior the first line should be
+  - ~.SUFFIXES~ To disable all default *inference rules*
+** Flags
+  - e take macros from the environment
+  - k for "keep going"
+  - j non standard to parallelize the buiild
+** Commands
+  - Each line runs on his own shell, be mindful of cd's
+** Macros
+- Expanded with $(...)
+- CC, CFLAGS: For compiler and compiler flags
+  LDFLAGS: for flags passed to compiler when linking
+  LDLIBS: For flags about libraries when linking
+- ~$<~ macro expands to the prerequisite

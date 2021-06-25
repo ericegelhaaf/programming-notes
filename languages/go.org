@@ -1,9 +1,7 @@
 * Videos
-- Gaming with GO https://www.youtube.com/user/Velovix
+- GameDev with GO https://www.youtube.com/user/Velovix
 - Learn Go Programming - Golang Tutorial for Beginners
   https://www.youtube.com/watch?v=YS4e4q9oBaU
-- Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay https://www.youtube.com/watch?v=LI1YTFMi8W4
-  https://github.com/eranyanay/1m-go-websockets
 - Make a chess program https://www.youtube.com/watch?v=zlPDWBLhn6c
 - Write web applications in Go without using a framework
   https://www.youtube.com/playlist?list=PL41psiCma00wgiTKkAZwJiwtLTdcyEyc4
@@ -11,6 +9,8 @@
 - /r/golang/ favorite go conference talks https://www.reddit.com/r/golang/comments/ei54kv/what_are_your_favorite_go_conference_talks/
 - /r/golang/ youtube.com https://www.reddit.com/r/golang/search?q=site%3Ayoutube.com&restrict_sr=1&sort=top
 ** Channels
+- Learn To Code https://www.youtube.com/c/toddmcleod-learn-to-code/videos
+- Go Class https://www.youtube.com/channel/UCC2ot8w_U6yQsq7jdpbECvQ/videos
 - Justforfunc https://www.youtube.com/c/JustForFunc/videos
 - Microservices: https://www.youtube.com/c/NicJackson/videos
 - The Go Programming Language https://www.youtube.com/c/golang/videos
@@ -32,40 +32,99 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
   - translated the C code of the compiler to Go using a "translator"
 ** Dave Ceney
 * Learn
+- http://blog.golang.org/go-slices-usage-and-internals
+- http://blog.golang.org/error-handling-and-go
+- https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go
 - https://talks.golang.org/2013/bestpractices.slide  Francesc Campoy Flores
-- flags custom arg http://blog.ralch.com/tutorial/golang-custom-flags/
+- flags http://blog.ralch.com/tutorial/golang-custom-flags/
 - SOCKS5 https://play.golang.org/p/l0iLtkD1DV (it also support HTTP_PROXY)
 - a set of vulnerable Golang programs https://github.com/trailofbits/not-going-anywhere
-- https://blog.golang.org/maps
-- Source analysis of sync.Mutex in golang
-  https://programmer.group/source-analysis-of-sync.mutex-in-golang.html
-- sync.RWMutex
-  https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
-- https://github.com/geektutu/7days-golang
-- https://github.com/astaxie/build-web-application-with-golang/blob/master/en/09.3.md
-- https://github.com/golang-standards/project-layout/
-- https://github.com/guardrailsio/awesome-golang-security
-- https://github.com/Alikhll/golang-developer-roadmap
-- https://github.com/GoesToEleven/GolangTraining
-- https://github.com/SuperPaintman/the-evolution-of-a-go-programmer
-- https://github.com/ardanlabs/gotraining/tree/master/reading
-- https://github.com/dariubs/GoBooks
-- https://github.com/hoanhan101/ultimate-go
-  https://github.com/ardanlabs/gotraining-studyguide
-- https://github.com/inancgumus/learngo/
-- https://github.com/re4lity/Hacking-With-Golang
-- https://github.com/parsiya/Hacking-with-Go
+- Source analysis of sync.Mutex in golang https://programmer.group/source-analysis-of-sync.mutex-in-golang.html
+- sync.RWMutex https://medium.com/golangspec/sync-rwmutex-ca6c6c3208a0
+- Layout https://github.com/golang-standards/project-layout/
+- Roamap https://github.com/Alikhll/golang-developer-roadmap
+- Meme: https://github.com/SuperPaintman/the-evolution-of-a-go-programmer
+- Links https://github.com/ardanlabs/gotraining/tree/master/reading
+- Links https://github.com/guardrailsio/awesome-golang-security
 - Links https://github.com/smallnest/go-best-practices
-- https://go101.org/article/tips.html#force-to-use-keyed-struct-literals
-- https://learnxinyminutes.com/docs/go/
-- Style
-  https://github.com/dgryski/awesome-go-style lists of good practices
-- Going Infinite, handling 1M websockets connections in Go
-  https://github.com/eranyanay/1m-go-websockets
+- Links/Tools https://github.com/re4lity/Hacking-With-Golang
+- Books: https://github.com/dariubs/GoBooks
+- Exercises https://github.com/inancgumus/learngo/
+- Tutorial https://github.com/parsiya/Hacking-with-Go
+- Tutorial https://github.com/geektutu/7days-golang
+- Tutorial Basics https://learnxinyminutes.com/docs/go/
+- Tutorial Basics https://blog.golang.org/maps
+- Tutorial Basics https://github.com/GoesToEleven/GolangTraining
+- Tutorial Web https://github.com/astaxie/build-web-application-with-golang/
+- Tutorial https://github.com/hoanhan101/ultimate-go https://github.com/ardanlabs/gotraining-studyguide
+- Style https://github.com/dgryski/awesome-go-style lists of good practices
 ** Interview questions
-  https://github.com/shomali11/go-interview
-  https://github.com/hoanhan101/algo
-  https://github.com/goquiz/goquiz.github.io
+   https://github.com/shomali11/go-interview
+   https://github.com/hoanhan101/algo
+   https://github.com/goquiz/goquiz.github.io
+* TODO Video: GOTO 2020 • GraphQL, gRPC and REST, Oh My! A Method for Unified API Design (2020) / Mike Amundsen
+  https://www.youtube.com/watch?v=oG6-r3UdenE
+  Author of Book: "Design and Build Great Web APIs" (Prag Bookshelf)
+- Designing API/Experience
+  - Dealing with HTTP details, is implementation NOT design
+- Case study:
+  - Large company
+  - Pick OpenApi as the backbone of the practice
+* DONE Video: Intro to gRPC: A Modern Toolkit for Microservice Communication (2017)
+https://www.youtube.com/watch?v=RoXT_Rkg8LA
+REST: is the architectural principle (most use HTTP+JSON
+Implementations:
+  - C++/Java/Python/Go/Ruby/C#/Javascript/Objective-C/PHP
+  - C/Java/Go (real implementations, other are bindings)
+"Rest is actually not that great"
+  - No formal (machine-readable) API *contract*
+    - Writing client libraries requires humans
+    - Humans are expensive(?) and don't like writing client libraries
+  - *Streaming* is difficult.
+  - *Bi-directional streaming* isn't possible at all
+  - Operations are difficult to *model*
+  - *Inefficient* (text isn't optimal for networks)
+  - Internal services aren't RESTful, they are just HTTP endpoints (?)
+Written in IDL (Interface Definition Language)
+  - While protobuf defines the data, gRPC defines interface and data for accepted and returned by it
+  - Machine readable
+  - Can be compiled
+    - Into Client libraries
+    - Combined with a server stub (to create your tcp server of your protocol in few lines).
+Alternatives
+  - WSDL, tried to do this in the past for SOAP.
+    - Tied to XML
+  - Swagger:
+    - Machine readable (on json...)
+    - Still http/json (performance, streaming, modeling problems still present)
+  - Thrift
+    - less documented?
+Born from Google's Project "stubby".
+What really *IS*:
+  - Built on top of HTTP/2
+  - protobuf serialization
+  - Allows client/server side streaming
+*Interceptors* that are kind of "middleware" (on the http.Context sense of the word)
+  - Can be used to add logging
+  - On the server or client
+Problems:
+  - Load Balancing (needs to be a grpc aware lb)
+  - Error handling is bad (no easy to add details of the error)
+  - No support for browser JS
+  - Breaking API changes (grpc side)
+* DONE Video: Things In Go I Never Use (2018) / Mat Ryer
+  https://www.youtube.com/watch?v=5DVV36uqQ4E
+  Author of "Go Programming Blueprints"
+- Arrays
+- http.Handler, insted use http.HandlerFunc. So no need to implement the Serve(),
+                we just need a function that return a http.HandlerFunc
+  Might get slower on initialization: but with *var init Sync.Once* it solves it
+- Keywords: goto, fallthrough, else
+  - *goto*, the code gets difficult to "see". "Ok", when small and local.
+  - *else*, don't for glanceability
+  - *new*, just *AThing{}* or *var thing Athing*
+- Build-In Functions: cap, complex, imag, new, panic, real, print, println
+  - *panic*, only panic to give a better panic(), like with an argument explaining what happned
 * DONE Video: dotGo 2014 - John Graham-Cumming - I came for the easy concurrency I stayed for the easy composition
 - Problem: identify if site is cloudflare or not (check NS)
   #+begin_src go
@@ -112,7 +171,7 @@ func (l +lookup) process() {
   }
 }
   #+end_src
-* Video: Practical Go: Real world advice for writing maintainable Go programs / Dave Cheney (2019)
+* TODO Video: Practical Go: Real world advice for writing maintainable Go programs / Dave Cheney (2019)
   https://www.youtube.com/watch?v=gi7t6Pl9rxE
   https://dave.cheney.net/practical-go/presentations/qcon-china.html
 - "Waterfall way of writting books" (how books are written?)
@@ -141,7 +200,7 @@ func (l +lookup) process() {
 - "Your one word elevator pitch word to define your package"
 - Unique (a name that needs a partner like, client and server, is likely not a good name)
 1:18:32
-* Video: Will contracts replace interfaces? / Francesc Campoy (2019)
+* TODO Video: Will contracts replace interfaces? / Francesc Campoy (2019)
   https://www.youtube.com/watch?v=E75b9kuyRKw
   - Go has 2 types, abstract or concrete.
   - Interfaces
@@ -180,6 +239,11 @@ func (l +lookup) process() {
     5) pointer vs value: shared access vs value copied
     6) Custom error: implement the interface when needed
     7) Know what is Safe and what is Unsafe
+* TODO Video: Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay
+  https://www.youtube.com/watch?v=LI1YTFMi8W4
+  https://github.com/eranyanay/1m-go-websockets
+- First problem is not having long lived connections. (ignores keep alive?)
+
 * TODO Tutorial: Learn go with tests
   https://github.com/quii/learn-go-with-tests
 ** Hello world
@@ -991,7 +1055,7 @@ Source: https://github.com/travisjeffery/proglog
   * Index: the file we store index entries in.
   * Segment: the abstraction that ties a *store* and an *index* together.
   * Log: the abstraction that ties all the *segments* together.
-- ~internal/log/store.go~
+*** internal/log/store.go
   - creates the filestorage abstraction struct
   - .Append()
     We write to the buffered writer instead of directly to the file
@@ -1001,25 +1065,176 @@ Source: https://github.com/travisjeffery/proglog
     make() buffers to read from, in the memory stack
     We read directly from disk with s.File.ReadAt()
     We enc.Uint64 to get it from a read []byte
-  - .ReadAt()
-    wrapper over .File.ReadAt() that calls buf.Flush()
-  - .Close()
-    wrapper over .File.Close() that cals to buf.Flush()
-- ~internal/log/store_test.go~
-  Uses https://github.com/stretchr/testify for require.NoError() require.Equal()
-  ioutil.TempFile(os.TempDir(), "some_extra_stuff")
-- ~internal/log/index.go~
+  - .ReadAt(), wrapper over .File.ReadAt() that calls buf.Flush()
+  - .Close(),  wrapper over .File.Close() that cals to buf.Flush()
+  - ~internal/log/store_test.go~
+    Uses https://github.com/stretchr/testify for require.NoError() require.Equal()
+    ioutil.TempFile(os.TempDir(), "some_extra_stuff")
+*** internal/log/index.go
   Uses https://github.com/tysonmote/gommap to use the gommap.MMap
   - Once memory mapped we can't resize it, so we grow/os.Truncate() the file before mapping it.
   - .Close() syncs the mmap and file, and truncates back the file
   - NewIndex() reads and maps the index file, growing it before hand
   - .Read(in) (out, pos, error), *enc.Uint32(src)*
   - .Write(off, pos) *appends* off and pos to the index, *enc.PutUint32(dst,src)*
-- ~internal/log/index_test.go~
-- ~internal/log/config.go~
+  - ~internal/log/index_test.go~
+*** internal/log/config.go
   - Place for the Config struct
-- ~internal/log/segment.go~
+*** internal/log/segment.go
   Integrates both the *store* and *log* part
+  newSegment()
+  .Append(record *api.Record) protobuf marshalled the entry into the store
+  .Read(uint64) (*api.Record, error) argument is used to lookup into the index which returns a position on the .store.Read()
+  .IsMaxed() bool
+  .Remove(), calls .Close() AND removes the assoc index and store from disk
+  .Close(), closes both index and store
+  .nearestMultiple(uint64, uint64) uint64
+  - ~internal/log/segment_test.go~
+    ioutil.Tempdir()
+    os.RemoveAll()
+*** internal/log/log.go
+- Has a sync.RWMutex
+- Manages the list of segments.
+- Has an active segment, and a slice of segments
+- NewLog()
+- .setup(), reads all files names and gets the base offsets from it.
+          , it creates the segments from them.
+- .Append(*api.Record) (uint64, error), appends to the current segment, check if maxed to create a new segment
+- .Read(offset uint64) (*api.Record, error), finds the segment where the offset falls in, s.Read(offset)
+- .Close() error, closes every segment
+- .Remove() error, .Close() and nukes it all os.RemoveAll(l.Dir)
+- .Reset() error, .Reset() and .setup()
+- .LowestOffset() (uint64, error), baseOffset from the [0] segment
+  .HighestOffset() (uint64, error), nextOffset from the last segment
+- .Truncate(lowest uint64) error, drops segments that are higher nextOffset than lowest
+- .Reader() io.Reader, retuns a io.MultiReader, from each segment store, wrapped on a struct to make sure we read all the file using .ReadAt()
+  - io.MultiReader is a concatenation of all input readers. After which it returns EOF.
+- .newSegment(uint64) error, calls newSegment(), appends to the list, and makes it the active one
+- ~internal/log/log_test.go~
+  - uses t.Run(), ran under a loop of map[string]fn(*testing.T,*Log)
+** Chapter 4: Serve Requests with gRPC
+"A high performance, open source universal RPC framework"
+https://www.grpc.io/
+https://github.com/grpc-ecosystem
+https://github.com/grpc-ecosystem/go-grpc-middleware
+- "The best tool for serving request across distributed services."
+  - Maintains these for both client and servers, for free
+    - Compatibility
+    - Performance
+- Requests/Responses/Models/Serialization is type checked
+- ~internal/~ packages are magical packages in Go that can only be imported by nearby code.
+   code in /a/b/c/internal/d/e/f can be imported from /a/b/c, but not from /a/b/g
+*** Goals when building a service
+  - Simplicity: Abstract no-business logic away, while still having control. Express>gRPC>Rails
+  - Maintainability: for backwards compatibility, the easiest is to *version* and *run* multiple instances of your API.
+  - Security
+  - Ease of use: type system will tell users when they do something wrong.
+  - Performance
+  - Scalability: Load balancing is possible.
+    - thich client-side lb
+    - proxy lb
+    - look-aside lb
+    - service mesh
+*** Defining a gRPC service: is essentially a group of related RPC *endpoints*
+  - Adding this on the previous ~.proto~ file
+    #+begin_src
+  service Log {
+    rpc Consume(ConsumeRequest)              returns (ConsumeResponse) {}
+    rpc Produce(ProduceRequest)              returns (ProduceResponse) {}
+    rpc ConsumeStream(ConsumeRequest)        returns (stream ConsumeResponse) {}
+    rpc ProduceStream(stream ProduceRequest) returns (stream ProduceResponse) {}
+  }
+  message ProduceRequest {
+    Record record = 1;
+  }
+  message ProduceResponse {
+    uint64 offset = 1;
+  }
+  message ConsumeRequest {
+    uint64 offset = 1;
+  }
+  message ConsumeResponse {
+    Record record = 2;
+  }
+  #+end_src
+  - Compile
+    $ go get google.golang.org/grpc@v1.32.0
+    $ go get google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.0.0
+    $ protoc api/v1/*.proto --go_out=. --go-grpc_out=. --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative --proto_path=.
+*** internal/server/server.go
+- We need a struct whose methods match the service definition in your .proto
+#+begin_src go
+package server
+import (
+    "context"
+    api "github.com/travisjeffery/proglog/api/v1"
+    "google.golang.org/grpc"
+)
+type Config struct {
+    CommitLog CommitLog
+}
+var _ api.LogServer = (*grpcServer)(nil)
+type grpcServer struct {
+    api.UnimplementedLogServer
+    *Configp
+}
+func newgrpcServer(config *Config) (srv *grpcServer, err error) {
+    srv = &grpcServer{
+        Config: config,
+    }
+    return srv, nil
+}
+#+end_src
+#+begin_src go
+func (s *grpcServer) Produce(ctx context.Context, req *api.ProduceRequest) (*api.ProduceResponse, error) {
+    offset, err := s.CommitLog.Append(req.Record)
+    if err != nil {
+        return nl, err
+    }
+    return &api.ProduceResponse{Offset: offset}, nil
+}
+func (s *grpcServer) Consume(ctx context.Context, req *api.ConsumeRequest) (*api.ConsumeResponse, error) {
+    record, err := s.CommitLog.Read(req.Offset)
+    if err != nil {
+        return nil, err
+    }
+    return &api.ConsumeResponse{Response: record}, nil
+}
+#+end_src
+#+begin_src go
+func (s *grpcServer) ProduceStream(stream api.Log_ProduceStreamServer) error {
+    for {
+        req, err := stream.Recv()
+        if err != nil {
+            return err
+        }
+        res, err := s.Produce(stream.Context(), req)
+        if err != nil {
+            return err
+        }
+        if err = stream.Send(res); err != nil {
+            return err
+        }
+    }
+}
+func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_ConsumeStreamServer) error {
+    for {
+        select {
+           case <-stream.Context().Done():
+               return nil
+           default:
+               res, err := s.Consume(stream.Context(), req)
+               switch err.(type) {
+                   case nil:
+                   case api.ErrOfsetOutOfRange:
+                        continue
+                   default:
+                        return err
+               }
+        }
+    }
+}
+#+end_src
 * DONE Article: I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,
@@ -1145,17 +1360,38 @@ Scenario: doing integration test with https://github.com/houseabsolute/detest
 - Other Languages
   + *strict* in Perl
   + *Option<T>* in Rust
-* Language features
-** slices
-- http://blog.golang.org/go-slices-usage-and-internals
-** errors
-- http://blog.golang.org/error-handling-and-go
-** everything is pass-by-value in Go.
-** interfaces: different from classes as they not hold data
-https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go
-#+begin_src
-This is a core concept in Go’s type system;
-instead of designing our abstractions in terms of what kind of data our types
-can hold, we design our abstractions in terms of what actions our types can
-execute.
-#+end_src
+* DONE Article: Golang: Don't be afraid of Makefiles (2017)
+https://sohlich.github.io/post/go_makefile/
+- Go commands: build, clean, test, get
+- Makefile commands:
+  - deps, to go get the deps (or use the -u flag???)
+  - clean, to go clean and rm -f the build
+  - crossbuild with flags: CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+  - dockerbuild: when C libraries interaction is needed for building or a particular go version, "docker run", with volume and worker dir setup accordingly
+- From the HN comments
+  - use ~:=~ to immediatly expand the variable
+  - use ~;~ to avoid tabs and oneline the command
+* DONE Article: How to Write Go Code
+https://golang.org/doc/code
+>=1.13
+- Package = Directory
+  Module  = Collection of related Packages
+  Repository = 1 Module (usually)
+- Creating a new program
+  #+begin_src shell
+  $ mkdir hello
+  $ cd hello
+    $ go mod init example.com/user/hello
+  $ cat go.mod
+  module example.com/user/hello
+  go 1.16
+    $ go install example.com/user/hello
+      go install .
+      go install
+    $ go init
+  #+end_src
+- Adding a new package within the module/repo, does NOT involve *go mod* or *go.mod*
+- For new external packages required by your code
+  $ go mod tidy # adds missing module requirements (require statements with his version)
+- Clean all downloades modules
+  $ go clean -modcache
