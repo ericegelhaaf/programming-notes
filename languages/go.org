@@ -58,6 +58,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - Tutorial Web https://github.com/astaxie/build-web-application-with-golang/
 - Tutorial https://github.com/hoanhan101/ultimate-go https://github.com/ardanlabs/gotraining-studyguide
 - Style https://github.com/dgryski/awesome-go-style lists of good practices
+- Style https://github.com/uber-go/guide/
 ** Interview questions
    https://github.com/shomali11/go-interview
    https://github.com/hoanhan101/algo

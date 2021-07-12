@@ -242,8 +242,6 @@ iplCreateContext(IPLLogFunction     logCallback,
 | cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
 | slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
 
-* chip-8
-http://stevelosh.com/blog/2016/12/chip8-cpu/
 * books
 - https://leanpub.com/lovinglisp/read
   https://github.com/mark-watson/loving-common-lisp

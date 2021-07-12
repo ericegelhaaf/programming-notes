@@ -1,3 +1,7 @@
+- True Technologist / Interviews
+  https://www.youtube.com/playlist?list=PLYaGSokOr0MO-ly3vKVpxU0Ftvkule8pg
+- Make Better Software: The Training Series / Joel Spolsky
+  https://www.youtube.com/playlist?list=PLXOSex6PRPFN48McdqRkGMLFd9-pov0Fe
 - https://github.com/kuchin/awesome-cto
 - Microservices: https://www.youtube.com/playlist?list=PLzERW_Obpmv81N-F8yBowb_QHvf9ISG7y
 - https://github.com/mtdvio/every-programmer-should-know
