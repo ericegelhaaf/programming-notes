@@ -24,6 +24,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Podcast - https://clojuredesign.club/
 - Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
 - Podcast - Eric Normad - https://www.youtube.com/channel/UC2riBMG3qf1Di20ouRc76BA/videos
+- Sci Cloj https://www.youtube.com/c/SciCloj/videos
 - re:clojure https://www.youtube.com/c/reclojure/videos
 - Course - Brian Will - the Clojure language - https://www.youtube.com/playlist?list=PLAC43CFB134E85266
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv

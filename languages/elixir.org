@@ -1,7 +1,10 @@
 https://elixirschool.com/en/
-
 https://github.com/elixirkoans/elixir-koans
 https://github.com/exercism/elixir
+- Book https://joyofelixir.com/toc.html
+* Channels
+- Tetris Phoenix, https://www.youtube.com/playlist?list=PLKBMoE8mCkXi-sAkesjaUnDQqyrkAK8R5
+- Cryptocurrency, https://www.youtube.com/c/KamilSkowron/videos
 * TODO https://joearms.github.io/published/2013-05-31-a-week-with-elixir.html
 - sigils are from ruby
 - on erlang, the AST has a different form for everythin

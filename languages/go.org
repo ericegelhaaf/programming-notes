@@ -9,6 +9,7 @@
 - /r/golang/ favorite go conference talks https://www.reddit.com/r/golang/comments/ei54kv/what_are_your_favorite_go_conference_talks/
 - /r/golang/ youtube.com https://www.reddit.com/r/golang/search?q=site%3Ayoutube.com&restrict_sr=1&sort=top
 ** Channels
+- GopherCon UK https://www.youtube.com/c/GopherConUK/videos
 - Learn To Code https://www.youtube.com/c/toddmcleod-learn-to-code/videos
 - Go Class https://www.youtube.com/channel/UCC2ot8w_U6yQsq7jdpbECvQ/videos
 - Justforfunc https://www.youtube.com/c/JustForFunc/videos
@@ -32,6 +33,10 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
   - translated the C code of the compiler to Go using a "translator"
 ** Dave Ceney
 * Learn
+- https://www.akitasoftware.com/blog-posts/taming-gos-memory-usage-or-how-we-avoided-rewriting-our-client-in-rust
+- https://blog.twitch.tv/en/2019/04/10/go-memory-ballast-how-i-learnt-to-stop-worrying-and-love-the-heap-26c2462549a2/
+- https://github.com/tmrts/go-patterns
+- https://github.com/dgryski/go-perfbook
 - http://blog.golang.org/go-slices-usage-and-internals
 - http://blog.golang.org/error-handling-and-go
 - https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go
@@ -47,6 +52,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - Links https://github.com/ardanlabs/gotraining/tree/master/reading
 - Links https://github.com/guardrailsio/awesome-golang-security
 - Links https://github.com/smallnest/go-best-practices
+- Links https://github.com/enocom/gopher-reading-list
 - Links/Tools https://github.com/re4lity/Hacking-With-Golang
 - Books: https://github.com/dariubs/GoBooks
 - Exercises https://github.com/inancgumus/learngo/
@@ -63,6 +69,14 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
    https://github.com/shomali11/go-interview
    https://github.com/hoanhan101/algo
    https://github.com/goquiz/goquiz.github.io
+* TODO Video: Golang UK Conference 2015 - Andrew Gerrand - Stupid Gopher Tricks
+  https://www.youtube.com/watch?v=UECh7X07m6E
+  - struct{} is a type literal, on var foo struct{}
+    - sometimes used on anonymous structs
+    - used on template/json (when pulling a field) or enconding
+    - can be nested
+  - embeddes structs, inherit the methods of the childs
+  - anynoymous, interfaces, used for type assertion
 * TODO Video: GOTO 2020 • GraphQL, gRPC and REST, Oh My! A Method for Unified API Design (2020) / Mike Amundsen
   https://www.youtube.com/watch?v=oG6-r3UdenE
   Author of Book: "Design and Build Great Web APIs" (Prag Bookshelf)
@@ -240,6 +254,40 @@ func (l +lookup) process() {
     5) pointer vs value: shared access vs value copied
     6) Custom error: implement the interface when needed
     7) Know what is Safe and what is Unsafe
+* Video: Golang University
+  https://www.youtube.com/playlist?list=PLEcwzBXTPUE_5m_JaMXmGEFgduH8EsuTs
+** 2016 - Mat Ryer - Idiomatic Go Tricks - Golang UK Conference
+   - No empty lines
+   - Line of sight: 1 indentation at most
+     - Make the happy treturn the last statement if possible
+   - Single method interfaces
+     - Function type alternatives for single method interfaces (like HandlerFunc)
+     - can also use them as a slice of interface
+   - Log Blocks
+     log.Println("----")
+     defer log.Println("----")
+   - return teardown functions as an argument
+     - so it can be immediatly defer after assigment
+   - You can check if a element implements an interface.
+     #+begin_src go
+                          // where v is an interface{}
+     obj, ok := v.(Valid) // where Valid is an interface, that implements OK()
+     if !ok {
+       return nil // no OK method
+     }
+     #+end_src
+   - Sometimes somebody elese provides the struct (and not the interface)
+     - Make your own interface
+   - We can leave the receiver part of a method empty, just specify the type
+   - We can use channels as semaphores to limit the ammount of work.
+** TODO 2019 - Dave Cheney - Clear is better than clever - GopherCon SG
+   https://www.youtube.com/watch?v=NwEuRO_w8HE
+   - Source code is the intermediate form, between the idea and what the machine does
+   - Readability is subjective
+   - Clarity != Readability
+   - you can either use new() or &Thing{}
+   - When you see something complicated, it should be complicated
+     12:00
 * TODO Video: Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay
   https://www.youtube.com/watch?v=LI1YTFMi8W4
   https://github.com/eranyanay/1m-go-websockets
@@ -535,6 +583,28 @@ Type reflection or Type Casting
     - Or in .Decode() (in json package)
 - In general avoid directly dealing with interface{},
   write wrappers (Get, Put) for the type you want (like when using tinyKV package)
+* Book: Cloud Native Go
+  Repo: https://github.com/cloudnativego/
+** 9 Building Web Application with Go
+   https://github.com/cloudnativego/web-application/3
+   - Serve static resources, where /assets/ is the directory where the static files are
+     PathPrefix("/").Handler(http.FileServer(http.Dir(webroot+"/assets/")))
+   - We can add later other .HandlerFunc() for other paths
+   - Cases when a AJAX based rendering might not be the best solution:
+     - You want a JS variable with the username of the currently logged user
+     - Or other cookie data you want to be on HTML before JS loads
+   - ~text/template~ package
+     t := template.Must(template.ParseFiles("./a/path/index.html"))
+     t.Execute(w, data) // Where data is a instance of a user defined struct, with `json:` tags
+   - ~r.Form~ is part of the http.Response
+     1) run r.ParseForm()
+     2) k,v range on r.Form, which is a map[string][]string
+*** Cookies:
+   - Never store confidential or sensitive information on them.
+   - Most store a randomly generated ID
+   - ~net/http~ defines the Cookie struct
+     http.SetCookie(w, &cookie)
+     r.Cookie("acookie")
 * Book: Get Programming with Go (Manning)
 Code: https://github.com/nathany/get-programming-with-go
 ** 5 State and behavior
@@ -850,12 +920,20 @@ func ListenAndServe(addres string, h Handler) error
 #+end_src
 - To satisfy we create a type, which can or can't hold data
   - We can switch on req.URL.Path on the ServeHTTP() method
-- ServMux() a server multiplexer, collects several handlers into one
-  - We register the handlers, *.Handle()* passing the path and the method to handle the path
-    Wrapped in http.HandlerFunc() which is a type conversion, of a type which is a function that satisfies http.Handler
-    an *adapter*
-- Or briefly, mux.HandleFunc(PATH, METHOD)
-- Or more briefly, use the DefaultServerMux
+- ServMux(), a Server Multiplexer, collects several http.handler(s) into one http.handler
+  * Either, we register the handlers, ~mux.Handle()~ passing the url path AND the method to handle the path
+    - Wrapped in http.HandlerFunc() which is a type conversion, of a type which is a function that satisfies http.Handler
+      aka an *adapter*
+      - A function type that has methods and satisfies an interface (!!!!)
+      #+begin_src go
+      package http
+      type HandlerFunc func(w ResposeWriter, r *Request)
+      func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
+         f(w,r)
+      }
+      #+end_src
+  * Or briefly, ~mux.HandleFunc(PATH, METHOD)~
+  * Or more briefly, use the DefaultServerMux
 - Each handle in a new goroutine
 *** 7.8 The error Interface
 - fmt.Errorf() calls errors.New()
@@ -951,24 +1029,33 @@ scheme://authority/path?query=abc&d=1#fragment
   Allows to send "field data" (key-values) or "form field"
   Sets a boundary for the date and sent on header Content-Type:
 ** 9 Building HTTP Services
+- Client
+  - We should get used to close the body
+  #+begin_src go
+  _ = resp.Body.Close()
+  #+end_src
 - In Go, a webservice relies on:
   - Handlers
   - Middleware: changes the handlers behavior or perform aux tasks (logging, authentication or access control)
   - Multiplexer
-- Client Timeouts:
-  IdleTimeout: control keepalive timeout
-  ReadHeaderTimeout:
-  ReadTimeout: time the client has to send both header and body
-  WriteTimeout: time it has the client to read the server reply
-- TLS
-  &http.Server{}.Serve()
-                .ServeTLS()
+- Bare bones server implementation creates srv as a http.Server{} struct and then does:
+  - net.Listen()
+  - srv.Serve(listener)
+  - srv.Close() - abruptly closes the server
+*** http.Server{} timeouts
+  - IdleTimeout: timout of how long keep the connection open (keepalive)
+  - ReadHeaderTimeout: timout reading request headers (not body)
+  - ReadTimeout: time the client has to send both header and body (ReadDeadLine of tcp socket)
+  - WriteTimeout: time it has the client to read the server reply (WriteDeadLine of tcp socket)
+*** TLS
+    .Serve(l)
+    .ServeTLS(l,CERT,KEY)
 *** Handlers
   http.HandlerFunc(
      func(w http.ResponseWrite, r *http.Request) {...})
   - Usually we ignore any potential (response) write error
     - We can keep track however of the frequency they occur.
-  - http.Server will close the request body, but it won't drain it
+  - Drain and close the request body. http.Server{} only close it by default. So closing here is optional.
     #+begin_src go
     // Inside a Handler
     defer func(r io.ReadCloser) {
@@ -976,12 +1063,43 @@ scheme://authority/path?query=abc&d=1#fragment
         _    = r.Close()
     }(r.Body)
     #+end_src
-  - *html/template* package to escape HTML code
-- Testing with *net/http/httptest* package
-  httptest.NewRequest will panic instead of throwing an error
-      unlike http.NewRequest
-  httptest.NewRecorder returns a pointer to httptest.ResponseRecorder
-      use the .Result() methos to return a pointer to http.Response
+  - Use ~html/template~ package to escape HTML code, especially when part of the data comes from client.
+  - To inject additional resources (than the request and response), like a database connection.
+    - Use a *closure*:
+    #+begin_src go
+    dbHandler = func(db *sql.Db) http.Handler {
+        return http.HandlerFunc(
+            func(w http.Response, r *http.Request) {
+                err := db.Ping()
+            }
+        )
+    }
+    #+end_src
+    - Or add a field to the struct/type that satisfies the http.Handler interface
+*** Testing with *net/http/httptest* package
+  - httptest.NewRequest() will panic instead of throwing an error
+    - unlike http.NewRequest
+  - httptest.NewRecorder() returns a pointer to httptest.ResponseRecorder
+     - use the .Result() method to return a pointer to http.Response
+  - Pass the request/recorder to the Handler
+  - Go assumes a 200 response if you write the body, before explicitly sending a header.
+    - use http.Error(w, BODY, ERRORCODE)
+*** Middleware
+    - func(http.Handler) http.Handler
+    - To inspect/act on the request.
+      To add headers to the response
+      Collect metrics
+      Control access
+    - If you find yourself writing the same handler, might be you can rewrite it as a middleware
+    - This works by closuring the next handler
+    - is NOT recommended performing many tasks on a single middleware
+    - http.TimeoutHandler, middleware that sets an internal timer for the given duration. Returns 503 if timeout.
+*** Multiplexers
+    - The http.ServeMux multiplexer is a http.Handler that routes the incoming request into the proper Handler
+    - You can drain and close the connection directly to the mux
+      There is no harm in drain a close a previously drain and closed request
+    - Subtree (/a/path/) vs absolute path (/another/path)
+      Go will try to match the absolute path, if not matches, will add a / and try to match and 301 to it
 * Book: Distributed Services with Go (Pragmatic Bookshelf) Travis Jefferey
 Source: https://pragprog.com/titles/tjgo/distributed-services-with-go/
 Source: https://github.com/travisjeffery/proglog
@@ -1236,6 +1354,61 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
     }
 }
 #+end_src
+* Book: Go Programming Blueprints
+** 6 - Exposing data and functionality through a RESTful data web service API
+*** Context
+   - *context* To share data between different handlers/middleware in a request
+   - every http.Request comes with a context.Context, accesible through .Context()
+   - Simple usage
+   #+begin_src go
+   ctx := context.WithValue(r.Context(), "key", "value")
+   Handler.ServeHTTP(w, r.WithContext(ctx))
+   #+end_src
+   - Using private types for the key
+     #+begin_src go
+     type contextKey struct {
+       name string
+     }
+     var contextKeyAPIKey = &contextKey{"api-key"}
+     func APIKey(ctx context.Context) (string, bool) {
+       key, ok := ctx.Value(contextKeyAPIKey).(string)
+       return key, ok
+     }
+     #+end_src
+*** Tags
+    - Since we can put multiple structure tags, we can have different *views* over the same *model* (the struct)
+      Example: json and bson (for mongo)
+** 8 - Filesystem Backup
+- With interfaces, we can export an *instance* of the type, without exporting the *type* itself
+   #+begin_src go
+package backup
+
+type Archiver interface {
+  Archive(src, dest string) error
+}
+type zipper struct{}
+var ZIP Archiver = (*zipper)(nil)// We export ZIP, which satisfies Archiver
+ #+end_src
+- Writing a string into a Writer:
+  - io.WriteString()
+  - fmt.Fprintf()
+- Passing around errors, can help on *error recovery* OR passing the problem to something else.
+- To associate *data* to each interface (ex: extension name string) we can add a func to the interface,
+  that returns said data, and each implementation will have to define it.
+- log.Fatal(), same as print to sterr and os.exit(1)
+- we can use a *defer* on main, to return an error if the program failed
+  #+begin_src go
+func main() {
+  var fatalErr error
+  defer func() {
+    if fatalErr != nil {
+      flag.PrintDefaults()
+      log.Fatalln(fatalErr)
+    }
+  }()
+  // ...
+}
+  #+end_src
 * DONE Article: I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,
@@ -1253,8 +1426,8 @@ Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - In Rust we have a type Path, that can have non utf-8 contents
   In Go we have strings, which are byte slices
   - We might silenty fail to read some files, since some characters might be non-printable
-- Path separator on Go, can't distinguish between not having a path separator and having it
-  In rust having ~Option<>~ allow us to differentiate
+- In Rust having ~Option<>~ allow us to differentiate
+  Path separator on Go, can't distinguish between not having a path separator and having it
 - "We can look at *what* we're manipulating just by looking at its type"
 - Types don't cost anything at runtime, everything ends up inlined anyway.
 - In rust permissions are not unix based, so they are more crossplatform (1 bit readonly)
@@ -1396,3 +1569,4 @@ https://golang.org/doc/code
   $ go mod tidy # adds missing module requirements (require statements with his version)
 - Clean all downloades modules
   $ go clean -modcache
+

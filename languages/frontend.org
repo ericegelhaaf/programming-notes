@@ -17,6 +17,10 @@ PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   #+end_src
+- React Boston https://www.youtube.com/channel/UCYjLoCbltSD_o2gLlM_yS8g/videos
+- React Loop https://www.youtube.com/channel/UCBoSWHAAhkqrCBsTAeS5cCA/videos
+- React Training https://www.youtube.com/c/ReactTraining/videos
+- React.JS Conf 2015 https://www.youtube.com/playlist?list=PLb0IAmt7-GS1cbw4qonlQztYV1TAW0sCr
 * javascript
 - JavaScript function hoisting by example
   https://gist.github.com/maxogden/4bed247d9852de93c94c
@@ -59,3 +63,1195 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 - Store
   https://github.com/goncy/pency/
 
+* TODO Video: 2014 - Pete Hunt: The Secrets of React's Virtual DOM -- FutureJS
+  https://www.youtube.com/watch?v=-DX3vJiqxm4
+  - Ideas not implementations
+  - UIs are difficult to test, sometimes you might have the "height" attribute on a element and automated testing won't catch it.
+  - Is difficult to visualize changes in time.
+    - We traditionally use *data binding*
+  - Key-Value Observation: Based on observables & Computed properties.
+    - Ember, Knockout, Backbone, Meteor.
+    - Use a DSL, no JS, limited.
+    - You are not allowed to use JS to compose your application.
+  - Dirty Checking
+  - 16:00
+* Video: 2014 - Pete Hunt: React: RESTful UI Rendering -- StrangeLoop
+  https://www.youtube.com/watch?v=IVvHPPcl2TM
+  - The evolution of distributed systems.
+    - 80' Message Passing: MPI
+      90' Distributed Objects: CORBA, RMI, SOAP, DCOM
+      - Generally unpredictable, what/when/where is hard to answer.
+      - Leaky abstractions are often worse than no abstractions.
+        - One could prefer plain MPI over Objects passing
+      00' REST
+        - Client-server, separates the UI concerns from the data concern
+        - Stateless, no client context on the server
+        - Cachable, by default and optionably disable
+        - Layered, clients can tell if cache or server
+        - Uniform Interface, same URL fro write/read
+  - The evolution of UI development
+    - Ad-Hoc: php, no separation of concerns
+    - MVC: Separating the managment of that data, from the display part.
+           To being able to render it in multiple ways.
+           With a controller that glues it together, absorving change events. And mutates both MV.
+           The observer pattern.
+           Different order might give you a different state.
+    - React:
+      - RESTful, properties
+        . Stateless (no need to know the state of the DOM)
+        . Cachable (is memoizable) shouldComponentUpdate(), which is a cache invalidator (to avoid calculating the diff of the VDOM)
+        . Layered, how we render native elements or user-defined is the same
+        . Uniform Interface, same with creation or instantiation
+      - getInitialStage()
+      - onChange(), handles the event, defines an explicit change transition
+      - handleSubmit()!??
+      - render(), called whenever the *data* (that the component depends on) changes
+* Video: 2014 - Christopher Chedeau: React's Architecture -- OSCON
+  https://www.youtube.com/watch?v=eCf5CquV_Bw
+  - '04 String Concatenation (on php)
+    - Problem: XSS injection, one mistake and there's a vulnerability.
+  - '10 XHP
+    - Extended PHP syntax, to put XML inside of it.n
+    - Markup is markup, and everything is going to be escaped by default.
+  - '13 JSX
+    - Started as a port of XHP to Javascript
+    - On PHP, we just re-render everything.
+    - Problem: DOM is stateful (input focus, input selection, scroll position, iframe)
+    - "I tend to think of React as Version Control for the DOM" -- AdonisSMU
+    - a "key=" attribute is added to uniq identify each node on the DOM by React
+    - bool shouldComponentUpdate(nextProps, nextState)
+      can help re-rendering by pruning parts of the Virtual DOM
+      can also be solved with an immutable data structure
+* Video: 2014 - Christopher Chedeau: Why does React Scale? -- JSConf
+  https://www.youtube.com/watch?v=D-ioDiacTm8
+  - min(Time to find the root cause)
+  - ReactDevTools: Browser extension
+    https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=es
+    https://addons.mozilla.org/es/firefox/addon/react-devtools/
+  - Debugger: Forward in time, execute every line
+  - Developer: Backard in time, jump to update (where the variable changes)
+  - With react, the scope of a variable/state is limited to a "component"
+  - In general you want types on the function arguments, and everything else untyped.
+  - .cloneWithProps(), you can modify an prop by making a new one
+* Video: 2013 - Tom Occhino & Jordan Walke: JS Apps at Facebook -- JSConf US
+  https://www.youtube.com/watch?v=GW0rj4sNH2w
+  - Defacto at the time was, MVC, MVVM, MVW (model view whatever)
+    - Models implements *observable* objects with an *events* api
+    - Bi-directional bind *views* to the models, as models change the view gets updated, and as view changes it can change the models
+    - Encourages ~mutation~
+  - Declarative components (non mutable description of what the UI should be)
+  - No observable data binding
+  - It isn't an object oriented framework, though it uses some OO
+  - JSX, embeddable XML syntax (so is just a meta-language!?)
+    - Using Custom Components, just like you would use any other <div>, or <span>
+    - Creating
+      - React.createClass
+      - provide a render() function
+        - Optional getInitialState()
+  - There are "Escape Hatches" to allow you to integrate it with other JS code (tools)
+* Video: 2013 - Pete Hunt: React: Rethinking best practices     -- JSConf EU
+  https://www.youtube.com/watch?v=x7cQ3mrcKaY
+  - https://signalvnoise.com/posts/3124-give-it-five-minutes (Jason Fried)
+    - "The faster you react, the less you think. Not always, but often." (about life)
+    - Ideas are Fragile. Often start powerless. Easy to ignore them or skip them.
+  - Renders and UI, and responds to events.
+    - Some people say, the "V" of MVC. Or sometimes the controller too.
+** 1 - Building components, not templates. (Mixing markup and display logic)
+    - Separation of concerns:
+      - reduce *coupling* (a module that depends on other module)
+      - increase in *cohesion* (single responsability, put everything that belongs to a module together)
+    - Templates encourage a poor separation of concerns.
+      - Separates technologies, not concerns.
+    - Display logic and markup are inevitable *tightly coupled*
+    - Problems with MVC:
+      - Controllers/Models/Views tend to get really fat
+      - The frameworks is telling you how to separate your components.
+    - Components are Reusable and Composable and Unit Testable
+    - Only put *display logic* in your components. Not validation, fetching or data access. Put it on a library.
+    - JSX, for designers too, to understand a contribute code.
+** 2 - Re-Render the whole app on every update (15:17)
+   - Data changing over time is the root of all evil.
+   - "Our intellectual powers are rather geared to master static relations and our powers to
+     visualize processes evolving in time are realtively poorly developed..." Dijkstra
+   - In the 90's you could just refresh the page when the data changed. Server rendering the whole HTML again.
+   - React *components* are basically just idempotent functions.
+     They describe your UI at any point in time, just like a server-renderer app.
+     - Nowhere on their code are "searches" for *where* something must be update.
+   - Everything is *declarative*, no explicit DOM operations
+** 3 - Virtual DOM (19:08)
+   - Along with an virtual event system
+     - Automatic top-level event delegation (?)
+   - Reconciliation (react looks a lot like DOOM 3 engine), to calculate the min number of operations from the VDOM to DOM
+   - Batches reads and writes for optimal DOM performance
+   - It can run on Node.JS
+     - Fast: We can render a static HTML page, without a DOM on the server
+             While still shipping React to the client.
+   - Testability
+   - SVG, CML and <canvas> support
+   - Web worker support (experimental)
+* Video: React London 2014
+  https://www.youtube.com/playlist?list=PL-IjEC9Tyk8a-GEpAHL5OoUaTHXr9JacX
+** Video: Lee Campbell & Matt Barrett - Event Driven User Interfaces
+  https://github.com/AdaptiveConsulting/ReactiveTrader
+  - Challenge: making the UI visually responsive, predictable latency
+    - Server and Client
+    - Async: avoid on the UI thread: I/O, heavy computations, enumerating long lists of data, mapping/translating
+             There are dimishing returns when just adding threads.
+    - Stream data (some .NET microsoft propietary stuff, instead of websockets)
+    - Fixed FPS (number of draws per second)
+    - 33:00
+** Video: Erik Meijer - What does it mean to be Reactive?
+- "The Reactive Manifesto" (2013), is just buzzwords (Architect Astronaut Speak)
+  v1 https://www.reactivemanifesto.org/pdf/the-reactive-manifesto.pdf
+  v2 https://www.reactivemanifesto.org/
+  - This architecture allows developers to build systems that are
+    - event-driven
+    - scalable
+    - resilent
+    - responsive
+- "...we should be using (mathematics) as a way of thinking about what we build" -- Lesli Lamport
+- The Four Fundamental Effects (about side effects)
+  |       | One       | Many          |
+  |-------+-----------+---------------|
+  | Sync  | T         | Enumerable[T] |
+  | Async | Future[T] | Observable[T] |
+  +-------+-----------+---------------+
+  1) Sync/One: Imperative programming
+  2) Future's allows you to get 1 value, but deal with it Async
+     A Future captures an effect.
+     A Future is a Monad
+- Objects are the thing that like to be mutated.
+  - the real tpe of a getter, a function that gets no arguments but returns something
+    Where Try, is a value or an exception
+    Where Option, is a value or nothing
+    ()=>Try[Option[A]]
+    - A getter of a getter ????!!
+    #+MSG: The exception part is removed...
+    #+begin_src
+    trait Enumerable[+T]{
+      def getEnumerator(): Enumerator[T]
+    }
+    trait Enumerable[+T]{
+      def moveNext(): Boolean
+      def current: T
+    }
+    #+end_src
+  - the setter
+               A  => ()
+           Try[A] => ()
+    Try[Option[A]] => ()
+- "I hate pattern matching, it's all noise.
+  Never do pattern matching, just pass-in all the functions that you would do on the different matches."
+  #+begin_src scala
+  trait Observable[+T] {
+    def Subscribe(o: Observer[T]): ()
+  }
+  trait Observer[-T]{
+    def onCompleted(): ()
+    def onError(error: Throwable): ()
+    def onNext(value: T): ()
+  }
+  #+end_src
+- So he gets 2 types of collections
+  - from getters, pull-based, the enumerables
+  - From setters, push-based, the observables
+- Iterable and observable are just interfaces to pull/push based collections.
+  - Interfaces in itself are useless, you need implementations of them.
+- Other effects: Latency, protections agains a slow "consumer" or "producer"
+              () => Future[Try[Option[A]]]
+  Try[Option[A]] => Future[()]
+- More Choice, pick the effect for the problem you have at hand.
+  |       | One       | Many               |
+  |-------+-----------+--------------------|
+  | Sync  | T         | Enumerable[T]      |
+  |       |           | AsyncIterable[T]   |
+  | Async | Future[T] | Observable[T]      |
+  |       |           | AsyncObservable[T] |
+- If you use futures, you should use a language that has language support for it (try/catch)
+** Video: Joe Armstrong - K things I know about building Resilient Reactive Systems
+* Book: Learning React (2nd Edition)
+  https://github.com/MoonHighway/learning-react
+** 1 - Welcome to React
+- Is a *small library* that doesn't come with everything you might need out of the box.
+- Needs *webpack* to translate rom that code that looks like HTML
+*** https://reactjs.org/blog/2013/06/05/why-react.html (this link?)
+   - Not a MVC framework
+   - Does not use template
+   - Created .JSX https://reactjs.org/docs/jsx-in-depth.html
+     - Syntatic sugar for the React.createElement(component, props, ...children)
+     - Compiled with *Babel*
+     - ...
+   - The result of calling render() each time is compared with the prev for differences (aka *reconciliation*)
+     Before updating the DOM.
+   - You can do server side rendering (?) https://github.com/petehunt/react-server-rendering-example
+*** A strong foundation (topics covered)
+    - React Hooks: allows us to reuse stateful logic between components.
+    - Suspense (& Hooks): helps with data fetching
+      EXPERIMENTAL as of Sep 2021
+      https://es.reactjs.org/docs/concurrent-mode-suspense.html
+    - Also: routing, testing, server-side rendering
+*** React's Past and Future
+    - Created by Jordan Walke
+    - 2011 Facebook
+      2012 Instagram
+      2013 OpenSource
+      2015 Netflix
+           React Native, for mobile applications
+      2016 React Router, Redux, Mobx, for routing and state managment
+      2017 React Fiber, rewrite of react's *rendering algorithm*, no public API changes
+      2019 React Hooks, a way to add stateful logic across components.
+           React Suspence, a way to optimize asynchronous rendering
+    - "The V in MVC"
+    - React's Blog https://reactjs.org/blog/2021/06/08/the-plan-for-react-18.html
+*** Working with Files
+    - React Developer Tools, browser addon that enables when a page is using React
+    - Node.js would be used on Chapter 12, to build an Express server.
+      - React is an npm library
+      - To start from scratch
+        > npm init -y
+      - To install/remove a package
+        > npm install package-name
+        > npm remove package-name
+    - Yarn, alternative to *npm*. Released on 2016, by Facebook.
+      > npm instsall -g yarn
+      > yarn add package-name
+      > yarn remove package-name
+** 2 - Javascript for React
+*** History
+- Released on 1995.
+  1) used for  interactive elements
+  2) added DHTML and AJAX
+  3) added node.js
+- ECMA - European Computer Manufacturers Association
+  1) 1997
+  2) 1998
+  3) 1999, regex, string handling
+  4) Never released
+  5) 2009, new array methods, object properties, json support
+  6) 2015
+- Kangax Compatibility table
+  http://kangax.github.io/compat-table/esnext/
+*** Declaring variables
+    - Declaring
+      #+begin_src javascript
+      var pizza = true;
+      const pizza = true;
+      let pizza = true;
+      #+end_src
+      - *var* keyworkd, not lexically scoped. Declaring it inside a *if/for*, would live outside it.
+      - *const* keyword, since ES6
+      - *let* keyword, lexically scoped
+    - Strings templating, accepts whitespace (new lines)
+      ${} takes any javascript that returns a value
+      #+begin_src js
+      console.log(lastName + ", " + firstName + " " + middleName);
+      console.log(`${lastName}, ${firstName} ${middleName}`);
+      ${new Date().getYear()}
+      #+end_src
+*** Creating Functions
+**** Function ~Declaration~
+      #+begin_src js
+      function logCompliment() {
+        console.log("You're doing great!");
+      }
+      #+end_src
+**** Function ~Expression~, creating a function as a variable
+      #+begin_src js
+      const logCompliment = function() {
+        console.log("You're doing great!");
+      }
+      #+end_src
+**** Declarations are *hoisted*, while expressions not.
+     Meaning you can invoke afunction before you write the function declaration.
+**** functions can ~return~ values, or take ~arguments~
+        #+begin_src js
+        const createCompliment = function(firstName, message) {
+          return `${firstName}: ${message}`;
+        }
+        console.log(createCompliment("You're so cool", "Molly"));
+        #+end_src
+**** ~Default parameters~, can be any type, not just strings
+        #+begin_src js
+        function logActivity(name = "ShaneConkey", activity = "skiing") {
+          console.log(`${name} loves ${activity}`);
+        }
+        #+end_src
+**** ~Arrow functions~, the arrow points to what should be returned.
+     Can ommit the parens if only 1 argument.
+     Must use {} if more than 1 line.
+        #+begin_src js
+        const lordify = firstName => `${firstName} of Canterbury`;
+        const lordify = (firstName, land) => `${firstName} of ${land}`;
+        const lordify = (firstName, land) => {
+          if (!firstName) {
+            throw new Error("A firstName is required to lordify");
+          }
+          if (!land) {
+            throw new Error("A lord must have a land");
+          }
+          return `${firstName} of ${land}`;
+        }
+        #+end_src
+**** Returning ~objects~
+     You should wrap the function with () parenthesis.
+     #+begin_src js
+     const person = (firstName, lastName) => ({
+       first: firstName,
+       last: lastName
+     })
+     #+end_src
+**** Arrow functions, do not block the scope of ~this~
+     - You need to think how to combine arrow and no-arrow definitions.
+       If I used arrow functions in both definitions. ~this~ would still be *Window {}*
+       #+begin_src js
+       const tahoe = {
+         mountains: ["Freel", "Rose", "Tallac", "Rubicon", "Silver"],
+         print: function(delay = 1000) {
+           setTimeout(() => {
+             console.log(this.mountain.join(", "));
+           }, delay)
+         }
+       }
+       #+end_src
+*** Compiling Javascript
+    - *Babel* allows to compile code using the lastest JS features, into JS understandable for most browsers.
+      - Sometimes add "use strict" at the top, to run in strict mode.
+      - There is also a Babel REPL: https://babeljs.io/repl
+*** Objects and Arrays
+    - Destructuring ~objects~, affected too by the scoping of *const*, *let*
+      #+begin_src js
+      const sandwich = {
+        bread: "dutch crunch",
+        meat: "tuna",
+        cheese: "swiss",
+        toppings: ["lettuce", "tomato", "mustard"]
+      };
+      const { bread, cheese } = sandwich; // dutch crunch swiss
+      const { hotness, cheese } = sandwich; //            swiss
+      let   { bread, meat   } = sandwich; // dutch crunch tuna
+      bread = "different";
+      #+end_src
+    - Can also destruct on function arguments ~objects~, and nest it
+      #+begin_src js
+      const lordify = ({ firstName }) => {
+        console.log(`${firstName} of Canterbury`);
+      }
+      const lordify = ({ spouse: { firstName } }) => {
+        console.log(`${firstName} of Canterbury`);
+      }
+      #+end_src
+    - Destructuring ~arrays~, firth and nth-element
+      #+begin_src js
+      const [firstAnimal] = ["Horse","Mouse","Cat"]; // Horse
+      const [,,thirdAnimal] = ["Horse","Mouse","Cat"] // Cat
+      #+end_src
+    - Object Literal Enhacement, making an object from vars. Makes the varnames the keys.
+      #+begin_src js
+      const name = "Tallac";
+      const elevation = 9738;
+      const funHike = { name, elevation };
+      #+end_src
+      - Declaring ~object methods~ with object literals enhancements, is not necessary to use the *function* keyword
+        #+begin_src js
+        const skier = {
+          name,
+          sound,
+          powderYell() {
+            let yell = this.sound.toUpperCase();
+            console.log(`${yell} ${yell} ${yell}!!!`);
+          },
+          speed(mph) {
+            this.speed = mph;
+            console.log("speed:", mph);
+          }
+        }
+        #+end_src
+    - The ~spread~ operator (...)
+      1) Combine the contents of arrays
+         #+begin_src js
+         const peaks = ["Tallac", "Ralston", "Rose"];
+         const canyons = ["Ward", "Blacwood"];
+         const tahoe = [...peaks, ...canyons];
+         #+end_src
+      2) Create a copy of an array, and perform mutatation on them.
+         #+begin_src js
+         const peaks = ["Tallac," "Ralston", "Rose"];
+         const [last] = [...peaks].reverse();
+         #+end_src
+      3) Get the (rest) of the elements of an array.
+         #+begin_src js
+         const lakes = ["Donner", "Marlette", "Fallen Leaf", "Cascade"];
+         const [first, ...others] = lakes;
+         #+end_src
+      4) Variadic functions, collect function arguments
+         #+begin_src js
+         function directions(...args) {
+            let [start, ...remaining] = args;
+            let [finish, ...stops] = remaining.reverse();
+            console.log(`drive through ${args.length} towns`);
+            console.log(`start in ${start}`);
+            console.log(`the destination is ${finish}`);
+            console.log(`stopping ${stops.length} times in between`);
+            console.log(``);
+         }
+         directions("Truckee", "Tahoe City", "Sunnyside", "Homewood", "Tahoma");
+         #+end_src
+      5) To combine two objects into one
+         #+begin_src js
+         const morning = {
+           breakfast: "oeatmeal",
+           lunch: "peanut butter and jelly"
+         };
+         const dinner = "mac and cheese";
+         const backpackingMeals = {
+           ...morning,
+           dinner
+         }
+         #+end_src
+*** Async Javascript
+    - Sync: while each operation is happening, nothing else is happening.
+**** Simple ~Promises~ with Fetch
+     #+begin_src js
+     fetch("https://api.randomuser.me/?nat=US&results=1")
+       .then(res => console.log(res.json()))
+       .then(json => json.results)
+       .then(console.log)
+       .catch(console.error);
+     #+end_src
+     - fetch(), returns a promise
+       a *promise* is an object that represents whether the async operations:
+       - is pending
+       - has been completed
+       - or has failed
+     - .then(), takes a callback function that will run if and when the previous operation was successful.
+     - Whathever you return from then() becomes the argument on the next then, so you can chain them
+**** Async/Await, another wait to handle Promises
+     #+begin_src js
+     const getFakePerson = async () => {
+       try {
+         let res = await fetch("https://api.randomuser.me/?nat=US&results=1");
+         let { results } = res.json();
+         console.log(results);
+       } catch (error) {
+         console.error(error);
+       }
+     };
+     getFakePerson();
+     #+end_src
+     - Prefered by some due it looks more familiar, like code that's found in synchronous funcion.
+     - Async functions can be told to wait for the promise to resolve
+       before further executing any code found in the function
+     - When using async/await, you NEED to surround your promise on a try/catch to handle unresolved errors
+**** Building Promises
+     #+begin_src js
+     const getPeople = count =>
+       new Promise((resolves, rejects) => {
+         const api = `https://api.randomuser.me/nat?US&results${count}`;
+         const request = new XMLHttpRequest();
+         request.open("Get", api);
+         request.onload = () =>
+           request.status == 200
+             ? resolves(JSON.parse(request.response).results)
+             : reject(Error(request.statusText));
+         request.onerror = err => rejects(err);
+         request.send();
+       });
+     #+end_src
+*** Classes
+    - JS uses something called ~prototypical inheritance~,
+      #+begin_src js
+      function Vacation(destination, length) {
+        this.destination = destination;
+        this.length = length;
+      }
+      Vacation.prototype.print = function() {
+        console.log(this.destination + " | "  + this.length + " days");
+      };
+      const maui = new Vacation("Maui", 7);
+      #+end_src
+    - React started by leaning on classes, but nowadays they start to moving away from using them.
+    - and ES2015 added syntactic sugar for it.
+    - class name is Capitalized
+      #+begin_src js
+    class Vacation {
+      constructor(destination, length) {
+        this.destination = destination;
+        this.length = length;
+      }
+      print() {
+        console.log(`${this.destination} will take ${this.length} days.`);
+      }
+    }
+    #+end_src
+    - Clases can be ~extends~, they inherit the methods. Use *super* to call parent method.
+      #+begin_src js
+      class Expedition extends Vacation {
+        constructor(destination, length, gear) {
+          super(destination, length);
+          this.gear = gear;
+        }
+        print() {
+          super.print();
+          console.log(`Bring your ${this.gear.join(" and your ")}`);
+        }
+      }
+      #+end_src
+
+*** ES6 Modules
+    - One file per module
+      Can be used on any JS type: primitives, objects, arrays, and functions.
+    - Exporting multiple objects, notice the lack of ~;~
+      #+begin_src js
+      export const print=(message) =>
+        log(message, new Date())
+      export const log=(message, timestamp) =>
+        console.log(`${timestamp.toString()}: ${message}`)
+      #+end_src
+    - Exporting a (1) single main variable.
+      #+begin_src js
+      export default new Expedition("Mt.Freel", 2, ["water", "snack"]);
+      #+end_src
+    - Importing
+      #+begin_src js
+      import { print, log }           from "./text-helpers";
+      import freel                    from "./mt-freel";
+      import { print as p, log as l } from "./text-helpers";
+      import * as fns                 from './text-helpers'
+      #+end_src
+    - CommonJS
+      - Module pattern, supported by NodeJS. Also supported by Babel and webpack.
+        #+begin_src js
+        module.exports = {print, log}
+        #+end_src
+      - No ~import~ statement, uses ~require~
+        #+begin_src js
+        const { log, print } = require("./txt-helpers");
+        #+end_src
+** 3 - Functional Programming with Javascript
+*** What it means to be Functional
+   - In javascript, functions can represent data in you application.
+     In javascript, functions are variables.
+   - We can add functions to objects.
+     #+begin_src js
+     const obj = {
+       message: "They can be added to objects like variables",
+       log(message) {
+         console.log(message);
+       }
+     };
+     obj.log(obj.message);
+     #+end_src
+   - They can be added to arrays (mixed arrays too, yikes)
+     #+begin_src js
+     const messages = [
+       "They can be inserted into arrays",
+       message => console.log(message),
+       "like variables",
+       message => console.log(message)
+     ]
+     #+end_src
+   - Can be send as arguments
+     #+begin_src js
+     const insideFn = logger => {
+       logger("They can be sent to other functions as arguments");
+     };
+     insideFn(message => console.log(message);
+     #+end_src
+   - Can be returned
+     #+begin_src js
+     const createSream = function(logger) {
+       return function(message) {
+         logger(message.toUpperCase() + "!!!");
+       };
+     };
+     const scream = createScream(message => console.log(message));
+     scream("functions can be returned from other functions")
+     scream("createScream returns a function");
+     scream("scream invokes that returned function");
+     #+end_src
+   - If you use arrow function declaration, and you see more than 2 arrows,
+     this means that you're useing a higher-order function
+*** Imperative VS Declarative
+   - *Funcional programming* is part of a larger programming paradigm: *declarative programming*
+     - Imperative
+       #+begin_src js
+       const string = "Restaurants in Hanalei";
+       const urlFriendly = "";
+       for (var i = 0; i < string.length; i++) {
+         if (string[i] == " ") {
+           urlFriendly += "-";
+         } else {
+           urlFriendly += string[i];
+         }
+       }
+       console.log(urlFriendly);
+       #+end_src
+     - Declarative
+       #+begin_src js
+       const string "Restaurants in Hanalei";
+       const urlFriendly = string.replace(/ /g, "-");
+       console.log(urlFriendly);
+       #+end_src
+     - Declarative Programming Wiki
+       http://wiki.c2.com/?DeclarativeProgramming
+     - React Component, declaratively creating a DOM
+       #+begin_src js
+       const { render } = ReactDOM;
+       const Welcome = () => {
+         <div id="welcome">
+           <h1>Hello World</h1>
+         </div>
+       };
+       render(<Welcome />, document.getElementById("target"));
+       #+end_src
+*** Functional Concepts
+**** Immutability
+     - Data is immutable. It never changes.
+     - In Javascript, function arguments are ~references~ to the actual data.
+       Immutable version:
+       #+begin_src js
+       const rateColor = function(color, rating) {
+         return Object.assign({}, color, { rating: rating });
+       };
+       // Arrow + Spread
+       const rateColor = (color, rating) ({
+         ...color,
+         rating
+       });
+       #+end_src
+       - Immutable array, .concat() instaed of .push()
+         #+begin_src js
+         const addColor = (title, array) => array.concat({ title });
+         const addColor = (title, list)  => [...list, { title }]
+         #+end_src
+**** Purity
+     - Always take at least 1 (one) argument.
+       Return a value that's computed based on its arguments.
+       Do not cause side effects, change global variables, or change anything about the application state.
+       Treat their argumetns as immutable data.
+     - React Pure Function, is responsability of something else add it to the DOM
+       #+begin_src js
+       const Header = props => <h1>{props.title}</h1>
+       #+end_src
+**** Data Transformation
+     - !==
+     - Array
+       .map(), can produce an array of objects, values, arrays, other functions...any javascript
+       .reduce
+       .join()
+       .filter() over .pop() or .splice()
+     - Ternary operator
+       #+begin_src js
+       const editName = (oldName, name, arr) =>
+         arr.map(item => (item.name === oldName ? {...item, name} : item));
+       #+end_src
+     - Object to array with ~Object.keys()~
+       #+begin_src js
+       const schools = {
+         Yorktown: 10,
+         "Washington & Liberty": 2,
+         Wakefield: 5
+       };
+       const schoolArray = Object.keys(schools).map(key => ({
+         name: key,
+         wins: schools[key]
+       }));
+       #+end_src
+     - Using *reduce* to transform an array into a single value OR single object
+     - Using *reduce* to transform an array into a different array (!!!)
+       ME: the reduce function receives, an *accumulator* and a *element*
+       #+begin_src js
+       const colors = ["red", "red", "green", "blue", "green"];
+       const uniqueColors = colors.reduce(
+         (unique, color) =>
+           unique.indexOf(color) !== -1 ? unique : [...unique, color],
+         []
+       );
+       #+end_src
+**** Higher-Order Functions
+     - Functions that return other funtions can help us handle
+       the complexities associated with asynchronicity in javascript.
+     - ~Currying~, by using hight-order functions (2 arrows)
+       #+begin_src js
+       const userLogs = username => message =>
+         console.log(`${userName} -> ${message}`);
+       const log = userLogs("grandpa23");
+
+       log("attemped to load 20 fake members");
+
+       getFakeMembers(20).then(
+         members => log(`successfuly loaded ${members.length} members`),
+         error   => log("encountered an error loading members")
+       );
+       #+end_src
+**** Recursion
+     - Works particularilly well with asynchronous process
+     - Functions can recall themselves when they're ready
+       - like when the data is *available*
+       - or whan a *timer* has finished.
+     - Using setTimeout(f,t), calls f after t seconds have passed
+       #+begin_src js
+       const countdown = (value, fn, delay = 1000) => {
+         fn(value);
+         return value > 0
+           ? setTimeout(() => countdown(value - 1, fn, delay), delay)
+           : value;
+       }
+       const log = value => console.log(value);
+       countdown(10, log);
+       #+end_src
+     - Is good for searching data-structures
+       #+begin_src js
+       const deepPick = (fields, object = {}) => {
+         const [first, ...remaining] = fields.split(".");
+         return remaining.length
+           ? deepPick(remaining.join("."), object[first])
+           : object[first];
+       }
+       #+end_src
+**** Composition
+     - *Chaining*, by using the dot notation. To act on the return value of the previous function.
+     - Without composing
+       #+begin_src js
+       const both = date => appendAMPM(civilianHours(date));
+       #+end_src
+     - Using high-order functions.
+       #+begin_src js
+       const both = compose(
+         civilianHours,
+         appendAMPM
+       );
+       both(new Data());
+       #+end_src
+     - Definition of compose
+       #+begin_src js
+       const compose = (...fns) => arg =>
+         fns.reduce((composed, f) => f(composed), arg);
+       #+end_src
+*** Putting It All Together
+** 4 - How React Works
+*** Page Setup
+    - React Elements
+    - React Components
+    - React Components that compose other components and elements
+    - A page needs 2 .js, for React and ReactDOM (used to actually render the UI in the browser).
+    - unpkg.com, uses react.development.js or react.production.min.js
+    - Example HTML:
+      #+begin_src html
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title> React Samples</title>
+        </head>
+        <body>
+          <!-- Target container -->
+          <div id="root"></div>
+          <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+          <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+          <script>
+            // Pure React and Javascript code
+          </script>
+        </body>
+      </html>
+      #+end_src
+*** React Elements
+    - HTML is a set of instructions a browser follows when constructing the DOM
+    - HTML elements become DOM elements
+      - The browser DOM is made of DOM   elements
+        React's     DOM is made of React elements
+    - AJAX: Asynchronous Javascript and XML, brought single-page applications or *SPA*
+    - DOM API, is a collection of objects that Javascript can use to intereact with the browser, to modify the DOM.
+      document.createElement()
+      document.appendChild()
+    - Creating a ~React Element~
+      #+begin_src js
+      // Arguments: type, properties, childrens
+      React.createElement("h1", { id: "recipe-0" }, "Baked Salmon");
+      // Output: <h1 id="recipe-0">Baked Salmon</h1>
+      #+end_src
+    - How the React Element looks like.
+      #+begin_src js
+      {
+        $$typeof: Symbol(React.element),
+        "type": "h1",
+        "key": null,
+        "ref": null,
+        "props": {id: "receipe-0", children: "Baked Salmon"},
+        "_owner": null,
+        "_store": {}
+      }
+      #+end_src
+*** ReactDOM
+    - Provides the tools to render a React Element in the browser.
+      ReactDOM.render()
+      #+begin_src js
+      const dish = React.createElement("h1", null, "Baked Salmon");
+      ReactDOM.render(dish, document.getElementById("root"));
+      #+end_src
+    - You can render arrays besides React.Element (since React 16, ReactConf 2017)
+      #+begin_src js
+      const dist = React.createElement("h1", null, "Baked Salmon");
+      const dessert = React.createElement("h2", null, "Coconut Cream Pie");
+      ReactDOM.render([dish, dessert], document.getElementById("root"));
+      #+end_src
+    - Any element that has an HTML *class* attribute is using *className* for that property, instead. Since it is a reserved word in JS.
+      #+begin_src js
+      React.createElement("ul", { clasName: "ingredients"},...);
+      #+end_src
+    - Children, a part of the *Element Tree*.
+      Every additional argument sent to the *createElement()* function is another child element.
+      A react app is a trree of react elements all stemming from a single root element.
+      #+begin_src js
+      React.createElement(
+        "ul",
+        null,
+        React.createElement("li", null, "2 lb salmon"),
+        React.createElement("li", null, "5 sprigs fresh rosemary"),
+        React.createElement("li", null, "2 tablespoons olive oil"),
+        React.createElement("li", null, "2 small lemons"),
+        React.createElement("li", null, "1 teaspoon kosher salt"),
+        React.createElement("li", null, "4 cloves of chopped garlic")
+      );
+      #+end_src
+    - Programatically create elements, they need a unique key.
+      In this case we use an arrow function with 2 params to accept the index (?) of the array.
+      #+begin_src js
+      const items = ["a", "b", "c"];
+      React.createElement(
+        "ul",
+        { className: "ingredients" },
+        items.map((ingredient, i) =>
+           React.createElement("li", { key: i}, ingredient));
+      );
+      #+end_src
+*** React Components
+    - Components are...The parts needed to create the user interface
+    - Components allow us to *reuse* the same structure, and then we can populate those structures with different sets of data.
+      - can be reuse/instantiated as many times as you want.
+    - Creating (hardcoded) function components
+      - Define a function that returns a React Element
+        #+begin_src js
+        function IngrediensList() {
+          return React.createElement(
+            "ul",
+            { className: "ingredients" },
+            React.createElement("li", null, "1 cup"),
+          );
+        }
+        #+end_src
+      - Wrap it on another *element* before *render*
+        #+begin_src js
+        ReactDOM.render(
+          React.createElement(IngredientsList, null, null),
+          document.getElementById("root")
+        );
+        #+end_src
+      - The end result would be a element with the name of the function.
+        #+begin_src xml
+        <IngredientsList>
+          <ul className="ingredients">
+            <li>1 cup of</li>
+          </ul>
+        </IngredientsList>
+        #+end_src
+    - Creating function components, using a special global property called ~items~
+      #+begin_src js
+      const secreetIngredients = [ "1 cup of" ];
+      function IngredientsList() {
+        return React.createElement(
+          "ul",
+          { className: "ingredients" },
+          items.map((ingredient, i) =>  // USING ITEMS HERE!!!!!!!!!!!
+            React.CreateElement("li", { key: i }, ingredient)
+        );
+      }
+      ReactDOM.render(
+        React.createElement(IngredientsList, { items: secretIngredients }, null), // PASSING ITEMS!!!!!!
+        document.getElementById("root")
+      );
+      #+end_src
+      OUTPUT
+      #+begin_src xml
+      <IngredientsList items="[...]">
+        <ul className="ingredients">
+          <li key=0>1 cup of</li>
+        </ul>
+      </IngredientsList>
+      #+end_src
+    - Creating function components, explicitly accepting the props
+      #+begin_src js
+      function IngredientsList({ items }) {
+        returns React.createElement("ul", { clasName: "ingredients"},
+          items.map((ingredient, i) =>
+            React.createElement("li", { key: i }, ingredient)
+          )
+        );
+      }
+      #+end_src
+**** React Components: A Historical Tour
+     - React.createClass
+       #+begin_src js
+       const IngridientsList = React.createClass({
+         displayName: "IngridientsList",
+         render() {
+           return React.createElement(
+             "ul",
+             { className: "ingridients" },
+             this.props.items.map((ingridient, i) =>
+               React.createElement("li", { key: i }, ingridient)
+             )
+           );
+         }
+       });
+       #+end_src
+       - 2013 react was Open Sourced with this only way to create components
+       - 2017 React 15.5 started throwing warnings if React.createClass was used
+       - 2017 React 16.0 officially deprecated and was moved to its own package *create-react-class*
+     - React.Component class
+       #+begin_src js
+       class IngredientsList extends React.Component {
+       }
+       #+end_src
+       - 2015, when JS added *class* syntax
+** 5 - React with JSX
+*** React Elements and JSX
+   - Tag's represent the element type
+   - Tag's attributes represent the properties.
+   - Passing attributes, surrounded with {} curly braces (a javascript *expression*)
+     #+begin_src js
+     React.createElement(IngredientsList, {list:[...]});
+                        <IngredientsList list={[...]}>
+     #+end_src
+   - Tips
+     - Can be Nested
+     - Still use className
+     - Javascript Expressions {}
+     - {} will be evaluated
+   - Mapping Arrays with JSX
+     #+begin_src js
+     <ul>
+       {props.ingredients.map((ingredient, i) => (
+         <li key="{i}">{ingredient}</li>
+       ))}
+     </ul>
+     #+end_src
+*** Babel
+    - 2014, called 6to5, used to convert ES6 syntax to ES5 syntax
+    - 2015, renamed to Babel
+    - Quick way to get started
+      #+begin_src html
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title>React Examples</title>
+        </head>
+        <body>
+          <div id="root"></div>
+          <script src="https//unpkg.com/react@16.8.6/umd/react.development.js"></script>
+          <script src="https//unpkg.com/react-dom@16.8.6/umd/react-dom.development.js"></script>
+          <script src="https//unpkg.com/@babel/standalone/babel.min.js"></script>
+          <script type="text/babel">
+          </script>
+        </body>
+      </html>
+      #+end_src
+      1) Include the babel CDN .js
+      2) Will compile any code in <script> blocks that have type of "text/babel"
+      3) No production ready
+*** Recipies as JSX
+    - We create an UI with 2 (two) components:
+      A *Menu* component for listing the recipes and a *Recipe* components.
+      #+begin_src js
+      const data = [
+        {name: "Baked Salmon", ingredients: [{},{}], steps: ["foo", "bar"]},
+        {name: "Baked Salmon", ingredients: [{},{}], steps: ["foo", "bar"]},
+      ];
+      function Recipe({ name, ingredients, steps ){
+        return (
+          <section id={name.toLowerCase().replace(/ /g, "-")}>
+            <h1>{name}</h1>
+            <ul className="ingredients">
+              {ingredients.map((ingredient, i) => (
+                <li key={i}>{ingredient.name}</li>
+              ))}
+            </ul>
+            <section className="instructions">
+              <h2>Cooking Instructions</h2>
+              {steps.map((step, i) => (
+                <p key={i}>{step}</p>
+              ))}
+            </section>
+          </section>
+        );
+      }
+      function Menu(props) {
+        return (
+          <article>
+            <header>
+              <h1>{props.title}</h1>
+            </header>
+            <div className="recipes">
+              {props.recipes.map((recipe, i) =>
+                <Recipe
+                  key={i}
+                  name={recipe.name}
+                  ingredients={recipe.ingredients}
+                  steps={recipe.staps}
+                />
+              ))}
+            </div>
+          </article>
+        );
+      }
+      ReactDOM.render(
+        <Menu recipes={data} title="Delicious Recipes" />,
+        document.getElementById("root")
+      );
+      #+end_src
+    - Using the JSX *spred operator*, to add all the props from recipe on Recipe component
+      #+begin_src js
+      {
+        props.recipes.map((recipe, i) => <Recipe key={i} {...recipe} />);
+      }
+      #+end_src
+    - Using *destructuring* to scope variables
+      #+begin_src js
+      function Menu({ title, recipes }) {
+        return (
+          <article>
+            <header>
+              <h1>{title}</h1>
+            </header>
+            <div className="recipes">
+              {recipes.map((recipe, i) => (
+                <Recipe key={i} {...recipe} />
+              ))}
+            </div>
+          </article>
+        );
+      }
+      #+end_src
+    - Because recipes, prop
+*** React Fragments
+    - Adjacent JSX elements must be wrapped in an enclosing tag!
+      Will not render to adjacent or sibling elements as a component.
+      This WON'T work.
+      #+begin_src js
+      function Cat({ name }) {
+        return (
+          <h1>The cat's name is {name}</h1>
+          <p>He's good.</p>
+        );
+      }
+      ReactDOM.render(<Cat name="Jungle" />, document.getElementById("root"));
+      #+end_src
+    - People used to wrap it on a <div>
+    - Use Fragments
+      - Long way: <React.Fragment>
+        #+begin_src js
+        function Cat({ name }) {
+          return (
+            <React.Fragment>
+              <h1>The cat's name is {name}</h1>
+              <p>He's good.</p>
+            </React.Fragment>
+          );
+        }
+        #+end_src
+      - Short way: <> </>
+        #+begin_src js
+        function Cat({ name }) {
+          return (
+            <>
+              <h1>The cat's name is {name}</h1>
+              <p>He's good.</p>
+            </>
+          );
+        }
+         #+end_src
+
+*** Intro to webpack
+    - Problems
+      - JSX, ESNext transformation
+      - Dependencies
+      - Optimize images and CSS
+    - Tools: Browserify, gulp, Grunt, Prepack, webpack
+    - React Specific: create-react-app, Gatsby, Code Sandbox
+    - Module Bundler: Turns (JS,LESS,CSS,JSX,ESNext) it into a single file.
+* DONE Article: 2019 - Functional JavaScript: How to use array reduce for more than just numbers
+  https://jrsinclair.com/articles/2019/functional-js-do-more-with-reduce/
+  - The great power of .reduce() comes from the fact that:
+      the *accumulator* and *accumulatorElement*, don't have to be the same type.
+  - For example, the accumulator can be a string, and the array (fromt where the elements come) contain numbers:
+    NOTE: the same can be achieved with .map() and .join()
+    #+begin_src js
+    function fizzBuzzReducer(acc, element) {
+      if (element % 15 == 0) return `${acc}Fizz Buzz\n`;
+      if (element %  5 == 0) return `${acc}Fizz\n`;
+      if (element %  3 == 0) return `${acc}Buzz\n`;
+      return `${acc}${element}\n`;
+    }
+    const nums = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    console.log(nums.reduce(fizzBuzzReducer, ''));
+    #+end_src
+  - Things that can be done with .reduce()
+    1) Convert an array to an object
+       #+begin_src js
+       function keyByUsernameReducer(acc, person) {
+         return {...acc, [person.username]: person};
+       }
+       console.log(peopleArr.reduce(keyByUsernameReducer, {}));
+        #+end_src
+    2) Unfold to a larger array:
+       Can be handy if you are reading data from a text file
+       #+begin_src js
+       function splitLineReducer(acc, line) {
+         return acc.concat(line.split(/,/g));
+       }
+       fileLines.reduce(splitLineReducer, []);
+       #+end_src
+       This could have been done with a *flatmap*, or you could build your own flatmap.
+       #+begin_src js
+       function flatMap(f, arr) {
+         const reducer = (acc, item) => acc.concat(f(item));
+         return arr.reduce(reducer, []);
+       }
+       flatMap(x => x.split(','), fileLines);
+       #+end_src
+    3) Make two calculations in one traversal:
+       in this case is the same, but if we were combining a .map() and .filter() might be...
+       #+begin_src js
+       const readings = [0.3, 1.2, 3.4, 0.2, 3.2, 5.5, 0.4];
+       function minMaxReducer(acc, reading) {
+         return {
+           minReading: Math.min(acc.minReading, reading);
+           maxReading: Math.max(acc.maxReading, reading);
+         };
+       }
+       cont initMinMax = {
+         minReading: Number.MAX_VALUE,
+         maxReading: Number.MIN_VALUE,
+       };
+       const minMax = readings.reduce(minMaxReducer, initMinMax);
+       #+end_src
+    4) Combine mapping and filtering into one pass
+       For example, if holding several arrays in memory is too expensive.
+       #+begin_src js
+       function notEmptyEmail(x) {
+         return (x.email != null) && (x.email !== undefined);
+       }
+       function greater(a, b) {
+         return (a > b) ? a : b;
+       }
+       function notEmptyMostRecent(currentRecent, person) {
+          return (notEmpty(person))
+            ? greater(currentRecent, person.lastSeen)
+            : currentRecent;
+       }
+       peopleArr.reduce(notEmptyMostRecent, '')
+       #+end_src
+    5) Run asynchronous functions in sequence
+       aka run Promises in sequence
+       - might be to avoid an API rate limit
+       - or if one depends on the another
