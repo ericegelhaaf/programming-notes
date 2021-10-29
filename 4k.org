@@ -1,14 +1,17 @@
-- https://github.com/Shizmob/liner/
-- https://gitlab.com/PoroCYon/linux-4k-intro-template
-- http://bruxy.regnet.cz/web/linux/EN/linux-demoscene/
-- http://www.sizecoding.org/wiki/Main_Page
-- https://github.com/baines/demostuff
-- https://github.com/faemiyah/dnload
-- https://github.com/lnqs/intrusion
-- Demo: 4k demo written in D
-  https://github.com/kubo39/tiny-d-demo
-- Tool: Audio engine for 4k and 8k
-  https://github.com/askeksa/Oidos
+- Synth https://github.com/askeksa/Oidos
+- Intro 1k https://github.com/baines/demostuff
+- Intro 4k https://github.com/kubo39/tiny-d-demo
+- Intro 4k https://github.com/lnqs/intrusion
+- Template https://github.com/shizmob/liner
+- Template https://gitlab.com/PoroCYon/linux-4k-intro-template
+- Article https://github.com/faemiyah/dnload
+- Article https://benjamin.computer/posts/2020-07-15-nova.html
+- Article http://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
+- Article http://bruxy.regnet.cz/web/linux/EN/linux-demoscene/
+- Article https://phresnel.org/gpl/4k/ntropy2k7/
+- Article http://www.sizecoding.org/wiki/Main_Page
+- Article https://int21.de/linux4k/
+- Article https://stackoverflow.com/questions/10551665/how-to-create-4kb-linux-binaries-that-render-a-3d-scene
 * Video: (2006) Linux 4k coding
   slides http://ftp.kameli.net/pub/fit/misc/presis_asm06.pdf
   talk https://www.youtube.com/watch?v=-UQSiRg8Ra0

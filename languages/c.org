@@ -15,6 +15,9 @@
 ** clang-format
   https://emacs.stackexchange.com/questions/55635/how-can-i-set-up-clang-format-in-emacs
   clang-format -style=llvm -dump-config > .clang-format
+* Book: Expert C Programming
+** Introduction
+   - some people do: if(3==i); in order to catch if they miss a =
 * Book: Effective C
 ** 1 Getting Started with C
 - C defines 2 possible execution environments:
@@ -90,3 +93,118 @@
 
 
 
+** 5 Control Flow
+   - Expression statement
+   - Compound statements
+   - Statement Kinds:
+     1) Selection
+     2) Iteration
+     3) Jump
+*** Expression Statement
+    Optional expression, terminated by a (;)
+    Most basic unit of work.
+    #+begin_src c
+    a = 6;
+    c = a + b;
+    ; // NULL STATEMENT
+    ++count;
+    #+end_src
+    After each full expression has been evaluated,
+    its value (if any) is discarded.
+*** {}        Compound Statement (or block)
+    a list of zero or more statements, surrounded by braces.
+    can be nested
+    #+begin_src c
+    {
+      static int count = 0;
+      c += a;
+      ++count;
+    }
+    #+end_src
+*** if/switch Selection Statements
+    allows you to conditionally execute based ona a *controlling expression*
+**** if
+     - -Wmisleading-indentation, to check for IF indentation when not using braces
+      #+begin_src c
+      if (expression)
+        substatement
+
+      if (expression)
+        substatement1
+      else
+        substatement2
+
+      if (expr1) // if..else ladder
+        substatement1
+      else if (expr2)
+        substatement2
+      else
+        substatement3
+
+      #+end_src
+     *substatement* runs if *expression* is not equal to 0
+     - Example
+      #+begin_src c
+      bool safediv(int dividend, int divisor, int *quotient) {
+        if (!quotient) return false;
+        if ((divisor == 0) || ((dividend == INT_MIN) && (divisor == -1)))
+          return false;
+        *quotient = dividend / divisor;
+        return true;
+      }
+      #+end_src
+**** switch
+     expression MUST have an *integer* type
+     Integer promotions are performed on the *controlling expression*
+     The *constant* expression in each *case* label is converted to the promoted type.
+     -Wimplicit-fallthrough
+     -Wswitch-enum
+     #+begin_src c
+     switch (marks/10) {
+       case 10: // Falls through
+       case 9:
+         puts("YOUR GRADE : A");
+         break;
+       default:
+         puts("YOUR GRADE : FAILED");
+     }
+     #+end_src
+     remember, enums map to integers
+     if you not provide a default, and nothing matches, nothing wil run
+     #+begin_src c
+     typedef enum { Saving, Checking, MoneyMarket } AccountType;
+     void assignInterestRate(AccountType account) {
+       double interest_rate;
+       switch (account) {
+         case Savings:
+           interest_rate = 3.0;
+           break;
+         case Checking:
+           interest_rate = 1.0;
+           break;
+         case MoneyMarket:
+           interest_rate = 4.5;
+           break;
+         default: abort();
+       }
+       printf("Interest rate = %g.\n", interest_rate);
+     }
+     #+end_src
+     abort(), declared in the stdlib.h
+*** while/for Iteration statement
+    AKA loops, "a process, the end of which is connected to the beginning"
+**** while
+     runs until the controlling expression is equal to 0
+     a simple *entry-controlled* loop
+     - Example:
+       1) copies the *val* converted to uchar
+       2) into the first *n* characters
+       3) of the object pointed by *dest*
+     #+begin_src c
+     void *memset(void *dest, int val, size_t n) {
+       unsigned char *ptr = (unsigned char*)dest;
+       while (n-- > 0)
+         *ptr++ = (unsigned char)val;
+       return dest;h
+     }
+     #+end_src

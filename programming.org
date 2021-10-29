@@ -1,3 +1,7 @@
+
+- https://crypto.stanford.edu/~dabo/
+- What every programmer should know about memory, Part 1
+  https://lwn.net/Articles/250967/
 - True Technologist / Interviews
   https://www.youtube.com/playlist?list=PLYaGSokOr0MO-ly3vKVpxU0Ftvkule8pg
 - Make Better Software: The Training Series / Joel Spolsky
@@ -64,8 +68,6 @@
 - git branch -vv
 * gamelisp.rs
 https://gamelisp.rs/reference/overview.html
-* Racket
-https://beautifulracket.com/
 * William Byrd on "The Most Beautiful Program Ever Written" [PWL NYC]
   https://www.youtube.com/watch?v=OyfBQmvr2Hc
   - "Programming Should Eat Itself" by Nada Amin
@@ -130,3 +132,21 @@ https://beautifulracket.com/
       (+ (fib (- n 1)
          (fib (- n 2))))))
   #+end_src
+* Lisp Cast
+** A Theory of functional programming 0001
+   - Started the podcast as a way to put the ideas of his book out of his head
+** Is Haskell a Procedural Language
+   - Anecdote of working on a system that didn't implement function programming.
+     And was growing "too large".
+     Most of the code was IO.
+   - They weren't doing:
+     1) high order abstractions
+     2) Data abstractions, operating on that data
+     3) Representing things as a pure domain model
+   - They needed to abstract and work with that pure representation and then do a min of IO stuff.
+   - FP is a mindset, distinguishing between
+     - actions (side effects)
+     - calculations
+     - data
+* Video Object-Oriented Programming is Bad
+  https://www.youtube.com/watch?v=QM1iUe6IofM

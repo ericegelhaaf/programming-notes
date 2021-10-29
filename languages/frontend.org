@@ -63,6 +63,82 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 - Store
   https://github.com/goncy/pency/
 
+* DONE Article: 2019 - Functional JavaScript: How to use array reduce for more than just numbers
+  https://jrsinclair.com/articles/2019/functional-js-do-more-with-reduce/
+  - The great power of .reduce() comes from the fact that:
+      the *accumulator* and *accumulatorElement*, don't have to be the same type.
+  - For example, the accumulator can be a string, and the array (fromt where the elements come) contain numbers:
+    NOTE: the same can be achieved with .map() and .join()
+    #+begin_src js
+    function fizzBuzzReducer(acc, element) {
+      if (element % 15 == 0) return `${acc}Fizz Buzz\n`;
+      if (element %  5 == 0) return `${acc}Fizz\n`;
+      if (element %  3 == 0) return `${acc}Buzz\n`;
+      return `${acc}${element}\n`;
+    }
+    const nums = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    console.log(nums.reduce(fizzBuzzReducer, ''));
+    #+end_src
+  - Things that can be done with .reduce()
+    1) Convert an array to an object
+       #+begin_src js
+       function keyByUsernameReducer(acc, person) {
+         return {...acc, [person.username]: person};
+       }
+       console.log(peopleArr.reduce(keyByUsernameReducer, {}));
+        #+end_src
+    2) Unfold to a larger array:
+       Can be handy if you are reading data from a text file
+       #+begin_src js
+       function splitLineReducer(acc, line) {
+         return acc.concat(line.split(/,/g));
+       }
+       fileLines.reduce(splitLineReducer, []);
+       #+end_src
+       This could have been done with a *flatmap*, or you could build your own flatmap.
+       #+begin_src js
+       function flatMap(f, arr) {
+         const reducer = (acc, item) => acc.concat(f(item));
+         return arr.reduce(reducer, []);
+       }
+       flatMap(x => x.split(','), fileLines);
+       #+end_src
+    3) Make two calculations in one traversal:
+       in this case is the same, but if we were combining a .map() and .filter() might be...
+       #+begin_src js
+       const readings = [0.3, 1.2, 3.4, 0.2, 3.2, 5.5, 0.4];
+       function minMaxReducer(acc, reading) {
+         return {
+           minReading: Math.min(acc.minReading, reading);
+           maxReading: Math.max(acc.maxReading, reading);
+         };
+       }
+       cont initMinMax = {
+         minReading: Number.MAX_VALUE,
+         maxReading: Number.MIN_VALUE,
+       };
+       const minMax = readings.reduce(minMaxReducer, initMinMax);
+       #+end_src
+    4) Combine mapping and filtering into one pass
+       For example, if holding several arrays in memory is too expensive.
+       #+begin_src js
+       function notEmptyEmail(x) {
+         return (x.email != null) && (x.email !== undefined);
+       }
+       function greater(a, b) {
+         return (a > b) ? a : b;
+       }
+       function notEmptyMostRecent(currentRecent, person) {
+          return (notEmpty(person))
+            ? greater(currentRecent, person.lastSeen)
+            : currentRecent;
+       }
+       peopleArr.reduce(notEmptyMostRecent, '')
+       #+end_src
+    5) Run asynchronous functions in sequence
+       aka run Promises in sequence
+       - might be to avoid an API rate limit
+       - or if one depends on the another
 * TODO Video: 2014 - Pete Hunt: The Secrets of React's Virtual DOM -- FutureJS
   https://www.youtube.com/watch?v=-DX3vJiqxm4
   - Ideas not implementations
@@ -1179,79 +1255,1181 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
     - Tools: Browserify, gulp, Grunt, Prepack, webpack
     - React Specific: create-react-app, Gatsby, Code Sandbox
     - Module Bundler: Turns (JS,LESS,CSS,JSX,ESNext) it into a single file.
-* DONE Article: 2019 - Functional JavaScript: How to use array reduce for more than just numbers
-  https://jrsinclair.com/articles/2019/functional-js-do-more-with-reduce/
-  - The great power of .reduce() comes from the fact that:
-      the *accumulator* and *accumulatorElement*, don't have to be the same type.
-  - For example, the accumulator can be a string, and the array (fromt where the elements come) contain numbers:
-    NOTE: the same can be achieved with .map() and .join()
-    #+begin_src js
-    function fizzBuzzReducer(acc, element) {
-      if (element % 15 == 0) return `${acc}Fizz Buzz\n`;
-      if (element %  5 == 0) return `${acc}Fizz\n`;
-      if (element %  3 == 0) return `${acc}Buzz\n`;
-      return `${acc}${element}\n`;
+    - Support:
+      - Code Splitting: sometimes called *rollups* or *layers*, allows you to break up code and load it when needed (?)
+      - Minification: removes whitespace, newline, long var names, and unnecesary code
+      - Feature Flagging: sends code to some, but not all environmets
+      - Hot Module Replacement(HMR): Watches for changes, and updates only the updated modules.
+    - Features:
+      - Modularity: allows to work on separate files that will be statically combined into a single file for production.
+      - Composition: we can build reusable React Components that later we can reuse and compose
+      - Speed: minification+singlel file=less network latency
+      - Consistency: we can use JSX, ESNext and all will be compiled by Babel
+**** Creating a Project
+#+begin_src
+> npm init -y
+> npm install react react-dom serve
+#+end_src
+- Breaking down a Component in Modules
+  #+begin_src javascript
+   export default function Recipe({ name, ingredients, steps }) {
+       return (
+           <section id="baked-salmon">
+               <h1>{name}</h1>
+               <ul className="ingredients">
+                   {ingredients.map((ingredient, i) => (
+                       <li key={i}>{ingredient.name}</li>
+                   ))}
+               </ul>
+               <section className="instructions">
+                   <h2>Cooking Instructions</h2>
+                   {steps.map((step, i) => (
+                       <p key={i}>{step}</p>
+                   ))}
+               </section>
+           </section>
+       );
+   }
+  #+end_src
+- src/components/Instructions.js
+  #+begin_src js
+   export default function Instructions({ title, steps }) {
+       return (
+           <section className="instructions">
+               <h2>{title}</h2>
+               {steps.map((s, i) => (
+                   <p key={i}>{s}</p>
+               ))}
+           </section>
+       );
+   }
+  #+end_src
+- src/components/Ingredient.js
+  #+begin_src js
+   import React from "react";
+
+   export default function Ingredient({ amount, measurement, name }) {
+       return (
+           <li>
+               {amount} {measurement} {name}
+           </li>
+       );
+   }
+  #+end_src
+- src/components/IngredientList.js
+  #+begin_src js
+    import React from "react";
+    import Ingredient from "./Ingredient";
+
+    export default function IngredientList({ list }) {
+        return (
+            <ul className="ingredients">
+                {list.map((ingredient, i) => (
+                    <Ingredient key={i} {...ingredient} />
+                ))}
+            </ul>
+        );
     }
-    const nums = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-    console.log(nums.reduce(fizzBuzzReducer, ''));
+  #+end_src
+- src/components/Recipe.js
+  #+begin_src js
+    import React from "react";
+    import IngredientsList from "./IngredientList";
+    import Instructions from "./Intructions";
+
+    function Recipe({ name, ingredients, steps }) {
+        return (
+            <section id={name.toLowerCase().replace(/ /g, "-")}>
+                <h1>{name}</h1>
+                <IngredientList list={ingredients} />
+                <Instructions title="Cooking Instructions" steps={steps} />
+            </section>
+        );
+    }
+    export default Recipe;
     #+end_src
-  - Things that can be done with .reduce()
-    1) Convert an array to an object
+- src/components/Menu.js
+  #+begin_src js
+   import React from "react";
+   import Recipe from "./Recipe";
+
+   function Menu({ recipes }) {
+       return (
+           <article>
+               <header>
+                   <h1>Delicious Recipes</h1>
+               </header>
+               <div className="recipes">
+                   {recipes.map((recipe, i) => (
+                       <Recipe key={i} {...recipe} />
+                   ))}
+               </div>
+           </article>
+       );
+   }
+   export default Menu;
+  #+end_src
+- src/index.js
+  Instead of adding a <script> tag, we import react and react-dom so *webpack* can add them to our bundle
+  #+begin_src js
+   import React from "react";
+   import { render } from "react-dom";
+   import Menu from "./components/Menu";
+   import data from "./data/recipes.json";
+
+   render(<Menu recipes={data} />, document.getElementById("root"));
+    #+end_src
+- src/data/recipes.json
+**** Creating the webpack build
+     - npm install webpack webpack-cli
+     - Since webpack 4.0.0, no custom config is explicitly needed
+     - ./webpack.config.js
+       import statement will be babelized into require()
        #+begin_src js
-       function keyByUsernameReducer(acc, person) {
-         return {...acc, [person.username]: person};
-       }
-       console.log(peopleArr.reduce(keyByUsernameReducer, {}));
-        #+end_src
-    2) Unfold to a larger array:
-       Can be handy if you are reading data from a text file
-       #+begin_src js
-       function splitLineReducer(acc, line) {
-         return acc.concat(line.split(/,/g));
-       }
-       fileLines.reduce(splitLineReducer, []);
-       #+end_src
-       This could have been done with a *flatmap*, or you could build your own flatmap.
-       #+begin_src js
-       function flatMap(f, arr) {
-         const reducer = (acc, item) => acc.concat(f(item));
-         return arr.reduce(reducer, []);
-       }
-       flatMap(x => x.split(','), fileLines);
-       #+end_src
-    3) Make two calculations in one traversal:
-       in this case is the same, but if we were combining a .map() and .filter() might be...
-       #+begin_src js
-       const readings = [0.3, 1.2, 3.4, 0.2, 3.2, 5.5, 0.4];
-       function minMaxReducer(acc, reading) {
-         return {
-           minReading: Math.min(acc.minReading, reading);
-           maxReading: Math.max(acc.maxReading, reading);
-         };
-       }
-       cont initMinMax = {
-         minReading: Number.MAX_VALUE,
-         maxReading: Number.MIN_VALUE,
+       var path = require("path");
+       module.exports = {
+         entry: "./src/index.js",
+         output: {
+           path: path.join(__dirname, "dist", "assets"),
+           filename: "bundle.js"
+         },
+         // List of loaders to run on this module
+         module: {
+           rules: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }]
+         }
        };
-       const minMax = readings.reduce(minMaxReducer, initMinMax);
        #+end_src
-    4) Combine mapping and filtering into one pass
-       For example, if holding several arrays in memory is too expensive.
+     - npm install babel-loader @babel/core # install loader
+     - npm install @babel/preset-env @babel/preset-react # install babel transformer
+     - ./.babelrc
        #+begin_src js
-       function notEmptyEmail(x) {
-         return (x.email != null) && (x.email !== undefined);
+       {
+         "presets": ["@babel/preset-env", "@babel/preset-react"]
        }
-       function greater(a, b) {
-         return (a > b) ? a : b;
-       }
-       function notEmptyMostRecent(currentRecent, person) {
-          return (notEmpty(person))
-            ? greater(currentRecent, person.lastSeen)
-            : currentRecent;
-       }
-       peopleArr.reduce(notEmptyMostRecent, '')
        #+end_src
-    5) Run asynchronous functions in sequence
-       aka run Promises in sequence
-       - might be to avoid an API rate limit
-       - or if one depends on the another
+     - npx webpack --mode development
+     - ./package.json, add a build script to run "npm run build"
+       #+begin_src js
+       ...
+        "scripts": {
+            "build": "webpack --mode production"
+        },
+        ...
+        #+end_src
+**** Source Mapping
+     - Maps the bundle to our code, for debugging
+     - webpack.config.js
+       #+begin_src js
+       module.exports = {
+         ...
+         devtool: "#source-map"
+       };
+       #+end_src
+     - We can step-through debugger on the provider browser webpack:// tab
+       Or inspect scoped variables, or add variables to watch in the "watch panel"
+**** Create React App
+     - npm install -g create-react-app
+       create-react-app my-project
+     - npx create-react-app myproject
+     - Creates a project with 3 dependencies:
+       - React
+       - ReactDOM
+       - react-scripts (installs babel, eslint, webpack, and more)
+     - npm start
+       npm test
+       npm run build
+** 6 - React State Managment
+   - The *state* of a React application is given by the data, that has the ability to change.
+   - How to create stateful components?
+   - How state can be sent *down* a component tree?
+   - How send user interaction back *up* the component tree?
+   - Stateful Context Providers?
+*** Building a Star Rating Component
+    - npm i react-icons # to get a SVG star icon
+    - Create component that renders the stars
+      #+begin_src js
+      import React from "react";
+      import { FaStar } from "react-icons/fa";
+      export default function StartRating() {
+        return [
+          <FaStar color="red" />
+          <FaStar color="red" />
+          <FaStar color="red" />
+          <FaStar color="grey" />
+          <FaStar color="grey" />
+        ];
+      }
+      #+end_src
+    - Create component that draws a painted star based on a property
+      #+begin_src js
+      const Star = ({ selected = false }) => (
+        <FaStar color={selected ? "red" : "grey"} />
+      );
+      #+end_src
+    - Component that draws the selected number of stars
+      #+begin_src js
+      const createArray = length => [...Array(length)];
+      export default function StarRating({ totalStars = 5}) {
+        return createAray(totalStars).map((n, i) => <Star key={i} />);
+      }
+      #+end_src
+*** The useState Hook
+    - Hooks contain reusable code logic, that is separate from the *component tree*
+    - Hooks can cause the component they're hooked into to rerender.
+    - StarRating: The hook is a function that we can invoke to return an array.
+      First value is the *state variable* we want to use.
+      #+begin_src js
+      import React from "react";
+      import FaStar from "react-icons/fa";
+      export default function StarRating({ totalStars = 5 }) {
+        const [selectedStars] = useState(3);
+        return (
+          <>
+          {createArray(totalStars}.map((n, i)) => (
+            <Star key={i} selected={selectedStars > i} />
+          ))}
+          <p>
+            {selectedStars} of {totalStars} stars
+          </p>
+          </>
+        );
+      }
+      #+end_src
+    - Star: Make FaStar clickable, onClick
+      Filled second prop, onSelect with a fake function that does nothing to fallback.
+      #+begin_src js
+      const Star = ({ selected = false, onSelect = f => f }) => (
+        <FaStar color={selected ? "red" : "grey" } onClick={onSelect} />
+      );
+      #+end_src
+    - StarRating: Using the prop to change the state of the Star Rating
+      The 2nd item in the array returned by useState hook is a function that can be used to change the state value.
+      #+begin_src js
+      export default function StarRating({ totalStars = 5 }) {
+        const [selectedStars, setSelectedStars] = useState(0);
+        return (
+          <>
+          {createArray(totalStars}.map((n, i) =>()
+            <Star
+              key={i}
+              selected={selectedStars > i}
+              onSelect={() => setSelectedStars(i+1)}
+              />
+          ))}
+          <p>
+            {selectedStars} of {totalStars} stars
+          </p>
+          </>
+        );
+      }
+      #+end_src
+*** React State the "Old Way"
+    - < v16.8.0
+      #+begin_src js
+      import React, { Component } from "react";
+      export default class StarRating extends Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            starsSelected: 0
+          };
+          this.change = this.change.bind(this);
+        }
+        change(starsSelected) {
+          this.setState({ starsSelected });
+        }
+        render() {
+          const { totalStars } = this.props;
+          const { starsSelected } = this.state;
+          return (
+            <div>
+              {[...Array(totalStars)].map((n, i) => (
+                <Star
+                  key={i}
+                  selected={i < starsSelected}
+                  onClick={() => this.change(i + 1)}
+                />
+              ))}
+            <p>
+              {starsSelected} of {totalStars} stars
+            </p>
+            </div>
+          );
+        }
+      }
+      #+end_src
+*** Refactoring for Advanced Reusability
+    - Adding more use cases
+    - StarRating: All react elements have *style* properties, a lot of components also have *style* properties.
+      Solution: upgrade the React.Fragment to a proper div, and pass the style prop
+      #+begin_src js
+      export default function StarRating({ style = {}, totalStars = 5 }) {
+        const [selectedStars, setSelectedStars] = useState(0);
+        return (
+          <div style={{ padding: "5px", ...style }}>
+            {createArray({totalStars}.map(n, i) => (
+              <Star
+                key={i}
+                selected={selectedStars > i}
+                onSelect{() => setSelectedStars(i + 1)}
+              />
+              ))}
+            <p>
+              {selectedStars} of {totalStars} stars
+            </p>
+          </div>
+        );
+      }
+      #+end_src
+    - StarRating: they might want to add other props, like onDoubleClick.
+      This is not a blanket rule to apply to all your components.
+      #+begin_src js
+      export default function StarRating({ style = {}, totalStars = 5, ...props }) {
+        const [selectedStars, setSelectedStars] = useState(0);
+        return (
+          <div style={{ padding: 5, ...style }} {...props}>
+            ...
+          </div>
+        );
+      }
+      #+end_src
+*** State in Components Trees
+It's not a great idea to use *state* in every singlel component.
+Having *state* data distributed throughout too many components makes it harder to track down bugs.
+ 1) Storing state at the root of the component tree and, passing it down to child components via props
+    #+NAME: color-data-json
+    #+begin_src json
+    [
+      {
+        "id": "0175d1f0-a8c6-41bf-8d02-df5734d829a4",
+        "title": "ocean at dusk",
+        "color": "#00c4e2",
+        "rating": 5
+      }
+    ]
+    #+end_src
+    - Store the state on the App component.
+       #+begin_src js
+       import React, { useState } from "react";
+       import colorData from "./color-data.json";
+       import ColorList from "./ColorList.js";
+       export default function App() {
+         const [colors] = useState(colorData);
+         return <ColorList colors={colors} />;
+       }
+       #+end_src
+    - ColorList.js
+      #+begin_src js
+      import React from "react";
+      import Color from "./Color";
+      export default function ColorList({ colors = [] }) {
+        if(!colors.length) return <div>No Colors Listed.</div>
+        return (
+          <div>
+          {
+            colors.map(color => <color>
+          }
+          </div>
+        );
+      }
+      #+end_src
+    - Color.js
+      #+begin_src js
+      export default function Color({ title, color, rating }) {
+        return (
+          <section>
+            <h1>{title}</h1>
+            <div style={{ height: 50, backgroundColor: color }} />
+            <StarRating selectedStars={rating} />
+          </section>
+        );
+      }
+      #+end_src
+    - StarRating.js
+      #+begin_src js
+      export default function StarRating({ totalStars = 5, selectedStars = 0 }) {
+        return (
+          <>
+            {createArray(totalStars).map((n, i) => (
+              <Star
+                key={i}
+                selected={selectedStars > i}
+              />
+              <p>
+                {selectedStars} of {totalStars} stars
+              </p>
+            ))}
+          </>
+        );
+      }
+      #+end_src
+ 2) onRemoveColor Send state from children back to the root.
+    Keep the component pure, and we only care about notifying about the deletion with his ID.
+    Is up to the parent providing the onRemove(), to remove the ID.
+    Changing the state of the colrs array causes the App component to be rerendered.
+    - Color.js
+      #+begin_src js
+      import { FaTrash } from "react-icons/fa";
+      export default function Color({ id, title, color, ration, onRemove = f => f }) {
+        return (
+          <section>
+            <h1>{title}</h1>
+            <button onClick={() => onRemove(id)}>
+              <FaTrash />
+            </button>
+            <div style={{ height: 50, backgroundColor: color }} />
+            <StarRating selectedStars={rating} />
+          </section>
+        );
+      }
+      #+end_src
+    - ColorList.js
+      #+begin_src js
+      export default function ColorList({ colors = [], onRemoveColor = f => f }) {
+        if (!colors.length) return <div>No Colors Listed. (Add a Color)</div>;
+        return (
+          <div>
+          {colors.map(color => (
+            <Color key={color.id} {...color} onRemove={onRemoveColor} />
+          )}
+          </div>
+        );
+      }
+      #+end_src
+    - App.js
+      #+begin_src js
+      export default function App() {
+        const [colors, setColors] = useState(colorData);
+        return (
+          <ColorList
+            colors={colors}
+            onRemoveColor={id =>{
+              const newColors = colors.filter(color => color.id !== id);
+              setColors(newColors);
+            }}
+          />
+        );
+      }
+      #+end_src
+ 3) onRate        Send state from children back to the root
+    - StarRating.js
+      #+begin_src js
+      export default function StarRating({
+        totalStars = 5,
+        selectedStars = 0,
+        onRate = f => f
+      }) {
+        return (
+          <>
+            {createArray(totalStars).map((n, i) => (
+              <Star
+                key={i}
+                selected={selectedStars > i}
+                onSelect{() => onRate(i + 1)}
+              />
+            ))}
+          </>
+        );
+      }
+      #+end_src
+    - Color.js
+      #+begin_src js
+      export default function Color({
+        id,
+        title,
+        color,
+        rating,
+        onRemove = f => f,
+        onRate = f => f
+      }) {
+        return (
+          <section>
+            <h1>{title}</h1>
+            <button onClick={()=>onRemove(id)}>
+              <FaTrash />
+            </button>
+            <div style={{ height: 50, backgroundColor: color }} />
+            <StarRating
+              selectedStars={rating}
+              onRate={rating => onRate(id, rating)}
+            />
+          </section>
+        );
+      }
+      #+end_src
+    - ColorList.js
+      #+begin_src js
+      export default function ColorList({
+        colors = [],
+        onRemoveColor = f => f,
+        onRateColor = f => f
+      }) {
+        if(!colors.length) return <div>No Colors Listed. (Add a Color)</div>
+        return (
+          <div className="color-list">
+            {
+              colors.map(color => (
+                <Color
+                  key={color.id}
+                  {...color}
+                  onRemove={onRemoveColor}
+                  onRate={onRateColor}
+                />
+              )
+            }
+          </div>
+        );
+      }
+      #+end_src
+    - App.js
+      #+begin_src js
+      export default function App() {
+        const [colors, setColors] = useState(colorData);
+        return (
+          <ColorList
+            colors={colors}
+            onRateColor={(id, rating) => {
+              const newColors = colors.map(color =>
+                color.id === id ? { ...color, rating } : color
+              );
+              setColors(newColors);
+            }}
+            onRemoveColor={id => {
+              const newColors = colors.filter(color => color.id !== id);
+              setColors(newColors);
+            }}
+          />
+        );
+      }
+      #+end_src
+*** Building Forms (useRef, useState)
+**** useRef - Uncontrolled Components
+    - Creates Imperative code, an *uncontroled component*, uses the DOM to save the form values.
+    - refs: allows us to access the DOM directly.
+            Stores values for the lifetime of a component.
+      #+begin_src js
+      import React, { useRef } from "react";
+      export default function AddColorForm({ onNewColor = f => f }) {
+        const txtTitle = useRef();
+        const hexColor = useRef();
+        const submit = e => {
+          e.preventDefault(); // Prevents the browser to submit the form to the target= of the <form>
+          const title = txtTitle.current.value;
+          const color = hexColor.current.value;
+          onNewColor(title, color);
+          txtTitle.current.value = "";
+          hexColor.current.value = "";
+        }
+        return (
+          <form onSubmit={submit}>
+            <input ref={txtTitle} type="text" placeholder="color title..." required />
+            <input ref={hexColor} type="color" required />
+            <button>ADD</button>
+          </form>
+        );
+      }
+      #+end_src
+**** useState - Controlled Components
+     The component has full control over the input value content.
+     event.target, is a reference to the DOM element
+     They render() a lot more than non-controlled components.
+     #+begin_src js
+     import React, { useState } from "react";
+     export default function AddColorForm({ onNewColor = f => f}) {
+       const [title, setTitle] = useState("");
+       const [color, setColor] = useState("#000000");
+       const submit = e => {
+         e.preventDefault();
+         onNewColor(title, color);
+         setTitle("");
+         setColor("");
+       };
+       return (
+         <form onSubmit{submit}>
+           <input
+             value={title}
+             onChange={event => setTitle(event.target.value)}
+             type="text"
+             placeholder="color title..."
+             required
+           />
+           <input
+             value={color}
+             onChange={event => setColor(event.target.value)}
+             type="color"
+             required
+           />
+           <button>ADD</button>
+         </form>
+       );
+     }
+     #+end_src
+**** Custom Hook with useState
+     Hooks are designed to be used inside of React components.
+     1) Returns an array, with 1) the value and the setter function. 2) a constructor, to reset the value
+        #+begin_src js
+        import { useState } from "react";
+        export const useInput = initialValue => {
+          const [value, setValue] = useState(initialValue);
+          return [
+            { value, onChange: e => setValue(e.target.value) },
+            () => setValue(initialValuef)
+          ];
+        };
+        #+end_src
+     2) Using the custom hooks, spreading the input elements instead of copying manually the props
+        #+begin_src js
+        import React from "react";
+        import { use Input } from "./hooks";
+        export default function AddColorForm({ onNewcolor = f => f }) {
+          const [titleProps, resetTitle] = useInput("");
+          const [colorProps, resetColor] = useInput("#000000");
+          const submit = event => {
+            event.preventDefaults();
+            onNewColor(titleProps.value, colorProps.value);
+            resetTitle();
+            resetColor();
+          };
+          return (
+            <form onSubmit={submit}>
+              <input
+                {...titleProps}
+                type="text"
+                placeholder="color title..."
+                required
+              />
+              <input {...colorProps} type="color" required />
+              <button>ADD</button>
+            </form>
+          );
+        }
+        #+end_src
+**** App.js
+     Both controlled and uncontrolled pass up the value of the color to their param onNewColor() function.
+     App component handles that.
+     #+begin_src js
+     import React, { useState } from "react";
+     import colorData from "./color-data.json";
+     import ColorList from "./ColorList.js";
+     import AddColorFrorm from "./AddColorForm";
+     import { v4 } from "uuid";
+     export default function App() {
+       const [colors, setColors] = useState(colorData);
+       return (
+         <>
+           <AddColorForm
+             onNewColor={(title, color) => {
+               const newColors = [
+                 ...colors,
+                 {
+                   id: v4(),
+                   rating: 0,
+                   title,
+                   color
+                 }
+               ];
+               setColors(newColors)M
+             }}
+           />
+           <ColorList ... />
+         </>
+       );
+     }
+     #+end_src
+*** React Context
+    - pass state up and down a component tree works for small components or small applications
+      still tedious and bug ridden
+    - On complex UI's the root of the tree is often very far from the leaves.
+      Passing the data around will bloat the code.
+    - *Context Provider*, to put data in.
+      Is a react Component, that you can wrap around your entire App() or parts of it (preferably)
+    - *Context Consumer*, data destination
+      Is a react Component, that retrieves the data from the context.
+**** createContext() Setting of the context
+      - index.js Create a provider
+        #+begin_src js
+        import React, { createContext } from "react";
+        import colors from "./color-data";
+        import { render } fromk "./color-data";
+        import App from "./App";
+        export const ColorContext = createContext();
+        render(
+          <ColorContext.Provider value={{ colors }}>
+            <App />
+          </ColorContext.Provider>,
+          document.getElementById("root")
+        );
+        #+end_src
+      - App.js Cleaned up version
+        #+begin_src js
+        import React from "react";
+        import ColorList from "./ColorList.js";
+        import AddColorForm from "./AddColorForm";
+        export default function App() {
+          return (
+            <>
+              <AddColorForm />
+              <ColorList />
+            </>
+          );
+        }
+        #+end_src
+**** useContext() Retrieving from the context with the hook
+      #+begin_src js
+      import React, { useContext } from "react";
+      import { ColorContext } from "./"; // ???
+      import Color from "./Color";
+      export default function ColorList() {
+        const { colors } = useContext(ColorContext);
+        if (!colors.length) return <div>No Colors Listed. (Add a color)</div>;
+        return (
+          <div className="color-list">
+            {
+              colors.map(color => <Color key={color.id} {...color} />)
+            }
+          </div>
+        );
+      }
+      #+end_src
+**** The "old" way, using directly .Consumer instead of the hook
+      Using a pattern called "render props"
+      #+begin_src js
+      export default function ColorList() {
+        return (
+          <ColorContext.Consumer>
+            {context => {
+              if (!context.colors.length) return <div>No Colors Listed. (Add a Color)</div>;
+              return (
+                <div className="color-list">
+                  <Color key={color.id> {...color} />
+                </div>
+              )
+            }}
+          </ColorContext.Consumer>
+        );
+      }
+      #+end_src
+**** Stateful Context Providers
+     - Create a stateful context that *renders* a Provider.
+       AKA wrap the values of useState() into a Provider
+     - ColorProvider.js
+       #+begin_src js
+       import React, { createContext, useState } from "react";
+       import colorData from "./color-data.json";
+       const ColorContext = createContext();
+       export default function ColorProvider ({ children }) {
+         const [colors, setColors] = useState(colorData);
+         return (
+           <ColorContext.Provider value={{ colors, setColors }}>
+             {children}
+           </ColorContext.Provider>
+         );
+       }
+       #+end_src
+     - It is a better idea, to not expose the raw setColors,
+       but instead return specific functions for the operations we want.
+       Ex: add a new color, remove a color, set rating to a color
+       #+begin_src js
+       export default function ColorProvider ({ children }) {
+         const [colors, setColors] = useState(colorData);
+         const addCOlor = (title, color) =>
+           setColors([
+             ...colors,
+             {
+               id: v4(),
+               ration: 0,
+               title,
+               color
+             }
+           ]);
+
+         const rateColor = (id, rating) =>
+           setColors(
+             colors.map(color => (color.id === id ? { ...color, rating } : color))
+           );
+
+         const removeColor = id => setColors(colors.filter(color => color.id !== id ));
+
+         return (
+           <ColorContext.Provider value={{ colors, addColor, removeColor, rateColor }}>
+             {children}
+           </ColorContext.Provider>
+         );
+       }
+       #+end_src
+**** Custom Hooks with useContext
+     - We create a hook (useCol), to wrap any mention of *Context*
+       color-hooks.js
+       #+begin_src js
+       import React, { createContext, useState, useContext } from "react";
+       import colorData from "./color-data.json";
+       import { v4 } from "uuid";
+       const ColorContext = createContext();
+       export const useColors = () => useContext(ColorContext);
+       #+end_src
+     - index.js, uses our custom provider
+       #+begin_src js
+       import React from "react";
+       import { ColorProvider } from "./color-hooks.js";
+       import { render } from "react-dom";
+       import App from "./App";
+       render(
+         <ColorProvider>
+           <App />
+         </ColorProvider>,
+         document.getElementById("root");
+       );
+       #+end_src
+     - ColorList.js, gets the colors
+       #+begin_src js
+       import React from "react";
+       import Color from "./Color";
+       import { useColors } from "./color-hooks";
+       export default function ColorList() {
+         const { colors } = useColors();
+         return (...);
+       }
+       #+end_src
+     - Color.js, get rating and remove functions
+       #+begin_src js
+       import React from "react";
+       import StarRating from "./StarRating";
+       import { useColors } from "./color-hooks";
+       export default function Color ({ id, title, color, rating }) {
+         const { rateColor, removeColor } = useColors();
+         return (
+           <section>
+             <h1>{title}</h1>
+             <button onClick={()=>removeColor(id)}>X</button>
+             <div style={{ height: 50, backgroundColor: color }} />
+             <StarRating
+               selectedStars={rating}
+               onRate={rating => rateColor(id, rating)}
+             />
+           </section>
+         );
+       }
+       #+end_src
+     - AddColorForm.js, get the add color function
+       #+begin_src js
+       import React from "react";
+       import { useInput } from "./hooks";
+       import { useColors } from "./color-hooks";
+       export default function AddColorForm() {
+         const [titleProps, resetTitle] = useInput("");
+         const [colorProps, resetColor] = useInput("#000000");
+         const { addColor } = useColors();
+         const submit = e => {
+           e.preventDefault();
+           addColor(titleProps.value, colorProps.value);
+           resetTitle();
+           resetColor();
+         };
+         return ( ... );
+       }
+       #+end_src
+
+** 7 - Enhancing Components with Hooks
+   - Hooks that define *rules* about *why/when* rendering should happen.
+   - Hooks than enhance rendering perfomance
+   - useEffect()
+   - useLayoutEffect()
+   - useReducer()
+   - useCallback()
+   - useMemo()
+*** Introducing useEffect(), happens after render
+   - Placing a function inside of an useEffect(),
+     means that the function will be called after the render,
+     as a side effect (something that the functions does, that is not part of the return)
+     #+begin_src js
+     function Checkbox {
+       const [checked, setChecked] = useState(false);
+       useEffect(() => {
+         alert(`checked: ${checked.toString()}`);
+       });
+       return (
+         <>
+           <input
+             type="checkbox"
+             value={checked}
+             onChange={() => setChecked(checked => !checked)}
+           />
+           {checked ? "checked" : "not checked"}
+         </>
+       );
+     }
+     #+end_src
+   - Or we can render(), and after set the value from storage.
+     #+begin_src js
+     useEffect(() => {
+       localStorage.setItem("checkbox-value", checked);
+     });
+     #+end_src
+   - Or to focus after the render was done
+     #+begin_src js
+     useEffect(() => {
+       txtInputRef.current.focus();
+     });
+     #+end_src
+*** The Dependency Array
+    - Or: how to associate useEffect() with specific data changes
+**** Dependencies: The second argument of useEffect()
+          #+begin_src js
+          import React, { useState, useEffect } from "react";
+          import "./App.css"; // ?
+          function App() {
+            const [val, set] = useState("");
+            const [phrase, setPhrase] = useState("example phrase");
+            const createPhrase = () => {
+              setPhrase(val);
+              set("");
+            };
+            useEffect(() => {
+              console.log(`typing "${val}"`);
+            }, [val]);
+            useEffect(() => {
+              console.log(`saved phrase: "${phrase}"`);
+            }, [phrase]);
+            return (
+              <>
+                <label>Favorite phrase:</label>
+                <input
+                  value={val}>
+                  placeholder={phrase}
+                  onChange={e => set(e.target.value)}
+                />
+                <button onClick={createPhrase}>send</button>
+              </>
+            );
+          }
+          #+end_src
+**** Can depend on multiple var changes
+**** Constructor: Can be empty [] to run only once, after the initial render
+**** Teardown: If you return a function, it will run when the component is removed.
+        #+begin_src js
+        const [posts, setPosts] = useState([]);
+        const addPost = post => setPosts(allPosts => [post, ...allPosts]);
+        useEffect(() => {
+          newsFeed.subscribe(addPost);
+          welcomeChime.play();
+          return () = {
+            newsFeed.unsubscribe(addPost);
+            goodbyeChime.play();
+          };
+        }, []);
+        #+end_src
+       For clarity, we might want to use separete useEffect(), for news feed and other for the chime events
+        #+begin_src js
+       useEffect(() => {
+         newsFeed.subscribe(addPost);
+         return () => newsFeed.unsubscribe(addPost);
+       }, []);
+       useEffect(() => {
+         welcomeChime.play();
+         return () => goodbyeChime.play();
+       }, []);
+       #+end_src
+       Or even better, create a *custom hook*
+       #+begin_src js
+       const useJazzyNews = () => {
+         const [posts, setPosts] = useState([]);
+         const addPost = post => setPosts(allPosts => [post, ...allPosts]);
+         useEffect(() => {
+           newsFeed.subscribe(addPost);
+           return () => newsFeed.unsubscribe(addPost);
+         }, []);
+         useEffect(() => {
+           welcomeChime.play();
+           return () => goodbyeChime.play();
+         }, []);
+         return posts;
+       };
+       #+end_src
+       Use the custom hook
+       #+begin_src js
+       function NewsFeed({ url }) {
+         const posts = useJazzyNews();
+         return (
+           <>
+             <h1>{posts.length} articles</h1>
+             {posts.map(post => {
+               <Post key={post.id} {...post}>
+             })}
+           </>
+         );
+       }
+       #+end_src
+*** Deep Checking Dependencies - useMemo()+useEffect() - useCallback()+useEffect()
+     - In javascript, arrays, objects, and functions are the *same* only when they are the exact same *instance*.
+     - If we want an element of the Dependency Array to be an Array
+       - We should declare it outside the function(), if no argument is needed
+       - Or useMemo(), which will accept arguments and cache his output using other Dependency Array
+         #+begin_src js
+         function WordCount({ children = "" }) {
+           useAnyKeyToRender();
+           const words = useMemo(() => children.split(" "), [children]);
+           useEffect(() => {
+             console.log("fresh render");
+           }, [words]);
+           return ( ... );
+         }
+         #+end_src
+     - Alternatively, if we want to memoize functions instead of values useCallback()
+       #+begin_src js
+       const fn = useCallback(() => {
+         console.log("hello");
+         console.log("world");
+       }, []);
+       useEffect(() => {
+         console.log("fresh render");
+         fn();
+       }, [fn]);
+       #+end_src
+     - Improved useJazzyNews hook, with useMemo()+useEffect()
+       That newPostChime.play() on each new message.
+       #+begin_src js
+       const useJazzyNews = () => {
+         const [_posts, setPosts] = useState([]);
+         const addPost = post => setPosts(allPosts => [post, ...allPosts]);
+         const posts = useMemo(() => _posts, [_posts]);
+
+         useEffect(() => {
+           newPostChime.play();
+         }, [posts]);
+
+         useEffect(() => {
+           newsFeed.subscribe(addPost);
+           return () => newsFeed.unsubscribe(addPost);
+         }, []);
+
+         useEffect(() => {
+           welcomeChime.play();
+           return () => goodbyeChime.play();
+         }, []);
+         return posts;
+       }
+       #+end_src
+*** When to use useLayoutEffect()
+    - Events
+      1) Render
+      2) useLayoutEffect()
+      3) browser paint, when the components are actually added to the DOM
+      4) useEffect()
+    - When the effect, is needed for the look of the component:
+      - Example to obtain the width and height of an element when the window is resized
+        #+begin_src js
+        function useWindowSize {
+          const [width, setWidth] = useState(0);
+          const [height, setHeight] = useState(0);
+          const resize = () => {
+            setWidth(window.innerWidth);
+            setHeight(window.innerHeight);
+          };
+          useLayoutEffects(() => {
+            window.addEventListener("resize", resize);
+            resize();
+            return () => window.removeEventListener("resize", resize);
+          }, []);
+
+          return [width, height];
+        }
+        #+end_src
+      - Example, tracking the position of the mouse
+        #+begin_src js
+        function useMousePosition {
+          const [x, setX] = useState(0);
+          const [y, setY] = useState(0);
+          const setPosition = ({ x, y }) => {
+            setX(x);
+            setY(y);
+          };
+          useLayoutEffect(() => {
+            window.addEventListener("mousemove", setPosition);
+            return () => window.removeEventListener("mousemove", setPosition);
+          }, []);
+        }
+        #+end_src
+*** Rules to follow with Hooks
+    1) Hooks only run on React Components, are not regular javascript.
+    2) Break functionality into multiple, small hooks.
+       React saves the values of Hooks in an Array so the values can be tracked.
+    3) Hooks should be called at the top leve. Not on conditionals or loops.
+       If not, it will throw off the internal array of value in React.
+       We can still nest conditional inside the Hook.
+       Similar, you can nest async functions inside the function in a Hook.
+*** Improving code with useReducer()
+    - useReducer() takes in the reducer function and the initial state.
+                              a reducer takes the current state and returns a new state.
+      #+begin_src js
+      function Checkbox() {
+        const [checked, toggle] = useReducer(checked => !checked, false);
+        return (
+          <>
+            <input type="checkbox" value={checked} onChange={toggle} />
+            {checked ? "checked" : "not checked"}
+          </>
+          </>
+        );
+      }
+      #+end_src
+*** useReducer() to handle complex state, instead of useState()
+    "Teach everyon to spread, they'll spread for a day.
+     Teach everyone to useReducer and they'll spread for life."
+     - We can use it to "hide" the spread of an object, when updating a single value.
+     - Instead of
+       #+begin_src js
+       const [user, setUser] = useState(firstUser);
+       setUser({ ...user, admin: true});
+       #+end_src
+     - Make this
+       #+begin_src js
+       function User() {
+         const [user, setUser] = useReducer(
+           (user, newDetails) => ({ ...user, ...newDetails }),
+           firstUser
+         );
+       }
+       setUser({ admin: true });
+       #+end_src
+*** TODO Legacy setState and useReducer
+*** memo() - Improving Coomponent Perfomance
+    - Tools to help you prevent unnecesarry renders:
+      memo, useMemo, useCallback
+    - *memo*, is used to create pure components
+      We can replace <Cat> with <PureCat>
+      #+begin_src js
+      import React, { useState, memo } from "react";
+      const Cat = ({ name }) => {
+        console.log(`rendering ${name}`);
+        return <p>{name}</p>;
+      }
+      const PureCat = memo(cat);
+      #+end_src
+      Second argument accepts a *Predicate*, a function that returns only true or false.
+      To decide wheter to render a cat or not.
+      false means re-render
+      true not re-render
+      #+begin_src js
+      const PureCat = memo(
+        Cat,
+        (prevProps, nextProps) => prevProps.name === nextProps.name
+      );
+      #+end_src
+*** shouldComponentUpdate() and React.PureComponent
+    - was the precusor of memo(), and we could use to let react knwo which props or state to watch
+    - while the other was the name of the class we used to extend to get a pure component
+    - useCallback() and useMemo() can be used to memoize object and function properties
+      - Instead of provide props to check on the memo(), we use the callback
+        to ensure that meow function ahd not changed.
+      #+begin_src js
+      const PureCat = memo(Cat);
+      function App() {
+        const meow = useCallback(name => console.log(`${name} has meowed`), []);
+        return <PureCat name="Biscuit" meow={meow} />
+      }
+      #+end_src
+*** When to refactor
+    - useMemo+useCallback, don't
+    - Use the React Profiler
+** 8 - Incorporating Data
+   - The UI components we've composed are vessels for data.

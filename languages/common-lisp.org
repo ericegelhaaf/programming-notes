@@ -1,3 +1,10 @@
+- Android APK Compiler? https://github.com/3b/3b-dex
+- https://www.ic.unicamp.br/~meidanis/courses/mc336/problemas-lisp/L-99_Ninety-Nine_Lisp_Problems.html
+- https://franz.com/support/documentation/current/doc/mop/concepts.html
+- https://mov.im/?blog/phoe%40movim.eu&page=2
+- https://mov.im/?blog/phoe%40movim.eu/a9391f4b-485e-4f3a-ae02-051a5fc65ed1
+- https://pvk.ca/Blog/2014/08/16/how-to-define-new-intrinsics-in-sbcl/
+- https://pvk.ca/Blog/2014/03/15/sbcl-the-ultimate-assembly-code-breadboard/
 - https://stevelosh.com/blog/2016/08/lisp-jam-postmortem/
 - http://wcp.sdf-eu.org/software/index.html
 - https://leanpub.com/readevalprintlove001/read
@@ -28,27 +35,12 @@
   http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
 - golang slices
   https://github.com/tpapp/cl-slice
-- haskell list functions
-  https://github.com/Dimercel/listopia
+- haskell
+  https://github.com/Dimercel/listopia  Data.List functions
 - clojure
-  https://github.com/ruricolist/cloture
-  https://github.com/joinr/clclojure
-#+begin_src
-(define-test in-lisp-many-things-are-true
-  ;; In Common Lisp, the canonical values for truth is T.
-  ;; However, everything that is non-NIL is true, too.
-  (true-or-false? t 5)
-  (true-or-false? nil (not 5))
-  (true-or-false? t "a string")
-  ;; Even an empty string...
-  (true-or-false? t "")
-  ;; ...or a list containing a NIL...
-  (true-or-false? t (list nil))
-  ;; ...or an array with no elements...
-  (true-or-false? t (make-array 0))
-  ;; ...or the number zero.
-  (true-or-false? t 0))
-#+end_src
+  https://github.com/ruricolist/cloture complete reimplementation
+  https://github.com/joinr/clclojure    complete reimplementation
+  https://github.com/eigenhombre/cl-oju just some functions
 * youtube
 - Common LISP Object Standard
   https://www.youtube.com/watch?v=IrmHp1rRQ68

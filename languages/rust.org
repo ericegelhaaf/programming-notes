@@ -1,3 +1,19 @@
+- https://github.com/glium/glium
+- https://github.com/not-fl3/macroquad
+- Ultimate Rust 2: Intermediate Concepts
+  https://github.com/CleanCut/ultimate_rust2
+- PNGme: An Intermediate Rust Project
+  https://picklenerd.github.io/pngme_book/
+- open source training *courses* about distributed database and distributed systemes
+  https://github.com/pingcap/talent-plan
+- "RustBelt: Logical Foundations for the Future of Safe Systems Programming".
+  https://plv.mpi-sws.org/rustbelt/
+- Developers Reveal Why Rust Programming Language Is Losing Popularity
+  https://fossbytes.com/developers-reveal-why-rust-programming-language-is-losing-popularity/
+- An interpreter for Rust's mid-level intermediate representation
+  https://github.com/rust-lang/miri
+- https://users.rust-lang.org/t/rust-cves-should-i-worry/59904/7
+- https://blog.akquinet.de/2021/01/03/haskell-is-faster-than-rust-wait-a-sec/
 - https://www.fpcomplete.com/blog/philosophies-rust-haskell/
 - http://technosophos.com/2019/08/07/writing-a-kubernetes-controller-in-rust.html
 - https://github.com/unknownue/vulkan-tutorial-rust
