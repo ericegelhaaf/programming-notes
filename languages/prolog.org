@@ -1,0 +1,44 @@
+* Video: 2014 - Production Prolog - Michael Hendricks - StrangeLoop
+  https://www.youtube.com/watch?v=G_eYTctGZw8
+  - First-order logic
+  - 1972, first version, Alain Colmerauer
+  - SWIProlog
+  - 4 parts
+    1) Logical
+    2) Logical ??????
+    3) Unification (fancy pattern matching)
+    4) ??????
+  - REPL here is called, "Top Level"
+  - (=) equal represents "Unification"
+  - Capitalized thing is a "variable"
+  - Lowercase are symbols, atoms
+  - Values are immutable
+  - () compound terms
+  - (;) is logic disjunction (OR)
+  - actually, *Dynamically Typed*
+  - assert() to modify the database
+  - Ways of think
+    - Functional: if i have this value how do I *map* it to some other value?
+    - Imperative: *do* this, then *do* this
+    - Logic: What are the *relationships* between things?
+  - Example with lists
+    #+begin_src prolog
+    ?- append(F,B,[a,b,c]).
+    F = [],
+    B = [a,b,c];
+    F = [a],
+    B = [b,c];
+    F = [a,b],
+    B = [c];
+    F = [a,b,c],
+    B = [];
+    false
+    #+end_src
+  - Example append/3
+    #+begin_src prolog
+    lists:append([], A, A).
+    lists:append([A|B], C, [A|D]) :- append(B, C, D).
+    #+end_src
+  - "When you really understand what the relationship is,
+     you almost need no code at all."
+  - Backtracking: when you ask for MOER

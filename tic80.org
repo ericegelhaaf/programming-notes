@@ -1,0 +1,20 @@
+- Chip-8: Technical Reference v1.0
+  http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
+* Videos
+- (Code Cap) 2h - Javascript - Building and understanding a Virtual Machine in 2hrs (CHIP-8 Emulator)
+  https://wwwa.youtube.com/watch?v=jWpbHC6DtnU
+- (GynvaelEn) Hacking Livestream #34: CHIP-8 VM
+  https://www.youtube.com/watch?v=BQRX3owv2JI
+  https://www.youtube.com/watch?v=locDS3uHv_E
+  https://www.youtube.com/watch?v=9xGgZUMNl2Y
+  https://www.youtube.com/watch?v=adHOlKKbFXM
+  https://www.youtube.com/watch?v=0sphPKO8QTs
+- (Vintage Computer Federation) 20m - Chip 8 Old TEch in a New Light
+  https://www.youtube.com/watch?v=V3ORJUS9YP4
+- (Venkos) 27m - Writing a CHIP-8 emulator (interpreter) in GO - chip8go
+  https://www.youtube.com/watch?v=MBWyVwyBMhk
+- (makigas) Construyendo un emulador CHIP8
+  https://www.youtube.com/playlist?list=PLTd5ehIj0goNh89DWAjXKCYxJQO0ZMxaE
+* Steve Losh Chip-8
+Blog: http://stevelosh.com/blog/2016/12/chip8-cpu/
+Source: https://github.com/sjl/cl-chip8

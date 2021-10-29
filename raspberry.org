@@ -1,0 +1,21 @@
+- https://github.com/thibmaek/awesome-raspberry-pi
+- Learning OS development using Linux kernel and Raspberry Pi
+  https://github.com/s-matyukevich/raspberry-pi-os
+- Raspberry Pi ARM based bare metal examples
+  https://github.com/dwelch67/raspberrypi
+* Book: Operating Systems Foundations with Linux (2019)
+Home: http://www.dcs.gla.ac.uk/operating-system-foundations/
+Source: https://github.com/wimvanderbauwhede/OSH/
+Solutions: http://www.dcs.gla.ac.uk/operating-system-foundations/solutions.html
+** Foreword
+- In 1983 author was modeling RISC processors on a simulator written in BBC Basic.
+- Operative Systems must trade-off abstraction for efficiency.
+- "The mind is not a vessel to be filled but a fire to be kindled." -- Plutarco
+  "Learning isn't just reading source code; it's bootstrapping machines"
+** Preface
+- Topics to be covered:
+  * Files
+  * Scheduling
+  * POSIX Threads
+  * Networking
+  * Arm/Kernel Memory managment.

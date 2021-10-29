@@ -1,0 +1,9 @@
+* Video: SPARK 2014 - Formal Verification Made Easy
+  https://www.youtube.com/watch?v=plXboBx7LUs
+* Will the defense, aviation, space, and automotive industries replace Ada/C/C++ with Rust?
+https://www.quora.com/Will-the-defense-aviation-space-and-automotive-industries-replace-Ada-C-C-with-Rust
+- A subset of Ada, named SPARK, has been developed to eliminate all undefined behavior
+  and to support formal verification of program correctness.
+- Formal verification provides a mathematical analysis of source code to determine the
+  correspondence with or correctness of the code implementation of the specified requirements.
+- Rust has no safety critical coding standards, nor does it currently support formal program verification.
