@@ -1,9 +1,17 @@
+- NOT A 4k, ray tracing on microcontrollers with Ulisp http://www.ulisp.com/show?2NWA
+- NOT A 4K, but a raymarched donut made in C https://www.a1k0n.net/2011/07/20/donut-math.html
 - Synth https://github.com/askeksa/Oidos
 - Intro 1k https://github.com/baines/demostuff
 - Intro 4k https://github.com/kubo39/tiny-d-demo
+- Intro 4k https://github.com/xyproto/tinytriangle
 - Intro 4k https://github.com/lnqs/intrusion
+- Intro 4k https://github.com/Sixstring982/4k
+- Intro 4k https://github.com/sandsmark/invitro
+- Intro 4k https://github.com/xyproto/shrinky-intro
 - Template https://github.com/shizmob/liner
 - Template https://gitlab.com/PoroCYon/linux-4k-intro-template
+- Tool https://github.com/stfsux/rld
+- Article http://twiren.kapsi.fi/linux4k.html
 - Article https://github.com/faemiyah/dnload
 - Article https://benjamin.computer/posts/2020-07-15-nova.html
 - Article http://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
@@ -11,13 +19,24 @@
 - Article https://phresnel.org/gpl/4k/ntropy2k7/
 - Article http://www.sizecoding.org/wiki/Main_Page
 - Article https://int21.de/linux4k/
+- Article https://raw.githubusercontent.com/gomson/TimothyLottes.github.io/d3d7e3f286a0066bec9b831c57ebcbe8f0ebdfd8/20140413.html
 - Article https://stackoverflow.com/questions/10551665/how-to-create-4kb-linux-binaries-that-render-a-3d-scene
-* Video: (2006) Linux 4k coding
+- Article https://raw.githubusercontent.com/gomson/TimothyLottes.github.io/d3d7e3f286a0066bec9b831c57ebcbe8f0ebdfd8/20140413.html
+  Manually dlopen() libGL.so
+- Article http://git.mikejsavage.co.uk/medfall/file/linux_audio_output.cc.html
+  Manually dlopen() libasound.so (ALSA)
+- Tool https://github.com/Dav1dde/glad
+  Loader-Generator for GL/GLES/EGL/GLX/WGL
+  https://github.com/Dav1dde/glad/issues/152
+- Tool https://github.com/DanielGibson/Linux-app-wrapper
+  A wrapper to conditionally override some Linux system libs with newer ones
+* DONE Video: (2006) Linux 4k coding - Markku Reunanen
   slides http://ftp.kameli.net/pub/fit/misc/presis_asm06.pdf
   talk https://www.youtube.com/watch?v=-UQSiRg8Ra0
-- Languages: ASM, C, C++(too much overhead)
-- They used ASM for soft synth, synth code and startup.
-  Effect code in C.
+- 6:30 Skip demos
+- Languages: ASM, C, C++(too much overhead, difficult to interface with ASM)
+- ASM: soft synth, system code and startup.
+    C: Effect code
 - GCC: -Os was worst than -O1
        -ffast-math
        -fshort-double (dangerous!)
@@ -25,14 +44,33 @@
        -fno-inline, -fmove-all-movables, -fpeephole2
                     -fforce-mem, -fexpensive-optimizations
 - gcc version 3.2 (unlike 3.3)
-- Libraries:
-  - "Using an external library function generates about 70byte overhead
-     if done via standard dynamic linkage"
+- Libraries: Dynamically Loaded
+  - "Using an external library *function* generates about 70byte overhead
+     if done via standard dynamic linkage". Not per call, but per function.
   - reduced to 20bytes by opening the library manually with *dlsym* and *dlopen*
-- resume 22:00
-* Video: (2019) Size coding på Linux – Knut Arild Erstad – RevolverConf 2019.2
-  https://github.com/knutae/revolverconf-2019.2
-  https://www.youtube.com/watch?v=UgNLULCwKgo
+- Using SDL is better than dealing with GLX or GLUT
+- Open the libraries ourselfes and call them through function pointers.
+  dlopen(LIBRARY_NAME)
+  dlsym(FUNCTION_NAME)
+  Done in ASM.
+- Compression
+  - The final demo file is a shell script.
+    - With some stub code and the compressed binary (tail|zcat|chmod+x|RUN)
+- Code level tricks
+  - Remove subroutines, messier
+  - -fshort-double
+  - Static tables: declaring local arrays as *static* removes their init code yielding some bytes.
+  - Custom Random: 10 bytes
+    #+begin_src asm
+    rnd: mov eax, [rndi]
+         add eax,RANDOM_SEED
+         xor eax,RANDOM_SEED
+         ror eax,1
+         mov [rndi],eax
+         ret
+    rndi: dd RANDOM_SEED
+    #+end_src
+- Tools: NASM, ELF Kickers (sstrip), GC Masher (compiles with different params to know the smaller)
 * Video: (2019) Revision - Intricacies of sizecoding on Linux
   https://www.youtube.com/watch?v=a03HXo8a_Io
   https://github.com/Shizmob/smol
@@ -53,3 +91,32 @@
   for ~8k demos
   https://www.youtube.com/watch?v=J5WX-wN_RKY
   https://github.com/negge/xlink
+* Video: (2019) Size coding på Linux – Knut Arild Erstad – RevolverConf 2019.2
+  https://github.com/knutae/revolverconf-2019.2
+  https://www.youtube.com/watch?v=UgNLULCwKgo
+* LIBC static linking
+  - https://akkadia.org/drepper/no_static_linking.html
+  - https://sta.li/faq/
+  - MUSL? dlopen() https://github.com/pfalcon/foreign-dlopen
+  - https://www.arp242.net/static-go.html
+    Go creates static binaries by default unless you use cgo to call C
+    code, in which case it will create a dynamically linked
+    library.
+  - https://news.ycombinator.com/item?id=23816748
+    Yep. The glibc tries very hard to avoid static linking (since the
+    infamous times of Ulrich Drepper). It is almost as if they hated
+    static linking for some personal reasons, and then they artificially
+    add the NSS and locale excuses that make it impossible.
+
+    Yet you can still compile a static executable that calls the dlopen
+    function. And you can also select (by using some -B and -W magic
+    options) exactly which libraries you want to link statically and
+    dynamically on your executable. It is a bit painful but it works. The
+    only thing that does not work is when you rely on GPU code, where your
+    program needs to be linked directly to specific graphics drivers. I
+    hope in a few years the kernel itself will allow a gpu abstraction for
+    that to work.
+
+    Great point about musl. To distribute (your) program as a linux static
+    binary, write it in standard C and compile it using musl.
+

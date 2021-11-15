@@ -1,3 +1,5 @@
+- https://github.com/sagiegurari/cargo-make
+- https://github.com/burtonageo/cargo-bundle
 - https://github.com/glium/glium
 - https://github.com/not-fl3/macroquad
 - Ultimate Rust 2: Intermediate Concepts
@@ -897,6 +899,140 @@ io::stdin().read_line(&mut something).unwrap()
   .read_to_string()
 ** cargo doc
 ** The end?
+* Tutorial: Rust by Example
+  https://doc.rust-lang.org/stable/rust-by-example/
+** 8 Flow of Control
+*** 8.5 Match
+**** 8.5.1 Pointers/ref
+- Dereferencing uses *
+- Destructuring uses &, ref, and ref mut
+#+begin_src rust
+let reference = &4;
+match reference {
+  &val => println!("{:?}", val),
+}
+// Alternatively, you can dereference before matching
+match *reference {
+  val => println!("{:?}", val),
+}
+#+end_src
+- ref modifies the assignment so that a reference is created for the element
+#+begin_src rust
+let ref _is_a_reference = 3;
+match value {
+  ref r => println!("{:?}", r),
+}
+match mut_value {
+   ref mut m => {
+     *m += 10; // gotta dereference before we can use it
+     println!("{:?}", m);
+   },
+}
+#+end_src
+**** 8.5.2 Guards
+    You must use the _ pattern at the end.
+    As the compiler won't check aribitrary expressions for completeness.
+**** 8.5.3 Binding @
+     It can also be used with enum's like Option
+     #+begin_src rust
+fn age() -> u32 {
+  15
+}
+fn main() {
+  println!("Tell me what type of person you are");
+  match age() {
+    0 => println!("I haven't celebrated my birthday yet"),
+    n @ 1 ..= 12 => println!("I'm a child of age {:?}", n),
+    n @ 13 ..= 19 => println!("I'm a teen of age {:?}", n),
+    n => println!("I'm an old person of age {:?}", n),
+  }
+}
+}
+#+end_src
+*** 8.6 if let
+    Also works with binding
+    #+begin_src rust
+    if let Foo::(value @ 100) = c {
+      println!("c is one hundred");
+    }
+    #+end_src
+    Also works with enums that don't implement PartialEq
+    #+begin_src rust
+    if let Foo::Bar == a {
+      println!("a is foobar");
+    }
+    #+end_src
+*** 8.7 while let
+    Alternative to loop+match
+    #+begin_src rust
+    let mut optional = Some(0);
+    while let Some(i) = optional {
+      if i > 9 {
+        println!("Greater than 9, quit!");
+        optional = None;
+      } else {
+        println!("{}", i);
+        optional = Some(i + 1);
+      }
+    }
+    #+end_src
+** 9 Functions
+*** 9.1 Methods
+   - Associated methods are called using ~::~ double colons
+   - Methods are called using the ~.~ dot operator
+   ~self~ is sugar for ~self: Self~
+   ~&self~ is sugar for ~self: &Self~
+   ~&mut self~ is sugar for ~self: &mut Self~
+*** 9.2 Closures
+    - I/O arguments type is infered, {} enclosure is optional
+    - Capture the environment
+      - (about ownership) They will do what the closure requires without anotation.
+    - Can explicitly use ~move~ to take ownership of captured variables
+      #+begin_src rust
+      let haystack = vec![1, 2, 3];
+      let contains = move |needle| haystack.contains(needle);
+      println!("{}", contains(&1));
+      println!("{}", contains(&4));
+      #+end_src
+    - They MUST be annotated when used as function arguments.
+      Using generics and picking one of:
+      * Fn     -     &T
+      * FnMut  - &mut T
+      * FnOnce -      T
+
+** 10 Modules
+*** 10.2 Structures
+    - Can have Generic type fields
+      #+begin_src rust
+      mod my {
+        pub struct OpenBox<T> {
+          pub contents: T,
+        }
+
+        pub struct ClosedBox<T> {
+          contents: T,
+        }
+
+        impl<T> ClosedBox<T> {
+          pub fn new(contents: T) -> ClosedBox<T> {
+            ClosedBox {
+              contents: contents,
+            }
+          }
+        }
+      }
+      #+end_src
+* Book: Command-Line Rust (OReilly)
+  source: https://github.com/kyclark/command-line-rust
+** 1
+   - cargo.toml, add test and benchark only dependencies
+     [dev-dependencies]
+     assert_cmd = "1"
+   - .rs file in bin directory
+     src/bin/true.rs
+     cargo run --quiet --bin true
+   - std::process::exit(1)
+     std::process::abort()
 * Book: Rust In Action (Manning)
 ** DONE 1 Introducing Rust
 - Not all security bugs can be solved

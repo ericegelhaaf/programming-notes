@@ -1,3 +1,5 @@
+- Video: Escape from the Heap Low Level Programming
+  https://www.youtube.com/watch?v=njfyWgqZmkI
 - Android APK Compiler? https://github.com/3b/3b-dex
 - https://www.ic.unicamp.br/~meidanis/courses/mc336/problemas-lisp/L-99_Ninety-Nine_Lisp_Problems.html
 - https://franz.com/support/documentation/current/doc/mop/concepts.html
@@ -41,6 +43,83 @@
   https://github.com/ruricolist/cloture complete reimplementation
   https://github.com/joinr/clclojure    complete reimplementation
   https://github.com/eigenhombre/cl-oju just some functions
+  +---------------+-------------+
+  | take          | drop        |
+  | spit          | slurp       |
+  | neg?          | pos?        |
+  | partition-all | partition-n |
+  | interleave    | interpose*  |
+  | rand-int      | rand-nth    |
+  | frequencies   | group-by    |
+  | juxt          | partial     |
+  | range         |             |
+  | repeatedly    |             |
+  | sort-by       |             |
+  +---------------+-------------+
+  * interperse
+* Static Linking
+  - 
+  - collect2 is also another level of indirection between gcc and ld.
+  - ld https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html
+     #+begin_src
+  -E
+  --export-dynamic
+    When creating a dynamically linked executable, add all symbols to
+    the dynamic symbol table. The dynamic symbol table is the set of
+    symbols which are visible from dynamic objects at run time. If you
+    do not use this option, the dynamic symbol table will normally
+    contain only those symbols which are referenced by some dynamic
+    object mentioned in the link. If you use dlopen to load a dynamic
+    object which needs to refer back to the symbols defined by the
+    program, rather than some other dynamic object, then you will
+    probably need to use this option when linking the program itself.
+#+end_src
+* Static Linking - Compilation
+  Minimal example https://gitlab.com/ralt/static-program-op
+  Florian https://www.mail-archive.com/cffi-devel@common-lisp.net/msg02990.html
+  https://github.com/cffi/cffi/blob/677cabae64b181330a3bbbda9c11891a2a8edcdc/toolchain/c-toolchain.lisp
+| SBCL                     | Compilation                       | Linking (sbcl.o)       |
+|--------------------------+-----------------------------------+------------------------|
+| sb-prelink-linkage-table | -Wno-buildin-declaration-mismatch | -no-pie -static        |
+| sb-linkable-runtime      |                                   | -Wl,--export-dynamic   |
+|                          |                                   | -ldl -lpthread -lz -lm |
+|--------------------------+-----------------------------------+------------------------|
+| sb-linkable-runtime      |                                   |                        |
+| sb-dynamic-core          |                                   |                        |
+* Static Linking
+** GROVEL
+- Grovel SDL2 bindings https://github.com/leosongwei/handy-sdl
+- bare bones example of using grovel https://gist.github.com/FilWisher/d2d17d984f69950bf27e1f86483dcffc
+- cl-mpi (using grovel)
+  https://github.com/marcoheisig/cl-mpi/issues/17
+  https://github.com/marcoheisig/cl-mpi/commit/4600e66e3da1d438a39d688d5550fd3b17df2223 (incomplete)
+** ASDF: Video: ELS - Delivering Common Lisp Applications with ASDF 3.3
+    https://www.youtube.com/watch?v=W4YcsP2FZh4
+    https://www.european-lisp-symposium.org/static/2017/rideau.pdf
+    - Repo https://github.com/fare/workout-timer/
+    - Uses Mixalot (cffi wrapped) https://github.com/ahefner/mixalot/
+** CFFI :static-program-op
+   https://common-lisp.net/project/cffi/manual/cffi-manual.html#Static-Linking
+   - https://common-lisp.net/project/cffi/manual/cffi-manual.html#The-Groveller
+     If you use ASDF, CFFI-Grovel is integrated
+   - Needs SBCL --with-sb-linkable-runtime --with-sb-dynamic-core
+** Florian (linux-packaging)
+  - https://gitlab.com/ralt/linux-packaging/
+     #+begin_src
+  * Statically link the C libraries that it can into the image of your Lisp application
+  * Detect the C shared libraries, and which linux package is providing them
+  * Build an installable package on any linux distribution
+     #+end_src
+   - https://github.com/sbcl/sbcl/commit/402a8fab62db036b2dd79ad4e91c41304d4c825d
+     Introduced on SBCL sb-linkable-runtime feature (not enabled by default?)
+   - https://stackoverflow.com/questions/55183247/how-to-dump-an-executable-sbcl-image-that-uses-osicat
+     #+begin_src
+     It takes the approach of fixing static-program-op by extending
+     it, but requires you to build a custom SBCL.
+     #+end_src
+** Daewok
+   https://www.timmons.dev/posts/static-executables-with-sbcl.html
+   https://www.timmons.dev/posts/static-executables-with-sbcl-v2.html
 * youtube
 - Common LISP Object Standard
   https://www.youtube.com/watch?v=IrmHp1rRQ68

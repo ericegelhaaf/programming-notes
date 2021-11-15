@@ -1,4 +1,6 @@
-
+- Carmack https://web.archive.org/web/20120702231514/http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/
+- Carmack http://number-none.com/blow/john_carmack_on_inlined_code.html
+- https://www.pbm.com/~lindahl/real.programmers.html
 - https://crypto.stanford.edu/~dabo/
 - What every programmer should know about memory, Part 1
   https://lwn.net/Articles/250967/

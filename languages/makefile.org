@@ -1,3 +1,4 @@
+- Template https://github.com/mbcrawfo/GenericMakefile/
 - Practical Makefiles, by example http://nuclear.mutantstargoat.com/articles/make/
 - https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
 - POSIX Make https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html
