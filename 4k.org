@@ -1,9 +1,10 @@
 - NOT A 4k, ray tracing on microcontrollers with Ulisp http://www.ulisp.com/show?2NWA
 - NOT A 4K, but a raymarched donut made in C https://www.a1k0n.net/2011/07/20/donut-math.html
+- Article: Rust 151Bytes http://mainisusuallyafunction.blogspot.com/2015/01/151-byte-static-linux-binary-in-rust.html
 - Synth https://github.com/askeksa/Oidos
-- Intro 1k https://github.com/baines/demostuff
-- Intro 4k https://github.com/kubo39/tiny-d-demo
-- Intro 4k https://github.com/xyproto/tinytriangle
+- Intro 1k (ASM,sdl,opengl) https://github.com/baines/demostuff
+- Intro 4k (D) https://github.com/kubo39/tiny-d-demo
+- Intro 4k https://github.com/xyproto/tinytriangle 2012
 - Intro 4k https://github.com/lnqs/intrusion
 - Intro 4k https://github.com/Sixstring982/4k
 - Intro 4k https://github.com/sandsmark/invitro
@@ -11,6 +12,10 @@
 - Template https://github.com/shizmob/liner
 - Template https://gitlab.com/PoroCYon/linux-4k-intro-template
 - Tool https://github.com/stfsux/rld
+- http://www.sizecoding.org/wiki/Linux
+- 4k https://linux.weeaboo.software/Home
+- (C/sstrip/xz/clang/32/ALSA/SDL/GL) https://github.com/grz0zrg/tinycelfgraphics
+- Article http://glprogramming.com/red/chapter07.html
 - Article http://twiren.kapsi.fi/linux4k.html
 - Article https://github.com/faemiyah/dnload
 - Article https://benjamin.computer/posts/2020-07-15-nova.html
@@ -20,6 +25,7 @@
 - Article http://www.sizecoding.org/wiki/Main_Page
 - Article https://int21.de/linux4k/
 - Article https://raw.githubusercontent.com/gomson/TimothyLottes.github.io/d3d7e3f286a0066bec9b831c57ebcbe8f0ebdfd8/20140413.html
+- Article https://www.alsa-project.org/alsa-doc/alsa-lib/pcm.html
 - Article https://stackoverflow.com/questions/10551665/how-to-create-4kb-linux-binaries-that-render-a-3d-scene
 - Article https://raw.githubusercontent.com/gomson/TimothyLottes.github.io/d3d7e3f286a0066bec9b831c57ebcbe8f0ebdfd8/20140413.html
   Manually dlopen() libGL.so
@@ -75,25 +81,77 @@
   https://www.youtube.com/watch?v=a03HXo8a_Io
   https://github.com/Shizmob/smol
   https://pcy.ulyssis.be/pres/Lin.pdf
-** Environment (OS)
+  - Mentioned, renders through tcp https://github.com/graphitemaster/bbgl
+  - Mentioned, Byte Optimized Linked https://www.alrj.org/pages/bold.html
+** Environment (Ubuntu OS)
   - default: libopus, imagemagick, fftw, espeak, SDL, libgompl
-  - glibc uses ld.so as dynamic linked
+  - glibc uses *ld.so* as dynamic linked
   - you can reduce the size by compiling to 32bits
+    - but it doesn't come with x86 (nor x32)
   - libGL needs to be dynamic linked
-  - apt-rdepends -d --state-follow=Installed <pkg>
-** Elf
+  - To know the libraries that we "know" that are going to be around for a long time
+    The more dependencies the more likely to stay.
+    apt-rdepends -d --state-follow=Installed <pkg>
+** ELF
    https://cseweb.ucsd.edu/~ricko/CSE131/teensyELF.htm
+   http://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
    https://www.pouet.net/prod.php?which=3696
-   - Both kernel and ld.so don't care about every ELF header field
-   - Static: kernel parses directly
-     Dynamic: ld.so loads binary instead
+   - ELF Headers
+     Static: kernel loads it and does some checking
+        - The kernel doesn't really look at "half of them"
+     Dynamic: kernel invokes the ld.so
+        - ld.so check some more
+** Syscalls
+   Static: done directly by the kernel
+   Dynamic: deletegated to the ld.so
+   #+begin_src
+   - Check parsing code of either, *unparsed field* to code (of zeros)
+   - Parsed but controllable fields (e_entry)
+   #+end_src
+** Entry to sizecoding
+   - Default entry point of C code is *crt0/crt1.so*
+   - Roll your own *-nostartfiles*
 * Video: (2019) Executable Code Golf: Making Tiny Binaries for Constrained Systems
   for ~8k demos
   https://www.youtube.com/watch?v=J5WX-wN_RKY
   https://github.com/negge/xlink
+  - Binary Dropping (circa 1995), uses lz
+    #+begin_src
+    cp $0 /tmp/M; (sed ld $0|lzcat)>$_;$_;exit
+    T=/tmp/i;tail -n+2 $0|zcat>$T;chmod +x $T;$T;rm $T;exit
+    sed ld $0|xzcat>/tmp/C;chmod +x /tmp/C;/tmp/C|aplay -f cd;exit
+    #+end_src
+  - Windows compressors: Crinkler, kkrunchy
+  - xlink: linux compression
+    - PAQ1 based compression (adaptable to the type of data)
+    - Link-time reordering+transformations to improve compression
+  - 11:47
 * Video: (2019) Size coding på Linux – Knut Arild Erstad – RevolverConf 2019.2
   https://github.com/knutae/revolverconf-2019.2
   https://www.youtube.com/watch?v=UgNLULCwKgo
+* DONE Video: (2021) Lovebyte 256 Second Seminar: Linux Sizecoding, by: PoroCYon / K2^TiTAN
+  https://www.youtube.com/watch?v=cvsH_rXlMKg
+  - For 256bytes demos
+  - fbdev (/dev/fbo)
+    vfb (for testing)
+    vcsa (tile based)
+  - sound
+    - alsa (with syscalls is complicated)
+    - OSS deprecated (disable by default /dev/dsp)
+    - use |aplay
+  - call syscall manually
+    - can get away with 32-bit code in 64-bit OS
+    - open() ioctl() mmap() manually
+    - ABI and LSB doc http://refspecs.linuxfoundation.org
+  - NASM
+  - /usr/include/asm/unistd*.h
+  - ELF Header
+    - 52b/65b (ehdr) + 32b/54b (phdr)
+  - Compression
+    - Shell Dropper
+    - dnload
+  - Example: "Blin Elfom" by YOLP (2011)
+    https://www.youtube.com/watch?v=c0Vh6u_Ze48
 * LIBC static linking
   - https://akkadia.org/drepper/no_static_linking.html
   - https://sta.li/faq/
@@ -120,3 +178,42 @@
     Great point about musl. To distribute (your) program as a linux static
     binary, write it in standard C and compile it using musl.
 
+* Article: NIM 160Bytes
+  https://github.com/def-/nim-binary-size/
+  http://hookrace.net/blog/nim-binary-size/
+  1. 160K initial
+     - -d:release
+     - --opt:size
+     - strip -s
+  2. LIBC Start by replacing glibc with musl gcc, statically
+  3. GC Disable
+     --gc:none
+  4. Disable dynamic memory, error handling (needs to provide rawoutout() and panic())
+     --os:standalone
+  5. LIBC: Remove libc dependency, we remove the print
+     --passL:-nostdlib
+     - We need to supply a _start function, and exit the program with a syscall
+  6. GCC Put function and data items into separate sections
+     -ffunction-sections
+     -fdata-sections
+  7. LD and at the linking sections
+     --passL:-Wl,--gc-sections
+  8. Custom LD and ELF header, we create the object
+     ld/objcopy/nm/nasm
+     --app:staticlib
+     https://github.com/def-/nim-binary-size/blob/master/elf.s
+     https://github.com/def-/nim-binary-size/blob/master/script.ld
+     #+begin_src bash
+     nim --app:staticlib --os:standalone -d:release \
+         --noMain \
+         --passC:-ffunction-sections \
+         --passC:-fdata-sections \
+         --passL:-Wl,--gc-sections c hello
+     ld --gc-sections -e _start -T script.ld \
+        -o payload hello.o
+     objcopy -j combined -O binary \
+           payload payload.bin
+     ENTRY=$(nm -f posix payload | grep '^_start' | awk '{print $3}')
+     nasm -f bin -o hello -D entry=0x$ENTRY elf.s
+     chmod +x hello
+     #+end_src

@@ -1,4 +1,3 @@
-
 Guys what about?:
 Core:
 Official Website: https://clojure.org/
@@ -40,6 +39,16 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 * Tools
 - nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
   https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
+** GraalVM
+- native-image on deps.edn https://github.com/taylorwood/clj.native-image
+  - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
+  - AWS Example https://github.com/latacora/lamed-sample-app
+  - Lein Plugin https://github.com/taylorwood/lein-native-image
+- https://clojure.atlassian.net/browse/CLJ-2582
+- https://github.com/clj-easy/graal-docs
+- https://www.graalvm.org/reference-manual/native-image/StaticImages/
+- https://www.innoq.com/en/blog/native-clojure-and-graalvm/
+- https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
 * Web
 - https://www.youtube.com/watch?v=wEjNWUMCX78&list=PLVi9lDx-4C_T7jkihlQflyqGqU4xVtsfi
 ** threeagent
@@ -355,7 +364,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 **** Vars
 cannot be changed outside their namespace
 **** Atoms
-- atoms: atom, deref, @, swap!, reset!
+- atom, deref, @, swap!, reset!
 #+begin_src clojure
 (def ciri (atom {:name "Cirilla"
                  :lastname "Fiona"
@@ -523,11 +532,47 @@ cannot be changed outside their namespace
 - (.pow js/Math NUMBER POWER)
   (js/Math.pow NUMBER POWER)
 * Book: Web development with Clojure - 2nd Edition
-*** 1
-- in (defproject) we can set the *entry point* with :main, :main myapp.core/foo, unset by default
-  you can it with:
-  > lein run
+** Introduction
+    - Focus on the *Luminous* stach
+** 1 Getting your feet wet
+- Clojure libraries https://clojars.org/
+- myapp/src/myapp/core.clj
+  (require myapp.core) Namespace declaration, matches folder structure
+- myapp/project.clj
+  in (defproject) we can set the *entry point* with :main, :main myapp.core/foo, unset by default
+  you can run it with:
+  #+begin_src
+  > lein run SomeArgument
+  SomeArgument Hello, World!
+  #+end_src
 - add/use luminus template for a quick webapp template
-  > lein new luminus guestbook +h2
+  > lein new luminus guestbook --template-version 3.91 -- +h2 +http-kit
 - hardcode a version by adding in ~/.lein/profiles.clj
   {:user {:plugins [[luminus/lein-template "2.9.9.2"]]}}
+- Dependencies
+| Name               | Description                                                                  | Home                                                    |
+|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
+| bulma              | Webjars. Bulma: the modern CSS framework that just works.                    | https://bulma.io/                                       |
+| chesire            | Clojure JSON and JSON SMILE (binary json format) encoding/decoding           | https://github.com/dakrone/cheshire                     |
+| conman             | a helper library for managing database connections                           | https://github.com/luminus-framework/conman             |
+| cprop              | likes properties, environments, configs, profiles..                          | https://github.com/tolitius/cprop                       |
+| expound            | Human-optimized error messages for clojure.spec                              | https://github.com/bhb/expound                          |
+| http-kit           | A simple, high-performance event-driven HTTP client+server for Clojure       | https://github.com/http-kit/http-kit                    |
+| h2                 | H2 is a database distributed as library...                                   | http://www.h2database.com/html/main.html                |
+| java-time          | A Clojure wrapper for Java 8 Date-Time API.                                  | https://github.com/dm3/clojure.java-time                |
+| logback-classic    | Logback is intended as a successor to the popular log4j project...           | http://logback.qos.ch/                                  |
+| luminus-http-kit   | HTTP Kit adapter for Luminus                                                 | https://github.com/luminus-framework/luminus-http-kit   |
+| luminus-migrations | For DB migrations. The library is a command line wrapper for Migratus.       | https://github.com/luminus-framework/luminus-migrations |
+| luminus-transit    | transit serialization helpers for Luminus                                    | https://github.com/luminus-framework/luminus-transit    |
+| markdown-clj       | Markdown parser in Clojure                                                   | https://github.com/yogthos/markdown-clj                 |
+| material-icons     | Webjars. A font for the web.                                                 | https://google.github.io/material-design-icons/         |
+| mount              | managing Clojure and ClojureScript app state since (reset)                   | https://github.com/tolitius/mount                       |
+| muuntaja           | Clojure library for fast http api format negotiation, encoding and decoding. | https://github.com/metosin/muuntaja                     |
+| nrepl              | A Clojure network REPL that provides a server and client...                  | https://github.com/nrepl/nrepl                          |
+| reitit             | A fast data-driven router for Clojure/Script                                 | https://github.com/metosin/reitit                       |
+| ring               | Clojure HTTP server abstraction                                              | https://github.com/ring-clojure/ring                    |
+| ring-webjars       | Ring middleware to serve static assets from WebJars.                         | https://github.com/weavejester/ring-webjars             |
+| ring-http-response | Handling HTTP Statuses with Clojure(Script)                                  | https://github.com/metosin/ring-http-response           |
+| selmer             | A fast, Django inspired template system in Clojure.                          | https://github.com/yogthos/Selmer                       |
+| struct             | Structural validation library for Clojure(Script)                            | https://github.com/funcool/struct                       |
+
