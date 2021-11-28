@@ -1,3 +1,7 @@
+- Memory Usage https://stackoverflow.com/questions/459725/how-to-reduce-memory-usage-in-a-haskell-app
+- FPGA Clash Talks https://unsafeperform.io/talks/
+- Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
+  https://unsafeperform.io/retroclash/
 - https://github.com/reanimate/reanimate
 - Haskell via Sokoban - Tutorial - https://haskell-via-sokoban.nomeata.de/
 - Learn Haskell making a static blog generator - https://soupi.github.io/learn-haskell-blog-generator/
@@ -84,6 +88,9 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
 - [Discord + Twitch] Double Platform ... https://www.twitch.tv/videos/764093623
 - Backend Web Programming in Haskell https://www.twitch.tv/videos/743607386
 ** Courses
+   - https://github.com/hzlmn/haskell-must-watch
+   - Functional Programming in Haskell: Professor Graham Hutton from the University of Nottingham.
+     https://www.youtube.com/playlist?list=PLF1Z-APd9zK7usPMx3LGMZEHrECUGodd3
    - Haskell for imperative programmers
      https://www.youtube.com/channel/UC3xdLFFsqG701QAyGJIPT1g/videos
    - Haskell Summer Course
@@ -101,7 +108,10 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
      https://www.youtube.com/playlist?list=PLhgq-BqyZ7i7MTGhUROZy3BOICnVixETS (category theory)
 ** Livecoding
    - Barry (haskell book) https://www.youtube.com/channel/UCndlCtPeYygdGZ9UUKdehbw
+
 ** other
+  - Zürich Friends of Haskell
+    https://www.youtube.com/channel/UC2zfPMH_srjxUN5EYrfIhCw
   - Jappie Klooster
     https://www.youtube.com/channel/UCQxmXSQEYyCeBC6urMWRPVw/videos
   - HaskellRank (tsoding)
@@ -462,7 +472,6 @@ module Main (main) where
 | tuple | (A,B) | fst/snd   | let (a,b)=('a',1) |   |
 | list  | [T]   | head/tail |                   |   |
 
-
 * TODO Interview: Michael Snoyman: From Haskell to Rust?
   #+DATE: Sep 13, 2020
   #+URL: https://www.youtube.com/watch?v=HKXmEFvsi6M
@@ -688,7 +697,7 @@ pp = putStrLn . unlines . map (unwords . map show)
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
 
-* TODO Course: Haskell by Bartosz Milewski
+* TODO Videos: Haskell by Bartosz Milewski
   playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
 ** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
 - Course based on "Parallel and concurrent programming" Oreilly book
@@ -872,7 +881,7 @@ type Z a = (a, Void)    -- a * 0 = 0
 ** 7-2 => Parallel sudoku solver, strategies, overview of Haskell parallelism.
 ** 8-1 => Concurrent Haskell, MVars
 ** 8-2 => Software Transactional Memory
-* TODO Course: Haskell 10X - Google TechTalks
+* TODO Videos: Haskell 10X - Google TechTalks
   repo: https://github.com/google/haskell-trainings
 ** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
 - There is NO function that can go from impure to pure code

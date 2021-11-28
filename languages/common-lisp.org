@@ -57,8 +57,19 @@
   | sort-by       |             |
   +---------------+-------------+
   * interperse
+* CEPL
+  https://github.com/cbaggers/spring-lisp-gamejam
+* Trial
+  - Lib https://github.com/Shinmera/sdf/
+  - Game https://github.com/Shinmera/beamer/
+  - Game https://github.com/Shirakumo/ld39
+  - Game https://github.com/Shirakumo/ld45
+  - Game https://github.com/shinmera/shootman
+* GUI
+  LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
+  GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
 * Static Linking
-  - 
+** Static Linking
   - collect2 is also another level of indirection between gcc and ld.
   - ld https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html
      #+begin_src
@@ -74,7 +85,7 @@
     program, rather than some other dynamic object, then you will
     probably need to use this option when linking the program itself.
 #+end_src
-* Static Linking - Compilation
+** Static Linking - Compilation
   Minimal example https://gitlab.com/ralt/static-program-op
   Florian https://www.mail-archive.com/cffi-devel@common-lisp.net/msg02990.html
   https://github.com/cffi/cffi/blob/677cabae64b181330a3bbbda9c11891a2a8edcdc/toolchain/c-toolchain.lisp
@@ -86,24 +97,24 @@
 |--------------------------+-----------------------------------+------------------------|
 | sb-linkable-runtime      |                                   |                        |
 | sb-dynamic-core          |                                   |                        |
-* Static Linking
-** GROVEL
+** Static Linking
+*** GROVEL
 - Grovel SDL2 bindings https://github.com/leosongwei/handy-sdl
 - bare bones example of using grovel https://gist.github.com/FilWisher/d2d17d984f69950bf27e1f86483dcffc
 - cl-mpi (using grovel)
   https://github.com/marcoheisig/cl-mpi/issues/17
   https://github.com/marcoheisig/cl-mpi/commit/4600e66e3da1d438a39d688d5550fd3b17df2223 (incomplete)
-** ASDF: Video: ELS - Delivering Common Lisp Applications with ASDF 3.3
+*** ASDF: Video: ELS - Delivering Common Lisp Applications with ASDF 3.3
     https://www.youtube.com/watch?v=W4YcsP2FZh4
     https://www.european-lisp-symposium.org/static/2017/rideau.pdf
     - Repo https://github.com/fare/workout-timer/
     - Uses Mixalot (cffi wrapped) https://github.com/ahefner/mixalot/
-** CFFI :static-program-op
+*** CFFI :static-program-op
    https://common-lisp.net/project/cffi/manual/cffi-manual.html#Static-Linking
    - https://common-lisp.net/project/cffi/manual/cffi-manual.html#The-Groveller
      If you use ASDF, CFFI-Grovel is integrated
    - Needs SBCL --with-sb-linkable-runtime --with-sb-dynamic-core
-** Florian (linux-packaging)
+*** Florian (linux-packaging)
   - https://gitlab.com/ralt/linux-packaging/
      #+begin_src
   * Statically link the C libraries that it can into the image of your Lisp application
@@ -117,7 +128,7 @@
      It takes the approach of fixing static-program-op by extending
      it, but requires you to build a custom SBCL.
      #+end_src
-** Daewok
+*** Daewok
    https://www.timmons.dev/posts/static-executables-with-sbcl.html
    https://www.timmons.dev/posts/static-executables-with-sbcl-v2.html
 * youtube
@@ -185,9 +196,9 @@ iplCreateContext(IPLLogFunction     logCallback,
   (print (cffi:mem-aref thing '(:struct tryout) 1))
   (print (cffi:mem-aref thing '(:struct tryout) 0)))
 #+end_src
-* koans
+* Tutorial: koans
 - string and array are atoms
-- a string is NOT a list
+  - a string is NOT a list
 - nil is both a list and an atom
 - (let) binds to nil by default
 - (block TAG) and (return-from TAG RETURN-VALUE) exists..

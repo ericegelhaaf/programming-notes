@@ -1,4 +1,5 @@
 https://github.com/rvirding/lfe/
+- https://news.ycombinator.com/item?id=11302125
 - https://en.wikipedia.org/wiki/LFE_(programming_language)
   many back to back comparisons
 - https://github.com/lfe-rebar3/rebar3_lfe

@@ -1,5 +1,12 @@
-- Calling Elixir from erlang
+
+- Video: Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
+- Article: The Joy of Pattern Matching http://blog.hellkvist.org/category/erlang/
+- Mix Erlang/Elixir https://dev.to/wesleimp/elixir-and-erlang-code-in-the-same-project-2l83
+- Calling Erlang from Elixir
+  https://nickcanzoneri.com/elixir/erlang/2015/08/03/calling-erlang-code-from-elixir.html
+- Calling Elixir from Erlang
   https://joearms.github.io/published/2017-12-18-Calling-Elixir-From-Erlang.html
+  https://elixir-lang.org/crash-course.html
 - https://erlang.org/mailman/listinfo
 - https://abstractmachines.dev/posts/am012-why-typing-erlang-is-hard.html
 - https://www.erlang-solutions.com/blog/the-sound-of-erlang-how-to-use-erlang-as-an-instrument.html?utm_source=twitter&utm_medium=social+
