@@ -1,0 +1,33 @@
+- https://gitweb.gentoo.org/proj/crossdev.git/plain/README
+- https://android.googlesource.com/platform/bionic
+- https://wiki.gentoo.org/wiki/Cross_build_environment
+- https://wiki.gentoo.org/wiki/Docker
+- https://wiki.gentoo.org/wiki/Crossdev
+- https://wiki.gentoo.org/wiki/ARM
+- https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Creating_a_cross-compiler
+- https://github.com/olsonbg/crossdev-gentoo
+- https://wiki.gentoo.org/wiki/Crossdev_qemu-static-user-chroot
+- https://wiki.gentoo.org/wiki/Category:Embedded_systems
+- Raspberry
+  https://wiki.gentoo.org/wiki/Raspberry_Pi/Cross_building
+- Docker
+  incomplete https://github.com/samuelololol/docker-gentoo-crossdev-distccd
+  armv6 https://github.com/samuelololol/docker-gentoo-crossdev-distccd
+- Android
+  https://wiki.gentoo.org/wiki/Android/SharkBait/Building_a_toolchain_for_aarch64-linux-android
+  https://wiki.gentoo.org/wiki/Android/SharkBait/Clang_toolchain_with_sanitizers_support_for_Android
+  2011 https://devjlanza.wordpress.com/2011/09/02/compile-a-native-c-android-application/
+  2017 https://github.com/skanti/Android-Manual-Build-Command-Line
+  https://github.com/facebookexperimental/ExtendedAndroidTools
+  https://github.com/borodust/aw-filament/blob/master/.github/workflows/build.yaml
+- Alternatives
+  - YOCTO https://www.yoctoproject.org/
+  - OPENWRT (fork of years old buildroot)
+  - Crosstool-ng https://crosstool-ng.github.io/
+  - buildroot (glibc,uclibc) https://buildroot.org/
+    https://buildroot.org/downloads/manual/manual.html
+- Gentoo Bionic
+  https://stackoverflow.com/questions/36331048/compiling-gentoo-bionic-on-a-x86-64-linux-machine
+  https://github.com/gentoobionic/bionic
+  https://github.com/krisk0/pc-linux-android
+  uses NDK (helpers to create a toolchain) https://github.com/vishalbiswas/libc-bionic

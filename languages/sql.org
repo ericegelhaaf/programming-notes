@@ -1,0 +1,669 @@
+- https://www.cybertec-postgresql.com/en/postgresql-exclude-beyond-unique/
+* DONE Exclusion operators - EXPLAINING PostgreSQL
+  https://www.youtube.com/watch?v=M58MR1vqnAk
+  1) RANGE TYPES: allows us to store periods, stored as 2 fields
+     <@ "contains operator"
+  2) GIST INDEX
+  3) Hotel 1 Example: 1 constrain
+     - Avoid overlapping booking
+       - Avoid, concurrently booking the same room
+       - Avoid, once the room is booked, not booking it again
+     #+begin_src sql
+     CREATE EXTENSION btree_gist;
+     CREATE TABLE t_booking (
+         room    int,
+         myrange daterange,
+         EXCLUDE USING gist (
+             room WITH=,
+             myrange WITH && -- must not overlap
+         )
+     );
+     #+end_src
+  4) Hotel 2 Example: 2 constrains
+     - We have a room a speaker and a range
+       - not overlap rooms
+       - not overlap speakers (same speaker on 2 rooms)
+     #+begin_src sql
+     CREATE TABLE t_lesson (
+         room    int,
+         speaker text,
+         period  tsrange,
+         EXCLUDE USING gist (room WITH =, period WITH &&),
+         EXCLUDE USING gist (speaker WITH =, period WITH &&)
+      );
+     #+end_src
+  5) Hotel 3 Example: dynamic
+     - Instead of using ranges, we can create the range on the fly
+       #+begin_src sql
+       CREATE TABLE t_dynamic (
+           room int,
+           start_time timestamptz,
+           end_time   timestamptz,
+           EXCLUDE USING gist (
+               room WITH =,
+               tstzrange(start_time, end_time) WITH &&)
+        );
+       #+end_src
+* Style Guides
+- https://news.ycombinator.com/item?id=18184731
+- https://oracle.readthedocs.io/en/latest/sql/basics/style-guide.html
+- https://www.sqlstyle.guide/
+- https://github.com/mattm/sql-style-guide
+- https://docs.telemetry.mozilla.org/concepts/sql_style.html
+- https://about.gitlab.com/handbook/business-technology/data-team/platform/sql-style-guide/
+  - when joining AS prefix field with table_ to avoid ambiguity
+  - ambiguous field names should be AS prefixed table_
+  - all fields should be AS snake cased
+  - boolean fields, should be AS has_ is_ does_
+* 2019 - The Art of PostgreSQL - Dimitri Fontaine - InfoQ Brasil
+  https://www.youtube.com/watch?v=09b-uk9UXbM
+  - wrote pg_auto_failover, "create extension", "event triggers", "pgloader"
+  - Book: Mastering PostgreSQL
+  - A.C.I.D. Compliant
+    Atomic: transactions (ROLLBACK), used on migrations
+    Consistent: schema, data types, constraints (check, not null, pkey, fkey), relations, sql
+    Isolated: transactions, the other side of atomicity, if I would see changes as long as it (query) runs
+    Durable: no data loss
+  - \copy implements the *streaming copy protocol*
+  - If you use money, it should be of type NUMERIC (not float, to avoid losing)
+  - ALTER TABLE can use external programs (awk,sed)
+  - EXPLAIN (analyze, verbose, buffers)
+    - (analyze) Does the actual query
+    - You will need to ROLLBACK if destructive
+  - 31:05
+* Book: The Art of PostgreSQL by Dimitri Fontaine
+  Authors Blog https://tapoueh.org/
+** About
+   - Doing more SQL, primarily it means writing fewer lines of code
+   - We should refer loc not as "lines produced" but as "lines spent" (Dijkstra)
+   - Markus Winand
+     - https://use-the-index-luke.com/
+     - https://modern-sql.com/
+** Part I
+   - PosgreSQL is and ORDBMS
+     Object-Oriented Relation Database Manager
+** Part II Introduction
+*** 1 SQL Structured Query Language
+    - We declare the result in terms of a ~data processing pipeline~
+      that is executed against a known ~database model~ and dataset
+    - The D.M. is statically typed
+    - RDBMS and SQL are forcing developers to think in terms of a ~data structure~
+    - "Bad programmers worry about the code.
+       Good programmers worry about data structures and their relationships"
+       Linus Torvalds
+    - SQLite projct is the "most widely deployed software module of any type" (along with zlib, libpng, libjpeg)
+    - The current SQL standard is SQL'2016
+**** A first use case
+     1) CSV
+        #+begin_src
+ 2010 1/4/2010 1,425,504,460 4,628,115 $38,495,460,645
+ 2010 1/5/2010 1,754,011,750 5,394,016 $43,932,043,406
+ 2010 1/6/2010 1,655,507,953 5,494,460 $43,816,749,660
+ 2010 1/7/2010 1,797,810,789 5,674,297 $44,104,237,184
+        #+end_src
+     2) Load the CSV, into an ad-hoc table and then tranform it into proper sql dta types, thanks to the alter table commands
+        #+begin_src sql
+        begin;
+        create table factbook
+        (
+            year    int,
+            date    date,
+            shares  text,
+            trades  text,
+            dollars text
+        );
+        \copy factbook from 'factbook.csv' with delimiter E'\t' null ''
+        alter table factbook
+          alter shares
+            type bigint
+          using replace(shares, ',', '')::bigint,
+          alter trades
+            type bigint
+          using replace(trades, ',', '')::bigint,
+          alter dollars
+            type bigint
+          using substring(replace(dollars, ',', '') from 2)::numeric;
+        commit;
+        #+end_src
+     3) Query
+        #+begin_src sql
+        \set start '2017-02-01'
+          select date,
+                 to_char(shares, '99G999G999G999') as shares,
+                 to_char(trades, '99G999G999') as trades,
+                 to_char(dollars, 'L99G999G999G999') as dollars
+             from factbook
+           where date >= date :'start'
+             and date  < date :'start' + interval '1 month'
+          order by date;
+        #+end_src
+**** A word about SQL injections
+     - PSQL implements a *protocol* level facility to send the static SQL query text,
+       separetely from its dynamic arguments.
+       https://www.postgresql.org/docs/current/protocol-flow.html#PROTOCOL-FLOW-EXT-QUERY
+       https://www.postgresql.org/docs/current/libpq-exec.html#LIBPQ-PQEXECPARAMS (part of the libpq C Driver)
+     - Never build a query string by concatenating your query arguments directly into your query strings.
+     - ~psycopg~, linked to libpq, the sql query parameters are interpolated in the SQL query (client). We trust psycopg to protect us.
+     - ~asyncpg~, no linked to libpq, uses server-side prepared statements https://github.com/MagicStack/asyncpg
+     - JDBC, Go's pq packages do NOT link to libpq
+     - In the background, a *server side prepared statement* it does (PREPARE, EXECUTE)
+       #+begin_src sql
+       prepare foo as
+         select date, shares, trades, dollars
+           from factbook
+          where date >= $1::date
+            and date  < $1::date + interval '1 month'
+          order by date;
+       execute foo('2010-02-01');
+       #+end_src
+**** Back to Discovering SQL (our use case)
+     1) Code to fill for the days with missing data.
+        COALESCE: returns the first argument that is not null
+        CAST
+        GENERATE_SERIES: a set returning function, returns a set of *timestamp*
+        #+begin_src sql
+      SELECT cast(calendar.entry as date) as date,
+             coalesce(shares, 0) as shares,
+             coalesce(trades, 0) as trades,
+             to_char(
+                 coalesce(dollars, 0),
+                 'L99G999G999G999'
+                 ) as dollars
+      FROM
+          generate_series(date :'start',
+                          date :'start' + interval '1 month'
+                                        - interval '1 day',
+                          interval '1 day'
+          )
+          AS calendar(entry)
+          LEFT JOIN factbook
+                 ON factbook.date = calendar.entry
+      ORDER BY date;
+      #+end_src
+     2) Down the road, that's less code to maintain and more efficient implementation too.
+     3) Create a wekk over week percentage difference
+        WITH: a *common table expression*
+        LAG: Provides access to rows before
+          OVER
+          PARTITION BY
+        EXTRACT: extracts subfields from a timestamp
+        CASE/WHEN/THEN
+       #+begin_src sql
+       WITH computed_data AS
+       (
+         SELECT CAST(date as date) as date,
+         TO_CHAR(date, 'Dy')       as day,
+         COALESCE(dollars, 0)      as dollars,
+         LAG(dollars, 1)
+           OVER(
+             PARTITION BY EXTRACT('isodow' from date)
+                 ORDER BY date
+            )
+          AS last_week_dollars
+        FROM
+          GENERATE_SERIES(date :'start' - interval '1 week',
+                          date :'start' + interval '1 month'
+                                        - interval '1 day',
+                          interval '1 day'
+          )
+          AS calendar(date)
+          LEFT JOIN factbook USING(date)
+       )
+       SELECT date, day,
+              TO_CHAR(
+                COALESCE(dollars, 0),
+                'L99G999G999G999'
+              ) AS dollars,
+              CASE WHEN dollars IS NOT NULL
+                    AND dollars <> 0
+                   THEN ROUND(   100.0
+                              * (dollars - last_week_dollars)
+                              / dollars
+                            , 2)
+              END
+              AS "WoW %"
+           FROM computed_data
+          WHERE date >= date :'start'
+        ORDER BY DATE;
+       #+end_src
+*** 2 Software Architecture
+    - Think it not as a "storage layer" bur rather as "concurrent data access service"
+    - Book focused on
+      - SQL idioms
+      - Database Modeling
+      - Normalization
+      - Denormalization
+*** 3 Getting Ready to read this book
+    - psql, pgAdmin, OmniDB https://omnidb.org/
+** Part III Writing SQL Queries
+   - How to write queries, as part fo your application code
+   - Is SQL a good place to implement business logic?
+*** 4 Business Logic
+    - SQL How much on the database?
+      #+begin_src sql
+        select name
+          from track
+         where albumid = 193
+      order by trackid;
+      #+end_src
+    - SQL Adding genre table
+      #+begin_src sql
+        select track.name as track, genre.name as genre
+          from track
+          join genre using (genreid)
+         where albumid = 193
+      order by trackid;
+      #+end_src
+    - SQL Adding some computation to the values returned
+      #+begin_src sql
+        select name,
+               milliseconds * interval '1 ms' as duration
+          from track
+         where albumid = 193
+      order by trackid;
+      #+end_src
+    - SQL Calculating the album length per artist given
+      #+begin_src sql
+         select album.title as album,
+                sum(milliseconds) * interval '1 ms' as duration
+           from album
+                join artist using(artistid)
+                left join track using(albumid)
+          where artist.name = 'Red Hot Chili Peppers'
+       group by album
+       order by album;
+      #+end_src
+    - *application_name* put into the connection string
+       Sets the application name to be reported in statistics and logs.
+    - Correctness
+      Transaction Isolation https://www.postgresql.org/docs/current/transaction-iso.html
+      1) Read uncommited ?
+      2) Read committed: default, you will see changes as soon as they happen
+      3) Repeatable read: keeps a snapshot for each transaction (between a BEGIN and COMMIT) useful for online backups
+      4) Serializable: ? eg: in stock managment facilities
+    - Efficiency:
+      * Static: development time, maintenence burden, how easy is to review the code.
+      * Dynamic: resources, processor, memory, network, disk
+    - ~When doing very simple queries against *primary key* column, it's quite common to see 0.1ms execution time~
+    - Stored Procedures: allows us to build a data access API
+      * Naive:
+        #+begin_src sql
+        create or replace function get_all_albums
+        (
+          in  name     text,
+          out album    text,
+          out duration interval
+        )
+        return setof record
+        language sql
+        as $$
+          select album.title as album,
+                 sum(milliseconds) * interval '1 ms' as duration
+            from album
+                 join artist using(artistid)
+                 left join track using(albumid)
+            where artist.name = get_all_albums.name
+        group by album
+        order by album;
+        $$;
+        #+end_src
+      * More efficient version that uses album_id (see above about primary key lookups)
+          #+begin_src sql
+          create or replace function get_all_albums
+          (
+            in  artistid bigint,
+            out album    text,
+            out duration interval
+          )
+          returns setof record
+          language sql
+          as $$
+            select album.title as album,
+              from album
+                   join artist using(artistid)
+                   left join track using(albumid)
+              where artist.artistid = get_all_albums.artistid
+          group by album
+          order by album;
+          $$;
+          #+end_src
+      * Calling it
+       #+begin_src sql
+       select * from get_all_albums(127);
+       -- OR by name using a subquery
+       select *
+         from get_all_albums(
+           (select artistid
+              from artist
+             where name = 'Red Hot Chili Peppers')
+         );
+       -- OR using lateral join
+       select album, duration
+         from artist,
+              lateral get_all_albums(artistid)
+        where artist.name = 'Red Hot Chili Peppers';
+       #+end_src
+      * Only of artists with 4 albums
+          #+begin_src sql
+        with four_albums as
+        (
+           select artistid
+             from album
+         group by artistid
+           having count(*) = 4
+        )
+           select artist.name, album, duration
+             from four_albums
+                  join artist using(artistid),
+                  lateral get_all_albums(artistid)
+         order by artistid, duration desc;
+        #+end_src
+      * Procedural Code vs Stored Procedures
+        We can rewrite the previous as a stored procedure, but it will be ugly.
+    - ~Write stored procedures in *SQL*, only switch to *PLpgSQL* when necessary~
+*** 5 A Small application
+    - Chinook database (dataset)
+      https://github.com/lerocha/chinook-database
+    - Load the database, with pgloader we get a summaryof rows added per table
+      #+begin_src
+      > createdb chinook
+      > pgloader https://github.com/.../Chinook_Sqlite_AutoIncrementPKs.sqlite
+      pgsql > ALTER TABLE track
+              ADD PRIMARY KEY USING INDEX idx_51519_ipk_track;
+      #+end_src
+    - album, artist, track, genre, mediatype
+      customer, invoice, invoiceline, staff
+      playlist, playlisttrack
+    - Counting the number of tracks per genre
+      #+begin_src sql
+      select genre.name, count(*) as count
+        from genre
+             left join track using(genreid)
+    group by genre.name
+    order by count desc;
+      #+end_src
+    - https://github.com/honza/anosql
+      https://github.com/nackjicholson/aiosql
+      Python library, to keep SQL files separate
+       #+NAME: artist.sql
+       #+begin_src sql
+      -- name: top-artists-by-album
+      -- Get the list of the N artist with the most albums
+      select artist.name, count(*) as albums
+        from artist
+             left join album using(artistid)
+    group by artist.name
+    order by albums desc
+       limit :n;
+      #+end_src
+    - This file format, is also readable by pgsql shell
+      #+begin_src
+      \set n 1
+      \i artist.sql
+      ...OUTPUT...
+      \set n 3
+      \i artist.sql
+      ...OUTPUT...
+      #+end_src
+    - Or from psql shell
+      #+begin_src
+      psql --variable "n=10" -f artist.sql chinook
+      #+end_src
+    - LEFT JOIN LATERAL:
+        We use lateral join again, to get some kind of "nested loops".
+        We use genre from outside the subquery.
+        We correlate genre between the outer loop and inner loop.
+        - https://stackoverflow.com/questions/28550679/what-is-the-difference-between-lateral-join-and-a-subquery-in-postgresql
+          "For returning more than one column, a LATERAL join is typically simpler, cleaner and faster."
+          "A correlated subquery can only return a single value, not multiple columns and not multiple rows"
+      ON TRUE: "the joins happens on the sub-query WHERE clause, we don't need another OUTER JOIN"
+      #+begin_src sql
+   select genre.name as genre,
+          case when length(ss.name) > 15
+               then substring(ss.name from 1 for 15) || '...'
+               else ss.name
+          end as track,
+          artist.name as artist
+     from genre
+          left join lateral
+          (
+              select track.name, track.albumid, count(playlistid)
+                from track
+                     left join playlisttrack using (trackid)
+               where track.genreid = genre.genreid
+            group by track.trackid
+            order by count desc
+               limit :n
+          ) ss(name, albumid, count) on true
+          join album using(albumid)
+          join artist using(artistid)
+ order by genre.name, ss.count desc;
+      #+end_src
+*** 6 The SQL REPL - An Interactive Setup
+    - \set ON_ERROR_ROLLBACK on/off/interactive
+      Useful when working with BEGIN transaction on *psql*
+      *interactive* Allows us to COMMIT on some error
+    - We can run a query and return the results on:
+      \pset format
+      - asciidoc
+      - HTML
+      #+begin_src
+      psql --tuples-only    \
+           --set n=1        \
+           --set name=Alesi \
+           --no-psqlrc      \
+           -P format=html   \
+           -d f1db          \
+           -f report.sql
+      #+end_src
+    - Use the connection string directly
+      #+begin_src
+      psql -d postgresql://dim@localhost:5432/f1db
+      psql -d "user=dim host=localhost port=5432 dbname=f1db"
+      #+end_src
+    - psql schema commands, do queries to *catalog* in the background
+      ~\set ECHO_HIDDEN true~ to show scheme queries done by psql for you
+*** 7 SQL is Code
+**** Style
+    - SQL Style Guidelines
+      - Follow the ~principle of least astonishment~ rule
+        a.k.a. POLA
+        https://en.wikipedia.org/wiki/Principle_of_least_astonishment
+      - "old habit of all-caps keywords", not needed with syntax highlighting
+      - Right aligned
+      - JOIN - ON vs USING
+      - Old habit of
+        "writing the join conditions of INNER JOIN in the WHERE clause"
+        "confusing and frowned upon"
+        #+begin_src sql
+        SELECT name, title
+          FROM artist, album
+         WHERE artist.artistid = album.artistid
+           AND artist.artistid = 1;
+        #+end_src
+      - Modern spelling, expanded the INNER JOIN to his full notation
+        #+begin_src sql
+        select name, title
+          from artist
+               inner join album using(artistid)
+         where artist.artistid = 1;
+        #+end_src
+      - https://stackoverflow.com/questions/17759687/cross-join-vs-inner-join-in-sql
+      - ~noise words~, INNER and OUTER
+        - OUTER: left join, right join, full join
+        - INNER: join
+      - NATURAL JOIN: "automatically expand a join condition over columns having the same name"
+        should be avoided
+      - We can use the same table twice.
+**** Unit testing
+      - http://manpages.ubuntu.com/manpages/trusty/man1/pg_virtualenv.1.html
+        Create a throw-away PostgreSQL environment for running regression tests
+      - https://julien.danjou.info/db-integration-testing-strategies-python/
+        Python
+      - The approach one used by postgresql
+        https://github.com/postgres/postgres/blob/master/src/test/regress/sql/aggregates.sql
+        https://github.com/postgres/postgres/blob/master/src/test/regress/expected/aggregates.out
+        1) psql: Run a SQL file containing your tests
+        2) Capture its output to a text file that includes the queries and their results
+        3) diff: Compare the output with the expected one that is maintained in the repository
+        4) Report any difference as failure
+      - https://github.com/dimitri/regresql
+        A tool to automate the above
+      - https://pgtap.org/
+        https://pgtap.org/documentation.html#canyourelate
+        https://pgtap.org/pg_prove.html
+        A tool to automate it, using a different appoach
+*** 8 Indexing Strategy
+    - "Indexing strategy" for ~Speed~
+      - In the absence of an index, the only option available
+        to your database is *sequential scan* of your tables.
+    - "Indexing strategy" for ~Consistency~
+      if used to ensure data consistency, is a data modeling activity
+      - Constrains
+        - UNIQUE
+        - PRIMARY KEY
+        - EXCLUDE USING
+    - M.V.C.C. Multi-version Concurrency Control
+    - An index duplicates data in a specialized format made to optimize certain searches
+      - Adds *write cost* to your DML insert/update/delete, as it needs to maintain the index up to date
+    - Index types:
+      1) B-Tree (default), handle concurrent read and write
+         https://github.com/postgres/postgres/tree/master/src/backend/access/nbtree
+      2) Hash
+         - Simple equality comparisons
+         - >10 are crash safe
+      3) GiST (generalized search tree), content-based indexing for massive amounts of complex content
+         - Support for 2D data types (geometry point or ranges)
+      4) SPGiST (spaced partitioned gist)
+         - support non-balanced disk-based data structures (index 2D data with different densities)
+           - quadtrees
+           - k-d trees
+           - radix trees (tries)
+      5) GIN (generalized inverted index)
+         - Foundation for PSQL *full text search* support
+           https://www.postgresql.org/docs/current/textsearch-intro.html
+         - when items to be indexed are *composite values*, and the queries search for elements that appear within the composite item
+      6) BRIN (block range indexes)
+         - store summaries about the values stored in consecutive physical block ranges
+         - For data types that have order, it can index the minimum and maximum values in the colum for each block range
+      7) Bloom Filters
+         - *create extension bloom*
+         - Space efficient
+         - Test if an elements belongs into a set
+         - B-trees are faster
+         - Only supports *equality*
+         - Used when too many B-Tree would be needed otherwise
+    - Advanced
+      https://www.postgresql.org/docs/10/indexes.html
+    - pg_stat_statements: check >10ms
+      https://www.postgresql.org/docs/current/pgstatstatements.html
+      - List the most common queries in
+        - number times
+        - cumulative time it took to execute
+    - EXPLAIN usage
+      - explain (analyze, verbose, buffers)
+      - Visualizers
+        - https://explain.depesz.com/
+        - http://tatiyants.com/pev/#/about
+        - pgAdmin comes with a visualizer
+      - Check row count difference between
+        - estimated
+          effective
+        - If not, might need to check the interval of the autovacuum
+          https://www.postgresql.org/docs/current/routine-vacuuming.html#AUTOVACUUM
+      - Check time spent doing *sequential scans*, with a filter step
+      - https://en.wikipedia.org/wiki/Amdahl%27s_law
+** Part IV SQL Toolbox
+- IN SQL you need to explain your problem,
+  unlike in most programming languages where
+  you need to focus on a solution.
+- Try write down a single sentence that perfectly describes
+  what you're trying to achieve. Talking out loud.
+*** 10 Get some Data
+- http://ergast.com/mrd/db/
+  #+begin_src
+$ createdb f1db
+$ pgloader mysql://root@localhost/f1db pgsql:///f1db
+  #+end_src
+- Tweak PSQL search_path to include f1db *schema* in the f1db *database*
+  ALTER DATABASE f1db
+             SET search_path TO f1db, public;
+*** 11 Structured Query Language
+- For some developers, not being in charge of every detail
+  of the query plan is a source of *frustation*, and they
+  prefer hiding SQL under another layer of technology that
+  makes them feel like they are still in control.
+*** 12 Queries, DML, DDL, TCL, DCL
+- SQL is composed of several areas
+  1) DML Data Manipulation Language
+     - insert
+     - update
+     - delete
+  2) DDL Data Definition Language (data-structures)
+     - create
+     - alter
+     - drop
+  3) TCL Transaction Control Language
+     - begin
+     - commit
+     - rollback
+     - start transaction
+     - savepoint, release savepoint, rollback to savepoint
+     - commit, prepare commit, commit prepared, rollback commit
+  4) DCL Data Control Language
+     - grant
+     - revoke
+  5) Other:
+     - vacuum, analyze, cluster
+     - prepare, execute, explain, listen, notify, lock, set
+*** 13 Select, From, Where
+**** Projection (output) aka SELECT
+    - Is usually frowned upon to use either "SELECT *"
+      or the classic "I don't know what I'm doing" behavior
+      of some (ORMs) object relational mappers when they
+      insist of fully *hydrating* the application objects, just in case
+      (?)
+      #+begin_src sql
+      select * from races limit 1;
+      select * from races fetch first 1 rows only;
+      table rages limit 1;
+      #+end_src
+    - Using a .java file
+      #+begin_src
+      $ javac Select.java
+      $ java -cp .:path/to/postgresql-42.1.1.jar Select
+      #+end_src
+    - Using "select star" also brings problems with application code
+      - Hides the intention
+      - Is not efficient to retrieve fields you don't need
+        - TOAST mechanism, makes some bytes expensive to retrieve
+          The Oversized-Attribute Storage Template
+          https://www.youtube.com/watch?v=_UUFMAZswhU
+          - postgresql can't return rows longer than 8k without doing some external table pointers
+    - Build-in functions https://www.postgresql.org/docs/9.6/functions-datetime.html
+      - format() like printf
+      - extract(), gets a number
+      - to_char(), gets a string
+**** Data Sources: FROM
+     - FROM, types of JOIN
+       https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-FROM
+     - FROM t1
+            LEFT JOIN t2
+              ON t1.id=t2.id
+             AND t1.field = 1
+**** Restrictions: WHERE
+     - WE ususally try to keep the WHERE clauses as simple,
+       in order to be able to use our indexes.
+     - OR operator is more complex to optimize, in respect to indexes
+     - Careful with NOT IN and NULL
+     - We can use subqueries on WHERE, to implement the
+       "anti-join" pattern using the NOT EXISTS and SELECT 1
+       #+begin_src sql
+       select forename,
+              surename,
+              constructs.name        as constructor,
+              count(*)               as races,
+              count(distinct status) as reasons
+         from drivers
+        where date >=
+       #+end_src
