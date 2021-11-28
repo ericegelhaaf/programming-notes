@@ -117,3 +117,35 @@ clean:
   LDFLAGS: for flags passed to compiler when linking
   LDLIBS: For flags about libraries when linking
 - ~$<~ macro expands to the prerequisite
+* DONE Video: 2020 - Lecture 8: Metaprogramming
+  https://www.youtube.com/watch?v=_Ms1Z4xfqv4
+  - we generate a *pipeline*
+  - depending on static files
+    % wildcard on the target (and deps)
+    $* matches whatever the "%" was
+    $@ matches the name of the target
+    #+begin_src makefile
+    paper.pdf: paper.tex plot-date.png
+         pdflatex.png
+
+    plot-%.png: %.data plot.py
+        ./plot.py -i $*.dat -o $@
+    #+end_src
+  - script plot.py
+    note how small is the python code for just a small and powerful library...
+    #+begin_src python
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', type=argparse.FileType('r'))
+parser.add_argument('-o')
+args = parser.parse_args()
+
+data = np.loadtxt(args.i)
+plt.plot(data[:, 0], data[:, 1])
+plt.savefig(args.o)
+    #+end_src
+  - ~Semantic Versioning~ Major.minor.patch

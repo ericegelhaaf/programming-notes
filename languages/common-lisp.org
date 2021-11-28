@@ -1,3 +1,5 @@
+- CLI arguments
+  https://stackoverflow.com/questions/1021778/getting-command-line-arguments-in-common-lisp
 - Video: Escape from the Heap Low Level Programming
   https://www.youtube.com/watch?v=njfyWgqZmkI
 - Android APK Compiler? https://github.com/3b/3b-dex

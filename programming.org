@@ -41,33 +41,6 @@
   reference https://github.com/jpellegrini/gnu-apl-refcard
 - ASM
   examples https://github.com/cirosantilli/x86-bare-metal-examples
-* Missing Semester - https://www.youtube.com/c/MissingSemester/videos
-** Lecture 6: Version Control (git) (2020) - https://www.youtube.com/watch?v=2sjqTHE0zok
-- blobs, trees, commits - all are git objects with an id hash
-- blobs are the files
-  trees directories (subdir or subblobs)
-  commits (msg,author,parent commits,tree)
-- HEAD is the current commit pointer
-- git log --all --graph --decorate --oneline
-- git cat-file -p HASH
-- git push <remote> <localbranch>:<remotebranch>
-*** Merge 2 branches
-- git checkout -b newbranch
-- ...vim, add, commit...
-- git checkout master
-- git checkout -b otherbranch
-- ...vim, add, commit....
-- git checkout master
-- git merge newbranch
-- git merge otherbranch
-  - fails so I can git merge --abort OR
-  - git mergetool OR
-  - vim...git add...git merge --continue
-*** remote
-- git pull == git fetch; git merge
-- git push origin master:master
-- git branch --set-upstream-to-origin=origin/master
-- git branch -vv
 * gamelisp.rs
 https://gamelisp.rs/reference/overview.html
 * William Byrd on "The Most Beautiful Program Ever Written" [PWL NYC]
