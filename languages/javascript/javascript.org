@@ -1,24 +1,7 @@
 https://twitter.com/goncy/status/1396093019246546947?s=20
-https://egghead.io/courses/the-beginner-s-guide-to-react
 https://github.com/30-seconds/30-seconds-of-interviews
-- How to npm install global not as root?
-  https://stackoverflow.com/questions/18088372/how-to-npm-install-global-not-as-root
-  #+NAME: ~/.npmrc
-  #+begin_src
-prefix=${HOME}/.npm-packages
-  #+end_src
-  #+NAME: ~/.bashrc
-  #+begin_src shell
-#mkdir "${HOME}/.npm-packages"
-NPM_PACKAGES="${HOME}/.npm-packages"
-NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-PATH="$NPM_PACKAGES/bin:$PATH"
-# Unset manpath so we can inherit from /etc/manpath via the `manpath`
-# command
-unset MANPATH # delete if you already modified MANPATH elsewhere in your config
-MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
-  #+end_src
-* javascript
+- https://www.youtube.com/c/Codexpanse/videos
+- https://www.solidjs.com/
 - JavaScript function hoisting by example
   https://gist.github.com/maxogden/4bed247d9852de93c94c
 - Formatter
@@ -35,10 +18,8 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   https://github.com/sudheerj/angular-interview-questions
   https://github.com/sudheerj/javascript-interview-questions
   https://github.com/lydiahallie/javascript-questions
-  https://github.com/sudheerj/reactjs-interview-questions
 - Libraries
   https://github.com/sorrycc/awesome-javascript
-- Node.js Intro: https://github.com/maxogden/art-of-node
 - browserify: https://github.com/browserify/browserify-handbook
 - http://callbackhell.com/
   - name lambdas OR use separate functions
@@ -47,7 +28,11 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 - https://frontendmasters.com/
 - https://rallycoding.com/
 - https://javascript30.com/
-- Arindam Paul - JavaScript VM internals, EventLoop, Async and ScopeChains
+* typescript
+- https://github.com/type-challenges/type-challenges
+- Store
+  https://github.com/goncy/pency/
+* TODO Video: Arindam Paul - JavaScript VM internals, EventLoop, Async and ScopeChains
   https://www.youtube.com/watch?v=QyUFheng6J0
   - There are 2 phases
     - Compilation
@@ -55,11 +40,6 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   - First compilation phase, parses functions as lambda's without looking inside AND allocates variables declared.
   - Nth, compilation phase happens inside functions. Allocates variables declared (var) and arguments.
   - 10:15
-* typescript
-- https://github.com/type-challenges/type-challenges
-- Store
-  https://github.com/goncy/pency/
-
 * DONE Article: 2019 - Functional JavaScript: How to use array reduce for more than just numbers
   https://jrsinclair.com/articles/2019/functional-js-do-more-with-reduce/
   - The great power of .reduce() comes from the fact that:
@@ -136,3 +116,4 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
        aka run Promises in sequence
        - might be to avoid an API rate limit
        - or if one depends on the another
+

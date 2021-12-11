@@ -1,3 +1,13 @@
+- http://sordina.github.io/blog/2021/01/03/1609638326-advent19b.html
+- Usage Examples of Haskell https://homepages.inf.ed.ac.uk/wadler/realworld/
+- https://hackage.haskell.org/package/rio
+  https://www.fpcomplete.com/haskell/library/rio/
+- CIS194 https://www.cis.upenn.edu/~cis194/fall16/lectures/01-intro.html
+  CS240 2016 http://www.scs.stanford.edu/16wi-cs240h/
+  CS240 2014 http://www.scs.stanford.edu/14sp-cs240h/
+  CS240 code https://github.com/Chouffe/cs240
+- Streamers https://github.com/chiroptical/declarative-programming-streams
+- Streamer https://www.youtube.com/c/cvladfp/videos
 - Memory Usage https://stackoverflow.com/questions/459725/how-to-reduce-memory-usage-in-a-haskell-app
 - FPGA Clash Talks https://unsafeperform.io/talks/
 - Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
@@ -61,6 +71,7 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
 - State of the Haskell ecosystem
   https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
 * Learn
+  - https://github.com/bitemyapp/fp-course
   - https://github.com/hmemcpy/milewski-ctfp-pdf
   - CIS 194: Introduction to Haskell (Spring 2013)
     https://www.seas.upenn.edu/~cis194/spring13/lectures.html

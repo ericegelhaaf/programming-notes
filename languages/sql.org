@@ -1,3 +1,4 @@
+- AWS Aurora https://www.youtube.com/watch?v=XKPHbYe-fHQ
 - https://www.cybertec-postgresql.com/en/postgresql-exclude-beyond-unique/
 * DONE Exclusion operators - EXPLAINING PostgreSQL
   https://www.youtube.com/watch?v=M58MR1vqnAk
@@ -55,7 +56,7 @@
   - ambiguous field names should be AS prefixed table_
   - all fields should be AS snake cased
   - boolean fields, should be AS has_ is_ does_
-* 2019 - The Art of PostgreSQL - Dimitri Fontaine - InfoQ Brasil
+* Video: 2019 - The Art of PostgreSQL - Dimitri Fontaine - InfoQ Brasil
   https://www.youtube.com/watch?v=09b-uk9UXbM
   - wrote pg_auto_failover, "create extension", "event triggers", "pgloader"
   - Book: Mastering PostgreSQL
@@ -652,11 +653,11 @@ $ pgloader mysql://root@localhost/f1db pgsql:///f1db
               ON t1.id=t2.id
              AND t1.field = 1
 **** Restrictions: WHERE
-     - WE ususally try to keep the WHERE clauses as simple,
+     - WE usually try to keep the WHERE clauses as simple,
        in order to be able to use our indexes.
      - OR operator is more complex to optimize, in respect to indexes
      - Careful with NOT IN and NULL
-     - We can use subqueries on WHERE, to implement the
+     - We can use sub-queries on WHERE, to implement the
        "anti-join" pattern using the NOT EXISTS and SELECT 1
        #+begin_src sql
        select forename,

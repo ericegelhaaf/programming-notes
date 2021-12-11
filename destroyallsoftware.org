@@ -1,20 +1,4 @@
-* 1 git stats
-Output format: Nr. of lines, hash and message
-100 HASH commit message here
 
-| git rev-list HEAD           | get a list of revisions (as hashes)                     |
-|                             | HEAD is a ref                                           |
-|                             | last commit last                                        |
-| git rev-list --reverse HEAD |                                                         |
-| git log -1 $revision        | same of just git log                                    |
-| git ls-tree $revision       | all the files on revision                               |
-| git ls-tree -r $revision    | -r does recursion of commits to actually show the files |
-| git show $blobid            | shows whole file                                        |
-... | view -             # read only vim
-git log --oneline -1 $revision
-- on vim
-:!./script.sh
-:map ,t :w\|:!./script.sh<cr>
 * TODO 2 How and Why to avoid NIL
 - Is a problem when it percolates faaar beyond one expect it to happen.
   - The introduction of the nil is not local to the use of it.

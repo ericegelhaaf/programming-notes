@@ -1,3 +1,5 @@
+- https://github.com/sudheerj/reactjs-interview-questions
+- https://egghead.io/courses/the-beginner-s-guide-to-react
 - React Boston https://www.youtube.com/channel/UCYjLoCbltSD_o2gLlM_yS8g/videos
 - React Loop https://www.youtube.com/channel/UCBoSWHAAhkqrCBsTAeS5cCA/videos
 - React Training https://www.youtube.com/c/ReactTraining/videos

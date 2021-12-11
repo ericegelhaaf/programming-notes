@@ -1,3 +1,12 @@
+- https://mumble.net/~campbell/scheme/style.txt
+- https://github.com/hanshuebner/bknr-datastore
+- music composition
+  https://quod.lib.umich.edu/s/spobooks/bbv9810.0001.001?rgn=main;view=fulltext
+- fset
+  https://www.youtube.com/watch?v=wx9BN2ppESY
+  https://www.youtube.com/watch?v=AfcjnBkWbfw
+- https://github.com/bendudson/array-operations
+- https://bernsteinbear.com/blog/compiling-a-lisp-0/
 - CLI arguments
   https://stackoverflow.com/questions/1021778/getting-command-line-arguments-in-common-lisp
 - Video: Escape from the Heap Low Level Programming
@@ -11,13 +20,8 @@
 - https://pvk.ca/Blog/2014/03/15/sbcl-the-ultimate-assembly-code-breadboard/
 - https://stevelosh.com/blog/2016/08/lisp-jam-postmortem/
 - http://wcp.sdf-eu.org/software/index.html
-- https://leanpub.com/readevalprintlove001/read
 - ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
 - zap https://malisper.me/zap/
-- Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
-- Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
-- CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
-
 - Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
 - https://funcall.blogspot.com/
 - https://google.github.io/styleguide/lispguide.xml?showone=Pathnames#Macros
@@ -37,7 +41,7 @@
 - One can use reinitialize-instance to avoid allocating a new instance of
   a thing and instead reset the values to the default initargs
   http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
-- golang slices
+- golang slices for arrays
   https://github.com/tpapp/cl-slice
 - haskell
   https://github.com/Dimercel/listopia  Data.List functions
@@ -59,19 +63,60 @@
   | sort-by       |             |
   +---------------+-------------+
   * interperse
-* CEPL
-  https://github.com/cbaggers/spring-lisp-gamejam
-* Trial
-  - Lib https://github.com/Shinmera/sdf/
-  - Game https://github.com/Shinmera/beamer/
-  - Game https://github.com/Shirakumo/ld39
-  - Game https://github.com/Shirakumo/ld45
-  - Game https://github.com/shinmera/shootman
-* GUI
-  LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
-  GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
-* Static Linking
+* Binary Release
+ "sbcl --disable-debugger --no-sysinit --no-userinit"
+            Use an existing SBCL binary as a cross-compilation
+            host even though you have stuff in your
+            initialization files which makes it behave in such a
+            non-standard way that it keeps the build from
+            working. Also disable the debugger instead of
+            waiting endlessly for a programmer to help it out
+            with input on *DEBUG-IO*. (This is the default.)
+- https://www.timmons.dev/posts/static-executables-with-sbcl.html
+- https://nyxt.atlas.engineer/article/continuous-testing-and-packaging.org
+- https://github.com/Shinmera/deploy
+** sbcl build
+- sh make.sh --fancy --with-sb-linkable-runtime --with-sb-dynamic-core
+  --fancy is
+    - sb-core-compression
+    - sb-xref-for-internals
+    - sb-after-xc-core
+** linux-packaging
+- ASDF .config/common-lisp/.../asdf.conf
+- https://gitlab.com/ralt/linux-packaging
+  https://gitlab.com/ralt/linux-packaging/-/blob/master/.ci/build.sh
+- Deps, asdf latest, cffi, wild
+  https://github.com/privet-kitty/wild-package-inferred-system
+  https://github.com/cffi/cffi
+  https://gitlab.common-lisp.net/asdf/asdf
+*** sbcl sb-linkable-runtime
+    https://sourceforge.net/p/sbcl/sbcl/ci/402a8fab
+#+begin_src markdown
+  Add the new feature sb-linkable-runtime, that depends on **sb-dynamic-core**,
+the sbcl build will create a file sbcl.o or libsbcl.a that you can link
+with additional other object files and libraries to deliver your applications
+as a single executable (after combining with a core file) that contains
+whatever statically linked C libraries you need as extensions.
+CFFI-toolchain and Bazel will be know how to use this features.
+
+Support this feature on Linux, macOS and Windows, on x86 and x86-64.
+
+  Dump the parameters to compile C code and link it into a file sbcl.mk.
+This new file will be included even if sb-linkable-runtime isn't present,
+so CFFI and other software will not have to guess with what compiler and
+what options to build dynamically linkable extensions.
+
+  Note that without a sb-linkable-runtime, SBCL can still dlopen the C code, but
+then you need at least two files to deliver an application with non-Lisp code,
+and that doesn't work if the code is provided as a *.a or *.o file
+(not a *.so) compiled without -fPIC.
+#+end_src
+** templates
+- https://github.com/fiddlerwoaroof/daydreamer
+- https://github.com/zodmaner/cl-makefile-template
+- https://github.com/phoe-trash/furcadia-post-splitter/
 ** Static Linking
+*** Static Linking
   - collect2 is also another level of indirection between gcc and ld.
   - ld https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html
      #+begin_src
@@ -87,7 +132,7 @@
     program, rather than some other dynamic object, then you will
     probably need to use this option when linking the program itself.
 #+end_src
-** Static Linking - Compilation
+*** Static Linking - Compilation
   Minimal example https://gitlab.com/ralt/static-program-op
   Florian https://www.mail-archive.com/cffi-devel@common-lisp.net/msg02990.html
   https://github.com/cffi/cffi/blob/677cabae64b181330a3bbbda9c11891a2a8edcdc/toolchain/c-toolchain.lisp
@@ -99,7 +144,7 @@
 |--------------------------+-----------------------------------+------------------------|
 | sb-linkable-runtime      |                                   |                        |
 | sb-dynamic-core          |                                   |                        |
-** Static Linking
+*** Static Linking
 *** GROVEL
 - Grovel SDL2 bindings https://github.com/leosongwei/handy-sdl
 - bare bones example of using grovel https://gist.github.com/FilWisher/d2d17d984f69950bf27e1f86483dcffc
@@ -133,36 +178,52 @@
 *** Daewok
    https://www.timmons.dev/posts/static-executables-with-sbcl.html
    https://www.timmons.dev/posts/static-executables-with-sbcl-v2.html
-* youtube
-- Common LISP Object Standard
-  https://www.youtube.com/watch?v=IrmHp1rRQ68
-- Lisp NYC
-  https://vimeo.com/lispnyc
-  https://www.youtube.com/channel/UCv33UlfX5S4PKxozGwUY_pA
-- Patrik Stein -  https://vimeo.com/nklein
-- ELS https://www.youtube.com/channel/UC55S8D_44ge2cV10aQmxNVQ/
-- MIT 6.001 Structure and Interpretation, 1986
-  https://www.youtube.com/playlist?list=PLE18841CABEA24090
-- kraklisp https://www.youtube.com/channel/UCymtXMj1M7cKiV9TKLoTtEg
-- INF4820 https://www.youtube.com/c/INF4820/
-- Baggers https://www.youtube.com/user/CBaggers
-- Neil Munro https://www.youtube.com/user/njalmunro
-- Allegro CL https://www.youtube.com/c/FranzAllegroCL/
-- Fare https://www.youtube.com/c/Fran%C3%A7oisRen%C3%A9Rideau/
-- "afp" https://www.youtube.com/channel/UCYg6qFXDE5SGT_YXhuJPU0A/
-** AFP Concurrency on Lisp - https://www.youtube.com/watch?v=3c7LwUjb-DU
-- Bourdeux Threads
-  - Initial bindings, to control the local environment.
-  - Locks: (with-lock-held ())
-  - Recursive locks: multiple operations on the same thread, take/release/take/release..
-  - Semaphores: "a thread safe counter", signal and wait
-  - Condition Locks: A lock + A conditional variable (not thread safe)
-- Atomics
-  - incf: use a cons and FIXNUM
-  - cas: COMPARE-AND-SWAP on sbcl works on (slot-value)
-- Memory order, "it prevents re-ordering across the fence"
-  - (sb-thread:barrier)
-- lparallel: channels/workers support, priority, queue, pmap, promises
+* Binary/stream
+** Franz
+- bits of integer:
+  > #b10
+- print in base 2 (let ((*print-base* 2)) (print #b10))
+  (logior #b100 #b110) ; OR
+  (logand #b100 #b110) ; AND
+- logxor, logeqv, lognand, lognor, logandc1, logandc2, logorc1, logorc2
+- Bit Testing
+  #+begin_src lisp
+  (logtest FLAGS MASK) ; T if bits in mask are 1
+  (logbitp 1 FLAGS)    ; T if second bit is 1
+  (logcount FLAGS)     ; count 1 bits
+  #+end_src
+- Vector bit, aref-able
+  (make-array 32 :element-type 'bit :initial-element 0)
+- Note: Bit Shifting to infity (to bignum)
+  #+begin_src lisp
+  (ash #b10 +1) -> #b100
+  (ash #b10 -1) -> #b1
+  #+end_src
+- Subseq-like thing for bits, setf-able, returns the same
+  #+begin_src lisp
+  (ldb (byte Sz Pos) #b111000111)
+  (ldb (byte  4   0) #b0111)     ->      #b111 ; rightmost 4 bits
+  (ldb (byte  4   4) #b1100)     ->     #b1100 ; next 4 bits
+  (ldb (byte  8   0) #b11000111) -> #b11000111 ; lowest  bits
+  #+end_src
+** Libraries
+|                | desc                                                 | url                                        |
+|----------------+------------------------------------------------------+--------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8)       | https://github.com/cl-babel/babel          |
+| bitio          | read multiples of 8 bits                             | https://github.com/psilord/bitio           |
+| bit-smasher    | utilities for bit vectors                            | https://github.com/thephoeron/bit-smasher  |
+| conspack       | encode and decode data types                         | https://github.com/conspack/cl-conspack    |
+| fast-io        |                                                      | https://github.com/rpav/fast-io/           |
+| flexi-streams  | read/write, octects                                  | https://github.com/edicl/flexi-streams/    |
+| ieee-floats    | read float values from strings                       | https://github.com/marijnh/ieee-floats     |
+| mmap           | read file into memory (mmap, munmap, msync,mprotect) | https://github.com/Shinmera/mmap           |
+| nibbles        | read/write 16/32/64 bits from octet vectors          | https://github.com/froydnj/nibbles         |
+| static-vectors | vectors from lisp to C                               | https://github.com/sionescu/static-vectors |
+| swap-bytes     | changing endianness of unsigned integers             | https://github.com/sionescu/swap-bytes     |
+* books
+- https://leanpub.com/lovinglisp/read
+- https://leanpub.com/readevalprintlove001/read
+- https://github.com/mark-watson/loving-common-lisp
 * cffi
 - function argument is a pointer to something
 #+begin_src
@@ -198,34 +259,6 @@ iplCreateContext(IPLLogFunction     logCallback,
   (print (cffi:mem-aref thing '(:struct tryout) 1))
   (print (cffi:mem-aref thing '(:struct tryout) 0)))
 #+end_src
-* Tutorial: koans
-- string and array are atoms
-  - a string is NOT a list
-- nil is both a list and an atom
-- (let) binds to nil by default
-- (block TAG) and (return-from TAG RETURN-VALUE) exists..
-  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node85.html
-- CLOSURE takes precedence over local vars
-- dynamic vars exists...can be (declare (special VAR)), changes binding (outer takes precedence)
-  http://clhs.lisp.se/Body/d_specia.htm
-- to match a T or NIL on a (case), put them between parentheses
-- eql: numbers, characters and objects (if they are the same instance)
-- equal: strings...
-- (cons) can be used to preppend something to a list
-- (push) does it inplace
-- one can think on (push) and (pop) as acting on CAR and CDR
-- (append) and (nconc), do the same but one is desctructive
-- (last) returns the last CONS cell
-- proper lists end with NIL on the last CDR
-- (list*) builds a non-proper list
-- (list-length) exists and works on cyclic lists
-- cyclic-lists exists in standards CL, where the last CDR refers to another cons cell (from the same list i guess)
-  #+begin_src
-  (let ((list        (list 1 2 3 4 5))
-        (cyclic-list (list 1 2 3 4 5)))
-    (setf (cdr (last cyclic-list)) cyclic-list))
-  #+end_src
-- (array-) rank, dimensions, total-size = 2, '(8 8), 64
 * CLOS
 ** Common Lisp Recipies
  - &key arguments on (initialize-instance :after) are valid on (make-instance)
@@ -294,84 +327,37 @@ iplCreateContext(IPLLogFunction     logCallback,
   "contract programming, "requirements" before execute and "guarantees" after,
    as well as "invariants" for the whole class.
    Beyond type checking is a check of state local or global"
-* Other
- - https://github.com/hipeta/arrow-macros
- - https://github.com/dlowe-net/local-time
- - Portable CL:*FEATURES* - https://github.com/trivial-features/trivial-features
- - https://common-lisp-libraries.readthedocs.io/
- - https://github.com/eschulte/memoize
-   Thread safe memoized defuns, using a synchronized type of hash table
-   See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
- - https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
- - https://common-lisp.net/project/metabang-bind/user-guide.html
- - https://gitlab.com/mbabich/cl-chess   - (chess GUI)
- - https://github.com/html/clache        - can be used for file score saving on game
- - https://github.com/orivej/defmemo     - cache function call
- - https://github.com/slyrus/opticl      - image
- - https://github.com/Shinmera/flow      - graph
- - https://github.com/Shinmera/flare - value transition
- - https://github.com/lmj/global-vars/
- - Pileup provides a portable, performant, and thread-safe binary heap
-   https://github.com/nikodemus/pileup
-   https://nikodemus.github.io/pileup/
-** incandescent
-- actor container: idea being position depend on the container not actors,
-  like and object and a particle system. Or an object and his hitbox (this one
-  is inherence)
-* web
-|         | desc                 | url                                                             |
-|---------+----------------------+-----------------------------------------------------------------|
-| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
-| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
-| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
-| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
-
-* books
-- https://leanpub.com/lovinglisp/read
-  https://github.com/mark-watson/loving-common-lisp
-* Binary/stream
-** Franz
-- bits of integer:
-  > #b10
-- print in base 2 (let ((*print-base* 2)) (print #b10))
-  (logior #b100 #b110) ; OR
-  (logand #b100 #b110) ; AND
-- logxor, logeqv, lognand, lognor, logandc1, logandc2, logorc1, logorc2
-- Bit Testing
-  #+begin_src lisp
-  (logtest FLAGS MASK) ; T if bits in mask are 1
-  (logbitp 1 FLAGS)    ; T if second bit is 1
-  (logcount FLAGS)     ; count 1 bits
-  #+end_src
-- Vector bit, aref-able
-  (make-array 32 :element-type 'bit :initial-element 0)
-- Note: Shifting to infity (to bignum)
-  #+begin_src lisp
-  (ash #b10 +1) -> #b100
-  (ash #b10 -1) -> #b1
-  #+end_src
-- Subseq like thing for bits, setf-able
-  #+begin_src lisp
-  (ldb (byte SIZE POSITION) #b111000111)
-  (ldb (byte 4 0)           #b0111)     ; rightmost 4 bits
-  (ldb (byte 4 4)           #b1100)     ; next 4 bits
-  (ldb (byte 8 0)           #b11000111) ; lowest  bits
-  #+end_src
-** Libraries
-|                | desc                                                 | url                                        |
-|----------------+------------------------------------------------------+--------------------------------------------|
-| babel          | charset enc/dec, strings and (unsigned-byte 8)       | https://github.com/cl-babel/babel          |
-| bit-smasher    | utilities for bit vectors                            | https://github.com/thephoeron/bit-smasher  |
-| bitio          | read multiples of 8 bits                             | https://github.com/psilord/bitio           |
-| conspack       | encode and decode data types                         | https://github.com/conspack/cl-conspack    |
-| fast-io        |                                                      | https://github.com/rpav/fast-io/           |
-| flexi-streams  | read/write, octects                                  | https://github.com/edicl/flexi-streams/    |
-| nibbles        | read/write 16/32/64 bits from octet vectors          | https://github.com/froydnj/nibbles         |
-| static-vectors | vectors from lisp to C                               | https://github.com/sionescu/static-vectors |
-| swap-bytes     | changing endianness of unsigned integers             | https://github.com/sionescu/swap-bytes     |
-| mmap           | read file into memory (mmap, munmap, msync,mprotect) | https://github.com/Shinmera/mmap           |
-| ieee-floats    | read float values from strings                       | https://github.com/marijnh/ieee-floats     |
-|                |                                                      |                                            |
+* Design Patterns
+** Peter Norvig - in Dynamic Programming
+   First-class types     : Abstract-Factory, Flyweight, Factory-Method, State, Proxy, Chain-Of-Responsibility
+   First-class functions : Command, Strategy, Template-Method, Visitor
+   Macros                : Interpreter, Iterator
+   Method Combination    : Mediator, Observer
+   Multimethods          : Builder
+   Modules               : Facade
+** https://wiki.c2.com/?AreDesignPatternsMissingLanguageFeatures
+  Visitor.................. GenericFunctions (MultipleDispatch)
+  Factory.................. MetaClasses, closures
+  Singleton................ MetaClasses
+  Iterator................. AnonymousFunctions, (used with HigherOrderFunctions, MapFunction, FilterFunction, etc.)
+  Interpreter.............. Macros (extending the language) EvalFunction, MetaCircularInterpreter Support for parser generation (for differing syntax)
+  Command.................. Closures, LexicalScope, AnonymousFunctions, FirstClassFunctions
+  HandleBody............... Delegation, Macros, MetaClasses
+  RunAndReturnSuccessor.... TailCallOptimization
+  Abstract-Factory
+  Flyweight
+  Factory-Method
+  State
+  Proxy
+  Chain-of-Responsibility.. FirstClass types (Norvig)
+  Mediator, Observer....... Method combination (Norvig)
+  Builder.................. Multi Methods (Norvig)
+  Facade................... Modules (Norvig)
+  Strategy................. higher order functions (Gene Michael Stover?), ControlTable
+  AssociationList.......... Dictionaries, maps, HashTables (these go by numerous names in different languages)
+* Documentation
+- https://github.com/Shinmera/staple
+- git config for ./doc ?
 * event
 - GOTO 2017 • The Many Meanings of Event-Driven Architecture • Martin Fowler
   https://www.youtube.com/watch?v=STKCRSUsyP0
@@ -441,6 +427,145 @@ iplCreateContext(IPLLogFunction     logCallback,
 **     deeds - https://github.com/Shinmera/deeds
 - doc https://shinmera.github.io/deeds/
 - example https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0151-deeds.org
+* Gamedev
+** CEPL
+  https://github.com/cbaggers/spring-lisp-gamejam
+** Trial
+  - Lib https://github.com/Shinmera/sdf/
+  - Game https://github.com/Shinmera/beamer/
+  - Game https://github.com/Shirakumo/ld39
+  - Game https://github.com/Shirakumo/ld45
+  - Game https://github.com/shinmera/shootman
+* GUI
+  LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
+  GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
+* Logging
+- https://github.com/Shinmera/verbose
+* Logic Programming (Non-Deterministic Programming)
+ - https://github.com/sjl/temperance
+   docs https://docs.stevelosh.com/temperance/usage/
+ - https://github.com/nikodemus/screamer - logic programming
+   - https://engineering.purdue.edu/~qobi/papers/aaai93.pdf
+   - Example https://nikodemus.github.io/screamer/sudoku.lisp.html
+   - https://i-need-closures.blogspot.com/2006/03/
+   - https://unwindprotect.com/constraint-programming
+   - https://www.youtube.com/watch?v=z7V5BL6W3CA
+ - Behind the Scenes with Auto Layout - iOS Conf SG 2019 https://www.youtube.com/watch?v=gxfyb3ipUFg
+ - https://github.com/Shinmera/classowary
+   https://shinmera.github.io/classowary/
+** Video: Intro to SCREAMER
+   https://www.youtube.com/watch?v=z7V5BL6W3CA&t=6582s
+- "You have functions that are allowed to multiple valid results"
+- Internally does some =backtracking= if a restriction is found
+- Example
+  #+begin_src lisp
+(one-value (an-integer-between 5 200))
+(one-value (let ((x (an-integer-between 5 200)))
+              (assert! (not (= x 5)))
+              x))
+  #+end_src
+- (one-value) (all-values) (ith-value)
+  are wrappers/barries between the non-deterministic part (screamer) and our code
+- Avoid using SIDE-EFFECTS in your non-deterministic context
+  - There are ways to control it and backtrack SETFs, by caching the current value and reassign on backtrack
+  - (local) undone
+    (global) not undone
+- (an-integer-between)
+  (an-integer-above
+  (a-member-of) (either)
+- DO NOT USE (all-values) ON A UNBOUND NON-DETERMINISTIC VALUE
+  - You can grab them with (ith-value)
+  - (for-effect)
+- (trail FUNCTION), calls FUNCTIOn on each backtracking, when present on a nondt env
+- Screamer, never modifies a user passed object
+- =logic variables=
+  - (make-variable :v)
+  - (an-integet-betweenv 2 1 :v)
+  - are variables that are still to be computed (one-value, et all)
+  - but can be constraint with, assert! or (=v) or (memberv) or (<v)
+  - to name it, give an extra argument to most non-det created functions
+  - there is no way to reverse contrainsts once added
+* Looping
+ - https://github.com/yitzchak/trivial-do/
+** loop
+  https://web.archive.org/web/20171127083905/http://www.method-combination.net/blog/archives/2010/04/06/looping-issues.html
+  https://lispcookbook.github.io/cl-cookbook/iteration.html
+  https://gigamonkeys.com/book/loop-for-black-belts.html
+** iterate
+- https://common-lisp.net/project/iterate/doc/index.html#Top
+- https://common-lisp.net/project/iterate/
+- https://common-lisp-libraries.readthedocs.io/iterate/
+- https://web.archive.org/web/20170713105315/https://items.sjbach.com/280/extending-the-iterate-macro
+- https://github.com/sjl/cl-losh/blob/master/src/iterate.lisp
+- https://sites.google.com/site/sabraonthehill/loop-v-iter
+*** Article: Comparing LOOP and ITERATE
+    https://web.archive.org/web/20170713081006/https://items.sjbach.com/211/comparing-loop-and-iterate
+- Accumulation:
+  - adjoining: collect+unique
+  - unioning: appending+unique
+  - nunioning
+  - accumulating: accumulation builder, ex: (accumulating lst by #'union))
+- Reduction:
+  - multiplying:
+  - reducing: a reduccion builder, ex:
+    (reducing d by #'/ initial-value 0)
+    OR with a macro
+     #+begin_src lisp
+  (defmacro dividing (num &keys (initial-value 0))
+    `(reducing , num by #'/ initial-value ,initial-value))
+  (iterate (for i in '(10 5 2))
+    (dividing i :initial-value 100)
+     #+end_src
+- Boolean aggregation: (same in loop and interation)
+  - always(every)
+  - never(notany)
+  - thereis(some)
+- Finding
+  #+begin_src lisp
+  (iterate (for lst in '((a) (b c d) (e f)))
+    (finding lst maximizing (length lst)))
+  #+end_src
+- Control Flow:
+  - (next-iteration) like continue or next on other languages
+  - (if-first-time then else)
+  - (first-iteration-p)
+- Destructuring:
+  - Can destructure values easily
+** gtwiwtg "naive generators"
+   https://github.com/cbeo/gtwiwtg
+** Series Package Appendix https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
+  https://cliki.net/SERIES
+  https://quickref.common-lisp.net/series.html
+  Intro to SERIES https://www.youtube.com/watch?v=uRLgZCV4bOM
+  SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
+  Mirror https://github.com/tokenrove/series
+  Article https://fourier.github.io/lisp/2017/12/17/series.html
+  http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
+  http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
+* Other
+ - https://github.com/hipeta/arrow-macros
+ - https://github.com/dlowe-net/local-time
+ - Portable CL:*FEATURES* - https://github.com/trivial-features/trivial-features
+ - https://common-lisp-libraries.readthedocs.io/
+ - https://github.com/eschulte/memoize
+   Thread safe memoized defuns, using a synchronized type of hash table
+   See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
+ - https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
+ - https://common-lisp.net/project/metabang-bind/user-guide.html
+ - https://gitlab.com/mbabich/cl-chess   - (chess GUI)
+ - https://github.com/html/clache        - can be used for file score saving on game
+ - https://github.com/orivej/defmemo     - cache function call
+ - https://github.com/slyrus/opticl      - image
+ - https://github.com/Shinmera/flow      - graph
+ - https://github.com/Shinmera/flare - value transition
+ - https://github.com/lmj/global-vars/
+ - Pileup provides a portable, performant, and thread-safe binary heap
+   https://github.com/nikodemus/pileup
+   https://nikodemus.github.io/pileup/
+** incandescent
+- actor container: idea being position depend on the container not actors,
+  like and object and a particle system. Or an object and his hitbox (this one
+  is inherence)
 * Testing
 https://lisp-lang.org/learn/writing-libraries
 https://lisp-lang.org/learn/continuous-integration
@@ -467,102 +592,18 @@ https://lisp-lang.org/learn/continuous-integration
   https://github.com/maruks/quickproject-templates
   https://github.com/noloop/cacau http://quickdocs.org/assert-p/
   https://github.com/joaotavora/fiasco
-* Binary Release
- "sbcl --disable-debugger --no-sysinit --no-userinit"
-            Use an existing SBCL binary as a cross-compilation
-            host even though you have stuff in your
-            initialization files which makes it behave in such a
-            non-standard way that it keeps the build from
-            working. Also disable the debugger instead of
-            waiting endlessly for a programmer to help it out
-            with input on *DEBUG-IO*. (This is the default.)
-- https://www.timmons.dev/posts/static-executables-with-sbcl.html
-- https://nyxt.atlas.engineer/article/continuous-testing-and-packaging.org
-- https://github.com/Shinmera/deploy
-** sbcl build
-- sh make.sh --fancy --with-sb-linkable-runtime --with-sb-dynamic-core
-  --fancy is
-    - sb-core-compression
-    - sb-xref-for-internals
-    - sb-after-xc-core
-** linux-packaging
-- ASDF .config/common-lisp/.../asdf.conf
-- https://gitlab.com/ralt/linux-packaging
-  https://gitlab.com/ralt/linux-packaging/-/blob/master/.ci/build.sh
-- Deps, asdf latest, cffi, wild
-  https://github.com/privet-kitty/wild-package-inferred-system
-  https://github.com/cffi/cffi
-  https://gitlab.common-lisp.net/asdf/asdf
-*** sbcl sb-linkable-runtime
-    https://sourceforge.net/p/sbcl/sbcl/ci/402a8fab
-#+begin_src markdown
-  Add the new feature sb-linkable-runtime, that depends on **sb-dynamic-core**,
-the sbcl build will create a file sbcl.o or libsbcl.a that you can link
-with additional other object files and libraries to deliver your applications
-as a single executable (after combining with a core file) that contains
-whatever statically linked C libraries you need as extensions.
-CFFI-toolchain and Bazel will be know how to use this features.
-
-Support this feature on Linux, macOS and Windows, on x86 and x86-64.
-
-  Dump the parameters to compile C code and link it into a file sbcl.mk.
-This new file will be included even if sb-linkable-runtime isn't present,
-so CFFI and other software will not have to guess with what compiler and
-what options to build dynamically linkable extensions.
-
-  Note that without a sb-linkable-runtime, SBCL can still dlopen the C code, but
-then you need at least two files to deliver an application with non-Lisp code,
-and that doesn't work if the code is provided as a *.a or *.o file
-(not a *.so) compiled without -fPIC.
-#+end_src
-** templates
-- https://github.com/fiddlerwoaroof/daydreamer
-- https://github.com/zodmaner/cl-makefile-template
-- https://github.com/phoe-trash/furcadia-post-splitter/
-* Documentation
-- https://github.com/Shinmera/staple
-- git config for ./doc ?
-* Logging
-- https://github.com/Shinmera/verbose
-* Logic Programming
- - https://github.com/sjl/temperance
-   docs https://docs.stevelosh.com/temperance/usage/
- - https://github.com/nikodemus/screamer - logic programming
-   - https://unwindprotect.com/constraint-programming
-   - https://i-need-closures.blogspot.com/2006/03/
-   - https://engineering.purdue.edu/~qobi/papers/aaai93.pdf
-   - https://www.youtube.com/watch?v=z7V5BL6W3CA
- - Behind the Scenes with Auto Layout - iOS Conf SG 2019 https://www.youtube.com/watch?v=gxfyb3ipUFg
- - https://github.com/Shinmera/classowary
-   https://shinmera.github.io/classowary/
-* Design Patterns
-** Peter Norvig - in Dynamic Programming
-   First-class types     : Abstract-Factory, Flyweight, Factory-Method, State, Proxy, Chain-Of-Responsibility
-   First-class functions : Command, Strategy, Template-Method, Visitor
-   Macros                : Interpreter, Iterator
-   Method Combination    : Mediator, Observer
-   Multimethods          : Builder
-   Modules               : Facade
-** https://wiki.c2.com/?AreDesignPatternsMissingLanguageFeatures
-  Visitor.................. GenericFunctions (MultipleDispatch)
-  Factory.................. MetaClasses, closures
-  Singleton................ MetaClasses
-  Iterator................. AnonymousFunctions, (used with HigherOrderFunctions, MapFunction, FilterFunction, etc.)
-  Interpreter.............. Macros (extending the language) EvalFunction, MetaCircularInterpreter Support for parser generation (for differing syntax)
-  Command.................. Closures, LexicalScope, AnonymousFunctions, FirstClassFunctions
-  HandleBody............... Delegation, Macros, MetaClasses
-  RunAndReturnSuccessor.... TailCallOptimization
-  Abstract-Factory
-  Flyweight
-  Factory-Method
-  State
-  Proxy
-  Chain-of-Responsibility.. FirstClass types (Norvig)
-  Mediator, Observer....... Method combination (Norvig)
-  Builder.................. Multi Methods (Norvig)
-  Facade................... Modules (Norvig)
-  Strategy................. higher order functions (Gene Michael Stover?), ControlTable
-  AssociationList.......... Dictionaries, maps, HashTables (these go by numerous names in different languages)
+* Utils
+- Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
+- Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
+- CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
+- fare-utils https://github.com/fare/fare-utils
+* web
+|---------+----------------------+-----------------------------------------------------------------|
+| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
+| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
+| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
+| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
+|---------+----------------------+-----------------------------------------------------------------|
 * Book: Programming Algorithms in Lisp (2021) / Vsevolod Domkin
 Source: https://github.com/vseloved/progalgs-code
 ** Chapter 1: Introduction
@@ -640,3 +681,173 @@ Source: https://github.com/vseloved/progalgs-code
   * Branching: (when) (unless) (cond)
   * Looping: We have many, unlike mainstream languages that provide a few and a way to extend them with polymorphism
 
+* Tutorial: koans
+- Things that are T (everything that is NOT NIL)
+  1. empty list
+  2. a list containing NIL
+  3. an array with no elements
+  4. number 0
+- (and) can take N number of arguments
+  returns the *last value*
+- (or) can take N number or argumets
+  returns the *first non-nil* value it founds
+- (/=) is a function for not equal
+- STRINGS are array and atoms
+  - a string is NOT a list
+- NIL is both a list and an atom
+- (let) binds to NIL by default
+  (let*) binds are sequentially
+- (block TAG) and (return-from TAG RETURN-VALUE) exists..
+  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node85.html
+- Mentions this for "enclosed variables", variables that can't be override
+  (declare (special (x))), makes them overridable
+  https://gigamonkeys.com/book/variables.html
+- CLOSURE takes precedence over local vars
+- dynamic vars exists...can be (declare (special VAR)), changes binding (outer takes precedence)
+  http://clhs.lisp.se/Body/d_specia.htm
+- (case)
+  - to match a T or NIL, put them between parentheses
+  - uses EQL
+- eql: numbers, characters and objects (if they are the exact same instance)
+- equal: strings...
+- (cons) can be used to preppend something to a list
+  (cdr) on a (cons) returns the second elements (not nested into a list)
+- (push) sets place to a new cons with a new *car*
+  (pop)  sets place to his *cdr*, returning car
+- (append) concats 2 lists into 1, creates new list
+  (nconc)  concats 2 lists into 1, inplace
+- (last) returns the last =CONS= cell
+- =proper lists= end with NIL on the last CDR
+  =improper list= has a non-nil on the last CDR, or not has a last CDR (circular list)
+- (list*) builds a improper list
+- =cycle list= build, setting the cdr last to self
+  (setf (cdr (last cyclic-list)) cyclic-list)
+- (list-length)
+  exists and works on cyclic lists by returning nil
+- many lisp functions operate ONLY on =proper lists=
+- (subseq)
+  with both indexes equal (=) returns nil
+- (aref) stands for "array reference"
+  (array-rank)       N dimensions
+  (array-dimensions) list of dimensions
+  (array-total-size) N total elements
+- (adjust-array) changes dimensions of a adjustable array
+- (row-major-aref) like aref but with 1(one) argument
+- (make-array 4 :element-type 'bit :initial-contents '(0 0 1 1)) , the =bit vector= type
+  #*0101
+  bit-and bit-ior bit-xor
+- (values) is also setfable
+- Equality
+  |         | objects | numbers | char | lists | string | bit-array | pathnames | array | struct | hash-table |
+  |---------+---------+---------+------+-------+--------+-----------+-----------+-------+--------+------------|
+  | EQ      | x       |         |      |       |        |           |           |       |        |            |
+  | EQL     | x       | x       | x    |       |        |           |           |       |        |            |
+  | EQUAL   | x       | x       | x    | x     | x      | x         | x         |       |        |            |
+  | EQUALP* | x       | x       | x    | x     | x      | x         | x         | x     | x      | x          |
+  * chars of the same letter
+    strings case insensitive
+    numbers same with different type
+- (char) can get a character from a string
+- (hash-table-count) N elements on the hashtable
+  - EQ, ~EQL~, EQUAL, EQUALP are the available hashtable tests
+- &rest, if passed no arguments returns NIL (not '(nil))
+- &key, if passes twice a keyword, it uses the first one
+- &rest must come before &key
+  - if no keyword passed NIL
+  - if a keyword is passed it will get the keyword and the value
+- (function) will return the function named the argument (macro, not need to quote a symbol)
+  #' is the syntax sugar
+- (apply FUNCTION LIST) applies the FUNCTION to the LIST of arguments
+  (apply FUNCTION ARG? ARG? LIST)
+- strings are vector/arrays/vectors of characters
+- (search) to find a string (sequence) into another
+- (defstruct (NAME (:conc-name ALIAS)) is used to define the acessor with a different prefix
+- (defstruct (NAME (:include   OTHERS)) is used to define the a struct to compose with
+  both accessor can be used
+  on copy, setting the slots will keep them different, but shared structures are different (the content of the slots)
+- (dolist)      returns a value
+  (dotimes) can return a value, named on the third argument
+  (do)      is kind-sort-of a for loop, 1) bindings 2) termination test 3) epilogue 4) code to run
+  1) test being "UNTIL" not "WHILE" test passes
+  2) epilogue might return a value, right after the test, enclosed on the same same s-expression
+- (loop), by defaults loops forever, can break from it with (return)
+  you might make it look lispy
+  #+begin_src lisp
+(let ((counter 0))
+  (loop (incf counter)
+      (when (>= counter 100)
+         (return counter)))
+    #+end_src
+- Not all vectors that contain characters are strings
+- to TRANSPOSE a list of lists, you can use
+  (apply #'mapcar #'list lists)
+- (numbers '(1 2 3 4 5))
+  (assert-equal '((((1 . 2) . 3) . 4) . 5) (reduce #'cons numbers))
+  (assert-equal '(1 2 3 4 . 5) (reduce #'cons numbers :from-end t)))
+- (loop)
+  :in iterates over each element on the list
+  (assert-equal '(:a :b :c) result-in)
+  :on iterates over each (cons) cell on the list
+  (assert-equal '((:a :b :c) (:b :c) (:c)) result-on)
+- (loop)
+  :for KEY :being :the :hash-keys :of HASHTABLE
+  :using (hash-value VALUE)
+- (loop)
+  :count VARIABLE :into VARIABLE
+  :sum   VARIABLE :into VARIABLE
+  :maximize
+  :minimize
+- (loop) destructuring
+  :for (a b) :in '((1 2) (3 4))
+- (format)
+  ~A for "aesthetic", :keyword into KEYWORD, char #\C into C
+  ~S for "standsard", prints them with escaped characters, KEYWORD into :KEYWORD
+  ~B, ~O, ~D, ~X and ~R (for customem radix) are radix for numbers, works with lists of numbers or operations
+- (format)
+  "~{~}" to iterate over a list
+  (assert-equal "[1][2][3][4][5][6]" (format nil "~{[~A]~}" '(1 2 3 4 5 6)))
+  (assert-equal "[1 2][3 4][5 6]" (format nil "~{[~A ~A]~}" '(1 2 3 4 5 6)))
+  ~^, abords iteration when no more available
+  (assert-equal "[1], [2], [3], [4], [5], [6]" (format nil "~{[~A]~^, ~}" '(1 2 3 4 5 6)))
+  "~(~)", lowercases what is inside
+  "~:(~)", uppercase first letter of each word
+  "~@(~)", uppercase only the first letter of the sentence
+  "~:@(~)", uppercase all
+- Every object is of type T, no object is of type NIL
+- 'nil is nil
+- type of nil is 'NULL
+- '() is list, atom, null, t
+- Integers are either FIXNUM or BIGNUM
+- (subtypep)
+- ATOM are anything are are not cons
+- (functionp)
+* Youtube
+- Common LISP Object Standard
+  https://www.youtube.com/watch?v=IrmHp1rRQ68
+- Lisp NYC
+  https://vimeo.com/lispnyc
+  https://www.youtube.com/channel/UCv33UlfX5S4PKxozGwUY_pA
+- Patrik Stein -  https://vimeo.com/nklein
+- ELS https://www.youtube.com/channel/UC55S8D_44ge2cV10aQmxNVQ/
+- MIT 6.001 Structure and Interpretation, 1986
+  https://www.youtube.com/playlist?list=PLE18841CABEA24090
+- kraklisp https://www.youtube.com/channel/UCymtXMj1M7cKiV9TKLoTtEg
+- INF4820 https://www.youtube.com/c/INF4820/
+- Baggers https://www.youtube.com/user/CBaggers
+- Neil Munro https://www.youtube.com/user/njalmunro
+- Allegro CL https://www.youtube.com/c/FranzAllegroCL/
+- Fare https://www.youtube.com/c/Fran%C3%A7oisRen%C3%A9Rideau/
+- "afp" https://www.youtube.com/channel/UCYg6qFXDE5SGT_YXhuJPU0A/
+** AFP Concurrency on Lisp - https://www.youtube.com/watch?v=3c7LwUjb-DU
+- Bourdeux Threads
+  - Initial bindings, to control the local environment.
+  - Locks: (with-lock-held ())
+  - Recursive locks: multiple operations on the same thread, take/release/take/release..
+  - Semaphores: "a thread safe counter", signal and wait
+  - Condition Locks: A lock + A conditional variable (not thread safe)
+- Atomics
+  - incf: use a cons and FIXNUM
+  - cas: COMPARE-AND-SWAP on sbcl works on (slot-value)
+- Memory order, "it prevents re-ordering across the fence"
+  - (sb-thread:barrier)
+- lparallel: channels/workers support, priority, queue, pmap, promises

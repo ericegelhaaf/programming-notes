@@ -92,7 +92,6 @@
     - &str[10] is the same as    str + 10
 
 
-
 ** 5 Control Flow
    - Expression statement
    - Compound statements

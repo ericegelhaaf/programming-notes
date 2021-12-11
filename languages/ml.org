@@ -1,6 +1,9 @@
+- https://cs3110.github.io/textbook/cover.html
+  https://www.youtube.com/playlist?list=PLre5AT9JnKShBOPeuiD9b-I4XROIJhkIU
+- Article: 2020 Leaving OCAML https://medium.com/darklang/leaving-ocaml-fce7049a2a40
 - https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi
 - Dialects:
-  - F
+  - F#
   - Elm
 - https://en.wikipedia.org/wiki/Standard_ML
 - Introduction to SML

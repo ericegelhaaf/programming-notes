@@ -1,9 +1,16 @@
+- Article: how to assemble assembly with NASM assembler to 32-bit or 64-bit ELF binary with or without libc
+  phttps://gist.github.com/yellowbyte/d91da3c3b0bc3ee6d1d1ac5327b1b4b2
+- Article Smallest x86 ELF Hello World http://timelessname.com/elfbin/
+- Tool: Compiler
+  https://bellard.org/tcc/
+  https://en.wikipedia.org/wiki/Tiny_C_Compiler
 - NOT A 4k, ray tracing on microcontrollers with Ulisp http://www.ulisp.com/show?2NWA
 - NOT A 4K, but a raymarched donut made in C https://www.a1k0n.net/2011/07/20/donut-math.html
 - Article: Rust 151Bytes http://mainisusuallyafunction.blogspot.com/2015/01/151-byte-static-linux-binary-in-rust.html
 - Synth https://github.com/askeksa/Oidos
 - Intro 1k (ASM,sdl,opengl) https://github.com/baines/demostuff
 - Intro 4k (D) https://github.com/kubo39/tiny-d-demo
+- Intro 4k https://gitlab.com/PoroCYon/fishypack-trident/-/tree/master/
 - Intro 4k https://github.com/xyproto/tinytriangle 2012
 - Intro 4k https://github.com/lnqs/intrusion
 - Intro 4k https://github.com/Sixstring982/4k
@@ -36,6 +43,14 @@
   https://github.com/Dav1dde/glad/issues/152
 - Tool https://github.com/DanielGibson/Linux-app-wrapper
   A wrapper to conditionally override some Linux system libs with newer ones
+* TODO Article 2013 - How to make smaller C and C++ Binaries
+  http://ptspts.blogspot.com/2013/12/how-to-make-smaller-c-and-c-binaries.html
+  - cpp, -fno-exceptions, -fno-rtti (no runtime type id or dynamic_cast), -fvtable-gc
+  - -ffunction-sections -fdata-sections -Wl,--gc-sections, only includ code needed from the .o
+  - -fomit-frame-pointer might make the code larger on x64
+  - -fno-stack-protector
+  - for x32 only
+    -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-loops=1
 * DONE Video: (2006) Linux 4k coding - Markku Reunanen
   slides http://ftp.kameli.net/pub/fit/misc/presis_asm06.pdf
   talk https://www.youtube.com/watch?v=-UQSiRg8Ra0
