@@ -1,0 +1,6 @@
+https://blog.darklang.com/new-backend-fsharp/
+https://bartoszsypytkowski.com/tag/fsharp/
+https://bartoszsypytkowski.com/writing-high-performance-f-code/
+- Tool: Fsharp to ASM/C# https://sharplab.io/
+- Book: https://zaid-ajaj.github.io/the-elmish-book/#/
+- Raytracer: https://github.com/bmitc/the-ray-tracer-challenge-fsharp

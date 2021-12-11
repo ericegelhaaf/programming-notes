@@ -1,0 +1,113 @@
+- 9h https://www.youtube.com/watch?v=rltfdjcXjmk
+- 1h https://www.youtube.com/watch?v=fBNz5xF-Kx4
+- 10h 4 projects https://www.youtube.com/watch?v=qwfE7fSVaZM
+- 8h learn https://www.youtube.com/watch?v=Oe421EPjeBE
+
+- Node.js Intro: https://github.com/maxogden/art-of-node
+- https://github.com/sergtitov/NodeJS-Learning#videos
+- x86
+- --enable-lto
+  --with-snapshot (enabled by default)
+  - Introduced in https://github.com/nodejs/node/issues/17058
+- How to npm install global not as root?
+  https://stackoverflow.com/questions/18088372/how-to-npm-install-global-not-as-root
+  #+NAME: ~/.npmrc
+  #+begin_src
+  prefix=${HOME}/.npm-packages
+  #+end_src
+  #+NAME: ~/.bashrc
+  #+begin_src shell
+  #mkdir "${HOME}/.npm-packages"
+  NPM_PACKAGES="${HOME}/.npm-packages"
+  NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+  PATH="$NPM_PACKAGES/bin:$PATH"
+  # Unset manpath so we can inherit from /etc/manpath via the `manpath`
+  # command
+  unset MANPATH # delete if you already modified MANPATH elsewhere in your config
+  MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+  #+end_src
+* DONE Article: 2019  Reduce Promises memory usage in Node.js
+  https://dev.to/shaggydoag/reduce-promises-memory-usage-in-node-js-1a3i
+  - 3000MB max ammount of memory on AWS lambda
+  - Promise are not memory friendly
+    https://github.com/nodejs/node/issues/6673
+  - bluebird
+    http://bluebirdjs.com/docs/getting-started.html
+  - Solution was to reduce the number of concurrent promises
+* Book: Fullstack Node.js
+** Your First Node API
+- Created on 2009, By Ryan Dahl, a Ruby developer
+- Non blocking I/O
+- Easy to code your own webserver
+- Preinstalled modules: fs, http, tcp, dns, events, child_process, crypto
+  https://nodejs.org/api/index.html (NOTE: node.js v17.0 at Nov/2021)
+- API frameworks
+  - express https://expressjs.com/
+  - hapi https://hapi.dev/ https://github.com/hapijs/hapi
+  - restify (abandoned?) https://github.com/restify/node-restify
+- Distributed systems, use tcp modules along with stream abstraction
+  - dnode (abandoned) https://github.com/substack/dnode
+- #!/usr/bin/env node
+  - yargs (command line arguments) https://github.com/yargs/yargs
+  - chalk (terminal colors) https://github.com/chalk/chalk
+  - blessed (~abandoned~, ncurses) https://github.com/chjj/blessed
+- Example interop with lower level languages
+  - C/Rust https://github.com/RisingStack/node-with-rust
+- Lacks globals, and common browser DOM APIs (window, document)
+  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
+*** Core Examples
+     Globals     https://nodejs.org/api/globals.html
+     process     https://nodejs.org/api/process.html#process_process
+     http        https://nodejs.org/api/http.html
+     querystring https://nodejs.org/api/querystring.html
+  1. Example returning plain string
+  2. Example returning JSON string
+  3. Example req.url functions
+  4. Example req.url querystring params
+  5. Example serving static files
+*** Express Simple Example
+    - drop-in replacement for the core *http* module
+      - biggest difference being routing
+    - Installing express, and his dependencies
+      #+begin_src
+      $ npm install express
+      $ du -sh node_modules/
+      2.7M    node_modules/
+      $ ls  node_modules/
+      accepts/              escape-html/        mime/            safer-buffer/
+      array-flatten/        etag/               mime-db/         send/
+      body-parser/          express/            mime-types/      serve-static/
+      bytes/                finalhandler/       ms/              setprototypeof/
+      content-disposition/  forwarded/          negotiator/      statuses/
+      content-type/         fresh/              on-finished/     toidentifier/
+      cookie/               http-errors/        parseurl/        type-is/
+      cookie-signature/     iconv-lite/         path-to-regexp/  unpipe/
+      debug/                inherits/           proxy-addr/      utils-merge/
+      depd/                 ipaddr.js/          qs/              vary/
+      destroy/              media-typer/        range-parser/
+      ee-first/             merge-descriptors/  raw-body/
+      encodeurl/            methods/            safe-buffer/
+      #+end_src
+    - We don't need to change our response*() functions at all,
+      but it gives us helpers to make them more succint.
+      - res.json
+      - req.query
+      - route wildcards
+        uses https://www.npmjs.com/package/path-to-regexp
+        test route path with http://forbeslindesay.github.io/express-route-tester/
+*** Express Chat Example
+    - Using SSE (Server Sent Events), to push events from the server to the browser
+      - Simpler than WebSockets
+    - SSE JS EventSource API https://developer.mozilla.org/en-US/docs/Web/API/EventSource
+    - SSE Specification https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
+    - Relaying messages using eventemmiter https://nodejs.org/api/events.html#events_class_eventemitter
+    - res.write instead of res.open to avoid closing the connection (keep-alive)
+** Async
+- Node.js is non-blocking by default
+  - Is single threaded
+  - We can still block it
+- Asynchronus
+  - Callback pattern
+    - setInterval(), setTimeout()
+*** Callback
+- fs.ReadFile(filename, callback)
