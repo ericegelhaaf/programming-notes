@@ -1,0 +1,3 @@
+https://picolisp.com/wiki/?Documentation
+https://software-lab.de/doc/tut.html#pilog
+https://git.envs.net/mpech/tankf33der
