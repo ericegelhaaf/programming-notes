@@ -1,3 +1,4 @@
+- sectorLISP https://www.youtube.com/watch?v=xD14SLU2u2k
 - https://mumble.net/~campbell/scheme/style.txt
 - https://github.com/hanshuebner/bknr-datastore
 - music composition
@@ -5,7 +6,6 @@
 - fset
   https://www.youtube.com/watch?v=wx9BN2ppESY
   https://www.youtube.com/watch?v=AfcjnBkWbfw
-- https://github.com/bendudson/array-operations
 - https://bernsteinbear.com/blog/compiling-a-lisp-0/
 - CLI arguments
   https://stackoverflow.com/questions/1021778/getting-command-line-arguments-in-common-lisp
@@ -25,6 +25,13 @@
 - Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
 - https://funcall.blogspot.com/
 - https://google.github.io/styleguide/lispguide.xml?showone=Pathnames#Macros
+  - Allocation: "If you make an array with a *fill pointer*, fill it and then set it back to zero, those objects are still accesible"
+  - "Use *check-type* in functions exported from a package"
+  - "You must not *intern* at runtime. It cons. Creates permanent symbols that won't be GC."
+  - "You must not use *unintern* at runtime"
+  - "You may of course use *intern* at compile-time"
+    - alexandria:symbolicate
+    - alexandria:format-symbol
 - Diferentiation in lisp (resume at 11:00)
   https://www.youtube.com/watch?v=EyhL1DNrSME
 - Reader Macros in Common Lisp
@@ -41,8 +48,6 @@
 - One can use reinitialize-instance to avoid allocating a new instance of
   a thing and instead reset the values to the default initargs
   http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
-- golang slices for arrays
-  https://github.com/tpapp/cl-slice
 - haskell
   https://github.com/Dimercel/listopia  Data.List functions
 - clojure
@@ -63,6 +68,34 @@
   | sort-by       |             |
   +---------------+-------------+
   * interperse
+* Arrays/Matrix
+- Build-in: Row slice, non-copy, :displaced-to & :displaced-index-offset
+  https://stackoverflow.com/questions/12327237/common-lisp-how-to-access-a-row-of-a-certain-multi-dimension-array/12327524
+  #+begin_src lisp
+AOC2021> (let ((arr (make-array '(8 8) :initial-contents (partition-n 8 8 (range 64)))))
+           (values
+            (setf (aref (make-array
+                    8
+                    :displaced-to arr
+                    :displaced-index-offset (* 8 2))
+                        0) 999)
+            arr))
+999 (10 bits, #x3E7)
+#2A((0 1 2 3 4 5 6 7)
+    (8 9 10 11 12 13 14 15)
+    (999 17 18 19 20 21 22 23)
+    (24 25 26 27 28 29 30 31)
+    (32 33 34 35 36 37 38 39)
+    (40 41 42 43 44 45 46 47)
+    (48 49 50 51 52 53 54 55)
+    (56 57 58 59 60 61 62 63))
+AOC2021>
+  #+end_src
+- AOP: https://github.com/bendudson/array-operations
+- NUMCL: https://github.com/numcl/numcl
+- SELECT: slices for arrays/matrix
+  https://github.com/Lisp-Stat/select
+  https://lisp-stat.github.io/select/
 * Binary Release
  "sbcl --disable-debugger --no-sysinit --no-userinit"
             Use an existing SBCL binary as a cross-compilation
@@ -179,6 +212,46 @@ and that doesn't work if the code is provided as a *.a or *.o file
    https://www.timmons.dev/posts/static-executables-with-sbcl.html
    https://www.timmons.dev/posts/static-executables-with-sbcl-v2.html
 * Binary/stream
+** Other
+- Common Lisp: The Language
+  17.4. Functions on =Arrays of Bits=
+  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node161.html
+- http://lisp-univ-etc.blogspot.com/2020/02/programming-algorithms-compression.html
+- http://cl-cookbook.sourceforge.net/io.html
+  If you need to copy a lot of data and the source and destination are both streams (of the same element type), it's very fast to use READ-SEQUENCE and WRITE-SEQUENCE:
+ #+begin_src lisp
+(let ((buf (make-array 4096 :element-type (stream-element-type input-stream)))
+ (loop for pos = (read-sequence input-stream)
+       while (plusp pos)
+       do (write-sequence buf output-stream :end pos))))
+ #+end_src
+** Book: Practical Common Lisp
+- 14 https://gigamonkeys.com/book/files-and-file-io.html
+- (open), (close), (with-open-file)
+- (read)
+- (read-byte)
+  (read-sequence)
+  (read-char)
+- 24 https://gigamonkeys.com/book/practical-parsing-binary-files.html
+- If you wanted to read 2 bytes, into 1 number, you will need to:
+  #+begin_src lisp
+  (defun read-u2 (in)
+    (+ (* (read-byte in) 256) (read-byte in)))
+  #+end_src
+- instead (ldb) can be used to *extract* and *set* BITs from an integer
+  (ldb BYTESPEC INTEGER)
+  (byte N-BITS POS-RIGHTMOST-BIT) creates the BYTESPEC
+- Rewritting read-u2
+  #+begin_src lisp
+  (defun read-u2 (in)
+    (let ((u2 0))
+      (setf (ldb (byte 8 8) u2) (read-byte in))
+      (setf (ldb (byte 8 0) u2) (read-byte in))
+      u2))
+  (defun write-u2 (out value)
+    (write-byte (ldb (byte 8 8) value) out)
+    (write-byte (ldb (byte 8 8) value) out))
+  #+end_src
 ** Franz
 - bits of integer:
   > #b10
@@ -207,12 +280,11 @@ and that doesn't work if the code is provided as a *.a or *.o file
   (ldb (byte  8   0) #b11000111) -> #b11000111 ; lowest  bits
   #+end_src
 ** Libraries
-|                | desc                                                 | url                                        |
 |----------------+------------------------------------------------------+--------------------------------------------|
 | babel          | charset enc/dec, strings and (unsigned-byte 8)       | https://github.com/cl-babel/babel          |
 | bitio          | read multiples of 8 bits                             | https://github.com/psilord/bitio           |
-| bit-smasher    | utilities for bit vectors                            | https://github.com/thephoeron/bit-smasher  |
-| conspack       | encode and decode data types                         | https://github.com/conspack/cl-conspack    |
+| bit-smasher    | utilities for =bit vectors=                          | https://github.com/thephoeron/bit-smasher  |
+| conspack       | MessagePack like, encode and decode data types       | https://github.com/conspack/cl-conspack    |
 | fast-io        |                                                      | https://github.com/rpav/fast-io/           |
 | flexi-streams  | read/write, octects                                  | https://github.com/edicl/flexi-streams/    |
 | ieee-floats    | read float values from strings                       | https://github.com/marijnh/ieee-floats     |
@@ -220,6 +292,7 @@ and that doesn't work if the code is provided as a *.a or *.o file
 | nibbles        | read/write 16/32/64 bits from octet vectors          | https://github.com/froydnj/nibbles         |
 | static-vectors | vectors from lisp to C                               | https://github.com/sionescu/static-vectors |
 | swap-bytes     | changing endianness of unsigned integers             | https://github.com/sionescu/swap-bytes     |
+|----------------+------------------------------------------------------+--------------------------------------------|
 * books
 - https://leanpub.com/lovinglisp/read
 - https://leanpub.com/readevalprintlove001/read
@@ -442,6 +515,7 @@ iplCreateContext(IPLLogFunction     logCallback,
 * Logging
 - https://github.com/Shinmera/verbose
 * Logic Programming (Non-Deterministic Programming)
+ - https://neil-lindquist.github.io/linear-programming/
  - https://github.com/sjl/temperance
    docs https://docs.stevelosh.com/temperance/usage/
  - https://github.com/nikodemus/screamer - logic programming
@@ -492,6 +566,7 @@ iplCreateContext(IPLLogFunction     logCallback,
   https://lispcookbook.github.io/cl-cookbook/iteration.html
   https://gigamonkeys.com/book/loop-for-black-belts.html
 ** iterate
+- Source https://github.com/lisp-mirror/iterate
 - https://common-lisp.net/project/iterate/doc/index.html#Top
 - https://common-lisp.net/project/iterate/
 - https://common-lisp-libraries.readthedocs.io/iterate/
@@ -501,15 +576,25 @@ iplCreateContext(IPLLogFunction     logCallback,
 *** Article: Comparing LOOP and ITERATE
     https://web.archive.org/web/20170713081006/https://items.sjbach.com/211/comparing-loop-and-iterate
 - Accumulation:
-  - adjoining: collect+unique
-  - unioning: appending+unique
-  - nunioning
-  - accumulating: accumulation builder, ex: (accumulating lst by #'union))
+  |-------------+----------------+-----------------------------|
+  | collect     |                |                             |
+  | appending   |                |                             |
+  | nconcing    |                |                             |
+  | *adjoining  | collect+unique |                             |
+  | *unioning   | append +unique |                             |
+  | *nunioning  |                |                             |
+  | *accumulate | *generic*      | (accumulate lst by #'union) |
+  |-------------+----------------+-----------------------------|
 - Reduction:
-  - multiplying:
+  |-----------+-----------+-------------------------------------|
+  | sum       | #'+       |                                     |
+  | *multiply | #'*       |                                     |
+  | counting  | #'count   |                                     |
+  | maximize  | #'max     |                                     |
+  | minimize  | #'min     |                                     |
+  | *reducing | *generic* | (reducing d by #'/ initial-value 0) |
+  |-----------+-----------+-------------------------------------|
   - reducing: a reduccion builder, ex:
-    (reducing d by #'/ initial-value 0)
-    OR with a macro
      #+begin_src lisp
   (defmacro dividing (num &keys (initial-value 0))
     `(reducing , num by #'/ initial-value ,initial-value))
@@ -517,9 +602,11 @@ iplCreateContext(IPLLogFunction     logCallback,
     (dividing i :initial-value 100)
      #+end_src
 - Boolean aggregation: (same in loop and interation)
-  - always(every)
-  - never(notany)
-  - thereis(some)
+  |--------+----------|
+  | always | #'every  |
+  | never  | #'notany |
+  | theris | #'some   |
+  |--------+----------|
 - Finding
   #+begin_src lisp
   (iterate (for lst in '((a) (b c d) (e f)))
@@ -543,25 +630,28 @@ iplCreateContext(IPLLogFunction     logCallback,
   http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
   http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
 * Other
- - https://github.com/hipeta/arrow-macros
- - https://github.com/dlowe-net/local-time
- - Portable CL:*FEATURES* - https://github.com/trivial-features/trivial-features
- - https://common-lisp-libraries.readthedocs.io/
- - https://github.com/eschulte/memoize
-   Thread safe memoized defuns, using a synchronized type of hash table
-   See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
- - https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
- - https://common-lisp.net/project/metabang-bind/user-guide.html
- - https://gitlab.com/mbabich/cl-chess   - (chess GUI)
- - https://github.com/html/clache        - can be used for file score saving on game
- - https://github.com/orivej/defmemo     - cache function call
- - https://github.com/slyrus/opticl      - image
- - https://github.com/Shinmera/flow      - graph
- - https://github.com/Shinmera/flare - value transition
- - https://github.com/lmj/global-vars/
- - Pileup provides a portable, performant, and thread-safe binary heap
-   https://github.com/nikodemus/pileup
-   https://nikodemus.github.io/pileup/
+- https://github.com/sharplispers/let-plus
+- https://github.com/rudolfochrist/cl-change-case
+- https://github.com/spwhitton/anaphora
+- https://github.com/hipeta/arrow-macros
+- https://github.com/dlowe-net/local-time
+- Portable CL:*FEATURES* - https://github.com/trivial-features/trivial-features
+- https://common-lisp-libraries.readthedocs.io/
+- https://github.com/eschulte/memoize
+  Thread safe memoized defuns, using a synchronized type of hash table
+  See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
+- https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
+- https://common-lisp.net/project/metabang-bind/user-guide.html
+- https://gitlab.com/mbabich/cl-chess   - (chess GUI)
+- https://github.com/html/clache        - can be used for file score saving on game
+- https://github.com/orivej/defmemo     - cache function call
+- https://github.com/slyrus/opticl      - image
+- https://github.com/Shinmera/flow      - graph
+- https://github.com/Shinmera/flare - value transition
+- https://github.com/lmj/global-vars/
+- Pileup provides a portable, performant, and thread-safe binary heap
+  https://github.com/nikodemus/pileup
+  https://nikodemus.github.io/pileup/
 ** incandescent
 - actor container: idea being position depend on the container not actors,
   like and object and a particle system. Or an object and his hitbox (this one
@@ -593,11 +683,12 @@ https://lisp-lang.org/learn/continuous-integration
   https://github.com/noloop/cacau http://quickdocs.org/assert-p/
   https://github.com/joaotavora/fiasco
 * Utils
+- RUTILS docs https://github.com/vseloved/rutils/blob/master/docs/tutorial.md
 - Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
 - Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
 - CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
 - fare-utils https://github.com/fare/fare-utils
-* web
+* Web
 |---------+----------------------+-----------------------------------------------------------------|
 | plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
 | clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
@@ -680,7 +771,6 @@ Source: https://github.com/vseloved/progalgs-code
     - (progn) if we do not plan to return early from a block
   * Branching: (when) (unless) (cond)
   * Looping: We have many, unlike mainstream languages that provide a few and a way to extend them with polymorphism
-
 * Tutorial: koans
 - Things that are T (everything that is NOT NIL)
   1. empty list

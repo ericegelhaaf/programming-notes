@@ -1,3 +1,8 @@
+- For minimal size file:
+  > go build -ldflags="-s -w"
+  - -w turns off DWARF debugging information (no gdb/pprof)
+  - -s turns off the generation of symbol table (no go tool nm)
+  > strip -x
 * Videos
 - GameDev with GO https://www.youtube.com/user/Velovix
 - Learn Go Programming - Golang Tutorial for Beginners
