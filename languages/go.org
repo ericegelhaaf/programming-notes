@@ -1,3 +1,5 @@
+https://ar1lib.org/book/18430280/6c824f
+https://ar1lib.org/book/18431465/3f352b
 - For minimal size file:
   > go build -ldflags="-s -w"
   - -w turns off DWARF debugging information (no gdb/pprof)
@@ -1360,6 +1362,9 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
 }
 #+end_src
 * Book: Go Programming Blueprints
+   https://github.com/matryer/goblueprints
+** 1 - Chat Application with Web Sockets
+
 ** 6 - Exposing data and functionality through a RESTful data web service API
 *** Context
    - *context* To share data between different handlers/middleware in a request

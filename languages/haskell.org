@@ -1,3 +1,5 @@
+- https://work.njae.me.uk/2021/12/21/advent-of-code-2021-day-19/
+- Category Theory for Programmers https://www.youtube.com/watch?v=SmXB2K_5lcA
 - http://sordina.github.io/blog/2021/01/03/1609638326-advent19b.html
 - Usage Examples of Haskell https://homepages.inf.ed.ac.uk/wadler/realworld/
 - https://hackage.haskell.org/package/rio

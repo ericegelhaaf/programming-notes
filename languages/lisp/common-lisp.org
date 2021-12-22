@@ -560,13 +560,31 @@ iplCreateContext(IPLLogFunction     logCallback,
   - to name it, give an extra argument to most non-det created functions
   - there is no way to reverse contrainsts once added
 * Looping
- - https://github.com/yitzchak/trivial-do/
+- https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md#iter
+  - do-hash-table
+  - do-each, iterates over a sequence
+  - collecting, collect
+    with-collector
+    with-collectors
+  - summing, sum
+  - nlet, goto wrapper for tail recursion
+- https://github.com/yitzchak/trivial-do/
+  do like iterators for different structs
+  - doalist
+  - dohash
+  - dolist*, with index tracking variable
+  - doplist
+  - doseq
+  - doseq*, with index tracking variable
+- https://github.com/alessiostalla/doplus
+  like iterate
 ** loop
   https://web.archive.org/web/20171127083905/http://www.method-combination.net/blog/archives/2010/04/06/looping-issues.html
   https://lispcookbook.github.io/cl-cookbook/iteration.html
   https://gigamonkeys.com/book/loop-for-black-belts.html
 ** iterate
 - Source https://github.com/lisp-mirror/iterate
+- examples https://github.com/earl-ducaine/loop-facility-clhs-examples
 - https://common-lisp.net/project/iterate/doc/index.html#Top
 - https://common-lisp.net/project/iterate/
 - https://common-lisp-libraries.readthedocs.io/iterate/
@@ -620,16 +638,24 @@ iplCreateContext(IPLLogFunction     logCallback,
   - Can destructure values easily
 ** gtwiwtg "naive generators"
    https://github.com/cbeo/gtwiwtg
-** Series Package Appendix https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
+** SERIES
   https://cliki.net/SERIES
   https://quickref.common-lisp.net/series.html
+  http://series.sourceforge.net/
+  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
+  Example https://github.com/tokenrove/series/blob/master/s-test.lisp
+  Example https://github.com/BusFactor1/mcl/blob/master/examples/series/stest.lisp
+  Example https://github.com/rabuf/advent-of-code
   Intro to SERIES https://www.youtube.com/watch?v=uRLgZCV4bOM
   SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
   Mirror https://github.com/tokenrove/series
   Article https://fourier.github.io/lisp/2017/12/17/series.html
   http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
   http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
-* Other
+* MISCELLANEOUS
+- https://github.com/cbaggers/draw-cons-tree
+- https://github.com/tokenrove/imago
+- https://github.com/stylewarning/cl-permutation
 - https://github.com/sharplispers/let-plus
 - https://github.com/rudolfochrist/cl-change-case
 - https://github.com/spwhitton/anaphora
@@ -656,6 +682,10 @@ iplCreateContext(IPLLogFunction     logCallback,
 - actor container: idea being position depend on the container not actors,
   like and object and a particle system. Or an object and his hitbox (this one
   is inherence)
+* Pattern Matching
+  https://github.com/m2ym/optima
+  https://github.com/guicho271828/trivia
+  https://github.com/fare/fare-quasiquote
 * Testing
 https://lisp-lang.org/learn/writing-libraries
 https://lisp-lang.org/learn/continuous-integration
@@ -686,6 +716,19 @@ https://lisp-lang.org/learn/continuous-integration
 - RUTILS docs https://github.com/vseloved/rutils/blob/master/docs/tutorial.md
 - Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
 - Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
+  |----------------+-----------------------------------+-----------------------------|
+  | (eqs)          | creates a single arg function     |                             |
+  | (eqls)         |                                   |                             |
+  | (equals)       |                                   |                             |
+  | (trampoline)   | ??????                            |                             |
+  | (define-train) | defun + define-compiler-macro     |                             |
+  | (flip)         | flips function arguments          |                             |
+  | (nth-arg)      | returns NTH argument              |                             |
+  | (juxt)         |                                   | (juxt #'filter #'remove-if) |
+  | (fork)         | ..(f g h) y <->   (f y) g   (h y) | (fork #'/ #'sum #'length)   |
+  | (fork2)        | x (f g h) y <-> (x f y) g (x h y) | (fork #'list #'+ #'-)       |
+  | (hook)         | f(y,g(y))                         | (hook #'= #'floor)          |
+  |----------------+-----------------------------------+-----------------------------|
 - CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
 - fare-utils https://github.com/fare/fare-utils
 * Web
