@@ -1,0 +1,3 @@
+https://www.purescript.org/
+https://book.purescript.org/
+https://github.com/purescript/documentation

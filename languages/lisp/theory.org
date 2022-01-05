@@ -1,0 +1,60 @@
+* SICP
+- MIT 6.001 Structure and Interpretation, 1986 - https://www.youtube.com/playlist?list=PLE18841CABEA24090
+  Gerald Jay Sussman
+** Video: Lecture 1A: Overview and Introduction to Lisp - https://www.youtube.com/watch?v=-J_xL4IGhJA&list=PLE18841CABEA24090
+*** Part 1
+- Computer engineer deals with idealized components.
+  That means there is no much difference into what I could build and what can I imagine.
+  The constrains are not physics, but the constrains of our minds.
+- Techniques to control complexity:
+  1) Black-box abstraction: functions that return values or other functions
+  2) Conventional interfaces: generic operations
+  3) Metalinguistic abstraction: DSL
+*** Part 2
+- Elements of programming languages:
+  1) Primitive elements:              + 3 17.5 5
+  2) means of combination:           (+ 3 17.5 5) (if) (cond)
+  3) means of abstraction: (define a (+ 3 17.5 5))
+     (define (square x) (* x x)) OR (define square (lambda (x) (* x x)))
+*** Part 3
+- You don't need any more constructs to loop. If you have recursive definitions.
+- Block structure: for defining local sub functions aka flet, labels
+  #+begin_src scheme
+  (define (sqrt x)
+    (define (try a b))
+    (define (improve-guess a b))
+    (define (good-enough-? a b))
+    (try 1)) ; Don't have to define X again as it is in scope
+  #+end_src
+** Video: Lecture 1B: Procedures and Processes; Substitution Model
+*** Part 1
+- "At any level of detail, if you look inside this machine, you are gonna find that there is multiple levels below that you don't know about."
+- "We have to learn to ignore details."
+- "The key to understanding complicated things is know what not to look at. And not to compute.
+- Peano Arithmetics
+  #+begin_src scheme
+  (define (+ x y)
+    (if (= x 0)
+        y
+        (+ (-1 x) (+1 y))))
+  (define (+ x y)
+    (if (= x 0)
+        y
+        (1+ (+ (-1 x) y))))
+  #+end_src
+*** Part 2
+- "The key to being a creative person, partly, is to do analysis at some level."
+- "How do I know what I am going to get on a film before I push a button."
+- both Peano sums have different "shapes", of time(vertical)/space(horizontal/memory)
+- First one has time=O(x), space=O(1)...called Iteration...iteration is "recoverable"
+  Second: time=O(x), space=O(x)...called (Linear) Recursion
+*** Part 3
+- time=O(fib(n))
+  space=O(n)
+  #+begin_src scheme
+  (define (fib n)
+    (if (< n 2)
+      n
+      (+ (fib (- n 1)
+         (fib (- n 2))))))
+  #+end_src
