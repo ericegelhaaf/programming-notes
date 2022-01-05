@@ -1,5 +1,3 @@
-https://ar1lib.org/book/18430280/6c824f
-https://ar1lib.org/book/18431465/3f352b
 - For minimal size file:
   > go build -ldflags="-s -w"
   - -w turns off DWARF debugging information (no gdb/pprof)

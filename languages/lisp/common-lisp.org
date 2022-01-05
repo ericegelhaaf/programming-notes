@@ -1,3 +1,36 @@
+- Some abbreviature macros https://github.com/cl21/cl21/blob/c36644f3b6ea4975174c8ce72de43a4524dd0696/src/stdlib/abbr.lisp
+- Blog: http://funcall.blogspot.com/
+- https://etc.ruricolist.com/2020/01/02/the-multiple-value-call-trick/
+  (multiple-value-bind) is a macro using (multiple-value-call)
+  #+begin_src lisp
+  (multiple-value-bind (x y z)
+    (+ x y z))
+  ;; Is the same as doing...
+  (multiple-value-call (lambda (&optional x y z)
+                         (+ x y z))
+    (values 1 2 3))
+  ;; But m-v-c can capture values from all the forms
+  (m-v-c (lambda (&optional x y z)
+           (+ x y z))
+    ;; (values 1 2) 3
+    ;; 1 2 3
+    (values 1) (values 2 3))
+  #+end_src
+  - m-v-c works directly on the stack, with NO allocations
+  - (values-list), takes a list and returns it as multiple values
+- Video: 2008 Raytracer in lisp
+  https://www.youtube.com/watch?v=N1oMRw04W3E
+  https://github.com/afwlehmann/clrt-tutorial
+  https://web.archive.org/web/20130107155225/http://rudairandamacha.blogspot.de/2012/09/writing-simple-raytracer-in-common-lisp.html
+- http://www.paulgraham.com/rootsoflisp.html
+  http://www.paulgraham.com/diff.html
+  http://paulgraham.com/avg.html
+- Reader macros https://gist.github.com/chaitanyagupta/9324402
+- https://github.com/hyotang666/common-lisp-pitfalls
+- ASDF
+  per file/package/system
+   https://gitlab.common-lisp.net/asdf/asdf/blob/master/doc/best_practices.md#package_inferred
+  https://common-lisp.net/project/asdf/asdf/The-package_002dinferred_002dsystem-extension.html#The-package_002dinferred_002dsystem-extension
 - sectorLISP https://www.youtube.com/watch?v=xD14SLU2u2k
 - https://mumble.net/~campbell/scheme/style.txt
 - https://github.com/hanshuebner/bknr-datastore
@@ -41,7 +74,6 @@
 - https://github.com/emacs-helm/helm-sly
 - https://ambrevar.xyz/modern-common-lisp/index.html
 - https://lainchan.org/~lisp/textdumps-and-videos.txt
-- defun-inline
 - (princ-to-string :this)
 - defgeneric, you can put the default method in it under (:method (arg arg) nil)
 - readonly is a slot defstruct arg
@@ -515,6 +547,9 @@ iplCreateContext(IPLLogFunction     logCallback,
 * Logging
 - https://github.com/Shinmera/verbose
 * Logic Programming (Non-Deterministic Programming)
+ - https://github.com/phoe/amb
+   https://github.com/phoe/amb/blob/main/doc/MANUAL.md
+   https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-28.html
  - https://neil-lindquist.github.io/linear-programming/
  - https://github.com/sjl/temperance
    docs https://docs.stevelosh.com/temperance/usage/
@@ -585,12 +620,14 @@ iplCreateContext(IPLLogFunction     logCallback,
 ** iterate
 - Source https://github.com/lisp-mirror/iterate
 - examples https://github.com/earl-ducaine/loop-facility-clhs-examples
+- addons https://github.com/ruricolist/cloture/blob/623c15c8d2e5e91eb87f46e3ecb3975880109948/iterate-drivers.lisp
+- addons https://github.com/sjl/cl-losh/blob/master/src/iterate.lisp
 - https://common-lisp.net/project/iterate/doc/index.html#Top
 - https://common-lisp.net/project/iterate/
 - https://common-lisp-libraries.readthedocs.io/iterate/
 - https://web.archive.org/web/20170713105315/https://items.sjbach.com/280/extending-the-iterate-macro
-- https://github.com/sjl/cl-losh/blob/master/src/iterate.lisp
 - https://sites.google.com/site/sabraonthehill/loop-v-iter
+- https://etc.ruricolist.com/2019/12/16/the-iterate-clause-trick/
 *** Article: Comparing LOOP and ITERATE
     https://web.archive.org/web/20170713081006/https://items.sjbach.com/211/comparing-loop-and-iterate
 - Accumulation:
@@ -639,6 +676,10 @@ iplCreateContext(IPLLogFunction     logCallback,
 ** gtwiwtg "naive generators"
    https://github.com/cbeo/gtwiwtg
 ** SERIES
+#+CAPTION: All methods exported
+#+NAME:   fig:SED-HR4049
+  [[./series.png]]
+
   https://cliki.net/SERIES
   https://quickref.common-lisp.net/series.html
   http://series.sourceforge.net/
@@ -646,13 +687,90 @@ iplCreateContext(IPLLogFunction     logCallback,
   Example https://github.com/tokenrove/series/blob/master/s-test.lisp
   Example https://github.com/BusFactor1/mcl/blob/master/examples/series/stest.lisp
   Example https://github.com/rabuf/advent-of-code
+  Extension https://github.com/mikelevins/taps
   Intro to SERIES https://www.youtube.com/watch?v=uRLgZCV4bOM
   SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
   Mirror https://github.com/tokenrove/series
   Article https://fourier.github.io/lisp/2017/12/17/series.html
   http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
   http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
+*** Part 1
+**** Intro
+    #+begin_src lisp
+(collect-sum (choose-if #'plusp (scan '(1 -2 3 -4))))
+;; => 4
+(let ((x (subseries (scan-range :from 0 :by 2) 0 5)))
+  (values (collect x) (collect-sum x)))
+;; => (0 2 4 6 8), 20
+
+;; Scanners
+(series 'a)
+(scan '(a b c))
+(scan 'vector #(a b c))
+(scan-range :from 1 :upto 3)
+(scan-plist '(a 1 b 2))
+
+;; Transducers
+(positions #Z(a nil b c nil nil));; =>#Z(0 2 3)
+(choose #Z(nil t t nil) #Z(1 2 3 4));; => #Z(2 3))
+
+;; Collectors
+#+end_src
+**** Generators and Gatherers
+***** Generators
+- by using (next-in) we get the next element on the series
+  with side-effect (like streams, unlike series)
+- Any Series can be converted in a Generator
+- (next-in GENERATOR &body ACTION-LIST)
+  (next-in x (return T))
+  (next-in x (return nil))
+  executes action-list when it runs out of elements
+  or errors
+- (generator SERIES)
+***** Gatherers
+- inverse of a generator, like and output stream
+- one at the time
+- Any one-input/one-output collector can be converted into a gatherer
+- (next-out GATHERER ITEM), writes ITEM into gatherer
+- (result-of GATHERER), gets the net result of a gatherer
+- (gatherer COLLECTOR)
+  arg must be a one input collector function
+  #+begin_src lisp
+(let ((x (gatherer #'collect))
+     ((y (gatherer #'(lambda (x) (collect-sum
+                             (choose-if #'oddp x))))))
+  (dotimes (i 4)
+    (next-out x i)
+    (next-out y i)
+    (if (evenp i) (next-out x (* i 10))))
+  (values (result-of x) (result-of y))))
+;; => (0 0 1 2 20 3), 4
+  #+end_src
+- (gathering VAR-COLLECTOR-PAIR-LIST &body body)
+  Returns N values, each value is the (result-of) each gatherer.
+  #+begin_src lisp
+(gathering ((x collect)
+            (y collect-sum))
+  (dotimes (i 3)
+    (next-out y i)
+    (if (evenp i) (next-out x (* i 10)))))
+;; => (0 20), 3
+  #+end_src
+- Optimization:
+  - "1st eversion", vars on stack if closure are near
+  - know at compile time *what* closure is involved and *which* scope
+**** TODO Defining New Off-line Series Functions
+- (producing OUTPUT-LIST INPUT-LIST &body BODY)
 * MISCELLANEOUS
+- https://github.com/sjl/cl-netpbm/     - image
+- https://github.com/slyrus/opticl      - image
+- https://github.com/slyrus/ch-image/   - image
+- readtable for string interpolation https://github.com/edicl/cl-interpol
+- thread-safe binary heap https://github.com/nikodemus/pileup
+- bounded, lossy, unbounded queue https://cliki.net/jpl-queues
+- https://github.com/mrossini-ethz/parseq
+  https://www.cliki.net/parseq
+  https://40ants.com/lisp-project-of-the-day/2020/10/0207-parseq.html
 - https://github.com/cbaggers/draw-cons-tree
 - https://github.com/tokenrove/imago
 - https://github.com/stylewarning/cl-permutation
@@ -671,7 +789,6 @@ iplCreateContext(IPLLogFunction     logCallback,
 - https://gitlab.com/mbabich/cl-chess   - (chess GUI)
 - https://github.com/html/clache        - can be used for file score saving on game
 - https://github.com/orivej/defmemo     - cache function call
-- https://github.com/slyrus/opticl      - image
 - https://github.com/Shinmera/flow      - graph
 - https://github.com/Shinmera/flare - value transition
 - https://github.com/lmj/global-vars/
@@ -687,6 +804,7 @@ iplCreateContext(IPLLogFunction     logCallback,
   https://github.com/guicho271828/trivia
   https://github.com/fare/fare-quasiquote
 * Testing
+https://github.com/lmj/1am
 https://lisp-lang.org/learn/writing-libraries
 https://lisp-lang.org/learn/continuous-integration
 ** parachute - https://github.com/Shinmera/parachute
@@ -712,7 +830,16 @@ https://lisp-lang.org/learn/continuous-integration
   https://github.com/maruks/quickproject-templates
   https://github.com/noloop/cacau http://quickdocs.org/assert-p/
   https://github.com/joaotavora/fiasco
+* Typing
+  https://github.com/stylewarning/cl-algebraic-data-type
+  https://renato.athaydes.com/posts/revenge_of_lisp-part-2.html
+  https://medium.com/@MartinCracauer/static-type-checking-in-the-programmable-programming-language-lisp-79bb79eb068a
+  https://alhassy.github.io/TypedLisp
+  https://ambrevar.xyz/modern-common-lisp/
+  ftype https://write.as/loke/common-lisp-code-optimisation
 * Utils
+- bundle :use of alexandria+serapeum+closer-mop+iterate+fset+split-sequence+cl-ppcre+named-readtables
+  https://github.com/GrammaTech/cl-utils
 - RUTILS docs https://github.com/vseloved/rutils/blob/master/docs/tutorial.md
 - Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
 - Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
@@ -730,7 +857,11 @@ https://lisp-lang.org/learn/continuous-integration
   | (hook)         | f(y,g(y))                         | (hook #'= #'floor)          |
   |----------------+-----------------------------------+-----------------------------|
 - CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
+  https://lisp-journey.gitlab.io/blog/snippets-functional-style-more/
+  (nullary)
+  (gathering)
 - fare-utils https://github.com/fare/fare-utils
+  (defun-inline)
 * Web
 |---------+----------------------+-----------------------------------------------------------------|
 | plump   | html,xml parser      | https://github.com/Shinmera/plump                               |

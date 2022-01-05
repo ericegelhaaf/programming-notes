@@ -1,3 +1,7 @@
+- MIT RES.LL-005 Mathematics of Big Data and Machine Learning, IAP 2020
+  https://www.youtube.com/watch?v=t4K6lney7Zw
+- Video: Information Thoery, Pattern Recognition, and Neural Networks
+  https://www.youtube.com/playlist?list=PLruBu5BI5n4aFpG32iMbdWoRVAA-Vcso6
 - https://www.youtube.com/user/mathematicalmonk/videos
 - Video Channel
   https://www.youtube.com/c/ShashankKalanithiData/videos

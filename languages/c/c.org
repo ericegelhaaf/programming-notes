@@ -8,6 +8,51 @@
 - https://tek256.com/posts/code-hardening/
 - http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
   https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
+* Article: C Runtime Overhead
+  http://ryanhileman.info/posts/lib43
+  https://news.ycombinator.com/item?id=29783585
+- overhead is 9ms of linker and glibc
+- strace -tt shows time in microseconds
+- baseline time without stdlib 0.5ms
+   -ffreestanding -nostdlib
+   #+begin_src c
+// gcc -m32 -ffreestanding -nostdlib
+void _start() {
+    /* exit system call */
+    asm("movl $1,%eax;"
+        "xorl %ebx,%ebx;"
+        "int  $0x80"
+    );
+}
+   #+end_src
+- Bloom filter, to test SET belongs, for big datasets
+  gives false-positive
+  do not gives false-negatives
+  https://en.wikipedia.org/wiki/Bloom_filter
+- 1ms in linking
+- 5ms in glibc load
+- portable startime libc https://github.com/lunixbochs/lib43
+* 0x00sec
+  https://0x00sec.org/t/remote-shells-part-ii-crypt-your-link/306
+- https://en.wikipedia.org/wiki/Loop_unrolling
+- SocketPair
+  - Used to transfer data
+  - Are a pair of sockets that are immediatly connected
+    Something like runing a client and a server in 1 call
+  - Kind of like a bidirectional PIPE
+  - Convenient IPC
+- secure_shel()
+| Parent       | Child              |
+|--------------+--------------------|
+| socketpair() |                    |
+| fork()       | fork()             |
+| close(sp[0]) | close(sp[1])       |
+| async_read() | start_shell(sp[0]) |
+- async_read()
+|   |   |   |   |   |
+|---+---+---+---+---|
+|   |   |   |   |   |
+
 * Projects
 - http://www.tendra.org/tdfc2-config/#S11.2
   https://github.com/tendra/tendra/wiki/About

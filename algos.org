@@ -1,6 +1,5 @@
 - https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
   "Algorithms with Attitude"
-
 - CodeEric
   https://www.youtube.com/channel/UCVUreMZC948wS-KecowbA_g/
 - https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
@@ -10,3 +9,7 @@
 - Category Theory
   https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
   https://www.youtube.com/playlist?list=PLbgaMIhjbmElia1eCEZNvsVscFef9m0dm
+* Book: Algebraic Graph Algorithms (Springer)
+- It can be viewed from the angle of *group theory* or *linear algebra*
+- The book deals with LinA, taking advantage of Matrix Operations
+- https://teachyourselfcs.com/#algorithms
