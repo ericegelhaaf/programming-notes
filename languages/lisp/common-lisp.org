@@ -1,23 +1,6 @@
+- History http://www.nhplace.com/kent/Papers/cl-untold-story.html
 - Some abbreviature macros https://github.com/cl21/cl21/blob/c36644f3b6ea4975174c8ce72de43a4524dd0696/src/stdlib/abbr.lisp
 - Blog: http://funcall.blogspot.com/
-- https://etc.ruricolist.com/2020/01/02/the-multiple-value-call-trick/
-  (multiple-value-bind) is a macro using (multiple-value-call)
-  #+begin_src lisp
-  (multiple-value-bind (x y z)
-    (+ x y z))
-  ;; Is the same as doing...
-  (multiple-value-call (lambda (&optional x y z)
-                         (+ x y z))
-    (values 1 2 3))
-  ;; But m-v-c can capture values from all the forms
-  (m-v-c (lambda (&optional x y z)
-           (+ x y z))
-    ;; (values 1 2) 3
-    ;; 1 2 3
-    (values 1) (values 2 3))
-  #+end_src
-  - m-v-c works directly on the stack, with NO allocations
-  - (values-list), takes a list and returns it as multiple values
 - Video: 2008 Raytracer in lisp
   https://www.youtube.com/watch?v=N1oMRw04W3E
   https://github.com/afwlehmann/clrt-tutorial
@@ -25,7 +8,6 @@
 - http://www.paulgraham.com/rootsoflisp.html
   http://www.paulgraham.com/diff.html
   http://paulgraham.com/avg.html
-- Reader macros https://gist.github.com/chaitanyagupta/9324402
 - https://github.com/hyotang666/common-lisp-pitfalls
 - ASDF
   per file/package/system
@@ -36,9 +18,6 @@
 - https://github.com/hanshuebner/bknr-datastore
 - music composition
   https://quod.lib.umich.edu/s/spobooks/bbv9810.0001.001?rgn=main;view=fulltext
-- fset
-  https://www.youtube.com/watch?v=wx9BN2ppESY
-  https://www.youtube.com/watch?v=AfcjnBkWbfw
 - https://bernsteinbear.com/blog/compiling-a-lisp-0/
 - CLI arguments
   https://stackoverflow.com/questions/1021778/getting-command-line-arguments-in-common-lisp
@@ -49,13 +28,10 @@
 - https://franz.com/support/documentation/current/doc/mop/concepts.html
 - https://mov.im/?blog/phoe%40movim.eu&page=2
 - https://mov.im/?blog/phoe%40movim.eu/a9391f4b-485e-4f3a-ae02-051a5fc65ed1
-- https://pvk.ca/Blog/2014/08/16/how-to-define-new-intrinsics-in-sbcl/
-- https://pvk.ca/Blog/2014/03/15/sbcl-the-ultimate-assembly-code-breadboard/
 - https://stevelosh.com/blog/2016/08/lisp-jam-postmortem/
 - http://wcp.sdf-eu.org/software/index.html
 - ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
 - zap https://malisper.me/zap/
-- Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
 - https://funcall.blogspot.com/
 - https://google.github.io/styleguide/lispguide.xml?showone=Pathnames#Macros
   - Allocation: "If you make an array with a *fill pointer*, fill it and then set it back to zero, those objects are still accesible"
@@ -80,55 +56,7 @@
 - One can use reinitialize-instance to avoid allocating a new instance of
   a thing and instead reset the values to the default initargs
   http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
-- haskell
-  https://github.com/Dimercel/listopia  Data.List functions
-- clojure
-  https://github.com/ruricolist/cloture complete reimplementation
-  https://github.com/joinr/clclojure    complete reimplementation
-  https://github.com/eigenhombre/cl-oju just some functions
-  +---------------+-------------+
-  | take          | drop        |
-  | spit          | slurp       |
-  | neg?          | pos?        |
-  | partition-all | partition-n |
-  | interleave    | interpose*  |
-  | rand-int      | rand-nth    |
-  | frequencies   | group-by    |
-  | juxt          | partial     |
-  | range         |             |
-  | repeatedly    |             |
-  | sort-by       |             |
-  +---------------+-------------+
-  * interperse
-* Arrays/Matrix
-- Build-in: Row slice, non-copy, :displaced-to & :displaced-index-offset
-  https://stackoverflow.com/questions/12327237/common-lisp-how-to-access-a-row-of-a-certain-multi-dimension-array/12327524
-  #+begin_src lisp
-AOC2021> (let ((arr (make-array '(8 8) :initial-contents (partition-n 8 8 (range 64)))))
-           (values
-            (setf (aref (make-array
-                    8
-                    :displaced-to arr
-                    :displaced-index-offset (* 8 2))
-                        0) 999)
-            arr))
-999 (10 bits, #x3E7)
-#2A((0 1 2 3 4 5 6 7)
-    (8 9 10 11 12 13 14 15)
-    (999 17 18 19 20 21 22 23)
-    (24 25 26 27 28 29 30 31)
-    (32 33 34 35 36 37 38 39)
-    (40 41 42 43 44 45 46 47)
-    (48 49 50 51 52 53 54 55)
-    (56 57 58 59 60 61 62 63))
-AOC2021>
-  #+end_src
-- AOP: https://github.com/bendudson/array-operations
-- NUMCL: https://github.com/numcl/numcl
-- SELECT: slices for arrays/matrix
-  https://github.com/Lisp-Stat/select
-  https://lisp-stat.github.io/select/
-* Binary Release
+* Elf Binary Release
  "sbcl --disable-debugger --no-sysinit --no-userinit"
             Use an existing SBCL binary as a cross-compilation
             host even though you have stuff in your
@@ -312,58 +240,58 @@ and that doesn't work if the code is provided as a *.a or *.o file
   (ldb (byte  8   0) #b11000111) -> #b11000111 ; lowest  bits
   #+end_src
 ** Libraries
-|----------------+------------------------------------------------------+--------------------------------------------|
-| babel          | charset enc/dec, strings and (unsigned-byte 8)       | https://github.com/cl-babel/babel          |
-| bitio          | read multiples of 8 bits                             | https://github.com/psilord/bitio           |
-| bit-smasher    | utilities for =bit vectors=                          | https://github.com/thephoeron/bit-smasher  |
-| conspack       | MessagePack like, encode and decode data types       | https://github.com/conspack/cl-conspack    |
-| fast-io        |                                                      | https://github.com/rpav/fast-io/           |
-| flexi-streams  | read/write, octects                                  | https://github.com/edicl/flexi-streams/    |
-| ieee-floats    | read float values from strings                       | https://github.com/marijnh/ieee-floats     |
-| mmap           | read file into memory (mmap, munmap, msync,mprotect) | https://github.com/Shinmera/mmap           |
-| nibbles        | read/write 16/32/64 bits from octet vectors          | https://github.com/froydnj/nibbles         |
-| static-vectors | vectors from lisp to C                               | https://github.com/sionescu/static-vectors |
-| swap-bytes     | changing endianness of unsigned integers             | https://github.com/sionescu/swap-bytes     |
-|----------------+------------------------------------------------------+--------------------------------------------|
+|----------------+----------------------------------------------------------------+--------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel          |
+| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio           |
+| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher  |
+| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack    |
+| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/           |
+| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/    |
+| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats     |
+| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap           |
+| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles         |
+| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors |
+| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes     |
+|----------------+----------------------------------------------------------------+--------------------------------------------|
 * books
 - https://leanpub.com/lovinglisp/read
 - https://leanpub.com/readevalprintlove001/read
 - https://github.com/mark-watson/loving-common-lisp
 * cffi
 - function argument is a pointer to something
-#+begin_src
-iplCreateContext(IPLLogFunction     logCallback,
-                IPLAllocateFunction allocateCallback,
-                IPLFreeFunction     freeCallback,
-                IPLhandle*          context)
-#+end_src
-#+begin_src
-(let ((context (cffi:foreign-alloc :pointer)))
-  (format t "raw: ~a pointer: ~a~%" context (cffi:mem-ref context :pointer))
-  (ipl-create-context (cffi:null-pointer)
-                      (cffi:null-pointer)
-                      (cffi:null-pointer)
-                      context)
-  (format t "daw: ~a pointer: ~a~%" context (cffi:mem-ref context :pointer))
-  context)
-#+end_src
+  #+begin_src c
+  iplCreateContext(IPLLogFunction     logCallback,
+                  IPLAllocateFunction allocateCallback,
+                  IPLFreeFunction     freeCallback,
+                  IPLhandle*          context)
+  #+end_src
+  #+begin_src lisp
+  (let ((context (cffi:foreign-alloc :pointer)))
+    (format t "raw: ~a pointer: ~a~%" context (cffi:mem-ref context :pointer))
+    (ipl-create-context (cffi:null-pointer)
+                        (cffi:null-pointer)
+                        (cffi:null-pointer)
+                        context)
+    (format t "daw: ~a pointer: ~a~%" context (cffi:mem-ref context :pointer))
+    context)
+  #+end_src
 - function that returns a pointer to a pointer
   https://stackoverflow.com/questions/35841771/common-lisp-cffi-pointer-to-the-pointer
 - cffi: array of c struct accessing
-#+begin_src
-(cffi:defcstruct tryout
-  (low  :float)
-  (high :int))
-(cffi:with-foreign-object (thing '(:struct tryout) 2)
-  (cffi:with-foreign-slots ((low high) (cffi:mem-aptr thing '(:struct tryout) 0) (:struct tryout))
-    (setf low 1s0)
-    (setf high 10))
-  (cffi:with-foreign-slots ((low high) (cffi:mem-aptr thing '(:struct tryout) 1) (:struct tryout))
-    (setf low 2s0)
-    (setf high 20))
-  (print (cffi:mem-aref thing '(:struct tryout) 1))
-  (print (cffi:mem-aref thing '(:struct tryout) 0)))
-#+end_src
+  #+begin_src lisp
+  (defcstruct tryout
+    (low  :float)
+    (high :int))
+  (with-foreign-object (thing '(:struct tryout) 2)
+    (with-foreign-slots ((low high) (mem-aptr thing '(:struct tryout) 0) (:struct tryout))
+      (setf low 1s0)
+      (setf high 10))
+    (with-foreign-slots ((low high) (mem-aptr thing '(:struct tryout) 1) (:struct tryout))
+      (setf low 2s0)
+      (setf high 20))
+    (print (mem-aref thing '(:struct tryout) 1))
+    (print (mem-aref thing '(:struct tryout) 0)))
+  #+end_src
 * CLOS
 ** Common Lisp Recipies
  - &key arguments on (initialize-instance :after) are valid on (make-instance)
@@ -460,9 +388,6 @@ iplCreateContext(IPLLogFunction     logCallback,
   Facade................... Modules (Norvig)
   Strategy................. higher order functions (Gene Michael Stover?), ControlTable
   AssociationList.......... Dictionaries, maps, HashTables (these go by numerous names in different languages)
-* Documentation
-- https://github.com/Shinmera/staple
-- git config for ./doc ?
 * event
 - GOTO 2017 • The Many Meanings of Event-Driven Architecture • Martin Fowler
   https://www.youtube.com/watch?v=STKCRSUsyP0
@@ -541,11 +466,28 @@ iplCreateContext(IPLLogFunction     logCallback,
   - Game https://github.com/Shirakumo/ld39
   - Game https://github.com/Shirakumo/ld45
   - Game https://github.com/shinmera/shootman
-* GUI
-  LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
-  GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
-* Logging
-- https://github.com/Shinmera/verbose
+* Implementations
+|------+---------+----------------------------------------+-------|
+|      | active? |                                        | free? |
+|------+---------+----------------------------------------+-------|
+| MOCL | no      |                                        | no    |
+| CCL  | yes     | https://ccl.clozure.com/               | yes   |
+| ECL  | yes     | https://gitlab.common-lisp.net/ecl/ecl | yes   |
+| SICL | yes     | https://github.com/robert-strandh/SICL | yes   |
+| SBCL | yes     | http://www.sbcl.org/                   | yes   |
+|------+---------+----------------------------------------+-------|
+** SBCL
+- https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
+- https://pvk.ca/Blog/2014/08/16/how-to-define-new-intrinsics-in-sbcl/
+- https://pvk.ca/Blog/2014/03/15/sbcl-the-ultimate-assembly-code-breadboard/
+** ECL
+   android https://gitlab.common-lisp.net/ecl/ecl-android
+** CCL
+- Clozure, random errors on arm
+  https://trac.clozure.com/ccl/ticket/1257
+- Distributed programming for Clozure
+  https://github.com/eugeneia/erlangen
+  https://mr.gy/blog/erlangen-els-2017-lightning-talk.html
 * Logic Programming (Non-Deterministic Programming)
  - https://github.com/phoe/amb
    https://github.com/phoe/amb/blob/main/doc/MANUAL.md
@@ -761,55 +703,96 @@ iplCreateContext(IPLLogFunction     logCallback,
   - know at compile time *what* closure is involved and *which* scope
 **** TODO Defining New Off-line Series Functions
 - (producing OUTPUT-LIST INPUT-LIST &body BODY)
-* MISCELLANEOUS
-- https://github.com/sjl/cl-netpbm/     - image
-- https://github.com/slyrus/opticl      - image
-- https://github.com/slyrus/ch-image/   - image
+* LIBRARIES
+- http://edicl.github.io/cl-fad/        - directory file, clossplatform
 - readtable for string interpolation https://github.com/edicl/cl-interpol
-- thread-safe binary heap https://github.com/nikodemus/pileup
-- bounded, lossy, unbounded queue https://cliki.net/jpl-queues
-- https://github.com/mrossini-ethz/parseq
-  https://www.cliki.net/parseq
-  https://40ants.com/lisp-project-of-the-day/2020/10/0207-parseq.html
-- https://github.com/cbaggers/draw-cons-tree
-- https://github.com/tokenrove/imago
-- https://github.com/stylewarning/cl-permutation
-- https://github.com/sharplispers/let-plus
-- https://github.com/rudolfochrist/cl-change-case
 - https://github.com/spwhitton/anaphora
 - https://github.com/hipeta/arrow-macros
 - https://github.com/dlowe-net/local-time
 - Portable CL:*FEATURES* - https://github.com/trivial-features/trivial-features
 - https://common-lisp-libraries.readthedocs.io/
-- https://github.com/eschulte/memoize
-  Thread safe memoized defuns, using a synchronized type of hash table
-  See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
-- https://pvk.ca/Blog/2013/11/22/the-weaknesses-of-sbcls-type-propagation/
-- https://common-lisp.net/project/metabang-bind/user-guide.html
 - https://gitlab.com/mbabich/cl-chess   - (chess GUI)
 - https://github.com/html/clache        - can be used for file score saving on game
-- https://github.com/orivej/defmemo     - cache function call
 - https://github.com/Shinmera/flow      - graph
 - https://github.com/Shinmera/flare - value transition
 - https://github.com/lmj/global-vars/
+** Arrays/Matrix
+- Build-in: Row slice, non-copy, :displaced-to & :displaced-index-offset
+  https://stackoverflow.com/questions/12327237/common-lisp-how-to-access-a-row-of-a-certain-multi-dimension-array/12327524
+  #+begin_src lisp
+  > (let ((arr (make-array '(8 8) :initial-contents (partition-n 8 8 (range 64)))))
+           (values
+            (setf (aref (make-array
+                    8
+                    :displaced-to arr
+                    :displaced-index-offset (* 8 2))
+                        0) 999)
+            arr))
+999 (10 bits, #x3E7)
+#2A((0 1 2 3 4 5 6 7)
+    (8 9 10 11 12 13 14 15)
+    (999 17 18 19 20 21 22 23)
+    (24 25 26 27 28 29 30 31)
+    (32 33 34 35 36 37 38 39)
+    (40 41 42 43 44 45 46 47)
+    (48 49 50 51 52 53 54 55)
+    (56 57 58 59 60 61 62 63))
+  >
+  #+end_src
+- AOP: https://github.com/bendudson/array-operations
+- NUMCL: https://github.com/numcl/numcl
+- SELECT: slices for arrays/matrix
+  https://github.com/Lisp-Stat/select
+  https://lisp-stat.github.io/select/
+** Data Structures
+- bounded, lossy, unbounded queue https://cliki.net/jpl-queues
+- https://github.com/cbaggers/draw-cons-tree
 - Pileup provides a portable, performant, and thread-safe binary heap
   https://github.com/nikodemus/pileup
   https://nikodemus.github.io/pileup/
-** incandescent
-- actor container: idea being position depend on the container not actors,
-  like and object and a particle system. Or an object and his hitbox (this one
-  is inherence)
-* Pattern Matching
-  https://github.com/m2ym/optima
-  https://github.com/guicho271828/trivia
-  https://github.com/fare/fare-quasiquote
-* Testing
+- fset
+  https://www.youtube.com/watch?v=wx9BN2ppESY
+  https://www.youtube.com/watch?v=AfcjnBkWbfw
+** Documentation
+- https://github.com/Shinmera/staple
+** GUI
+  LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
+  GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
+** Image
+- https://github.com/tokenrove/imago
+- https://github.com/sjl/cl-netpbm/
+- https://github.com/slyrus/opticl
+- https://github.com/slyrus/ch-image/
+** Logging
+- https://github.com/Shinmera/verbose
+** Memoization
+- https://github.com/orivej/defmemo     - cache function call
+- https://github.com/eschulte/memoize
+  Thread safe memoized defuns, using a synchronized type of hash table
+  See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
+** Pattern Matching/Destructuring
+|-----------------+------------------------+---------------------+------------------------------------------------|
+| optima          | pattern matching (old) |                     | https://github.com/m2ym/optima                 |
+| trivia          | pattern matching       | defun-match*, ppcre | https://github.com/guicho271828/trivia         |
+| fare-quasiquote | extensions for trivia  |                     | https://github.com/fare/fare-quasiquote        |
+| let-plus        | destructuring          | defun+              | https://github.com/tpapp/let-plus              |
+| metabang-bind   | destructuring          |                     | https://common-lisp.net/project/metabang-bind/ |
+| serapeum        |                        | mvlet               |                                                |
+|-----------------+------------------------+---------------------+------------------------------------------------|
+- https://common-lisp.net/project/metabang-bind/user-guide.html
+** String Manipulation/Parsing
+- https://github.com/mrossini-ethz/parseq
+  https://www.cliki.net/parseq
+  https://40ants.com/lisp-project-of-the-day/2020/10/0207-parseq.html
+- https://github.com/stylewarning/cl-permutation
+- https://github.com/rudolfochrist/cl-change-case
+** Testing
 https://github.com/lmj/1am
 https://lisp-lang.org/learn/writing-libraries
 https://lisp-lang.org/learn/continuous-integration
-** parachute - https://github.com/Shinmera/parachute
+*** parachute - https://github.com/Shinmera/parachute
 :perform (asdf:test-op (op c) (uiop:symbol-call :parachute :test :test-package))
-** fiveam    - https://github.com/sionescu/fiveam
+*** fiveam    - https://github.com/sionescu/fiveam
 :perform (asdf:test-op (o s) (uiop:symbol-call :fiveam :run! 'quasirpg-tests:all-tests))
 - Game of Life TDD in Common Lisp
   https://www.youtube.com/watch?v=-7QRrUpWR34
@@ -823,20 +806,32 @@ https://lisp-lang.org/learn/continuous-integration
     (is (= 4 (+ 2 2)))
     (is (= 1/2 (+ 1/4 1/4))))
   #+end_src
-** quickproject
+*** quickproject
 - fiveam, travis, gitignore, coc
   https://github.com/fisxoj/fishproject/tree/master/template
 - fiasco or cacau with assert-p
   https://github.com/maruks/quickproject-templates
   https://github.com/noloop/cacau http://quickdocs.org/assert-p/
   https://github.com/joaotavora/fiasco
-* Typing
+** Typing
   https://github.com/stylewarning/cl-algebraic-data-type
   https://renato.athaydes.com/posts/revenge_of_lisp-part-2.html
   https://medium.com/@MartinCracauer/static-type-checking-in-the-programmable-programming-language-lisp-79bb79eb068a
   https://alhassy.github.io/TypedLisp
   https://ambrevar.xyz/modern-common-lisp/
   ftype https://write.as/loke/common-lisp-code-optimisation
+** Web
+- Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
+|---------+----------------------+-----------------------------------------------------------------|
+| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
+| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
+| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
+| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
+|---------+----------------------+-----------------------------------------------------------------|
+* incandescent
+- actor container: idea being position depend on the container not actors,
+  like and object and a particle system. Or an object and his hitbox (this one
+  is inherence)
 * Utils
 - bundle :use of alexandria+serapeum+closer-mop+iterate+fset+split-sequence+cl-ppcre+named-readtables
   https://github.com/GrammaTech/cl-utils
@@ -862,13 +857,26 @@ https://lisp-lang.org/learn/continuous-integration
   (gathering)
 - fare-utils https://github.com/fare/fare-utils
   (defun-inline)
-* Web
-|---------+----------------------+-----------------------------------------------------------------|
-| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
-| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
-| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
-| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
-|---------+----------------------+-----------------------------------------------------------------|
+- haskell
+  https://github.com/Dimercel/listopia  Data.List functions
+- clojure
+  https://github.com/ruricolist/cloture complete reimplementation
+  https://github.com/joinr/clclojure    complete reimplementation
+  https://github.com/eigenhombre/cl-oju just some functions
+  +---------------+-------------+
+  | take          | drop        |
+  | spit          | slurp       |
+  | neg?          | pos?        |
+  | partition-all | partition-n |
+  | interleave    | interpose*  |
+  | rand-int      | rand-nth    |
+  | frequencies   | group-by    |
+  | juxt          | partial     |
+  | range         |             |
+  | repeatedly    |             |
+  | sort-by       |             |
+  +---------------+-------------+
+  * interperse
 * Book: Programming Algorithms in Lisp (2021) / Vsevolod Domkin
 Source: https://github.com/vseloved/progalgs-code
 ** Chapter 1: Introduction
@@ -1115,3 +1123,36 @@ Source: https://github.com/vseloved/progalgs-code
 - Memory order, "it prevents re-ordering across the fence"
   - (sb-thread:barrier)
 - lparallel: channels/workers support, priority, queue, pmap, promises
+* Book: https://leanpub.com/readevalprintlove001/read
+- Tour of Lisp(s)
+** Article: 2006 The Nature of Lisp
+   https://www.defmacro.org/ramblings/lisp.html
+- Put off by syntax at first
+- Attempt to explain lisp with familiar concepts
+- Comparison with XML
+  - XML can be represented as a tree
+  - So can be any programming language be represented as XML
+- ANT(Another Near Tool) was build as a Make replacement for Java, to avoid spaces issues
+  - Started using Java Property files and then moved to XML
+  - XML to interpret and execute java code
+* Book: https://leanpub.com/readevalprintlove002/read
+* Book: https://leanpub.com/readevalprintlove003/read
+* Book: https://leanpub.com/readevalprintlove004/read
+* Article: https://etc.ruricolist.com/2020/01/02/the-multiple-value-call-trick/
+  (multiple-value-bind) is a macro using (multiple-value-call)
+  #+begin_src lisp
+  (multiple-value-bind (x y z)
+    (+ x y z))
+  ;; Is the same as doing...
+  (multiple-value-call (lambda (&optional x y z)
+                         (+ x y z))
+    (values 1 2 3))
+  ;; But m-v-c can capture values from all the forms
+  (m-v-c (lambda (&optional x y z)
+           (+ x y z))
+    ;; (values 1 2) 3
+    ;; 1 2 3
+    (values 1) (values 2 3))
+  #+end_src
+  - m-v-c works directly on the stack, with NO allocations
+  - (values-list), takes a list and returns it as multiple values  

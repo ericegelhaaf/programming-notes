@@ -1,3 +1,6 @@
+- Courses https://ebookfoundation.github.io/free-programming-books/courses/free-courses-en.html
+- Topics https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-subjects.html
+- Programming Languages https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-langs.html
 - Competitive https://cses.fi/problemset/
 - Channel: Coding with Some Guy https://www.youtube.com/channel/UCBwH4Xj7s5C9tkeYxI3dIzA/about
 - Channel: Creel https://www.youtube.com/c/WhatsACreel/videos

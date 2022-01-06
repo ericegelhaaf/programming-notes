@@ -111,3 +111,15 @@
     - setInterval(), setTimeout()
 *** Callback
 - fs.ReadFile(filename, callback)
+  setTimeout(callback, delay)
+- =Convention= In the official Node.js API
+  - callback is always the last argument
+  - The first argument of the callback is the error
+- Async code
+  - does NOT wait
+  - order is not guaranteed
+  - Array.foreach() would give unordered results
+* Book: Scaling Your Node.js Apps
+** 2 Architectural Patterns
+- Layered Architecture (aka n-tier arch patttern)
+  
