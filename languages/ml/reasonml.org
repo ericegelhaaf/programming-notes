@@ -1,0 +1,8 @@
+- https://rescript-lang.org/
+- https://github.com/vramana/awesome-reasonml
+- Article: ReasonML https://medium.com/hackernoon/rs256-in-ocaml-reasonml-9ae579b9420a
+- ReasonML Framework (mirageOS)
+  https://github.com/dysinger/restack
+- Channel: Reason Vienna
+  https://www.youtube.com/channel/UCVVeX_-gN0sV51VAfayIrKA/videos?view=0&sort=dd&shelf_id=0
+- Heroku WebApp https://github.com/jchavarri/ocaml_webapp
