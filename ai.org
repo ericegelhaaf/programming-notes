@@ -1,3 +1,6 @@
+- Course: 2020 Cornell CS 5787: Applied Machine Learning.
+  https://www.youtube.com/playlist?list=PL2UML_KCiC0UlY7iCQDSiGDMovaupqc83
+- NN https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi
 - MIT RES.LL-005 Mathematics of Big Data and Machine Learning, IAP 2020
   https://www.youtube.com/watch?v=t4K6lney7Zw
 - Video: Information Thoery, Pattern Recognition, and Neural Networks

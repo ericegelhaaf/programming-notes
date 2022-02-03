@@ -1,1 +1,2 @@
 https://justine.lol/sectorlisp2/
+https://woodrush.github.io/blog/posts/2022-01-16-neural-networks-in-pure-lisp.html

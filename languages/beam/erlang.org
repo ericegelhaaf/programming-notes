@@ -1,4 +1,4 @@
-
+- https://github.com/duomark/epocxy
 - Video: Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
 - Article: The Joy of Pattern Matching http://blog.hellkvist.org/category/erlang/
 - Mix Erlang/Elixir https://dev.to/wesleimp/elixir-and-erlang-code-in-the-same-project-2l83

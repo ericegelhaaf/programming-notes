@@ -1,3 +1,10 @@
+- https://lisp-journey.gitlab.io/gray-streams/
+- http://www.softwarepreservation.org/projects/LISP/common_lisp_family
+- Quicklisp Snapshot http://blog.quicklisp.org/2011/08/going-back-in-dist-time.html
+- https://unthought.net/2016/12/22-lisp-memory-woes-but-not/
+- Firefox Add-on PCL https://github.com/vale981/practical-cl-beautified
+- Package-local nicknames in Common Lisp
+  https://gist.github.com/phoe/2b63f33a2a4727a437403eceb7a6b4a3
 - History http://www.nhplace.com/kent/Papers/cl-untold-story.html
 - Some abbreviature macros https://github.com/cl21/cl21/blob/c36644f3b6ea4975174c8ce72de43a4524dd0696/src/stdlib/abbr.lisp
 - Blog: http://funcall.blogspot.com/
@@ -240,19 +247,23 @@ and that doesn't work if the code is provided as a *.a or *.o file
   (ldb (byte  8   0) #b11000111) -> #b11000111 ; lowest  bits
   #+end_src
 ** Libraries
-|----------------+----------------------------------------------------------------+--------------------------------------------|
-| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel          |
-| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio           |
-| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher  |
-| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack    |
-| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/           |
-| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/    |
-| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats     |
-| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap           |
-| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles         |
-| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors |
-| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes     |
-|----------------+----------------------------------------------------------------+--------------------------------------------|
+|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel                                    |
+| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio                                     |
+| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher                            |
+| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack                              |
+| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/                                     |
+| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/                              |
+| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats                               |
+| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap                                     |
+| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles                                   |
+| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors                           |
+| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
+| simple-streams | bivalent, varying-width elements support                       | http://www.sbcl.org/manual/#Simple-Streams                           |
+|                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
+| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
+|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
+|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
 * books
 - https://leanpub.com/lovinglisp/read
 - https://leanpub.com/readevalprintlove001/read
@@ -537,6 +548,10 @@ and that doesn't work if the code is provided as a *.a or *.o file
   - to name it, give an extra argument to most non-det created functions
   - there is no way to reverse contrainsts once added
 * Looping
+- https://github.com/Shinmera/trivial-extensible-sequences
+  https://shinmera.github.io/trivial-extensible-sequences/
+- 'User-extensible sequences in Common Lisp' by Christophe Rhodes[1]
+  https://web.archive.org/web/20150918224411/http://www.doc.gold.ac.uk/\~mas01cr/papers/ilc2007/sequences-20070301.pdf
 - https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md#iter
   - do-hash-table
   - do-each, iterates over a sequence
@@ -758,11 +773,14 @@ and that doesn't work if the code is provided as a *.a or *.o file
 ** GUI
   LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
   GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
+  QT  https://github.com/commonqt/commonqt5/
+      https://github.com/kierangrant/cl-qt-example/
 ** Image
 - https://github.com/tokenrove/imago
 - https://github.com/sjl/cl-netpbm/
 - https://github.com/slyrus/opticl
 - https://github.com/slyrus/ch-image/
+- https://github.com/epsilon-phase/img-genner
 ** Logging
 - https://github.com/Shinmera/verbose
 ** Memoization

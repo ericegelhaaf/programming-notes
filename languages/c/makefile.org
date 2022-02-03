@@ -149,3 +149,30 @@ plt.plot(data[:, 0], data[:, 1])
 plt.savefig(args.o)
     #+end_src
   - ~Semantic Versioning~ Major.minor.patch
+* DONE Video: 2019 - Makefiles: 95% of what you need to know
+https://www.youtube.com/watch?v=DtGrdB8wQ_8
+- -MP -MD, flags to be passed to GCC
+- Makefile foreach, patsubst, wildcard, .d
+  #+begin_src makefile
+# generate files that encode make rules for the .h deps
+# generate .d files, includes information for Make
+DEPFLAGS=-MP -MD
+INCDIRS=. ./include/
+CFLAGS=$(foreach D,$(INCDIRS),-I$(D))
+CFILES=$(foreach D$(CODEDIRS),$(wildcard $(D)/*.c))
+OBJECTS=$(patsubst %c,%,o,$(CFILES))
+DEPFILES=$(patsubst %c,%,o,$(CFILES))
+  #+end_src
+- $(info something hello world)
+* DONE Video: 2016 - Introduction to Make and GNU Autotools | Barry Smith, Argonne National Laboratory
+  https://www.youtube.com/watch?v=WFLvcMiG38w
+  #+begin_src makefile
+OUTPUT_OPTION = -MMD -MP -o $@
+
+SOURCE = ext8.c util8.c
+DEPS   = $(SOURCE:.c=.d)
+OBJS   = $(SOURCE:.c=.o) # replace, like patsubst
+-include ${DEPS}
+  #+end_src
+- add a help:
+- include <filename>

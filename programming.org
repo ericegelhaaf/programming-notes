@@ -1,3 +1,5 @@
+- Cursos Uni https://www.youtube.com/channel/UCtUHm20l_zL4u8Q59i3dYow/playlists
+  Cursos UNAM OS https://www.youtube.com/c/SistemasOperativosCienciasUNAM/playlists
 - Courses https://ebookfoundation.github.io/free-programming-books/courses/free-courses-en.html
 - Topics https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-subjects.html
 - Programming Languages https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-langs.html
@@ -59,3 +61,32 @@
      - data
 * Video Object-Oriented Programming is Bad
   https://www.youtube.com/watch?v=QM1iUe6IofM
+* Book: Programming with Types
+** 1
+- The Curry-Howard Correspondence
+  https://www.youtube.com/watch?v=GdcOy6zVFC4
+  16:00
+- Propositions as Types - Computerphile
+  Prop = Type
+  https://www.youtube.com/watch?v=SknxggwRPzU
+- Curry-Howard correspondene, aka proofs-as-programs
+  - Show where is a close relationship between *logic* and *type theory*
+- A function can also be interpreted as "typeA *implies* typeB"
+  Given *evicence* of the proposition typeA
+  The function(implication) can produce evidence of the proposition typeB
+- =State Space= of a running program is the combination of all possible
+  values of all its live variables.
+- Benefits of Typing are
+  1) Correctness
+  2) Inmmutability, const, values can be inlined by the compiler
+  3) Encapsulation, private methods or fields, api
+  4) Composability, generic functions
+  5) Readability
+- Being able to interpret code as data and data as code
+  can lead to catastrophic results
+- =Duck Typing= comes from the phrase
+  "If it waddles like a duck and it quacks like a duck, it must be a duck"
+- Type Systems differn in *when* types are checkd and *how strict* the checks are
+  - WHEN Static vs Dynamic
+  - HOW  Strong vs Weak
+PAGE 15/35

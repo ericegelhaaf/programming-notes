@@ -1,3 +1,22 @@
+- http://infolab.stanford.edu/~ullman/focs.html#pdfs
+- Book: http://c-faq.com/
+- C Books Reviews http://knking.com/recbooks/c.html
+- Code: http://bxr.su/OpenBSD/
+- Article: 2016 https://matt.sh/howto-c
+- Article: https://suckless.org/coding_style/
+- Article: 2021 - unfashionable C
+  https://www.yodaiken.com/2021/05/21/your-computer-is-a-fast-pdp-11-and-more-on-c-the-c-standard-and-computer-architecture/
+- Article: 2018 - C Is Not a Low-level Language
+  https://queue.acm.org/detail.cfm?id=3212479
+- Benchmark: https://www.wilfred.me.uk/blog/2014/10/20/the-fastest-bigint-in-the-west/
+- Benchmark: FFI https://github.com/dyu/ffi-overhead
+  - Golang is 40x slower than C
+  - Haskell,Ocaml(opt),Rust are on par with C
+  - Ocaml(C) is 4x slower
+  - LuaJit is faster than C, https://github.com/dyu/ffi-overhead/issues/2#issuecomment-405834411
+    "Using JITing to skip PLT inderection"
+    "Same on C would be -fno-plt"
+- https://fastcompression.blogspot.com/2019/01/writing-safer-c-code.html
 - Video: How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
 - https://github.com/AnthonyCalandra/modern-cpp-features
 - https://github.com/gerasdf/InsecureProgramming/
@@ -252,3 +271,24 @@ void _start() {
        return dest;h
      }
      #+end_src
+* 6.S081: Learning by doing
+Catalog description: Design and implementation of operating systems,
+and their use as a foundation for systems programming. Topics include
+virtual memory; file systems; threads; context switches; kernels;
+interrupts; system calls; interprocess communication; coordination,
+and interaction between software and hardware. A multi-processor
+operating system for RISC-V, xv6, is used to illustrate these
+topics. Individual laboratory assignments involve extending the xv6
+operating system, for example to support sophisticated virtual memory
+features and networking.
+
+You may wonder why we are studying xv6, an operating system that
+resembles Unix v6, instead of the latest and greatest version of
+Linux, Windows, or BSD Unix. xv6 is big enough to illustrate the basic
+design and implementation ideas in operating systems. On the other
+hand, xv6 is far smaller than any modern production O/S, and
+correspondingly easier to understand. xv6 has a structure similar to
+many modern operating systems; once you've explored xv6 you will find
+that much is familiar inside kernels such as Linux.
+- https://pdos.csail.mit.edu/6.S081/2021/schedule.html
+- https://news.ycombinator.com/item?id=30094376

@@ -1,3 +1,4 @@
+- https://dropbox.tech/application/our-journey-to-type-checking-4-million-lines-of-python
 - https://gto76.github.io/python-cheatsheet/
 - https://news.ycombinator.com/item?id=29582437
 - James Powell: So you want to be a Python expert? | PyData Seattle 2017
