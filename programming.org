@@ -8,6 +8,7 @@
 - Channel: Creel https://www.youtube.com/c/WhatsACreel/videos
 - Article: 2014 - Is TDD Dead https://news.ycombinator.com/item?id=24281195
 - Article: Carmack https://web.archive.org/web/20120702231514/http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/
+- Article: Carmack https://www.gamedeveloper.com/programming/in-depth-functional-programming-in-c-
 - Article: Carmack http://number-none.com/blow/john_carmack_on_inlined_code.html
 - Article: Real Programmer Don't use Pascal https://www.pbm.com/~lindahl/real.programmers.html
 - Course: Cryptography https://crypto.stanford.edu/~dabo/

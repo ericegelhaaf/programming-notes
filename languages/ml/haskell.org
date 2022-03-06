@@ -1,3 +1,7 @@
+- Course: MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
+- Article: Monads https://blog.plover.com/prog/burritos.html
+- Article: https://paulspontifications.blogspot.com/2013/01/when-haskell-is-faster-than-c.html
+- Videos: Haskell beginners 2022 https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c
 - https://www.schoolofhaskell.com/school/advanced-haskell/beautiful-concurrency/3-software-transactional-memory
 - https://github.com/prathyvsh/category-theory-resources
 - Functional Parsing - Computerphile https://www.youtube.com/watch?v=dDtZLm7HIJs
@@ -966,3 +970,26 @@ add (Minutes x) (Minutes y) = Minutes $ x + y
   Can't pattern match
   Can't get values from it
 
+* Course: Functional Programming in Haskell: Supercharge Your Coding
+** 1
+- Pure functional programming languages do NOT have any statements,
+  no assigments, no jumps
+- All is performed using expressions
+- List of Operators Precedence
+  https://www.haskell.org/onlinereport/exps.html
+- Function applications bind thightly than anything else
+- Try Haskell Online
+  https://www.haskellmooc.co.uk
+- :quit
+  to exit ghci
+- Anything with a *=* is an equation
+- Generics/Templates
+  #+begin_src haskell
+  set :: Data.Map.Map String Integer
+  set = Data.Map.empty
+  set' = Data.Map.insert "Answer" 42 set
+  #+end_src
+- Computation is done not through *statements*
+  - But through "Redex", aka reducible expression
+  - If >1 redex, they can run in different orders
+    *"Church-Rosser Theorem"*

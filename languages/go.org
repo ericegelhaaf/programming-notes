@@ -1,3 +1,5 @@
+- https://github.com/microcosm-cc/bluemonday
+- https://jvns.ca/blog/2022/02/01/a-dns-resolver-in-80-lines-of-go/
 - https://github.com/miku/dwstalk
   ckit + sqlite
 - https://www.allhandsontech.com/programming/golang/web-app-sqlite-go/
@@ -30,6 +32,7 @@
 - Gophercon Israel https://www.youtube.com/channel/UCV_ox3kVvV5HrUz4JOuZpdQ
 - Gophercon Russia https://www.youtube.com/channel/UCq-OB01F8YnS-FJpeJRCvMQ/videos
 - Singapore Gophers https://www.youtube.com/channel/UCazkIMpjghmT8fugD1WF_DQ
+- ArdanLabs https://www.youtube.com/channel/UCCgGRKeRM1b0LTDqqb4NqjA/videos
 * Personalities
 ** Rob Pike
 https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
@@ -58,7 +61,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - Layout https://github.com/golang-standards/project-layout/
 - Roamap https://github.com/Alikhll/golang-developer-roadmap
 - Meme: https://github.com/SuperPaintman/the-evolution-of-a-go-programmer
-- Links https://github.com/ardanlabs/gotraining/tree/master/reading
+- Links https://github.com/ardanlabs/gotraining/
 - Links https://github.com/guardrailsio/awesome-golang-security
 - Links https://github.com/smallnest/go-best-practices
 - Links https://github.com/enocom/gopher-reading-list
@@ -1421,6 +1424,96 @@ func main() {
   // ...
 }
   #+end_src
+* Book: Ultimate Go
+** Chapter 4: Decoupling
+*** Method receiver, data semantics
+- Pick between value and pointer
+- Check the constructor
+- Ask yourself, if the value can be copied
+  - If yes, it can be passed as value
+  - If no,  it needs to be passed as pointer
+- Keep the same across all for the type
+  - Exception being, if you are strictly implementing an interface
+- OK      value->pointer
+- NEVER pointer->value
+*** Interfaces
+- Use when
+  1) Pluggable Implementation, is needed by the user of an API
+  2) Multiple API Implementations
+  3) Changability, parts of the API can change and need decoupling
+- Do NOT use when
+  1) For the sake of it
+  2) To generalize an algorithm
+  3) When the user can declare their own interfaces
+  4) It is not clear if an interface would make the code clear
+- Generalized interfaces that focus on *behavior* are the best
+- Interfaces with >1 method, have >1 reason to change
+- Interfaces based on nouns, tend to be less reusable
+*** Polymorphism
+- "The concrete type file now implements the reader interface using value semantics"
+- Interface, has two words
+  1) iTable
+     1) describes the type of value stored
+     2) has function poitners to the concrete implementations of the method set, for the type of value stored
+  2) value being stored (a copy of it, or a pointer, depending the data semantics)
+*** Method Set Rules
+- A value         has attached all methods, for that type value
+- A value address has attached all methods, for that type
+*** Slice of Interfaces
+- Reason why GO doesn't need *sub-typing*
+  - it's all about =common behavior=, not *data*
+*** (struct) Embedding
+- Can also be either by value or pointer
+- This is NOT *sub-classing*
+  - NOT about reusing *state* is about =promoting behavior=
+- Being METHOD a method of INNER
+  OUTER.INNER.METHOD // direct call
+  OUTER.METHOD       // calling the promoted method
+*** Exporting
+- Be consistent when exporting struct fields of an embedded structure.
+- Returning a value of an unexported type is meaningless. Since the caller won't be able to reference it.
+  #+begin_src go
+  package counters
+  type alertCounter int
+  func New(value int) alertCounter {
+    return alertCounter(value)
+  }
+  #+end_src
+** Chapter 5: Software Design
+*** Grouping different types of data
+- Do not try to mimick inheritance in GO, with struct embedding
+  - Embedding Is like a 1 way relationship, can't make a slice of the embedded type
+  - "A Dog is a Dog, a Cat is a Cat, and a Animal an Animal"
+  - It's not about grouping through common DNA,
+    It's about grouping through common =behavior=.
+- AVOID: Declaring a type just to share a set of common state.
+- Interfaces give you the way to create slices of things with common behavior.
+- Guidelines on creating types
+  - Something new or unique
+  - Do NOT create types for readability
+  - Embed not for the state but for the behavior
+    - If not, it will lock/rot the design
+  - Question types that are aliases or abstractions of an existent type
+  - Question types whose sole purpose is to share a common state
+*** Don't design with interfaces
+- Program then engineer
+- "Don't design with interfaces, discover them" - Rob Pike
+*** Decoupling with interfaces
+- Work towards composing larger interfaces from smaller one
+*** Error handling
+- Create New() errors
+  #+begin_src go
+  var (
+    ErrBadRequest = errors.New("Bad Request")
+    ErrPageMoved = errors.New("Page Moved")
+  )
+  func webCall(b bool) error {
+    if b {
+      return ErrBadRequest
+    }
+    return ErrPageMoved
+  }
+  #+end_src
 * DONE Article: I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,
@@ -1548,15 +1641,34 @@ Scenario: doing integration test with https://github.com/houseabsolute/detest
   + *Option<T>* in Rust
 * DONE Article: Golang: Don't be afraid of Makefiles (2017)
 https://sohlich.github.io/post/go_makefile/
-- Go commands: build, clean, test, get
+- go commands: build, clean, test, get
 - Makefile commands:
   - deps, to go get the deps (or use the -u flag???)
-  - clean, to go clean and rm -f the build
   - crossbuild with flags: CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-  - dockerbuild: when C libraries interaction is needed for building or a particular go version, "docker run", with volume and worker dir setup accordingly
-- From the HN comments
-  - use ~:=~ to immediatly expand the variable
-  - use ~;~ to avoid tabs and oneline the command
+  - dockerbuild: when C libraries interaction is needed for building or a particular go version,
+    "docker run", with volume and worker dir setup accordingly
+** HN Discussion
+   https://news.ycombinator.com/item?id=15294929
+- use ~:=~ to immediatly expand the variable
+- use ~;~ to avoid tabs and oneline the command
+  #+begin_src makefile
+  BINARY_NAME := mybinary
+  BINARY_UNIX := $(BINARY_NAME)_unix
+
+  .PHONY: all test build clean run deps
+  all: test build
+  build: ; go build -o $(BINARY_NAME) -v
+  test:  ; go test -v ./...
+  clean: ; go clean && rm -f $(BINARY_NAME) $(BINARY_UNIX)
+  run:   ; go run $(BINARY_NAME) -v ./...
+
+  deps: DEPS := $(addprefix github.com/markbates/,goth pop)
+  deps:  ; go get $(DEPS)
+
+  build-linux: ; CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(BINARY_UNIX) -v
+
+  docker-build: ; docker run --rm -it -v "$(GOPATH)":/go -w /go/src/bitbucket.org/rsohlich/makepost golang:latest go build -o "$(BINARY_UNIX)" -v
+  #+end_src
 * DONE Article: How to Write Go Code
 https://golang.org/doc/code
 >=1.13

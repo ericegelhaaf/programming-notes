@@ -1,3 +1,6 @@
+- Course: Rust analyzer https://www.youtube.com/watch?v=I3RXottNwk0&list=PLhb66M_x9UmrqXhQuIpWC5VgTdrGxMx3y
+- https://matklad.github.io/2020/09/20/why-not-rust.html
+- https://fasterthanli.me/articles/some-mistakes-rust-doesnt-catch
 - vulkan https://github.com/sjb3d/caldera
 - libpthread.so needes for print!() https://github.com/rust-lang/rust/issues/43633
 - https://www.forrestthewoods.com/blog/learning-rust-via-advent-of-code/

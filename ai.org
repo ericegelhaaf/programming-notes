@@ -1,3 +1,4 @@
+- Standford Machine Learning Andrew NG https://www.youtube.com/watch?v=jGwO_UgTS7I&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=1
 - Course: 2020 Cornell CS 5787: Applied Machine Learning.
   https://www.youtube.com/playlist?list=PL2UML_KCiC0UlY7iCQDSiGDMovaupqc83
 - NN https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi

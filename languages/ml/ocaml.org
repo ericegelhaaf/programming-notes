@@ -1,8 +1,34 @@
+- Book: 2012 - Fun of Programming https://github.com/bobzhang/ocaml-book
+- Book: OCaml From the Ground Up  https://ocamlbook.org/
+- Book: https://ocaml.xyz/book/
+  https://github.com/owlbarn/owl
+- Book: OCaml From the Ground Up
+  https://ocamlbook.org/
+  https://github.com/dmbaturin/ocamlbook.org/tree/master/book
+- Book: 2014 - Unix system programming in OCaml
+  https://ocaml.github.io/ocamlunix/
+  Text Code https://github.com/ocaml/ocamlunix
 - Manual https://ocaml.org/manual/index.html
 - Manual https://caml.inria.fr/pub/old_caml_site/ocaml/htmlman/index.html
+- Tutorial:
+  https://o1-labs.github.io/ocamlbyexample/
+  https://github.com/o1-labs/ocamlbyexample
 - Tutorial: https://ocaml.org/learn/tutorials/up_and_running.html
+- Tutorial: https://web.archive.org/web/20091214115026/http://www.ocaml-tutorial.org/streams
 - Tutorial: http://xahlee.info/ocaml/ocaml_basics.html
 - Tutorial: https://lambdafoo.com/posts/2021-10-29-getting-started-with-ocaml.html
+- Tutorial: Cheatsheet https://github.com/OCamlPro/ocaml-cheat-sheets
+- Tutorial: 2006 - OCaml for the Skeptical https://www2.lib.uchicago.edu/keith/ocaml-class/class-01.html
+- Tutorial: 2016 https://github.com/caiorss/Functional-Programming/tree/master/ocaml
+- Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
+- Tutorial: 2019 https://github.com/lindig/ocaml-style
+- Course: Dan Ghica's Foundations of Computer Science https://vimeo.com/user8856528/videos
+- Course: John Whitington’s Videos https://vimeo.com/user20888710/videos
+- Course: 2022 - Waterloo - Principles of Programming Languages
+  https://student.cs.uwaterloo.ca/~cs442/W22/notes/
+  https://www.youtube.com/channel/UCnmJoeNk2mrItxXJ2-XOCcQ/videos
+- Course: 2013 - Washington University https://homes.cs.washington.edu/~djg/teachingMaterials/gpl/lectures/
+- Course: Columbia Proffesor http://www.cs.columbia.edu/~sedwards/classes/
 - Course: 2021 - Singapore - Introductory Data Structures and Algorithms
   https://ilyasergey.net/YSC2229/index.html
   Example https://github.com/ysc2229/ocaml-graphics-demo
@@ -12,19 +38,25 @@
   2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
   2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
   2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
-- Course: 2016 - FUN - Introduction to Functional Programming in OCaml
+- Course: 2016 - MOOC - Introduction to Functional Programming in OCaml
   https://www.fun-mooc.fr/en/courses/introduction-functional-programming-ocaml/
   https://archive.org/details/fun_ocaml_mooc
   MKV https://archive.org/compress/fun_ocaml_mooc/formats=MATROSKA&file=/fun_ocaml_mooc.zip
   CODE https://github.com/smeruelo/mooc-ocaml
   SLIDES https://archive.org/download/fun_ocaml_mooc/slidesAndCode.zip
-- Book: OCaml From the Ground Up  https://ocamlbook.org/
-- Book: https://ocaml.xyz/book/
-  https://github.com/owlbarn/owl
+- Course: OCAML to Racket
+  CMSC 430: Design and Implementation of Programming Languages
+  https://www.cs.umd.edu/class/fall2021/cmsc430/OCaml_to_Racket.html
+  https://www.youtube.com/watch?v=xKCFkXUcmK4&list=PLsg0tbEwZlcxS17oqa-I4bmmhlvwkUlp6&index=1
 - Excercises
   https://ocaml.org/learn/tutorials/99problems.html
   https://github.com/VictorNicollet/99-Problems-OCaml
+  https://github.com/janestreet/learn-ocaml-workshop
 * Articles
+- Roguelike with effect handlers
+  https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
+  https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
+- AWS https://mirage.io/docs/xen-boot
 - https://tarides.com/blog/2019-05-09-an-introduction-to-ocaml-ppx-ecosystem
 - (HN) The BitCoin Piñata https://news.ycombinator.com/item?id=9027743
 - https://discuss.ocaml.org/t/plans-to-choose-an-official-package-project-manager/8620
@@ -33,12 +65,11 @@
 - 2020 Leaving OCAML https://medium.com/darklang/leaving-ocaml-fce7049a2a40
 - 2014 https://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/
 - 2013 https://roscidus.com/blog/blog/2013/06/20/replacing-python-round-2/
-* SML
-- Playlist: Functional Programming with Standard ML (University of Trento)
-  https://www.youtube.com/playlist?list=PLbdi8aNvDqlKKXdG7qn0rQsfH0z1hf7FC
-- https://en.wikipedia.org/wiki/Standard_ML
-- Introduction to SML
-  https://cs.lmu.edu/~ray/notes/introml/
+* Editor
+- https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
+- https://github.com/Gopiandcode/gopcaml-mode
+  https://www.youtube.com/watch?v=vy6oGSk7A3s
+  - needs emacs packages: merlin, ocp-indent, and tuareg
 * Book: 2022 - Real World Ocaml
 - Book:
   https://dev.realworldocaml.org/toc.html
@@ -65,6 +96,65 @@
 - ^ provided by Pervasives module
 - Ref shorthands probided by Base
 - ¦ used in place of |
+- Modules
+  |----------------------------+------------------------------------|
+  | new                        | module M = struct                  |
+  |                            | ..let x = 3                        |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  | type                       | module type MT = sig               |
+  |                            | ..type t                           |
+  |                            | ..val is_empty : t -> bool         |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  | type+new                   | module M : sig                     |
+  |                            | ..type t                           |
+  |                            | end = struct                       |
+  |                            | ..type t = string                  |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  |                            | module newM : MT = M               |
+  |----------------------------+------------------------------------|
+  | new functor                | module fM (M:MT) : MT = struct     |
+  |                            | ..let x = M.x + 1                  |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  | instance functor           | module newM = functorM(M)          |
+  |----------------------------+------------------------------------|
+  | instance functor           | module newM =                      |
+  | +                          | ..functorM(struct                  |
+  | anonymous module           | ..type t = int                     |
+  |                            | ..let compare = Int.compare        |
+  |                            | end)                               |
+  |----------------------------+------------------------------------|
+  | include                    | module newM = struct               |
+  |                            | ..include M                        |
+  |                            | ..let f x = x                      |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  | include with type          | module newM = sig                  |
+  | (multiple)                 | ..type t                           |
+  |                            | ..include M1 with type t := t      |
+  |                            | ..include M2 with type t := t      |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  | with type                  | module type MT =                   |
+  | "sharing constraint"       | ..MT with type T1 = T2             |
+  |----------------------------+------------------------------------|
+  | with type                  | module fM(M:MT1)                   |
+  | "sharing constraint"       | ..: (MT2 with type endpoint = M.t) |
+  | functor                    | struct                             |
+  |                            | ...                                |
+  |                            | end                                |
+  |----------------------------+------------------------------------|
+  | with type                  | module type MT =                   |
+  | "destructive substitution" | ..MT with type T1 := T2            |
+  |----------------------------+------------------------------------|
+  | with type                  | module fM(M:MT1)                   |
+  | "destructive substitution" | ..: MT2 with type T1 := T2 =       |
+  | functor                    | struct                             |
+  |                            | end                                |
+#+TBLFM: $2=struct
 - List
   (_exn for exception is possible)
 - In_channel.fold_lines
@@ -1115,6 +1205,37 @@ let fib = make_rec fib_norec
   1) a function definition
   2) a constructor
   3) a lazy keyword
+** ? Functors
+- The input module might have extra fields, than the module type specified as input,
+  they will be dropped.
+- Idiom: comparation functions return
+  -  0 if equal
+  - >1 if first is bigger than the second one
+  - <1 if second is bigger than first one
+** ? First Class Modules
+- create, module to value
+  #+begin_src ocaml
+  let simple = (module Mod1 : Modt_1)
+             = [simple; (module Mod1)]
+             = [simple; (module struct let x = 4 end)]
+  #+end_src
+- unpack, value to module
+  #+begin_src ocaml
+  let to_int m =
+    let module M = (val m : Modt_1 ) in
+    M.x;;
+
+    (* OR using pattern patching *)
+  let to_int (module M : Modt_1) = M.x
+  #+end_src
+- using =locally abstract type= on a function, to take and an abstract type as an argument
+  along with a first-class modules polymorphically
+  #+begin_src ocaml
+  let bump_list
+        (type a) (* locally abstract type *)
+        (module Bumper : Bumpable with t = a)
+        (l : a list) (* locally abstract type *)
+  #+end_src
 * Course: 2021 - OCaml Programming: Correct + Efficient + Beautiful
   https://cs3110.github.io/textbook/cover.html
   https://www.youtube.com/playlist?list=PLre5AT9JnKShBOPeuiD9b-I4XROIJhkIU
@@ -1746,22 +1867,35 @@ expr:
   | e1 = expr; PLUS; e2 = expr { Binop (Add, e1, e2) }
   ;
     #+end_src
-* Editor
-  https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
 * Libraries
+- WebFramework https://aantron.github.io/dream/
+- HTTP Server
+  - https://github.com/inhabitedtype/ocaml-webmachine
+  - https://github.com/mirage/ocaml-cohttp
+  - https://github.com/dinosaure/multipart_form
+- HTTP Clients
+  - https://github.com/mirage/ocaml-cohttp
+  - https://github.com/ygrek/ocurl
 - https://github.com/aantron/bisect_ppx
 - MirageOS smpt https://github.com/dinosaure/ptt-deployer
 - https://janmidtgaard.dk/quickcheck/index.html
 - https://github.com/ocaml-community/awesome-ocaml
 - https://github.com/dinosaure/gilbraltar
 - https://github.com/mirage/ocaml-freestanding
-- Utils https://github.com/ocaml-batteries-team/batteries-included
+- Utils
+  Source https://github.com/ocaml-batteries-team/batteries-included
+  Docs https://ocaml-batteries-team.github.io/batteries-included/hdoc2/index.html
 - Utils https://github.com/c-cube/ocaml-containers
 - Utils https://github.com/janestreet/base
 - Utils https://github.com/janestreet/core
 - Utils https://github.com/janestreet/async
 * Video
-- Podcast MirageOS https://signalsandthreads.com/what-is-an-operating-system/
+- Podcast Episode
+  Episode 204: Anil Madhavapeddy on the Mirage Cloud Operating System and the OCaml Language
+  https://www.youtube.com/watch?v=ZYGWDpIS5UE
+- Podcast Episode
+  Automated Trading and OCaml with Yaron Minsky
+  https://www.youtube.com/watch?v=KdAS2_Gienc
 - Video: Raytracer
   https://www.youtube.com/playlist?list=PLlw1FcLpWd42vMLPlR3K7iq-CuCtkZr8o
   https://github.com/LesleyLai/ocamlpt
@@ -1770,14 +1904,15 @@ expr:
   - Better to programming at scale (multiple persons)
   - Better for hostile environments
   - Better for Distributed applications programming
-- Anwar Mamat
-  https://www.youtube.com/watch?v=djymZspawFc
-- Playlist: OCAML to Racket
-  CMSC 430: Design and Implementation of Programming Languages
-  https://www.cs.umd.edu/class/fall2021/cmsc430/OCaml_to_Racket.html
-  https://www.youtube.com/watch?v=xKCFkXUcmK4&list=PLsg0tbEwZlcxS17oqa-I4bmmhlvwkUlp6&index=1
+- Anwar Mamat https://www.youtube.com/playlist?list=PLF-pVzrCrXdj7rBvOOwulglwwDjVy96uI
 - Playlist: OCaml 2021
   https://www.youtube.com/playlist?list=PLyrlk8Xaylp5CdqKE-ZqR5K5kRgPcKYN9
+- OCaml 2014: The State of OCaml (invited), Xavier Leroy https://www.youtube.com/watch?v=DMzZy1bqj6Q&list=UUP9g4dLR7xt6KzCYntNqYcw
+- Video: 2012 - Xavier Leroy - The continuation of functional programming by other means
+  https://events.inf.ed.ac.uk/Milner2012/X_Leroy-html5-mp4.html
+- Video: Effective ML
+  https://vimeo.com/21564387
+  https://vimeo.com/21564926
 ** Channels
 - Ocaml Software Foundation https://www.youtube.com/channel/UCnwkbeuXjuUTNsPoLKsBWdg
 - Ocaml Workshops https://www.youtube.com/c/OCamlWorkshops/videos
@@ -1795,3 +1930,59 @@ expr:
 ** Video: How to make a Netcat (with OCaml/MirageOS) - Oskar M Grande
   - https://www.youtube.com/watch?v=37cLNsnLozE
     https://github.com/musha68k/chill-netcat
+** Video: 2015 - A Crash Course in OCaml Modules - Tim McGilchrist
+https://www.youtube.com/watch?v=lISWTUyNP4c
+- =OCaml Modules= v =Haskell Type Classes=
+- Ocaml Modules
+  - like Functors (in category theory)
+  - aka parametrized structures
+  - functions from struct to struct
+- Haskell
+  - Implicit program construction
+  - ad-hoc polymorphism
+- Ocaml
+  - Type Safe Extensions (using *include*) (aka monkeypatching)
+  - Parametrized Library
+    you can pick different "backends" or implementations for things
+    like pick between lwt and async support
+*** Typeclasses to Signatures
+  #+begin_src ocaml haskell
+  class Show a where
+      show :: a -> String
+  #+end_src
+  #+begin_src ocaml
+  module type Show = sig
+    type t
+    val show : t -> string
+  end
+  #+end_src
+*** Instances   to Structures
+  #+begin_src haskell
+  instance Show Int where
+      show = ... -- Provided by GHC
+  #+end_src
+  #+begin_src ocaml
+  module ShowInt = struct
+    type t = int
+    let show = string_of_int
+  end
+  #+end_src
+*** Using them
+  #+begin_src haskell
+  csv :: Show a => [a] String
+  csv [] = ""
+  csv [x] = show x
+  csv h:t = show h ++ "," ++ csv t
+  #+end_src
+  - 1 extra step, instanciate with the functor, a new module
+  #+begin_src ocaml
+  module Csv(S:Show) = struct
+    let rec to_csv : S.t -> string = function
+      | []   -> ""
+      | [x]  -> S.show x
+      | h::t -> S.show h ^ "," ^ to_csv t
+  end
+  module X = Csv(ShowInt) (* extra step *)
+  X.to_csv [1;2;3] (* => 1,2,3 *)
+  #+end_src
+

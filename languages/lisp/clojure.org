@@ -16,6 +16,7 @@ Tools:
 Clojure Toolbox: https://www.clojure-toolbox.com/
 EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-api.html
 
+- Blog https://www.juxt.pro/blog
 - https://github.com/mfikes/esprit ESP
 - Transforming Data with ClojureScript¶ https://langintro.com/cljsbook/
 - https://github.com/magomimmo/modern-cljs
@@ -28,14 +29,15 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Podcast - https://clojuredesign.club/
 - Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
 * Videos
-- Podcast - Eric Normad - https://www.youtube.com/channel/UC2riBMG3qf1Di20ouRc76BA/videos
-- on the code again https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig
-- Sci Cloj https://www.youtube.com/c/SciCloj/videos
-- re:clojure https://www.youtube.com/c/reclojure/videos
 - Course - Brian Will - the Clojure language - https://www.youtube.com/playlist?list=PLAC43CFB134E85266
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
 - ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW
 - Fulcro – Part 1: Getting Started https://www.youtube.com/watch?v=wEjNWUMCX78
+** Channel
+- London Clojurians https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw
+- on the code again https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig
+- Sci Cloj https://www.youtube.com/c/SciCloj/videos
+- re:clojure https://www.youtube.com/c/reclojure/videos
 * Personalities
 ** Rich Hickey
 - Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr

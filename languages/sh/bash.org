@@ -1,3 +1,4 @@
+https://www.mulle-kybernetik.com/modern-bash-scripting/
 https://github.com/dylanaraps/pure-bash-bible
 https://github.com/mrzool/bash-sensible
 https://github.com/joseluisq/awesome-bash-commands

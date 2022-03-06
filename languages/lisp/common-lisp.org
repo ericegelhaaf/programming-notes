@@ -1,3 +1,5 @@
+- Article: Conditions and Restarts in Common Lisp https://z0ltan.wordpress.com/2016/08/06/conditions-and-restarts-in-common-lisp/
+- Article: https://vindarel.github.io/cl-torrents/tutorial.html
 - https://lisp-journey.gitlab.io/gray-streams/
 - http://www.softwarepreservation.org/projects/LISP/common_lisp_family
 - Quicklisp Snapshot http://blog.quicklisp.org/2011/08/going-back-in-dist-time.html
@@ -638,16 +640,16 @@ and that doesn't work if the code is provided as a *.a or *.o file
   [[./series.png]]
 
   https://cliki.net/SERIES
-  https://quickref.common-lisp.net/series.html
   http://series.sourceforge.net/
-  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
+  https://github.com/tokenrove/series
+  Ref https://quickref.common-lisp.net/series.html
+  Manual https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
   Example https://github.com/tokenrove/series/blob/master/s-test.lisp
   Example https://github.com/BusFactor1/mcl/blob/master/examples/series/stest.lisp
   Example https://github.com/rabuf/advent-of-code
   Extension https://github.com/mikelevins/taps
-  Intro to SERIES https://www.youtube.com/watch?v=uRLgZCV4bOM
-  SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
-  Mirror https://github.com/tokenrove/series
+  Video: Intro to SERIES   https://www.youtube.com/watch?v=uRLgZCV4bOM
+  Video: SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
   Article https://fourier.github.io/lisp/2017/12/17/series.html
   http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
   http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
@@ -771,10 +773,20 @@ and that doesn't work if the code is provided as a *.a or *.o file
 ** Documentation
 - https://github.com/Shinmera/staple
 ** GUI
-  LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
-  GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
-  QT  https://github.com/commonqt/commonqt5/
+- ALL https://lispcookbook.github.io/cl-cookbook/gui.html
+- MCCLIM+classowary
+  https://github.com/djeis97/dumb-mcclim-statusbar/
+- LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
+      https://github.com/VitoVan/cl-pkr (image picker mutiple platform build)
+      https://github.com/mijohnson99/ltk-small-games example
+      http://www.peter-herth.de/ltk/ltkdoc/ doc
+      https://peterlane.netlify.app/ltk-examples/#_more_widgets doc examples
+- GTK https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
+      http://www.crategus.com/books/cl-gtk/gtk-tutorial.html
+      https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#properties
+- QT  https://github.com/commonqt/commonqt5/
       https://github.com/kierangrant/cl-qt-example/
+      https://github.com/Shinmera/qtools/tree/master/examples
 ** Image
 - https://github.com/tokenrove/imago
 - https://github.com/sjl/cl-netpbm/

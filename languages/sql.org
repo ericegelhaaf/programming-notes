@@ -1,5 +1,7 @@
+- https://devcenter.heroku.com/articles/postgresql-indexes
 - AWS Aurora https://www.youtube.com/watch?v=XKPHbYe-fHQ
 - https://www.cybertec-postgresql.com/en/postgresql-exclude-beyond-unique/
+- DB Standford 2013 https://www.youtube.com/watch?v=D-k-h0GuFmE&list=PLroEs25KGvwzmvIxYHRhoGTz9w8LeXek0
 * DONE Exclusion operators - EXPLAINING PostgreSQL
   https://www.youtube.com/watch?v=M58MR1vqnAk
   1) RANGE TYPES: allows us to store periods, stored as 2 fields
