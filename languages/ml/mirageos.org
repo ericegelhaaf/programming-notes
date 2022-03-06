@@ -1,0 +1,13 @@
+- Compile your own cloud with Mirage OS v2.0 by Thomas Gazagnaire
+  https://www.youtube.com/watch?v=WZMJNrGKgKo
+- Nomadic Labs Research Seminars #16 | Package Tezos as a MirageOS Unikernel
+  https://www.youtube.com/watch?v=5Xc1hqT9Q6A
+- https://web.archive.org/web/20190903190945/http://roadtounikernels.myriabit.com/
+** Video: 2014 - Unikernels: Who, What, Where, When, Why - Adam Wick, Galois
+   https://www.youtube.com/watch?v=oHcHTFleNtg
+** Video: 2015 - Rainbows and Unikernels - Garret Smith
+  https://www.youtube.com/watch?v=cUvNths_5RA
+  - OS + APP = Unikernel
+  - Single Process
+  - Singel Address Space
+  - Resume 17:00

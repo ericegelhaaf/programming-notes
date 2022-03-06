@@ -1,0 +1,2 @@
+- https://ziglang.org/learn/why_zig_rust_d_cpp/
+- https://github.com/ratfactor/ziglings

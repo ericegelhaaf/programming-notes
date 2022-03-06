@@ -1,0 +1,12 @@
+- Article Effective Scala Case Class Patterns
+  https://gist.github.com/chaotic3quilibrium/58e78a2e21ce43bfe0042bbfbb93e7dc
+- Framework: Play Framework.
+  Conocimientos deseables: Slick, Monix Task.
+https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-langs.html#scala
+https://github.com/lauris/awesome-scala
+- Course: Introduction to Programming and Problem Solving Using Scala
+  https://www.youtube.com/playlist?list=PLLMXbkbDbVt9MIJ9DV4ps-_trOzWtphYO
+- Course: Parallel Programming
+  https://www.youtube.com/channel/UCFVAx3NnF3HpQawLY6KR2DQ
+* Figures
+- Martin Odersky (courses)
