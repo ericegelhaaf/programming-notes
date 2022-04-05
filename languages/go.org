@@ -1,3 +1,5 @@
+- Chat over SSH https://github.com/quackduck/devzat
+- https://github.com/golang-design/history
 - https://github.com/microcosm-cc/bluemonday
 - https://jvns.ca/blog/2022/02/01/a-dns-resolver-in-80-lines-of-go/
 - https://github.com/miku/dwstalk
@@ -198,6 +200,165 @@ func (l +lookup) process() {
   }
 }
   #+end_src
+* DONE Video: 2012 - Rob Pike - Go Concurrency Patterns
+Channels are first class values
+** Generator - 15:52
+- "like having a service"
+- ME: kind of like a lazy timed infinite sequence.
+  ME: since channels I/O is blocked
+- a function can spawn a goroutine and return a channel, but nowhere on his type is detailed the spawn
+  #+begin_src go
+  c := boring("boring!")
+  for i := 0; i < 5; i++ {
+    fmt.Printf("You say: %q\n", <-c)
+  }
+  fmt.Println("You're boring; I'm leaving.")
+
+  func boring(msg string) <-chan string {
+    c := make(chan string)
+    go func() {
+      for i := 0; ; i++ {
+        c <- fmt.Sprintf("%s %d, msg, i)
+        time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+      }
+    }()
+    return c
+  }
+  #+end_src
+** Multiplexing/Fanin - Goroutines - 17:08
+- take 2 channels and return 1, instead of lockstep each output
+  #+begin_src go
+  func fanIn(input1, input2 <-chan string) <-chan string {
+    c := make(chan string)
+    go func() { for { c <- <-input1 } }()
+    go func() { for { c <- <-input2 } }()
+    return c
+  }
+  func main() {
+    c := fanIn(boring("Joe"), boring("Ann"))
+      for i := 0; i < 10; i++ {
+        fmt.Println(<-c)
+      }
+    fmt.Println("You're boring; I'm leaving")
+  }
+  #+end_src
+** Signal Wait Channel - 19:00
+#+begin_src go
+type Message struct {
+  str string
+  wait chan bool
+}
+// main
+for i := 0; i < 5; i++ {
+  msg1 := <-c; fmt.Println(msg1.str)
+  msg2 := <-c; fmt.Println(msg2.str)
+  msg1.wait <- true
+  msg2.wait <- true
+}
+// boring
+waitForIt := make(chan bool)
+c <- Message{ fmt.Sprintf("%s: %d", msg, i), waitForIt }
+time.Sleep(time.Duration(rand.Intn(2e3)) * time.Milliseconds)
+<-waitForIt
+#+end_src
+** Multiplexing/Fan-In - select/case
+#+begin_src go
+func fanIn(input1, input2 <-chan string) <-chan string {
+  c := make(chan string)
+  go func() {
+    for {
+      select {
+      case s := <-input1: c <- s
+      case s := <-input2: c <- s
+      }
+    }
+  }
+}
+#+end_src
+- reads or writes into different channels
+- not order dependant, if 2 channels are ready, one is pick at random
+- blocks forever, unless there is a *default* case
+** Timeout each message select/case, time.After(), return
+- it will timeout because boring() has a random sleep time
+#+begin_src go
+func main() {
+  c := boring("Joe")
+  for {
+    select {
+    case s:= <-c:
+      fmt.Println(s)
+    case <-time.After(1 * time.Second):
+      fmt.Println("You're too slow.")
+      return
+    }
+  }
+}
+#+end_src
+** Timeout whole conversation select/case, time.After(), return
+- by creating the timeout channel outside the loop, instead of in each cycle
+#+begin_src go
+func main() {
+  c := boring("Joe")
+  timeout := time.After(5 * time.Second)
+  for {
+    select {
+    case s := <-c:
+      fmt.Println(s)
+    case <-timeout:
+      fmt.Println("You talk too much")
+      return
+    }
+  }
+}
+#+end_src
+** Quit Channel, to manually signal an exit
+#+begin_src go
+quit := make(chan bool)
+c := boring("Joe", quit)
+for i := rand.Intn(10); i >= 10; i-- { fmt.Println(<-c) }
+quit <- true
+//...
+select {
+case c <- fmt.Sprintf("%s: %d", msg, i):
+// do nothing
+case <-quit:
+  return
+}
+#+end_src
+** TODO Daisy-chain 27:00
+** Example: Fan-in + Timeout + Replicas
+#+begin_src go
+type Search func(query string) Result
+
+func First(query string, replicas ...Search) Result {
+  c := make(chan Result)
+  searchReplica := func(i int) { c <- replicas[i](query) }
+  for i := range replicas {
+    go searchReplica(i)
+  }
+  return <-c
+}
+//..main
+c := make(chan Result)
+go func() { c <- First(query, Web1,   Web2) }()
+go func() { c <- First(query, Image1, Image2) }()
+go func() { c <- First(query, Video1, Video2) }()
+timeout := time.After(80 * time.Millisecond)
+for i := 0; i < 3; i++ {
+  select {
+  case result := <-c:
+    results = append(results, result)
+  case <-timeout:
+    fmt.Println("timed out")
+    return
+  }
+}
+#+end_src
+** Examples
+- gochatroutlette https://www.youtube.com/watch?v=bj6EtLacsj8 
+- goloadbalancer https://www.youtube.com/watch?v=jgVhBThJdXc
+- gosieve https://github.com/aht/gosieve
+- gopowerseries https://go.dev/test/chan/powser1.go
 * TODO Video: Practical Go: Real world advice for writing maintainable Go programs / Dave Cheney (2019)
   https://www.youtube.com/watch?v=gi7t6Pl9rxE
   https://dave.cheney.net/practical-go/presentations/qcon-china.html
@@ -1551,9 +1712,9 @@ Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
   - golang monotonic clock breaking change, time.Now returns 2 different values if called twice?
     https://github.com/golang/go/issues/12914
 ** Parting words
-"It constantly takes *power* away from its users, reserving it for itself."
-"It constantly lies about how complicated real-world systems are, and optimize for the *90%* case, ignoring correctness."
-"Everything looks simple on the surface, but nothing is."
+- "It constantly takes *power* away from its users, reserving it for itself."
+- "It constantly lies about how complicated real-world systems are, and optimize for the *90%* case, ignoring correctness."
+- "Everything looks simple on the surface, but nothing is."
 * DONE Article: Shrink your Go binaries with this one weird trick
 https://blog.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
 - binwalk: can plot the entropy of a file to know how well it can compress
@@ -1694,3 +1855,29 @@ https://golang.org/doc/code
 - Clean all downloades modules
   $ go clean -modcache
 
+* Video: 2013 - Campoy - Go: Code that GFrows with Grace
+  https://www.youtube.com/watch?v=bj6EtLacsj8
+- 9:26 concurrent echo tcp server
+  #+begin_src go
+package main
+import (
+  "io"
+  "log"
+  "net"
+)
+const listenAddr = "localhost:4000"
+
+func main() {
+  l, err := net.Listen("tcp", listenAddr)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for {
+    c, err := l.Accept()
+    if err != nil {
+      log.Fatal(err)
+    }
+    go io.Copy(c, c)
+  }
+}
+  #+end_src

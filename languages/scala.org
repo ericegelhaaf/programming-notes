@@ -1,12 +1,32 @@
+- FP library https://typelevel.org/cats/
+- Async https://zio.dev/
+- Async https://typelevel.org/cats-effect/
+- Build https://github.com/com-lihaoyi/mill
+- HTTP https://http4s.org/
+- https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-langs.html#scala
+- https://github.com/lauris/awesome-scala
 - Article Effective Scala Case Class Patterns
   https://gist.github.com/chaotic3quilibrium/58e78a2e21ce43bfe0042bbfbb93e7dc
 - Framework: Play Framework.
   Conocimientos deseables: Slick, Monix Task.
-https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-langs.html#scala
-https://github.com/lauris/awesome-scala
-- Course: Introduction to Programming and Problem Solving Using Scala
+* Video
+** Course
+- Introduction to Programming and Problem Solving Using Scala
   https://www.youtube.com/playlist?list=PLLMXbkbDbVt9MIJ9DV4ps-_trOzWtphYO
-- Course: Parallel Programming
+- Parallel Programming
   https://www.youtube.com/channel/UCFVAx3NnF3HpQawLY6KR2DQ
-* Figures
+- (Udemy) Scala functioning and programming for beginners
+  https://www.youtube.com/playlist?list=PL15cIG7aNbhtZxLafzxmld750BcFw-9Ek
+- (Udemy) Advance Scala and functional Programming
+  https://www.youtube.com/playlist?list=PL15cIG7aNbhshROiDuYpFTwoCRXeyBNYx
+* Binary
+** Compatibility
+#+begin_src
+Scala doesn't have binary compatibility, you can't even use a library compiled for 2.12 on Scala 2.13. For that
+reason library developers cross-compile to all versions they support.
+
+This is fixed in Scala 3, but it's only valid for Scala 3 and higher, it doesn't help for Scala 2.
+#+end_src
+* People
 - Martin Odersky (courses)
+- Dick Wall, Courses

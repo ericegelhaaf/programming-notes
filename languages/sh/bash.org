@@ -1,4 +1,10 @@
-https://www.mulle-kybernetik.com/modern-bash-scripting/
-https://github.com/dylanaraps/pure-bash-bible
-https://github.com/mrzool/bash-sensible
-https://github.com/joseluisq/awesome-bash-commands
+- https://www.mulle-kybernetik.com/modern-bash-scripting/
+- https://github.com/dylanaraps/pure-bash-bible
+- https://github.com/mrzool/bash-sensible
+- https://github.com/joseluisq/awesome-bash-commands
+- https://lobste.rs/s/iofste/please_stop_writing_shell_scripts
+- Why doesn't set -e (or set -o errexit, or trap ERR) do what I expected?
+  http://mywiki.wooledge.org/BashFAQ/105
+- shfmt
+  https://github.com/mvdan/sh
+  (fork?) https://github.com/patrickvane/shfmt

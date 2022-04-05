@@ -1,3 +1,5 @@
+- Styleguide https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
+- Mailing List https://mail.haskell.org/mailman/listinfo/haskell-cafe
 - Course: MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
 - Article: Monads https://blog.plover.com/prog/burritos.html
 - Article: https://paulspontifications.blogspot.com/2013/01/when-haskell-is-faster-than-c.html
@@ -80,26 +82,36 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
 - State of the Haskell ecosystem
   https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
 * Learn
-  - https://github.com/bitemyapp/fp-course
-  - https://github.com/hmemcpy/milewski-ctfp-pdf
-  - CIS 194: Introduction to Haskell (Spring 2013)
-    https://www.seas.upenn.edu/~cis194/spring13/lectures.html
-  - https://threadreaderapp.com/thread/1277615394560360449.html
-  - https://github.com/Kuratoro/haskell.zettel.page/blob/master/2012502.md
-  - Applied Haskell is a commercial training program focusing on teaching intermediate Haskell.
-    https://www.fpcomplete.com/haskell/syllabus/
-  - http://learnyouahaskell.com/chapters
-  - https://www.reddit.com/r/haskell/comments/d5og5n/which_book/
-  - https://github.com/i-am-tom/haskell-exercises (extensions)
-  - https://github.com/caiorss/Functional-Programming
-  - What I Wish I Knew When Learning Haskell
-    http://dev.stephendiehl.com/hask/
-  - https://kowainik.github.io/posts/haskell-mini-patterns
-  - https://github.com/soupi/haskell-study-plan
-  - https://github.com/alpacaaa/zero-bullshit-haskell
-  - https://github.com/tssm/up-to-date-real-world-haskell
-  - https://github.com/graninas/software-design-in-haskell
-  - https://github.com/bitemyapp/learnhaskell
+** Other
+- https://github.com/bitemyapp/fp-course
+- https://github.com/hmemcpy/milewski-ctfp-pdf
+- CIS 194: Introduction to Haskell (Spring 2013)
+  https://www.seas.upenn.edu/~cis194/spring13/lectures.html
+- https://threadreaderapp.com/thread/1277615394560360449.html
+- https://github.com/Kuratoro/haskell.zettel.page/blob/master/2012502.md
+- Applied Haskell is a commercial training program focusing on teaching intermediate Haskell.
+  https://www.fpcomplete.com/haskell/syllabus/
+- http://learnyouahaskell.com/chapters
+- https://www.reddit.com/r/haskell/comments/d5og5n/which_book/
+- https://github.com/i-am-tom/haskell-exercises (extensions)
+- https://github.com/caiorss/Functional-Programming
+- What I Wish I Knew When Learning Haskell
+  http://dev.stephendiehl.com/hask/
+- https://kowainik.github.io/posts/haskell-mini-patterns
+- https://github.com/soupi/haskell-study-plan
+- https://github.com/alpacaaa/zero-bullshit-haskell
+- https://github.com/tssm/up-to-date-real-world-haskell
+- https://github.com/graninas/software-design-in-haskell
+- https://github.com/bitemyapp/learnhaskell
+** Monad Tutorials
+- https://www.lambdacat.com/the-midnight-monad-a-journey-to-enlightenment/
+- https://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
+- https://en.wikibooks.org/wiki/Haskell/Understanding_monads
+- http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html
+- https://web.archive.org/web/20081206204420/http://www.loria.fr/~kow/monads/index.html
+- https://blog.plover.com/prog/burritos.html
+  https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/
+  https://chrisdone.com/posts/monads-are-burritos/
 * Videos
 ** Tsoding
 - Haskell AMA https://www.twitch.tv/videos/736842835
@@ -382,6 +394,7 @@ data InstrumentName = AcousticGrandPiano | BrightAcousticPiano ...
 * TODO Book: Real World Haskell
 - Updated code version https://github.com/tssm/up-to-date-real-world-haskell/
 - Real World Haskell outdated parts https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
+- Online http://book.realworldhaskell.org/read/
 ** 6 Using Typeclasses
 *** Defining
 - Different implementation depending on the type of data given.
@@ -904,74 +917,159 @@ type Z a = (a, Void)    -- a * 0 = 0
 * TODO Videos: Haskell 10X - Google TechTalks
   repo: https://github.com/google/haskell-trainings
 ** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
+- EXTRA: https://ucsd-progsys.github.io/liquidhaskell-blog/
+- Everything is a function
+- Everything is immutable
+  Everything is *const* (on C++ on a function means that it will not change the state of the object)
+- Everything is an expression, no statements
+- No side effects, unless explicit
 - There is NO function that can go from impure to pure code
   f :: IO a -> a
 - Going from pure to impure is ok
   f :: a -> IO a
-- Strict evaluation: inner to outer
-  Lazy evaluation: outer to inner (when needed you eval the arguments)
-- Lazyness:
-  - Memory pitfalls
-  - IO and parallelism pitfalls: threads will just create the expressions, not evaluate them
-  + Huge optimizations: compiler can re-arrange the code, simplify noop operations,
-                        partially thanks to knowing about pure/impurity of a function
-  + Great expressivity (e.g. infinite structures)
+*** Lazyness (18:00)
+- Reductions steps:
+  - Strict evaluation: inner to outer
+    Lazy evaluation: outer to inner (when needed you eval the arguments)
+(-) Memory pitfalls
+(-) IO and parallelism pitfalls: threads will just create the expressions, not evaluate them (use escape hatches)
+(+) Huge optimizations:
+  + compiler can re-arrange the code, simplify noop operations,
+  + partially thanks to knowing about pure/impurity of a function
+  + because only a part of the result of the operation might be needed
+(+) Great expressivity (e.g. infinite structures)
+*** Syntax (40:00)
 - Is NOT recommended to create your own operators.
 - ($) lowest priority
-- ~type synonyms~
+- (.) composition
+*** Types (49:00)
+- ~type~, a weak typedef, sinonyms
   type Point = (Int, Int)
   type Map k v = [(k, v)] -- ~type parameters~
 - ~data structures~
   - NO methods
   - NO modifiers (setters)
   - NO private members/slots
-  - YES Constructors
-- data
+  - YES Constructors (which are just functions)
+- Data Types
 #+begin_src haskell
-data None    = None
+data None    = None             -- data with 1 option, have same the constructor and type name
 data Minutes = Minutes Int      -- Minutes 10
 data Bool    = False   | True
-data Maybe a = Nothing | Just a -- Just 10
+data Maybe a = Nothing | Just a -- Just 10 -- Generic Type (a type argument)
 data List  a =     Nil | Cell a (List a)
--- Records, named "fields". Fields are in the same namespace.
+-- Records
 data User = User String Int
+-- Records, can also have named "fields". Fields are in the same namespace.
 data User = User {
-    userName :: String,
+    userName :: String, -- Creates getters-like functions too
     userAge  :: Int
 }
 #+end_src
+*** Functions (01:03:00)
 - Operators can be constructors
 - Operators pattern matching CAN short-circuit
-#+begin_src haskell
+  #+begin_src haskell
 (&&) :: Bool -> Bool -> Bool
 True && True = True -- does NOT short-circuit (comment this line)
 True && y    = y    -- does short-circuit
-x    && y    = False
-#+end_src
+_    && _    = False
+  #+end_src
 - Deconstructor, pattern matching
-#+begin_src haskell
+  #+begin_src haskell
 data Minutes = Minutes Int
+
 add :: Minutes -> Minutes -> Minutes
 add (Minutes x) (Minutes y) = Minutes $ x + y
-#+end_src
+  #+end_src
 - "backslash because it kind of looks like a lambda"
-- head is considered "bad design", as in some of the inputs panics
-  also callled partial functions
+- in a function
+  - you cannot use something like (==) without defining Eq on the definition
+- head, is considered "bad design", as in some of the inputs panics
+  also callled "partial functions"
+- You can use pattern matching and guards at the same time
 - Point free style: is when we define functions without defining the arguments.
                     Because it doesn't use the (.) operator.
-** Haskell 102 https://www.youtube.com/watch?v=Ug9yJnOYR4U
+** TODO Haskell 102 https://www.youtube.com/watch?v=Ug9yJnOYR4U
 - If a library has 2 versions of a function, with (') is called "f prime".
   The one with the (') is ~eager~
   The one without the (') ~lazy~
-- Type Constrains
-- Cascading Maybe's, nested case's
-- IO
-  Can't apply regular functions
-  Can't pattern match
-  Can't get values from it
+- Problems to solve:
+  1) Extend data types, ex: to show or compare
+  2) Type Constrains, are sometimes mandatory to declare some functions
+  3) Cascading Maybe's, might be solved with nested case's
+  4) IO
+     Can't apply regular functions
+     Can't pattern match
+     Can't get values from it
+*** Solution
+- 1 & 2 ) Declaring the type and implementing it, are separate things
+  #+begin_src haskell
+  -- 1)
+  class Show a where
+    show :: a -> String
 
-* Course: Functional Programming in Haskell: Supercharge Your Coding
-** 1
+  data Color = Red | Green | Blue
+
+  instance Show Color where
+    show Red = "Red"
+    show Green = "Green"
+    show Blue
+  -- 2)
+  -- Constraints on functions
+  show :: Show a => a -> String -- a is an instance of show
+  sum  :: Num  a => [a] -> a
+  (==) :: Eq   a => a -> a -> Bool
+  -- Constraint on instances
+  instance Show a => Show (Maybe a) where
+    show Nothing  = "Nothing"
+    show (Just x) = "Just " ++ show x
+  -- Classes can have DEFAULT implementations
+  class Eq a where (==) :: a -> a -> Bool
+    (==) :: a -> a -> Bool
+    (/=) :: a -> a -> Bool
+    a == b = not $ a /= b
+    a /= b = not $ a == b
+  -- Classes can also have constraints, minimun implementation is either compare or <=
+  class Eq a => Ord a where
+    compare :: a -> a -> Ordering
+    (<=)    :: a -> a -> Bool
+    (>=)    :: a -> a -> Bool
+    (<)     :: a -> a -> Bool
+    (>)     :: a -> a -> Bool
+    max     :: a -> a -> a
+    min     :: a -> a -> a
+  -- Bounded, things on a class definition, can also be "values" in the class
+  class Bounded a where
+    minBound :: a
+    maxBound :: a
+  #+end_src,
+- 3)
+  Functions to deal with values in a context "C":
+  | Functor     | <$> | fmap | :: | (a -> b)   | -> | C a | -> | C b |
+  | Applicative | <*> | ap   | :: | C (a -> b) | -> | C a | -> | C b |
+  | Monad       | >>= | bind | :: | (a -> C b) | -> | C a | -> | C b |
+- 4)
+  We use *do* syntax on IO monad, as we could do with anything else that implemented
+  do guarantees sequencial execution, ap can parallelize
+  #+begin_src haskell
+  class Applicative m => Monad m where
+    return :: a -> m a
+    (>>=)  :: m a -> (a -> m b) -> m b
+  #+end_src
+*** CodeLab (01:00:00)
+fmapValue
+apValue
+bindValue
+* DONE Video: What is a Monad? - Computerphile
+  https://www.youtube.com/watch?v=t1e8gqXLbsU
+  - Maybe, >>=, do, return
+  - A way to handle failure and """unwrap""" a series of Maybe operations
+  - "A monad is some kind of type constructor like Maybe or ... together with 2 functions (return, >>=)"
+  - Works with other "effects"
+* DONE Course: Functional Programming in Haskell: Supercharge Your Coding
+Source: https://github.com/wimvanderbauwhede/HaskellMOOC
+** 1 Haskell First Steps
 - Pure functional programming languages do NOT have any statements,
   no assigments, no jumps
 - All is performed using expressions
@@ -991,5 +1089,300 @@ add (Minutes x) (Minutes y) = Minutes $ x + y
   #+end_src
 - Computation is done not through *statements*
   - But through "Redex", aka reducible expression
-  - If >1 redex, they can run in different orders
+  - If >1 redex, they can run in different orders, in parallel
     *"Church-Rosser Theorem"*
+- List comprehensions
+  - are transformed by the compiler into an expression
+  - inspired in mathematical notation of *set comprehension*
+- List:
+  - (++) appending
+  - (!!) indexing, negative or too big returns *undefined* (exception?)
+  - (:)
+  - head,tail - return *undefined* on empty list
+  - Are Lazy
+  - Lazyness makes it so you won't error until you access the element
+  - Lazyness makes it so you can reference things that are not yet defined
+  - ['a' .. 'z']
+- Robust programming:
+  - Well defined, or
+  - All exceptions caught and handled
+- A function can only return 1 value
+** 2 Haskell Building Blocks
+- Relation Operators:
+  (==) (/=) elem (>)
+- Work with lists
+- zip, zip3, zipWith
+- folds of (&&) and (||) are (and) and (or), which work with list of values
+- IO
+  - getLine/putStrLn
+  - read/show
+  - do blocks sequences IO actions
+  - print = putStrLn + show
+  - Sequencing is vital for IO actions
+  - A sequence of IO actions is described as being in the ~IO Monad~
+- ghci
+  - :set +m, set multiline support on ghci
+** 3 Data Structures and Types
+- filter
+   #+begin_src haskell
+filter :: (a -> Bool) -> [a] -> [a]
+filter pred [] = []
+filter pred (x:xs)
+  | pred x = x : filter pred xs
+  | otherwise = filter pred xs
+   #+end_src
+- compositions: (f . g), first g, then f
+- Point Free Notation:
+  #+begin_src haskell
+sum xs = foldr (+) 0 xs
+sum    = foldr (+) 0     -- Point free
+  #+end_src
+- Different ways to define a recursive function
+  1) one for each case
+  2) if/then/else
+  3) guards
+  4) where
+- fold
+  #+begin_src haskell
+-- foldr, elem f acc
+foldr (/)  1 [2,4,8]
+-- -> 8/1 4/8 0.5/2 4
+
+-- foldl, acc  f elem
+foldl (/) 16 [8,4,2,1]
+-- -> 16/8 2/4 0.5/2 0.25/1
+  #+end_src
+- Custom data types
+  - Sum Datatype: A type with different values
+    data SimpleNum = One | Two | Many deriving Show
+  - Product DataType (records)
+    data CricketScore = Score [Char] Int Int deriving show
+- https://www.futurelearn.com/courses/functional-programming-haskell/10/steps/1103593
+  - Convert a Tree to a list
+  - Insert a value into a tree ordered
+  - Sum values in a tree
+- TypeClasses
+  1) constrains member types (instances) to conform to an API
+  2) like interfaces in C# and Java
+  3) types are concrete implementations of the interface
+  4) enable operator overloading
+- (+) :: Num a => a -> a -> a
+  Type Class Membership: a of Num
+  Type Variable: a
+  Context of the type: Num a
+  Typeclasses: Num, Eq, Ord, Show, Read
+- Interview Simon Peyton
+  - Lazyness: John Huges "Why Functional Programming Matters"
+    FP allows to compose things together.
+    Separating the tree creation (a lazy operation) from the tree walking.
+    On a eager programming language both will be tied together.
+    "A modularity mechanism."
+** 4 When Programs Get Bigger
+- Like python, whitespace is important in Haskell, in *let* expressions anyway
+- *where/let* differences
+  #+begin_src haskell
+  let x = numeral ++ " minister"  where numeral = "prime" in x
+  let x = numeral ++ " minister"
+        where numeral = "prime"
+  in x
+  #+end_src
+  1) let, is an expression, and can be used anywhere an expression is allowed
+  2) where, is NOT an expression, can only be used to provide local variables to a top level equation
+     otherwise, is the catch-all of where
+- *case X of*, selects based on the form of the X value
+  _ is the catch-all
+- *if*, expressions are syntactic sugar that gets converted into case (?
+- Maybe, like Option
+  Nothing, like None
+  Just, like Some
+- *fmap*, allows a function to be called on something inside a Maybe
+*** Parsing text using high-order functions
+  https://www.futurelearn.com/courses/functional-programming-haskell/10/steps/1103599
+  https://wiki.haskell.org/Parsec
+  - Approaches to parsing
+    |                   | reusability | for type of input |
+    |-------------------+-------------+-------------------|
+    | impose a format   |             | no                |
+    | hand              | no          | no                |
+    | regex             | no          | very simple       |
+    | parser combinator |             | medium            |
+    | parser generator* |             | heavy             |
+    |-------------------+-------------+-------------------|
+    * yacc/bison/antlr/happy
+  - Haskell used *monads* to structure computations
+  - A computation done in *monad* returns a monadic type
+    In ~IO String~, we say that, "String returns inside the monad"
+  - Anatomy of a basic parser:
+    - All Parser Combinators are functions that return functions
+    - The returned functions operates on a string
+    - Take no argument or 1 string for parametrization
+  - Anatomy of a parser combinator: <|>, parens
+    - take other parsers as input
+    - <|> is for try if any of the parser work
+    - use <|> with try to do not consume on failed
+  - >> can be used to shorted the *do* notation
+  - builExpressionParser, Parsec helper for expression parsing
+  - <?>, helper to define a custom error message
+*** QuickCheck
+- Property checking
+- "Testing can only show the presence of bugs, not his absense"
+  Edsger Dijkstra
+#+begin_src shell
+> import Test.QuickCheck
+> -- Or verboseCheck
+> quickCheck ((\n -> (\s -> ((decipher n (cipher n s)) == s)))
+            :: Int -> [Char] -> Bool)
+*** Failed! Falsifiable (after 6 tests and 4 shrinks):
+1
+"z"
+#+end_src
+** 5 Hardcore Haskell
+- Interview
+  Video: 2013 Codemania 2013: Katie Miller on Monads
+  https://www.youtube.com/watch?v=MlZCiiKGbb0
+  http://monads.codemiller.com/#/
+- Use Cases
+  Facebook: https://code.facebook.com/posts/745068642270222/fighting-spam-with-haskell/
+  Galois: https://www.scribd.com/document/45049621/Building-a-business-with-Haskell-Case-Studies-Cryptol-HaLVM-and-Copilot
+  NYT: https://www.infoq.com/presentations/haskell-newsroom-nyt/
+  http://cufp.org/2014/maxime-ransan-adopting-functional-programming-with-ocaml-at-bloomberg-lp.html
+- IO ()
+  used to say that a function returns "no value", but causes an effect
+- Type inference, starts from "a -> b -> c", then adds constraints to figure out the type
+  http://dev.stephendiehl.com/fun/006_hindley_milner.html
+  https://en.wikipedia.org/wiki/Unification_(computer_science)#Application:_type_inference
+*** Lazyness
+- Parameters of functions are not evaluated until are used in the body of the function
+  - They are not evaluated if not used
+  - Also applies if for example, we need a length of a list, but not the content of the list
+- Infinite Data Structures
+  > let ones = 1 : ones
+  > repeat '1'
+  > [1..]
+- Example: Fibonnaci
+  > let fibs = 1:1:(zipWith (+) fibs (tail fibs))
+- Example: Prime numbers
+  #+begin_src haskell
+properfactors x = filter (\y -> (x `mod` y == 0)) [2..(x-1)]
+numproperfactors x = length (properfactors x)
+primes = filter (\x -> (numproperfactors)) [2..]
+  #+end_src
+*** Types
+- Anonymouse expressions: without them haskell it would look like assembly
+  (-b) + sqrt (b^2 - 4*a*c)
+- Monomorphic and Polymorphic functions
+- Currying
+  - We can restrict functions to have just one argument and not lose expresiveness against functions that take any number of args
+- Typeclasses
+  - Example: the typeclass Num, is a set of types for which (+) is defined
+  - Ad-Hoc vs Parametric Polymorphism
+** 6 Think Like A Functional Programmer
+*** Typeclasses
+  https://www.futurelearn.com/courses/functional-programming-haskell/10/steps/1103626
+  1) Definying the data types
+     #+begin_src haskell
+ data Bright = Blue | Red deriving (Read,Show)
+ data Pastel = Turquoise | Tan deriving (Read,Show)
+     #+end_src
+  2) Definying a new typeclass, for any type color there are 2 functions (dark, lighten)
+     #+begin_src haskell
+ class Color a where
+   dark :: a -> Bool
+   lighten :: a -> a
+     #+end_src
+  3) Instancing
+     #+begin_src haskell
+ instance Color Bright where
+   dark = darkBright
+   lighten = lightenBright
+
+ instance Color Pastel where
+   dark = darkPasterl
+   lighten = lightenPaster
+     #+end_src
+- Predefined Typeclasses https://www.haskell.org/onlinereport/basic.html
+- Implementing Show
+  #+begin_src haskell
+data Foo = Bar | Baz
+
+instance Show Foo where
+  show Bar = "this is bar"
+  show Baz = "this is baz"
+  #+end_src
+*** Lambda
+- Code -> System F -> Machine Language
+- Conversions:
+  1) Alpha
+  2) Betha
+  3) Eta Conversion:
+     - f is equivalent to (\x -> f x)
+     - (*3) is equivalent to (\x -> (*3) x)
+     - Also to "factor out" trailing common arguments
+*** TODO There are only functions
+https://www.futurelearn.com/courses/functional-programming-haskell/10/steps/1103634
+- Variables and *let* expressions are just syntactic sugar for lambda expressions
+- Tuples are syntactic sugar for function application
+  tp = (1,2)
+  tp = mkTup 1 2
+- ...
+*** Monads
+- "Monads allow sequencing of function calls via the type system"
+  aka allow computation to be chained together
+  aka a computation patter
+- do, can work with monads IO and Maybe, propagating Maybe errors
+- Introduction to Monad Theory https://www.futurelearn.com/courses/functional-programming-haskell/10/steps/1103629
+  - Describe steps, are abstract, structure program, safely implement actions
+  - Building Blocks
+    1) Type Construct, for a type of a computation result
+    2) A Function, from value to computation that will return the result
+    3) A Function (>>=), from 2 computations and produces the result of applying each in sequence
+**** Monad Typeclass
+    #+begin_src haskell
+class Monad m where
+  return ::   a -> m a
+  (>>=)  :: m a -> (a -> m b) -> m b
+  (>>)   :: m a -> m b -> m b
+  fail   :: String -> m a
+    #+end_src
+  - (>>=) "Bind"s the value of the prev computation (>>) "Then" does not
+  - *fails is usually not used directly, pretend is not there*
+  - 3 Monadic Laws
+    | Law         |                 | = |                         |
+    | right unit  | m >>= return    |   | m                       |
+    | left unit   | return x >>= f  |   | f x                     |
+    | associative | (m >>= f) >>= g |   | m >>= (\x -> f x >>= g) |
+  - do rules
+    #+begin_src haskell
+    do { x }  -- >  x
+    do {x ; <xs> }  -- >  x >> do { <xs> }
+    do { a <- x ; <xs> }  -- >  x >>= \a -> do { <xs> }
+    do { let <declarations> ; xs } -- >
+    let <declarations> in do { xs }
+    #+end_src
+**** Maybe Monad
+#+begin_src haskell
+-- 1)
+data Maybe a = Just a | Nothing
+instance Monad Maybe where
+  return         = Just    -- 2)?
+  Nothing  >>= f = Nothing
+  (Just x) >>= f = f x     -- 3)?
+  fail _         = Nothing
+#+end_src
+- MonadPlus
+#+begin_src haskell
+instance MonadPlus Maybe where
+  mzero             = Nothing
+  Nothing `mplus` x = x
+  m `mplus` _       = x
+#+end_src
+- ghci > 7.10 needs more https://gitlab.haskell.org/ghc/ghc/-/wikis/migration/7.10
+**** Other monad tutorials
+- https://www.lambdacat.com/the-midnight-monad-a-journey-to-enlightenment/
+- https://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
+- https://en.wikibooks.org/wiki/Haskell/Understanding_monads
+- http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html
+- https://web.archive.org/web/20081206204420/http://www.loria.fr/~kow/monads/index.html
+- https://blog.plover.com/prog/burritos.html
+  https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/
+  https://chrisdone.com/posts/monads-are-burritos/

@@ -1,3 +1,4 @@
+- https://github.com/lucasvegi/Elixir-Code-Smells
 - https://github.com/Zensavona/domainatrex
   A library for parsing TLDs from urls in Elixir
 https://elixirschool.com/en/

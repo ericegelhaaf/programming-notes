@@ -13,13 +13,6 @@
 - Docker
   incomplete https://github.com/samuelololol/docker-gentoo-crossdev-distccd
   armv6 https://github.com/samuelololol/docker-gentoo-crossdev-distccd
-- Android
-  https://wiki.gentoo.org/wiki/Android/SharkBait/Building_a_toolchain_for_aarch64-linux-android
-  https://wiki.gentoo.org/wiki/Android/SharkBait/Clang_toolchain_with_sanitizers_support_for_Android
-  2011 https://devjlanza.wordpress.com/2011/09/02/compile-a-native-c-android-application/
-  2017 https://github.com/skanti/Android-Manual-Build-Command-Line
-  https://github.com/facebookexperimental/ExtendedAndroidTools
-  https://github.com/borodust/aw-filament/blob/master/.github/workflows/build.yaml
 - Alternatives
   - YOCTO https://www.yoctoproject.org/
   - OPENWRT (fork of years old buildroot)

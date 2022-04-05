@@ -1,3 +1,6 @@
+- Github Action: build docs
+  https://github.com/smimram/monadic-synth/blob/master/.github/workflows/build.yml
+- Video: 2014 Ocaml at Bloomberg http://cufp.org/2014/maxime-ransan-adopting-functional-programming-with-ocaml-at-bloomberg-lp.html
 - Book: 2012 - Fun of Programming https://github.com/bobzhang/ocaml-book
 - Book: OCaml From the Ground Up  https://ocamlbook.org/
 - Book: https://ocaml.xyz/book/
@@ -74,6 +77,7 @@
 - Book:
   https://dev.realworldocaml.org/toc.html
   https://github.com/realworldocaml/book/
+** Types
 |-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
 | Type      | Init                   | Access | Modifying | Pattern Matching                | Adding | Appending      |
 |-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
@@ -96,7 +100,7 @@
 - ^ provided by Pervasives module
 - Ref shorthands probided by Base
 - ¦ used in place of |
-- Modules
+** Modules
   |----------------------------+------------------------------------|
   | new                        | module M = struct                  |
   |                            | ..let x = 3                        |
@@ -155,6 +159,7 @@
   | functor                    | struct                             |
   |                            | end                                |
 #+TBLFM: $2=struct
+** Functions
 - List
   (_exn for exception is possible)
 - In_channel.fold_lines
@@ -1236,6 +1241,89 @@ let fib = make_rec fib_norec
         (module Bumper : Bumpable with t = a)
         (l : a list) (* locally abstract type *)
   #+end_src
+** ? Async
+- A middle road between a event-callback and threads
+*** Async functions
+  | Function             | input      | output     |                                          |
+  |----------------------+------------+------------+------------------------------------------|
+  | Reader.file_contents | Deferred.t |            |                                          |
+  | Deferred.peek        | Deferred.t | option     |                                          |
+  | Deferred.bind        | Deferred.t | Deferred.t | with a """callback""" type function call |
+  | >>=                  |            |            |                                          |
+  | return               | 'a         | Deferred.t |                                          |
+  | Deferred.map         | Deferred.t | Deferred.t | bind + return                            |
+  | >>¦                  |            |            |                                          |
+  |----------------------+------------+------------+------------------------------------------|
+*** ppx_let
+  let%bind
+  let%map
+*** ivar, low-level manual filling of variable
+- Ivar.create
+- Ivar.fill
+- Ivar.read
+- Deferred.peek works with ivar's
+*** upon
+- Thunk: a function whose argument is of type *unit*
+- upon: schedules a callback to be called when the passed Deferred is resolved
+  - upon: 'a Deferred.t -> ('a -> unit) -> unit
+  - no new Deferred is created
+*** Example: Queue of scheduled thunks
+#+begin_src ocaml
+module Delayer : Delayer_intf = struct
+  type t = { delay: Time.Span.t;
+             jobs: (unit -> unit) Queue.t;
+           }
+
+  let create delay =
+    { delay; jobs = Queue.create () }
+
+  let schedule t thunk =
+    let ivar = Ivar.create () in
+    Queue.enqueue t.jobs (fun () ->
+      upon (thunk ()) (fun x -> Ivar.fill ivar x));
+    upon (after t.delay) (fun () ->
+      let job = Queue.dequeue_exn t.jobs in
+      job ());
+    Ivar.read ivar
+end;;
+#+end_src
+*** Example: Bind made with ivar and upon
+#+begin_src ocaml
+let my_bind d ~f =
+  let i = Ivar.create () in
+  upon d (fun x -> upon (f x) (fun y -> Ivar.fill i y));
+  Ivar.read i;;
+#+end_src
+*** Example: Echo server
+#+begin_src ocaml
+open Core
+open Async
+
+let rec copy_blocks buffer r w =
+  Reader.read r buffer
+  >>= function
+  | `Eof -> return ()
+  | `Ok  -> bytes_read ->
+    Writer.write w (Bytes.to_string buffer) ~len:bytes_read;
+    Writer.flushed w
+    >>= fun () ->
+    copy_blocks buffer r w
+#+end_src
+- provides *pushback*, it holds until progress can be made, otherwise it could lead to a a memory leak
+- bind + tail recursion
+*** Example: Echo server - Async.Tcp
+#+begin_src ocaml
+let run () =
+  let host_and_port =
+    Tcp.Server.create
+      ~on_handler_error:`Raise
+      (tcp.Where_to_listen.of_port 8765)
+      (fun _addr r w ->
+        let buffer = Bytes.create (16 * 1024) in
+        copy_blocks buffer r w)
+  in
+  ignore (host_and_port : (Socket.Address.Inet.t, in) Tcp.Server.t Deferred.t)
+#+end_src
 * Course: 2021 - OCaml Programming: Correct + Efficient + Beautiful
   https://cs3110.github.io/textbook/cover.html
   https://www.youtube.com/playlist?list=PLre5AT9JnKShBOPeuiD9b-I4XROIJhkIU
@@ -1867,7 +1955,40 @@ expr:
   | e1 = expr; PLUS; e2 = expr { Binop (Add, e1, e2) }
   ;
     #+end_src
+* Course: 2020 - Princeton - Functional Programming
+** 03
+- Function parameters are patterns too
+  #+begin_src ocaml
+  type point = float * float
+
+  let distance ((x1,y1):point) ((x2,y2):point) : float =
+    let square x = x *. x in
+    sqrt (square (x -. x1) +. square (y2 -. y1))
+  #+end_src
+** 12 Modules
+*** 1
+- Signature = an inteface
+  Structure = an implementation
+  Function  = a parametrized module
+- Murphy's Law: "When is not enforced is broken"
+- Types of operations on a data type
+  1) Constructor: return a value of the type
+  2) Observer: reveals information about the status of the type
+  3) Mutator: takes t and returns a new t
+- "Sealing" a structure by a signature, limits visibility
+*** 2
+- Principles:
+  1) Fail as early as possible (ex: return irregular data)
+  2) Non-determinism is tough for clients (ex: return bad data)
+  3) Recoverable errors are better (ex: crashing)
+  4) More Non-determinism is worse (ex: it crashes or ret bad data)
+- Options and Exceptions are preferred
+  - *exception* can be declared on signatures, they can be handled
+  - *option*, adds an code overhead
+*** 3
 * Libraries
+- LWT/Telegram bot https://github.com/quernd/SushiBot
+- Synth https://github.com/smimram/monadic-synth
 - WebFramework https://aantron.github.io/dream/
 - HTTP Server
   - https://github.com/inhabitedtype/ocaml-webmachine

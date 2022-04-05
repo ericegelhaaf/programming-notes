@@ -66,7 +66,16 @@
   a thing and instead reset the values to the default initargs
   http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
 * Elf Binary Release
- "sbcl --disable-debugger --no-sysinit --no-userinit"
+|-----------------+-------------+-------+-----+-----|
+|                 | compression | extra | .so | X11 |
+|-----------------+-------------+-------+-----+-----|
+| deploy+appimage | Y           | Y     | Y   | Y   |
+| deploy          | Y           |       | Y   | Y   |
+| sb-ext          | Y           |       |     | Y   |
+| static          | Y           |       | Y   |     |
+| groveler        |             |       | Y   | ?   |
+|-----------------+-------------+-------+-----+-----|
+  "sbcl --disable-debugger --no-sysinit --no-userinit"
             Use an existing SBCL binary as a cross-compilation
             host even though you have stuff in your
             initialization files which makes it behave in such a

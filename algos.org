@@ -1,3 +1,5 @@
+- CS170 -  Efficient Algorithms and Intractable Problems
+  https://cs170.org/
 - https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
   "Algorithms with Attitude"
 - CodeEric

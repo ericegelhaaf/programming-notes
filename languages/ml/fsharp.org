@@ -1,3 +1,9 @@
+- F# Cheatsheet
+  https://dungpa.github.io/fsharp-cheatsheet/
+  https://github.com/dungpa/fsharp-cheatsheet
+- dotnet run
+  dotnet run arg1 arg2
+  dotnet watch run arg1 arg2
 https://blog.darklang.com/new-backend-fsharp/
 https://bartoszsypytkowski.com/tag/fsharp/
 https://bartoszsypytkowski.com/writing-high-performance-f-code/
@@ -33,6 +39,7 @@ https://fsharp.org/use/linux/
 - Learning resources https://fsharpforfunandprofit.com/
 * Video
 - Austin 2019 https://usergroup.tv/videos/category/group/austin-f-meetup/
+- Channel: Casual F# with Kit Eason https://www.youtube.com/channel/UCcmY0UZ5XqK2g7e4gynenWQ/videos
 - Channel: Community F# https://vimeo.com/channels/c4fsharp/videos
 - Channel: Community F# https://www.youtube.com/c/C4fsharpNet/videos
 - Channel: F# Online https://www.youtube.com/channel/UC1SQsRYPRV0Kw3KCowGJXzA
