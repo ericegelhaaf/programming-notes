@@ -1,2 +1,17 @@
 - https://ziglang.org/learn/why_zig_rust_d_cpp/
 - https://github.com/ratfactor/ziglings
+* Video
+- Tsoding - Paid Zig Stream https://www.youtube.com/watch?v=eIX9zER9vjY
+** DONE How Zig is used at Uber - Motiejus Jakštys
+   https://www.youtube.com/watch?v=SCj2J3HcEfc
+   Position:
+     - Past: Erlang Developer
+     - Present: Infrastructure
+   Uber
+     - Primarly Go (for infra) and Java (some rare C++)
+     - Monorepo per language
+     - Will use the Zig's C toolchain for crosscompilation
+   Hermetic: when the tool to compile the program comes with the source.
+     - Go is Hermetic (with bazel?), C++ is not.
+** Channel
+- https://www.youtube.com/c/ZigSHOWTIME

@@ -1,3 +1,5 @@
+- python -> c compiler https://mypyc.readthedocs.io/en/latest/
+  https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html
 - https://dropbox.tech/application/our-journey-to-type-checking-4-million-lines-of-python
 - https://gto76.github.io/python-cheatsheet/
 - https://news.ycombinator.com/item?id=29582437

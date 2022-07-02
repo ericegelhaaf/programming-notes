@@ -1,3 +1,4 @@
+- https://evanrelf.com/haskell-libraries-i-love
 - Styleguide https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
 - Mailing List https://mail.haskell.org/mailman/listinfo/haskell-cafe
 - Course: MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
@@ -54,6 +55,11 @@
   https://github.com/bos/stanford-cs240h
   http://www.scs.stanford.edu/11au-cs240h/notes/
 - https://github.com/hzlmn/haskell-must-watch
+* Build
+- -I0
+  -Iw
+  +RTS -I0 -RTS
+  -rtsopts to ghc-options in .cabal
 * Personalities
 ** Simon Peyton-Jones
 - haskell comitee on design
@@ -730,190 +736,6 @@ pp = putStrLn . unlines . map (unwords . map show)
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
 
-* TODO Videos: Haskell by Bartosz Milewski
-  playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
-** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
-- Course based on "Parallel and concurrent programming" Oreilly book
-- Based on math, lambda calculus
-- Lists are the core DS while in other langs would be an array
-** DONE 1-2 => Functions https://www.youtube.com/watch?v=ybba5tcOeEY
-- keep the more reocurring thing simple
-  - in morse code (? the letter "e" is just a dot
-- ~function application~ is the strongest binding
-  7 - f x y z - 1
-- no variables in haskell, they are nonary functions
-- write file
-#+begin_src haskell
-sqDist :: Num a => a -> a -> a
-sqDist x y = x^2 + y ^2
-
-main = print (sqDist 3 4)
-#+end_src
-- load foñe
-#+begin_src haskell
-> :l main.hs
-> main
-25
-> :t sqDist
-sqDist :: Num a => a -> a -> a
-#+end_src
-- there are things that are NOT expressable in haskell, that are left to the used (axioms)
-- main :: IO ()
-  print :: Show a => a -> IO ()
-  putStrLn :: String -> IO ()
-- ghci commands
-  #+begin_src
-  :l FILENAME
-  :r reload
-  :t expand type
-  :q quit
-  :i info
-  #+end_src
-- Num is a ~class of types~, Double is type
-** DONE 2-1 => More Functions
-- on tuples: fst, snd
-- lowest possible binding is $
-- (.) ~function composition~, very high precedence
-- spaces kind of does't matter at times, precedence does
-- sq . sqDist -- reads "sq after sqDist"
-- the definition of a function is with a -> b -> c because
-  - ~partial application~ happens automatically
-- using a tuple as an argument, is not convenient for partial application
-- polymorphism:
-  - parametric: "it can handle values uniformly without depending on their type.
-                 Parametric polymorphism is a way to make a language more expressive
-                 while still maintaining full static type-safety."
-                 ex: map function
-  - adhoc: different behaviour for different types of arguments
-- code
-  #+begin_src haskell
-main = print $ sqDist 3 4 -- using ($)
-
-sqDist (x,y) = x^2 + y ^2 -- using ($) on a tuple
-main = print $ sqDist $ (3,4)
-
-sq x = x * x -- replacing parens
-main = print $ sq $ 2 + 3
-main = print $ sq (2 + 3)
-main = print $ sq 2+3 -- NOT the same
-
-dist pt = sqrt $ sqDist pt -- Partial Application in Function composition
-dist = sqrt . sqDist
-  #+end_src
-** DONE 2-2 => Product data types https://www.youtube.com/watch?v=a6IkhX1zgXI
-- ELM isn't lazy evaluated
-#+begin_src haskell
-inc x = 1 + x
-inc x = (+) 1 x  -- () changes infix to prefix operator
-inc   = (+ 1)    -- "x" cancells out
-#+end_src
-- partial application of an operator is called ~operator section~
-- ~Void~ is type with no elements
-- ~Unit~ is the "Singleton" Type denoted by "()", tuple of 0 elements
-- Define a ~NEW type~ with:
-  > data Unit = CONSTRUCTOR
-              = U
-  > data ()   = ()
-    TYPE      = DATA
-    CONSTRUCTOR CONSTRUCTOR
-- Different namespace for types and data constructors
-- Every constructor is a function (capitalized for some reason).
-  > data Product a b = P a b
-  > :t P
-  P :: a -> b -> Product a b
-- ~Destructuring~ happens with the Data Constructor
-  > f (P x y) = x + y
-- When you have more than 2 components, you are better using a ~record~ where fields are named
-- 2 ways of constructing new data types??
-** DONE 3-1 => Laziness https://www.youtube.com/watch?v=jWrRs-l8C1U
-:set -Wall
-:set -fforce-recomp
-*** Kinds
-- "In haskell we don't want to use many names, because the polute the namespace"
-- ~*~ in type definitions means "any type"
-- (,) is the data constructor for pair
-- The Type Constructors have types and those types are called ~kinds~
-- use ~:k~ to get the kind of the argument
-#+begin_src haskell
-> :t (,) -- Data Constructor
-(,) :: a -> b -> (a, b)
-> :k (,) -- Type Constructor
-(,) :: * -> * -> *
-#+end_src
-- "If you define a data type in Haskell you can promote it to a kind"????
-*** Lazyness
-- Haskell by default is lazy evaluated
-- ~:sprint~ prints a value WITHOUT evaluating it
-- Haskell has ~polymorphic values~, so we need to type "x" here
-#+begin_src haskell
-> let x = 1 + 2 :: Int
-> :sprint x
-x = _
-> x
-3
-> :sprint x
-x = 3
-#+end_src
-- We can force eager evaluation by using ~seq~, it "sequences" the arguments, it evaluates the 1st before the 2nd
-#+begin_src haskell
-> let x = 2 + 3 :: Int
-> let y = x + 1
-> print (seq y ())
-()
-> :sprint y
-y = 6
-#+end_src
-- ~swap~
-#+begin_src haskell
-> import Data.Tuple
-> let z = swap (x,x+1)
-> :sprint z
-z = _
-#+end_src
-** 3-2 => Sum types https://www.youtube.com/watch?v=MagayXbH4oY
-- Unlike product types, on ~sum types~ we can have either from a or b
-  - In terms of sets is like a "discriminated union", aka "tagged union"
-- "|" as in OR
-- Either is used to return either an error or a valid output. We don't use a pair.
-#+begin_src haskell
-data Either a b = Left a | Right b
-safeSqrt :: Either String Double -> Either String Double
-safeSqrt (Left str) = Left str
-safeSqrt (Right x) = if x < 0
-                     then Left "Error"
-                     else Right (sqrt x)
--- Alternative using case
-safeSqrt sx =
-    case sx of
-        Left str -> Left str
-        Right x -> if x < 0
-                   then Left "Error"
-                   else Right (sqrt x)
-#+end_src
-- What in other languages would be an "enumeration type" here is just another sum
-  - data Bool = True | False
-- Algebraic data types???
-#+begin_src haskell
-data X a = X a | Y Void -- a + 0 = a
-type Y a = (a, ())      -- a * 1 = a
-type Z a = (a, Void)    -- a * 0 = 0
-#+end_src
-** 4-1 => Recursion https://www.youtube.com/watch?v=F-nAAIH4e2s
-- data List a = Nil | Cons a (List a)
-- ~:~ Cons operator
-- ~..~ range operator for lists
-  [0..]         => PRINTSUNTILSTOP
-  [0..4]        => [0,1,2,3,4]
-  take 4 [0..]  => [0,1,2,3]
-** 4-2 => Functors
-** 5-1 => Monads
-** 5-2 => The Monad Class
-** 6-1 => IO Monad
-** 6-2 => Parallellism and Concurrency
-** 7-1 => The Eval monad
-** 7-2 => Parallel sudoku solver, strategies, overview of Haskell parallelism.
-** 8-1 => Concurrent Haskell, MVars
-** 8-2 => Software Transactional Memory
 * TODO Videos: Haskell 10X - Google TechTalks
   repo: https://github.com/google/haskell-trainings
 ** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
@@ -1001,7 +823,7 @@ add (Minutes x) (Minutes y) = Minutes $ x + y
   4) IO
      Can't apply regular functions
      Can't pattern match
-     Can't get values from it
+     Can't get values out of it, but can operate while keeping it on IO
 *** Solution
 - 1 & 2 ) Declaring the type and implementing it, are separate things
   #+begin_src haskell
@@ -1045,7 +867,7 @@ add (Minutes x) (Minutes y) = Minutes $ x + y
     maxBound :: a
   #+end_src,
 - 3)
-  Functions to deal with values in a context "C":
+  Functions to deal with values in a context "C", or "<>" as context
   | Functor     | <$> | fmap | :: | (a -> b)   | -> | C a | -> | C b |
   | Applicative | <*> | ap   | :: | C (a -> b) | -> | C a | -> | C b |
   | Monad       | >>= | bind | :: | (a -> C b) | -> | C a | -> | C b |
@@ -1386,3 +1208,667 @@ instance MonadPlus Maybe where
 - https://blog.plover.com/prog/burritos.html
   https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/
   https://chrisdone.com/posts/monads-are-burritos/
+* Videos: 2013 - Simon Peyton - Adventure with Types in Haskell
+  - Simon Peyton Jones Compiling without continuations
+    https://www.youtube.com/watch?v=qx5NZmrFnvs
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FC_in_GHC_July13.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Kinds_and_GADTs.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Type_inference.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FunWithTypeFuns.pdf
+** 1 https://www.youtube.com/watch?v=6COvD8oynmI
+  slides https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/ClassesJimOPLSS.pdf
+- 18:40 When we declare a function with a type class (constraint?)
+  the compiler "adds an extra argument" to the function, the arg is kind of like a "vtable/read-table"
+- A *class* declaration turns into a *data* declaration
+- Constants are also overloaded, "1" is "(fromInteger d 1)"
+* Course: Packt - Learning Haskell Programming
+- stack new words
+  stack ghci
+  stack build
+  stack exec words-exe
+  stack test
+  stack ghc -- -dynamic test.hs
+- Testing
+  #+begin_src haskell
+import Test.Hspec
+main :: IO ()
+main = hspec $ do
+  describe "how to write a test" $ do
+    it "should be able to run tests" $ do
+      someFunc `Shouldbe` "someFunc"
+  #+end_src
+- ~/.stack/config.yml
+- words.cabal
+  - ghc-options
+  - executable name
+  - build-depends
+- Functions that take 2 arguments, of the same type, can be used as operators with ``
+- Function definition, Point-free style
+  #+begin_src haskell
+add a b = a + b
+add a b = (+) a b
+add a   = (+) a
+add     = (+)
+#+end_src
+- List monad
+  #+begin_src haskell
+import Control.Monad (guard)
+mapped = do
+  i <- [0..9]
+  return (i * 2)
+filtered = do
+  i <- [0..]
+  guard (div2 i)
+coords2 = do
+  row <- [0..7]
+  return $ do
+    col <- [0..7]
+    return (row,col)
+#+end_src
+- List comprehension
+  #+begin_src haskell
+coords3 = [ [ (row,col)| col <- [0..7] ] | row <- [0..7] ]
+#+end_src
+- zipWith
+  #+begin_src haskell
+cols = repeat [0..]
+rows = map repeat [0..]
+repeat8 = take 8 . repeat
+cols8 = repeat8 [0..7]
+rows8 = map repeat8 [0..7]
+coords4 = zipWith zip rows8 cols8
+      #+end_src
+- (map . map)
+- (zipWith . zipWith)
+* TODO Course: 2016 - Haskell by Bartosz Milewski
+  playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
+** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
+- "Web programming is horrible-cheap imitation of programming"
+- Course based on "Parallel and concurrent programming" Oreilly book
+- Based on math, Lambda Calculus
+- Lists are the core DS while in other langs would be an array
+- There are different "languages"/syntax in haskell
+  - do
+  - functions
+  - types
+  - constructs
+- Pure Functions
+  1) Equational Reasoning: Let us reason about programs, *you can inline them*
+  2) Concurrent Programming: Reproducible
+** DONE 1-2 => Functions https://www.youtube.com/watch?v=ybba5tcOeEY
+- usually *show* produces a string that can be parsec back by *read*
+- haskell keeps the more reocurring thing simple
+  - in morse code (? the letter "e" is just a dot
+- ~function application~ has the strongest binding
+  7 - f x y z - 1
+- there are no variables in haskell, they are *nonary* functions
+- #+NAME: main.hs
+  #+begin_src haskell
+--sqDist :: Num a => a -> a -> a
+sqDist :: Double -> Double -> Double
+sqDist x y = x^2 + y^2
+
+main = print (sqDist 3 4)
+#+end_src
+- load file
+  #+begin_src haskell
+> :l main.hs
+> main
+25
+> :t sqDist
+sqDist :: Num a => a -> a -> a -- the "type language"
+#+end_src
+- there are things that are NOT expressable in haskell,
+  that are left to the user (ex: axioms)
+- main :: IO ()
+  print :: Show a => a -> IO ()
+  putStrLn :: String -> IO ()
+- ghci commands
+  #+begin_src
+  :l FILENAME
+  :r reload
+  :t expand type
+  :i info
+  :q quit
+  #+end_src
+- Num is a ~typeclass~, a class of types, Double is type
+- IO is a type constructor
+- () is a type constructor for unit type
+** DONE 2-1 => More Functions
+- code
+  #+begin_src haskell
+sq x = x * x -- replacing parens
+sqDist (x,y) = x^2 + y ^2
+main = print $ sqDist (3,4)
+-- sq - 1 -- means substract 1 from sq
+
+main = print $ sq $ 2 + 3
+main = print $ sq (2 + 3)
+main = print $ sq 2+3 -- NOT the same
+
+dist pt = sqrt $ sqDist pt -- Partial Application in Function composition
+dist = sqrt . sqDist -- Point free notation + composition
+  #+end_src
+- on tuples: fst, snd
+- There are 10 levels of precedence, space has 10
+  - lowest possible binding is $
+  - spaces kind of does't matter at times, precedence does
+- (.) ~function composition~
+  - very high precedence
+  - sq . sqDist -- reads "sq after sqDist"
+  - the opposite direction than "|>" in fsharp
+- the definition of a function is with a -> b -> c because
+  - ~partial application~ happens automatically
+  - using a tuple as an argument, is not convenient for partial application
+- polymorphic functions:
+  1) parametric: same behaviour for all types
+     "it can handle values uniformly without depending on their type. 
+      Parametric polymorphism is a way to make a language more expressive
+      while still maintaining full static type-safety."
+      ex: map function
+  2) adhoc: different behaviour, for different types of arguments
+** DONE 2-2 => Product data types https://www.youtube.com/watch?v=a6IkhX1zgXI
+- ELM isn't lazy evaluated
+- partial application of an operator is called ~operator section~
+  #+begin_src haskell
+inc x = 1 + x
+inc x = (+) 1 x  -- () changes infix to prefix operator
+inc   = (+ 1)    -- "x" cancells out
+#+end_src
+- ~Void~
+  1) is type with no elements
+  2) an empty set
+  3) no construct
+- ~Unit~
+  1) is type with one element
+  2) is the "Singleton" Type denoted by "()"
+  3) tuple of 0 elements
+- Define a ~NEW type~ with:
+  > data Unit = CONSTRUCTOR
+              = U
+  > data ()   = ()
+    TYPE      = DATA
+    CONSTRUCTOR CONSTRUCTOR
+- Are different namespace for types and data constructors
+- Every constructor is a function (capitalized for some reason).
+- 20:00
+  ~Cartesian product~ of types, since types are sets
+  > data Product a b = P a b
+  > :t P
+  P :: a -> b -> Product a b
+  - ~type constructor~ is Product, used in type declarations
+  - ~data constructor~ is P, used in destructoring and constructing new type instance
+- When you have >2 components, you are better using a ~record~ where fields are named
+** DONE 3-1 => Laziness https://www.youtube.com/watch?v=jWrRs-l8C1U
+:set -Wall
+:set -fforce-recomp
+:k <TYPE_CONSTRUCTOR>
+:sprint value -- Prints the value without evaluating it
+*** Kinds
+- The Type Constructors have types and those types are called ~kinds~
+- "In haskell we don't want to use many names,
+  because they polute the namespace"
+- ~*~ in type #kind language" means "any type"
+  #+begin_src haskell
+> :t (,) -- Data Constructor
+(,) :: a -> b -> (a, b)
+> :k (,) -- Type Constructor
+(,) :: * -> * -> *
+#+end_src
+- "If you define a data type in Haskell you can promote it to a kind"
+  Type Promotion
+  https://downloads.haskell.org/~ghc/7.8.4/docs/html/users_guide/promotion.html
+*** Lazyness (12:30)
+- ML, In the book "Persistent Data Structures", he had to implement special extensions to ML to make it lazy.
+- Haskell by default is lazy evaluated
+- Haskell has ~polymorphic values~, so we need to type ":: Int" here
+  #+begin_src haskell
+  > let x = 1 + 2 :: Int
+  > :sprint x
+   x = _
+  > x
+   3
+  > :sprint x
+   x = 3
+#+end_src
+- We can force eager evaluation by using ~seq~,
+  it "sequences" its arguments, it evaluates the 1st BEFORE evaluating the 2nd
+  #+begin_src haskell
+  > let x = 2 + 3 :: Int
+  > let y = x + 1
+  > print (seq y ())
+   ()
+  > :sprint y
+   y = 6
+#+end_src
+- ~swap~, showing how is lazy. You would need to ~seq~ both x and z to compute the result.
+  #+begin_src haskell
+  > import Data.Tuple
+  > let z = swap (x,x+1)
+  > :sprint z
+   z = _
+#+end_src
+** DONE 3-2 => Sum types https://www.youtube.com/watch?v=MagayXbH4oY
+- In product types, we had projections
+  In Sum types, we have injections
+- Unlike product types, on ~sum types~ we can have *either* from a or b
+  - In terms of sets is like a "discriminated union", aka "tagged union"
+- "|" as in OR
+- Example: Either
+  Unlike Product Types, where we have a native type (the tuple) in haskell we don't have a native one.
+  We have one defined in the stdlib.
+  ~Either~ is used to return either an error or a valid output.
+  "Used as a poor man's exception", exceptions are more complicated because they might have more types, here are just strings
+  #+begin_src haskell
+data Either a b = Left a | Right b
+
+safeSqrt :: Either String Double -> Either String Double
+safeSqrt (Left str) = Left str
+safeSqrt (Right x) = if x < 0
+                     then Left "Error"
+                     else Right (sqrt x)
+
+-- Alternative using case
+safeSqrt sx =
+    case sx of
+        Left str -> Left str
+        Right x -> if x < 0
+                   then Left "Error"
+                   else Right (sqrt x)
+#+end_src
+- Example: Bool
+  What in other languages would be an "enumeration type" here is just another sum
+  - data Bool = True | False
+- Void and Unit
+  #+begin_src haskell
+data X a = X a | Y Void -- a + 0 = a, you can never use Y
+type Y a = (a, ())      -- a * 1 = a, equivalent or isomorphic a = (a,())
+type Z a = (a, Void)    -- a * 0 = 0, you can never create this type
+#+end_src
+** DONE 4-1 => Recursion https://www.youtube.com/watch?v=F-nAAIH4e2s
+- A power series, translates into Algebraic Data Types as
+  [ () | a | (a,a) | (a,a,a) |
+  where | is sum
+  aka a list
+- -- l(a) = l + a . l(a)
+  data List a = Nil | Cons a (List a)
+- ~:~ Cons operator
+- ~..~ range operator for lists
+  [0..]         => PRINTSUNTILSTOP
+  [0..4]        => [0,1,2,3,4]
+,  take 4 [0..]  => [0,1,2,3]
+- the code for a recursive *len* function gets converted by the compiler into a loop
+** DONE 4-2 => Functors
+- ~Induction~ in mathematics, recursive proofs
+  ~Structural Induction~ when there is some kind of ordering, partial or not, example in list
+- A ~Functor~ is sorta like a container of a's
+  - (data) Has a shape
+  - Has contents, values or can be a function
+  - (type constructor) It has to be polimorphic on his type
+  - (map) There has to be a way to modify uniformly the content of it
+- A functor is a class of types
+  #+begin_src haskell
+-- Functor is the "class name"
+-- f is a "type constructor"
+-- fmod is a generalization of functors, a method of the functor
+class Functor f where
+  fmod :: (a -> b) -> f a -> f b
+#+end_src
+- Axioms
+  1) Needs to be proven on each case for the container:
+     fmap id = id
+  2) It follows that: "Fusion Law"
+     fmap g . fmap f = fmap (g . f)
+*** Example: Binary tree definition
+  #+begin_src haskell
+data Tree a = Empty | Node (Tree a) a (Tree a)
+instance Functor Tree where -- NOT "Tree a"
+  --fmap = mapT
+  fmap f Empty = Empty
+  fmap f (Node l v r) = Node l (f v) r
+  #+end_src
+*** Example: ~Maybe~ is a functor
+  #+begin_src haskell
+data Maybe a = Nothing | Just a
+mapm f Nothing  = Nothing
+mapm f (Just x) = Just (f x)
+    #+end_src
+*** Example: Identity Functor, is also a monad, without side-effects
+  #+begin_src haskell
+data I a = I a
+instance Functor I where
+  fmap f (I x) = I (f x)
+  #+end_src
+*** Example: Function container
+  #+begin_src haskell
+-- e for environment
+-- a is the free-variable
+data Reader e a = Reader (e -> a)
+instance Functor (Reader e) where
+  fmap g (Reader f) = Reader (g . f)
+  #+end_src
+** DONE 5-1 => Monads
+- Monads
+  - They are not impure, they do not encapsulate side effects
+  - They are useful when dealing with side effects, but they don't deal with it themselves
+- "Kleisli arrows", side-effects solved by it
+  a -> m b
+  m :: * -> *
+*** Example: a functor with state and his proof
+  #+begin_src haskell
+data State s a = State (s -> (a,s))
+
+instance Functor (State s) where
+  fmap g (State f) = State -- f'
+    (\st -> let (a,st') = f st
+                b       = g a
+            in  (b,st'))
+  -- g  is (a -> b)
+  -- f  is (s -> (a,s))
+  -- f' is (s -> (b,s))
+  #+end_src
+*** >=> "fish operator"
+- A more general composition of functions, for "Kleisi arrows"
+- Needed to represent a common boilerplate with less work
+- Signature
+  (.)   :: (b->  c) -> (a->  b) -> (a->  c)
+  (>=>) :: (a->m b) -> (b->m c) -> (a->m c)
+- Example:
+  (a -> [b]) -> (b -> [c]) -> (a -> [c])
+    #+begin_src haskell
+f >=> g = \a -> let  bs = f a
+                    css = fmap g bs
+                in concat css
+f >=> g = concat . fmap g . f -- Note: it has to be Functor
+  #+end_src
+*** MONAD is
+The essence of monads is >=> and composition
+  - a type constructor (m)
+  - a fish operator (>=>)
+  - and return
+*** ~return~ The equivalent of the "id" function for the (.) operator
+#+begin_src haskell
+return :: a -> m a
+return >=> f = f
+
+f >=> return = f
+(f >=> g) >=> h = f >=> (g >=> h) -- associativity
+#+end_src
+** DONE 5-2 => The Monad Class (continuations)
+- Tetris, is how working with types in haskell is described
+- (>>=) ~bind~, "just give me the result, don't give me the whole function"
+  - is "easy" to define the *Kleisi Arrow* if you have the *bind*
+  - similarly is easy define fmap with return and bind
+*** Monad class
+   #+begin_src haskell
+class Monad m where
+--class Functor m => Monad m where
+--class Applicative => Monad m where
+  return :: a -> m a
+  (>>=)  :: m a -> (a->m b) -> m b
+  --(>=>)  :: (a->m b) -> (b->m c) -> (a->m c)
+  --join   :: m (m a) -> m a
+#+end_src
+*** Example: Either, proof that it is a Monad
+  "Either is a better version of Mayber"
+  #+begin_src haskell
+instance Monad (Either s) where
+  return x = Right x
+  ea >>= k = case ea of -- k is a function, name from "continuation"
+               Left  s -> Left s
+               Right x -> k s
+  #+end_src
+*** Example: >>= using bind
+  #+begin_src haskell
+safeRecSqrt x = safeSqrt x >>=
+  (\y -> if y == 0
+         then Left "div by 0"
+         else return (1/y))
+  #+end_src
+*** Example: >>= using bind, with do (hides the safe-effect)
+  #+begin_src haskell
+safeRecSqrt x = do
+  y <- safeSqrt x -- implicit bind
+  if y == 0
+  then Left "div by 0"
+  else return (1/y) -- always parens after return
+  #+end_src
+*** Example: >>= using bind, with do, without return but a function that returns the monad
+  #+begin_src haskell
+safeRecSqrt x = do
+  y <- safeSqrt x -- implicit bind
+  safeRec y
+  #+end_src
+** DONE 6-1 => IO Monad
+- It's a state monad
+- Math has no concept of time, not concept of "block"
+- In an ~Applicative~ you cannot fork between choices, like in Monads
+- "Think of this as Haskell programmers producing a program for the runtime.
+  The runtime is impure. But the program is pure."
+- (>>) There is a special version of *bind* that does not bind a variable
+  (>>) :: ma -> mb -> mb
+- "In imperative programming, the monad sits on the semicolon (;)"
+*** Example: Sugared IO() with *do*
+  #+begin_src haskell
+main :: IO()
+main = do
+  putStrLn "What's your name?"
+  name <- getLine
+  putStrLn $ "Hi " ++ name
+  #+end_src
+*** Example: desugared IO()
+  #+begin_src haskell
+main = putStrLn "What's your name?"
+       >> getLine
+       >>= \name -> putStrLn $ "Hi " ++ name
+  #+end_src
+** DONE 6-2 => Parallellism and Concurrency
+- You can escape monads like Maybe, but not IO
+  - You have no way of run/execute IO
+  - The runtime has some way of run it
+- Naming: When dealing with functions in monads arguments, are usually called run*
+*** Concurrent
+- is older, in practice
+- you want to *structure* the program differently,
+  easier to think about it
+- usually non-deterministic (due the added "time" dimension of in which order the threads run)
+- goal is ~latency~
+  - threads might slow down your program,
+    but that is ok for concurrency,
+    what is important is the *reaction time*
+*** Parallelism
+- no way to introduce data-races
+- In Haskell: "because of lazyness paralellism is right there"
+  - sparks: pointers to thunks
+  - thunks can be marked as sparks and place into queue to run in parallel
+  - there is a queue per processor, that processor can steal from it when idle
+  - queues are maintained using CAS operations
+    - CAS operations cause to flush the cpu caches
+    - CAS might keep retring several times until it can run
+    - the cpu owner of the queue, does NOT have to use CAS to pop values
+  - there is a thread-pool per cpu, to deal with FFI calls that might hang
+  - is NOT a problem if 2 cpus run the same job, due function purity
+- can be deterministic or not (in haskell is deterministic)
+- is the way using multicore/gpu
+- goals is ~throughput~ and performance
+** 7-1 => The Eval monad
+- Identity Monad
+  #+begin_src haskell
+data Identity a = Id a
+runIdentity (Id x) x
+instance Monad Identity where
+  return   = Id
+  ix >>= f = f (runIdentity ix)
+  #+end_src
+- Eval Monad, similar to the identity monad
+  #+begin_src haskell
+data Eval a = Done a
+runEval (Done x) = x
+instance Monad Eval where
+  return         = Done
+  (Done x) >>= f = f x -- "strict monad", eagear unpack, instead of run runEval
+#+end_src
+- Additional Eval functions:
+  #+begin_src haskell
+rpar :: a -> Eval a -- runs "a" expression in parallel
+rseq :: a -> Eval a -- runs "a" fully before return
+#+end_src
+- Example: calculates f on different args, where f can take a long time
+  We do the operations in the do monad, and then exit the monadic world in runEval
+  #+begin_src haskell
+runEval $ do
+  x' <- rpar (f x)
+  y' <- rpar (f y)
+  return (x',y')
+  #+end_src
+** 7-2 => Parallel sudoku solver, strategies, overview of Haskell parallelism.
+** 8-1 => Concurrent Haskell, MVars
+** 8-2 => Software Transactional Memory
+* Course: Bartosz Milewski - Category Theory I
+  https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
+  https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/
+** 1.1: Motivation and Philosophy
+** 1.2: What is a category?
+** 2.1: Functions, epimorphisms
+** 2.2: Monomorphisms, simple types
+** 3.1: Examples of categories, orders, monoids
+** 3.2: Kleisli category
+** 4.1: Terminal and initial objects
+** 4.2: Products
+** 5.1: Coproducts, sum types
+** 5.2: Algebraic data types
+** 6.1: Functors
+** 6.2: Functors in programming
+** 7.1: Functoriality, bifunctors
+** 7.2: Monoidal Categories, Functoriality of ADTs, Profunctors
+** 8.1: Function objects, exponentials
+** 8.2: Type algebra, Curry-Howard-Lambek isomorphism
+** 9.1: Natural transformations
+** 9.2: bicategories
+** 10.1: Monads
+** 10.2: Monoid in the category of endofunctors
+* Course: Graham Hutton - Advanced Haskell Programming
+** 06 Functors
+- Functor: Generalizing further the concept of *map*, we can map over things other than lists.
+- class definition, we use fmap since map already exists
+  #+begin_src haskell
+clas Functor f where -- f is a parametrized type/type constructor
+  fmap :: (a -> b) -> f a -> f b
+  #+end_src
+- "Whenever you see parametrized type,
+   ask if you can make into an instance of Functor"
+- Why?
+  1) ~fmap~ We can use the same function for things that are essentially the same
+  2) ~Generics~ Can define *generic* functions that work with any functorial type
+     using the Functor typeclass
+*** Example: declaration for lists
+  #+begin_src haskell
+instance Functor [] where -- [] is the type constructor
+  fmap = map
+  #+end_src
+*** Example: declaration for Maybe
+  > fmap (+1) Nothing
+    Nothing
+  > fmap (*2) (Just 3)
+    Just 6
+  #+begin_src haskell
+data Maybe a = Nothing | Just a
+instance Functor Maybe where
+  -- fmap :: (a->b) -> Maybe a -> Maybe b
+  fmap g Nothing  = Nothing
+  fmap g (Just x) = Just $ g x
+  #+end_src
+*** Example: declaration for a tree
+  > fmap length (Left "abc")
+    Leaf 3
+  > fmap even (Node (Leaf 1) (Leaf 2))
+    Node (Leaf False) (Leaf True)
+  #+begin_src haskell
+data Tree a = Leaf a
+            | Node (Tree a) (Tree a)
+instance Functor Tree where
+  -- fmap :: (a->b) -> Tree a -> Tree b
+  fmap g (Leaf x)   = Leaf (g x)
+  fmap g (Node l r) = Node (fmap g l) (fmap g r)
+  #+end_src
+** 07 Applicative Functors
+- Problem: Example of naive declaration of Functor2
+  #+begin_src haskell
+class Functor2 f where
+  fmap2 :: (a->b->c) -> f a -> f b -> f c
+  #+end_src
+- Applicative Functor
+  #+begin_src haskell
+class Functor f => Applicative f where
+  pure :: a -> f a
+  (<*>) :: f (a->b) -> f a -> f b -- generalized form of "applicative function"
+  #+end_src
+- Further generalization to *Type Constructors* with >1 arguments
+  - Functions that take as many arguments as we like
+- Example of fmap2
+  > fmap (+) (Just 1) (Just 2)
+    Just 3
+- <*> star operator, read as "applied to"
+- Usage, ~applicative style~
+  #+begin_src haskell
+pure g <*> x <*> y <*> z -- "star" separates the function arguments
+((g x) y) z -- function application and star group to the left
+  #+end_src
+- Examples: fmap0 fmap1 declarations in applicative style
+  #+begin_src haskell
+fmap0 :: a -> f a
+fmap0 = pure
+
+fmap1 :: (a->b) -> f a -> f b
+fmap1 g x = pure g <*> x
+  #+end_src
+- Example: Applicative Maybe
+  > pure (+) <*> Nothing <*> Just 2
+    Nothing
+  #+begin_src haskell
+instance Applicative Maybe where
+  -- pure :: a -> Maybe a
+  pure x = Just x
+  -- (<*>) :: Maybe (a->b) -> Maybe a -> Maybe b
+  Nothing  <*> mx = Nothing
+  (Just g) <*> mx = fmap g mx
+  #+end_src
+- Examples: Applicative for lists
+  "Applicative style for lists supports a form of Non-Deterministic
+   programming where we apply pure functions to multi valued arguments"
+  > pure (+1) <*> [1,2,3]
+    [2,3,4]
+  > pure (+) <*> [1] <*> [2]
+    [3]
+  > pure (*) <*> [1,2] <*> [3,4]
+    [3,4,6,8]
+** 08 Monads I
+- "Monads is about absorving a common patter and applying it"
+- "The idea of applicative functors, captures a patter of programing with effects"
+  "We apply pure functions. To effectful arguments."
+- Failled attempt of use *safediv* using applicatives
+  #+begin_src haskell
+eval :: Expr -> Maybe Int
+eval (Val n) = pure n
+eval (Div x y) = pure safediv <*> x <*> y -- ! does NOT compile, safediv is NOT pure
+  #+end_src
+- >>= "into", "in", "bind"
+** 09 Monads II
+- In haskell, the class of applicative functors that support the bind operator, are monads
+  #+begin_src haskell
+class Applicative m => Monad m where
+  (>>=) :: m a -> (a -> m b) -> m b
+  return :: a -> m a
+  return = pure
+  #+end_src
+- You can use *do* notation with lists, same way you would with list comprehensions.
+- ~State Transformer~ is a function which takes a state and returns a possible modified output state
+  type State = ...
+  type ST = State -> State
+  type ST a = State -> (a, State)
+- ~ST~ as a data declaration, S is dummy constructor
+  data ST a = S (State -> (a,State))
+  newtype ST a = S(State -> (a,State))
+- ~app~ A way to apply them
+  app :: ST a -> State -> (a,State)
+  app (S st) s = st s

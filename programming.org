@@ -6,6 +6,13 @@
 - Competitive https://cses.fi/problemset/
 - Channel: Coding with Some Guy https://www.youtube.com/channel/UCBwH4Xj7s5C9tkeYxI3dIzA/about
 - Channel: Creel https://www.youtube.com/c/WhatsACreel/videos
+- Channel: Club de Programación Competitiva https://www.youtube.com/channel/UCZalVP2C0nwe0JjmItyKS1w/videos
+- Channel: Programacion Competitiva Bolivia https://www.youtube.com/channel/UCod9TyxrhF8QHMezaVzMDVg/videos
+- Channel: Club de Programación Competitiva UMSA https://www.youtube.com/channel/UCi3lobNX_J1cMW6BjFZGTmw/videos
+- https://github.com/matramos/elrejunte
+  https://github.com/undefinedfceia/guardian-tortuga
+- https://github.com/ec24/tc-arg
+  https://www.youtube.com/user/ltaravilse/videos
 - Article: 2014 - Is TDD Dead https://news.ycombinator.com/item?id=24281195
 - Article: Carmack https://web.archive.org/web/20120702231514/http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/
 - Article: Carmack https://www.gamedeveloper.com/programming/in-depth-functional-programming-in-c-
@@ -25,7 +32,7 @@
 - Learn Type Theory https://github.com/jozefg/learn-tt
 - Podcast - History of computing https://open.spotify.com/show/1wdCnbj68DbWinQjmEwUaC
 - https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00-introduction-to-computer-science-and-programming-fall-2008/video-lectures/
--  Continuous Delivery https://www.youtube.com/channel/UCCfqyGl3nq_V0bo64CjZh8g/videos
+- Continuous Delivery https://www.youtube.com/channel/UCCfqyGl3nq_V0bo64CjZh8g/videos
 - https://ourmachinery.com/post/data-structures-part-1-bulk-data/
 - Ask HN: What are some of the best technical talks you've heard?
   https://news.ycombinator.com/item?id=18217762
@@ -38,12 +45,11 @@
   reference https://github.com/jpellegrini/gnu-apl-refcard
 - ASM
   examples https://github.com/cirosantilli/x86-bare-metal-examples
+- Course: 2022 - Waterloo - Principles of Programming Languages
+  https://student.cs.uwaterloo.ca/~cs442/W22/notes/
+  https://www.youtube.com/channel/UCnmJoeNk2mrItxXJ2-XOCcQ/videos
 * gamelisp.rs
   https://gamelisp.rs/reference/overview.html
-* William Byrd on "The Most Beautiful Program Ever Written" [PWL NYC]
-  https://www.youtube.com/watch?v=OyfBQmvr2Hc
-  - "Programming Should Eat Itself" by Nada Amin
-    https://www.youtube.com/watch?v=SrKj4hYic5A
 * Lisp Cast
 ** A Theory of functional programming 0001
    - Started the podcast as a way to put the ideas of his book out of his head
@@ -60,6 +66,10 @@
      - actions (side effects)
      - calculations
      - data
+* Video: William Byrd on "The Most Beautiful Program Ever Written" [PWL NYC]
+  https://www.youtube.com/watch?v=OyfBQmvr2Hc
+  - "Programming Should Eat Itself" by Nada Amin
+    https://www.youtube.com/watch?v=SrKj4hYic5A
 * Video Object-Oriented Programming is Bad
   https://www.youtube.com/watch?v=QM1iUe6IofM
 * Book: Programming with Types
@@ -91,3 +101,152 @@
   - WHEN Static vs Dynamic
   - HOW  Strong vs Weak
 PAGE 15/35
+* Book: Head-First Design Patterns
+** Design Principles
+1) Identify the aspects of your application that vary and separate them from what stays the same.
+2) Program to an interface, not an implementation
+** TODO 1 Intro to Design Patterns
+- All paterns provide a way to let "some part of a system vary independently of all other parts"
+- Inheritance, problems:
+  1) Changes of a superclass can unintentionally affect other subclasses
+  2) It's hard to gain knowledge of behaviours
+- Interfaces:
+  1) fly() class method *to* Flyable interface with a fly() method
+  2) problem is that in JAVA, interfaces don't have implementation code. No code reuse.
+** 5 Singleton
+- Violates the single responsability principle
+- Has
+  1) Static method .getInstance()
+  2) class allocated variable (static) to hold the instance of the singleton
+- Easy of accessing as a global variable, with the *lazy* instantiation of a singleton
+- *static* all the things is possible, as long as it is self-contained and has simple initization
+  can get messy
+*** code: enum, thread safe
+#+begin_src java
+public enum Singleton {
+  UNIQUE_INSTANCE; // more useful fields HERE
+}
+public class SingletonClient {
+  public static void main(String[] args) {
+    Singleton singleton = Singleton.UNIQUE_INSTANCE;
+    // use singleton HERE
+  }
+}
+#+end_src
+*** code: lazy code, might bring problems on multi-thread execution
+- *synchronized* to support multithreading, and not have 2 threads enter the method at the same time
+  But it will add unnecesary overhead. After the first call.
+   #+begin_src java
+public class Singleton {
+  private static Singleton uniqueInstance;
+  private Singleton() {}
+  public static synchronized Singleton getInstance() {
+    if (uniqueInstance == null) {
+      uniqueInstance = new Singleton();
+    }
+    return uniqueInstance;
+  }
+}
+#+end_src
+*** code: eager code
+   #+begin_src java
+public class Singleton {
+  private static Singleton uniqueInstance = new Singleton();
+  private Singleton() {}
+  public static synchronized Singleton getInstance() {
+    return uniqueInstance;
+  }
+}
+#+end_src
+*** code: "double-checked locking" volatile, synchronized block
+- volatile, ensures that multple threads handle the variable correctly
+#+begin_src java
+public class Singleton {
+  private volatile static Singleton uniqueInstance;
+  private Singleton() {}
+  public static Singleton getInstance() {
+    if (uniqueInstance == null) { // 1st
+      synchronized (Singleton.class) {
+        if (uniqueInstance == null) { // 2nd
+          uniqueInstance = new Singleton();
+        }
+      }
+    }
+    return uniqueInstance;
+  }
+}
+#+end_src
+* Book: Algorithmic Thinking
+** 6 Binary Search - O(? log n)
+- Ingredients (conditions needed)
+  1) Hard optimality and easy feasibility: hard to find the optimal, but easy to judge the feasibility of a solution.
+  2) Infeasible-feasible split: there is a casm that divides the solutions.
+- Feasibility is determined by an *other* algorithm separated to the BS
+- BS is a legendarily difficult to implement correctly:
+  - Should > be >= ?
+  - Should that be *mid* or *mid + 1* ?
+  - Do we want *low + high* or *low + high + 1* ?
+  - Invariant
+    low = 0
+    high = length + 1
+    or
+    high = length
+- Examples: Minimizing, maximizing, ... searching a value
+*** Example: DMOJ coci14c4p4
+- Feasibility: Tree search
+- BFS (bread-first search) would be an overkill, due no cycles
+- "...we keep dividing the range in half until it's very small"
+*** Example: POJ 3258
+- Feasibility: Greedy Algorithm (GA)
+  - GA does what looks promising right now, with no regard to the long-term consequences of its choices.
+  - Dijkstra algorithm is a GA
+- Objective: Maximize the minimum distance between rocks.
+  - Feasibility GA Attempts:
+    1) find the 2 rocks that are closest together, remove one that's closes to its other neighbor rock, and repeat.
+    2) consider each rock in order, remove if too close to the previous. Also check the rightmost kept, remove it if it's too close to the end rock. Finally count the number of rocks removed.
+*** Example: DMOJ ioi10p3
+- Feasibility: Dynamic Programming
+- Objective: find minimum median quality rank of any hxw rectangle
+- Naive Solution Problems:
+  1) getting the median with qsort
+  2) creating the array to sort from scratch
+- Binary Search Solution:
+  - Opposite of previous BS example, *low* and lower are infeasible, *high* and everything larger are feasible
+  - No longer having to determine the median of every rectangle, or median at all.
+    We just need to determine is "at most" below some some value.
+    (If a median X is feasible or not)
+  - Naive Solution:  O(m^4 log m)
+  - Dynamic Programming: can take away the need of 4 nested loops to search for feasiblity of each rectangle with dimensions provided.
+    - 1D range sum query:
+      - a new array (~prefix sum~), where "i" holds the sum of all values from "0" to "i"
+    - 2D range sum query: O(m^2 log m)
+      * a -1,1 matrix
+      * another "prefix sum" matrix
+      * an operation (+ and -) of 4 elements from 1. and 2. matrices
+*** Example: DMOJ ioi13p4
+- BS used to zone-in on a desired element.
+  NOT to find the ~optimal solution~
+- Subtask 1: n door = n switch
+  - Naive: 1door at the time, O(n) ? one for() loop
+* Book: Refactoring: Improving the Design of Existing Code - Martin Fowler
+** 1 Refactoring: A first Example
+- "Brevity is the soul of wit, but clarity is the soul of evolvable software."
+- compile-test-commit
+- It's much easier to improve the ~performance~ of a well-factored code base.
+- Refactoring Types:
+  1) Extract Function: for example, from a case/switch to a function
+  2) Replace Temp (variable) with Query: reduces mutable parts
+  3) Change Function Declaration: like changing the name, or removing a parameter in favor of calling a function. Makes easier to 1).
+  4) Inline Variable: same as 2) ?
+  5) Split Loop: isolate the accumulation
+  6) Slide Statements: move declarations of the variable next the loop for easy 1)
+  7) Split Phase: divide logic
+  8) Move Function:
+  9) Replace Loop with Pipeline: loop to .map() and friends
+  10) Replace Conditional with Polymorphism
+- Javascript
+  - Perform a shallow copy, to not modify aPerformance
+    const result = Object.assign({}, aPerformance)
+- Code Style
+  1) Use *result* as the variable name to return from a function
+  2) On dynamically typed languages, keep track of the type of a var by his name

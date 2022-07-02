@@ -1,3 +1,4 @@
+- Haskell like in cli https://github.com/gelisam/hawk
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
 - https://github.com/dylanaraps/pure-bash-bible
 - https://github.com/mrzool/bash-sensible

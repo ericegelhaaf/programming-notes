@@ -1,3 +1,4 @@
+- https://developer.mozilla.org/en-US/docs/Learn/JavaScript
 - deno runtime https://github.com/denoland/deno
 - CPS http://matt.might.net/articles/by-example-continuation-passing-style/
 https://twitter.com/goncy/status/1396093019246546947?s=20
@@ -30,6 +31,26 @@ https://github.com/30-seconds/30-seconds-of-interviews
 - https://frontendmasters.com/
 - https://rallycoding.com/
 - https://javascript30.com/
+* TODO Video: (2021) Understanding Variance in the TypeScript Type System
+  Tițian Cericova-Dragomir
+  https://www.youtube.com/watch?v=EInunOVRsUU
+  - variance refers as how the relationship is of a type to other type
+  - co-variance (same direction)
+    contra-variance (opposite)
+    bi-variance (both)
+    in-variance (no relationship)
+  - Rule:
+    1) If it comes OUT of the implementation it will be co-variant
+    2) If it come IN of the implementation it will be contra-variant
+  - C# has type annotation for <in> and <out>
+  - Variance by position (on generic interfaces)
+    | RO Field                   | Co     |
+    | Return Type                | Co     |
+    | Parameter                  | Contra |
+    | RW Field                   | Co*    |
+    | Parameter (without strict) | Bi     |
+    | Parameter Method Sig       | Bi     |
+  - 22:00
 * typescript
 - https://github.com/type-challenges/type-challenges
 - Store
@@ -118,4 +139,593 @@ https://github.com/30-seconds/30-seconds-of-interviews
        aka run Promises in sequence
        - might be to avoid an API rate limit
        - or if one depends on the another
-
+* Book: 2020 - Modern Javascript for the Impatient
+** Preface
+- Golden rules
+  1) Declare variables with ~let~ and ~const~, not ~var~
+  2) Use strict mode
+  3) Know you types and avoid automatic type conversion
+  4) Understand prototypes, but use modern syntax for classes, constructors and methods.
+  5) Don't use ~this~ outside constructors of methods
+** 1 Values and Variables
+- typeof, .toString(), parseFloat(), parseInt(), Math.trunc(), Math.round(), delete, .toLowerCase(), Array.isArray(),
+  JSON.stringify, JSON.parse
+  / (always returns float), %, **, +=, `++` (before or after, return different), `+` (concatenation)
+  Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER
+- Types:
+  - numeber, boolean, string, an object
+  - Special values: ~null~ and ~undefined~
+  - a symbol
+- Non-object types are called *primitive types*
+- ? You can wrap objetcs around primitives, like: type of new Number(42) ? do not do it
+- Uninitialized variables, have the value ~undefined~
+- Identifiers can be unicode values, _, $, numbers
+- In Javascript, all numbers are doubles.
+  - If you deal with money, use pennies
+- N/0 = Infinity, -Infinity
+  0/0 = NaN
+- null + undefined = NaN
+- falsy values: 0, NaN, null, undefined, ''
+- null vs undefined, schools
+  1) avoid having 2 *bottom* values, use 1, undefined
+  2) always use null
+- *const* is like *final* in Java, not like in C++
+  - I can mutate the object the var points, but not assign a different object/value to the var
+- Strings:
+  - use (') and ("),
+  - support unicode literal or \u{1F310}
+  - Uses UTF-16
+- Template Literals (``), allow for embedded expressions inside ${}
+  - (Tagged) Template Literal: has a preceded function.
+    Example, where html is a function
+    html`<div>Hello ,${destination}</div>`
+*** Type Conversion: (aka avoid string concatenation(+), use ~template literals~)
+  | value     | 2int | 2string           |
+  |-----------+------+-------------------|
+  | ''        |    0 | ''                |
+  | string    |  NaN |                   |
+  | false     |    0 | 'false'           |
+  | true      |    1 | 'true'            |
+  | null      |    0 | 'null'            |
+  | undefined |  NaN | 'undefined'       |
+  | []        |    0 | ''                |
+  | [1]       |    1 | '1'               |
+  | array     |  NaN | '1,2,3'           |
+  | objects   |  NaN | '[object Object]' |
+*** Objects are "dictionaries", no encapsulation, no behavior, not an instance of a class
+  - you can add fields
+  - properties
+    - are ALWAYS string
+    - use [] to compute  in object literals
+    - use '' for spaced ones
+- {} can be either
+  1) an object literal: 1 - {}
+  2) block statement: {} - 1
+*** Array
+  - are objects, with '0', '1' etc as properties (automatically [0] converted to string)
+  - can have any type
+*** Destructuring
+  - patterns, can be any place, array element or object property
+  - array
+    - defaults: let [first,second=0] = [42]
+    - unmatched elements are ignored: let [first,second] = [1,2,3]
+    - if array is shorted, are set to undefined: let [first,second] = [1]
+    - [x,y]=[y,x]
+    - let [first,second,...others] = numbers // for the *rest* use *...*
+  - objects:
+    - defaults: let { nickname = 'None' } = harry
+                let { name, nickname = name } = harry
+    - *...* also works
+    - let { name: harrysName, age: harrysAge } = harry // OR
+      let { name, age } = harry
+          ({name, age } = sally) // if vars existed already
+** 2 Control Structures
+- Expresion: has a value
+- Statement: never has a value, executed for an effect
+  - Expression Statement: an expression, followed by a (;), are statements. Value is discarded.
+- (;), MUST exists for (but JS adds them for you)
+  - nonlinear control flow (break,continue,return,throw)
+  - and variable declaration
+  - and expression statements
+  - if a (++) or (--) is immediatly proceded by a line terminator, keep them on the same line
+- (?:) conditional operator, helps workaround the fact that if/else are statements
+- Any comparison (>,<,>=,<=) involving NaN, returns false
+- (===) strictly equal, no 2 NaN are considered equal (use Number.isNan())
+  (==) loose equality, can compare values of different type. Useful only to check if something is null or undefined.
+  .is() is strict, can compare NaN
+- This breaks down if arg is zero, '', or false
+  let result = arg && arg.someMethod()
+  let result = arg.omeMethod() || defaultValue
+- Optional Chaining (.?) https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+  Yields the property if x is not undefined or null, otherwise returns undefined
+  x?.propertyName
+- Bitwise (32bit integer) operators: & | ^ ~ << >> >>>
+- Round with (|) breaks if >= 2^31. Use Math.floor() instead
+- ~switch~ has strict matching, fallthrough to next case if *break* is missing.
+  Performance: it might perform as a jump table
+- ~for~ can initialize multiple variables, can update multiple variables
+  ~for of~ iterates over an "iterable object" (array,string,...), using *const*
+  ~for in~ iterates over property keys of an object,
+  do NOT use it for arrays (#3) as indexes are strings
+  do NOT use it for strings as it visits each unicode code unit
+- ~labeled break~ example: you can define a label outside 2 nested loops and break from the innermost one with it
+** 3 Functions and Functional Programming
+- Math.trunc(), Math.random(), .map(), .join(), .filter(), Object.freeze()
+- Functions are "first-class" values
+- Functions without *return*, return undefined
+- (=>) if it returns an object, use parentheses () => ({})
+- Doesn't return anything by itself
+  .forEach((e,i) =>)
+  .forEach(e =>)
+- A function has 1) block of code 2) parameters 3) free variables (global/environment)
+  If the function has 3) is called ~closure~
+- Hard Objects: aka "closure pattern" or "factory class pattern"
+  A way to create "objects" with private state with closures.
+- Strict Mode: on file or function scope
+  'use strict'
+  node --use-strit
+- Functions, ignore if passed more arguments. And set to 'undefined' those not passed.
+- Rest functions (first, ...rest), rest will be an array
+*** How test different types
+  |-------------+--------------------------|
+  | Type        | Test                     |
+  |-------------+--------------------------|
+  | undefined   | x === undefined          |
+  |             | typeof x === 'undefined' |
+  |-------------+--------------------------|
+  | string      | typeof x === 'string'    |
+  |             | x instanceof String      |
+  |-------------+--------------------------|
+  | regex       | x instanceof RegExp      |
+  |-------------+--------------------------|
+  | number      | typeof x === 'number'    |
+  |             | x instanceof NUmber      |
+  |-------------+--------------------------|
+  | number-like | typeof +x === 'number'   |
+  |-------------+--------------------------|
+  | array       | Array.isArray(x)         |
+  |-------------+--------------------------|
+  | function    | typeof x === 'function'  |
+  |-------------+--------------------------|
+*** use ~spread~ operator
+  - To pass it an array(or any iterable)
+    Math.max(...numbers)
+  - To initialize an array
+    [1,2,3,...numbers]
+  - Destructuring
+    let [first,...rest] = [1,2,3,4]
+*** Destructuring Objects
+    can also have default argument when passed objects and even default the whole thing
+  #+begin_src javascript
+  const mkString = (array, {
+    separator = ',',
+    leftDelimiter = '[',
+    rightDelimiter = ']',
+    } = {}) => {
+    . . .
+  }
+  #+end_src
+*** Hoisting
+- Avoid his by: 1) don't use var 2) use strict mode 3) declare variables and functions before using them
+- In JS every declaration is ~hoisted~ to the top of its scope.
+- *var* declares it on the function scope, not the enclosing block
+- Hoisting is nice for mutually recursive functions
+  function isEven(n) { return n === 0 ? true  : isOdd(n -1) }
+  function isOdd(n)  { return n === 0 ? false : isEven(n -1) }
+*** Exceptions
+- throw value // can be a value of any type, but its convention to throw a *error object*
+- throw Error(`Element ${elem} not found`)
+- Not suitable for situations where failus is expected.
+- Error Object
+  Has a *name* and a *message*
+  In JS is usually not productive to analyze the error object in detail. Usually no analysis of the type of exception is done.
+  In JS there is no way to capture the stacktrace
+- Catch: you can return, break, throw
+- Finally: always runs
+** 4 Object-Oriented Programming
+- in JS objects, all properties ar public, and only belong to Object class
+- ~this~ refers to the object to the left of the dot operator
+*** Methods (this)
+- JS object with, identity, state and behavior
+  #+begin_src javascript
+  let harry = {
+    name: 'Harry Smith',
+    salary: 90000,
+    raiseSalary: function(percent) {
+      this.salary *= 1 + percent / 100 // this does NOT work with arrow function definition
+    },
+    reduceSalary(ammount) { // sugar for method declaration
+      this.salary -= ammount
+    }
+  }
+  harry.raiseSalary(10)
+  #+end_src
+*** Prototypes (Object.setPrototypeof)
+- Are used for classes and Inheritance
+- A problem with creating a constructor/factory function,
+  is that methods will refer to different functions despite being the same.
+- A prototype collects the properties shared, in this case a method.
+  #+begin_src javascript
+  const employeePrototype = {
+    reaiseSalary: function(percent) {
+      this.salary *= 1 + percent / 100
+    }
+  }
+  #+end_src
+- in JS is and *internal slot* of the Object
+  Object.getPrototypeOf
+  Object.setPrototypeof
+  #+begin_src javascript
+  function createEmployee(name, salary) {
+    const result = { name, salary }
+    Object.setPrototypeOf(result, employeePrototype)
+    return result
+  }
+  #+end_src
+*** Constructors (new)
+- ~new~
+  1) created a new empty object
+  2) sets the prototype *internal slot* of that object to the Employee.prototype property
+  3) then calls the constructor.
+  #+begin_src javascript
+  function Employee(name, salary) {
+    this.name = name
+    this.salary = salary
+  }
+  let harry = new Employee('nick', 2000)
+  #+end_src
+- A function is an object, so it can have properties.
+  Each JS function has a *prototype* property whose value is an object.
+  You can add methods on that object.
+- Object.prototype contributes .toString() along with other methods
+*** The Class Syntax (class)
+- Bundles up a constructor function AND prototype methods
+  #+begin_src javascript
+  class Employee {
+    constructor(name, salary) {
+      this.name = name
+      this.salary = salary
+    }
+    raiseSalary(percent) {
+      this.salary *= 1 + percent / 100
+    }
+  }
+  const harry = new Employee('Harry smith', 90000)
+  #+end_src
+- A class can have at most 1 constructor. Defauts to empty body {}
+- Classes are NOT hoisted
+- Body of a class is executed in *strict mode*
+*** Getters and Setters (get & set)
+- A dynamically computed property
+- Methods with no parameters, using get
+  #+begin_src javascript
+  class Person {
+    get fullName() { return `${this.last}, ${this.first}` }
+    set fullName(value) {
+      const parts = value.split(/,\s*/)
+      this.last = parts[0]
+      this.first = parts[1]
+    }
+  }
+  #+end_src
+- You cal it without parantheses, as it were a property
+  const harrysName = harry.fullName
+  harry.fullName = 'Smith, Harold'
+*** Instance fields and Private methods (#)
+- Alternative to using a constructor() you an just put the vars
+- (#) denote a private field, or a private method.
+#+begin_src javascript
+class BankAccount {
+  balance = 0  // public field declaration
+  #balance = 0 // private
+  deposit(amount) { this.#balance += amount }
+}
+#+end_src
+*** Static Method and Fields (static)
+#+begin_src javascript
+class BankAccount {
+  static OVERDRAFT_FEE = 30
+  static percentOf(amount,rate) { return amount * rate / 100 } // static method
+  addInterest(rate) { this.balance += BankAccount.percentOf(this.balance, rate)
+  withdraw(amount) {
+    if (this.balance < amount) {
+      this.balance -= BankAccount.OVERDRAFT_FEE
+    }
+  }
+}
+#+end_src
+- static methods, do NOT operate on an object
+  - always called as : <ClassName>.<MethodName>()
+- Behind the scenes, the static method is a property of the constructor.
+- static get/set can be defined over the static fields
+  - "static get OVERDRAFT_FEE()" for this.#OVERDRAFT_FEE
+  - this is the constructor function (on static methods)
+*** Subclasses (extends)
+#+begin_src javascript
+class Employee {}
+class Manager extends Employee {}
+#+end_src
+- Behind the scenes, a prototype chains is stablished
+- ~instanceof~
+  boss instanceof Employee
+- Java, C++ need abstract superclasses/interfaces to satisfy compile-time checking for method application.
+  Example: to use .getSalary() over Employee and Contractor
+*** Overriding Methods (super.)
+- Polymorphism, where the invoked method depends ont he actual object being referenced
+- You can override getters/setters, or normal methods
+- You can call the superclass method from the subclass by using *super.*
+  #+begin_src javascript
+  class Manager extends Employee {
+    get salary() { return super.salary + this.bonus }
+  }
+  #+end_src
+*** Subclass Construction (super())
+- Default super() constructor, passes all the arguments to the superclass
+- You should call the superclass constructor from the subclass constructor
+  #+begin_src javascript
+  class Manager extends Employee {
+    constructor(name, salary, bonus) {
+      super(name, salary) // calls the superclass constructor
+      this.bonus = bonus  // now this. is valid
+    }
+  }
+  #+end_src
+*** Class Expressions (class{})
+- ~class~ yields a constructor function
+- Anonymous class{} are useful to *mix in* a capability into an existing class
+- Like taking a class as a parameter to create a new class, with a method
+  #+begin_src javascript
+  const withToString = base =>
+    class extends base {
+      toString() {
+        let result = '{'
+        for (const key in this) {
+          if (result !== '{') result += ', '
+          result += `${key}=${this[key]}`
+        }
+        return result + '}'
+      }
+    }
+  #+end_src
+*** The this Reference
+- Always use *new*
+- Always use *this* on methods, constructors and arrow functions
+  - NOT inside named functions
+  - NOT inside unnamed functions
+  - NOT inside nested functions (arrow functions can workaround it)
+** 5 Numbers and Dates
+- .toString() .toFixed() .toExponential() .toPrecision()
+  parseFloat() parseInt()
+  <regex>.test(srt)
+  Number module: isNaN() isFinite() isInteger() isSafeInteger()
+  Math module: max() min()  random() abs() sign() round() trunc() floor() ceil()
+- All numbers have double precision. 8 Bytes.
+- 42, 0x2A, 0o52, 0b101010, 4.2e-3
+- Constants: Infinity, NaN
+- printf https://github.com/alexei/sprintf.js
+- BigInt() 1213n - arbitrary number of digits
+  BigInt.asIntN()
+  BigInt.asUintN()
+- in JS time is measured in smoothed milliseconds from EPOCH
+  +- 100_000_000 days in either direction
+- ~Date~ class, always use *new*
+  UTC(y,zm,d,h,m,s,ml) ms from epoch
+  .getUTCFullYear() ...
+  .getTime() milliseconds from epoch
+  .toISOString()
+  .tLocaleString() ..DateString() ...TimeString()
+- Date module static functions .UTC() .parse() .now() // yield milliseconds, NOT Date objects
+** 7 Array and Collections
+- Constructing an array, an empty array with 10_000 elements
+  const bigEmptyArray = []
+  bigEmptyARray.length = 10000
+- Array.from() Array.isArray()
+  const squares = Array.from({ length: 5 }, (elem,index) => index * index)
+- Do NOT use Array() constructor
+- Array.of() same as array literals
+- each array has a *length* property
+- test if a *index property* is on an array
+  '2' in someNames
+*** methods
+| .pop()                                  | removes at the end                 |
+| .push()                                 | adds at the end                    |
+| .shift()                                | removes at the beggining           |
+| .unshift(N)                             | adds at the beggining              |
+| .splice(start, deletecount, x1, x2,...) | deletes and adds elements, returns |
+| .fill(value, start, end)                |                                    |
+| .copyWithin(targetINdex, start, end)    |                                    |
+| .reverse()                              | inplace                            |
+| .sort(fn)                               | inplace, fn returns <0 0 >0        |
+| .flat(k)                                |                                    |
+| .join(s)                                |                                    |
+*** no mutable method
+- arr[Symbol.isConcatSpreadable] = false
+| .slice(start,end)               |                                               |
+| .flat(n?)                       | same as [...arr], or multidimension flat      |
+| .concat()                       | flat concat, aka [...arr,3,4,...arr2]         |
+|---------------------------------+-----------------------------------------------|
+| .findIndex(f) .find(f)          | All these take and optional argument.         |
+| .every(f) .some(f)              | ...It becomes the *this* parameter of f       |
+| .filter(f)                      | ...instead of arr.                            |
+| .map(f) .flatMap(f) .forEach(f) |                                               |
+|---------------------------------+-----------------------------------------------|
+| .entries()                      | produces arryas fo length 2: [index, element] |
+| .keys() values()                |                                               |
+|---------------------------------+-----------------------------------------------|
+| .includes(target,start)         |                                               |
+| .firstIndex(t,s)                |                                               |
+| .lastIndex(t,s)                 |                                               |
+|---------------------------------+-----------------------------------------------|
+- for in, views arrays
+  for of, views iterables
+- for (const [index, element] of arr.entries())
+    console.log(index, element)
+*** Sparse Arrays
+- replace missing elements
+  - with undefined: Array.from()
+  - with '': .join()
+- eliminating missing elements
+  [,2,,9].filter(x => true) // [2,9]
+*** Reduction .reduce(op, init) .redueRight()
+- array to number
+  [1,7,2,9].reduce((x,y) => 10 * x + y) // 1729
+- takes 4 values
+  1) the accumulator
+  2) the current array element
+  3) the index of the current element
+  4) the entire array
+*** Maps (Map)
+- ~Map~ class
+  - keys can be of ANY type
+  - remembers insertion order
+  - do NOT have a prototype chain
+  - .size property
+- Hash comparison functions is like (===), except NaN are equal
+  Distinct *object* have different keys, even if their values ar the same
+- Using
+  #+begin_src javascript
+  const weekdays = new Map([["Mon", 0]])
+  weekdays.set("Tue", 1)
+  weekdays.delete("Mon")
+  weekdays.clear()
+  if (weekdays.has(key)) ...
+  const value = weekdays.get("Mon")
+  for (const [k,v] of map)
+  weekdays.forEach((k,v) => {})
+  weekdays.keys()
+  weekdays.values()
+  weekdays.entries()
+  #+end_src
+*** Sets (Set)
+- add(x) delete(x) has(x) clear()
+*** WeakMap() WeakSet()
+- set, delete, has, get
+- Use case: Attach properties to DOM nodes.
+  ndoe.outcome = 'success'
+  Problem: Not robust. Something else or future code might also use that property.
+- Solution: Map with node as key
+  Problem: hinder GC
+- Solution: Weak maps, if a key is the only reference to an object, that object is not kept by the GC.
+- NO traversal methods, NOT iterable
+*** Typed Arrays
+- Int8 Uint8 Uint8Clamped Int16 Uint16 Int32 Uint32 Float32 Float64
+- new <TYPE>Array(N)
+- <TYPE>Array.of()
+  <TYPE>Array.from()
+- Has properties
+- Can't change size, NOT: push, pop, shift, unshift
+- Can't hold arrays, NOT: flat, flatMap
+- arr.set(source, offset) // will share memory address with source too
+- Example: canvas array
+  #+begin_src javascript
+  const canvas = document.getElementById('canvas')
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(img, 0, 0)
+  let imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  let rgba = imgdata.data // an Uint8ClampedArray
+  canvas.addEventListener('click', event => {
+    for (let i = 0; i < rgba.length; i++) {
+      if (i % 4 != 3) rgba[i] = 255 - rgba[i]
+    }
+    ctx.putImageData(imgdata, 0, 0)
+  })
+  #+end_src
+*** ArrayBuffer(N)
+#+begin_src javascript
+const buf = new ArrayBuffer(1024 * 2)
+const view = DataView(buf)
+const littleEndian = true
+const value = view.getUint32(offset, littleEndian)
+              view.setUint32(offset, newValue, littleEndian)
+#+end_src
+** TODO 9 Asynchronous Programming
+** TODO 13 An Introduction to Typescript
+- A static type checkir for Javascript
+  https://flow.org/
+  https://github.com/facebook/flow
+- ECMAScript is governed by a standards committee composed of many companies
+  TypeScript is produced by a Microsoft
+- Documentation is sketcy and inconclusive.
+- Type Annotations
+  #+begin_src typescript
+  const average = (x: number, y: number) => (x + y) / 2
+  function average(x: number, y: number) { return (x + y) / 2 }
+  #+end_src
+- Union TYpe: when the type can be multiple
+  number | number[]
+- Primitive Types:
+  - number, string, boolean, symbol
+  - null (1 instance), undefined (1 instance), void, never
+  - unknown (convert from any type), for parameters
+  - any (convert from/to any type)
+- Type Alias:
+  type Numbers = number | number[]
+  type Weekday = 'Mon' | 'Tue'
+- Enumerated Types:
+  enum Weekday { MON, TUE }
+  enum Color { RED = 4, GREEN = 2 }
+  enum QUarer { Q1 = 'Winter', Q2 = 'Spring' }
+- Tuple Type:  [number, string]
+- Object Type: type Point = { x: number, y: number }
+- Function Type: (arg1: number, arg2: number) => number
+- Intersection Type: combine the requirement of both
+  Point & { color: string }
+- You might need to *annotate* types to fix type inference at times.
+  1) When you assign undefined to a variable
+  2) On a tuple
+  3) On a function that returns a tuple
+  4) complex type guards
+- Type assertions with *as <TYPE>*
+  let target = JSON.parse(response) as Point
+- Type Guard Functions, a type guard put into a function.
+  #+begin_src javascript
+  // indicates that this function returns a boolean
+  const isNumberArray = (array: unknown[]): array is number[] =>
+    array.length > 0 && typeof array[0] == 'number'
+  #+end_src
+*** Optional Properties (?)
+- are meant to catch typos with optional properties
+  #+begin_src typescript
+type MaybeColoredPoint = {
+  x: number,
+  y: number,
+  color?: string
+}
+#+end_src
+*** Subtypes and Supertypes
+#+begin_src typescript
+type Point = { x: number, y: number } // SUPERtype
+type ColoredPoint = { x: number, y: number, color: string } // SUBtype
+#+end_src
+- ~substitution rule~ Where a supertype is expected you can supply a subtype instance
+  - *Object literals* are NOT accepted (just add another variable)
+    - NOT for parameters of functions
+    - NOT for variable assignment
+*** Installing
+- npm install -g typescript
+- tsconfig.json
+  #+begin_src js
+  {
+    "compilerOptions": {
+      "target": "ES2020",
+      "strict": true,
+      "soureMap": true
+    },
+    "filesGlob": [
+      "*.ts"
+    ]
+  }
+  #+end_src
+- Cli
+| tsc                                                 | to compile with tsconfig.json    |
+| ts-node                                             | REPL                             |
+| ts-node -O '{ "target": "es2020", "strict": true }' | to compile without tsconfig.json |
+*** Array and Object Type Variance
+- Theorically
+  - Only *immutable* arrays should be co-variant
+  - *mutable* arrays should be in-variant
+- Arrays are covariant in TS, since he types vary in the same *direction* as the element types. But...
+- on TS invariant *arrays* are inconvenient
+- on TS covariance for *objects* is also unsound
+*** Classes
+- 

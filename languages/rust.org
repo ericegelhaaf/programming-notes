@@ -1,3 +1,5 @@
+- https://fasterthanli.me/articles/the-curse-of-strong-typing
+- https://hirrolot.github.io/posts/rust-is-hard-or-the-misery-of-mainstream-programming.html
 - https://github.com/trickster0/OffensiveRust
 - RUST WASM https://www.reddit.com/r/rust/comments/tm10wi/media_i_made_a_website_to_demonstrate_performance/
 - Course: Rust analyzer https://www.youtube.com/watch?v=I3RXottNwk0&list=PLhb66M_x9UmrqXhQuIpWC5VgTdrGxMx3y

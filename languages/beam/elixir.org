@@ -1,3 +1,7 @@
+- https://david-delassus.medium.com/elixir-and-kubernetes-a-love-story-721cc6a5c7d5
+- https://github.com/bitwalker/libcluster
+  https://github.com/derekkraan/horde
+- https://elixir-lang.org/getting-started/mix-otp/config-and-releases.html#releases
 - https://github.com/lucasvegi/Elixir-Code-Smells
 - https://github.com/Zensavona/domainatrex
   A library for parsing TLDs from urls in Elixir

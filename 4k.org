@@ -21,6 +21,7 @@
 - Template https://gitlab.com/PoroCYon/linux-4k-intro-template
 - Tool https://github.com/stfsux/rld
 - http://www.sizecoding.org/wiki/Linux
+- https://justine.lol/sizetricks/
 - 4k https://linux.weeaboo.software/Home
 - (C/sstrip/xz/clang/32/ALSA/SDL/GL) https://github.com/grz0zrg/tinycelfgraphics
 - Article http://glprogramming.com/red/chapter07.html

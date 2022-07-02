@@ -1,3 +1,11 @@
+- https://tutorialedge.net/golang/snippets/type-casting-interface-to-string-go/
+- Go Data Structures - Russ Cox
+  https://research.swtch.com/godata
+- https://eng.uber.com/dynamic-data-race-detection-in-go-code/
+  https://eng.uber.com/data-race-patterns-in-go/
+  https://news.ycombinator.com/item?id=31698503
+- https://github.com/wardviaene/golang-for-devops-course/
+- https://typesanitizer.com/blog/go-experience-report.html
 - Chat over SSH https://github.com/quackduck/devzat
 - https://github.com/golang-design/history
 - https://github.com/microcosm-cc/bluemonday
@@ -12,6 +20,7 @@
   - -s turns off the generation of symbol table (no go tool nm)
   > strip -x
 * Videos
+- https://earthly.dev/blog/golang-streamers/
 - GameDev with GO https://www.youtube.com/user/Velovix
 - Learn Go Programming - Golang Tutorial for Beginners
   https://www.youtube.com/watch?v=YS4e4q9oBaU
@@ -1675,6 +1684,232 @@ func main() {
     return ErrPageMoved
   }
   #+end_src
+* Book: Network Programming with Go Language - Dr Jan Newmarch - 2022 - 2nd edition
+** 15 Websockets
+ - HTTP 1.1 with "keep alive" keeping the connection open for a short while,
+   helped mostly for images
+ - AJAX (Asynchronous Javascript and XML) too helped interaction.
+ - ws://, still user-agent initiated, but where is possible a server-to-browser communication
+ - RFC https://datatracker.ietf.org/doc/html/rfc6455
+ - starts listening as http:// and then switches to ws://
+*** golang.org/x/net/websocket   | official
+ - HTTP stream based protocol
+ - WS  frame based protocol
+ - TYPES
+   var Message = Codec{marshal, unmarshal}
+   var JSON = Codec{jsonMarshal, jsonUnmarshal}
+ - SERVER
+   websocket.Message.Send(ws, s)
+   websocket.Message.Receive(ws, &s)
+   websocket.Handler() // args is a func that takes a *websocket.Conn
+ - CLIENT
+   websocket.Dial(URL,PROTO,ORIGIN)
+   websocket.Message.Receive
+   websocket.Message.Send
+ - JSON
+   websocket.JSON.Receive(ws, &someStruct) error
+   websocket.JSON.Send(conn, somestruct) error
+**** echoserver.go
+   #+begin_src go
+   package main
+   import (
+     "fmt"
+     "golang.org/x/net/websocket"
+     "log"
+     "net/http"
+   )
+   func Echo(ws *websocket.Conn) {
+     fmt.Println("Echoing")
+     for n := 0; n< 10; n++ {
+       msg := "Hello " + string(n+48)
+       fmt.Println("Sending to client: " + msg)
+       err := websocket.Message.Send(ws, msg)
+       if err != nil {
+         fmt.Println("Can't send")
+         break
+       }
+       var reply string
+       err = websocket.Message.Receive(ws, &reply)
+       if err != nil {
+         fmt.Println("Can't receive")
+         break
+       }
+       fmt.Println("Received back from client: " + reply)
+     }
+   }
+   func main() {
+     http.Handle("/", websocket.Handler(Echo))
+     err := http.ListenAndServe(":12345", nil)
+     checkError(err)
+   }
+   func checkError(err error) {
+     if err != nil {
+       log.Fatalln("Fatal error ", err.Error())
+     }
+   }
+   #+end_src
+**** echoclient.go
+ #+begin_src go
+ import (
+   "fmt"
+   "golang.org/x/net/websocket"
+   "io"
+   "os"
+   "log"
+ )
+ func main() {
+   if len(os.Args) != 2 {
+     log.Fatalln("Usage: ", os.Args[0], "ws://host:port")
+   }
+   service := os.Args[1]
+   conn, err := websocket.Dial(service, "", "http://localhost:12345")
+   checkError(err)
+   var msg string
+   for {
+     err := websocket.Message.Receive(conn, &msg)
+     if err != nil {
+       if err == io.EOF {
+         break
+       }
+       fmt.Println("Couldn't receive msg " + err.Error())
+       break
+     }
+     fmt.Println("Reeived from server: " + msg)
+     err = websocket.Message.Send(conn, msg)
+     if err != nil {
+       fmt.Println("Couldn't return msg")
+       break
+     }
+   }
+ }
+ func checkError(err error) {
+   if err != nil {
+     log.Fatalln("Fatal error ", err.Error())
+   }
+ }
+ #+end_src
+**** Codec and Implementing and XML codec
+ - Codec signature
+ #+begin_src go
+ type Codec struct {
+   Marshal   func(v interface{})                                (data []byte, payloadType byte, err error)
+   Unmarshal func(data []byte, payloadType byte, v interface{}) (err error)
+ }
+ #+end_src
+ - XML decoder
+ #+begin_src go
+ package main
+ import (
+   "encoding/xml"
+   "golang.org/x/net/websocket"
+ )
+ func xmlMarshal(v interface{}) (msg []byte, payloadType byte, err error) {
+   msg, err = xml.Marshal(v)
+   return msg, websocket.TextFrame, nil
+ }
+ func xmlUnmarshal(msg []byte, payloadType byte, v interface{}) (err error) {
+   err = xml.Unmarshal(msg, v)
+   return err
+ }
+ var XMLCodec = websocket.Codec{xmlMarshal, xmlUnmarshal}
+ #+end_src
+*** github.com/gorilla/websocket | 3rd party
+ - websoket.Upgrader{} // GLOBAL
+   .Upgrade()
+ - SERVER
+   conn.WriteMessage(websocket.TextMessage, []byte(STRINGVAR))
+   conn.ReadMessage()
+   conn.Close()
+ - CLIENT
+   websocket.DefaultDialer.Dial(SERVNAME, make(http.Header))
+   conn.ReadMessage()
+   conn.WriteMessage()
+   websocket.IsCloseError(err, websocket.CloseAbnormalClosure)
+**** echoserver.go
+ #+begin_src go
+ package main
+ import (
+   "fmt"
+   "github.com/gorilla/websocket"
+   "log"
+   "net/http"
+ )
+ var upgrader = websocket.Upgrader{
+   ReadBufferSize:  1024,
+   WriteBufferSize: 1024,
+ }
+ func Handler(w http.ResponseWriter, r *http.Request) {
+   fmt.Println("Handling /")
+   conn, err := upgrader.Upgrade(w, r, nil)
+   if err != nil {
+     fmt.Println(err)
+     return
+   }
+   for n := 0; n < 10; n++ {
+     msg := "Hello " + string(n+48)
+     fmt.Println("Sending to client: " + msg)
+     err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
+     _, reply, err := conn.ReadMessage()
+     if err != nil {
+       fmt.Println("Can't receive")
+       break
+     }
+     fmt.Println("Received back from client: " + string(reply[:]))
+   }
+   conn.Close()
+ }
+ func main() {
+   http.HandleFunc("/", Handler)
+   err := http.ListenAndServe("loalhost:12345", nil)
+   if err != nil {
+     log.Fatalln("Fatal error ", err.Error())
+   }
+ }
+ #+end_src
+**** echoclient.go
+ #+begin_src go
+ package main
+ import (
+   "fmt"
+   "github.com/gorilla/websocket"
+   "io"
+   "log"
+   "net/http"
+   "os"
+ )
+ func main() {
+   if len(os.Args) != 2 {
+     log.Fatalln("Usage: ", os.Args[0], "ws://host:port")
+   }
+   service := os.Args[1]
+   header := make(http.Header)
+   con, _, err := websocket.DefaultDialer.Dial(service, header)
+   if err != nil {
+     log.Fatalln("Fatal error ", err.Error())
+   }
+   for {
+     _, reply, err := conn.ReadMessage()
+     if err != nil {
+       if err == io.EOF {
+         fmt.Println("EOF from the server")
+         break
+       }
+       if websocket.IsCloseError(err, websocket.CloseAbnormalClosure) {
+         fmt.Println("Close from server")
+         break
+       }
+       fmt.Prinln("Could not receive msg " + err.Error())
+       break
+     }
+     fmt.Println("received from server: " + string(reply[:]))
+     err = conn.WriteMessage(websocket.TextMessage, reply)
+     if err != nil {
+       fmt.Println("could not return msg")
+       break
+     }
+   }
+ }
+ #+end_src
 * DONE Article: I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,
@@ -1854,6 +2089,21 @@ https://golang.org/doc/code
   $ go mod tidy # adds missing module requirements (require statements with his version)
 - Clean all downloades modules
   $ go clean -modcache
+
+* Article: Linkedin Go https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/go/go-quiz.md
+  - A special type of *type casting* for interfaces only
+    a.(type)
+    Type Casting for primitives
+    int(a)
+  - https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool
+    Add this on the top of the file to build only on windows
+    // + build windows
+  - How to POST
+    https://pkg.go.dev/net/http#Client.Post
+  - Lexical Scopes
+    https://topic.alibabacloud.com/a/go-language-core-technology-volume-one-15-font-colorredscopefont_1_38_30923325.html
+  - json.Unmarshall is case insensitive
+    unsensiti
 
 * Video: 2013 - Campoy - Go: Code that GFrows with Grace
   https://www.youtube.com/watch?v=bj6EtLacsj8

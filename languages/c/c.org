@@ -1,8 +1,14 @@
+- https://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html
+- A Guide to Undefined Behavior in C and C++, Part 1
+  https://blog.regehr.org/archives/213
+- const https://softwareengineering.stackexchange.com/questions/204500/when-and-for-what-purposes-should-the-const-keyword-be-used-in-c-for-variables
+- https://gjbex.github.io/DPD-online-book/CodingBestPractices/ErrorHandling/error_handling_c/
 - asan, ubsan, valgrind, fuzzers, libcheck, pvs
 - http://infolab.stanford.edu/~ullman/focs.html#pdfs
 - Book: http://c-faq.com/
 - C Books Reviews http://knking.com/recbooks/c.html
 - Code: http://bxr.su/OpenBSD/
+- Example: https://github.com/ltratt/hk/blob/18fcaea3e83f0c00aaef13b2882d5fa233d85de2/hk.c
 - Article: 2016 https://matt.sh/howto-c
 - Article: https://suckless.org/coding_style/
 - Article: 2021 - unfashionable C
@@ -22,12 +28,134 @@
 - https://github.com/AnthonyCalandra/modern-cpp-features
 - https://github.com/gerasdf/InsecureProgramming/
 - https://github.com/junegunn/fzf
-- https://github.com/oz123/awesome-c
+
 - https://github.com/rhysd/vim-clang-format
 - https://not.cafe/2020/10/12/getting-started-with-c-programming.html
 - https://tek256.com/posts/code-hardening/
 - http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
   https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
+* Videos
+** "New" Features in C - Daniel Saks
+   https://www.youtube.com/watch?v=ieERUEhs910
+- C++ dev, working also on C
+- 4 Standards C89=C90/C99/C11/C18(bugfix of 11)
+- Reserved identifiers
+  - for global scope, starting with undersore
+  - for all, starting with 2 underscores, or underscore and uppercase
+- C99 boolean type
+- C90 _STDC_
+  C99 _STDC_VERSION_
+- C99 long long
+- C99 <stdint.h> for exact length ints
+- C90 you couldn't declare after the first line
+     for loop variables declared at the beginning
+  C99 relaxed it, and allows declaration after
+     for loop variables declared inplace
+- C99 inline for functions
+- C99 ~compound literals~, where rational is a typedef struct with 2 members
+  (rational){1,2}
+  (int [m]){8,6,3,1,2,3,4,5,6}
+  (int []){8,6,3,1,2,3,4,5,6}
+- C99 ~designated initializers~, nice for unions or structs (to avoid confusion) or arrays
+  glop g1 = { .i = 10}
+  glop g2 = { .d = 12.3 }
+  int x[10] = { 0, 0, 0, 8, 0, 0, 0,  2}
+  int x[10] = { [3] = 8, [7] = 2 }
+- C99 ~variable length arrays~ VLAs, declaring and as parameters
+  void f(size_t m, size_t n) {
+    int x[m][n];
+- C99 ~Flexible Array Members~, useful for packet-like structures
+  struct packet {
+    header h;
+    data d[]; // THIS
+  }
+** Modern C and What We Can Learn From It - Luca Sas [ ACCU 2021 ] 
+   https://www.youtube.com/watch?v=QpAhX-gsHMs
+- WG14 Standarization Group https://www.open-std.org/jtc1/sc22/wg14/
+- designated initializers, initialize everything else to 0
+- header macro to differentiate between c++ and c
+  __cplusplus
+- Instead using malloc/fopen ask for allocators iocallbacks
+- static_assert()
+- Example: using sokol gfx, we describe a pipeline, we initialize the others to 0/default
+  #+begin_src c
+sg_pipeline_desc pip_desc = {
+  .layout = {
+    .buffers[0].stride = 28,
+    .attrs = {
+      [ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3,
+      [ATTR_vs_color0].format   = SG_VERTEXFORMAT_FLOAT4
+    }
+  },
+  .shared = shd,
+  .index_type = SG_INDEXTYPE_UINT16,
+  .depth_stencil = {
+    .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
+    .depth_write_enagled = true,
+  }
+  .rasterizer.cull_mode = SG_CULLMODE_BACK,
+  .rasterizer.sample_count = SAMPLE_COUNT,
+  .label = "cube-pipeline"
+};
+  #+end_src
+- C11 _Generic and Overloading
+  #define min(a,b) _Generic((a), float. minf(a,b), int: mini(a,b))
+- C11 atomics, thread_local
+- defer macro
+  #+begin_src c
+#define macro_var(name) concat(name, __LINE__)
+#define defer(start,end) for (     \
+   int macro_var(_i_) = (start,0); \
+   !macro_var(_i_);                \
+   (macro_var(_i_) +=, end)
+#define profile defer(profile_begin(), profile_end())
+profile
+{
+ ...
+}
+#define gui defer(gui_begin(),gui_end()
+gui
+{
+  ...
+}
+  #+end_src
+- scope macro
+  #+begin_src c
+  file_handle_t file = file_open(filename, file_mode_read);
+  scope(file_close(file))
+  {
+    ...
+  }
+  #+end_src
+- Unions: We can refer to the same thing in different ways
+  #+begin_src c
+  typedef union hmm_vec2
+  {
+    struct { float X, Y; };
+    struct { float U, V; };
+    struct { float Left, Right; };
+    struct { float Width, Height; };
+    float Elements[2];
+  } hmm_vec2;
+  #+end_src
+- Error: return a struct with a *valid* field
+* Libraries
+- (3K) minimal cross-platform standalone C headers
+  https://github.com/floooh/sokol
+- (800) math lib https://github.com/HandmadeMath/Handmade-Math
+- https://github.com/oz123/awesome-c
+- https://wiki.gnome.org/Projects/GLib
+- https://github.com/clibs
+- (893) https://github.com/tezc/sc
+- (80) https://github.com/ludocode/pottery
+- (24) https://github.com/begriffs/libderp
+- (10) https://github.com/lelanthran/libds
+* Sanitizers
+- Static http://splint.org/
+- https://www.youtube.com/watch?v=Q2C2lP8_tNE
+- https://github.com/google/sanitizers/wiki/AddressSanitizer
+- https://valgrind.org/docs/manual/quick-start.html
+- https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
 * Article: C Runtime Overhead
   http://ryanhileman.info/posts/lib43
   https://news.ycombinator.com/item?id=29783585
@@ -53,7 +181,8 @@ void _start() {
 - 5ms in glibc load
 - portable startime libc https://github.com/lunixbochs/lib43
 * 0x00sec
-  https://0x00sec.org/t/remote-shells-part-ii-crypt-your-link/306
+** II Remote Shells. Part II. Crypt your link 
+- https://0x00sec.org/t/remote-shells-part-ii-crypt-your-link/306
 - https://en.wikipedia.org/wiki/Loop_unrolling
 - SocketPair
   - Used to transfer data
@@ -69,10 +198,13 @@ void _start() {
 | close(sp[0]) | close(sp[1])       |
 | async_read() | start_shell(sp[0]) |
 - async_read()
-|   |   |   |   |   |
-|---+---+---+---+---|
-|   |   |   |   |   |
-
+  select()
+  memset()
+  read()
+  memfrob()
+- We use stdin socket as the input socket for async_read() on main()
+** III Remote Shells Part III. Shell Access your Phone
+- setsockopt() - SO_REUSEADDR
 * Projects
 - http://www.tendra.org/tdfc2-config/#S11.2
   https://github.com/tendra/tendra/wiki/About
@@ -80,10 +212,7 @@ void _start() {
 ** clang-format
   https://emacs.stackexchange.com/questions/55635/how-can-i-set-up-clang-format-in-emacs
   clang-format -style=llvm -dump-config > .clang-format
-* Book: Expert C Programming
-** Introduction
-   - some people do: if(3==i); in order to catch if they miss a =
-* Book: Effective C
+* Book: 2020 Effective C
 ** 1 Getting Started with C
 - C defines 2 possible execution environments:
   - Freestanding: no OS, embedded programming
@@ -107,26 +236,27 @@ void _start() {
 - The ~referenced type~ T derives a ~pointer to~ T
 - A code block {} is know as a ~compound statement~
 - C is ~call-by-value~ (aka ~pass-by-value~) language
-*** Scopes:
-  - file: declared outside a block or param list
-  - block: declared inside a block or param list
-  - prototype: on function prototype params
-  - function: on function definition, between {}, only labels(?)
-*** Storage duration
-  - automatic: block scope
-  - static: file scope (the word *static* can make block vars into static scope)
-            Must be initialized wth a constant value, not a variable
-  - thread:
-  - allocated: dynamic allocated
+*** Scopes (identifiers)
+| file      | declared outside a block or param list             |
+| block     | declared inside a block or param list              |
+| prototype | on function prototype params                       |
+| function  | on function definition, between {}, only labels(?) |
+*** Storage duration (lifetime: objects)
+|           | life    | default when declared on                                             |
+|-----------+---------+----------------------------------------------------------------------|
+| automatic | block   | block scope or function parameter                                    |
+| static    | program | file scope, must be initialized wth a constant value, not a variable |
+| thread    |         |                                                                      |
+| allocated |         | (dynamic allocated)                                                  |
 *** Alignment
-    Number of bytes between suuccessive addresses of objs.
-  - CPU's might behave differently with aligned or unaligned data
-    - They access data by word, and might be able to access multiwords with a perf cost
-    - Depending of the CPU's word (16,32,64 bits)
-  - malloc() is sufficiently aligned for all standard types
-  - _Alignas(struct S) can be used on C11 to align by the type provided
-    In the example for a buffer which is then casted to a struct
-  - Can be weaker or stronger (aka stricter). Stronger have larger alignment values.
+  Number of bytes between suuccessive addresses of objs.
+- CPU's might behave differently with aligned or unaligned data
+  - They access data by word, and might be able to access multiwords with a perf cost
+  - Depending of the CPU's word (16,32,64 bits)
+- malloc() is sufficiently aligned for all standard types
+- _Alignas(struct S) can be used on C11 to align by the type provided
+  In the example for a buffer which is then casted to a struct
+- Can be weaker or stronger (aka stricter). Stronger have larger alignment values.
 *** Object Types
 - Boolean:
   - <stdbool.h>
@@ -155,7 +285,17 @@ void _start() {
   - Arrays:
     - str[i]   is identical to *(str + i)
     - &str[10] is the same as    str + 10
-
+*** TODO Derived Types
+*** Tags
+- Special naming mechanisms (struct,union,enums)
+- Are not a *type name* by itself
+- On a different namespace than identifiers
+- ~typedef~ define an alias for it
+*** Type Qualifiers
+| const                 | unmodifiable memory                                                    |
+| static volatile       | mmap Inpu/Output                                                       |
+| static const volative | mmap Input                                                             |
+| restrict              | optimization on pointers, when they are the unique point to the object |
 ** 5 Control Flow
    - Expression statement
    - Compound statements
@@ -271,6 +411,38 @@ void _start() {
        return dest;h
      }
      #+end_src
+** 10 Program Structure
+- Decompose your program into a collection of components that exchange information
+  aross a shared boundary, or interface.
+- Aim: low copling and high cohesion
+- ~Cohesion~ measure of commonality between elements on a interface.
+- ~Coupling~ measure of interdependency of programming interfaces
+  - You can benefit from structuring your code as a collection of libraries.
+    Even if the components aren't turned into actual libraries.
+- ~Code Reuse~ functions, an interface, must struck a balance between generality and specificity. To allow for future changes.
+- ~Data Abstractions~ enforces clear separation between the public interface and the implementation details.
+- ~Opaque Types~ provide incomplete types on public interfaces
+  typedef struct collection_type collectin_type;
+  Defines a pointer to the type needed, instead of an actual value type.
+  Internal header file, would define the type fully.
+- Static compiled code can be further optimized for your program's use.
+  Unused library code can be stripped from the final executable.
+*** Linkage
+| external  | by default at file level                                          |
+| internal  | explicit *static* at file level                                   |
+| nolinkage | variable at block level (static gives it static storage duration) |
+* Book: 2019 Modern C
+** TODO 18 Threads
+- Are another variation of *control flow*
+- thrd_create()
+  thrd_join() - waits until thread is finished
+- "If a thread T0 writes a non-atomic object that is simultaneously read/write by another thread T1,
+  the behavior of the execution becomes undefined."
+- "There are no atomic array types.W
+- Race Free Initilization and ...
+* Book: 2002 Expert C Programming
+** Introduction
+- some people do: if(3==i); in order to catch if they miss a =
 * 6.S081: Learning by doing
 Catalog description: Design and implementation of operating systems,
 and their use as a foundation for systems programming. Topics include

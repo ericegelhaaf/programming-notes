@@ -1,3 +1,4 @@
+- https://www.csee.umbc.edu/courses/331/resources/lisp/LISP-tutorial.html
 - Article: Conditions and Restarts in Common Lisp https://z0ltan.wordpress.com/2016/08/06/conditions-and-restarts-in-common-lisp/
 - Article: https://vindarel.github.io/cl-torrents/tutorial.html
 - https://lisp-journey.gitlab.io/gray-streams/
@@ -785,6 +786,12 @@ and that doesn't work if the code is provided as a *.a or *.o file
 - ALL https://lispcookbook.github.io/cl-cookbook/gui.html
 - MCCLIM+classowary
   https://github.com/djeis97/dumb-mcclim-statusbar/
+  http://turtleware.eu/posts/McCLIM-backends---Part-I-Medium-Output-Protocol.html
+  Maze: https://www.youtube.com/watch?v=_PYGSfiX6tw[1] 1h30
+  (https://gist.github.com/epanji/5901227977fd64689f01d3fb7eaa351b[2])
+  decision tree: https://www.youtube.com/watch?v=8KHEwySzi9o[3] 5m
+  (https://github.com/epanji/decision-tree/[4])
+  building: https://www.youtube.com/watch?v=0uKptCcTqCc&t=19s[5] 2m
 - LTK https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
       https://github.com/VitoVan/cl-pkr (image picker mutiple platform build)
       https://github.com/mijohnson99/ltk-small-games example
@@ -796,6 +803,7 @@ and that doesn't work if the code is provided as a *.a or *.o file
 - QT  https://github.com/commonqt/commonqt5/
       https://github.com/kierangrant/cl-qt-example/
       https://github.com/Shinmera/qtools/tree/master/examples
+- CLOG https://lisp-journey.gitlab.io/blog/clog-contest/
 ** Image
 - https://github.com/tokenrove/imago
 - https://github.com/sjl/cl-netpbm/

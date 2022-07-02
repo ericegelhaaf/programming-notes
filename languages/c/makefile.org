@@ -1,3 +1,4 @@
+- https://swcarpentry.github.io/make-novice/reference.html
 - Template https://github.com/mbcrawfo/GenericMakefile/
 - Practical Makefiles, by example http://nuclear.mutantstargoat.com/articles/make/
 - https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html

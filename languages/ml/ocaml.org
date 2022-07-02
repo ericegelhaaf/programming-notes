@@ -1,16 +1,9 @@
+- https://www.cl.cam.ac.uk/teaching/1617/L28/materials.html
+- Promises https://cs3110.github.io/textbook/chapters/ds/promises.html?highlight=async
+- https://smlfamily.github.io/
+- Style guide https://www.cs.cornell.edu/courses/cs3110/2016fa/handouts/style.html
 - Github Action: build docs
   https://github.com/smimram/monadic-synth/blob/master/.github/workflows/build.yml
-- Video: 2014 Ocaml at Bloomberg http://cufp.org/2014/maxime-ransan-adopting-functional-programming-with-ocaml-at-bloomberg-lp.html
-- Book: 2012 - Fun of Programming https://github.com/bobzhang/ocaml-book
-- Book: OCaml From the Ground Up  https://ocamlbook.org/
-- Book: https://ocaml.xyz/book/
-  https://github.com/owlbarn/owl
-- Book: OCaml From the Ground Up
-  https://ocamlbook.org/
-  https://github.com/dmbaturin/ocamlbook.org/tree/master/book
-- Book: 2014 - Unix system programming in OCaml
-  https://ocaml.github.io/ocamlunix/
-  Text Code https://github.com/ocaml/ocamlunix
 - Manual https://ocaml.org/manual/index.html
 - Manual https://caml.inria.fr/pub/old_caml_site/ocaml/htmlman/index.html
 - Tutorial:
@@ -27,9 +20,6 @@
 - Tutorial: 2019 https://github.com/lindig/ocaml-style
 - Course: Dan Ghica's Foundations of Computer Science https://vimeo.com/user8856528/videos
 - Course: John Whitington’s Videos https://vimeo.com/user20888710/videos
-- Course: 2022 - Waterloo - Principles of Programming Languages
-  https://student.cs.uwaterloo.ca/~cs442/W22/notes/
-  https://www.youtube.com/channel/UCnmJoeNk2mrItxXJ2-XOCcQ/videos
 - Course: 2013 - Washington University https://homes.cs.washington.edu/~djg/teachingMaterials/gpl/lectures/
 - Course: Columbia Proffesor http://www.cs.columbia.edu/~sedwards/classes/
 - Course: 2021 - Singapore - Introductory Data Structures and Algorithms
@@ -37,37 +27,62 @@
   Example https://github.com/ysc2229/ocaml-graphics-demo
   Code https://github.com/ysc2229/
   Student? https://tanrobby.github.io/teaching/ync_algo_intro/index.html
-- Course: Princeton - COS 326 - Functional Programming
-  2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
-  2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
-  2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
 - Course: 2016 - MOOC - Introduction to Functional Programming in OCaml
   https://www.fun-mooc.fr/en/courses/introduction-functional-programming-ocaml/
   https://archive.org/details/fun_ocaml_mooc
   MKV https://archive.org/compress/fun_ocaml_mooc/formats=MATROSKA&file=/fun_ocaml_mooc.zip
   CODE https://github.com/smeruelo/mooc-ocaml
   SLIDES https://archive.org/download/fun_ocaml_mooc/slidesAndCode.zip
-- Course: OCAML to Racket
-  CMSC 430: Design and Implementation of Programming Languages
-  https://www.cs.umd.edu/class/fall2021/cmsc430/OCaml_to_Racket.html
-  https://www.youtube.com/watch?v=xKCFkXUcmK4&list=PLsg0tbEwZlcxS17oqa-I4bmmhlvwkUlp6&index=1
 - Excercises
   https://ocaml.org/learn/tutorials/99problems.html
   https://github.com/VictorNicollet/99-Problems-OCaml
   https://github.com/janestreet/learn-ocaml-workshop
+* Makefile
+  #+begin_src
+.PHONY: dev release deps test clean run install
+
+dev:     ; opam exec -- dune build
+release: ; opam exec -- dune build --profile release --build-dir _build_release
+
+deps:  ; opam install . --deps-only --with-test
+test:  ; opam exec -- dune runtest
+clean: ; opam exec -- dune clean ; rm -rf _build_release _build
+run:   ; opam exec -- dune exec ./src/main.exe
+
+install: release
+	install _build_release/default/src/main.exe $(HOME)/.newsboat/feeds/sql2rss
+  #+end_src
 * Articles
 - Roguelike with effect handlers
   https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
   https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
-- AWS https://mirage.io/docs/xen-boot
 - https://tarides.com/blog/2019-05-09-an-introduction-to-ocaml-ppx-ecosystem
-- (HN) The BitCoin Piñata https://news.ycombinator.com/item?id=9027743
 - https://discuss.ocaml.org/t/plans-to-choose-an-official-package-project-manager/8620
 - https://markkarpov.com/post/haskell-vs-ocaml.html
 - 2022 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
 - 2020 Leaving OCAML https://medium.com/darklang/leaving-ocaml-fce7049a2a40
 - 2014 https://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/
 - 2013 https://roscidus.com/blog/blog/2013/06/20/replacing-python-round-2/
+** 2018 What I wish I knew when learning OCaml
+   https://baturin.org/docs/ocaml-faq/
+- you can also produce Javascript from OCaml Bytecode (js_of_ocaml)
+*** let ... and
+  allows mutually recursive binding
+  example: define *even* and *odd* mutually recursive
+  #+begin_src ocaml
+let rec even x =
+  match x with
+  | 0 -> true
+  | _ -> odd (x - 1)
+and odd x =
+  match x with
+  | 0 -> false
+  | _ -> even (x - 1)
+  #+end_src
+*** abstract types
+- reasons
+  1) abstract implementation details
+  2) prevent invariant violations
 * Editor
 - https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
 - https://github.com/Gopiandcode/gopcaml-mode
@@ -101,64 +116,65 @@
 - Ref shorthands probided by Base
 - ¦ used in place of |
 ** Modules
-  |----------------------------+------------------------------------|
-  | new                        | module M = struct                  |
-  |                            | ..let x = 3                        |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  | type                       | module type MT = sig               |
-  |                            | ..type t                           |
-  |                            | ..val is_empty : t -> bool         |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  | type+new                   | module M : sig                     |
-  |                            | ..type t                           |
-  |                            | end = struct                       |
-  |                            | ..type t = string                  |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  |                            | module newM : MT = M               |
-  |----------------------------+------------------------------------|
-  | new functor                | module fM (M:MT) : MT = struct     |
-  |                            | ..let x = M.x + 1                  |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  | instance functor           | module newM = functorM(M)          |
-  |----------------------------+------------------------------------|
-  | instance functor           | module newM =                      |
-  | +                          | ..functorM(struct                  |
-  | anonymous module           | ..type t = int                     |
-  |                            | ..let compare = Int.compare        |
-  |                            | end)                               |
-  |----------------------------+------------------------------------|
-  | include                    | module newM = struct               |
-  |                            | ..include M                        |
-  |                            | ..let f x = x                      |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  | include with type          | module newM = sig                  |
-  | (multiple)                 | ..type t                           |
-  |                            | ..include M1 with type t := t      |
-  |                            | ..include M2 with type t := t      |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  | with type                  | module type MT =                   |
-  | "sharing constraint"       | ..MT with type T1 = T2             |
-  |----------------------------+------------------------------------|
-  | with type                  | module fM(M:MT1)                   |
-  | "sharing constraint"       | ..: (MT2 with type endpoint = M.t) |
-  | functor                    | struct                             |
-  |                            | ...                                |
-  |                            | end                                |
-  |----------------------------+------------------------------------|
-  | with type                  | module type MT =                   |
-  | "destructive substitution" | ..MT with type T1 := T2            |
-  |----------------------------+------------------------------------|
-  | with type                  | module fM(M:MT1)                   |
-  | "destructive substitution" | ..: MT2 with type T1 := T2 =       |
-  | functor                    | struct                             |
-  |                            | end                                |
-#+TBLFM: $2=struct
+  |----------------------------+--------------------------------|
+  | new                        | module M = struct              |
+  |                            | ..let x = 3                    |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  | type                       | module type MT = sig           |
+  |                            | ..type t                       |
+  |                            | ..val is_empty : t -> bool     |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  | type+new                   | module M : sig                 |
+  |                            | ..type t                       |
+  |                            | end = struct                   |
+  |                            | ..type t = string              |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  |                            | module newM : MT = M           |
+  |----------------------------+--------------------------------|
+  | new functor                | module fM (M:MT) : MT = struct |
+  |                            | ..let x = M.x + 1              |
+  |                            | ..let f i = M.g i              |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  | instance/use functor       | module newM = functorM(M)      |
+  |----------------------------+--------------------------------|
+  | instance functor           | module newM =                  |
+  | +                          | ..functorM(struct              |
+  | anonymous module           | ..type t = int                 |
+  |                            | ..let compare = Int.compare    |
+  |                            | end)                           |
+  |----------------------------+--------------------------------|
+  | include                    | module newM = struct           |
+  |                            | ..include M                    |
+  |                            | ..let f x = x                  |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  | include with type          | module newM = sig              |
+  | (multiple)                 | ..type t                       |
+  |                            | ..include M1 with type t := t  |
+  |                            | ..include M2 with type t := t  |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  | new module with type       | module type MT =               |
+  | "sharing constraint"       | ..MT with type T1 = T2         |
+  |----------------------------+--------------------------------|
+  | new functor with type      | module fM(M:MT1)               |
+  | "sharing constraint"       | ..: (MT2 with type T1 = M.t)   |
+  |                            | = struct                       |
+  |                            | ..type T1 = M.t                |
+  |                            | end                            |
+  |----------------------------+--------------------------------|
+  | new module with type :=    | module type MT =               |
+  | "destructive substitution" | ..MT with type T1 := T2        |
+  |----------------------------+--------------------------------|
+  | new functor with type :=   | module fM(M:MT1)               |
+  | "destructive substitution" | ..: MT2 with type T1 := T2 =   |
+  |                            | struct                         |
+  |                            | end                            |
+  #+TBLFM: $2=struct
 ** Functions
 - List
   (_exn for exception is possible)
@@ -888,59 +904,228 @@ type <variant> =
 #+end_src
 - Simple, no data, like enums
   #+begin_src ocaml
-type basic_color =
-  | Black | Red | Green | Yellow | Blue | Magenta | Cyan
-#+end_src
-- With data =of=
+  type basic_color =
+    | Black | Red | Green | Yellow | Blue | Magenta | Cyan
+  #+end_src
+- With data
   #+begin_src ocaml
-type weight = Regular | Bold
-type color =
-  | Basic of basic_color * weight
-  | RGB   of int * int * int
-  | Gray  of int
-#+end_src
-- Multiple Argument Variant VS Variant Containing a Tuple
+  type weight = Regular | Bold
+  type color =
+    | Basic of basic_color * weight (* basic colors, regular and bold *)
+    | RGB   of int * int * int (* 6x6x6 color cube *)
+    | Gray  of int (* 24 grayscale levels *)
+  #+end_src
+- We are NOT sending a tuple, it might look like
+  RGB (200,0,200)
+- Multiple Argument Variant ~VS~ Variant Containing a Tuple
   Differer in memory allocation. MAV has a single allocation in memory, VCT have heap memory.
   With and Without parens
   #+begin_src ocaml
-type color1 = RGB of int * int   (* cannot take a tuple *)
-type color2 = RGB of (int * int) (* can take a tuple *)
+  type color1 = RGB of int * int   (* cannot take a tuple *)
+  type color2 = RGB of (int * int) (* can take a tuple *)
   #+end_src
-- =Avoid catch-all cases in pattern matches=, to have the compiler help on refactoring
+- =Avoid catch-all cases in pattern matches=,
+  to have the compiler help on refactoring
   they supress compiler exhaustive checks
-  aka the | - ->
-- ADT =Algebraic Data Types= (Variant/Record/Tuples)
-  Is a powerful lenguage to describe data.
-  Combine 2 different types:
-  1) Product types:
-     - combine multiple different types together
-     - similar to cartesian products
-  2) Sum types:
-     - combine multiple different possibilities into one type
-     - similar to disjoint unions
-** 7 Error Handling
+  aka the | _ ->
+- *match*, we can use the type name when matching
+  in this case "color" is the type name
+  #+begin_src ocaml
+  let extended_color_to_int : extended_color -> int = function
+    | `RGBA (r,g,b,a) -> 256 + a + b * 6 + g * 36 + r * 216
+    | #color as color -> color_to_int
+  #+end_src
+*** ADT =Algebraic Data Types= (Variant/Record/Tuples)
+1) Product types:
+   - record and tuples
+   - conjuctions
+   - combine multiple different types together
+   - similar to cartesian products
+2) Sum types:
+   - variants
+   - combine multiple different possibilities into one type
+   - similar to disjoint unions
+**** Separate
+#+begin_src ocaml
+module Time_ns = Core.Time_ns
+module Log_entry = struct
+  type t =
+    { session_id: string;
+      time: Time_ns.t;
+      important: bool;
+      message: string;
+    }
+end
+module Heartbeat = struct
+  type t =
+    { session_id: string;
+      time: Time_ns.t;
+      status_message: string;
+    }
+end
+module Logon = struct
+  type t =
+     { session_id: string;
+       time: Time_ns.t;
+       user: string;
+       credentials: string;
+     }
+end
+type client_message = | Logon of Logon.t
+                      | Heartbeat of Heartbeat.t
+                      | Log_entry of Log_entry.t
+#+end_src
+**** Tuple of shared fields and non-shared
+#+begin_src ocaml
+  module Log_entry = struct
+    type t = { important: bool;
+               message: string;
+             }
+  end
+  module Heartbeat = struct
+    type t = { status_message: string; }
+  end
+  module Logon = struct
+    type t = { user: string;
+               credentials: string;
+             }
+  end
+  type details = | Logon of Logon.t
+                 | Heartbeat of Heartbeat.t
+                 | Log_entry of Log_entry.t
+  module Common = struct
+    type t = { session_id: string;
+               time: Time_ns.t;
+             }
+  end
+#+end_src
+**** Embedded records, if we don't need to pass the record types outside the variant
+- More memory efficient
+- The inlined record CANNOT be treated as its own free-standing object
+#+begin_src ocaml
+type details =
+  | Logon of { user: string; credentials: string; }
+  | Heartbeat of { status_message: string; }
+  | Log_entry of { important: bool; message: string; }
+#+end_src
+*** TODO Variants and Recursive Data Structurs
+- Example: Boolean Expression Language, used for filters
+  Parametrized bya polymorphic type 'a
+  #+begin_src ocaml
+  type 'a expr =
+    | Base  of 'a
+    | Const of bool
+    | And   of 'a expr list
+    | Or    of 'a expr list
+    | Not   of 'a expr
+  let rec eval expr base_eval =
+    let eval' expr = eval expr base_eval in
+    match expr with
+    | Base  base  -> base_eval base
+    | Const bool  -> bool
+    | And   exprs -> List.for_all exprs ~f:eval'
+    | Or    exprs -> List.exists  exprs ~f:eval'
+    | Not   expr  -> not (eval' expr)
+  #+end_src
+*** Polymorphic Variants (`)
+- More flexible, syntactically lightweight than variants
+- Can be used without an explicit type declaration
+- Style: The tag name matched the type name (`Int and int)
+- Lets us reuse tags between different variant types
+  - """Type cohersion"""
+- match
+  - Explict match of a PV ends up with an *upper* bound (<)
+  - Catch all on a PV ends up with *lower* bound (>)
+    - Be Extra cautious
+**** | > | open     | "these tags or more" | lower bounds |
+#+begin_src ocaml
+let three = `Int 3
+(* val three : [> `Int of int ] = `Int 3 *)
+let four = `Float 4.
+(* val four : [> `Float of float ] = `Float 4. *)
+
+(* Combining the variants *)
+[three; four]
+(* - : [> `Float of float | `Int of int ] list *)
+#+end_src
+**** | < | close    | "these tags or less  | upper bounds |
+#+begin_src ocaml
+  let is_positive = function
+    | `Int x   -> x > 0
+    | `Float x -> Float.(x > 0.)
+(* val is_positive : [< `Float of float | `Int of int ] -> bool *)
+#+end_src
+**** |   | exact    |                      | both         |
+#+begin_src ocaml
+  let exact = List.filter ~f:is_positive [tree;four]
+(* val exact: [ `Float of float | `Int of int ] list = [`Int 3; `Float 4.] *)
+#+end_src
+**** |   | distinct |                      | distinct     |
+#+begin_src ocaml
+List.filter [three;four] ~f:(fun x ->
+  match is_positive x with
+  | Error _ -> false
+  | Ok    b -> b)
+(* [< `Float of float | `Int of int | `Not_a_number > `Float `Int ] list = *)
+#+end_src
+*** Example: Terminal Colors
+**** PV with functions
+    #+begin_src ocaml
+let basic_color_to_int = function
+  | `Black -> 0 | `Red     -> 1 | `Green -> 2 | `Yellow -> 3
+  | `Blue  -> 4 | `Magenta -> 5 | `Cyan  -> 6 | `White  -> 7
+let color_to_int = function
+  | `Basic (basic_color,weight) ->
+    let base = match weight with | `Bold -> 8 | `Regular -> 0 in
+    base + basic_color_to_int basic_color
+  | `RGB (r,g,b) -> 16 + b + g * 6 + r * 36
+  | `Gray i -> 232 + 1
+let extended_color_to_int = function
+  | `RGBA (r,g,b,a) -> 256 + a + b * 6 + g * 36 + r * 216
+  | (`Basic _ | `RGB _ | `Gray _) as color -> color_to_int
+  #+end_src
+**** PV with type extensions
+#+NAME: color.mli
+#+begin_src ocaml
+  open Base
+  type basic_color =
+    [ `Black | `Blue | `Cyan | `Green
+      `Magenta | `Red | `White | `Yellow ]
+  type color =
+    [ `Basic of basic_color * [ `Bold | `Regular ]
+    | `Gray of int
+    | `RGB of int * int * int ]
+  type extended_color = (* extends color *)
+    [ color
+    | `RGBA of int * int * int * int ]
+  val color_to_int : color -> int
+  val extended_color_to_int : extended_color -> int
+#+end_src
+** DONE 7 Error Handling
+- "Use exceptions for exceptional conditions", if the error is rare
 | Errors             | Omnipresent | Acceptable | Foreseeable |   |
 |--------------------+-------------+------------+-------------+---|
 | Exceptions         |             | Yes        |             |   |
 | Error-aware return | No          |            | Yes         |   |
 *** Error-aware return type
-- =Option=
-  #+NAME: error-aware, propagate error
+**** =Option=
+1) propagate error
+   #+begin_src ocaml
+ let compute_bounds ~compare list =
+   let sorted = List.sort ~compare: list
+   match List.hd sorted, List.last sorted with
+   | None,_ | _,None -> None
+   | Some x, Some y -> Some (x,y)
+   #+end_src
+2) Or and error might be acceptable and have not need to propagate it
+**** =Result=, like an Option augmented with the ability to store other information
   #+begin_src ocaml
-let compute_bounds ~compare list =
-  let sorted = List.sort ~compare: list
-  match List.hd sorted, List.last sorted with
-  | None,_ | _,None -> None
-  | Some x, Some y -> Some (x,y)
-  #+end_src
-- =Result=, like an Option augmented with the ability to store other information
-  #+begin_src ocaml
-  module Result : sig
+module Result : sig
   type ('a,'b) t = | Ok of 'a
                  | Error of 'b
 end
   #+end_src
-- =Bind= aka >>=, for sequencing error producing function until one return an error
+**** =Bind= aka >>=, for sequencing error producing function until one return an error
   For smaller examples (like the ones showed here, direct match of Option is generally better than bind)
   #+NAME: bind definition
   #+begin_src ocaml
@@ -957,7 +1142,7 @@ let compute_bounds ~compare list =
     Option.bind (List.last sorted) ~f:(fun last ->
       Some (first,last)))
   #+end_src
-  #+NAME: example 2, Option.Monad_infix
+  #+NAME: example 2, Option.Monad_infix, >>=
   #+begin_src ocaml
 let compute_bounds ~compare list =
   let open Option.Monad_infix in
@@ -966,7 +1151,7 @@ let compute_bounds ~compare list =
   List.last sorted >>= fun last  ->
   Some (first,last)
   #+end_src
-  #+NAME: example 3, Option.Let_syntax aka let%bind
+  #+NAME: example 3, Option.Let_syntax, let%bind
   #+begin_src ocaml
 #require "ppx_let"
 let compute_bounds ~compare list =
@@ -976,53 +1161,53 @@ let compute_bounds ~compare list =
   let%bind last  = List.last sorted in
   Some (first,last)
   #+end_src
-- =Option.both=, takes 2 Option values and returns None or a Some pair (tuple)
+**** =Option.both=, takes 2 Option values and returns None or a Some pair (tuple)
   #+begin_src ocaml
 let compute_bounds ~compare list =
   let sorted = List.sort ~compare list in
   Option.both (List.hd sorted) (List.last sorted)
   #+end_src
-*** Error
+*** Base.Error
 - =Error.t=, defines a type for errors
-  Error.of_string, returns a Error.t
-- Error.create "Unexpected character" 'c' Char.sexp_of_t
-- Error.tag
-  Error.of_list
-  Error.of_string
-- [%message],  compact syntax for providing a string describing the error
-  #+begin_src ocaml
+- Base.Or_error.
+  - error_s [%message "something was wrong" (a:string) (b: int list)]
+    #+begin_src ocaml
 let a = "foo" and b = ("foo",[3;4])
 Or_error.error_s
   [%message "Something went wrong" (a:string) (b: string * int list)]
-  #+end_src
+    #+end_src
+  - Error.tag
+    Error.of_list
+    Error.of_string
+    Error.create "Unexpected character" 'c' Char.sexp_of_t
+    Error.t_of_sexp [%sexp ("List is too long",[1;2;3] : string * int list)]
 *** Exceptions
 - Define your own =exception/raise=
   #+begin_src ocaml
 exception Key_not_found of string
 raise (Key_not_found "a")
   #+end_src
+- Exceptions are ordinary values, can be on a list
 - Use the _exn extension on functions that return one
-- Type is =exn=, open (aka not fully defined in any one place)
-  - Are ordinary values and can be manipulated just like other values
-  - You can never exhaustive match on an =exn=
+- Of *open* type =exn= (aka not fully defined on 1 place, extendable)
+  - You can *never* exhaustive match on an =exn=
     #+begin_src ocaml
-(* are regular values *)
 let exceptions = [ Division_by_zero; Key_not_found "b" ]
 List.filter exceptions ~f:(function
   | Key_not_found _ -> true
   | _ -> false)
     #+end_src
-- [@@deriving sexp], used on the type (record) and the exception to get more information
+**** =[@@deriving sexp]=, used on the type (record) AND the exception to get more exception information
   #+begin_src ocaml
   type 'a bounds = { lower: 'a; upper: 'a } [@@deriving sexp]
   exception Crossed_bounds of int bounds [@@deriving sexp]
   Crossed_bounds { lower=10; upper=0 }
   #+end_src
-- =Base.failwith=
+**** =Base.failwith=
   #+begin_src ocaml
 let failwith msg = raise (Failure msg)
   #+end_src
-- =Base.assert=, to indicate a bug
+**** =Base.assert=, to indicate a bug
   #+NAME: assert false, always triggger
   #+begin_src ocaml
 let merge_lists xs ys ~f =
@@ -1039,20 +1224,19 @@ let merge_lists xs ys ~f =
 merge_lists [1;2;3] [-1;1;2] ~f:(+) (* Some [0;3;5] *)
 merge_lists [1;2;3] [-1;1] ~f:(+)   (* None *)
   #+end_src
-- =try/with=
-  #+begin_src ocaml
-  try <expr> with
-  | <pat1> -> <expr1>
-  | <pat2> -> <expr2>
-    #+end_src
-  - if there is an exception and isn't caught, goes up the stack,
-    if still uncaught the program terminates
-  - Exceptions might get masked (you won't know where they exactly happened)
-    if:
-    - Avoid relying on the identity of an exception, to know the nature of the failure
-    - Narrow the scope of the exception handler
-      #+NAME: instead of, having a big scope
-      #+begin_src ocaml
+**** =try/with=, and =match/exception= respond and recover from an exception
+#+begin_src ocaml
+try <expr> with
+| <pat1> -> <expr1>
+| <pat2> -> <expr2>
+  #+end_src
+- if uncaught the exception goes up the stack
+  if still uncaught the program terminates
+- Exceptions might get masked (you won't know where they exactly happened)
+  if:
+  - Avoid relying on the identity of an exception, to know the nature of the failure
+  - Narrow the scope of the exception handler
+    #+begin_src ocaml
 let lookup_wieght ~compute_weight alist key =
   try
     let data = find_exn alist key in
@@ -1060,28 +1244,27 @@ let lookup_wieght ~compute_weight alist key =
   with
   Key_not_found _ -> 0.
       #+end_src
-      #+NAME: do this with match
-      #+begin_src ocaml
+  - do this with MATCH
+    #+begin_src ocaml
 let lookup_weight ~compute_weight alist key =
   match find_exn alist key with
   | exception _ -> 0.
   | data -> compute_weight data
       #+end_src
-      #+NAME: or better avoid _exn
-      #+begin_src ocaml
+  - or better avoid _exn, for and *option*
+    #+begin_src ocaml
 let lookup_weight ~compute_weight alist key =
   match List.Assoc.find ~equal:String.equal alist key with
   | None -> 0.
   | Some data -> compute_weight_data
       #+end_src
-- =Exn.protect= (like try/finally on other languages)
-  #+NAME: open a file without leadking FD on error
+**** =Exn.protect= (like try/finally on other languages, always runs the finally fun)
+  #+NAME: open a file without leadking FD
   #+begin_src ocaml
 let load filename =
   let inc = In_channel.create filename in
   Exn.protect
-    ~f:(fun () -> In_channel.input_lines inc
-                  |> List.map ~f:parse_line)
+    ~f:(fun () -> In_channel.input_lines inc |> List.map ~f:parse_line)
     ~finally:(fun () -> In_channel.close inc)
   #+end_src
   #+NAME: using build in with_file
@@ -1091,39 +1274,41 @@ let load filename =
     In_channel.input_lines inc
     |> List.map ~f:parse_line)
   #+end_src
-- =*.try_with=, captures the exception into an Option
+**** =Option.try_with= or =Or_error.try_with=, exception to option/error
   #+begin_src ocaml
 let find alist key =
   Option.try_with (fun () -> find_exn alist key)
 let find alist key =
   Or_error.try_with (fun () -> find_exn alist key)
   #+end_src
-- =Or_error.ok_exn=
+**** =Or_error.ok_exn=, raised exception if error
   #+begin_src ocaml
   Or_error.ok_exn (find ["a",1;"b",2] "b") (* 2 *)
   Or_error.ok_exn (find ["a",1;"b",2] "c") (* Exception: Key_not_found("c") *)
   #+end_src
 *** Backtraces
-- Build: with Base opened backtraces and debugging information are enabled
-- Build: turn off backtraces
-  $ OCAMLRUNPARAM=b=0 dune exec -- ./blow_up.exe
-- Code: turn off backtraces
-  Backtrace.Exn.set_recording false
+- Build:
+  - disabled by default
+  - with =open Base= backtraces and debugging information are enabled
+  - turn off backtraces
+    $ OCAMLRUNPARAM=b=0 dune exec -- ./blow_up.exe
+- Code:
+  Backtrace.Exn_most_recent         -- backtrace of most recent exception
+  Backtrace.Exn.set_recording false -- turn off backtraces
 - Benchmarks with
   - Core_bench
     $ dune exec -- ./exn_cost.exe -ascii -quota 1 -clear-columns time cycles
-
-** 8 Imperative Programming
+** TODO 8 Imperative Programming
 - Returning a unit () is common for imperative code
 - =let () = <expr>= is equivalent to =<expr>;=
 - Tip: Do the side-effect ops at the end of the function.
        Minimizes the chance that the op will be interrupted with an exception.
-- Cyclic Data Structures
+- Cyclic Data Structures, different general purpose cyclic DS require mutation
   #+begin_src ocaml
 let rec endless_loop = 1 :: 2 :: 3 :: endless_loop
 (* val endless_loop : int list = [1;2;3;<cycle>] *)
   #+end_src
-- Sometimes, the precedence of =match= or =if= would make the need to use =begin/end=
+- =begin/end= sometimes the precedence of =match= or =if= would make the it necessary
   #+begin_src ocaml
 let insert_first t value =
   let new_elt = { prev = None; next = !t; value } in
@@ -1139,11 +1324,19 @@ let insert_first t value =
   Array.blit
 - Exception on "out of bound" indexing
 *** Strings
-- Are just *byte arrays*
+- Are just *byte arrays*, but immutable
 - string VS Char.t array
   string is more memory efficient
-  string
-*** Benign effects
+- You can create mutable strings
+  #+begin_src ocaml
+  let b = Bytes.of_string "foobar" in
+  Bytes.set b 0 (Char.uppercase (Bytes.get b 0));
+  Bytes.to_string b
+  #+end_src
+*** Big Arrays
+- Outside the OCaml heap
+- To communicate with C/Fortran
+*** Benign *effects*
 **** laziness =lazy/force=
 - Lazy.lazy <expr>
   wraps the type returned by expr into *lazy_t* type
@@ -1206,18 +1399,303 @@ let fib = make_rec fib_norec
   time (fun () -> lazy_memo_rec (module Int) fib_norec 40)
   #+end_src
 **** Limits of =let rec=
-- Only allows on the right handside of =:
+- Only allows on the right handside of =
   1) a function definition
   2) a constructor
   3) a lazy keyword
-** ? Functors
-- The input module might have extra fields, than the module type specified as input,
+** TODO 9 GADT (Generalized Algebraic Data Types)
+- Extension of variants
+  - more expresive
+  - harder to use and less intuitive
+- Easier to work with ~Existential Types~, of a specific but unknown type
+- They NEED type declaration when used
+- Inference of GATDs does NOT play well with recursive calls
+*** Example: Variant approach, a lot of work left to runtime
+#+begin_src ocaml
+open Base
+exception Ill_typed
+type value =
+  | Int of int
+  | Bool of bool
+type expr =
+  | Value of value
+  | Eq of expr * expr
+  | Plus of expr * expr
+  | If of expr * expr * expr
+let rec eval expr =
+  match expr with
+  | Value v -> v
+  | If (c,t,e) ->
+    (match eval c with
+     | Bool b -> if b then eval t else eval e
+     | Int _ -> raise Ill_typed)
+  | Eq (x,y) ->
+    (match eval x, eval y with
+     | Bool _,_ | _,Bool _ -> raise Ill_typed
+     | Int f1, Int f2 -> Bool (f1 = f2))
+  | Plus (x,y) ->
+    (match eval x, eval y with
+     | Bool _,_ | _,Bool _ -> raise Ill_typed
+     | Int f1 Int f2 -> Int (f1 + f2))
+#+end_src
+*** Example: Variant approach, *Phantom Type*
+- Phantom Type:
+  - A type that doesn't show up in the body of the definition of t.
+  - Free to take on any value.
+  - Still allows some wrong expressions to run and fail at runtime
+    let expr = Typesafe_lang.(eq (bool true) (bool false))
+    Exception: Ill_typed
+- signature
+  #+begin_src ocaml
+  module type Typesafe_lang_sig = sig
+    type 'a t
+    (* functions for constructing expressions *)
+    val int : int -> int t
+    val bool : bool -> bool t
+    val if_ : bool t -> 'a t -> 'a t -> 'a t
+    val eq : 'a t -> 'a t -> bool t
+    val plus : int t -> int t -> int t
+    (* Evalation functions *)
+    val int_eval : int t -> int
+    val bool_eval : bool t -> bool
+  end
+#+end_src
+- implementation
+  #+begin_src ocaml
+  module Typesafe_lang : Typesafe_lang_sig = struct
+    type 'a t = expr (* Phantom type *)
+
+    let int x = Value (Int x)
+    let bool x = Value (Bool x)
+    let if_ c t e ) = If (c,t,e)
+    let eq x y = Eq (x,y)
+    let plus x y = Plus (x,y)
+
+    let int_eval expr =
+      match eval expr with
+      | Int x -> x
+      | Bool _ -> raise Ill_typed
+    let bool_eval expr =
+      match eval expr with
+      | Bool x -> x
+      | Int _ -> raise Ill_typed
+  end
+#+end_src
+*** Example: Variant approach, type parameter
+- sig
+  #+begin_src ocaml
+  type 'a value =
+    | Int of 'a
+    | Bool of 'a
+  type 'a expr =
+    | Value of 'a value
+    | Eq of 'a expr * 'a expr
+    | Plus of 'a expr * 'a expr
+    | If of bool expr * 'a expr * 'a expr
+  #+end_src
+- testing
+  problem: the type fo the outer expression is always just equal ot the type of the inner expression
+  #+begin_src ocaml
+  let i x = Value (Int x)
+  and b x = Value (Bool x)
+  and (+:) x y = Plus (x,y)
+
+  i 3
+  b false
+  i 3 +: i 4
+  #+end_src
+*** Example: GADT (:)
+- The (:) to the right of the tag is what tells you is s GADT
+- Each tag has a type constructor "function"
+- Code
+  #+begin_src ocaml
+  type _ value =
+    | Int  : int  -> int  value
+    | Bool : bool -> bool value
+  type _ expr =
+    | Value : 'a value -> 'a expr
+    | Eq   : int expr * int expr -> bool expr
+    | Plus : int expr * int expr -> int expr
+    | If : bool exp * 'a expr * 'a expr -> 'a expr
+  #+end_src
+- Now the evaluator does not needs any type check on runtime
+  #+begin_src ocaml
+let eval_value : type a. a value -> a = function
+  | Int x -> x
+  | Bool x -> x
+let rec eval : type a. a expr -> a = function
+  | Value v -> eval_value v
+  | If (c,t,e) -> if eval c then eval t else eval e
+  | Eq (x,y) -> eval x = eval y
+  | Plus (x,y) -> eval x + eval y
+  #+end_src
+*** Different eval_value
+  #+begin_src ocaml
+  let eval_value : type a. a value -> a = function
+    | Int x -> x
+    | Bool x -> x
+  (* Using a Locally Abstracted Type *)
+  let eval_value (type a) (v: a value) : a =
+    match v with
+    | Int x -> x
+    | Bool x -> x
+#+end_src
+*** Different eval
+- Does not work with Locally Abstracted Types, due being recursive
+    #+begin_src ocaml
+  (* ocaml syntactic sugar *)
+  let rec eval : type a. a expr -> a = function
+    | Value v -> eval_value v
+    | If (c,t,e) -> if eval c then eval t else eval e
+    | Eq (x,y) -> eval x = eval y
+    | Plus (x,y) -> eval x + eval y
+  (* desugar: Marking it as Polymorphic *)
+  let rec eval : 'a. 'a expr -> 'a =
+    fun (type a) (x : a expr) ->
+      match x with
+      | Value v -> eval_value v
+      | If (c,t,e) -> if eval c then eval t else eval e
+      | Eq (x,y) -> eval x = eval y
+      | Plus (x,y) -> eval x + eval y
+    #+end_src
+*** Use: Varying your return type
+- A ~List.Find~ that is configurable in how it handles when does not find the item, either
+  1) throw and exception
+  2) return None
+  3) return a default value
+- Without GATDs we will always need to wrap the return into an *option*
+- With GATDS, one type for the type of the list and other for the return type
+  #+begin_src ocaml
+  module If_notfound = struct
+    type (_,_) t =
+      | Raise       : ('a,'a) t
+      | Return_none : ('a,'a option) t
+      | Default_to  : 'a -> ('a,'a) t
+  end
+  let rec flexible_find
+   : type a b. f:(a -> bool) -> a list -> (a,b) If_not_found.t -> b =
+   fun ~f list if_not_found ->
+     match list with
+     | [] ->
+       (match if_not_found with
+       | Raise -> failwith "no matching item found"
+       | Return_none -> None
+       | Default_to x -> x
+     | hd :: tl ->
+       if f hd
+       then (
+         match if_not_found with
+         | Raise -> hd
+         | Return_none -> Some hd
+         | Default_to _ -> hd)
+       else flexible_find ~f tl if_not_found
+  #+end_src
+*** Use: ~Universally Quantified~ vs ~Existentially Quantified~
+- We want instead of being compatible with ALL types,
+  the type represents a particular but unknown type
+- 'a is E.Q. if it shows on the left of (->), but not on the right
+- Stringable
+  #+begin_src ocaml
+  type stringable =
+    Stringable : { value: 'a; to_string: 'a -> string } -> stringable
+  let print_stringable (Stringable s) =
+    Stdio.print_endline (s.to_string s .value)
+  #+end_src
+- A function trying to return such value, would NOT typecheck
+*** Use: Abstracting computational machines (combinators)
+- Example is "Pipelines", with added functionality from (|>)
+  - Profiling, of how long each step took
+  - Control, allow pause midway through and restart it later
+  - Error Handling, custom recovery for example
+- Attempt 1: Functor
+  #+begin_src ocaml
+  module type Pipeline = sig
+    type ('input, 'output) t
+    val ( @> ) : ('a->'b) -> ('b,'c) t -> ('a,'c)
+    val empty  : ('a,'a) t
+  end
+  (* Using it on a Functor *)
+  module Example_pipeline (Pipeline : Pipeline) = struct
+    open Pipeline
+    let sum_file_sizes =
+      (fun () -> Sys.ls_dir ".")
+      @> List.filter ~f:Sys.is_file_exn
+      @> List.map ~f:(fun file_name -> (Unix.lstat file_name).st_size)
+      @> List.sum (module Int) ~f:Int64.to_int_exn
+      @> empty
+  end
+  #+end_src
+- Attempt 1.1: as function application
+  #+begin_src ocaml
+  module Basic_pipeline : sig
+    include Pipeline
+    val exec : ('a,'b) t -> 'a -> 'b
+  end = struct
+    type ('input,'output) t = 'input -> 'output
+    let empty = Fn.id
+    let ( @> ) f t input = t (f input)
+    let exec t input = t input
+  end
+  #+end_src
+- Attempt 2 GATDs
+  Abstractly represent the piplene we want, build it after
+  #+begin_src ocaml
+  type (_,_) pipeline =
+    | Step
+      : ('a -> 'b) * ('b,'c) pipeline
+      -> ('a,'c) pipeline
+    | Empty
+      : ('a,'a) pipeline
+  let ( @> ) f pipeline = Step (f,pipeline)
+  let empty = Empty
+  let rec exec : type a b. (a,b) pipeline -> a -> =
+  #+end_src
+** 10 Functors
+- Are functions from modules to modules.
+- Use cases
+  1) Dependency Injection: swappable for testing
+  2) Auto-extension of modules: deriving
+  3) Instantiating modules with state: can contain mutable state, is useful have multiple instance of the same module
+- The input module might have extra fields,
+  than the module type specified as input,
   they will be dropped.
 - Idiom: comparation functions return
-  -  0 if equal
+  - 0 if equal
   - >1 if first is bigger than the second one
   - <1 if second is bigger than first one
-** ? First Class Modules
+*** Abstracting a functor
+- FROM
+  #+begin_src ocaml
+  module Make_interval(Endpoint : Comparable) = struct
+    type t = | Interval of Endpoint.t * Endpoint.t
+             | Empty
+  ...
+  #+end_src
+- TO
+  - adding return module type
+  - adding type *endpoint* which is defined on the output module signature
+  #+begin_src ocaml
+  module Make_interval(Endpoint : Comparable) : Interval_intf = struct
+    type endpoint = Endpoint.t
+    type t = | Interval of Endpoint.t * Endpoint.t
+             | Empty
+    ...
+  #+end_src
+- It is not good enough because *endpoint* is not exposed
+**** Use =sharing constraint=, expose the fact that a given type
+  is equal to some other type.
+  <Module_type> with type <type> = <type'>
+  #+begin_src ocaml
+  module Make_interval(Endpoint : Comparable)
+    : (Interval_intf with type endpoint = Endpoint.t)
+  = struct
+    type endpoint = Endpoint.t
+    type t = | Interval of Endpoint.t * Endpoint.t
+             | Empty
+  #+end_src
+**** Use =Destructive Substitution=
+  <Module_type> with type <type> := <type'>
+** 11 First Class Modules
 - create, module to value
   #+begin_src ocaml
   let simple = (module Mod1 : Modt_1)
@@ -1955,7 +2433,10 @@ expr:
   | e1 = expr; PLUS; e2 = expr { Binop (Add, e1, e2) }
   ;
     #+end_src
-* Course: 2020 - Princeton - Functional Programming
+* Course: 2020 - Princeton - COS 326 - Functional Programming
+  2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
+  2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
+  2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
 ** 03
 - Function parameters are patterns too
   #+begin_src ocaml
@@ -1986,6 +2467,73 @@ expr:
   - *exception* can be declared on signatures, they can be handled
   - *option*, adds an code overhead
 *** 3
+** 18 Parallel
+- Frameworks
+  1) Dryad https://www.microsoft.com/en-us/research/publication/dryad-distributed-data-parallel-programs-from-sequential-building-blocks/
+  2) Naiad https://www.youtube.com/watch?v=lHBCq2AbWqc&feature=emb_title
+  3) Spark
+  4) Hadoop
+  5) Pig
+- Types
+  - Data, same computation on independent items
+  - Task, different computations at the same time
+  - Pipeline, assembly line
+- Concurrency, mediates multiparty access to shared resources
+  - Thread is single core, good for concurrent programming but not for parallel
+    - That is < 2021
+- Paralleism, performs many tasks simultaneously
+  - You cannot get more parallelism than the number of virtual cores you have.
+  - CPU's cache makes parallel operations even more complicated than just interleaving
+- ~Atomicity~ is not guaranteed on a ref, on a := and !
+  - Even if it is on the operation, it won't be across threads
+    #+begin_src ocaml
+    let inc(r:int ref) = r := !r + 1
+    #+end_src
+- ~Busy waiting~
+  - Consuming CPU without doing something useful
+  - CPU could either be runnign a useful thread/program or power down
+- Thread.(create join)
+  - ~Fork-Join Paralleism~, *join*, wait for the thread t to finish and resume when done
+- Performance Bugs: for example when you run serial a code that is mean to be parallel
+*** Futures (aka promises or delays)
+- Easy to reason when there are NOT side effects, purely functional
+- Good for things worst than O(n log n), it will get at best linear time
+- Types helps remove errors at run-time, by checking types at compile-time
+- Similar to *lazy programming*, not the same
+**** Signature
+  #+begin_src ocaml
+  module type FUTURE =
+  sig
+    type 'a future
+    val future : ('a -> 'b) -> 'a -> 'b future
+    val force : 'a future -> 'a
+  end
+  #+end_src
+**** An implementation
+  #+begin_src ocaml
+  module Future : FUTURE =
+  struct
+    type 'a future = { tid   : Thread.t ;
+                      value : 'a option ref }
+
+    let future(f:'a->'b) (x:'a) : 'b future =
+      let r ref None in
+      let t = Thread.create (fun () -> r:= Some(f x)) () in
+      {tid=t ; value=r}
+
+    let force (f:'a future) : 'a =
+      Thread.join f.tid;
+      match !(f.value) with
+      | Some v -> v
+      | None -> failwith "impossible"
+  end
+  #+end_src
+**** Using it
+  #+begin_src ocaml
+  let x = future f () in
+  let y = g () in
+  let v = force x in
+  #+end_src
 * Libraries
 - LWT/Telegram bot https://github.com/quernd/SushiBot
 - Synth https://github.com/smimram/monadic-synth
@@ -2011,12 +2559,12 @@ expr:
 - Utils https://github.com/janestreet/core
 - Utils https://github.com/janestreet/async
 * Video
-- Podcast Episode
-  Episode 204: Anil Madhavapeddy on the Mirage Cloud Operating System and the OCaml Language
-  https://www.youtube.com/watch?v=ZYGWDpIS5UE
-- Podcast Episode
-  Automated Trading and OCaml with Yaron Minsky
+- 2014 Ocaml at Bloomberg http://cufp.org/2014/maxime-ransan-adopting-functional-programming-with-ocaml-at-bloomberg-lp.html
+- Podcast: Automated Trading and OCaml with Yaron Minsky
   https://www.youtube.com/watch?v=KdAS2_Gienc
+- Video: Effective ML (Yaron Minsky)
+  https://vimeo.com/21564387
+  https://vimeo.com/21564926
 - Video: Raytracer
   https://www.youtube.com/playlist?list=PLlw1FcLpWd42vMLPlR3K7iq-CuCtkZr8o
   https://github.com/LesleyLai/ocamlpt
@@ -2025,32 +2573,17 @@ expr:
   - Better to programming at scale (multiple persons)
   - Better for hostile environments
   - Better for Distributed applications programming
-- Anwar Mamat https://www.youtube.com/playlist?list=PLF-pVzrCrXdj7rBvOOwulglwwDjVy96uI
-- Playlist: OCaml 2021
-  https://www.youtube.com/playlist?list=PLyrlk8Xaylp5CdqKE-ZqR5K5kRgPcKYN9
+- OCaml 2021 https://www.youtube.com/playlist?list=PLyrlk8Xaylp5CdqKE-ZqR5K5kRgPcKYN9
 - OCaml 2014: The State of OCaml (invited), Xavier Leroy https://www.youtube.com/watch?v=DMzZy1bqj6Q&list=UUP9g4dLR7xt6KzCYntNqYcw
 - Video: 2012 - Xavier Leroy - The continuation of functional programming by other means
   https://events.inf.ed.ac.uk/Milner2012/X_Leroy-html5-mp4.html
-- Video: Effective ML
-  https://vimeo.com/21564387
-  https://vimeo.com/21564926
 ** Channels
-- Ocaml Software Foundation https://www.youtube.com/channel/UCnwkbeuXjuUTNsPoLKsBWdg
-- Ocaml Workshops https://www.youtube.com/c/OCamlWorkshops/videos
+- Westley Weimer https://www.youtube.com/channel/UCSZ5lYLg6ARj4Wow3ZQXQzA/videos
+- Anwar Mamat https://www.youtube.com/playlist?list=PLF-pVzrCrXdj7rBvOOwulglwwDjVy96uI
 - Jane Street https://www.youtube.com/channel/UCDsVC_ewpcEW_AQcO-H-RDQ
 - Eduardo Rafael https://www.youtube.com/c/EduardoRFS/videos
-** Video: Unikernels: the rise of the library hypervisor in MirageOS - https://www.youtube.com/watch?v=dn4ARS4lDlQ
-- slides: https://www.slideshare.net/Docker/unikernels-the-rise-of-the-library-hypervisor-in-mirageos
-- Hypervisors:
-  - run full OS emulation
-  - sit at the bottom of everything make it hard to compose into the whole architecture.
-- Unikernels:
-  - OS broken down into individual "libraries" (tcp/ip, device drivers, schedulers)
-  - linked by conf file and a bootloader
-- RESUME: 8:00
-** Video: How to make a Netcat (with OCaml/MirageOS) - Oskar M Grande
-  - https://www.youtube.com/watch?v=37cLNsnLozE
-    https://github.com/musha68k/chill-netcat
+- Ocaml Workshops https://www.youtube.com/c/OCamlWorkshops/videos
+- Ocaml Software Foundation https://www.youtube.com/channel/UCnwkbeuXjuUTNsPoLKsBWdg
 ** Video: 2015 - A Crash Course in OCaml Modules - Tim McGilchrist
 https://www.youtube.com/watch?v=lISWTUyNP4c
 - =OCaml Modules= v =Haskell Type Classes=
@@ -2107,3 +2640,63 @@ https://www.youtube.com/watch?v=lISWTUyNP4c
   X.to_csv [1;2;3] (* => 1,2,3 *)
   #+end_src
 
+** TODO Video: 2019 - GADTs and You; Writing Safer Code Using GADTs
+   Nathan Holland https://www.youtube.com/watch?v=tEQ8bTNYj5g
+   runnable slides https://github.com/nholland94/gadt-lambdaconf-talk
+- Allows us:
+  1) add *invariants* to our DT at the type level
+     - Disallow to construction of values that don't follow the invariants
+  2) restrict values we can pass to a functions
+  3) Encode simple logic
+  4) Runtime optimizations
+- Limitations of ADTs
+  - Since every constructor of and ADT (a variant) the same type
+    - We are not able to reason about the types inside an ADT
+- Use patterns
+  - Type Witness, mapping between type parametres and the constructors
+    #+begin_src ocaml
+    type 'a witness =
+      | Int : int witness
+      | Bool : float witness
+    #+end_src
+  - Recursive Type Witness
+    #+begin_src ocaml
+    type 'a witness =
+      | Int : int witness
+      | Bool : float witness
+      | List : 'a witness -> ('a list) witness
+    #+end_src
+  - Type Level Peano Numbers
+    #+begin_src ocaml
+    (* ADT *)
+    type peano =
+      | Zero
+      | Succ of peano
+    let zero = unit
+    let one = Succ zero
+    let four = Succ (Succ (Succ (Succ Zero)))
+    (* Type Level *)
+    type zero = unit
+    type 'a succ = unit -> 'a
+    type one = zero succ
+    type two = one succ
+    (* GADT *)
+    type 'a peano =
+      | Zero : zero peano
+      | Succ : 'a peano -> ('a succ) peano
+    let succ : 'a peano -> ('a succ) peano = fun n -> Succ n
+    let zero : zero peano = Zero
+    let one : one peano = Succ zero
+    #+end_src
+    13:00
+* Books
+- 2012 - Fun of Programming https://github.com/bobzhang/ocaml-book
+- 2014 - Unix system programming in OCaml
+  https://ocaml.github.io/ocamlunix/
+  Text Code https://github.com/ocaml/ocamlunix
+- 2021
+  https://ocaml.xyz/book/
+  https://github.com/owlbarn/owl
+- OCaml From the Ground Up
+  https://ocamlbook.org/
+  https://github.com/dmbaturin/ocamlbook.org/tree/master/book

@@ -1,3 +1,5 @@
+- Channel: Sergei Winitzki https://www.youtube.com/channel/UCWpjX-z6_oNZhcHPzAAQy6g/videos
+  Programming Papers explained with scala
 - FP library https://typelevel.org/cats/
 - Async https://zio.dev/
 - Async https://typelevel.org/cats-effect/
@@ -15,9 +17,9 @@
   https://www.youtube.com/playlist?list=PLLMXbkbDbVt9MIJ9DV4ps-_trOzWtphYO
 - Parallel Programming
   https://www.youtube.com/channel/UCFVAx3NnF3HpQawLY6KR2DQ
-- (Udemy) Scala functioning and programming for beginners
+- (Udemy) RockTheJVM - Scala functioning and programming for beginners
   https://www.youtube.com/playlist?list=PL15cIG7aNbhtZxLafzxmld750BcFw-9Ek
-- (Udemy) Advance Scala and functional Programming
+- (Udemy) RockTheJVM - Advance Scala and functional Programming
   https://www.youtube.com/playlist?list=PL15cIG7aNbhshROiDuYpFTwoCRXeyBNYx
 * Binary
 ** Compatibility
@@ -28,5 +30,5 @@ reason library developers cross-compile to all versions they support.
 This is fixed in Scala 3, but it's only valid for Scala 3 and higher, it doesn't help for Scala 2.
 #+end_src
 * People
-- Martin Odersky (courses)
-- Dick Wall, Courses
+- Martin Odersky (Creator)
+- Dick Wall (Courses)

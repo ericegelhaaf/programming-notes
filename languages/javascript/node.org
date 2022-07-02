@@ -2,7 +2,6 @@
 - 1h https://www.youtube.com/watch?v=fBNz5xF-Kx4
 - 10h 4 projects https://www.youtube.com/watch?v=qwfE7fSVaZM
 - 8h learn https://www.youtube.com/watch?v=Oe421EPjeBE
-
 - Node.js Intro: https://github.com/maxogden/art-of-node
 - https://github.com/sergtitov/NodeJS-Learning#videos
 - x86
@@ -34,7 +33,7 @@
   - bluebird
     http://bluebirdjs.com/docs/getting-started.html
   - Solution was to reduce the number of concurrent promises
-* Book: Fullstack Node.js
+* Book: 2019 - Fullstack Node.js
 ** Your First Node API
 - Created on 2009, By Ryan Dahl, a Ruby developer
 - Non blocking I/O
@@ -42,84 +41,1332 @@
 - Preinstalled modules: fs, http, tcp, dns, events, child_process, crypto
   https://nodejs.org/api/index.html (NOTE: node.js v17.0 at Nov/2021)
 - API frameworks
-  - express https://expressjs.com/
-  - hapi https://hapi.dev/ https://github.com/hapijs/hapi
-  - restify (abandoned?) https://github.com/restify/node-restify
+  1) express https://expressjs.com/
+  2) hapi https://hapi.dev/ https://github.com/hapijs/hapi
+  3) restify (abandoned?) https://github.com/restify/node-restify
 - Distributed systems, use tcp modules along with stream abstraction
   - dnode (abandoned) https://github.com/substack/dnode
 - #!/usr/bin/env node
-  - yargs (command line arguments) https://github.com/yargs/yargs
-  - chalk (terminal colors) https://github.com/chalk/chalk
-  - blessed (~abandoned~, ncurses) https://github.com/chjj/blessed
+  1) yargs (command line arguments) https://github.com/yargs/yargs
+  2) chalk (terminal colors) https://github.com/chalk/chalk
+  3) blessed (~abandoned~, ncurses) https://github.com/chjj/blessed
 - Example interop with lower level languages
   - C/Rust https://github.com/RisingStack/node-with-rust
 - Lacks globals, and common browser DOM APIs (window, document)
   - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 *** Core Examples
-     Globals     https://nodejs.org/api/globals.html
-     process     https://nodejs.org/api/process.html#process_process
-     http        https://nodejs.org/api/http.html
-     querystring https://nodejs.org/api/querystring.html
-  1. Example returning plain string
-  2. Example returning JSON string
-  3. Example req.url functions
-  4. Example req.url querystring params
-  5. Example serving static files
+   Globals     https://nodejs.org/api/globals.html
+   process     https://nodejs.org/api/process.html#process_process
+   http        https://nodejs.org/api/http.html
+   querystring https://nodejs.org/api/querystring.html
+1. Example returning plain string
+2. Example returning JSON string
+3. Example req.url functions
+4. Example req.url querystring params
+5. Example serving static files
 *** Express Simple Example
-    - drop-in replacement for the core *http* module
-      - biggest difference being routing
-    - Installing express, and his dependencies
-      #+begin_src
-      $ npm install express
-      $ du -sh node_modules/
-      2.7M    node_modules/
-      $ ls  node_modules/
-      accepts/              escape-html/        mime/            safer-buffer/
-      array-flatten/        etag/               mime-db/         send/
-      body-parser/          express/            mime-types/      serve-static/
-      bytes/                finalhandler/       ms/              setprototypeof/
-      content-disposition/  forwarded/          negotiator/      statuses/
-      content-type/         fresh/              on-finished/     toidentifier/
-      cookie/               http-errors/        parseurl/        type-is/
-      cookie-signature/     iconv-lite/         path-to-regexp/  unpipe/
-      debug/                inherits/           proxy-addr/      utils-merge/
-      depd/                 ipaddr.js/          qs/              vary/
-      destroy/              media-typer/        range-parser/
-      ee-first/             merge-descriptors/  raw-body/
-      encodeurl/            methods/            safe-buffer/
-      #+end_src
-    - We don't need to change our response*() functions at all,
-      but it gives us helpers to make them more succint.
-      - res.json
-      - req.query
-      - route wildcards
-        uses https://www.npmjs.com/package/path-to-regexp
-        test route path with http://forbeslindesay.github.io/express-route-tester/
+- drop-in replacement for the core *http* module
+  - biggest difference being routing
+- Installing express, and his dependencies
+  #+begin_src
+  $ npm install express
+  $ du -sh node_modules/
+  2.7M    node_modules/
+  $ ls  node_modules/
+  accepts/              escape-html/        mime/            safer-buffer/
+  array-flatten/        etag/               mime-db/         send/
+  body-parser/          express/            mime-types/      serve-static/
+  bytes/                finalhandler/       ms/              setprototypeof/
+  content-disposition/  forwarded/          negotiator/      statuses/
+  content-type/         fresh/              on-finished/     toidentifier/
+  cookie/               http-errors/        parseurl/        type-is/
+  cookie-signature/     iconv-lite/         path-to-regexp/  unpipe/
+  debug/                inherits/           proxy-addr/      utils-merge/
+  depd/                 ipaddr.js/          qs/              vary/
+  destroy/              media-typer/        range-parser/
+  ee-first/             merge-descriptors/  raw-body/
+  encodeurl/            methods/            safe-buffer/
+  #+end_src
+- We don't need to change our response*() functions at all,
+  but it gives us helpers to make them more succint.
+  - res.json
+  - req.query
+  - route wildcards
+    uses https://www.npmjs.com/package/path-to-regexp
+    test route path with http://forbeslindesay.github.io/express-route-tester/
 *** Express Chat Example
-    - Using SSE (Server Sent Events), to push events from the server to the browser
-      - Simpler than WebSockets
-    - SSE JS EventSource API https://developer.mozilla.org/en-US/docs/Web/API/EventSource
-    - SSE Specification https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
-    - Relaying messages using eventemmiter https://nodejs.org/api/events.html#events_class_eventemitter
-    - res.write instead of res.open to avoid closing the connection (keep-alive)
+- Using SSE (Server Sent Events), to push events from the server to the browser
+  - Simpler than WebSockets
+- SSE JS EventSource API https://developer.mozilla.org/en-US/docs/Web/API/EventSource
+- SSE Specification https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
+- Relaying messages using eventemmiter https://nodejs.org/api/events.html#events_class_eventemitter
+- res.write instead of res.open to avoid closing the connection (keep-alive)
 ** Async
 - Node.js is non-blocking by default
   - Is single threaded
   - We can still block it
 - Asynchronus
-  - Callback pattern
-    - setInterval(), setTimeout()
+  - Callback pattern:
+    - Non-Blocking functions:
+      setInterval(), setTimeout()
+- We want the ability to perform task on different timelines.
+  Some sequentially, and other concurrently.
+- process.argv = ['node', 'file.js']
 *** Callback
-- fs.ReadFile(filename, callback)
-  setTimeout(callback, delay)
+- 2ms ~= 10.000 math operations
+- fs.readFile(filename, callback)
+  fs.readdir()
 - =Convention= In the official Node.js API
   - callback is always the last argument
+- =Convention= On callback functions
   - The first argument of the callback is the error
 - Async code
   - does NOT wait
   - order is not guaranteed
   - Array.foreach() would give unordered results
-* Book: Scaling Your Node.js Apps
+- Creating a function that takes a callback is how to make sure things happen in the order we want.
+*** Promises
+- Is an object that represents a future action AND his result.
+- While *callbacks* are just conventions around how we use functions.
+- .then(data => console.log(data.length))
+  .catch(err => console.error(err))
+- then/catch order does not matter
+- To be able to perform multiple *async* actions concurrently,
+  we'll need to use Promise.all()
+  - Executes an array of promises at the same time
+  - It returns an array of results
+**** Example: Promise.all
+#+begin_src javascript
+const fs = require('fs').promises
+fs.readdir('./')
+  .then(fileList =>
+    Promise.all(
+      fileList.map(file => fs.readFile(file)
+                            .then(data => [file, data.length]))
+    )
+  )
+  .then(results => {
+    results.forEach(([file,length]) => console.log(`${file}: ${length}`))
+    console.log('done!')
+  })
+  .catch(err => console.error(err))
+#+end_src
+*** Async & Await
+- Allow us to use Promises as they were synchronous.
+  While they would NOT block other executing tasks.
+- Non-blocking /performance/ of asynchronous code,
+  but with the /simplicity/ of synchronous ode.
+- We can use sync features like try/catch
+- We can NOT use await with .map() directly. It will not wait.
+  wrap it with Promise.all()
+**** Example
+#+begin_src javascript
+async function printLength(file) {
+  try {
+    const data = await fs.readFile(file)
+    console.log(`${file}: ${data.length}`)
+  } catch (err) {
+    console.error(err)
+  }
+}
+#+end_src
+* Book: 2019 - Scaling Your Node.js Apps
 ** 2 Architectural Patterns
-- Layered Architecture (aka n-tier arch patttern)
-  
+1) Layered Architecture (aka n-tier arch patttern)
+   - each layer has a purpose/functionality
+   - each layer cannot send data to other layer not directly below
+     - from where is initiated, not transmitted
+   - the deeper the more business logic
+   - not MVC, because on it you can skip a layer and talk directly to another
+   - example: MVP (model-view-presentation) MVVM (model-view-viewmodel)
+2) Client-Server (many to one)
+   - Clients always start the conversation, after that it might vary
+   - Servers are always listening
+3) Master-Slave  (one to many)
+   - heavy tasks are processed on the slaves
+   - example: databases, hadoop
+4) Event-Bus or Event-Driven Architecture (many to many)
+   - Components
+     1) Event(s)
+     2) Event Bus
+     3) Event Source(s)
+     4) Event Consumer(s)
+   - Need to avoid component-to-component communication
+* TODO Book: 2019 - Get Programming with Node.js
+- Queries http://mongoosejs.com/docs/queries.html
+- Schema https://mongoosejs.com/docs/schematypes.html
+- Promises https://mongoosejs.com/docs/promises.html
+** 3 (require) Creating a Node.js Module
+- modules are individual JS files
+  packages, contain modules
+  dependencies are modules
+*** example
+1) npm install cities --save
+2) main.js
+   #+begin_src javascript
+   const cities = require("cities");
+   var myCity = cities.zip_lookup("10016");
+   console.log(myCity);
+   #+end_src
+3) node main.js
+   node main
+*** CommonJS
+- Node.js uses CommonJS https://nodejs.org/api/modules.html
+- module.exports
+  #+NAME: messages.js
+  #+begin_src javascript
+  // Instead of
+  // let messages = ["a", "b", "c"];
+  exports.messages = ["a", "b", "c"];
+  #+end_src
+- module.require (attaches the loaded module to your module exports object)
+  #+begin_src javascript
+  const messageModule = require("./messages");
+  messageModule.messages.forEach(m => console.log(m));
+  #+end_src
+*** npm install
+npm install cities --save
+|--------------+----+----------------------------|
+| --save       | -S | saves it into package.json |
+| --global     | -g | installs globally          |
+| --save-prod  |    | by default                 |
+| --save-dev   |    |                            |
+| --production |    |                            |
+|--------------+----+----------------------------|
+** 4 (http.createServer) Creating a simple WebServer in Node.js
+- port 3000 is generally used for web servers in development
+- callbacks are overwhelmingly used throughout Node.js
+*** Example
+#+begin_src javascript
+const port = 3000,
+      http = require("http"),
+      httpStatus = require("http-status-codes"),
+      app = http.createServer((request, response) => {
+          console.log("Received an income request!");
+          response.writeHead(httpStatus.OK, {
+              "Content-Type": "text/html"
+          });
+          let responseMessage = "<h1>Hello, Universe!</h1>";
+          response.write(responseMessage);
+          response.end();
+          console.log(`Sent a response : ${responseMessage}`)
+      });
+
+app.listen(port);
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+** 5 (app.on/req.url) Handling incoming data, manual routing
+- req.on("data"), data event is triggered when data is received for a particular *req*
+  req.on("end")
+- POSTed data comes into the server in *chunks*, because we don't know how much data will be received
+  - ReadableStream library, fore working with chunks
+- JSON.stringify
+  #+begin_src javascript
+const getJSONString = obj => {
+    return JSON.stringify(obj, null, 2);
+};
+#+end_src
+- can also http.createServer().listen(port) directly
+- setTimeout(() => res.end(reouteResponseMap[req.url]), 2000); // delay the response
+*** Example: same but slightly different
+  #+begin_src javascript
+const port = 3000,
+      http = require("http"),
+      httpStatus = require("http-status-codes"),
+      app = http.createServer();
+
+app.on("request", (request, response) => {
+    response.writeHead(httpStatus.OK, {
+        "Content-Type": "text/html"
+    });
+    let responseMessage = "<h1>Hello, Universe!</h1>";
+    response.end(responseMessage);
+});
+
+app.listen(port);
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+*** Example: POST, req.on("data") req.on("end")
+curl --data "username=Jon&password=secret" http://127.0.0.1:3000
+    #+begin_src javascript
+const port = 3000,
+      http = require("http"),
+      httpStatus = require("http-status-codes"),
+      app = http.createServer();
+
+app.on("request", (req, res) => {
+    var body = [];
+    req.on("data", (bodyData) => {
+        body.push(bodyData);
+    });
+    req.on("end", () => {
+        body = Buffer.concat(body).toString(); // array to string
+        console.log(`Request Body Constents: ${body}`)
+    });
+    console.log(req.method);
+    console.log(req.url);
+    console.log(req.headers);
+    res.writeHead(httpStatus.OK, {
+        "Content-Type": "text/html"
+    });
+    let responseMessage = "<h1>Hello, Universe!</h1>";
+    res.end(responseMessage);
+});
+
+app.listen(port);
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+*** Example: routing, indexing into a map
+#+begin_src javascript
+const routeResponseMap = {
+    "/info": "<h1>Info Page</h1>",
+    "/contact": "<h1>Contact Us</h1>",
+    "/about": "<h1>Learn more about us.</h1>",
+    "/hello": "<h1>say hello by emailing us here</h1>",
+    "/error": "<h1>sorry the apge you are looking for is not here</h1>"
+};
+
+const port = 3000,
+      http = require("http"),
+      httpStatus = require("http-status-codes"),
+      app = http.createServer((req, res) => {
+          res.writeHead(httpStatus.OK, {
+              "Content-Type": "text/html"
+          });
+          if (routeResponseMap[req.url]) {
+              res.end(routeResponseMap[req.url]);
+          } else {
+              res.end("<h1>Welcome!</h1>");
+          }
+      });
+
+app.listen(port);
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+** 6 (fs/views/router.js) Writing better routes and serving external files
+- /views folder contains files that will render on the client browser
+- fs.readFile
+*** Example: fs.Readfile
+#+begin_src javascript
+const routeMap = {
+    "/": "views/index.html"
+};
+
+const port = 3000,
+      fs = require("fs"),
+      http = require("http"),
+      httpStatus = require("http-status-codes");
+
+http
+    .createServer((req, res) => {
+        res.writeHead(httpStatus.OK, {
+            "Content-Type": "text/html"
+        });
+        if (routeMap[req.url]) {
+            fs.readFile(routeMap[req.url], (error, data) => {
+                res.write(data);
+                res.end();
+            });
+        } else {
+            res.end("<h1>Sorry, not found.</h1>");
+        }
+    })
+    .listen(port);
+
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+*** Example: handle fs errors
+#+begin_src javascript
+const getViewUrl = (url) => {
+    return `views${url}.html`
+};
+
+const port = 3000,
+      fs = require("fs"),
+      http = require("http"),
+      httpStatus = require("http-status-codes");
+
+http.createServer((req, res) => {
+    fs.readFile(routeMap[req.url], (error, data) => {
+        res.write(data);
+        res.end();
+        if (error) {
+            res.end("<h1>Sorry, not found.</h1>");
+        } else {
+            res.writeHead(httpStatus.OK, {
+                "Content-Type": "text/html"
+            });
+        }
+    });
+}).listen(port);
+
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+*** Example: handle other type of files
+#+begin_src javascript
+const post = 3000,
+      fs = require("fs"),
+      http = require("http"),
+      httStatus = require("http-status-codes");
+
+const sendErrorResponse = res => {
+    res.writeHead(httpStatus.NOT_FOUND, {
+        "Content-Type": "text/html"
+    });
+    res.write("<h1>File Not Found!</h1>");
+    res.end();
+}
+
+const customReadFile = (file_path, res) => {
+    if (fs.existsSync(file_path)) {
+        fs.readFile(file_path, (error, data) => {
+            if (error) {
+                console.log(error);
+                sendErrorResponse(res);
+                return;
+            }
+            res.write(data);
+            res.end();
+        });
+    } else {
+        sendErrorResponse(res);
+    }
+}
+
+http.createServer((req, res) => {
+    let url = req.url;
+    if (url.indexOf(".html") !== -1) {
+        res.writeHead(httpStatus.OK, {
+            "Content-Type" : "text/html"
+        });
+        customReadFile(`./views${url}`, res);
+    } else if (url.indexOf(".js") !== -1) {
+        res.WriteHead(httpStatus.OK, {
+            "Content-Type": "text/javascript"
+        });
+        customReadFile(`./public/js${url}`, res);
+    } else if (url.indexOf(".css") !== -1) {
+        res.writeHead(httpStatus.OK, {
+            "Content-Type": "text/css"
+        });
+        customReadFile(`./public/css${url}`, res);
+    } else if (url.indexOf(".png") !== -1) {
+        res.writeHead(httpStatus.OK, {
+            "Content-Type": "image/png"
+        });
+        customReadFile(`./public/images${url}`, res);
+    } else {
+        sendErrorResponse(res);
+    }
+}).listen(3000);
+
+console.log(`The server is listening on port number: ${port}`);
+#+end_src
+*** Example: router.js
+- encapsulation
+  1) setters to append to a unexported routes dictionary
+  2) handle
+     - to match against the routes dictionary
+     - try/catch avoid crashing
+**** main.js
+#+begin_src javascript
+const port = 3000,
+      http = require("http"),
+      httpStatus = require("http-status-codes"),
+      router = require("./router"),
+      fs = require("fs"),
+      plainTextContentType = {
+          "Content-Type": "text/plain"
+      },
+      htmlContentType = {
+          "Content-Type": "text/html"
+      },
+      customReadFile = (file, res) => {
+          fs.readFile(`./{file}`, (err, data) => {
+              if (err) {
+                  console.log("error reading the file...");
+              }
+              res.end(data);
+          });
+      };
+
+router.get("/", (req, res) => {
+    res.writeHead(httStatusCodes.OK, plainTextContentType);
+    res.end("INDEX");
+})
+
+router.get("/index.html", (req, res) => {
+    res.writeHead(httpStatusCodes.OK, htmlContentType);
+    customReadFile("views/index.html", res);
+})
+
+router.post("/", (req, res) => {
+    res.writeHead(httpStatusCodes.OK, plainTextContentType);
+    res.end("POSTED");
+})
+
+http.createServer(router.handle).listen(port);
+
+console.log(`The server has started and is listening on port number: ${port}`);
+#+end_src
+**** router.js
+  #+begin_src javascript
+const httpStatus = require("http-status-codes"),
+      htmlContentType = {
+          "Content-Type": "text/html"
+      },
+      routes = {
+          "GET" : {
+              "/info": (req, res) => {
+                  res.writeHead(httpStatus.OK, {
+                      "Content-Type": "text/plain"
+                  });
+                  res.end("Welcome to the info page!");
+              }
+          },
+          "POST": {}
+      };
+
+exports.handle = (req, res) => {
+    try {
+        if (routes[req.method][req.url]) {
+            routes[req.method][req.url](req, res);
+        } else {
+            res.writeHead(httpStatus.NOT_FOUND, htmlCOntentType);
+            res.end("<h1>No such file exists</h1>");
+        }
+    } catch (err) {
+        console.log("error: " + err);
+    }
+}
+
+exports.get = (url, action) => {
+    routes["GET"][url] = action;
+};
+
+exports.post = (url, action) => {
+    routes["POST"][url] = action;
+};
+  #+end_src
+** 7 Capstone: creating your first web application
+*** contentTypes.js
+- defining *exports* fully, as an object of objects
+  used as ex: contentTypes.html
+#+begin_src javascript
+module.exports = {
+    html: {
+        "Content-Type": "text/html"
+    },
+    text: {
+        "Content-Type": "text/plain",
+    },
+    js: {
+        "Content-Type": "text/js"
+    },
+    jpg: {
+        "Content-Type": "image/jpg"
+    },
+    png: {
+        "Content-Type": "image/png"
+    },
+    css: {
+        "Content-Type": "text/css"
+    }
+};
+#+end_src
+*** utils.js
+- defining *exports* fully, as an object of objects
+  module.exports = {
+    f: () => console.log("error");
+  }
+#+begin_src javascript
+const fs = require("fs"),
+      httpStatus = require("http-status-codes"),
+      contentTypes = require("./contentTypes");
+
+module.exports = {
+    getFile: (file, res) => {
+        fs.readFile(`./${file}`, (error, data) => {
+            if (error) {
+                res.writeHead(httpStatus.INTERNAL_SERVER_ERROR,
+                              contentTypes.html);
+                res.end("There was an error serving the content!");
+            }
+            res.end(data);
+        });
+    }
+};
+#+end_src
+** UNIT 2 Easier web development with Express.js
+- The file structure of an application exists
+  to optimize communication of data among your pages.
+  - MVC (Model View Controller) architecture
+    1) give structure to your data
+    2) display that data
+    3) handle request to interact with that data
+** 8 (app.get) Setting up an app with Express.js
+- Other Frameworks
+  | name     | active? |
+  |----------+---------|
+  | [[https://github.com/koajs/koa][koa.js]]   | yes     |
+  | [[https://github.com/hapijs/hapi][hapi.js]]  | yes     |
+  | [[https://github.com/balderdashy/sails][sails.js]] | yes*    |
+  | [[https://github.com/totaljs][total.js]] | yes     |
+  |----------+---------|
+- npm init
+  npm install express@4.16.3 --save
+- npm docs express
+- res.write() -> res.send()
+  Does NOT need .end()
+- req.params {}
+  req.body
+  req.url   /?name=jon
+  req.query { name: 'jon' }
+- You can think of ~Middleware~ like a post office.
+  It makes sure to inspect the package. Before delivery.
+*** nodemon
+ | npm i nodemon -g         | global install             |
+ | npm i nodemon --save-dev | dev install                |
+ | npm i nodemon -D         | dev install                |
+ | npm start                | add to package.json        |
+ |                          | "start": "nodemon main.js" |
+*** Example: simple
+#+begin_src javascript
+const port = 3000,
+      express = require("express"),
+      app = express();
+
+app.get("/", (req, res) => {
+    res.send("Hello, Express(o)!");
+}).listen(port, () => {
+    console.log(`The Express.js server has started and is listening on port number: ${port}`);
+});
+#+end_src
+** 9 (app.use) Routing in Express.js
+- REST - REpresentational State Transfer architecture
+- npm install express-generator -g
+  express <PROJECT_NAME>
+*** Route Parameters, (:) have a colon before the parameter.
+  *req.params*
+  useful for data objects
+  #+begin_src javascript
+  app.get("/items/:vegetable", (req, res) => {
+    let veg = req.params.vegetable;
+    res.sen(`This is the page for ${veg}`);
+  }
+  #+end_src
+*** (app.use) Middleware
+- app.use("/items", <callback>)
+  #+begin_src javascript
+  app.get("/items", (req,res) => {
+    console.log("next!");
+    next();
+  });
+  #+end_src
+- app.use((req,res,next) => { next(); })
+  #+begin_src javascript
+  app.use((req,res,next) => {
+    console.log(`request made to: ${req.url}`);
+    next();
+  });
+  #+end_src
+*** (app.use) .urlencoded() and .json()
+#+begin_src javascript
+app.use(
+  express.urlencoded({
+    extended: false
+  })
+);
+app.use(express.json());
+app.post("/", (req, res) => {
+  console.log(req.body);
+  console.log(req.query);
+  res.send("POST successful!");
+});
+#+end_src
+- To assist in reading the *body* contents
+  > express 4.16.0
+- .urlencoded() - Usually form post and UTF-8 content
+- .json() - in json format
+**** curl --data "first_name=Jon&last_name=Wexler" http://localhost:3000
+request made to: /
+[Object: null prototype] { first_name: 'Jon', last_name: 'Wexler' }
+{}
+*** URL Parameters (?)
+    *req.query*
+*** (controllers/) MVC
+- ~WHY?~ in a controllers/ folder you would name also the .js <some>Controller.js !??!?
+- ~WHY?~ in a controller, would you separate the REQUIRED "path/:parameter" from the callbacks !??!?!?
+- Move the Middleware logging (app.use()) to controllers/homeController.js
+- Move your callback functions to separate modules
+  (to follow the MVC design pattern)
+  - Example:
+    - controllers/userController.js
+    - controllers/homeController.js
+      #+begin_src javascript
+      exports.sendReqParam = (req,res) => {
+        let veg = req.params.vegetable;
+        res.send(`This is the page for ${veg}`);
+      };
+      #+end_src
+** 10 (EJS) Connecting views with templates
+- npm install ejs --save
+  npm install express-ejs-layouts --save
+- Other template engines
+  |            | active? | only? |                                                  |
+  |------------+---------+-------+--------------------------------------------------|
+  | mustache   | yes     | yes   | https://github.com/janl/mustache.js/             |
+  | handlebars | yes     | yes   | https://github.com/handlebars-lang/handlebars.js |
+  | underscore | yes     | no    | https://github.com/jashkenas/underscore          |
+  | pug        | yes*    | yes   | https://github.com/pugjs/pug                     |
+  |------------+---------+-------+--------------------------------------------------|
+*** app.set() - sets application settings properties
+  - app.set("port", process.env.PORT || 3000);
+    .listen(app.get("port"))
+  - app.set("view engine", "ejs");
+  - variables https://expressjs.com/en/api.html#app.set
+*** .ejs
+- <%  %> to define and assign variables
+- <%= %> to print variables
+- index.ejs
+  #+begin_src html
+  <% let name = "Jon"; %>
+  <h1>Hello, <%= name %> </h1>
+  #+end_src
+- homeController.js
+  #+begin_src javascript
+  exports.respondWithName = (req,res) => {
+    res.render("index");
+  };
+  #+end_src
+*** send data from controllers to .ejs
+- router.js, add a route parameter
+  #+begin_src javascript
+  app.get("/name/:myName", homeController.respondWithName);
+  #+end_src
+- homeController.js
+  #+begin_src javascript
+  exports.respondWithName = (req,res) {
+    let paramsName = req.params.myNam;
+    res.render("index", { name: paramsName });
+  }
+  #+end_src
+*** Layout: content that doesn't change between views
+- Example: footer of page
+- Automatically used
+- <%- body %> gets replaces by target route rendered content
+- layout.ejs
+  #+begin_src html
+  <body>
+    <div id="nav">NAVIGATION</div>
+      <%- body %>
+    <div id="footer">FOOTER</div>
+  </body>
+  #+end_src
+- main.js
+  #+begin_src javascript
+  const layouts = require("express-ejs-layouts");
+  app.use(layouts);
+  #+end_src
+*** Partials: code snippets can be included in views
+- views/notification.ejs
+- views/partials/navigation.ejs
+- views/layouts.ejs
+  <% include partials/navigation %>
+** 11 (node start) Configurations and Error Handling
+*** node start
+  package.json
+  #+begin_src javascript
+  "scripts": {
+    "start": "node main.js"
+  }
+  #+end_src
+*** handling errors
+- npm install http-status-codes --save
+- res.status()
+  res.sendFile("./public/404.html")
+- fallback route to catch errors, with app.use()
+  (req,res)          404
+  (err,req,res,next) 500
+**** Example: (err,req,res,next)
+- errorController.js
+  #+begin_src javascript
+  exports.logErrors = (err,req,res,next) => {
+    console.error(err.stack);
+    next(err);
+  };
+  #+end_src
+- main.js
+  #+begin_src javascript
+  app.use(errorController.logErrors);
+  #+end_src
+*** serving static files
+- automatically, after root dir is set
+  app.use(express.static("public"))
+** 12 Capstone: enhacing the confetti cusisine site with express.js
+- npm init
+- npm install express ejs express-ejs-layouts http-status-codes --save
+- mkdir -p views controllers public/{css,js,images}
+*** main.js
+#+begin_src javascript
+const express = require("express");
+          app = express();
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.set("port", process.env.PORT || 3000);
+app.get("/", (req,res) => {
+  res.send("Welcome to Confetti Cuisine!");
+});
+app.listen(app.get("port"), () => {
+  console.log(
+    `Server running at http://localhost:${app.get("port")}`
+  );
+});
+#+end_src
+*** courses.ejs, looping
+#+begin_src html
+<h1></h1>
+<% offeredCourses.forEach(course => { %>
+  <h5> <%= course.title %> </h5>
+  <span>$ <%= course.cost %> </span>
+<% }); %>
+#+end_src
+** UNIT 3 Connecting to a database
+- mongodb, fits with MVC and OOP
+- mongoose, npm package, ODM (object-document mapper), db api
+- schema to relate objects
+- promises
+** 13 Setting up a mongodb database
+- mongo-shell, https://www.mongodb.com/docs/manual/reference/mongo-shell/
+- Compass, GUI https://www.mongodb.com/products/compass
+- a *collection* stores all documents related to a data-model
+- organizes data by using *documents*, stored data in BSON (binary json)
+  - key-value pairing for their properties
+- Inserts with an extra property "_id"
+  and value instance of ObjectId()
+*** mongodb shell
+**** Navigate & Create
+#+begin_src haskell
+> db
+ test
+> show dbs
+ admin
+ local
+ test
+> show collections
+ ???
+> use recipe_db
+> use recipe_db
+#+end_src
+**** Insert & Find
+#+begin_src haskell
+> db.contacts.insert({
+    name: "Jon Wexler",
+    email: "jon@jonwexler.com",
+    note: "decent guy"
+  })
+> db.contacts.find()
+  {"_id": ObjectId("5941f..."),
+   "name": "Jon Wexler"
+   "email": "jon@jonwexler.com",
+   "note": "Nice Guy"}
+> db.contact.find({_id: ObjectId("5941f...")})
+  {"_id": ObjectId("5941f..."),
+   "name": "Jon Wexler"
+   "email": "jon@jonwexler.com",
+   "note": "Nice Guy"}
+#+end_src
+**** Update & Delete
+#+begin_src haskell
+> db.contacts.update(
+  {name: "Jon"},
+  {name: "Jon Wexler"})
+> db.contacts.delete({name: "Jon Wexler"})
+> db.contacts.deleteMany({}) -- Removes all documents
+  #+end_src
+*** javascript connection
+- npm install mongodb --save
+**** query
+#+begin_src javascript
+const MongoDB = require("mongodb").MongoClient,
+        dbURL = "mongodb://localhost:27017",
+       dbName = "recipe_db"; // Creates if missing
+
+MongoDB.connect(dbURL, (err,client) => {
+  if (err) throw err;
+  let db = client.db(dbName);
+  db.collection("contacts")
+    .find()
+    .toArray((err,data) => {
+      if (err) throw err;
+      console.log(data);
+    });
+});
+#+end_src
+**** insert
+#+begin_src javascript
+db.collection("contacts")
+  .insert({
+    name: "freddie mercury",
+    email: "fred@queen.com"
+  },(err,db) => {
+    if (err) throw err;
+    console.log(db);
+  });
+#+end_src
+** 14 Building Models with Mongoose
+- npm install mongoose --save
+- Mongoose, is a ODM (Object-Document Mapper)
+- You build *models* with *schemas*, defining what type of data can be saved.
+  - schema defines the rules
+  - models uses them
+*** Create schema and model
+#+begin_src javascript
+const mongoose = require("mongoose");
+mongoose.connect(
+  "mongodb://localhost:27017/recipe_db",
+  {useNewUrlParser: true}
+);
+const db = mongoose.connection;
+
+// db.once() - runs code callback once, when received a message
+db.once("open", () => {
+  console.log("succesful connection");
+});
+
+// mongoose.Schema(), creates a schema
+const subscriberScheme = mongoose.Schema({
+  name: String,
+  email: Sring,
+  zipCode: Number
+})
+// mongoose.model(), creates a model from a schema
+const Subscriber = mongoose.model("Subscriber", subscriberSchema);
+#+end_src
+*** Instantiate and save
+#+begin_src javascript
+// 1) new
+var subscriber1 = new Subcriber({
+  name: "Jon Wexler",
+  email: "jon@jonwexler.com"
+});
+// 2) create - new + save
+Subscriber.create(
+  {
+    name: "Jon Wexler",
+    email: "jon@jonwexler.com"
+  },
+  function (error, savedDocument) {
+    if (error) console.log(error);
+    console.log(savedDocument);
+  }
+);
+
+// save
+subscriber1.save((error, savedDocument) => {
+  if (error) console.log(error);
+  console.log(savedDocument);
+})
+
+#+end_src
+*** /models/subscribers.js, .exec()
+- The above code here
+- schema is not exported
+- export the model (aka Subscriber)
+- Queries can be chained
+  .findOne({ name: "Jon Wexler"})
+  .where("email", /wexler/)
+- Queries only run when exec() is called
+  .exec((error,data) => {
+    if (data) console.log(data.name);
+  })
+** 15 Connecting Controllers and Models
+- "Callback can be messy, especially with compliated queries."
+- mongoose offers support for *promise* syntax
+- Convention: *controllers* are named in the plural version of the *model*
+  subscribersController.js
+*** req.data, passing data model to controller
+*** view, ejs loop
+#+begin_src html
+<% subscribers.forEach(s => {)%>
+  <p><%= s.name %></p>
+  <p><%= s.email %></p>
+<% }); %>
+#+end_src
+*** passing data controller to model
+- Using *body-parser* package
+- subscribersController.js
+#+begin_src javascript
+exports.getSubscriptionsPage = (req,res) => {
+  res.render("contact");
+};
+
+exports.saveSubscriber = (req,res) => {
+  let newSubscriber = new Subscriber({
+    name: req.body.name,
+    email: req.body.email,
+    zipCode: req.body.zipCode
+  });
+  newSubscriber.save((error,result) => {
+    if (error) res.send(error);
+    res.render("thanks");
+  });
+};
+#+end_src
+*** using *promises* with mongoose
+- promises facilitate a chain of functions, usually callback functions, in async queries
+  - ME: a lot like the same problem monads solve
+    we use .then()/.catch()
+- main.js
+  mongoose.Promise = global.Promise
+- .exec() now will return a promise
+  .save() does not work with exec()
+**** subscribersController.js, using promises to get
+  #+begin_src javascript
+exports.getAllSubscribers = (req,res) => {
+  Subscriber.find({})
+    .exec()
+    .then((subscribers) => {
+      subscribers: subscribers
+    })
+    .catch((error) => {
+      console.log(error.message);
+      return [];
+    })
+    .then(() => {
+      console.log("promise completed");
+    });
+};
+
+// SNIPPET, return a promise
+newSubscriber.save()
+  .then(result => {
+    res.render("thanks");
+  })
+  .catch(error => {
+    if (error) res.send(error);
+  });
+#+end_src
+**** Promise.all(), not needed for our example, different example
+#+begin_src javascript
+var commands = [];
+
+contacts.forEach((c) => {
+  commands.push(Subscriber.create({
+    name: c.name,
+    email: c.email
+  }));
+});
+
+Promise.all(commands)
+  .then(r => {
+    console.log(JSON.stringify(r));
+    mongoose.connection.close();
+  })
+  .catch(error => {
+    console.log(`ERROR: ${error}`);
+  });
+#+end_src
+** UNIT 4 Building a user model
+- CRUD (Create, Read, Update, and Delete)
+** 17 Improving your data models
+- SchemaTypes
+  1) String, not null or undefined
+  2) Date
+  3) Array
+  4) Mixed, needs mongoose.Schema.Types.Mixed
+  5) ObjectId, needs mongoose.Schema.Types.ObjectId
+- Until you build *views*
+  the REPL is agreat tool to run CRUD operations
+  on your *models*
+*** Validators, added to the schema definition
+- subscriber.js
+#+begin_src javascript
+const mongoose = require("mongoose");
+const subscriberSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
+    unique: true // a schema helper, not a validator
+  },
+  zipCode: {
+    type: Number,
+    min: [10000, "Zip code too short"],
+    max: 99999
+  }
+});
+#+end_src
+*** methods
+- <SCHEMA>.methods.<NAME> - instance methods, operate on the document
+- <SCHEMA>.statics.<NAME> - static methods, general queries, may relato to many model instances
+#+begin_src javascript
+subscriberSchema.methods.getInfo = function() {
+  return `Name. ${this.name} Email: ${this.email} Zip: ${this.zipCode}`;
+}
+subscriberSchema.methods.findLocalSubscribers = function() {
+  return this.model("Subscriber")
+    .find({zipCode: this.zipCode})
+    .exec();
+}
+#+end_src
+*** query methods
+   |          | returns |
+   |----------+---------|
+   | find     | array   |
+   | findOne  | record  |
+   | findById | record  |
+   | remove   |         |
+*** data relationships
+- one-to-one user to profile
+- one-to-many: user to posts
+- many-to-many: many users to many courses
+**** relationship property, has a ~type~ and a ~ref~
+- one side property relationship is enough
+#+begin_src javascript
+// Example: a user with many pictures
+pictures: [{type: mongoose.Schema.Types.ObjectId,
+            ref: "Picture"}]
+// Example: a course has many subscribers
+subscribers: [{type: mongoose.Schema.Types.ObjectId,
+               ref: "Subscriber"}]
+// and/or
+courses: [{type: mongoose.schema.Types.ObjectId,
+           ref: "Course"}]
+#+end_src
+*** TODO populate
+    pag 188
+* TODO Book: 2021 - Distributed Systems with Node.js
+** 1 Why Distributed
+- Node.js Modules
+  1) cluster, instances, https://nodejs.org/api/cluster.html
+  2) worker_threads, instances, https://nodejs.org/api/worker_threads.html
+  3) child_process, processs, https://nodejs.org/api/child_process.html
+*** Javascript
+- New multi-thread mechanisms
+  1) Atomics https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics
+  2) SharedArrayBuffers https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
+- Error triggered on infinity recursive calls (15k)
+  "RangeError: Maximum call stack size exceeded"
+- Other languages, run withing a single call stack through his lifetime
+- On Javascript, the event loop grabs functions, with their own callstack
+  - Two call stacks won't exist at the same time (no parellel)
+*** Node.js
+- It embraces the CPS ~Continuation-Passing Style~ pattern
+- It is multi-threaded
+- libuv, handles OS abstraction and I/O
+  - maintains a *thread pool* for managing I/O or CPU heavy ops
+  - default size 4
+  - max size 1024
+- .unref() and .ref() to not and to keep the process alive while running
+*** Node.js Event Loop
+- it executes callbacks when I/O evens happen
+- a =tick= is a complete pass through the event loop
+- Gotcha:
+  setImmediate() take a tick to run
+  nextTick() is more immediate
+- Phases, event loop, loops through them
+  1) Pool: ~I/O~ related callbacks, most code runs here
+  2) Check: ~setImmediate()~ triggered callbacks
+  3) Close: ~EventEmitter~ *close* event triggered callbacks
+  4) Timers: ~setTimeout()~ or ~setInterval~
+  5) Pending: ~system events~, like when net.socket TCP throws a ECONNREFUSED
+- Microtask Queues, take priority over callbacks on the phase queue
+  1) ~process.nextTick()~
+  2) ~promises~ that reject or resolve
+- async/await, they have to wait for the underlying code returns
+  1) sugar for code that uses nested callbacks
+  2) or as a chain of .then() calls
+**** Don't starve the event loop
+  break up cpu intensive ops across multiple stacks
+  example: break into batches and use setImmediate() between each
+  example: child process
+- never break up process.nextTick()
+  #+begin_src javascript
+  // micro-task queue, will stuck the program
+  const nt_recursive = () => process.nextTick(nt_recursive);
+  nt_recursive();
+  // next check phase, will not get stuck
+  const si_recursive = () => setImmediate(si_recursive);
+  si_recursive();
+  #+end_src
+**** Don't introduce Zalgo
+- Run asynchronously, methods that take a callback
+  #+begin_src javascript
+  // instead of
+  return callback(new TypeError('count > 0'))
+  // run it async, on a new stack
+  return process.nextTick(() =>
+    callback(new TypeError('count > 0')));
+  // using setImmediate() is also ok
+  #+end_src
+*** Sample Application
+- npm init -y
+  npm install fastify@3.2 node-fetch@2.6j
+- #!/usr/bin/env node
+**** recipe-api, producer, internal api
+- 1 path
+  /recipes/:id
+- only if id == 42
+- returns a json
+**** web-api, consumer, public api
+- await on the fetch and .json(), to resolve promises
+- returns 2 fields, an unique and other with the date from the private api
+** TODO 2 Protocols
+- Synchronous communication
+- AMAZON: allow APIs over the network, allows teams to access data and innovate.
+*** HTTP
+- HTTP Methods
+  - map the the basic CRUD ops (concepts that can be applied to all stateful data stores)
+  - are idempotent
+- HTTP/2
+  - does NOT provide a "Reason Phrase" for each Status Code
+  - compress the headers too (HPACK)
+- HTTP Compression
+  - gzip, brotli(br)
+  - Node.js is NOT the most efficient tool to perform it
+  - Book has a an example of server-gzip.js
+    raw = fs.createReadStream()
+    raw.pipe(zlib.createGzip()).pipe(response)
+- HTTP/TLS
+  - Hashicorp Vault
+    https://www.vaultproject.io/
+    https://github.com/hashicorp/vault
+    handles the creation/revoke of certs
+  - CPU intensive, should be done by an external process
+  - fastify, supports a https parameter on load to pass the cert and key file
+  - node-fetch
+    1) accept blindly certs
+       rejectUnauthorized: false
+    2) add cert to ca
+       new https.Agent({
+         ca: fs.readFileSync()
+       })
+  - a *chain of trust* is formed by certificates when
+    CA X3 signs Let's Encrypt cert which signs your cert
+  - you can replicate this by generating your own CA
+    to then avoid to having to distribute each public cert
+- JSON over HTTP
+  - Certain concepts are loose, like page pagination
+  - Standards
+    - OpenAPI https://swagger.io/specification/
+    - JSON Schema https://json-schema.org/specification.html
+    - JSON:API https://jsonapi.org/format/
+- POJO (Plain Ol' Javascript Object)
+  - aka JSON.stringify(obj)
+  - is better to marshall it manually (class instance)
+    define a class for it with his constructor
+    and have a .toJSON() method
+  - manual marshalling avoids leaking fields (returning or printing fields that you don't want)
+*** TODO GraphQL
+ - By Facebook
+ - useful for *facade services*, services that sit in front of multiplel other services and data sources
+ - good at returning the smallest ammount of info needed
+ - Types: Int, Float, String, Boolean, ID (is a string)
+ - Schema (.gql)
+   - (!) means that the server must provide the field
+   - Describes Interactions & typed objects
+   - Example
+     #+begin_src java
+     type Query {
+       recipe(id: ID): Recipe
+       pid: Int
+     }
+     type Recipe {
+       id: ID!
+       name: String!
+       steps: String
+       ingredients: [Ingredient]!
+     }
+     type Ingredient {
+       id: ID!
+       name: String!
+       quantity: String
+     }
+     #+end_src
+ - Queries/Reponse
+   - { pid }
+     { "data": { "pid": 9372 } }
+   - { recipe(id: 42) {
+         name
+         ingredients {
+           name
+           quantity
+         }
+       }
+     }
+ - GraphiQL - web repl
+ - npm
+   graphql
+   fastify-gql (wrapper around graphql)
+ - on node, you will need to register the schema, the resolved (queries)
+** 3 Scaling
+- npm install -g autocannon@6
+  autocannon -c 2 http://127.0.0.1:4000/10000
+- simulate a single CPU
+  $ taskset -cp 0 <PID>
+*** Cluster, same server replication
+- adds routing handling to a simple process.child_process() fork
+- anti-pattern
+- cluster.fork() != fork() are technically unrelated
+  cluster.fork() creates a worker
+- cluster.setupMaster({exec: "some.js"})
+- useful when the application is bound by CPU, not by I/O
+- does NOT work well with gRPC over HTTP/2 due those having a concept of session,
+  one worker will do most of the job
+*** HAProxy, different machines replication
+- Layer 4 TCP
+  Layer 7 HTTP
+- Works with both layers
+- Event driven, single threaded
+- Alternative:
+  - Nginx: can also map requests to files on disk, can also cache responses
+  - ELB: on AWS, Elastic Load Balancing and API Gateway
+  - Traefik
+  - Kong
+- Rate Limiting and Back Pressure
+  - When a request is received, those callbacks will keep getting scheduled by the event loop.
+    If the callback is doing a lot of blocking, having too many will block the process.
+  - Memory Consumption: Every single queued callback comes with a stack
+  - http.Server maxConnection
+    http.Server _connections
+  - Haproxy:
+    defaults maxconn N (max number of connections, sum between frontend and backend)
+    httpclose (to close connections with the backend)
+    maxconn N
+  - ~Back Pressure~, slow a sender down to avoid being overwhelmed
+*** SLA and Load Testing
+- SLA - Service Level Agreements (aka contractual service obligations)
+  SLO -   "       "   Objective
+  SLI -   "       "   Indicators
+- SLO is the "numerator" and SLI is the denominator
+- Example:
+  SLO api should respond in 100ms
+  SLI api does respond in 83ms
+- Alternatives
+  - Apache Bench (ab)
+  - wrk
+  - Siege
+  - wrk2 (autocannon is based on it)
+- Talk: 2015 - "How NOT to Measure Latency" by Gil Tene
+  https://www.youtube.com/watch?v=lJ8ydIuPFeU
+- console.log() affect benchmark results, at least when doing
+*** Benchmarking
+- First figure out a max value. Setup a very simple node server on the prod hardware and Benchmark.
+- 25k r/s is the max on the book hardkware
+- latency/throughput
+  avg is not a good value to look at
+  95% or 99% percentile are better values to look at
+- TLS termination works faster/best with HAProxy if size of page is big
+*** SLO
+- SLO for latency can be tricky.
+  - It might depend on some upstream service/SLO.
+  - Should account peak traffic days
+  - Account for "noisy neightboors" on the machine
+** TODO 4 Observability
+- ELK, Zipkin, Graphite/StatsD/Grafana, Cabot
