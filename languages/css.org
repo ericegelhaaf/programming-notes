@@ -1,0 +1,751 @@
+- https://developer.mozilla.org/en-US/docs/Web/CSS
+- https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/css/css-quiz.md
+- aria-live https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-live
+- TTI - Time to Interactive https://web.dev/interactive/
+- <link CSS async https://stackoverflow.com/questions/32759272/how-to-load-css-asynchronously/46750893#46750893
+- <link rel=preconnect https://web.dev/preconnect-and-dns-prefetch/
+- CSS Grid https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/CSS_Grid_Layout_and_Accessibility
+- CSS Grid examples and patterns https://gridbyexample.com/
+- Logical Properties https://www.youtube.com/watch?v=cnwOfaE5GEk
+* Book: 2021 - CSS Master - Tiffany B. Brown
+** 5 Layouts
+ - in CSS everything is a box,
+   browsers generate 1 or more box for element
+   depending on their *display type*
+   - inner: flex, inline-flex, grid, inline-grid, table
+   - outer: block, inline
+ - block level boxes expand to fill the available width of their containing element
+   - display: block, list-item, table, flex, grid, flow-root
+   - position: absolute, fixed
+   - contain: layout, content, strict
+ - inline level boxes
+   - display: inlin, inline-block, inline-table, ruby
+   - a, span, canvas
+ - Logical Properies
+   https://drafts.csswg.org/css-logical/
+   - They are flow-relative, affected by *direction* and *writing-mode*
+   - ??
+ - Box model
+   - Margins collapse, unlike in grid (powerman 5k)
+   - width:
+     - *box-sizing: content-box* is defined for the content
+     - *box-sizing: border-box* IE 5.5 define it for content+padding+border
+* Book: 2018 - CSS In Depth - Keith J. Grant - Manning
+  code: https://github.com/CSSInDepth/css-in-depth
+  http://howtocenterincss.com/
+  OOCSS http://www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code
+  Recommended to autoprefix https://github.com/postcss/autoprefixer
+  List of flexbox bugs https://github.com/philipwalton/flexbugs
+  Use CSS Grid Layout for fullpage layout instead of flexbox https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/
+  CSS Grid examples and patterns https://gridbyexample.com/
+** Box model and border-box sizing
+- Width and Height
+  - By default:
+    Element size = width/height + padding + border + margin
+  - box-sizing: border-box
+    Element-size = width/height + margin
+** Part 1 - Reviewing the fundamentals
+- Topics: Cascade, relative units, box model
+** 01 Cascade, specificity, and inheritance
+*** Specificity
+ - on CSS, is not always easy to distill the problem down to a single question
+ - Fundamentally, CSS is about declaring rules.
+ - An element might have 3 different conflicting properties
+   Example: same font-family
+ - Cascaded Value: A value for a particular property applied to an element as a result of the cascade.
+ - TIP: Is better to keep the specifity low.
+   TIP: Avoid ID. Too specific. Difficult to override.
+   TIP: Do NOT use !important
+**** =Cascade=, is the name for a set rules, that determines how rules conflict is solved.
+   1) Stylesheet ~origin~ (NOTE: transitions and animations introduce more origins)
+      - Author Important:
+      - Author: site styles
+      - User Agent: browser defaults
+   2) Selector ~specificity~
+      - Inline: style attribute, scoped
+      - Selector:
+        - Rules
+          1) If a selector has more IDs, it wins
+          2) If equal, the selector with the most classes   wins
+          3) If equal, the selector with the most tag names wins
+        - Example: "#main-nav a" has higher specifity than just ".featured"
+        - Pseudo Class and attribute selectors have the same specifity as class selectors
+        - Notation INLINE,ID,CLASS,TAG
+          Example: 0,2,0,0 for "#page-header #page-title"
+   3) Source ~order~: if all else equal, the declaration that appears later in SS takes precedence
+      - Example:
+        "a.featured" and ".nav a"
+         0,1,1       and  0,1,1
+         Have the same specificity, so order will matter now.
+      - Example: (LoVe/HAte) Links, should go in a certain order
+        a:link
+        a:visited
+        a:hover
+        a:active
+**** Definitions
+   |-----------------------+-----------------------|
+   | Properties on CSS     | color:                |
+   | Attributes on HTML    | href=                 |
+   | Declaration Block     | {}                    |
+   | Selector              | body                  |
+   | Ruleset/Rule          | body{}                |
+   | at-rules              | @import               |
+   | important             | color: red !important |
+   |-----------------------+-----------------------|
+   | pseudo-class selector | :hover                |
+   | attribute selector    | [type="input"]        |
+   | universal selector    | *                     |
+   | combinators           | >+~                   |
+   |-----------------------+-----------------------|
+*** Inheritance
+ - NOT all properties are inherited. By default only certain ones are.
+   - color, letter-spacing, line-height, white-space, word-spacing
+   - font-*
+   - text-*
+   - list-style-*
+   - border-collapse, border-spacing (border of tables, not commonly used)
+ - ~inherit~: to force inheritance of a value over cascading
+ - ~initial~: resets to its default value. Even before the user agent style. Sometimes it might be "auto".
+*** ShortHand Properties
+ - TIP: avoid font, except for <body>, might be
+ - Like *font* or *background* or *border* or *border-width*
+ - Ommiting a value, still sets it to their *inital* value.
+ - Order can be infered.
+ - margin/padding: ~TR ou BL e~
+   - 3 values, LR will use the same one
+   - 2 values, TB will use the same one
+   - 1 value , all will use the same one
+ - background-position, box-shado, text-shadow:
+   take 2 values, RLTB, represent a cartesian grid
+** 02 Working with relative units (em, rems, viewport-relative, $)
+ - Absolute: always means the same thing.
+   - 1 in = 25.4 mm = 2.54 cm = 6 pc = 72 pt = 96 px
+     16 px = 12 pt
+ - Relative: change based on external factors. Evaluated by the browser to an absolute value (computed value).
+   1) ~em~: relative to the the font size.
+      - work well: padding, height, width, border-radius
+      - work ok: font-size, computed value is derived from the *inherited* font-size
+      - work ok: both above, but font-size is computed first
+      - work ??: font-size, on with multiple nested elements. Font keeps shrinking. A way to avoid would be have a selector for "ul" and "ul ul".
+   2) ~rem~, relative to the :root element. short for "root em".
+      work for font-size
+   3) Viewport relative: great to make something fill the screen https://caniuse.com/viewport-units
+      ~vh~   1/100 the viewport height
+      ~vw~   1/100 the viewport width
+      ~vmin~ 1/100 the min(height,width), useful to position regardless of orientation
+      ~vmax~ 1/100 the max(height,width)
+*** The Power of relative values ¿
+ - Late-binding:
+   The content and its styles are't pulled together until after the authoring of both is complete.
+ - Pixe-perfect design:
+   using a thighly defined container, often a centered column around 800px wide.
+ - Responsive:
+   styles that respond different based on the size of the browser window
+ - Relative to Window or Font size
+ - TIP: for most browsers the default font-size 16px, aka the value *medium*
+ - TIP: always use relative units for font-size for accesability
+ - TIP:
+   rem for font-size
+   px  for borders
+   ems for most other measures (paddings, margins, border radius)
+   %   for contaienr widths (when necessary)
+*** Stop Thinking in pixels (@media)
+ - Antipattern: set root to 0.625 em (10px)
+   - PRO: convenient when given a measure in px, you can use rem easily
+   - CON: many overrides to make it readeable
+ - Media Query: *@media* is a rule that will ONLY be applied to certain screen sizes or media types.
+   :root {}
+   @media ( min-width: 800px  ) { :root { font-size: 0.8em; } }
+   @media ( min-width: 1200px ) { :root { font-size: 1.0em;} }
+ - By using *rem* for a container and *em* for the childs,
+   you can create instances of something resizable by their container.
+*** Viewport-relateive units (calc())
+ - viewport: the framed are in the browser window, where the page is visible.
+ - Can't be directly assigned to *font-size* (the linear change makes it too big and too small on the extremes)
+   #+begin_src css
+   :root {
+     font-size: calc(0.5em + 1vw); /* 0.5em is the min */
+   }
+   #+end_src
+*** Unitless numbers and "line-height"
+ - Properties that accept unitless values
+   line-height, z-index, font-weight (700=bold 400=normal)
+   - Those that are "lengths" can cause issue if calculated with a unit and inherited
+ - Length: a value that denotes a distance measurement
+   1) Absolute: with a unit
+   2) Relative: unitless
+ - Any with 0, except for angular values or time-based
+*** Custom properties (aka CSS variables) - (--) and var() and getPropertyValue() and setProperty(P,V)
+ - 2015 https://caniuse.com/css-variables
+ - LESS and SASS (Syntactically awesome stylesheets) are a CSS preprocessor
+ - var(CUSTOMPROP,FALLBACK), on error returns the initial value for the prop
+ - Name Must begin with "--"
+   Declares a variable "--main-font"
+   #+begin_src css
+   :root {
+     --main-font: Helvetica, Arial, sans-serif;
+   }
+   p {
+     font-family: var(--main-font);
+   }
+   #+end_src
+ - They cascade and inherit. The re-declaration will be local.
+ - With JS getPropertyValue(P) and setProperty(P,V)
+   #+begin_src javascript
+   <script type="text/javascript">
+   // GET
+    var rootElement = document.documentElement;
+    var styles = getComputedStyle(rootElement);
+    var mainColor = styles.getPropertyValue('--main-bg');
+    console.log(String(mainColor).trim());
+    // SET
+    var rootElement = document.documentElement;
+    rootElement.style.setProperty('--main-bg', '#cdf');
+   </script>
+   #+end_src
+ - Provide fallback for old browsers
+   #+begin_src css
+   color: black;
+   color: var('--main-color')
+   #+end_src
+** 03 Mastering the box model
+   http://howtocenterincss.com/
+ - basic topics: document flow, box model
+ - problems: vertical centering, equal-heigh columns
+ - float-based layout - calc()
+*** Difficulties with element *width*
+**** box-sizing: content-box - Default - calc()
+ - the width and height are of its content,
+   padding, border and margin are then added.
+ - float: left
+   width: 70%
+ - float: left
+   width: calc(30% - 3em)
+   padding: 1.5em
+**** box-sizing: border-box
+ - makes the dimensions (width,height) account for = content + padding + border
+ - float: left
+   width: 70%
+   box-sizing: border-box
+ - float: left
+   width: 30%
+   padding: 1.5em
+   box-sizing: border-box
+**** Universal Selectors
+ - universal selectors:
+   #+begin_src css
+   *, ::before, ::after {
+     box-sizing: border-box;
+   }
+   #+end_src
+ - universal selectors, more compatible with external styles
+   #+begin_src css
+   :root {
+     box-sizing: border-box;
+   }
+   *, ::before, ::after {
+     box-sizing: inherit;
+   }
+   #+end_src
+
+**** Adding gap (gutter) between columns
+ 1) Adding padding to one, works only when there are no bg colors OR
+ 2) Add a margin to one, adn adjust widths
+    - By %, inconsistent with resize of viewport
+      - width: 29%
+        margin-left: 1%
+    - By em, consistent, code is more explicit
+      - width: calc(30% - 1.5em);
+        margin-left: 1.5em;
+*** Difficulties with element *height*
+ - TIP: It's better to avoid setting heights on elements.
+ - ~Normal document flow~, refers tot the default layout behavior of elements.
+   Is designed tow work with a constrined width and an unlimted height.
+**** Overflow
+   Happens only when you set an element's height.
+   Not accounted by NDF.
+   Properties: overflow, overflow-x, overflow-y
+   | visible (default) | all content is visible, even on overflow            |
+   | hidden            | overflow content is clipped                         |
+   | scroll            | adds scrollbars to the container (enabled/disabled) |
+   | auto              | adds scrollbars, only if overflow                   |
+**** Same Height Columns
+ 1) Height by %, if container height is:
+    - Fixed: it works
+    - Relative: creates a circular definition. Because a container height also depends of their childrens content.
+       Which the browser ignores.
+ 2) CSS Table Layout
+    - Needs and extra <div> wrapper
+    - CONTAINER: display: table; width: 100%
+    - COLUMNS  : display: table-cell
+    - *margin* on the column will no longer work
+      - you can use *border-spacing: SH SV*, on he container,
+        and add a <div> wrapper to the container with negative *margin-left* and *margin-right*
+ 3) Flexbox
+    - Does NOT need an extra <div> wrapper
+    - Children will have the same height, automatically
+    - CONTAINER:
+      display: flex
+    - min-height, max-height (on em)
+**** Vertically centering content
+ 1) vertical-align: middle
+    only affects inline and *display: table-cell* elements
+    Example: to align an inline image with the neightboring text
+ 2) Padding: Give a container equal top/bottom. Works with any *display* value.
+ 3) set *line-height* equal to desired container height.
+    On multiple lines might eneed *inline-block*
+*** Negative margins
+ - TIP: might leave some elements unclickable as they move behind others
+ - Example: building column layouts
+ - ~Margins~ can have negative values. Unlike *border* and *padding*
+   - Left, Top: pull the element towards it.
+   - Right, Bottom: pulls adjacent elements towards it.
+ - Can also extend any direction outside of their container.
+*** Collapsed margins (top and bottom ONLY)
+ - Collapsing:
+   When top and/or bottom magins are adjoining, they overlap.
+   Any adjacent top and bottom margins will collapse together. Siblings or not.
+   collapsed_margin_size = max(calc(margin1), calc(margin2))
+ - <p> by default have 1em top and bottom margin.
+   When you stack 2 <p>, they don't add up. They colapse in one 1em margin.
+ - Avoiding:
+   | overflow: auto             | container |                    |
+   | padding: 0.0001em          | element   |                    |
+   | "floated"/inline/fixed pos | container |                    |
+   | display: flex              | container |                    |
+   | display: table-cell        | element   | don't have margins |
+   | display: table-row         | element   | don't have margins |
+*** Spacing elements within a container
+    TIP: "margins are like applying glue to one side of an object before you've determined whether you actually want to stick it to something."
+ - Custom margin
+  #+begin_src css
+   .button-link + .button-link {
+     margin-top: 1.5em;
+   }
+   .button-link {
+     display: block;
+   }
+   #+end_src
+ - Lobotomized owl selector: all ellements on the page that aren't the first child of their parent.
+   Created by Heydon Pickering
+   added body to not apply it to body too
+   #+begin_src css
+   body * + * {
+     margin-top: 1.5em;
+   }
+   .sidebar {
+     margin-top: 0; /* reset an unwanted margin */
+   }
+   #+end_src
+** Part 2 - Mastering layout
+** 04 Making sense of floats
+ - NOT originally intended to construct page layouts.
+ - A *float* pulls an element (often an image) at one side of its container,
+   allowing the doc flow to wrap around it.
+ - TIP: Two floats on the same direction, stack alongside
+*** Double Container Pattern by Brad Westfall
+ - To center the contents of a page.
+ - Steps
+   1) Placing the content inside 2 nested containers
+   2) Set the margins of the inner container to position it within the outer one
+ - Example, using <body> as 1 of the containers, already does 100% of width
+ - Code
+   #+begin_src css
+   .container {
+     max-width: 1080px;
+     margin: 0 auto; /* AUTO right and left, will grow centering it */
+   }
+   #+end_src
+*** Container Collapsing and clearfix
+ - PROBLEM: float'ed elements do NOT add height to the parents.
+ - SOLUTIONS:
+   1) Add a <div style="clear: both"> at the end of the container
+   2) Adding an pseudo-element (with css) to the DOM at the end of the container.
+      #+begin_src css
+      .clearfix::after {
+        display: block;
+        content: " "; /* FIX: old Opera bug */
+        clear: both;
+      }
+      #+end_src
+   3) Like 2) but contains the margins, and prevents the margin to collapsing outside.
+      Creates 2 pseudo-elements
+      #+begin_src css
+      .clearfix::after, .clearfix::before {
+        display: table;
+        content: " "; /* FIX: old Opera bug */
+      }
+      .clearfix::after {
+        clear: both;
+      }
+      #+end_src
+*** Unexpected "float catching"
+ - PROBLEM: Layout of boxes are NOT in even rows.
+   DUE: Uneven sized boxes.
+   DUE: Browsers place boxes as high as possible.
+ - SOLUTION:
+   The 3rd float needs to *clear* the floats above it. (aka the first element of each row needs to clear the float above it)
+   - :nth-child()
+     #+begin_src css
+     .media:nth-child(odd) {
+       clear: left;
+     }
+     #+end_src
+*** Media Objects and block formatting contexts
+ - "media objects" pattern coined by Nicole Sullivan
+   Is an image on the left, and descriptive content on the right
+ - SOLUTION (part 1):
+   1) We need to float the image to the left
+   2) We need to remove margin-top, of own and user agent
+      #+begin_src css
+      .media-image {
+        float: left;
+      }
+      .media-body {
+        margin-top: 0;
+      }
+      .media-body h4 {
+        margin-top: 0;
+      }
+      #+end_src
+   3) We need a *block formatting context* (BFC) for the media body.
+      - What it does
+        + It contains the T B margins of all elements within. No margin collapse outside.
+        + It contains all floated elements within
+        + It does not overlap with floated elements outside
+      - If you clear a BFC it will clear inside it
+      - How to make a BFC, either
+        + float: left|right
+        + overflow: hidden|auto|scroll
+        + display: inline-block|table-cell|table-caption|flex|inline-flex|grid|inline-grid
+        + position: absolute|fixed
+*** Grid Systems
+ - CSS frameworks:
+   - bootstrap (live Jun 2022) https://getbootstrap.com/
+   - foundation (Dec 2021) https://get.foundation/
+   - pure (apr 2022) https://purecss.io/
+ - Facilitate code reuse
+ - Are a series of class names, that you can add to your markup
+   to structure portions of the page into cols and rows.
+ - Building your own
+   Remove .media float/width/margin and .media:nth-child(odd)
+   Add paddings on the column to replace the margin
+   Remove the own margin
+   Wide the row, by pulling with negative margins
+   #+begin_src css
+   [class*="column-"] { /* "attribute selector" */
+     float: left;
+     margin-top: 0;
+     padding: 0 0.75em;
+   }
+   .row {
+     margin-left: -0.75em;
+     margin-right: -0.75em;
+   }
+   .row::after {
+     content: " ";
+     display: block;
+     clear: both;
+   }
+   .column-1 { width: 8.3333%;}
+   .column-2 { width: 16.6667%;}
+   /* ... */
+   #+end_src
+** 05 Flexbox (Flexible Box Layout)
+ - Concepts: Flex Containers, Flex Items, Main Axis, Cross Axis, Size/Alignment of objects in flexbox
+ - Introduces 12 new properties to CSS (included some shorthands)
+*** Flexbox Principles
+ - ~Flex Container~ = *display: flex*
+   ~Flex Items~ (are he childrens)
+ - TIP: there is also *display: inline-flex*
+   - Won't grow auto to 100% width
+   - Like inline-block, it flows inline, with other inline elements
+ - ~Main Axis~  (x) items are placed along it (from main-start to main-end)
+ - ~Cross Axis~ (y) from top to bottom (cross-start to cross-end)
+ - Older browsers would use, so you might want to use both. A browser ignores declaration it doesn't understand.
+   display: -ms-flexbox;
+   display: -webkit-flex;
+   display: flex;
+ - Recommended to autoprefix https://github.com/postcss/autoprefixer
+**** Example
+ - <ul> as the flex container
+   <li> as the flex items
+ - ul/li/a
+   display block  would make the padding+content  add to the parent
+   display inline would make only the line height add to the parent
+ - margin-left: auto
+   will fill the available space (push it to the right)
+*** Flex item sizes
+ - Instead margin for space between items
+ - ~flex~ property controls the size of the flex items along the main axis (width)
+   - Example: Two columns, each column 2/3 and 1/3
+     - flex: 2
+     - flex: 1
+   - Is a shorthand for: flex-grow|shrink(1)|basis(0%)
+     - flex-grow:   (=0) it will NOT   grow beyond the basis,     (>0) it will grow beyond, at N speed
+     - flex-shrink: (=0) it will NOT shrink to prevent overflows, (>0) it will shrink, at N speed
+     - flex-basis: (px,ems,%,auto) defines the *starting point* for the size of an element, initial "main size"
+*** Flex direction
+ - flex-direction: row(default) | column | row-reverse | column-reverse
+   On container. Shift the direction of the axes
+ - PROBLEM: On our example, the <sidebar> elements will NOT grow vertically if the <main> did
+ - SOLUTION: nested flexboxes for he sidebar, in the column direction
+   #+begin_src css
+   .column-sidebar {
+     display: flex;
+     flex: 1; /* when it acts as an ITEM  */
+     flex-direction: column;
+   }
+   .column-sidebar > .tile {
+     flex: 1;
+   }
+   #+end_src
+*** Alignment spacing and other details
+**** Container props
+| PROP            | DEFAULT    | OTHER         | DESCRIPTION                            |
+|-----------------+------------+---------------+----------------------------------------|
+| flex-wrap       | nowrap     | wrap          | how items wrap                         |
+|                 |            | wrap-reverse  |                                        |
+|-----------------+------------+---------------+----------------------------------------|
+| flex-flow       |            |               | shorthand for -direction and -wrap     |
+|-----------------+------------+---------------+----------------------------------------|
+| justify-content | flex-start | flex-end      | items along main axis                  |
+|                 |            | center        |                                        |
+|                 |            | space-between |                                        |
+|                 |            | space-around  |                                        |
+|-----------------+------------+---------------+----------------------------------------|
+| align-items     | stretch    | flex-start    | items along cross axis                 |
+|                 |            | flex-end      |                                        |
+|                 |            | center        |                                        |
+|                 |            | baseline      |                                        |
+|-----------------+------------+---------------+----------------------------------------|
+| align-content   |            | flex-start    | if -wrap, how spacing along cross axis |
+|                 |            | flex-end      |                                        |
+|                 |            | center        |                                        |
+|                 |            | stretch       |                                        |
+|                 |            | space-between |                                        |
+|                 |            | space-around  |                                        |
+**** Item props
+- flex-grow flex-shrink flex-basis flex
+| align-self | *auto*     | aligned on the cross axis |
+|            | center     | (override of align-items) |
+|            | flex-start |                           |
+|            | flex-end   |                           |
+|            | stretch    |                           |
+|            | baseline   |                           |
+|------------+------------+---------------------------|
+| order      | <int>      | moves to position         |
+**** Example:
+ - TIP: using <span> instead of <div> might make the site more accesible (? in failure of css load
+ - It uses both *center* on both axes (justify-content, align-items)
+ - Overrides center on one
+*** A couple of things to be aware of
+ - TIP: trust the document flow and ONLY add flexbox where you know you'll need it
+ - List of flexbox bugs https://github.com/philipwalton/flexbugs
+ - Use CSS Grid Layout for fullpage layout instead of flexbox https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/
+   flex-direction: row
+   Only with multiple columns in a row. Not on the inverse.
+** 06 Grid Layout
+*** Web Layout is Here
+ - Grid Container (display: grid)
+   Grid Items
+ - fr: fraction unit (like flex-grow)
+ - Width
+  |           100% | display: grid        |
+  | as much needed | display: inline-grid |
+ - Define the rows/cols of equal size
+   #+begin_src css
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      grid-gap: 0.5em; /* gutter */
+    }
+    #+end_src
+*** Anatomy of a grid
+ - Names
+  | Grid...   |                               |
+  |-----------+-------------------------------|
+  | Container |                               |
+  | Item      |                               |
+  | Line      | grid-gap lies atop the lines  |
+  | Track     | space between lines           |
+  | Cell      | overlap of tracks             |
+  | Area      | rectangular area made of cell |
+  |-----------+-------------------------------|
+ - On Container, Equivalent, auto will grow to the size of his contents
+   ~grid-template-rows~: repeat(4, auto);
+   ~grid-template-rows~: auto auto auto auto
+ - On Item, These specify between which *lines* your container *area* will be
+   | ~grid-column~ | ~grid-column-start~ | ~grid-column-end~ |
+   | ~grid-row~    | ~grid-row-start~    | ~grid-row-end~    |
+ - We can have 2 (siblings?) sharing the same -row and -column
+ - *span* can be used to autoplace a -row or -column (start or end)
+ - Differences
+   | Flexbox | 1D | content out | ideal for rows, or wrap |
+   | Grid    | 2D | layout in   | align multiple rows     |
+   - "content out", sizes not explicit, content determines it
+   - "layout in", you define the layout, and the content might only affect the size of a track
+**** Example
+ #+begin_src css
+   .container {
+     display: grid;
+     grid-template-columns: 2fr 1fr;
+     grid-template-rows: repeat(4, auto);
+     grid-gap: 1.5em;
+     max-width: 1080px;
+     margin: 0 auto;
+   }
+   header,
+   nav {
+     grid-column: 1 / 3;
+     grid-row: span 1;
+   }
+   .main {
+     grid-column: 1 / 2;
+     grid-row: 3 / 5;
+   }
+   .sidebar-top {
+     grid-column: 2 / 3;
+     grid-row: 3 / 4;
+   }
+   .sidebar-bottom {
+     grid-column: 2 / 3;
+     grid-row: 4 / 5;
+   }
+ #+end_src
+*** Alternate syntaxes (Named)
+**** Naming grid lines []
+ - Put between braces, on container
+   #+begin_src css
+   grid-template-columns: [start] 2fr [center] 1fr [end];
+   grid-template-columns: [left-start] 2fr
+                          [left-end right-start] 1fr
+                          [right-end];
+   grid-template-rows: repeat(4, [row] auto);
+   grid-template-columns: repeat(3, [col] 1fr 1fr)
+   #+end_src
+ - Used on items
+   #+begin_src css
+   grid-column: start / center;
+   grid-column: left /* left-start / left-end */
+   grid-row: row 3 / span 2;
+   grid-column: col 2 / span 2;
+   #+end_src
+**** Naming grid areas =grid-template-areas=
+ - NOTE: each are has to be rectangular, no L or U shapes
+ - NOTE: you can leave an are unnamed with "."
+ - Container
+   #+begin_src css
+   grid-template-areas: "title title"
+                        "nav   nav"
+                        "main  aside1"
+                        "main  aside2";
+   grid-template-columns: 2fr 1fr;
+   grid-template-rows: repeat(4, auto);
+   #+end_src
+ - Item
+   #+begin_src css
+   grid-area: title;
+   #+end_src
+*** Explicit and implicit grid
+**** Implicit (grid-auto-rows/auto-fill/auto-fit)
+    https://gridbyexample.com/examples/example37/
+ - grid items placed outside the explicit tracks can be added
+   implicit tracks will be automatically generated
+ - Example: if we define
+   ~grid-column-temlate~ but no -rows
+   rows will be implicit
+ - g-c-t: repeat(auto-fill, minmax(200px, 1fr));
+   - min column width to 200px, and autofills the grid
+   - ~auto-fill:~ will place as many tracks as it can fit, all of the same size (1fr)
+   - ~auto-fit:~ stretch to fill availbale space
+ - grid-auto-rows: 1fr
+   - implicit horizontal grid track size of 1fr
+ - Container example
+   #+begin_src css
+   .portfolio {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+     grid-auto-rows 1fr;
+     grid-gap: 1em;
+   }
+   .portfolio > figure {
+     margin: 0;
+   }
+   .portfolio img {
+     max-width: 100%;
+   }
+   .portfolio figcaption {
+     padding: 0.3em 0.8em;
+     background-color: rgba(0,0,0,0.5);
+     color: #fff;
+     text-align: right;
+   }
+   #+end_src
+**** Adding variety (grid-auto-flow)
+ - some have 2x size, generate empty spaces
+ - ~grid-auto-flow~ (container)
+   - defaults to row
+   - column
+   - dense (same as "row dense")
+ - Code
+   #+begin_src css
+   .portfolio .featured {
+     grid-row: span 2;
+     grid-column: span 2;
+   }
+   #+end_src
+**** Adjusting *grid items* to fill the *grid track* (object-fit)
+ - grid items might stretch, but chidren won't
+ - add flex inside
+ - <img> flex-grow with "fill"
+ - object-fit
+  | fill    | expand to fill, deform                     |
+  | cover   | expand to fill, cutting borders            |
+  | contain | expand to fill, whole, leaves blank border |
+ - Code
+   #+begin_src css
+   .portfolio > figure {
+     display: flex;
+     flex-direction: column;
+     margin: 0;
+   }
+   .portfolio img {
+     flex: 1;
+     object-fit: cover;
+     max-width: 100%
+   }
+   #+end_src
+*** Feature Queries (@supports)
+ - IE does NOT support @supports (LOL)
+ - Defaults/Fallback are outside the feature query, will always apply.
+ - Can use not/and/or with @supports
+ - Example
+   #+begin_src css
+   /* DEFAULT/FALLBACK */
+   .portfolio > figure {}
+   .portfolio img { }
+
+   @supports (display: grid) or (display: -ms-grid) {
+     .portfolio { }
+     .portfolio img { }
+   }
+   #+end_src
+*** Alignment (align- justify-)
+ - Placement
+   - Horizontal  justify-
+   - Vertical  align-
+ - Properties
+   | justify-items   | grid container | itemS within grid areas      |
+   | align-items     |                |                              |
+   |-----------------+----------------+------------------------------|
+   | justify-self    | grid item      | item within grid area        |
+   | align-self      |                |                              |
+   |-----------------+----------------+------------------------------|
+   | justify-content | grid container | grid tracks within container |
+   | align-content   |                |                              |
+ - -content, is useful when the grid does NOT fill the container fully
+ - CSS grid layout example and patters https://gridbyexample.com/
+** Part 3 - CSS at scale
+** Part 4 - Advanced topics

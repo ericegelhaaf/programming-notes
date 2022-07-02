@@ -1,0 +1,21 @@
+- https://developer.mozilla.org/en-US/docs/Web/API
+- https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+  https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API/Timing_element_visibility
+* Book: 2018 - Eloquent Javascript - Marjin Haverbeke
+** 15 Handling Events
+ - Pooling: periodically checking a queue for new events
+ - Handlers: actively notify us when a event happens
+ - a node can only have 1 onclick= attribute, but many with
+   - .addEventListener("click", fn)
+   - .removeEventListener("click", fn)
+ - the an "event" object is passed to fn
+   | event.type               | mousedown,mouseup ?   |
+   | event.button             | 1,2,3 for mouse click |
+   | event.target             | originated node       |
+   | event.target.nodeName    | BUTTON                |
+   | event.target.textContent |                       |
+ - events are *propagated outward*, a parent handler gets notified of events of their children
+   - event.stopPropagation()
+ - Default Actions
+   - User agent comes with their own defined event Handlers.
+     Example: clicking a link, pressing down arrow, etc.

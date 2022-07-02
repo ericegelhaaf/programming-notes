@@ -1,0 +1,114 @@
+- https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/html/html-quiz.md
+- https://developer.mozilla.org/en-US/docs/Web/HTML
+
+* W3 Schools
+- HSL colors https://www.w3schools.com/colors/colors_hsl.asp
+ | Hue        | (°) on color wheel (0-360) 0=red 120=green 240=blue |
+ | Saturation | 0% gray - 100% full color                           |
+ | Lightness  | 0% black - 100% white                               |
+- attribute, accesskey= adds a keyboard shortcut
+- href=mailto: can have a ?subject=
+- href=tel: to make phone calls?
+** Tags  https://www.w3schools.com/tags/tag_article.asp
+*** Tags
+ | head>base | default target url for all links <a>/<img>/?  |
+ | head>meta | metadata, name= content= charset= http-equiv= |
+ | embed     | use img/iframe/video/audio instead            |
+*** div
+**** Landmarks https://en.wikipedia.org/wiki/HTML_landmarks
+ | main            | unique, no parent of article/aside/footer/header/nav                  |
+ | aside           | aka sidebar (can be removed?)                                         |
+ |-----------------+-----------------------------------------------------------------------|
+ | header          | child of body, article, section                                       |
+ | footer          | child of body, article, section                                       |
+ |-----------------+-----------------------------------------------------------------------|
+ | section         |                                                                       |
+ | article         | selfcontained/independent (forum/blog/news post)                      |
+ | nav             | <a>'s container, not all, just the ones in a major navigation section |
+**** Other
+ |-----------------+-----------------------------------------------------------------------|
+ | span            | inline, to markup text                                                |
+ | dialog          | open= middle of screen                                                |
+ | address         | block/italic (contact info)                                           |
+ | data            | to add metadata in ul/li attributes                                   |
+ | details>summary | open= toggable                                                        |
+*** Font
+  | abbr         | title=                                             |
+  | address      | block/italic (contact info)                        |
+  | b            | bold (last resort after hN/em/strong/mark)         |
+  | cite         | italic                                             |
+  | del/ins      | line-through/underline                             |
+  | s            | line-through                                       |
+  | dfn          | italic                                             |
+  | em           | italic                                             |
+  | i            | italic (last resort after em/string/mark/cite/dfn) |
+  | mark         | bg-yellow                                          |
+  | pre          | preformatted, preserves spaces and line breaks     |
+  | q/blockquote | short/long quotation                               |
+  | small        | font size smaller                                  |
+  | strong       | bold (important text)                              |
+  | sub/sup      | small valign sub/sup                               |
+  | time         | can also add machine readable datetime=            |
+  | u            | misspelled (unarticulated)                         |
+  | wbr          | word break opportunity                             |
+**** UI
+  | template       | hidden content (JS showable) |
+  | progress/meter | id= value= max= progress var |
+**** Computer
+  | kbd  | monospace       |
+  | code | monospace       |
+  | var  | variable        |
+  | samp | "sample output" computer output |
+**** Idiom
+  | ruby/rt+rp | japanese                                                 |
+  | bdi        | "bi-directional isolation", for lang with diff direction |
+  | bdo        | "bi-directional override"                                |
+*** media et all
+ | img                      |                                            |
+ | picture>img+source*N     | sets different images for different widths |
+ | figure>img+figcaption    |                                            |
+ | imp+map>area*N           | defines a clickable are on an img          |
+ |--------------------------+--------------------------------------------|
+ | audio                    | content will be the "alt"                  |
+ | video                    |                                            |
+ | video/audio>source       | media source in different format           |
+ | video/audio>source+track | .vtt subtitles tracks                      |
+ |--------------------------+--------------------------------------------|
+ | svg                      | circle/rect/polygon/ellipse/text           |
+ | canvas                   |                                            |
+*** form
+ | fieldset                 | for legend/label/input                   |
+ | fieldset>legend          |                                          |
+ | label                    | for input/select/progress/textarea/meter |
+ |--------------------------+------------------------------------------|
+ | textarea                 |                                          |
+ | select>option*N          |                                          |
+ | select>optgroup>option*N |                                          |
+ | datalist>option*N        |                                          |
+ |--------------------------+------------------------------------------|
+ | output                   | to put JS output                         |
+ | button                   | can contain an image, html or text       |
+*** Lists
+ | ul>li*N    | un-ordered list  |
+ |------------+------------------|
+ | ol>li*N    | ordered list     |
+ |------------+------------------|
+ | dl>dt+dd*N | description list |
+ | dt         |                  |
+ | dd         |                  |
+*** table>
+ |---------------+------------------------|
+ | >caption      | caption title          |
+ |---------------+------------------------|
+ | >thead>tr>th  | header                 |
+ | >tr>th        |                        |
+ |---------------+------------------------|
+ | >tbody>tr>td  |                        |
+ |---------------+------------------------|
+ | >tfoot>tr>td  |                        |
+ |---------------+------------------------|
+ | >tr>td        |                        |
+ |---------------+------------------------|
+ | >colgroup     | to style groups of col |
+ | >colgroup>col |                        |
+ |---------------+------------------------|
