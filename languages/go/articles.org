@@ -1,0 +1,193 @@
+* DONE Article: I want off Mr. Golang's Wild Ride
+Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
+- Lack of generics, makes problems impossible to model accurately,
+  falling back into ~reflection~
+- Default error handling is *wonky* (even with 3rd party that adds context or stacktraces)
+- DWARF: debugging information on shared libraries
+- "When you make something simple, you move complexity elsewhere"
+- GO and NodeJS handling of cross platform permissions is made up (on windows)
+  https://nodejs.org/api/fs.html#fs_class_fs_stats
+  - A call to Chmod() on windows just flips the windows readonly flag
+  - "A language with a more involved type system, and better designed libraries
+     could avoid that pitfall"
+- In Rust we get a ~Result<>~, so we don't get some invalid/unitialized/null
+  In Go is up to us to test the value of *err* returned by the function
+- In Rust we have a type Path, that can have non utf-8 contents
+  In Go we have strings, which are byte slices
+  - We might silenty fail to read some files, since some characters might be non-printable
+- In Rust having ~Option<>~ allow us to differentiate
+  Path separator on Go, can't distinguish between not having a path separator and having it
+- "We can look at *what* we're manipulating just by looking at its type"
+- Types don't cost anything at runtime, everything ends up inlined anyway.
+- In rust permissions are not unix based, so they are more crossplatform (1 bit readonly)
+  - Unix type permissions are available on PermissionsExt
+- In go there are build constraints in comments
+  // +build: !windows
+- "The Go way is to half-ass things"
+- "The Go way is to patch things up until they sorta kinda work, in the name of simplicity."
+** Lots of little things
+- net/http, timeouts:
+  - request timeout VS whole connection timeouts
+  - Both don't account if the request has been accepted but no data has been send.
+    Might be important on POST request.
+  - https://github.com/getlantern/idletiming solves above
+  - left-pad incident https://qz.com/646467/how-one-programmer-broke-the-internet-by-deleting-a-tiny-piece-of-code/
+  - golang monotonic clock breaking change, time.Now returns 2 different values if called twice?
+    https://github.com/golang/go/issues/12914
+** Parting words
+- "It constantly takes *power* away from its users, reserving it for itself."
+- "It constantly lies about how complicated real-world systems are, and optimize for the *90%* case, ignoring correctness."
+- "Everything looks simple on the surface, but nothing is."
+* DONE Article: Shrink your Go binaries with this one weird trick
+https://blog.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
+- binwalk: can plot the entropy of a file to know how well it can compress
+  -E https://github.com/ReFirmLabs/binwalk/wiki/Usage#-e---entropy
+- executable packer
+  https://upx.github.io/
+  $ upx --brute FILENAME
+- removes the DWARF tables, nothe the annotations for stacktraces
+  $ GOOS=linux go build -ldflags="-s -w"
+* DONE Article: Go is not an easy language
+https://www.arp242.net/go-easy.html
+Simple syntax.
+Simple semantics.
+Doint useful stull is not always easy.
+Arg1: Some basic slice operations are complex. And some might be unintuite more costly.
+      Slice Tricks: https://github.com/golang/go/wiki/SliceTricks
+Arg2: While primitives are there, the patterns that put them together are up to us.
+* DONE Article: Channel Axioms (Dave Cheney)
+- A send      to a nil channel blocks forever
+- A receive from a nil channel blocks forever
+- A send      to a closed channel panics
+- A receive from a closed channel returns the zero value immediatly
+* DONE Article: Why Discord is switching from Go to Rust (Jesse Howarth?)
+- Uses: client video encoding, Elixir NIFs
+- Go Service to be rewritten:
+  - Every few minutes large latency/cpu spikes, due
+    1) it's memory model: memory is not freed immediatly
+    2) garbage collector: needs to scan the whole memory
+  - Go will force a garbage collection run every 2 minutes at minimum
+    https://github.com/golang/go/blob/895b7c85addfffe19b66d8ca71c31799d6e55990/src/runtime/proc.go#L4481-L4486
+  - Service did not borrow or free big ammounts of memory
+  - Data Structure: one instance per channel, per user
+    - LRU cache, millons of users in each cache
+      - Cassandra cluster backed
+- Memory managment in Rust: no gc, ownership means it will free it when no needed
+- Async Rust: at the time (<2020) async was only available on nightly
+- Implementation: it was a deep dive write performant (to their scale) code in Go
+  - Changing ot a BTreeMap instead of a HashMap
+  - Swapping to a metrics library that used concurrency
+* DONE Article: Go is Google's language, not ours (2019)
+- Claim: A community made package manager was dropped in favor of one made by the core team.
+  - https://peter.bourgon.org/blog/2018/07/27/a-response-about-dep-and-vgo.html
+    https://research.swtch.com/vgo
+* DONE Article: Ten Reasons Why I Don't Like Golang
+1) Using letter capitalization for private and public visibility.
+   Problem: Compiler can't identify class from variable name.
+            Constants are lowercase.
+   #+begin_src go
+   type user struct {
+   }
+   func main(){
+     var user *user
+     user = &user{} // panic!
+   }
+   #+end_src
+2) Structs implicity implement interfaces.
+   Problem: No guarantee that the "contract" (detailed on the comments of the interface)
+            is fullfilled.
+3) Uses multiple values to return errors.
+   Problem: easy to forget, nothing on the idiom enforces that the returned values are valid.
+4) Convention over configuration
+   Examples: somefile_linux.go, init()
+5) Easy to end up with several identically-named identifiers.
+6) Is difficult to autogenerate code (?)
+7) No Ternary Operator.
+8) Clumsy sort.Interface
+   Problem: boilerplate code increase with each new types you want to compare with little to no re-usability.
+            Casting also looks like a function call.
+9) No version or vendoring support (circa 2016)
+10) No generics.
+    Problem: 3rd party libraries (ab)use of interface{}
+11) append() "might" do an implace replacement, or not
+    Problem: compiler used to not warn for not assigning the append()
+* DONE Article: Down the Golang nil Rabbit Hole (2021)
+Scenario: doing integration test with https://github.com/houseabsolute/detest
+- Go has multiple "types" of nil. Both typed and untyped nil variables.
+- reflect.ValueOf(nil) returns an invalid nil (untyped nil?)
+         .IsValid()
+         .IsNil()
+         .Type()
+- Sometimes, Go types the untyped nil, if it goes through a function argument typed.
+- Sometimes, it won't type the untyped nil. If it goes through a function argument interface.
+- Other Languages
+  + *strict* in Perl
+  + *Option<T>* in Rust
+* DONE Article: Golang: Don't be afraid of Makefiles (2017)
+https://sohlich.github.io/post/go_makefile/
+- go commands: build, clean, test, get
+- Makefile commands:
+  - deps, to go get the deps (or use the -u flag???)
+  - crossbuild with flags: CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+  - dockerbuild: when C libraries interaction is needed for building or a particular go version,
+    "docker run", with volume and worker dir setup accordingly
+** HN Discussion
+   https://news.ycombinator.com/item?id=15294929
+- use ~:=~ to immediatly expand the variable
+- use ~;~ to avoid tabs and oneline the command
+  #+begin_src makefile
+  BINARY_NAME := mybinary
+  BINARY_UNIX := $(BINARY_NAME)_unix
+
+  .PHONY: all test build clean run deps
+  all: test build
+  build: ; go build -o $(BINARY_NAME) -v
+  test:  ; go test -v ./...
+  clean: ; go clean && rm -f $(BINARY_NAME) $(BINARY_UNIX)
+  run:   ; go run $(BINARY_NAME) -v ./...
+
+  deps: DEPS := $(addprefix github.com/markbates/,goth pop)
+  deps:  ; go get $(DEPS)
+
+  build-linux: ; CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(BINARY_UNIX) -v
+
+  docker-build: ; docker run --rm -it -v "$(GOPATH)":/go -w /go/src/bitbucket.org/rsohlich/makepost golang:latest go build -o "$(BINARY_UNIX)" -v
+  #+end_src
+* DONE Article: How to Write Go Code
+https://golang.org/doc/code
+>=1.13
+- Package = Directory
+  Module  = Collection of related Packages
+  Repository = 1 Module (usually)
+- Creating a new program
+  #+begin_src shell
+  $ mkdir hello
+  $ cd hello
+    $ go mod init example.com/user/hello
+  $ cat go.mod
+  module example.com/user/hello
+  go 1.16
+    $ go install example.com/user/hello
+      go install .
+      go install
+    $ go init
+  #+end_src
+- Adding a new package within the module/repo, does NOT involve *go mod* or *go.mod*
+- For new external packages required by your code
+  $ go mod tidy # adds missing module requirements (require statements with his version)
+- Clean all downloades modules
+  $ go clean -modcache
+* Article: Linkedin Go https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/go/go-quiz.md
+  - A special type of *type casting* for interfaces only
+    a.(type)
+    Type Casting for primitives
+    int(a)
+  - https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool
+    Add this on the top of the file to build only on windows
+    // + build windows
+  - How to POST
+    https://pkg.go.dev/net/http#Client.Post
+  - Lexical Scopes
+    https://topic.alibabacloud.com/a/go-language-core-technology-volume-one-15-font-colorredscopefont_1_38_30923325.html
+  - json.Unmarshall is case insensitive
+    unsensiti

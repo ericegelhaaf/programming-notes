@@ -1,0 +1,1146 @@
+* 2015 | The Go Programming Language          | Alan A. Donovan   | Addison
+Code: https://github.com/adonovan/gopl.io/
+** DONE 6 Methods
+*** Method Declaration
+- ~Method receiver~, is the extra parameter from a regular function definition.
+- ~Selector~, is the obj.MethodName alone
+- No special *self* name being used
+- Methods and (struct) Fields inhabit the same namespace
+- Can define methods on slices, if they are declared a type.
+*** Methods with a Pointer Receiver
+For methods that need to update the receiver, or the variable is too big to copy.
+- CONVENTION: if a method of the type has a pointer receiver, all should use point receiver
+  - If any method has ~*T~ avoid copying instances of ~T~
+  - Unless the type is a pointer (slice/map)
+- ~receiver parameter~ what the method declares (p Point) func ...
+  ~receiver argument~  what the method receives Point{1,2}
+- Method calls:
+  - Same type of receiver arg and receiver param
+  - Receiver arg is ~T~ and receiver param is ~*T~ (implicit &)
+  - Receiver arg is ~*T~ and receiver param is ~T~ (implicit *)
+- Receiver can accept nil (empty maps/slices)
+*** Structure Embedding
+- Embedding != Subclassing
+- Language facilities:
+ | Field access            | can access the fields of the embedded struct directly |
+ | Method access/promotion | can access methods of the embedded struct directly    |
+ | No Inheritance          | I still can't use it inplace of the embedded          |
+- Works with pointers to a named type on the ~anonymous field~ (aka "child")
+- Works with unnamed struct types too
+*** Method Values and Expressions
+**** Method Values
+distanceP = p.Distance
+Is a function that bind the method to a specific receiver.
+- You can ~select~ the method, bind it, and use it later
+- sometimes we can shorter code
+  #+begin_src go
+  time.AfterFunc(10 * time.Second, func() { r.Launch() })
+  time.AfterFunc(10 * time.Second, r.Launch)
+  #+end_src
+**** Method Expression
+distance = Point.Distance (or (*Point).Distance )
+Is a function where the first argument is the receiver.
+Can be useful when the value can be a choice between many others.
+#+begin_src go
+if add {
+    op = Point.Add
+} else {
+    op = Point.Sub
+}
+...
+op(p[0], offset)
+#+end_src
+
+*** Example: Bit Vector for set operations
+instead of using map[T]bool
+Bit-vector: uses a slice of unsigned integer,
+            each bit represents a element present
+- bytes.Buffer, is often used in String() methods
+  buf.WriteByte()
+  fmt.Fprintf(&buf,,)
+- while declaring String(), for ~*T~ won't make it for ~T~
+  use & accordingly
+- binary operators:
+  << (binary left shift), &(binary and), |= (bitwise inclusive or and assignment)
+*** Encapsulation
+aka getters and setters
+- The unit of encapsulation is the ~package~
+- We encapsulate on a struct, even if it is ONE field
+** 7 Interfaces
+*** 7.1 Interfaces as contracts
+    Definitions: abstract type, implictly implemented
+    An interface is contract, of what the type can do.
+    Some cannot be expressed by the language and is detailed in the comments of the interface.
+~substitutability~ of a type that satisfies the interface for another.
+*** 7.2 Interface Types
+    Inteface embedding
+*** 7.3 Interface Satisfaction
+- <TYPE> "is a" <INTERFACE>, when type satisfies the interface
+- Only the methods revealed by the interface type may be called, even if the concrete type has others.
+- ~empty interface~ interface{}, we can assign it anything, but we can't do nothing with it directly (see shadowing)
+- I can create interfaces as I need them, some might refer to common properties (getter methods)
+- *Documenting and asserting* the relationship between a type and intefaces it satisfies
+  var _ io.Writer = (*bytes.Buffer)(nil)
+*** 7.4 Parsing Flags with flag.Value
+fmt.Sscanf - to read in put in format
+- flag.Value is an interface
+  #+begin_src go
+  package flag
+  type Value interface {
+      String()    string // value to stdout
+      Set(string) error  // stdin to value
+  }
+#+end_src
+- Satisfying it, 1) wraping it on a struct
+#+begin_src go
+type celsiusFlag struct { Celsius }
+
+func (f *celsiusFlag) Set(s string) error {...}
+
+func CelciusFlag(name string, value Celsius, usage string) *Celsius {
+    f := celsiusFlag{value}
+    flag.CommandLine.Var(&f, name, usage) // Adds the flag
+    return &f.Celsius
+}
+#+end_src
+*** 7.5 Interface Values
+The potential to *panic*
+- Two components:
+  - A concrete type (dynamic type)
+  - A value of that type (dynamic value)
+- Zero value for an interface is both nil, a ~nil interface value~
+  - restored when one assigns nil to the interface variabe
+- If the value is not comparable (slices, map) comparisons between interface values wil panic
+- makes an impact on *nil*, when passes as an argument it will go from nil interface to:
+  - The Type can be the interface one, while
+  - The Value is nil
+  - Which is != of a plain *nil*
+*** 7.6 Sorting with sort.Interface
+tabwriter.Write
+#+begin_src go
+package sort // provides inplace sorting
+type Interface interface {
+    Len() int
+    Less(i, j int) bool // i,j are indices
+    Swap(i, j int)
+}
+#+end_src
+- Satisfied by providing ALL the methods for the type to satisfy
+  #+begin_src go
+  type StringSlice []string
+  fun (p StringSlice) Len() { return len(p) }
+  #+end_src
+- A sort of a slice of pointers to struct runs faster (faster swap)
+  than a slice of structs.
+- To sort for each field of the struct,
+  I need to create separate types that satisfy the interface
+- sort.Reverse
+  it uses a non-exported type (reverse) that embeds sort.Interface and
+        changes the Less() by swapping the arguments
+- sort.Sort(sort.Reverse(byArtist(tracks)))
+- Custom sorts
+  - wrapping the tracks and a function to sort on a struct
+    then instantiation on the sort, where we define it with a *lambda*
+    #+begin_src go
+   sort.Sort(customSort{tracks, func(x, y *Track) book {
+       if x.Title != y.Title {
+         return x.Title < y.Title
+       }
+       if x.Year != y.Year {
+         return x.Year < y.Year
+       }
+       if x.Length != y.Length {
+         return x.Length < y.Length
+       }
+       return false
+   }})
+    #+end_src
+*** 7.7 The http.Handler Interface
+#+begin_src go
+package http
+
+type Handler interface {
+  ServeHTTP(w ResponseWriter, r *Request)
+}
+
+func ListenAndServe(addres string, h Handler) error
+#+end_src
+- To satisfy we create a type, which can or can't hold data
+  - We can switch on req.URL.Path on the ServeHTTP() method
+- ServMux(), a Server Multiplexer, collects several http.handler(s) into one http.handler
+  * Either, we register the handlers, ~mux.Handle()~ passing the url path AND the method to handle the path
+    - Wrapped in http.HandlerFunc() which is a type conversion, of a type which is a function that satisfies http.Handler
+      aka an *adapter*
+      - A function type that has methods and satisfies an interface (!!!!)
+      #+begin_src go
+      package http
+      type HandlerFunc func(w ResposeWriter, r *Request)
+      func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
+         f(w,r)
+      }
+      #+end_src
+  * Or briefly, ~mux.HandleFunc(PATH, METHOD)~
+  * Or more briefly, use the DefaultServerMux
+- Each handle in a new goroutine
+*** 7.8 The error Interface
+- fmt.Errorf() calls errors.New()
+  - given every time it creates a new one, there no 2 errors ==
+#+begin_src go
+type error interface {
+  Error() string
+}
+#+end_src
+- syscall.Errno(2) creates a error of type syscall.Errno which satisfies Error()
+*** TODO 7.9 Example: Expression Evaluator
+*** 7.15 A few Words of Advice
+- "Interfaces are *only* needed when there are two or more
+   concrete types that must be dealt with ina uniform way."
+- Exception being when the interface and the (single only) type can't be on the same package.
+- ~ask only for what you need~, rule of thumb for interface design
+* 2016 | Go in practice                       | Matt Butcher      | Manning
+** 4.1
+- errors.New
+  fmt.Errorf
+- Sometimes, when returning a meaningful non-nil value we can ignore the error check
+- Custom error types
+  - When we need to return more than a string
+  - packages can export errors (errors.New) instances that can be ~err ==~
+  - Custom error, to add more data to the error
+     #+begin_src go
+type ParseError struct {
+    Message    string,
+    Line, Char int
+}
+func (p *ParseError) Error() string {
+   format := "%s on Line %d, Char %d"
+   return fmt.Sprintf(format, p.Message, p.Line, p.Char)
+}
+  #+end_src
+  - Default interface
+     #+begin_src go
+type error interface {
+    Error() string
+}
+     #+end_src
+- panics
+  - unwind the stack
+  - if unhandled unwind the whole stack
+  - signature is ~panic(interface{})~
+* 2016 | Go Programming Blueprints            | Mat Ryer          | Packt
+   https://github.com/matryer/goblueprints
+** 1 - Chat Application with Web Sockets
+
+** 6 - Exposing data and functionality through a RESTful data web service API
+*** Context
+   - *context* To share data between different handlers/middleware in a request
+   - every http.Request comes with a context.Context, accesible through .Context()
+   - Simple usage
+   #+begin_src go
+   ctx := context.WithValue(r.Context(), "key", "value")
+   Handler.ServeHTTP(w, r.WithContext(ctx))
+   #+end_src
+   - Using private types for the key
+     #+begin_src go
+     type contextKey struct {
+       name string
+     }
+     var contextKeyAPIKey = &contextKey{"api-key"}
+     func APIKey(ctx context.Context) (string, bool) {
+       key, ok := ctx.Value(contextKeyAPIKey).(string)
+       return key, ok
+     }
+     #+end_src
+*** Tags
+    - Since we can put multiple structure tags, we can have different *views* over the same *model* (the struct)
+      Example: json and bson (for mongo)
+** 8 - Filesystem Backup
+- With interfaces, we can export an *instance* of the type, without exporting the *type* itself
+   #+begin_src go
+package backup
+
+type Archiver interface {
+  Archive(src, dest string) error
+}
+type zipper struct{}
+var ZIP Archiver = (*zipper)(nil)// We export ZIP, which satisfies Archiver
+ #+end_src
+- Writing a string into a Writer:
+  - io.WriteString()
+  - fmt.Fprintf()
+- Passing around errors, can help on *error recovery* OR passing the problem to something else.
+- To associate *data* to each interface (ex: extension name string) we can add a func to the interface,
+  that returns said data, and each implementation will have to define it.
+- log.Fatal(), same as print to sterr and os.exit(1)
+- we can use a *defer* on main, to return an error if the program failed
+  #+begin_src go
+func main() {
+  var fatalErr error
+  defer func() {
+    if fatalErr != nil {
+      flag.PrintDefaults()
+      log.Fatalln(fatalErr)
+    }
+  }()
+  // ...
+}
+  #+end_src
+* 2018 | Get Programming with Go              | Nathan Youngman   | Manning
+Code: https://github.com/nathany/get-programming-with-go
+** 5 State and behavior
+*** DONE 21 A little Structure
+- For things that go together (ex: latitude and longitude)
+- New structs can either:
+  #+begin_src go
+  var curiosity struct {
+    lat  float64
+    long float64
+  }
+  // OR
+  type location struct {
+    lat  float64
+    long float64
+  }
+  var curiosity location
+  #+end_src
+- ~Composite literals~
+  location{lat: 1.3, long: 231.4}
+  location{1.3, 231.4}
+- Copied on :=
+- ~Struct tags~ are the comments that go right of struct fields
+*** DONE 22 GO's got no class
+- Attaching methods to structures (types)
+- Struct constructors are idiomatic
+  func newLocation(lat, long coordinate) location {}
+  func newLocationDMS()..
+  func newLocationDD()..
+- Sometimes just New(), if the package name is self descriptive
+*** DONE 23 Composition
+- "In OO, objects are *composed* of smaller objects in the same way."
+- Behavior:
+  On ~inheritence~, you create hierarchies. Which can be tricky to think about and change.
+  On ~composition~, you create methods and associate them to each "class".
+  Example: classifing animals by families *VS* creating attributes (walk, swim, nursing) and attach it to each animal
+- State:
+  ~Composition~ also takes place on structures.
+   Break down a dispair structure into smaller ones. And combine them.
+- Forwarding methods:
+  // Naive
+  type report struct {
+    sol         int
+    temperature temperature
+    location    location
+  }
+  func (r report) avg() celsius {
+    return r.temperature.avg()
+  }
+  ~Struct embedding~: makes all methods/subfields accessible from the main
+                      the fields still exists
+  type report struct {
+    sol int
+    temperature
+    location
+  }
+  ~Name Collision~, compiler warns ONLY on ambiguous usage
+*** DONE 24 Interfaces
+- ~Interfaces~ A way to express an ~abstract~ concept, a *Writer*. In place of a ~concrete~ thing.
+   A common behavior shared between "things".
+- declaring var t with an *interface type*
+  #+begin_src go
+  var t interface {
+      talk() string
+  }
+  #+end_src
+  ~Polimorphysm~ The var can be (re)assigned anything, which type satisfies the interface.
+- declaring a named *interface type*, usually ended with ~-er~, like fmt.Stringer
+  #+begin_src go
+  type talker interface {
+      talk() string
+  }
+  #+end_src
+  - They can be used anywhere a type is used.
+- Interfaces work along with ~structure embedding~.
+  Regular functions that take the interface, would take structure embedded ones.
+     (unlike with just using methods).
+- Interfaces in go are *satisfied implicitly*.
+  We don't need to explicitly say that a struct would satisfy our own interface.
+- ~Interface embedding~ is a thing, like with io.ReadWriter
+  They save some typing, but not much else.
+- Try to keep interface small
+** 6 Down the gopher hole
+*** DONE 26 A few pointers
+- A ~Pointer~ is a variable that points to the address of another variable.
+- ~Maps~ are pointers in disguise, no need to dereference on a function arg
+  ~Slices~ are, in part, pointers to elements on an array.
+           A pointer to a slice is only needed when modifing the cap/length/offset.
+           Though, it might been better return a new slice.
+- & address operator, can't take addresses of literal strings, number or booleans
+- * dereference operator, also used in pointer types (like *int)
+  can be assigned: *adminpoint = "new admin"
+- ~Automatic dereferencing~
+  - struct fields
+  - array indexes
+- Unlike C:
+  - Arrays and pointers are different types altogether
+  - GO avoids potential unsafe operations with pointers
+    a *int pointer can only point to a memory position where there is a int
+  - parameters are ALWAYS passed by value, pointers enable ~mutation~
+- Methods who have a *pointer receiver* (mutable), can be sent from a struct or a pointer
+  #+begin_src go
+  func (p *person) book (){
+     p.foo += 1
+  }
+  p1 := person{}  // struct
+  p2 := &person{} // pointer
+  p1.book()
+  p2.book()
+  #+end_src
+* 2019 | Black Hat Go                         | Tom Steele        | nostarch
+  https://github.com/blackhat-go/bhg/
+** Chapter 5 DNS
+- with "net" package you can't set the resolver or run deep inspection (? on the result
+- RR interface doesn't have methods to get the response IP
+- to get the IP from a RR struct we use *type assertion* to create the data
+- you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
+* 2021 | Cloud Native Go                      | Matthew A. Titmus | OReilly
+  Repo: https://github.com/cloudnativego/
+** 9 Building Web Application with Go
+   https://github.com/cloudnativego/web-application/3
+   - Serve static resources, where /assets/ is the directory where the static files are
+     PathPrefix("/").Handler(http.FileServer(http.Dir(webroot+"/assets/")))
+   - We can add later other .HandlerFunc() for other paths
+   - Cases when a AJAX based rendering might not be the best solution:
+     - You want a JS variable with the username of the currently logged user
+     - Or other cookie data you want to be on HTML before JS loads
+   - ~text/template~ package
+     t := template.Must(template.ParseFiles("./a/path/index.html"))
+     t.Execute(w, data) // Where data is a instance of a user defined struct, with `json:` tags
+   - ~r.Form~ is part of the http.Response
+     1) run r.ParseForm()
+     2) k,v range on r.Form, which is a map[string][]string
+*** Cookies:
+   - Never store confidential or sensitive information on them.
+   - Most store a randomly generated ID
+   - ~net/http~ defines the Cookie struct
+     http.SetCookie(w, &cookie)
+     r.Cookie("acookie")
+* 2021 | Network Programming with Go          | Adam Woodbeck     | nostarch
+** Introduction
+- Writing network software using Go's *Asynchronous* features
+- Emphasis on security
+- TCP, UDP, Unix Socket
+  Application-level protocols (http, http/2, TLS)
+  Fob, JSON, protocol buffers, gRPC
+** 1 An Overview of Networked Systems
+*** Choosing a Network Topology
+- Organization of nodes in a network
+  * point-to-point: o-o
+  * daisy chain:    o-o-o-o, a series of point-to-point with "hops" between 2 separated nodes
+  * bus: common network link, common on wireless, everyone sees everything
+  * ring: was used on some fiber-optic deployments, single direction
+  * star: there is a central node, individual point-to-point connections
+  * mesh: every node is fully connected to every other node
+- Hybrid topologies are more common: star-ring, star-bus
+*** Bandwidth vs. Latency
+- CDN, Caching
+- Go's concurrency to minimize server-side blocking of the response.
+*** OSI: The Open Systems Interconnection Reference Model
+Software application
+7) Application (http)
+6) Presentation (encryption, decoding)
+5) Session (connection life cycle?)
+4) Transport (tcp, udp)
+3) Network (ip)
+2) Data Link/Logical link control/Media Access control (mac) (error correction, common in wireless)
+1) Physical (bit to electric/optical signal)
+Physical transmission media
+**** Payloads
+Payload=Message Body=SDU=Service Data Unit
+Layer4: TCP Payloads=Segments=Datagrams
+Layer3: IP Payloads=Packet
+Layer2: Frame (containing MAC and FCS, frame check sequence)
+*** The TCP/IP Model
+Software Application
+- Application (7,6,5) (http,ftp,smtp,dhcp,dns)
+- Transport (4)
+- Internet/Network (3) (ip,bgp,icmp,igmp,ipsec)
+- Link (2,1) (arp)
+Physical Transmission Media
+
+SLIP or PPP, were part of serial connections to the ISP.
+No link layer protocol.
+** 8 Writting HTTP Clients
+URL = Uniform Resourse Locator
+scheme://authority/path?query=abc&d=1#fragment
+- Methods
+  POST: for new data
+  PUT: for updates
+  PATCH: partial changes
+  CONNECT: to request an *HTTP tunneling*
+  TRACE: to echo what you send (test tampering?) (bad for XST)
+- Response codes:h
+  3XX-It needs further action from the client
+  4XX-Error with the request
+  5XX-Server side error
+  304 Not Modified, works with the ETag header
+  404 Not Found, sometimes as a ~glomar response~, not confirming or dening the resource exists or not
+  426 Upgrade Required, when it needs to update to TLS before accessing the resource
+- Versions:
+  HTTP/1.0: requires separate TCP connections for different requests
+  HTTP/1.1: ~keepalive~ allows different request in the same TCP connection
+  HTTP/2  : allows server to push resources to the client.
+- Go automatically consumes the Response headers, but leaves the body unread
+  until is consumed or the connection closed.
+- To reuse the connection you need to consume the body, which also happens when you .close() the body
+- Default HTTP client has no timeout.
+  context.WithTimeout()
+  context.WithCancel() - and usin a timer time.AfterFunc()
+- Disable reuse:
+  req.Close = true
+- Server must explicitly drain the request body before closing it.
+- MIME: Multipupose Internet Mail Extension
+  "mime/multipart" package
+  Allows to send "field data" (key-values) or "form field"
+  Sets a boundary for the date and sent on header Content-Type:
+** 9 Building HTTP Services
+- Client
+  - We should get used to close the body
+  #+begin_src go
+  _ = resp.Body.Close()
+  #+end_src
+- In Go, a webservice relies on:
+  - Handlers
+  - Middleware: changes the handlers behavior or perform aux tasks (logging, authentication or access control)
+  - Multiplexer
+- Bare bones server implementation creates srv as a http.Server{} struct and then does:
+  - net.Listen()
+  - srv.Serve(listener)
+  - srv.Close() - abruptly closes the server
+*** http.Server{} timeouts
+  - IdleTimeout: timout of how long keep the connection open (keepalive)
+  - ReadHeaderTimeout: timout reading request headers (not body)
+  - ReadTimeout: time the client has to send both header and body (ReadDeadLine of tcp socket)
+  - WriteTimeout: time it has the client to read the server reply (WriteDeadLine of tcp socket)
+*** TLS
+    .Serve(l)
+    .ServeTLS(l,CERT,KEY)
+*** Handlers
+  http.HandlerFunc(
+     func(w http.ResponseWrite, r *http.Request) {...})
+  - Usually we ignore any potential (response) write error
+    - We can keep track however of the frequency they occur.
+  - Drain and close the request body. http.Server{} only close it by default. So closing here is optional.
+    #+begin_src go
+    // Inside a Handler
+    defer func(r io.ReadCloser) {
+        _, _ = io.Copy(ioutil.Discard, r)
+        _    = r.Close()
+    }(r.Body)
+    #+end_src
+  - Use ~html/template~ package to escape HTML code, especially when part of the data comes from client.
+  - To inject additional resources (than the request and response), like a database connection.
+    - Use a *closure*:
+    #+begin_src go
+    dbHandler = func(db *sql.Db) http.Handler {
+        return http.HandlerFunc(
+            func(w http.Response, r *http.Request) {
+                err := db.Ping()
+            }
+        )
+    }
+    #+end_src
+    - Or add a field to the struct/type that satisfies the http.Handler interface
+*** Testing with *net/http/httptest* package
+  - httptest.NewRequest() will panic instead of throwing an error
+    - unlike http.NewRequest
+  - httptest.NewRecorder() returns a pointer to httptest.ResponseRecorder
+     - use the .Result() method to return a pointer to http.Response
+  - Pass the request/recorder to the Handler
+  - Go assumes a 200 response if you write the body, before explicitly sending a header.
+    - use http.Error(w, BODY, ERRORCODE)
+*** Middleware
+    - func(http.Handler) http.Handler
+    - To inspect/act on the request.
+      To add headers to the response
+      Collect metrics
+      Control access
+    - If you find yourself writing the same handler, might be you can rewrite it as a middleware
+    - This works by closuring the next handler
+    - is NOT recommended performing many tasks on a single middleware
+    - http.TimeoutHandler, middleware that sets an internal timer for the given duration. Returns 503 if timeout.
+*** Multiplexers
+    - The http.ServeMux multiplexer is a http.Handler that routes the incoming request into the proper Handler
+    - You can drain and close the connection directly to the mux
+      There is no harm in drain a close a previously drain and closed request
+    - Subtree (/a/path/) vs absolute path (/another/path)
+      Go will try to match the absolute path, if not matches, will add a / and try to match and 301 to it
+* 2021 | Distributed Services with Go         | Travis Jeffery    | Pragmatic Bookshelf
+Source: https://pragprog.com/titles/tjgo/distributed-services-with-go/
+Source: https://github.com/travisjeffery/proglog
+- Author: Works at Confluence (kafka)
+  https://twitter.com/travisjeffery
+  https://travisjeffery.com/
+  https://github.com/travisjeffery/jocko/
+- Book uses code from Hashicorp's *Serf* and *Raft* packages
+  Studied from Consul source code.
+- "Designing data intense applications" by Martin Kleppman
+  Covers data structures and algorithms for distributed services, abstractly.
+** Chapter 1: Let's Go
+- On C, author was bugged by the lack of modules
+- Author's project *Jocko*, and implementation of Kafka in Go
+- JSON over HTTP, most common APIs on the web.
+  - For internal web APIs, might use *protobuf/gRPC* for features not provided by it.
+    Like type checking and versioning. (performance?)
+- $ go mod init github.com/travisjeffery/proglog
+  $ ls
+  go.mod
+- ~internal/server/log.go~ (package server)
+  With the append log datastructure and basic .Append() .Read() methods
+- Each JSON/HTTP handler should
+  1. *Unmarshall* the JSON request into a struct
+  2. *Run* the endpoint logic with the request
+  3. *Marshal* and write that result to the response
+  If handlers become much more complicated, move code out
+- ~internal/server/http.go~ (package server)
+  - Uses https://github.com/gorilla/mux
+    Like http.ServMux, mux.Router implements http.Handler but provides easier ways to match different things on the URI
+  - The producer and consumer handler code
+- ~cmd/server/main.go~ (package main)
+   - just .NewHTTPserver() and .ListenAndServe()
+- encoding/json package encodes []byte as a base64 string
+** Chapter 2: Structure with Protocol Buffers
+- For internal APIs (with control of the clients)
+  * Guarentees type-safety
+  * Prevents schema-violations (across several microservices/teams)
+  * Enables fast serialization (six times faster than JSON)
+  * Offers backward compatibility
+  * Language agnosticism
+- From a .proto file you generate/compile to .go code
+  #+begin_src
+  syntax = "proto3"
+  package twitter;
+  message Tweet {
+    string message = 1
+  }
+  #+end_src
+- *protoc* is the compiler binary name
+- Go convention is to put the .proto files on the *api/v1* directory
+  - Using the *repeated* protobuf keyword to describe the slice of Records
+  - You assign an "unique field number" to each field of the Message
+- History: gogoprobuf was a fork of googles runtime to run protobuf, later replaced with Go API (APIv2)
+- $ go get google.golang.org/protobuf/...@v1.25.0
+  $ protoc api/v1/*.proto --go_out=. --go_opt=source_relative --proto_path=.
+- Use a ~Makefile~
+- You will end up creating *interfaces*, to handle the *getters* you get from the autogenerated code
+  Or you will end up writting plugins for the protobuf generator (like to generate setters?)
+** Chapter 3: Write a Log Package
+- Other names:
+  * write-ahead logs
+  * transaction logs
+  * commit logs
+- Examples: ext journal, postgres WAL, raft append logs, Redux logs (?
+- "Logs not only holds the latest state, but all states that have existed."
+- Some implemetations split logs into *segments*, 1 active one.
+  The index part of the logs can be *memory-map*
+- Name convention:
+  * Record: the data stored in our log.
+  * Store: the file we store records in.
+  * Index: the file we store index entries in.
+  * Segment: the abstraction that ties a *store* and an *index* together.
+  * Log: the abstraction that ties all the *segments* together.
+*** internal/log/store.go
+  - creates the filestorage abstraction struct
+  - .Append()
+    We write to the buffered writer instead of directly to the file
+    to reduce the number of system calls and improve performance.
+  - .Read()
+    Call to .Flush() to clear the write buffer
+    make() buffers to read from, in the memory stack
+    We read directly from disk with s.File.ReadAt()
+    We enc.Uint64 to get it from a read []byte
+  - .ReadAt(), wrapper over .File.ReadAt() that calls buf.Flush()
+  - .Close(),  wrapper over .File.Close() that cals to buf.Flush()
+  - ~internal/log/store_test.go~
+    Uses https://github.com/stretchr/testify for require.NoError() require.Equal()
+    ioutil.TempFile(os.TempDir(), "some_extra_stuff")
+*** internal/log/index.go
+  Uses https://github.com/tysonmote/gommap to use the gommap.MMap
+  - Once memory mapped we can't resize it, so we grow/os.Truncate() the file before mapping it.
+  - .Close() syncs the mmap and file, and truncates back the file
+  - NewIndex() reads and maps the index file, growing it before hand
+  - .Read(in) (out, pos, error), *enc.Uint32(src)*
+  - .Write(off, pos) *appends* off and pos to the index, *enc.PutUint32(dst,src)*
+  - ~internal/log/index_test.go~
+*** internal/log/config.go
+  - Place for the Config struct
+*** internal/log/segment.go
+  Integrates both the *store* and *log* part
+  newSegment()
+  .Append(record *api.Record) protobuf marshalled the entry into the store
+  .Read(uint64) (*api.Record, error) argument is used to lookup into the index which returns a position on the .store.Read()
+  .IsMaxed() bool
+  .Remove(), calls .Close() AND removes the assoc index and store from disk
+  .Close(), closes both index and store
+  .nearestMultiple(uint64, uint64) uint64
+  - ~internal/log/segment_test.go~
+    ioutil.Tempdir()
+    os.RemoveAll()
+*** internal/log/log.go
+- Has a sync.RWMutex
+- Manages the list of segments.
+- Has an active segment, and a slice of segments
+- NewLog()
+- .setup(), reads all files names and gets the base offsets from it.
+          , it creates the segments from them.
+- .Append(*api.Record) (uint64, error), appends to the current segment, check if maxed to create a new segment
+- .Read(offset uint64) (*api.Record, error), finds the segment where the offset falls in, s.Read(offset)
+- .Close() error, closes every segment
+- .Remove() error, .Close() and nukes it all os.RemoveAll(l.Dir)
+- .Reset() error, .Reset() and .setup()
+- .LowestOffset() (uint64, error), baseOffset from the [0] segment
+  .HighestOffset() (uint64, error), nextOffset from the last segment
+- .Truncate(lowest uint64) error, drops segments that are higher nextOffset than lowest
+- .Reader() io.Reader, retuns a io.MultiReader, from each segment store, wrapped on a struct to make sure we read all the file using .ReadAt()
+  - io.MultiReader is a concatenation of all input readers. After which it returns EOF.
+- .newSegment(uint64) error, calls newSegment(), appends to the list, and makes it the active one
+- ~internal/log/log_test.go~
+  - uses t.Run(), ran under a loop of map[string]fn(*testing.T,*Log)
+** Chapter 4: Serve Requests with gRPC
+"A high performance, open source universal RPC framework"
+https://www.grpc.io/
+https://github.com/grpc-ecosystem
+https://github.com/grpc-ecosystem/go-grpc-middleware
+- "The best tool for serving request across distributed services."
+  - Maintains these for both client and servers, for free
+    - Compatibility
+    - Performance
+- Requests/Responses/Models/Serialization is type checked
+- ~internal/~ packages are magical packages in Go that can only be imported by nearby code.
+   code in /a/b/c/internal/d/e/f can be imported from /a/b/c, but not from /a/b/g
+*** Goals when building a service
+  - Simplicity: Abstract no-business logic away, while still having control. Express>gRPC>Rails
+  - Maintainability: for backwards compatibility, the easiest is to *version* and *run* multiple instances of your API.
+  - Security
+  - Ease of use: type system will tell users when they do something wrong.
+  - Performance
+  - Scalability: Load balancing is possible.
+    - thich client-side lb
+    - proxy lb
+    - look-aside lb
+    - service mesh
+*** Defining a gRPC service: is essentially a group of related RPC *endpoints*
+  - Adding this on the previous ~.proto~ file
+    #+begin_src
+  service Log {
+    rpc Consume(ConsumeRequest)              returns (ConsumeResponse) {}
+    rpc Produce(ProduceRequest)              returns (ProduceResponse) {}
+    rpc ConsumeStream(ConsumeRequest)        returns (stream ConsumeResponse) {}
+    rpc ProduceStream(stream ProduceRequest) returns (stream ProduceResponse) {}
+  }
+  message ProduceRequest {
+    Record record = 1;
+  }
+  message ProduceResponse {
+    uint64 offset = 1;
+  }
+  message ConsumeRequest {
+    uint64 offset = 1;
+  }
+  message ConsumeResponse {
+    Record record = 2;
+  }
+  #+end_src
+  - Compile
+    $ go get google.golang.org/grpc@v1.32.0
+    $ go get google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.0.0
+    $ protoc api/v1/*.proto --go_out=. --go-grpc_out=. --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative --proto_path=.
+*** internal/server/server.go
+- We need a struct whose methods match the service definition in your .proto
+#+begin_src go
+package server
+import (
+    "context"
+    api "github.com/travisjeffery/proglog/api/v1"
+    "google.golang.org/grpc"
+)
+type Config struct {
+    CommitLog CommitLog
+}
+var _ api.LogServer = (*grpcServer)(nil)
+type grpcServer struct {
+    api.UnimplementedLogServer
+    *Configp
+}
+func newgrpcServer(config *Config) (srv *grpcServer, err error) {
+    srv = &grpcServer{
+        Config: config,
+    }
+    return srv, nil
+}
+#+end_src
+#+begin_src go
+func (s *grpcServer) Produce(ctx context.Context, req *api.ProduceRequest) (*api.ProduceResponse, error) {
+    offset, err := s.CommitLog.Append(req.Record)
+    if err != nil {
+        return nl, err
+    }
+    return &api.ProduceResponse{Offset: offset}, nil
+}
+func (s *grpcServer) Consume(ctx context.Context, req *api.ConsumeRequest) (*api.ConsumeResponse, error) {
+    record, err := s.CommitLog.Read(req.Offset)
+    if err != nil {
+        return nil, err
+    }
+    return &api.ConsumeResponse{Response: record}, nil
+}
+#+end_src
+#+begin_src go
+func (s *grpcServer) ProduceStream(stream api.Log_ProduceStreamServer) error {
+    for {
+        req, err := stream.Recv()
+        if err != nil {
+            return err
+        }
+        res, err := s.Produce(stream.Context(), req)
+        if err != nil {
+            return err
+        }
+        if err = stream.Send(res); err != nil {
+            return err
+        }
+    }
+}
+func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_ConsumeStreamServer) error {
+    for {
+        select {
+           case <-stream.Context().Done():
+               return nil
+           default:
+               res, err := s.Consume(stream.Context(), req)
+               switch err.(type) {
+                   case nil:
+                   case api.ErrOfsetOutOfRange:
+                        continue
+                   default:
+                        return err
+               }
+        }
+    }
+}
+#+end_src
+* 2021 | Ultimate Go                          | William Kennedy   |
+** Chapter 4: Decoupling
+*** Method receiver, data semantics
+- Pick between value and pointer
+- Check the constructor
+- Ask yourself, if the value can be copied
+  - If yes, it can be passed as value
+  - If no,  it needs to be passed as pointer
+- Keep the same across all for the type
+  - Exception being, if you are strictly implementing an interface
+- OK      value->pointer
+- NEVER pointer->value
+*** Interfaces
+- Use when
+  1) Pluggable Implementation, is needed by the user of an API
+  2) Multiple API Implementations
+  3) Changability, parts of the API can change and need decoupling
+- Do NOT use when
+  1) For the sake of it
+  2) To generalize an algorithm
+  3) When the user can declare their own interfaces
+  4) It is not clear if an interface would make the code clear
+- Generalized interfaces that focus on *behavior* are the best
+- Interfaces with >1 method, have >1 reason to change
+- Interfaces based on nouns, tend to be less reusable
+*** Polymorphism
+- "The concrete type file now implements the reader interface using value semantics"
+- Interface, has two words
+  1) iTable
+     1) describes the type of value stored
+     2) has function poitners to the concrete implementations of the method set, for the type of value stored
+  2) value being stored (a copy of it, or a pointer, depending the data semantics)
+*** Method Set Rules
+- A value         has attached all methods, for that type value
+- A value address has attached all methods, for that type
+*** Slice of Interfaces
+- Reason why GO doesn't need *sub-typing*
+  - it's all about =common behavior=, not *data*
+*** (struct) Embedding
+- Can also be either by value or pointer
+- This is NOT *sub-classing*
+  - NOT about reusing *state* is about =promoting behavior=
+- Being METHOD a method of INNER
+  OUTER.INNER.METHOD // direct call
+  OUTER.METHOD       // calling the promoted method
+*** Exporting
+- Be consistent when exporting struct fields of an embedded structure.
+- Returning a value of an unexported type is meaningless.
+  Since the caller won't be able to reference it.
+  #+begin_src go
+  package counters
+  type alertCounter int
+  func New(value int) alertCounter {
+    return alertCounter(value)
+  }
+  #+end_src
+** Chapter 5: Software Design
+*** Grouping different types of data
+- Do not try to mimick inheritance in GO, with struct embedding
+  - Embedding Is like a 1 way relationship, can't make a slice of the embedded type
+  - "A Dog is a Dog, a Cat is a Cat, and a Animal an Animal"
+  - It's not about grouping through common DNA,
+    It's about grouping through common =behavior=.
+- AVOID: Declaring a type just to share a set of common state.
+- Interfaces give you the way to create slices of things with common behavior.
+- Guidelines on creating types
+  - Something new or unique
+  - Do NOT create types for readability
+  - Embed not for the state but for the behavior
+    - If not, it will lock/rot the design
+  - Question types that are aliases or abstractions of an existent type
+  - Question types whose sole purpose is to share a common state
+*** Don't design with interfaces
+- Program then engineer
+- "Don't design with interfaces, discover them" - Rob Pike
+*** Decoupling with interfaces
+- Work towards composing larger interfaces from smaller one
+*** Error handling
+- Create New() errors
+  #+begin_src go
+  var (
+    ErrBadRequest = errors.New("Bad Request")
+    ErrPageMoved = errors.New("Page Moved")
+  )
+  func webCall(b bool) error {
+    if b {
+      return ErrBadRequest
+    }
+    return ErrPageMoved
+  }
+  #+end_src
+* 2022 | Network Programming with Go Language | Dr Jan Newmarch   | Apress
+** 15 Websockets
+ - HTTP 1.1 with "keep alive" keeping the connection open for a short while,
+   helped mostly for images
+ - AJAX (Asynchronous Javascript and XML) too helped interaction.
+ - ws://, still user-agent initiated, but where is possible a server-to-browser communication
+ - RFC https://datatracker.ietf.org/doc/html/rfc6455
+ - starts listening as http:// and then switches to ws://
+*** golang.org/x/net/websocket   | official
+ - HTTP stream based protocol
+ - WS  frame based protocol
+ - TYPES
+   var Message = Codec{marshal, unmarshal}
+   var JSON = Codec{jsonMarshal, jsonUnmarshal}
+ - SERVER
+   websocket.Message.Send(ws, s)
+   websocket.Message.Receive(ws, &s)
+   websocket.Handler() // args is a func that takes a *websocket.Conn
+ - CLIENT
+   websocket.Dial(URL,PROTO,ORIGIN)
+   websocket.Message.Receive
+   websocket.Message.Send
+ - JSON
+   websocket.JSON.Receive(ws, &someStruct) error
+   websocket.JSON.Send(conn, somestruct) error
+**** echoserver.go
+   #+begin_src go
+   package main
+   import (
+     "fmt"
+     "golang.org/x/net/websocket"
+     "log"
+     "net/http"
+   )
+   func Echo(ws *websocket.Conn) {
+     fmt.Println("Echoing")
+     for n := 0; n< 10; n++ {
+       msg := "Hello " + string(n+48)
+       fmt.Println("Sending to client: " + msg)
+       err := websocket.Message.Send(ws, msg)
+       if err != nil {
+         fmt.Println("Can't send")
+         break
+       }
+       var reply string
+       err = websocket.Message.Receive(ws, &reply)
+       if err != nil {
+         fmt.Println("Can't receive")
+         break
+       }
+       fmt.Println("Received back from client: " + reply)
+     }
+   }
+   func main() {
+     http.Handle("/", websocket.Handler(Echo))
+     err := http.ListenAndServe(":12345", nil)
+     checkError(err)
+   }
+   func checkError(err error) {
+     if err != nil {
+       log.Fatalln("Fatal error ", err.Error())
+     }
+   }
+   #+end_src
+**** echoclient.go
+ #+begin_src go
+ import (
+   "fmt"
+   "golang.org/x/net/websocket"
+   "io"
+   "os"
+   "log"
+ )
+ func main() {
+   if len(os.Args) != 2 {
+     log.Fatalln("Usage: ", os.Args[0], "ws://host:port")
+   }
+   service := os.Args[1]
+   conn, err := websocket.Dial(service, "", "http://localhost:12345")
+   checkError(err)
+   var msg string
+   for {
+     err := websocket.Message.Receive(conn, &msg)
+     if err != nil {
+       if err == io.EOF {
+         break
+       }
+       fmt.Println("Couldn't receive msg " + err.Error())
+       break
+     }
+     fmt.Println("Reeived from server: " + msg)
+     err = websocket.Message.Send(conn, msg)
+     if err != nil {
+       fmt.Println("Couldn't return msg")
+       break
+     }
+   }
+ }
+ func checkError(err error) {
+   if err != nil {
+     log.Fatalln("Fatal error ", err.Error())
+   }
+ }
+ #+end_src
+**** Codec and Implementing and XML codec
+ - Codec signature
+ #+begin_src go
+ type Codec struct {
+   Marshal   func(v interface{})                                (data []byte, payloadType byte, err error)
+   Unmarshal func(data []byte, payloadType byte, v interface{}) (err error)
+ }
+ #+end_src
+ - XML decoder
+ #+begin_src go
+ package main
+ import (
+   "encoding/xml"
+   "golang.org/x/net/websocket"
+ )
+ func xmlMarshal(v interface{}) (msg []byte, payloadType byte, err error) {
+   msg, err = xml.Marshal(v)
+   return msg, websocket.TextFrame, nil
+ }
+ func xmlUnmarshal(msg []byte, payloadType byte, v interface{}) (err error) {
+   err = xml.Unmarshal(msg, v)
+   return err
+ }
+ var XMLCodec = websocket.Codec{xmlMarshal, xmlUnmarshal}
+ #+end_src
+*** github.com/gorilla/websocket | 3rd party
+ - websoket.Upgrader{} // GLOBAL
+   .Upgrade()
+ - SERVER
+   conn.WriteMessage(websocket.TextMessage, []byte(STRINGVAR))
+   conn.ReadMessage()
+   conn.Close()
+ - CLIENT
+   websocket.DefaultDialer.Dial(SERVNAME, make(http.Header))
+   conn.ReadMessage()
+   conn.WriteMessage()
+   websocket.IsCloseError(err, websocket.CloseAbnormalClosure)
+**** echoserver.go
+ #+begin_src go
+ package main
+ import (
+   "fmt"
+   "github.com/gorilla/websocket"
+   "log"
+   "net/http"
+ )
+ var upgrader = websocket.Upgrader{
+   ReadBufferSize:  1024,
+   WriteBufferSize: 1024,
+ }
+ func Handler(w http.ResponseWriter, r *http.Request) {
+   fmt.Println("Handling /")
+   conn, err := upgrader.Upgrade(w, r, nil)
+   if err != nil {
+     fmt.Println(err)
+     return
+   }
+   for n := 0; n < 10; n++ {
+     msg := "Hello " + string(n+48)
+     fmt.Println("Sending to client: " + msg)
+     err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
+     _, reply, err := conn.ReadMessage()
+     if err != nil {
+       fmt.Println("Can't receive")
+       break
+     }
+     fmt.Println("Received back from client: " + string(reply[:]))
+   }
+   conn.Close()
+ }
+ func main() {
+   http.HandleFunc("/", Handler)
+   err := http.ListenAndServe("loalhost:12345", nil)
+   if err != nil {
+     log.Fatalln("Fatal error ", err.Error())
+   }
+ }
+ #+end_src
+**** echoclient.go
+ #+begin_src go
+ package main
+ import (
+   "fmt"
+   "github.com/gorilla/websocket"
+   "io"
+   "log"
+   "net/http"
+   "os"
+ )
+ func main() {
+   if len(os.Args) != 2 {
+     log.Fatalln("Usage: ", os.Args[0], "ws://host:port")
+   }
+   service := os.Args[1]
+   header := make(http.Header)
+   con, _, err := websocket.DefaultDialer.Dial(service, header)
+   if err != nil {
+     log.Fatalln("Fatal error ", err.Error())
+   }
+   for {
+     _, reply, err := conn.ReadMessage()
+     if err != nil {
+       if err == io.EOF {
+         fmt.Println("EOF from the server")
+         break
+       }
+       if websocket.IsCloseError(err, websocket.CloseAbnormalClosure) {
+         fmt.Println("Close from server")
+         break
+       }
+       fmt.Prinln("Could not receive msg " + err.Error())
+       break
+     }
+     fmt.Println("received from server: " + string(reply[:]))
+     err = conn.WriteMessage(websocket.TextMessage, reply)
+     if err != nil {
+       fmt.Println("could not return msg")
+       break
+     }
+   }
+ }
+ #+end_src

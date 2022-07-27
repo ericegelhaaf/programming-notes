@@ -1,0 +1,408 @@
+* TODO Video: Golang UK Conference 2015 - Andrew Gerrand - Stupid Gopher Tricks
+  https://www.youtube.com/watch?v=UECh7X07m6E
+  - struct{} is a type literal, on var foo struct{}
+    - sometimes used on anonymous structs
+    - used on template/json (when pulling a field) or enconding
+    - can be nested
+  - embeddes structs, inherit the methods of the childs
+  - anynoymous, interfaces, used for type assertion
+* TODO Video: GOTO 2020 • GraphQL, gRPC and REST, Oh My! A Method for Unified API Design (2020) / Mike Amundsen
+  https://www.youtube.com/watch?v=oG6-r3UdenE
+  Author of Book: "Design and Build Great Web APIs" (Prag Bookshelf)
+- Designing API/Experience
+  - Dealing with HTTP details, is implementation NOT design
+- Case study:
+  - Large company
+  - Pick OpenApi as the backbone of the practice
+* DONE Video: Intro to gRPC: A Modern Toolkit for Microservice Communication (2017)
+https://www.youtube.com/watch?v=RoXT_Rkg8LA
+REST: is the architectural principle (most use HTTP+JSON
+Implementations:
+  - C++/Java/Python/Go/Ruby/C#/Javascript/Objective-C/PHP
+  - C/Java/Go (real implementations, other are bindings)
+"Rest is actually not that great"
+  - No formal (machine-readable) API *contract*
+    - Writing client libraries requires humans
+    - Humans are expensive(?) and don't like writing client libraries
+  - *Streaming* is difficult.
+  - *Bi-directional streaming* isn't possible at all
+  - Operations are difficult to *model*
+  - *Inefficient* (text isn't optimal for networks)
+  - Internal services aren't RESTful, they are just HTTP endpoints (?)
+Written in IDL (Interface Definition Language)
+  - While protobuf defines the data, gRPC defines interface and data for accepted and returned by it
+  - Machine readable
+  - Can be compiled
+    - Into Client libraries
+    - Combined with a server stub (to create your tcp server of your protocol in few lines).
+Alternatives
+  - WSDL, tried to do this in the past for SOAP.
+    - Tied to XML
+  - Swagger:
+    - Machine readable (on json...)
+    - Still http/json (performance, streaming, modeling problems still present)
+  - Thrift
+    - less documented?
+Born from Google's Project "stubby".
+What really *IS*:
+  - Built on top of HTTP/2
+  - protobuf serialization
+  - Allows client/server side streaming
+*Interceptors* that are kind of "middleware" (on the http.Context sense of the word)
+  - Can be used to add logging
+  - On the server or client
+Problems:
+  - Load Balancing (needs to be a grpc aware lb)
+  - Error handling is bad (no easy to add details of the error)
+  - No support for browser JS
+  - Breaking API changes (grpc side)
+* DONE Video: Things In Go I Never Use (2018) / Mat Ryer
+  https://www.youtube.com/watch?v=5DVV36uqQ4E
+  Author of "Go Programming Blueprints"
+- Arrays
+- http.Handler, insted use http.HandlerFunc. So no need to implement the Serve(),
+                we just need a function that return a http.HandlerFunc
+  Might get slower on initialization: but with *var init Sync.Once* it solves it
+- Keywords: goto, fallthrough, else
+  - *goto*, the code gets difficult to "see". "Ok", when small and local.
+  - *else*, don't for glanceability
+  - *new*, just *AThing{}* or *var thing Athing*
+- Build-In Functions: cap, complex, imag, new, panic, real, print, println
+  - *panic*, only panic to give a better panic(), like with an argument explaining what happned
+* DONE Video: dotGo 2014 - John Graham-Cumming - I came for the easy concurrency I stayed for the easy composition
+- Problem: identify if site is cloudflare or not (check NS)
+  #+begin_src go
+type lookup struct {
+  name       string
+  err        error
+  cloudflare bool
+}
+  #+end_src
+- Problem: score exit tor nodes and score them on *Project Honeypot*
+  Reusing code above with interfaces.
+  With the ~factory pattern~.
+  #+begin_src go
+type factory interface {
+  make(line string) task
+}
+type task interface {
+  process()
+  print()
+}
+
+type lookupFactory struct {
+}
+func (f *lookupFactory) make(line string) task {
+  return &lookup{name: line}
+}
+
+type lookup struct {
+  name string
+  err error
+  cloudflare bool
+}
+func (l +lookup) process() {
+  nss, err := net.LookupNS(l.name)
+  if err != nil {
+    l.err = err
+  } else {
+    for _, ns := range nss {
+        if strings.HasSuffix(ns.Host, ".ns.cloudflare.com") {
+          l.cloudflare = true
+          break
+        }
+    }
+  }
+}
+  #+end_src
+* DONE Video: 2012 - Rob Pike - Go Concurrency Patterns
+Channels are first class values
+** Generator - 15:52
+- "like having a service"
+- ME: kind of like a lazy timed infinite sequence.
+  ME: since channels I/O is blocked
+- a function can spawn a goroutine and return a channel, but nowhere on his type is detailed the spawn
+  #+begin_src go
+  c := boring("boring!")
+  for i := 0; i < 5; i++ {
+    fmt.Printf("You say: %q\n", <-c)
+  }
+  fmt.Println("You're boring; I'm leaving.")
+
+  func boring(msg string) <-chan string {
+    c := make(chan string)
+    go func() {
+      for i := 0; ; i++ {
+        c <- fmt.Sprintf("%s %d, msg, i)
+        time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+      }
+    }()
+    return c
+  }
+  #+end_src
+** Multiplexing/Fanin - Goroutines - 17:08
+- take 2 channels and return 1, instead of lockstep each output
+  #+begin_src go
+  func fanIn(input1, input2 <-chan string) <-chan string {
+    c := make(chan string)
+    go func() { for { c <- <-input1 } }()
+    go func() { for { c <- <-input2 } }()
+    return c
+  }
+  func main() {
+    c := fanIn(boring("Joe"), boring("Ann"))
+      for i := 0; i < 10; i++ {
+        fmt.Println(<-c)
+      }
+    fmt.Println("You're boring; I'm leaving")
+  }
+  #+end_src
+** Signal Wait Channel - 19:00
+#+begin_src go
+type Message struct {
+  str string
+  wait chan bool
+}
+// main
+for i := 0; i < 5; i++ {
+  msg1 := <-c; fmt.Println(msg1.str)
+  msg2 := <-c; fmt.Println(msg2.str)
+  msg1.wait <- true
+  msg2.wait <- true
+}
+// boring
+waitForIt := make(chan bool)
+c <- Message{ fmt.Sprintf("%s: %d", msg, i), waitForIt }
+time.Sleep(time.Duration(rand.Intn(2e3)) * time.Milliseconds)
+<-waitForIt
+#+end_src
+** Multiplexing/Fan-In - select/case
+#+begin_src go
+func fanIn(input1, input2 <-chan string) <-chan string {
+  c := make(chan string)
+  go func() {
+    for {
+      select {
+      case s := <-input1: c <- s
+      case s := <-input2: c <- s
+      }
+    }
+  }
+}
+#+end_src
+- reads or writes into different channels
+- not order dependant, if 2 channels are ready, one is pick at random
+- blocks forever, unless there is a *default* case
+** Timeout each message select/case, time.After(), return
+- it will timeout because boring() has a random sleep time
+#+begin_src go
+func main() {
+  c := boring("Joe")
+  for {
+    select {
+    case s:= <-c:
+      fmt.Println(s)
+    case <-time.After(1 * time.Second):
+      fmt.Println("You're too slow.")
+      return
+    }
+  }
+}
+#+end_src
+** Timeout whole conversation select/case, time.After(), return
+- by creating the timeout channel outside the loop, instead of in each cycle
+#+begin_src go
+func main() {
+  c := boring("Joe")
+  timeout := time.After(5 * time.Second)
+  for {
+    select {
+    case s := <-c:
+      fmt.Println(s)
+    case <-timeout:
+      fmt.Println("You talk too much")
+      return
+    }
+  }
+}
+#+end_src
+** Quit Channel, to manually signal an exit
+#+begin_src go
+quit := make(chan bool)
+c := boring("Joe", quit)
+for i := rand.Intn(10); i >= 10; i-- { fmt.Println(<-c) }
+quit <- true
+//...
+select {
+case c <- fmt.Sprintf("%s: %d", msg, i):
+// do nothing
+case <-quit:
+  return
+}
+#+end_src
+** TODO Daisy-chain 27:00
+** Example: Fan-in + Timeout + Replicas
+#+begin_src go
+type Search func(query string) Result
+
+func First(query string, replicas ...Search) Result {
+  c := make(chan Result)
+  searchReplica := func(i int) { c <- replicas[i](query) }
+  for i := range replicas {
+    go searchReplica(i)
+  }
+  return <-c
+}
+//..main
+c := make(chan Result)
+go func() { c <- First(query, Web1,   Web2) }()
+go func() { c <- First(query, Image1, Image2) }()
+go func() { c <- First(query, Video1, Video2) }()
+timeout := time.After(80 * time.Millisecond)
+for i := 0; i < 3; i++ {
+  select {
+  case result := <-c:
+    results = append(results, result)
+  case <-timeout:
+    fmt.Println("timed out")
+    return
+  }
+}
+#+end_src
+** Examples
+- gochatroutlette https://www.youtube.com/watch?v=bj6EtLacsj8 
+- goloadbalancer https://www.youtube.com/watch?v=jgVhBThJdXc
+- gosieve https://github.com/aht/gosieve
+- gopowerseries https://go.dev/test/chan/powser1.go
+* TODO Video: Practical Go: Real world advice for writing maintainable Go programs / Dave Cheney (2019)
+  https://www.youtube.com/watch?v=gi7t6Pl9rxE
+  https://dave.cheney.net/practical-go/presentations/qcon-china.html
+- "Waterfall way of writting books" (how books are written?)
+- Bryan Cantrill talk about operative systems (LINK??)
+** Identifiers
+- Names have an *oversized* impact in go
+- consise
+  descriptive, on vars "how" is used not "what" it has, on methods "what" it does not "how"
+  predictable
+- DO not short already short names, like oid to just o
+- Avoid naming with:
+  | do NOT                           | instead                           |
+  |----------------------------------+-----------------------------------|
+  | companiesMap map[string]*Company | companies map[string]*Company     |
+  | config Config*                   | c Config* or conf *Config         |
+  | config1 Config*, config2 Config* | original Config*, updated Config* |
+  | context context.Context          | ctx context.Context               |
+- "a" and "b" are usually names given to variables that are going to be compared
+** Comments
+"Good code has a lot comments, bad code requires a lot of comments" -- Dave Thomas (on The Pragmatic Programmer)
+- Start writting the comment fo rthe function.
+  - If you found an *and* while writing the function, it is doing 2 things, and needs refactoring.
+- Comment exported symbols
+  - NOT implementation of an interface
+** Package Design
+- "Your one word elevator pitch word to define your package"
+- Unique (a name that needs a partner like, client and server, is likely not a good name)
+1:18:32
+* TODO Video: Will contracts replace interfaces? / Francesc Campoy (2019)
+  https://www.youtube.com/watch?v=E75b9kuyRKw
+  - Go has 2 types, abstract or concrete.
+  - Interfaces
+    - Canonical examples of interfaces are Reader/Writer with Read/Write methods.
+    - They create a "set" of types
+      - Can define an "union" interface of those interfaces
+      - The ~empty interface~ interface{} "contains" all the types
+    - You can translate some of the behaviour of something (an object in other languages)
+        to an interface with methods associated.
+      Like a Stack which has Pop, Push, Empty methods.
+    - And then you have algoritms that can work with that interface.
+    - However there are types that are not completely defined by JUST an interface. So it is
+      kind of an incomplete idea.
+    - "Return concrete types, accept interfaces"
+  - Call Dispatch: f.Do()
+  - Interception Points: when an interface is provided for a struct type, the methods
+    of the interface are the interception points.
+  - ~Implicit interface satisfaction~ no implements. Instead of import the type of the interface you can declare it
+    locally. "give me something that can Eval() or Pop() ... etc"
+* DONE Video: 7 common mistakes in Go and when to avoid them / Steve Francia (2015)
+  https://www.youtube.com/watch?v=29LLRKIL_TI
+  - Types can express State and Behavior
+    - State = struct
+    - Behavior = interface
+  - (Below are translated as DO)
+    1) Accept interfaces parameters:
+        Example: instead of translated a buffer to .Bytes()
+                 just send it and accept the interface as argument
+    2) Use io.Reader, io.Writer
+    3) Do not abuse broader interfaces, use the smaller for the job
+    4) Methods vs Functions
+       - functions do not depend of state or do not change it, same input same output.
+         Can accept interfaces
+       - method defines a behaviour of a type, depend of the state.
+         Bound to a type.
+    5) pointer vs value: shared access vs value copied
+    6) Custom error: implement the interface when needed
+    7) Know what is Safe and what is Unsafe
+* Video: Golang University
+  https://www.youtube.com/playlist?list=PLEcwzBXTPUE_5m_JaMXmGEFgduH8EsuTs
+** 2016 - Mat Ryer - Idiomatic Go Tricks - Golang UK Conference
+   - No empty lines
+   - Line of sight: 1 indentation at most
+     - Make the happy treturn the last statement if possible
+   - Single method interfaces
+     - Function type alternatives for single method interfaces (like HandlerFunc)
+     - can also use them as a slice of interface
+   - Log Blocks
+     log.Println("----")
+     defer log.Println("----")
+   - return teardown functions as an argument
+     - so it can be immediatly defer after assigment
+   - You can check if a element implements an interface.
+     #+begin_src go
+                          // where v is an interface{}
+     obj, ok := v.(Valid) // where Valid is an interface, that implements OK()
+     if !ok {
+       return nil // no OK method
+     }
+     #+end_src
+   - Sometimes somebody elese provides the struct (and not the interface)
+     - Make your own interface
+   - We can leave the receiver part of a method empty, just specify the type
+   - We can use channels as semaphores to limit the ammount of work.
+** TODO 2019 - Dave Cheney - Clear is better than clever - GopherCon SG
+   https://www.youtube.com/watch?v=NwEuRO_w8HE
+   - Source code is the intermediate form, between the idea and what the machine does
+   - Readability is subjective
+   - Clarity != Readability
+   - you can either use new() or &Thing{}
+   - When you see something complicated, it should be complicated
+     12:00
+* TODO Video: Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay
+  https://www.youtube.com/watch?v=LI1YTFMi8W4
+  https://github.com/eranyanay/1m-go-websockets
+- First problem is not having long lived connections. (ignores keep alive?)
+* Video: 2013 - Campoy - Go: Code that GFrows with Grace
+  https://www.youtube.com/watch?v=bj6EtLacsj8
+- 9:26 concurrent echo tcp server
+  #+begin_src go
+package main
+import (
+  "io"
+  "log"
+  "net"
+)
+const listenAddr = "localhost:4000"
+
+func main() {
+  l, err := net.Listen("tcp", listenAddr)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for {
+    c, err := l.Accept()
+    if err != nil {
+      log.Fatal(err)
+    }
+    go io.Copy(c, c)
+  }
+}
+  #+end_src
