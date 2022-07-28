@@ -198,7 +198,7 @@ type error interface {
 - Exception being when the interface and the (single only) type can't be on the same package.
 - ~ask only for what you need~, rule of thumb for interface design
 * 2016 | Go in practice                       | Matt Butcher      | Manning
-** 4.1
+** 4 Handling Errors and Panics
 - errors.New
   fmt.Errorf
 - Sometimes, when returning a meaningful non-nil value we can ignore the error check
@@ -206,21 +206,21 @@ type error interface {
   - When we need to return more than a string
   - packages can export errors (errors.New) instances that can be ~err ==~
   - Custom error, to add more data to the error
-     #+begin_src go
-type ParseError struct {
-    Message    string,
-    Line, Char int
-}
-func (p *ParseError) Error() string {
-   format := "%s on Line %d, Char %d"
-   return fmt.Sprintf(format, p.Message, p.Line, p.Char)
-}
+    #+begin_src go
+      type ParseError struct {
+          Message    string,
+          Line, Char int
+      }
+      func (p *ParseError) Error() string {
+         format := "%s on Line %d, Char %d"
+         return fmt.Sprintf(format, p.Message, p.Line, p.Char)
+      }
   #+end_src
   - Default interface
      #+begin_src go
-type error interface {
-    Error() string
-}
+       type error interface {
+           Error() string
+       }
      #+end_src
 - panics
   - unwind the stack
@@ -229,7 +229,9 @@ type error interface {
 * 2016 | Go Programming Blueprints            | Mat Ryer          | Packt
    https://github.com/matryer/goblueprints
 ** 1 - Chat Application with Web Sockets
-
+- we are using *package main* because we want to build and run our program from the CLI
+- if we were building a reusable chating package,
+  we might choose to use something different, such as *package chat*
 ** 6 - Exposing data and functionality through a RESTful data web service API
 *** Context
    - *context* To share data between different handlers/middleware in a request
@@ -255,14 +257,14 @@ type error interface {
       Example: json and bson (for mongo)
 ** 8 - Filesystem Backup
 - With interfaces, we can export an *instance* of the type, without exporting the *type* itself
-   #+begin_src go
-package backup
+  #+begin_src go
+    package backup
 
-type Archiver interface {
-  Archive(src, dest string) error
-}
-type zipper struct{}
-var ZIP Archiver = (*zipper)(nil)// We export ZIP, which satisfies Archiver
+    type Archiver interface {
+      Archive(src, dest string) error
+    }
+    type zipper struct{}
+    var ZIP Archiver = (*zipper)(nil)// We export ZIP, which satisfies Archiver
  #+end_src
 - Writing a string into a Writer:
   - io.WriteString()
@@ -273,16 +275,16 @@ var ZIP Archiver = (*zipper)(nil)// We export ZIP, which satisfies Archiver
 - log.Fatal(), same as print to sterr and os.exit(1)
 - we can use a *defer* on main, to return an error if the program failed
   #+begin_src go
-func main() {
-  var fatalErr error
-  defer func() {
-    if fatalErr != nil {
-      flag.PrintDefaults()
-      log.Fatalln(fatalErr)
+    func main() {
+      var fatalErr error
+      defer func() {
+        if fatalErr != nil {
+          flag.PrintDefaults()
+          log.Fatalln(fatalErr)
+        }
+      }()
+      // ...
     }
-  }()
-  // ...
-}
   #+end_src
 * 2018 | Get Programming with Go              | Nathan Youngman   | Manning
 Code: https://github.com/nathany/get-programming-with-go
@@ -584,6 +586,8 @@ Source: https://github.com/travisjeffery/proglog
   Studied from Consul source code.
 - "Designing data intense applications" by Martin Kleppman
   Covers data structures and algorithms for distributed services, abstractly.
+- https://github.com/hashicorp/serf embeded service discovery
+- https://github.com/uber-go/zap logging
 ** Chapter 1: Let's Go
 - On C, author was bugged by the lack of modules
 - Author's project *Jocko*, and implementation of Kafka in Go
@@ -826,6 +830,124 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
         }
     }
 }
+#+end_src
+** Chapter 7: Server-to-Server Service Discovery
+- It must keep an up-to-date list (aka *registry*) of services/locations/health
+- When?: for server-to-server communication, where you control the servers and don't need a LB
+  - If you manage 10's or 100's of microserv1ices.
+    Otherwise you will need the same ammount of LB's and DNS records.
+- Two different service-discovery problems to solve
+  - servers to discover each other (ch7,ch8)
+  - clients to discover the servers (ch9)
+- https://github.com/hashicorp/serf golang library that can be embeded SD to provide
+  * decentralized cluster membership
+  * failure detection
+  * orchestration
+- Serf uses a lightweight *gossip protocol* to communicate between the service nodes.
+- Every instance on the cluster runs a *serf node*
+*** Implementation
+- go get github.com/hashcorp/serf@v0.8.5
+- m.Config.Tags
+  serf shares these tags to the other nodes in the cluster.
+  eg: voter or non-voter
+- m.EventCh
+  where you receive sefs events when a node joins or leaves the cluster
+- internal/discover/membership.go
+  #+begin_src go
+    package discovery
+    import (
+            "net"
+            "go.uber.org/zap"
+            "github.com/hashicorp/serf/serf"
+    )
+    type Membership struct {
+            Config
+            handler Handler
+            serf    *serf.Serf
+            events  chan serf.Event
+            logger  *zap.Logger
+    }
+    func New(handler Handler, config Config) (*Membership, error) {
+            c := &Membership{
+                    Config: config,
+                    handler: handler,
+                    logger: zap.L().Named("membership"),
+            }
+            if err := c.setupSerf(); err != nil {
+                    return nil, err
+            }
+            return c, nil
+    }
+    type Config struct {
+            NodeName       string
+            BindAddr       string
+            Tags           map[string]string
+            StartJoinAddrs []string
+    }
+    func (m *Membership) setupSerf() (err error) {
+            add, err := net.ResolveTCPAddr("tcp", m.BindAddr)
+            if err != nil {
+                    return err
+            }
+            config := serf.DefaultConfig()
+            config.Init()
+            config.MemberlistConfig.BindAddr = addr.IP.String()
+            config.MemberlistConfig.BindPort = addr.Port
+            m.events = make(chan serf.Event)
+            config.EventCh = m.events
+            config.Tags = m.Tags
+            config.NodeName = m.Config.NodeName
+            m.serf, err = serf.Create(config)
+            if err != nil {
+                   return err
+            }
+            go m.eventHandler()
+            if m.StartJoinAddrs != nil {
+                    _, err = m.serf.Join(m.StartJoinAddrs, true)
+                    if err != nil {
+                           return err
+                    }
+                    return nil
+            }
+            return nil
+    }
+  #+end_src
+**** Event handler
+#+begin_src go
+  type Handler interface {
+          join(name, addr string) error
+          Leave(name string) error
+  }
+  func (m *Membership) eventHandler() {
+       for e := range m.events {
+             switch e.EventType() {
+             case serf.EventMemberJoin:
+                  for _, member := range e.(serf.MemberEvent).Members {
+                        if m.isLocal(member) {
+                            continue
+                        }
+                        m.handleJoin(member)
+                  }
+             case serf.EventMemberLeave, serf.EventMemberFailed:
+                  for _, member := range e.(serf.MemberEvent).Members {
+                      if m.isLocal(member) {
+                          return
+                      }
+                      m.handleLeave(member)
+                  }
+             }
+       }
+  }
+  func (m *Membership) handleJoin(member serf.Member) {
+       if err := m.handler.Join(member.Name, member.Tags["rpc_addr"]); err != nil {
+             m.logError(err, "failed to join", member)
+       }
+  }
+  func (m *Membership) handleLeave(member serf.Member) {
+       if err := m.Handler.Leave(member.Name); err != nil {
+             m.logError(err, "failed to leave", member)
+       }
+  }
 #+end_src
 * 2021 | Ultimate Go                          | William Kennedy   |
 ** Chapter 4: Decoupling

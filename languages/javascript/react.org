@@ -1,3 +1,7 @@
+- Filtering undefined elements from an array in TypeScript
+  https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
+- https://quicktype.io/typescript/
+- https://frontendmastery.com/posts/the-new-wave-of-react-state-management/
 - Beta Documentation https://beta.reactjs.org/
 - Tutorial https://www.w3schools.com/react/default.asp
 - websockets example https://www.freecodecamp.org/news/react-websockets-project-build-real-time-order-book-app/
@@ -44,6 +48,12 @@
       the current state
     x the DOM element that exists outside of the parent component
   #+end_src
+- vite
+  yarn create vite
+  cd
+  yarn add -DE prettier
+  yarn add -D eslint-config-prettier eslint-plugin-prettier @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react
+
 * TODO Video: 2014 - Pete Hunt: The Secrets of React's Virtual DOM -- FutureJS
   https://www.youtube.com/watch?v=-DX3vJiqxm4
   - Ideas not implementations
@@ -250,7 +260,7 @@
   |       |           | AsyncObservable[T] |
 - If you use futures, you should use a language that has language support for it (try/catch)
 ** Video: Joe Armstrong - K things I know about building Resilient Reactive Systems
-* Book: Learning React (2nd Edition)
+* Book: 2020 | Learning React                  | Alex Banks
   https://github.com/MoonHighway/learning-react
 ** DONE 1 - Welcome to React
 - Is a *small library* that doesn't come with everything you might need out of the box.
@@ -3608,7 +3618,7 @@
      );
      export default ThirdPage;
      #+end_src
-* Book: Fullstack React with Typescript
+* Book: 2020 | Fullstack React with Typescript | Nate Murray
  - Types reduce 15% of bugs on JS https://earlbarr.com/publications/typestudy.pdf
  - TDD between 40%-90% of bug reduce http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.210.4502&rep=rep1&type=pdf
 ** Trello App
@@ -4385,7 +4395,7 @@
     }
   )
   #+end_src
-* Book: React - The Road to Enterprise
+* Book: 2022 | React The Road to Enterprise    | Thomas Findlay
   code https://github.com/ThomasFindlay/react-the-road-to-enterprise
 ** 2 Project configuration and useful extensions
 *** craco.config.js
@@ -4759,7 +4769,7 @@
  - useImmer() can be used when stateless changes are too verbose (like nested objects) for readability and maintenance.
    | useImmer()        | useState()   |
    | useImmerReducer() | useReducer() |
-* Book: 2021 - React Cookbook - David Griffiths
+* Book: 2021 | React Cookbook                  | David Griffiths
   code https://github.com/dogriffiths/ReactCookbook-source/
 ** 3 Managing State
 *** 3 Create and Validate Forms
@@ -4813,6 +4823,271 @@
    return online
  }
  #+end_src
+* Book: 2022 | Real-World Next.js              | Michele Riva
+code https://github.com/PacktPublishing/Real-World-Next.js
+postman alternative https://insomnia.rest/
+atomic design https://bradfrost.com/blog/post/atomic-web-design
+manifest.json https://web.dev/add-manifest/
+public apis https://github.com/public-apis/public-apis
+CORS https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+** 04 Organizing the Code Base and Fetching Data in Next.js
+*** /components/ Atomic design Principle
+|-----------+-------------------------------------------------------+------------------------------------------------------|
+| atoms     |                                                       | wrappers of html elemnts, animations, color palletes |
+| molecules | small group of atoms                                  | <input> + <label> atom wrappers                      |
+| organisms | molecules and atoms combined                          | registration form, footer, carousel                  |
+| templates | "skeletons", organisms, atoms, and molecules together |                                                      |
+|-----------+-------------------------------------------------------+------------------------------------------------------|
+- mkdir -p components/{atoms,molecules,organism,templates}
+- mkdir -p components/atoms/Button; cd $_
+  index.js
+  buton.test.js
+  button.styled.js (or style.module.css)
+*** /utilities/
+- By scope
+  touch utilities/{time.js, localStorage.js, jwt.js, logs.js}
+- For files that do NOT export components
+  eg: check whether a hour of the day has passed
+*** /public/assets/ static assets
+- images, compiled JS, compiled CSS, icons, manifest.json, robots.txt
+- public/assets/{js,css,icons,images}
+- public/manifest.json
+  <link rel="manifest" href="/manifest.json">
+  #+begin_src json
+    {
+      "name": "My next.js app",
+      "short_name": "next.js app",
+      "description": "a test app made with next.js",
+      "background_color": "#a600ff",
+      "display": "standalone",
+      "theme_color": "#a600ff",
+      "icons": [
+        {
+        "src": "/assets/icons/icon-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+        {
+        "src": "/assets/icons/icon-512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+        }
+      ]
+    }
+  #+end_src
+*** /lib/
+- scripts that wrap thid-party libraries as lib files
+- lib/graphql/{queries,mutations}/*.js
+  lib/graphql/index.js
+*** Data Fetching
+- delegate database connection and queries to external systems (REST/GraphQL)
+- Fetch from the server
+  getServerSideProps()
+  getStaticProps()
+  pages/api/
+- Alternatices to not expose an /api endpoint
+  - render the component list exclusively on the server GSSP()
+  - use an authentication method (JWT,API...)
+  - use a backend framework (rails, spring, lavarel, nest.js, strapi)
+- Libraries to fetch() from the server (next.js)
+  - isomorphic-unfetch
+  - undici
+  - Axios
+- When to make HTTP requests on the client
+  1) make it to trusted sources only
+  2) call https apis
+  3) never connect to a remote db from a browser
+- Client side requests need a "Loading..." pagej
+- Code
+  #+begin_src js
+    import axios from 'axios';
+    export async function getServerSideProps() {
+        const usersReq = await axios.get('https://api.rwnjs.com/04/users');
+        if (userReq.status === 404) {
+            return {
+                notFound: true // !!!
+            }
+        }
+        return {
+            props: {
+                users: usersReq.data
+            }
+        };
+    }
+  #+end_src
+*** TODO GraphQL
+** 12 Managing Authentication and User Sessions
+*** JWT (Json Web Token)
+https://jwt.io/
+https://datatracker.ietf.org/doc/html/rfc7519#section-4
+- 3 fields
+  | Header    | token type and algorithm used for signing 3)                                     |
+  | Payload   | non-sensistive data (eg: "sub"(subject), "aud"(audiene), "exp"(expiration time)) |
+  | Signature | does NOT contain the *secretpassword*                                            |
+- each base64 encoded
+- separated by "."
+- by auth0
+- code: generate
+  #+begin_src js
+    const jwt = require('jsonwebtoken');
+    const myToken = jwt.sign(
+        {
+            name: 'Jane Doe',
+            admin: false,
+        },
+        'secretpassword',
+    );
+    const tokenValue = jwt.verify(myTOken, 'secretpassword');
+  #+end_src
+*** Custom Autentication
+- Non-Custom Providers: auth0, firebase, aws cognito, magic.link
+- Cookies should have =httOnly= flag set to true to prevent JS to accessing it
+- Instead of returning a plain JSON with the information we return it JWT encoded.
+  TO ensure it cannot be forged.
+**** Server Code: Add the JWT encoded data to a cookie
+  #+begin_src js
+    // yarn add cookie
+    import { serialize } from 'cookie';
+    // ... user is JWT.encode()
+    if (user) {
+        res.SetHeader('Set-Cookie', serialize('my_auth', user, { path: '/', httpOnly: true }))
+        return res.json({ success: true });
+    } else {
+        return res.status(401).json({
+            success: false,
+            error: 'Wrong email of password',
+        });
+    }
+  #+end_src
+**** Client Code: /pages/protected-route.js
+  #+begin_src js
+    import { useRouter } from 'next/router';
+    import { useAuth } from '../lib/hook/auth';
+
+    export default function ProtectedRoute() {
+        const router = useRouter();
+        const { loading, error, loggedIn } = useAuth();
+        if (!loading && loggedIn) {
+            router.push('/login');
+        }
+        return (
+            <div>
+                {loading && <p>Loading...</p>}
+                {error   && <p> An error ocurred. </p>}
+                {loggedIn && (
+                    <>
+                        <h1>Protected Route</h1>
+                        <p>You can't see me if not logged-in!</p>
+                    </>
+                )}
+            </div>
+        );
+    }
+  #+end_src
+**** Client Code: /pages/login.js, <form> with useRoute() target
+#+begin_src js
+  import { useState } from 'react';
+  import { useRouter } from 'next/router';
+  import { useAuth } from '../lib/hook/auth';
+  export default function Home() {
+      const router = useRouter();
+      const [loginError, setLoginError] = useState(null);
+      const { loading, loggedIn } = useAuth();
+      const handleSubmit = (event) => {
+          event.preventDefault();
+          const { email, password } = event.target.elements; // !!!!
+          setLoginError(null);
+          handleLogin(email.value, password.value)
+            .then(() => router.push('/protected-route'))
+            .catch((err) => setLoginError(err.message));
+      };
+      if (loading) return <p>Loading..<p/>;
+      if (!loading && loggedIn) {
+          router.push('/protected-route');
+          return null;
+      }
+      return (
+          <div>
+              <h1>Login</h1>
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" />
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" />
+                <buton type="submit">Login</button>
+                {loginError && (<div>{loginError}</div>)}
+              </form>
+          </div>
+      );
+  }
+#+end_src
+**** Client Code: handleLogin()
+#+begin_src js
+  async function handleLogin(email, password) {
+      const resp await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email,
+              password,
+          }),
+      });
+      const data = await resp.json();
+      if (data.success) {
+          return;
+      }
+      throw new Error('Wrong email or password');
+  }
+#+end_src
+**** Server Code: /pages/api/get-session.js, validates JWT cookie from the client
+#+begin_src js
+  import { parse } from 'cookie';
+  import { decode } from '../../lib/jwt';
+  export default (req, res) => {
+      if (req.method !== 'GET') {
+          return res.status(404).end();
+      }
+      const { my_auth } = parse(req.header.cookie || '');
+      if (!my_auth) {
+          return resjson({ loggedIn: false });
+      }
+      return res.json({
+          loggedIn: true,
+          user: decode(my_auth),
+      });
+  }
+#+end_src
+**** Client Code: lib/hooks/auth.js, handles login and JWT validation
+#+begin_src js
+  import { useState, useEffect } from 'react';
+  export function useAuth() {
+      const [loggedIn, setLoggedIn] = useState(false);
+      const [user, setUser]         = useState(null);
+      const [loading, setLoading]   = useState(true);
+      const [error, setError]       = useState(null);
+      useEffect(() => {
+          setLoading(true);
+          fetch('/api/get-session')
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.loggedIn) {
+                    setLoggedIn(true);
+                    setUser(data.user);
+                }
+            })
+            .catch((err) => setError(err))
+            .finally(() => setLoading(false));
+      }, []);
+      return {
+          user,
+          loggedIn,
+          loading,
+          error,
+      };
+  }
+#+end_src
 * Tutorial: Next.js https://nextjs.org/docs
 ** Pages https://nextjs.org/docs/basic-features/pages
 - Pre-rendering

@@ -1,17 +1,1747 @@
-- CS170 -  Efficient Algorithms and Intractable Problems
-  https://cs170.org/
-- https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
-  "Algorithms with Attitude"
-- CodeEric
-  https://www.youtube.com/channel/UCVUreMZC948wS-KecowbA_g/
-- https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
-  "Algorithms with Attitude"
-- https://github.com/chiroptical/ctfp-book-club
-  https://github.com/hmemcpy/milewski-ctfp-pdf
-- Category Theory
-  https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
-  https://www.youtube.com/playlist?list=PLbgaMIhjbmElia1eCEZNvsVscFef9m0dm
+- https://github.com/fogleman/AdventOfCode2021/
+- https://github.com/cl2333/Grokking-the-Coding-Interview-Patterns-for-Coding-Questions
+- https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed
+- https://malisper.me/an-algorithm-for-passing-programming-interviews/
+- https://ourmachinery.com/post/data-structures-part-1-bulk-data/
+- https://github.com/matramos/elrejunte
+  https://github.com/undefinedfceia/guardian-tortuga
+- https://github.com/ec24/tc-arg
+  https://www.youtube.com/user/ltaravilse/videos
+- https://github.com/jwasham/coding-interview-university
+- CS170 - Efficient Algorithms and Intractable Problems https://cs170.org/
+- Competitive https://cses.fi/problemset/
+* Videos
+** Data Structures
+   https://www.youtube.com/playlist?list=PLI1t_8YX-Apv-UiRlnZwqqrRT8D1RhriX
+   Balanced Parentheses in Expression
+   Queue With Two Stacks
+   Stacks and Queues
+   Cycles in a Linked List
+   Linked Lists
+   Binary Search Tree
+   Trees
+   Solve 'Contacts' Using Tries
+   Tries
+   Heaps
+   Solve 'Find the Running Median' Using Heaps
+   Anagram Problem Solution
+   Hash Tables
+   Solve 'Ransom Note' Using Hash Tables
+   Hash Tables
+** Algorithms
+   https://www.youtube.com/playlist?list=PLI1t_8YX-ApvMthLj56t1Rf-Buio5Y8KL
+   Recursion
+   Solve 'Ice Cream Parlor' Using Binary Search
+   Binary Search
+   Solve 'Shortest Reach' Using BFS
+   Solve 'Connected Cells' Using DFS
+   Solve 'Recursive Staircase' Using Recursion
+   Quicksort
+   Merge Sort
+   Bubble Sort
+   Solve 'Coin Change' Using Memoization and DP
+   Memoization and Dynamic Programming
+   Sort An Array with Comparator
+   Bit Manipulation
+   Graph Search, DFS and BFS
+   Solve 'Lonley Integer' Using Bit Manipulation
+** Channel
+- Reducible https://www.youtube.com/c/Reducible
+- "Algorithms with Attitude" https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
+- CodeEric https://www.youtube.com/channel/UCVUreMZC948wS-KecowbA_g/
+- Coding with Some Guy https://www.youtube.com/channel/UCBwH4Xj7s5C9tkeYxI3dIzA/about
+- Creel https://www.youtube.com/c/WhatsACreel/videos
+- Club de Programación Competitiva https://www.youtube.com/channel/UCZalVP2C0nwe0JjmItyKS1w/videos
+- Programacion Competitiva Bolivia https://www.youtube.com/channel/UCod9TyxrhF8QHMezaVzMDVg/videos
+- Club de Programación Competitiva UMSA https://www.youtube.com/channel/UCi3lobNX_J1cMW6BjFZGTmw/videos
+* Video: Balanced binary search tree rotations.
+   https://www.youtube.com/watch?v=q4fnJZr8ztY
+   - We move the nodes without breaking the tree invariants (the hierarchy of the rest of the nodes)
+     We do NOT care about the structure, only of the invariants of the BST (left<right)
+     The level does NOT matter, the left-right does.
+   - code (missing update of possible parent link on A to point to B)
+     #+begin_src python
+     function righRotate(A):
+       B := A.left
+       A.left = B.right
+       B.right = A
+       return B
+     #+end_src
+* Video: Floyd Warshall - All Pairs Shortest Path Algorithm
+  https://www.youtube.com/watch?v=4NQ3HnhyNfQ
+ - Ideal for <200 nodes
+ - APSP = All Pairs Shortest Path algorithm
+ - m[i][j] = 2D Adjacency Matrix
+   0        for self
+   infinity for unreachable
+ - We use a memoized table of the previous optimal solutions
+   from i to j
+   routing through nodes 0..k
+   #+begin_src c
+     dp[k][i][j];
+     dp[k][i][j] = m[i][j]; // if k = 0
+     dp[k][i][j] = min(dp[k-1][i][j],
+                       dp[k-1][i][k]+dp[k-1][k][j]);
+     // OR
+     dp[i][j] = m[i][j]; // if k = 0
+     dp[i][j] = min(dp[i][j],
+                    dp[i][k]+dp[k][j]);
+   #+end_src
+ - Comparison
+  |            | BFS      | Dijkstra    | Bellman | Floyd    |
+  |            |          |             | Ford    | Warshall |
+  |------------+----------+-------------+---------+----------|
+  | Complexity | V + E    | (V+E) log V | V . E   | V^3      |
+  | Graph Size | large    | large       | medium  | small    |
+  | APSP?      | unweight | ok          | ~bad~   | yes      |
+  | (-) Cycles | no       | no          | yes     | yes      |
+  | weighted   | no       | =Best=      | ok      | ~bad~    |
+  | unweighted | =Best=   | ok          | ~bad~   | ~bad~    |
+  |------------+----------+-------------+---------+----------|
+** Code
+   #+begin_src python
+     function propagateNegativeCycles(dp, n):
+         # Execute FW APSP algorithm a 2nd time but
+         # this time if the distance can be improved
+         # set the optimal distance to be -INFINITY
+         # Every edge (i,j) marked with -INFINITY is either
+         # part of OR reaches into a negative cycle.
+         for(k := 0; k < n; k++):
+             for(i := 0; i < n; i++):
+                 for(j := 0; j < n; j++):
+                     if(dp[i][k] + dp[k][j] < dp[i][j]):
+                         dp[i][j] = -INFINITY
+                         next[i][j] = -1
+     function setup(m):
+         # dp   = empty matrix of size n x n
+         # next = empty integer matrix of size n x n
+         # Do a deep copy of the input matrix
+         # ...and setup the next matrix for path reconstruction
+         for(i := 0; i < n; i++):
+             for(j := 0; i < n; j++):
+                 dp[i][j] = m[i][j]
+                 if m[i][j] != +INFINITE:
+                     next[i][j] = j
+     # n    = size of adjacency matrix
+     # dp   = memp table
+     # next = matrix used to reconstruct shortest paths
+     function floydWarshall(m):
+         setup(m)
+         # Execute FW all pairs shortest path algorithm
+         for(k := 0; k < n; k++):
+             for(i := 0; i < n; i++):
+                 for(j := 0; j < n; j++):
+                     if(dp[i][k] + dp[k][j] < dp[i][j]):
+                         dp[i][j] = dp[i][k] + dp[k][j]
+                         next[i][j] = next[i][k]
+         # Detect and propagate negative cycles
+         propagateNegativeCycles(dp, n)
+         # Return APSP matrix
+         return dp
+     # Reconstructs the shortest path between nodes
+     # 'start' and 'end.
+     # Returns null if path is affected by negative cycle.
+     function reconstructPath(start, end):
+         path = []
+         # Check if there exists a path between
+         # the start and the end node.
+         if dp[start][end] == +INFINITY: return path
+         at := start
+         # reconstrct path from =next= matrix
+         for(;at != end; at = next[at][end]):
+             if at == -1: return null
+             path.add(at)
+
+         if next[at][end] == -1: return null
+         path.add(end)
+         return path
+   #+end_src
+* TODO Video: Bellman Ford   - Shortest path & Negative cycles
+https://www.youtube.com/watch?v=lyw4FaxrwHg
+* Video: NeetCode - Top 5 Most Common =Graph Algorithms= for Coding Interviews
+  https://www.youtube.com/watch?v=utDu3Q7Flrw
+  - Prim's Kruska's (Minimum Spanning Tree)
+  - Floyd Warshall's Algorithm
+ | DFS         | O(n)     | HashSet(cycles) | Recursive |
+ | DFS         | O(n)     | Stack           | Iterative |
+ |-------------+----------+-----------------+-----------|
+ | BFS         | O(n)     | (de)Queue       | Iterative |
+ |             |          | HashSet(cycles) |           |
+ |-------------+----------+-----------------+-----------|
+ | Union       | O(nlogn) | Forest of Trees |           |
+ | Find        |          |                 |           |
+ |-------------+----------+-----------------+-----------|
+ | Topological | O(n)     | HashSet         |           |
+ | Sort (DFS)  |          |                 |           |
+ |-------------+----------+-----------------+-----------|
+ | Dijstra's   | O(ElogV) | Heap            |           |
+ | Shortest    |          | HashSet         |           |
+ | Path        |          |                 |           |
+* Video: NeetCode - Top 5 =Dynamic Programming= Patterns for Coding Interviews - For Beginners
+  https://www.youtube.com/watch?v=mBNrRy2_hVs
+ - Dimensions
+   - 1D:
+     - Fibonacci
+   - 2D: (size of target, if we use a coin or not)
+     - 0/1 Knapsack: in diagonal
+     - Unbounded Knapsack: from the bottom right, to the left
+ - Types
+   1) Fibonnaci Numbers: solved using bottom-up approach, starting from the bottom
+      - from F(0) to F(1) and so on...
+      - we also do NOT need to keep everything (N) on memory, just the last 2
+   2) 0/1 Knapsack: Can we sum to TARGET with these ITEMS
+      - We can use the ITEMS 0 or 1 times
+      - Combinations being 2^n
+   3) Unbounded Knapsack:
+      - We are allowed to use ITEMS infinite number of times
+      - TARGET still exists
+   4) Longest Common Subsequence:
+      - 
+   5) Palindromes
+** Original Table
+1. Fibonacci Numbers
+| Climbing Stairs                     | https://youtu.be/Y0lT9Fck7qI | https://leetcode.com/problems/climbing-stairs/                     |
+| House Robber                        | https://youtu.be/73r3KWiEvyk | https://leetcode.com/problems/house-robber/                        |
+| Maximum Alternating Subsequence Sum | https://youtu.be/4v42XOuU1XA | https://leetcode.com/problems/maximum-alternating-subsequence-sum/ |
+| Fibonacci Number                    |                              | https://leetcode.com/problems/fibonacci-number/                    |
+2. Zero / One Knapsack
+| Partition Equal Subset Sum | https://youtu.be/IsvocB5BJhw                | https://leetcode.com/problems/partition-equal-subset-sum/ |
+| Target Sum                 | https://www.youtube.com/watch?v=g0npyaQtAQM | https://leetcode.com/problems/target-sum/                 |
+3. Unbounded Knapsack
+| Coin Change              | https://youtu.be/H9bfqozjoqs                | https://leetcode.com/problems/coin-change/              |
+| Coin Change II           | https://www.youtube.com/watch?v=Mjy4hd2xgrs | https://leetcode.com/problems/coin-change-2/            |
+| Minimum Cost for Tickets | https://www.youtube.com/watch?v=4pY1bsBpIY4 | https://leetcode.com/problems/minimum-cost-for-tickets/ |
+4. Longest Common Subsequence
+| Longest Common Subsequence     | https://youtu.be/Ua0GhsJSlWM | https://leetcode.com/problems/longest-common-subsequence/     |
+| Longest Increasing Subsequence | https://youtu.be/cjWnW0hdF1Y | https://leetcode.com/problems/longest-increasing-subsequence/ |
+| Edit Distance                  | https://youtu.be/XYi2-LPrwm4 | https://leetcode.com/problems/edit-distance/                  |
+| Distinct Subsequences          | https://youtu.be/-RDzMJ33nx8 | https://leetcode.com/problems/distinct-subsequences/          |
+5. Palindromes
+| Longest Palindromic Substring   | https://youtu.be/XYQecbcd6_c | https://leetcode.com/problems/longest-palindromic-substring    |
+| Palindromic Substrings          | https://youtu.be/4RACzI5-du8 | https://leetcode.com/problems/palindromic-substrings/          |
+| Longest Palindromic Subsequence |                              | https://leetcode.com/problems/longest-palindromic-subsequence/ |
+* Video: freeCodeCamp - Solve Coding Interview Backtracking Problems - Crash Course
+https://www.youtube.com/watch?v=A80YzvNwqXA
+- LeetCode Problems: NQueen, Sudoku
+- Components: State
+- Functions:
+  - is_valid_state(state)
+  - get_candidates(state)
+  - search(state, solutions)
+  - solve()
+
+* Course: 2015 | MIT 6.046J Design and Analysis of Algorithms
+https://www.youtube.com/playlist?list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp
+* Course: 2020 | MIT 6.006 Introduction to Algorithms
+https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
+** DONE 1. Algorithms and Computation
+- Solve Computational Problems, communicating, correct and efficiently
+- A problem is a relation between an INPUT and an OUTPUT (like a bipartite graph)
+  f: I -> O
+- Efficicency: use Asyntotic Analysis, measure in "ops". Depends on size of input.
+  O() upper bounds
+  n() lower bounds - Omega
+  8() both  bounds - Tetha
+- O(1)
+  O(log n)   after some time itstarts to look like constant
+  O(n)
+  O(n log n) after some time it start to look linear
+  O(n ^ ?)
+  2^O(n)
+- Design our own algorithm
+  1) Brute Force
+  2) Decrease and Conquer
+  3) Divide and Conquer
+  4) Dynamic Programming
+  5) Greedy / Incremental
+- Reduce to a problem you already know (use a DS or algo)
+ | Data Structures      | Sort Algorithms | Shortest Path Algo |
+ |----------------------+-----------------+--------------------|
+ | Static Array         | Insertion Sort  | BFS                |
+ | Linked List          | Selection Sort  | DFS                |
+ | Dynamic Array        | Merge Sort      | Topological Sort   |
+ | Sorted Array         | Counting Sort   | Bellman-Ford       |
+ | Direct Access Array  | Radix Sort      | Dijkstra           |
+ | Hash Table           | AVL Sort        | Johnson            |
+ | Balanced Binary Tree | Heap Sort       | Floyd-Warshall     |
+ | Binary Heap          |                 |                    |
+** DONE 2. Data Structures and Dynamic Arrays
+- Interface (API/ADT) vs Data Structures
+  | Interface           | Data Structure                |
+  |---------------------+-------------------------------|
+  | specification       | representation                |
+  | what data can store | how to store data             |
+  | what the ops do     | algorithms to support the ops |
+  | problem             | solution                      |
+- Approaches
+  - Arrays
+  - Pointers
+- Static  Sequence (Interface) : Static Array (Data Structure)
+  - build(X)
+  - len()
+  - iter_seq()
+  - get_at(i)
+  - set_at(i,x)
+  - get_first/last()
+  - set_first/last(x)
+- Dynamic Sequence (Interface) : Linked Lists (DS, pointer based)
+  - insert_at(i,x)
+  - delete_at(i)
+  - insert/delete_first/last(x)/()
+- *DS Augmentation* can be done to a simple LL by adding a extra pointer to the tail,
+  which would make insert_last O(1)
+- Dynamic Sequence OPS
+ |               | get/set_at | insert/delete_first | insert/delete_last | insert/delete_at |
+ | Static Array  | =1=        | n                   | n                  | n                |
+ | Linked List   | n          | =1=                 | n                  | n                |
+ | Dynamic Array | =1=        | n                   | =1=                | n                |
+- How can we get BOTH the benefits of Static Arrays and Linked Lists?
+  Dynamic Arrays, implemented in Python as "Lists"
+  (ME: Implementation looks like Go Slices)
+  Static Arrays being resized
+  DS: 1) array pointer 2) length 3) size
+  length <= size
+- Geometric Series: are dominated for by the last term (the biggest term)
+  O(E 2^i) = O(2^(log n)) = O(n)
+- Amortization: a particular kind of avg (charging 1 cost all the others that make it happen)
+  operation takes T(n) amortized time
+  if any k ops take <=  k T(n)
+** DONE 3. Sets and Sorting
+- Interface     : collection of OPS (eg: sequence & set)
+  Data Structure: way to store data that supports a set of OPS
+- Possible DS for Set Interface
+  |                | build   | find  | insert | find_min | find_prev |
+  |                |         |       | delete | find_max | find_next |
+  |----------------+---------+-------+--------+----------+-----------|
+  | Unsorted Array | n       | n     | n      | n        | n         |
+  | Sorted Array   | n log n | log n | n      | 1        | log n     |
+- Destructive: overrides the input array
+  In Place   : uses O(1) extra space
+- n! is the number of permutations on a list with n members
+- Permutation Sort
+  #+begin_src python
+    def permutation_sort(A):
+        for B in permutation(A):
+            if is_sorted(B):
+                return B
+  #+end_src
+- Selection Sort:
+  1) find max with index <= 1
+  2) swap
+  3) sort rest (back to step 1)
+  #+begin_src python
+    def prefix_max(A, i):
+        '''Return index of maximum in A[:i + 1]'''
+        if i > 0:
+            j = prefix_max(A, i - 1)
+            if A[i] < A[j]:
+                return j
+        return i
+  #+end_src
+- Insertion Sort...
+- Merge Sort
+  #+begin_src python
+    def merge_sort(A, a = 0, b = None):
+        if b is None: b = len(A)
+        if 1 < b - a:
+            c = (a + b + 1) // 2
+            merge_sort(A, a, c)
+            merge_sort(A, c, b)
+            L, R = A[a:c], A[c:b]
+            merge(L, R, A, len(L), len(R), a, b)
+  #+end_src
+** 4. Hashing
+** 5. Linear Sorting
+** 6. Binary Trees, Part 1
+- Missing some performant operations on the current DS
+- "Inspired" by Linked List, with 3 links instead of 1 or 2 like in Double-LL
+- depth(X) = #ancestors = #edges in path from X to root (downward)
+ height(X) = #edges in longest downward path (upward, from node)
+           = max depth() of a node in subtree
+- traversal ops: both O(h) where h is the height
+  - subtree_first(node): leftmost leaf
+  - successor(node): next after node, leftmost leaf on the right child subtree, or walkup tree until up a left branch
+  - subtree_insert_after(node, new)
+** 7. Binary Trees, Part 2: AVL
+** 8. Binary Heaps
+** 9. Breadth-First Search
+** Quiz 1 review
+** 10. Depth-First Search
+** 11. Weighted Shortest Paths
+** 12. Bellman-Ford
+** 13. Dijkstra
+** 14. APSP and Johnson
+** Quiz 2 Review
+** 15. Dynamic Programming, Part 1: SRTBOT, Fib, DAGs, Bowling
+** 16. Dynamic Programming, Part 2: LCS, LIS, Coins
+** 17. Dynamic Programming, Part 3: APSP, Parens, Piano
+** 18. Dynamic Programming, Part 4: Rods, Subset Sum, Pseudopolynomial
+** 19. Complexity
+** 20. Course Review
+** 21. Algorithms Next Steps
 * Book: Algebraic Graph Algorithms (Springer)
 - It can be viewed from the angle of *group theory* or *linear algebra*
 - The book deals with LinA, taking advantage of Matrix Operations
 - https://teachyourselfcs.com/#algorithms
+* Book: 2006 | Art of Programming Contest       | Ahmed Shamsul Arefin
+** 06 Brute Force Method
+- This method should almost always be the first algorithm/solution you consider.
+  - If this wors within time/space constraints then do it
+- If you have this kind of reasoning ability.
+  Many seemingly hard problems is eventually solvable using brute force.
+*** Problem 1 : Party Lamps
+- "Youre given N lamps and 4 switches.
+  switch1, toggles all lams
+  switch2, the even lamps
+  switch3, 1,4,7,10,...
+  Output: all the number of states the lamps can be in.
+- How? Work out the problem.
+ | 4^10000 | start, 4 posibilities for a total of 10k button presses                        |
+ | 10000^4 | the order does not matter                                                      |
+ |     2^4 | pressing twice is the same as pressing it no times, so only check 0 or 1 times |
+*** Problem 2 : The Clocks
+- 9 clock in a 3x3 grid
+  each clock at 12, 3, 6, or 9
+  9 *moves* possible, each rotate a certain subset of clock 90 degrees clockwise
+  Output: all to read 12, in shortest number of *moves*
+- Working it out
+ | 9^k  | where k is the number of moves                            |
+ | k^9  | order of moves does NOT matter                            |
+ | 49^9 | doing each move 4 times is the same as doing it no times, |
+ |      | no move will be done more than 3 times                    |
+*** Recursion
+- =Backtracking= a popular combinatorial brute force algorithm, usually implemented recursively.
+- If one problem can be solved in both way (recursive or iterative)
+  then choosing iterative version is agood idea
+  since it is faster and doesn't consume a lot of memory.
+  - Examples      | Factorial, Fibonacci
+  - Anti-Examples | Tower of Hanoi, DFS/BFS
+- Types
+  1) Linear: his *order of growth* is linear, like fac(n) = n * fac(n-1)
+  2) Tree (Multiple Branch): can be used to perform a *complete search*,
+     has quadratic or cubic or more *order of growth*, not suitable for solving big problems
+- Divide & Conquer
+  - Try to make problems simpler by dividing it to sub problems, that can be solved easier
+    Examples: Quick Sort, Merge Sort, Binary Search
+*** Optimizing your source code
+| Generating                   | those that hone the answer without false starts                               |
+| Filtering                    | those that generate ALL possible answers and then choose the correct one      |
+| PRE(Computation/Calculation) | pregenerated tables for lookup                                                |
+| Decomposition                | problems that require the combination usage of >1 algorithm                   |
+| Symmetries                   | exploit summetreis to reduce execution time                                   |
+| Forward vs Backward          | some problems work far better solved backwards (processing data in rev order) |
+** 08 Sorting (bubble/quick)
+|             | Speed      | Space | Complexity |
+|-------------+------------+-------+------------|
+| Bubble Sort | O(n^2)     | O(n)  | simple     |
+| Quick Sort  | O(n log n) | O(n)  | complex    |
+- size: if the size of the date to sort is too big to fit in memory, use *external sorting*
+- stability: if preserves order, so for example you can sort twice by different fields
+- key sorting: for large data, we asocciate a number to the data
+- Types:
+  | comparison sort | O(n log n) |                        |
+  | counting sort   | O(n+k)     | counting ocurrences (? |
+  | radix sort      | O(d(n+k))  | sort by nth-digit      |
+- Bubble Sort: values bubble up
+  #+begin_src
+    BubbleSort(A)
+      for i <- length[A]-1 down to 1
+        for j <- 0 to i-1
+          if (A[j] > A[j+1])
+            temp <- A[j]
+            A[j] <- A[j+1]
+            A[j+1] <- temp
+  #+end_src
+- Quick Sort: Partition the array. Recursively sort each array.
+  #+begin_src
+    QuickSort(A,p,r)
+      if p < r
+        q <- Partition(A,p,r)
+        QuickSort(A,p  ,q)
+        QuickSort(A,q+1,r)
+#+end_src
+** 09 Searching (bs,bst,hash)
+| Binary Search      | O(log n) |
+| Binary Search Tree | O(log n) |
+| Hashes             |          |
+- Binary Search Tree: are sorted, node weighted.
+  Examples: Splay, Red-Black, B-Trees, AVL.
+- Binary Search: find a value in a sorted list.
+  - First in the center
+  - then on the correct half.
+  - code
+    #+begin_src ruby
+      function binarySearch(a, value, left, right)
+        if right < left
+          return not found
+        mid := floor((left+right)/2)
+        if a[mid] = value
+          return mid
+        if value < a[mid]
+          binarySearch(a, value, left, mid-1)
+        else
+          binarySearch(a, value, mid+1, right)
+    #+end_src
+** 10 Greedy Algorithms
+- "...are algorithms which follow the problem solving meta-heuristic of
+  making the *locally optimum* choice at each stage with the hope of finding
+  the *global optimum*"
+- They do not operate exhaustively on *all the data*
+- They usually aren't correct.
+- Examples of GA that give GO.
+  - Kruskal's, Prims's for MST.
+  - Algorithm for finding optimum Huffman trees.
+  - matroids and theory of greedoids
+* Book: 2012 | Coding Interviews                | Harry He
+** 4 Algorithms
+*** Backtracking
+- is a refinement of the *brute-force* approach, which systematically searches for a solution to a problem among all available options.
+- suitable when there is a set of options at each step, and we must choose one(1), move one, choose 1, and repeat until a final state.
+- Problems with a 2D grid. Can be seen as a Tree using DFS
+- Implementation: Recursion
+*** Dynamic Programming and Greedy Algorithms
+- If an interview problem has *optimal substructure* and *overlapping subproblems*, it might be solved by DP.
+| optimal substructure    | means that the solution to a given ~optimization~ problem can be obtained by a combination of optimal solutions. |
+| overlapping subproblems | means a recursive algorithm solves subproblems over and over, rather than always generating new subproblems.     |
+* Book: 2013 | Competitive Programming 3        | Steven Halim
+** 1
+- "Given well-known Computer Science Problems, solve them as quickly as possible!"
+- Doing a *complete search* using recursive backtracking might yield *time limit exceeded* (TLE)
+  Using a *greedy* algorithm might lead to the *wrong answer* (WA)
+- "minimum weight perfect matching on weighted complete graph" problem
+** 5 Mathematics
+- Topics
+  | Arithmethic Progression | Geometric Progression  | *Polynomial*            |
+  | Algebra                 | Logarithm/Power        | BigInteger              |
+  | *Combinatorics*         | Fibonacci              | *Golden Ratio*          |
+  | *Binet's Formula*       | *Zeckendorf's Theorem* | *Catalan Numbers*       |
+  | Factorial               | *Derangement*          | *Binomial Coefficients* |
+  | Number Theory           | Prime Number           | *Sieve of Eratosthenes* |
+  | *Modified Sieve*        | *Miller-Rabin's*       | *Euler Phi*             |
+  | Greatest Common Divisor | Lowest Common Multiple | Probability Theory      |
+  | Game Theory             | Zero-Sum Game          | Decision Tree           |
+  | Perfect Play            | Minimax                | *Nim Game*              |
+*** Ad Hoc Mathematics Problems
+- The Simpler Ones
+- Mathematical Simulation (Brute Force)
+- Grid
+**** Finding Pattern of Formula
+- read the problem description carefully. To spot the pattern or simplified formula.
+  eg:
+  S = infinite set of square integers
+  X = (1<=X<=10^17)
+  ? = How many Integers in S are less than X
+  sqrt(x-1)
+**** Number System oro Sequences
+- Fibonacci numbers
+- Factorial
+- Derangement
+- Catalan Numbers
+- Arithmetic Progression: Sn = (n/2) * (2*a + (n-1)*d)
+- Geometric Progression: Sn = a * ( (1-r^n) / (1-r) )
+- Logarithm, Exponentiation, Power: Clever usae of log() anr/or exp()
+- Polynomial: OPS. We can represent it by storing the coefficients of the terms sorted by their powers.
+- Base Number Variants
+- Just Ad Hoc
+*** Combinatorics
+- How many...? Count...
+**** Fibonnaci Numbers
+ | O(n)     | Usually resolved non-recursively using DP                        |
+ | O(log n) | using the efficient *matrix power*                               |
+ | O(1)     | approximation using *Binet's Formula*, not accurate for large FN |
+- Zekendorf's theorem:
+  - Every positive number can be represented as the sum of 2 fibonacci non-consecutive fibonacci numbers
+  - can be found using a greedy algorithm, choosing the largest fibonacci number at each step.
+- Pisano Period
+**** TODO Binomial Coefficients
+* Book: 2015 | Cracking the Coding Interview    | Gayle Laakmann
+  SELF: Why interviews don't flip the roles. Ask us to give an opinion about something they did.
+  Ask us to predict the beheviour and results of it.
+** II Behind the scenes
+- Ask what position the interviewer has on the company.
+  And what the interview is about.
+- Wait time is 1 week
+- Analytical ability
+  Coding Experience
+  Communication
+- System design questions for backend enginners
+  https://github.com/donnemartin/system-design-primer
+  https://github.com/checkcheckzz/system-design-interview
+  https://github.com/shashank88/system_design
+  https://github.com/lei-hsia/grokking-system-design
+- HackerRank is more used for inexperienced programmers.
+** III Special Situations
+- Everybody has algorithm questions
+- Moving positions might depend of the code skills showed on interview
+- There are interviews when a company is acquired by another.
+- Questions "should" be about algorithms not knowledge (math, probabilty...)
+- Levels of questions:
+  1) Sanity check: filter questions, no qualification
+  2) Quality Check: problem solving
+  3) Specialist Check: specific knowledge
+  4) Proxy knowledge: being able to grasp core ideas
+** TODO VII Technical Questions. Page 78
+- Try coding on paper
+- Basic Knowledge
+| Data Structure        | Algorithms          | Concepts                |
+|-----------------------+---------------------+-------------------------|
+| Linked Lists          | Breath-First Search | Bit Manipulation        |
+| Trees, Tries & Graphs | Depth-First Search  | Memory (Stack vs. Heap) |
+| Stacks & Queues       | Binary Search       | Recursion               |
+| Heaps                 | Merge Sort          | Dynamic Programming     |
+| Vectors/ArrayLists    | Quick Sort          | Big O Time & Space      |
+| Hash Tables           |                     |                         |
+- Power of 2, to Bytes/MB/GB table (?
+- Problem-Solving
+  1) Listen: optimal solutions involve ALL pieces of information provided
+  2) Exemplify: specific, yet large and not a special case
+  3) Brute-force: naive solution
+  4) Optimize: B.U.D.
+     Bootlenecks
+     Unnecessary work
+     Duplicated Work
+  5) WalkThrough
+  6) Implement: "Write beautiful code"
+     - Modularize (you can cheat and implement things later)
+     - error check or TODO
+     - Use other classes/structs/types
+  7) Test:
+  - Conceptual: code review it
+  - Unusual: calculations
+  - Hotspots
+  - Small test
+  - Edge cases: null, single element, extreme cases
+** IX Interview Questions
+*** DONE 3 Stacks and Queues
+**** Stacks
+|       |      | ops        | add  | del  |
+|-------+------+------------+------+------|
+| Stack | LIFO | pop()      | O(1) | O(1) |
+|       |      | push(ITEM) |      |      |
+|       |      | peek()     |      |      |
+|       |      | isEmpty()  |      |      |
+- Stack Uses
+  1) in certain recursive algorithms, you need to push temporaty data onto it,
+     then remove it as you backtrack
+  2) to implement a recursive algorithm iteratively
+**** Queue
+|       |      | ops       | add | del |
+|-------+------+-----------+-----+-----|
+| Queue | FIFO | add(ITEM) |     |     |
+|       |      | remove()  |     |     |
+|       |      | peek()    |     |     |
+|       |      | isEmpty() |     |     |
+- Queue Uses
+  - on BFS, or in a cache
+**** Problems
+ | Three in One     | use a single array to implement 3(three) stacks  |
+ | Stack Min        | stack with an O(1) op min()                      |
+ | Stack of Plates  | create new stacks based on a threshold           |
+ |                  | implement popAt(IDX)                             |
+ | Queue via Stacks | using 2 stacks implement 1 queue                 |
+ | Sort Stack       | smallest item on the top, using only other stack |
+ | Animal Shelter   | dequeueAny() dequeueDog() dequeueCat()           |
+*** DONE 4 Trees and Graphs
+- Other: Topological Sort, Dijkstra Algorithm, AVL Trees, Red-Black Trees
+**** Trees
+ - Worst case and avg case may vary wildly.
+ - Trees Definition:
+   * Has a root nodep
+   * Root node has zero or more childs
+   * Each child has zero or more child nodes
+   * Cannot contain cycles
+   * May be ordered
+   * Could have any data
+   * May have links back to their parent nodes
+***** BT Shapes
+      https://en.wikipedia.org/wiki/Binary_tree
+ | Binary Trees         | each node has up to 2 children.                        |
+ |----------------------+--------------------------------------------------------|
+ | Binary *Search* Tree | where every node fits a specific order,                |
+ |                      | left <= n  right, some might NOT have duplicates       |
+ |----------------------+--------------------------------------------------------|
+ | Balanced             | means "not terribly imbalanced".                       |
+ | (red-black trees)    | Enough to ensure O(log n) times for insert and find.   |
+ | (AVL trees)          |                                                        |
+ |----------------------+--------------------------------------------------------|
+ | Complete             | every node has 2 children, except maybe the last level |
+ | Full                 | every node has 0 or 2 children                         |
+ | Perfect              | full + complete (2^k - 1 nodes)                        |
+ |----------------------+--------------------------------------------------------|
+***** BT Traversal
+ | TYPES      | 1°      | 2°      | 3°      |
+ |------------+---------+---------+---------|
+ | in-order   | left    | current | right   |
+ | pre-order  | current | left    | right   |
+ | post-order | left    | right   | current |
+***** Binary Heaps
+     https://en.wikipedia.org/wiki/Binary_heap
+ - Min-Heaps: elements are in  ascending order
+   Max-Heaps: elements are in descending order
+ - Are a *complete* binary tree. Root is the min/max element of the tree.
+ - Operations of Min Heap: take  O( log n )
+  | insert()      | insert into bottom-right and =bubble-up= the minimum element        |
+  | extract_min() | remove top root and swap it with the bottom-right and =bubble-down= |
+***** Tries (Prefix Trees)
+     https://en.wikipedia.org/wiki/Trie
+ - Characters are stored on each node. Each path down might represent a word.
+ - The "*" are "null nodes", indicate a complete word.
+   - Might also be a flag on the last node.
+ - Commonly, is used to store the entire english language for quick *prefix lookups*.
+ - Problems involving lists of valid words, leverage a trie as an optmization.
+   If we search the tree of related prefixes repeateadly (M,MA,MAN,MANY)
+**** Graphs
+ - A tree is a *connected* graph without *cycles*
+ - directed/undirected
+ - cyclic/acyclic
+ - connected or consist of multiple isolated subgraphs
+***** Representation
+ - Adjacency List  : Every vertex/node stores a list of adjacent vertices
+ - Adjacency Matrix:
+   - NxN boolean matrix (N=number of nodes), to indicate the edges
+   - if undirected, is symmetric
+***** Search: DFS depth-first search, we analyze each branch completely before moving on to the next. Deep first.
+   - Is a bit simpler for checking every single node
+   - We heek if node has been visited
+   - Pseudocode
+     #+begin_src C
+     void search(Node root) {
+       if (root == null) return;
+       visit(root);
+       root.visited = true;
+       for each (Node n in root.adjacent) {
+         if (n.visited == false) {
+           search(n);
+         }
+       }
+     }
+     #+end_src
+***** Search: BFS breath-first search, we explore each neightbor before going to their children
+   - NOT recursive, uses a queue
+   - Better for searching the shortest path (or any path) between nodes
+   - Pseucode
+     #+begin_src C
+     void search(Node root) {
+       Queue queue = new Queue();
+       root.marked = true;
+       queue.enqueue(root); // Add to the end of the queue
+       while (!queue.isEmpty()) {
+         Node r = queue.dequeue();
+         visit(r);
+         for each (Node n in r.adjacent) {
+           if (n.marked == false) {
+             n.marked = true;
+             queue.enqueue(n);
+           }
+         }
+       }
+     }
+     #+end_src
+***** Search: Bidirectional Search,
+ - used to find the shortest path
+ - runs 2 BFS, one from each node (start/end), when their collide, we found a path
+**** Problems
+ 1) DG: check for route between nodes
+ 2) BST: from a unique sorted array, with min height
+ 3) BT: from BT to a LLs for each depth level
+ 4) BT: check if balanced
+ 5) BT: check if BST
+ 6) BST: get next node
+ 7) Build order from a list of dependencies
+ 8) First common ancestor, avoid additional node storage
+ 9) BST: Given a BST return the possible arrays they could come from
+ 10) BT: Check if A is substree of B
+ 11) BT: Get a random node
+ 12) BT: Count paths that SUM == ?
+*** DONE 8 Recursion and Dynamic Programming
+**** DP
+ - A good hint that a problem is recursive is that it can be built of subproblems.
+   - "Design an algorith to compute the nth.."
+   - "Write code to list the first n..."
+   - "Implement a method to compute all.."
+ - There is a 50% chance that something that "sounds" recursive is it.
+ - Approaches
+  | Bottom-Up     | start from the base case, build up to the others                    |
+  | Top-Down      | We think in how to divide he problem into subproblems               |
+  | Half-and-Half | divide the data set in half, example: "binary search or merge sort" |
+ - Before diving into recursive code,
+   ask yourself how hard it would be to implement it *iteratively*,
+   and discuss the tradeoffs with your interviewer.
+ - Drawing the recursive calls as a *tree*
+   is a great way to figure out the *runtime* of a recursive algorithm
+ - Dynamic Programming
+   - Top-Down: memoization
+   - Bottom-up: think about doing the same thing as the recursive memoized approach,
+     but in reverse, start from the bottom. Even remove the memo.
+     #+begin_src c
+       int fibonacci(int n) {
+         if (n == 0) return 0;
+         int a = 0;
+         int b = 1;
+         for (int i = 2; i < n; i++) {
+           int c = a + b;
+           a = b;
+           b = c;
+         }
+         return a + b;
+       }
+     #+end_src
+**** Problems
+ | Triple Step        | how many ways can you use stair, being able to skipping X,Y,Z steps |
+ | Robot in a Grind   | robot path into a grid, where some cells are forbidden              |
+ | Magic Index        | A[i] = i, find all if sorted set or list                            |
+ | Power Set          | return all substes of a set                                         |
+ | Recursive Multiply | multiply 2 integers without using "*"                               |
+ | Towers of Hanoi    |                                                                     |
+ | Permutatin no dups | of a string of unique chars                                         |
+ | Permutation w/dups | of a string, output should be unique                                |
+ | Parens             | print properly open/closed parens                                   |
+ | Paint Fill         | the "bucket" from a 2D array                                        |
+ | Coins              | having infinite (25/10/1/5) cents, how many representations of N?   |
+ | Eight Queens       | 8x8 chess board, all possible placements                            |
+ | Stack of Boxes     | larger boxes below, height of the tallest possible stack of boxes   |
+ | Boolean Evaluation | eval a string                                                       |
+ |--------------------+---------------------------------------------------------------------|
+* Book: 2016 | Grokking Algorithms              | Aditya Y. Bhargava
+** DONE 6 BFS Bread-First Search - O(V + E)
+ - What is the *shortest path* to go to X?
+ - Uses a Queue/FIFO/deque (double-ended queue in python)
+ - Uses a mark on each node visited to not search again (avoid cycles)
+ - Steps
+   1) add to queue the start neightbours
+   2) Check if they are target
+   3) If not add their neightbours to the end of queue
+   4) pop a node from the queue
+   5) repeat
+ - Can answer either:
+   1) Is there a path from A to B? (exists)
+   2) What is the shortest path from A to B? (short)
+ - Topological sort: a way to make an ordered list out of a graph
+ - Trees           : special type of graph with no arrows pointing back
+** DONE 7 Dijkstra's Algorithm - DAG - Directed (Weighted) Acyclic Graphs
+ - What is the shortest/fastest path?
+   * On a non-negative weighted graph ( Bellman-Ford for negative weights )
+   * Without Cycles
+ - Uses a hash for the graph, GRAPH[NODE][CHILD_1] = WEIGHT1
+ - Uses a hash from node to cost (from start)
+   Uses a hash from node to his parent ( to calculate the final path )
+   Or a single 3 column table
+ - Steps
+   1) Initialize table of costs and parents
+   2) Find the cheapest node (less weight), fill the unknown with +infinity+
+   3) For neightbours:
+      Update the costs (from start) of the new neightbours, if cheaper
+      Update the parent of the neightbour, if cheaper
+      you are done with that node (mark it done)
+   4) Repeat, till visit all nodes
+   5) Calculate the final path
+** DONE 8 Greedy Algorithms
+ - Approximation Algorithm: fast and close to the optimal solution.
+   - Greedy algorithms are a subcategory of them
+ - "at each step you pick the locally optimal solution"
+   in the endyou're left with the globally optimal solution.
+ - Not always gave the perfect solution. Usually get a pretty close solution.
+ - NP-complete problems: Where you have to calculate every possible set. No know fast solution.
+   - Set covering:
+     32 Stations =       13 yrs or 102sec
+     100 Stations = 4x10^21 yrs or 16min
+   - Traveling salesperson: impossible to compute the "correct" solution if you have large number of cities. Is a factorial problem.
+     Algo: pick random city, pick the closest one
+   - Giveaways:
+     1) slows down as more items get added
+     2) "All combinations of X"
+     3) can't break it down into smaller problems
+     4) involves a sequence
+     5) involves a set
+     6) You restate your problem
+** DONE 9 Dynamic Programming
+ - When trying to optimize, given a constraint
+ - When a problem can be broken up into *discrete* subproblems, that don't depend on each other.
+ - TIPS
+   - Every DP problem starts with a grid
+   - Each cell is the value to optimize
+   - Each cell is a subproblem
+ - DP can NOT directly solve unknown fractions
+   - Greedy algorithm can help with that
+*** Problem: knapsack
+   - grid
+     |        | 1lb    | 2lb    | 3lb    | 4lb    |
+     | guitar | 1500/G | 1500/G | 1500/G | 1500/G |
+     | stereo | 1500/G | 1500/G | 1500/G | 3000/G |
+     | laptop | 1500/G | 1500/G | 2000/G | 3500/G |
+   - Simple solution: O(2^n) tries all solutions
+   - Solving 1b + 3b knapsacks
+   - cell[i][j]
+     = max of
+     1. The previous max: cell[i-1][j]
+     2. Value of curent item + value of remaining space: cell[i-1][j-itemsweight]
+*** Problem: Longest Common Substring
+ - Levenshtein distance
+ - Maximize: the longest substring that two words have in common
+ - Questions to form the grid:
+  | 1 | What are the *values* of the cells?                | length of the longest substring |
+  | 2 | How do you divide this problem into *subproblems*? | compare sub-substrings          |
+  | 3 | What are the *axes* of the grid?                   |                                 |
+ - The answer might not be in the last cell, in this case is the largest number in the grid
+* Book: 2020 | Algorithmic Thinking             | Daniel Zingaro
+** 3 Memoization And Dynamic Programming
+- =Optimization Problem= involves choosing the *optimal* (best) solution out of all *feasible* solutions.
+*** Burger Fevor - UVA 10465
+**** Description
+ t = total time
+ m = burger 1
+ n = burger 2
+ input: m n t
+ output:
+ - if he can fit the time exactly, max number of burgers
+ - if not,                         max number of burgers, maximizing time + number of free minutes
+**** Thinking
+ - If we know that the last optimal burger for "t" is "m".
+   We know that *t - m* is also an optimal time.
+ - Same if we know if the last is "n"
+ - We try to solve for both new optimal times.
+**** Solution General
+ 1) Try filling "t" time eating burgers
+ 2) if not possible, try "t - 1"
+**** Solution 1 - Recursion
+***** solve_t: returns >= 0 if is an exact match
+   #+NAME: solve_t
+   #+begin_src C
+   int max(int v1, int v2) { return (v1 > v2) ? v1 : v2; }
+   int solve_t(int m, int n, int t) {
+     if (t == 0) return 0; /* BASE CASE */
+
+     int first  = (t >= m) ? solve_t(m, n, t - m) /* recur 1 */
+                  : -1;
+     int second = (t >= n) ? solve_t(m, n, t - n) /* recur 2 */
+                  : -1;
+
+     if (first == -1 && second == -1)
+       return -1;
+
+     return max(first, second) + 1;
+   }
+   #+end_src
+***** Try solve_t
+   #+NAME: main
+   #+begin_src C :noweb yes
+   #include <stdio.h>
+   <<solve_t>>
+   int main() {
+     printf("%d\n", solve_t(4,9,22));
+     printf("%d\n", solve_t(4,9,54));
+     printf("%d\n", solve_t(4,9,15));
+     exit(0);
+   }
+   #+end_src
+
+   #+RESULTS: main
+   |  3 |
+   | 11 |
+   | -1 |
+***** solve: change the value of t
+   #+NAME: solve
+   #+begin_src C
+   void solve(int m, int n, int t) {
+     int result, i;
+     result = solve_t(m, n, t);
+     if (result >= 0) {
+       printf("%d\n", result);
+     } else {
+       i = t - 1;
+       result = solve_t(m, n, i);
+       while (result == -1) {
+         i--;
+         result = solve_t(m, n, i);
+       }
+       printf("%d %d\n", result, t - i);
+     }
+   }
+   #+end_src
+***** Try all
+  #+begin_src C :noweb yes
+  #include <stdio.h>
+  <<solve_t>>
+  <<solve>>
+  int main() {
+    solve(4,9,22);
+    solve(4,9,54);
+    solve(4,9,15);
+    exit(0);
+  }
+  #+end_src
+
+  #+RESULTS:
+  |  3 |   |
+  | 11 |   |
+  |  2 | 2 |
+**** Solution 2 - Memoization
+  - Inneficient due doing neccessary work over and over and over...
+    | 4 2 88 | 10 seconds | 2,971,215,072 function calls |
+    | 4 2 90 | 18 seconds | 4,807,526,975 function calls |
+  - "Remember, don't refigure", that's the maxim of memoization
+  - memoize: means to put it into a memo
+  - We use an array length 10k, of which we use *t*
+**** Solution 3 - Dynamic Programming
+ - We change the Solution 2, to avoid doing recursive calls,
+   when is possible, to just check on the memo.
+ - A function that uses *dynamic programming* organizes the work so
+   that a subproblem is already solved by the time we need it.
+ - Dynamic Programming ensures that the problem to be solved has not use for recursion.
+ - Code
+   #+NAME: solve_memo
+   #+begin_src C :noweb yes
+   #define SIZE 10000
+   <<solve_t>>
+   void solve(int m, int n, int t) {
+     int result, i, first, second;
+     int dp[SIZE];
+     dp[0] = 0;
+     for (i = 1; i <= t; t++) {
+       first  = (i >= m) ? dp[i - m] : -1;
+       second = (i >= n) ? dp[i - n] : -1;
+       if (first == -1 && second == -1)
+         dp[i] = -1;
+       else
+         dp[i] = max(first, second) + 1;
+     }
+     result = dp[t];
+     if (result >= 0)
+       printf("%d\n", result);
+     else {
+       i = t - 1;
+       result = dp[i];
+       while (result == -1) {
+         i--;
+         result = dp[i];
+       }
+       printf("%d %d\n", result, t - i);
+     }
+   }
+   #+end_src
+
+   #+RESULTS: solve_memo
+** 4 Graphs and Breadth-First search
+- We use the number of EDGES to determine the runtime of BFS
+  - Any time the problem involves objects and relationships between those,
+    it's a good bet that modeling the problem as graph will help
+- Optimization:
+  1) Run BFS once
+  2) Keep the number of edges we call it on check
+- It's tempting to map the available moves, one for one, from real-world problem to the graph.
+  It's not a requirement. We can produce a more desirable graph (less edges/nodes) as longn as that graph can still give us the answer to our problem)
+*** DMOJ ccc99s4 - Knight Chase
+ - Problem: Chess game between a pawn and a Knight
+ - Goal: knight must win, count steps
+ - Input: != start position, at least one move available
+   - Nr of testcases
+   - Testcase = rows(3-99) cols(2-99) pr pc kr kc
+ - Output:
+   - Win/Stalemate/loss in m knigh moves
+     m is the minimum number of moves made by the knight
+ - Code
+   #+begin_src C
+   #define MAX_ROWS 99
+   #define MAX_COLS 99
+   typedef struct position {
+     int row, col;
+   } position;
+   typedef int board[MAX_ROWS + 1][MAX_COLS + 1];
+   typedef position positions[MAX_ROWS * MAX_COLS];
+   int find_distance(int knight_row, int knight_col,
+                     int dest_row, int dest_col,
+                     int num_rows, int num_cols)
+   #+end_src
+*** TODO DMOJ wc18c1s3 - Rope Climb
+| j   | constant jump length                 |
+| f?  | variable fall distance               |
+| h   | current or target height             |
+| a,b | start and end height of itchy powder |
+|     | can't jump to it                     |
+|     | can't fall to it                     |
+| n   | number of segments with itchy powder |
+- Goal min number of moves to get to "h" or higher or -1
+- Code
+  #+begin_src C
+  #define SIZE 1000000
+  typedef int boad[SIZE * 2]; // the rope
+  typedef int positions[SIZE * 2];
+  #+end_src
+- Formula to get the number of fall edges:
+  h(h+1)/2
+  - For a height of 50:
+    50(51)/2 = 1272 edges
+  - Our formula is quadratic:
+    O(h^2)
+- Solution: create a new ROPE to only fall on it
+** 6 Binary Search - O(? log n)
+- Ingredients (conditions needed)
+  1) Hard optimality and easy feasibility: hard to find the optimal, but easy to judge the feasibility of a solution.
+  2) Infeasible-feasible split: there is a casm that divides the solutions.
+- Feasibility is determined by an *other* algorithm separated to the BS
+- BS is a legendarily difficult to implement correctly:
+  - Should > be >= ?
+  - Should that be *mid* or *mid + 1* ?
+  - Do we want *low + high* or *low + high + 1* ?
+  - Invariant
+    low = 0
+    high = length + 1
+    or
+    high = length
+- Examples: Minimizing, maximizing, ... searching a value
+*** Example: DMOJ coci14c4p4
+- Feasibility: Tree search
+- BFS (bread-first search) would be an overkill, due no cycles
+- "...we keep dividing the range in half until it's very small"
+*** Example: POJ 3258
+- Feasibility: Greedy Algorithm (GA)
+  - GA does what looks promising right now, with no regard to the long-term consequences of its choices.
+  - Dijkstra algorithm is a GA
+- Objective: Maximize the minimum distance between rocks.
+  - Feasibility GA Attempts:
+    1) find the 2 rocks that are closest together, remove one that's closes to its other neighbor rock, and repeat.
+    2) consider each rock in order, remove if too close to the previous. Also check the rightmost kept, remove it if it's too close to the end rock. Finally count the number of rocks removed.
+*** Example: DMOJ ioi10p3
+- Feasibility: Dynamic Programming
+- Objective: find minimum median quality rank of any hxw rectangle
+- Naive Solution Problems:
+  1) getting the median with qsort
+  2) creating the array to sort from scratch
+- Binary Search Solution:
+  - Opposite of previous BS example, *low* and lower are infeasible, *high* and everything larger are feasible
+  - No longer having to determine the median of every rectangle, or median at all.
+    We just need to determine is "at most" below some some value.
+    (If a median X is feasible or not)
+  - Naive Solution:  O(m^4 log m)
+  - Dynamic Programming: can take away the need of 4 nested loops to search for feasiblity of each rectangle with dimensions provided.
+    - 1D range sum query:
+      - a new array (~prefix sum~), where "i" holds the sum of all values from "0" to "i"
+    - 2D range sum query: O(m^2 log m)
+      * a -1,1 matrix
+      * another "prefix sum" matrix
+      * an operation (+ and -) of 4 elements from 1. and 2. matrices
+*** Example: DMOJ ioi13p4
+- BS used to zone-in on a desired element.
+  NOT to find the ~optimal solution~
+- Subtask 1: n door = n switch
+  - Naive: 1door at the time, O(n) ? one for() loop
+* Book: 2020 | Data Structures and Algorithms   | Jay Wengrow
+** 12 Dynamic Programming
+ - https://en.wikipedia.org/wiki/Overlapping_subproblems
+   - Lec 13 | MIT 6.00 Introduction to Computer Science and Programming, Fall 2008
+     00:00-16:00 Overlapping Subproblems
+     16:00-??:?? Optimal Substructure
+     https://www.youtube.com/watch?v=ZKBUu_ahSR4
+ - Dynamic Programming is the process of optimizing recursive problems that have overlapping subproblems.
+   1) Memoization
+   2) Going bottom-up: ditch recursion an use some other approach (like a loop)
+ - Recursion is often the culprit behind O(2^n)
+   | NAME                       | PROBLEM                                          | SOLUTION                    |
+   |----------------------------+--------------------------------------------------+-----------------------------|
+   | Unnecesary recursive calls | calling with the same paremeters, multiple times | capture the partial results |
+   |----------------------------+--------------------------------------------------+-----------------------------|
+   | Overlapping subproblems    | duplicate calls of smaller problems              | DP/memoization              |
+   |                            |                                                  | DP/Bottom-up                |
+** TODO 13 Recursive Algorithms for Speed
+ - Partitioning
+* Book: 2020 | Guide to Competitive Programming | Antti Laaksonen
+** TODO 7 Graph Algorithms
+ - 7.3 *Dijkstra* is more efficient that *Bellman-Ford's*, but it requires non-negative weights.
+   And *Floyd-Warshall's* ????
+ - 7.5 *Floyd's* for cycle detection
+ - 7.6 *MST*
+*** 7.1.1 Graph Terminology
+ - n number of nodes
+ - m number of edges
+ - the length of a *path* is the number of edges in it
+ - the connected parts of a graph are called its *components*
+ - the weights are often interpreted as edge *lengths*, and the length of a path is the sum of its edge weights
+ - two nodes are *neightbors* or *adjacent* if there is and edge between them
+ - the *degree* of a node is the number if its neightbors
+   - the sum of degrees on a graph is always 2m
+   - *indegree* number of edges that end at that node
+   - *outdegree* is the number of edges that start at the node
+ - a graph is *regular* is the degree of ech onde is constant
+ - a graph is *complete* if the degree of every node is "n - 1"
+ - a graph is *bipartite* when it does NOT hace a cycle with an odd number of edges
+*** 7.1.2 Graph Representation
+ |------------------+-----------------------------------+--------------------------------------------|
+ | Adjacency List   | vector<int>           adj[N];     | each node is assigned an adjacency list    |
+ |                  | vector<pair<int,int>> adj[N];     |                                            |
+ |------------------+-----------------------------------+--------------------------------------------|
+ | Adjacency Matrix | int adj[N][N];                    |                                            |
+ |------------------+-----------------------------------+--------------------------------------------|
+ | Edge List        | vector<pair<int,int>>      edges; | convenient if we need to process all edges |
+ |                  | vector<tuple<int,int,int>> edges; |                                            |
+ |------------------+-----------------------------------+--------------------------------------------|
+*** 7.2 Graph Traversal (DFS/BFS) O(n+m)
+- Depth-First Search: using recursion
+  #+begin_src c++
+    vector<int> adj[N];
+    bool visited[N];
+
+    void dfs(int s) {
+      visited[s] = true;
+      for (auto u: adj[s]) { // process node "s"
+        dfs(u);
+      }
+    }
+  #+end_src
+- Breath-First Search:
+  #+begin_src c++
+    queue<int> q;   // nodes to be processed
+    bool visited[N];// nodes already visited
+    int distance[N];// distance from the STARTING NODE
+    vector<int> adj[N];
+    visited[x] = true;
+    distance[x] = 0;
+    q.push(x);
+    while (!q.empty()) {
+      int s = q.front; q.pop();
+      for (auto u: adj[s]) { // process node s
+        if (visited[u]) continue;
+        visited[u] = true;
+        distance[u] = distance[s]+1;
+        q.push(u);
+      }
+    }
+  #+end_src
+*** 7.2.3 Applications
+ - Connectivity Check
+   - Starting at an arbitratry node, try to reach all the other nodes
+ - Cycle Detection
+   - if on transversal we find a node we already visited
+   - If a component contains c nodes, and "c-1" edges (is a tree). If has more edges contains a cycle
+ - Bipartiteness Check
+   1) pick two colors (X,Y).
+   2) Color the starting node X.
+   3) And it's neightbours Y.
+   4) And their neightbours X.
+   5) Repeat.
+   6) If 2 adjacent have the same color is NOT bipartite.
+*** 7.3 Shortest Path
+ - Unweighted: BFS is enough
+*** 7.3.1 Bellman-Ford   Algorithm - O(n * m)
+ - No cycles with negative length. Can detect them.
+ - Steps
+   - Distance to self is 0, distance to everything else is infinite
+   - reduce the distances by finding edges that shorten the path
+ - Optimizations
+   - Exit earlier than "n-1" when we cannot longer reduce distance
+   - SPFA (Short Path Faster Algorithm), maintaining a queue of nodes that might be used for reducing distances, only process the queue
+ - Negative Cycles: run the algorithm for "n" rounds, if the last round reduces any distance, the graph contains a negative cycle.
+ - Code: uses a Edge List (a,b,w), builds an array "distance"
+   #+begin_src c++
+     for (int i = 1; i <= n; i++) {
+       distance[i] = INF;
+     }
+     distance[x] = 0;
+     for (int i = 1; i <= n-1; i++) {
+       for (auto e : edges) {
+         int a, b, w;
+         tie(a, b, w) = e;
+         distance[b] = min(distance[b],
+                           distance[a]+w);
+       }
+     }
+   #+end_src
+*** 7.3.2 Dijkstra's     Algorithm - O(n + m log m)
+ - No negative weights.
+ - Implementation
+   - Using a Priority Queue (using negative values due c++ implementation finds maximum elements, while we want minimum)
+     - Alternative 1: that has an operation fro modifying a value in the queue.
+     - Alternative 2: or adding a new instance of a node to the priority queue always when the distance changes
+   - Adjacency List
+   - Code
+     #+begin_src c++
+       priority_queue<pair<int,int>> q; // (-d,x) distance d for node x
+       for (int i = 1; i <= n; i++) {
+         distance[i] = INF;
+       }
+       distance[x] = 0;
+       q.push({0,x});
+       while (!q.empty()) {
+         int a = q.top().second; q.pop();
+         if (processed[a]) continue;
+         processed[a] = true;
+         for (auto u : adj[a]) {
+           int b = u.first, w = u.second;
+           if (distance[a]+w < distance[b]) {
+             distance[b] = distance[a]+w;
+             q.push({-distance[b], b});
+           }
+         }
+       }
+     #+end_src
+*** TODO 7.3.3 Floyd-Warshall Algorithm - O(V ^ 3)
+ - It finds the shortest path between ALL node pairs
+ - Uses a matrix of distances between nodes (from an Adj Matrix)
+** 8 Algorithm Design Topics
+*** Bit-Parallel Algorithms
+ - we can replace a for loop with bit operations
+ - Individual bits of numbers can be manipulated in *parallel* using bit ops
+**** Hamming Distances - (^) XOR for difference in
+- is the number of positions where differ 2 strings of equal length
+#+NAME: hamming_no_bit
+   #+begin_src C
+  // O(n^2 * k)
+  // K = bit length
+  int hamming(string a, string b) {
+    int d = 0;
+    for (int i = 0; i < K; i++)
+      if (a[i] != b[i])
+        d++;
+    return d;
+  }
+   #+end_src
+#+NAME: hamming_bit
+#+begin_src C
+  int hamming(int a, int b) {
+    return __builtin_popcount(a^b);  // (^) being the XOR op constructor
+  }
+#+end_src
+**** Counting Subgrids - (&) count the number of bits
+- on a black or white grid, calculate the Nr of subgrids with black corners
+#+NAME: count_no_bit
+#+begin_src C
+  // O(n^3), go through all O(n^2) pair of rows,
+  //and for each calculate O(n) the Nr of subgrids with black corners
+  int count = 0;
+  for (int i = 0; i< n; i++)
+    if (color[a][i] == 1 && color[b][i] == 1)
+      count++;
+  // Finally we do count(count - 1)/2 to calculate the number of subgrids
+#+end_src
+#+NAME: count_bit
+#+begin_src C
+  // each row "k" as an n-bit bitset row[k]
+  // 1bit = black square
+  int count = (row[a]&row[b]).count(); // (&) AND to count the number of 1 bits
+#+end_src
+**** Reachability in Graphs - (|) union of 2 lists
+- in a DAG of n nodes
+- reach(X) is the number of noes that can be reached from node X
+- with DP we build a list of reachable nodes for each node
+- we represent each list as bitset of n bits
+#+begin_src C
+  // adj   = the adjacency list for the graph
+  // reach = array of bitset structures
+  reach[x][x] = 1;
+  for (auto u: adj[x])
+    reach[x] |= reach[u]; // (|) OR calculate the union of two lists
+#+end_src
+** Appendix: Math Background
+- Sum of polynoms https://en.wikipedia.org/wiki/Faulhaber%27s_formula
+  a = first number
+  b = last number
+  k = ratio
+  n = ammount of numbers
+*** =Arithmetic Progression=
+- is a sequece of numbers where the difference between any two consecutive numbers is ~constant~
+  eg: 3,7,11,15
+  1 + ... + n = (n * (n + 1)) / 2
+- Formula:             a + ... + b = (n * (a + b)) / 2
+***  =Geometric Progression=
+- is sequence of numbers where the ~ratio~ between any two consecutive numbers is constant
+  3 + 6 + 12 + 24         = (24 * 2 - 3) / (2 - 1)
+  eg: 3,6,12,24
+- Formula: a + ak + ak^2 + ... + n = (b * (k - a)) / (k - 1)
+*** =Harmonic Sum=
+- Special case of a GP
+  1 + 2 + 4 + 8 + ... + 2^(n-1) = 2^n - 1
+- Upper bound is: log 2 (n) + 1
+* Book: 2021 | Programming Algorithms in Lisp   | Vsevolod Domkin
+  Source: https://github.com/vseloved/progalgs-code
+** Notes on rtl:
+   https://github.com/vseloved/rutils/blob/master/docs/tutorial.md
+ | rtl:dokv       | iterate over key values                         |
+ | rtl:?          | generic get element, support for nested objects |
+ | rtl:pair       | replacement for cons                            |
+ | rtl:with       | let with destructuring                          |
+ | rtl:keys       |                                                 |
+ | rtl:getsethash |                                                 |
+ | rtl:vec        | adjustable vector                               |
+** 1: Introduction
+- Disconnect between algorithmic question in job interviews and everyday essence of the same job.
+- Top 10% programmers?
+- Two main reasons, due the lack of knowledge of:
+  1. The underlying platforms
+  2. Algorithms and algorithmic development technics
+- Recommended: "The Algorithm Design Manual" by Steven Skiena
+- Won't cover:
+  * Persistent or probabilistic data structures
+  * Advanced Tree
+  * Graph
+  * Optimization Algorithms
+- Lisp has a ~numeric tower~, which means no overflow errors.
+  https://en.wikipedia.org/wiki/Numerical_tower
+- Python and JS, are in many ways *anti-algorithmic*.
+  Trying to be simple and accessible, they hide too much from the programmer and don't give enough control of the concrete data.
+** 2: Algorithmic Complexity
+- Algorithm Qualities:
+  - Complexity: Measured on the number of operations performed on provided input.
+  - Correctness:
+- Complexity Theory: as a branch of CS
+  https://en.wikipedia.org/wiki/Computational_complexity_theory
+- To *measure* complexity we count these Nr of operations in the ~upper limit~
+  - Each loops adds multiplication to the formula
+  - Each sequential block adds a plus sign
+  - The Constant is the number of operations (for example, on the inner loop) for the worst case
+- Big-O notation (depends of the *n* we are considering)
+  - Constants become 1 (one)
+  - We don't care about individual array dimensions differences (instead of n*m it becomes n*n)
+  - ~O(n^2)~ has *quadratic complexity* aka *polynomial complexity* (a broader class)
+    - In array dimensions
+  - However if instead of caring about the dimensions of the array we do care about the number elements we have:
+    - ~n^2~ as the number of elements, which can be written as ~n~, IF we mean by n the number elements.
+    - ~O(n)~ Complexit is linear
+- Complexity classes
+  1. O(1) Constant Time
+  2. O(log n) Sublinear
+  3. O(n) Linear and O(n * log n) Superlinear
+  4. O(n^c) Higher-Order Polynomial, where c is a constant >1
+  5. O(c^n) Exponential, where c is usually 2 but at least >1
+  6. O(n!) Lunatic Complex O(mg)
+- Sometimes worst-case is significantly different than average-case, example on quicksort algorithm
+- In practice the constant factors might be important. Or sometimes theorical-complexity may be worse in many practical applications.
+- Besides *Execution time complexity* thereis also *Space complexity*, which measures the storage space used in relation to the input.
+** 3: A Crash Course in Lisp
+- Code Quality (simplicity, clarity, and beauty)
+- Lisp programs consist of *forms* that are *evaluated* by the compiler.
+  * Self-evaluation
+  * Symbol evaluation
+  * Expression evaluation:
+    - 25 Special Operators (block, if, go)
+    - ordinary function evaluation
+    - Macro evaluation
+- Book: On Lisp
+- Book: Let Over Lambda
+- Lisp, there is no distinction between statements and expressions.
+- A do until loop:
+  #+begin_src lisp
+  (do () ((= beg end))
+    (progn))
+  #+end_src
+- Modifying the REPL
+  R: read, with *reader macros*
+  E: eval, ordinary *macros* are a way to customize this stage
+  P: print, *print-object* changes how objexts are printed
+  L: can be replaced by any program logic
+- Structural Programming Paradigm, can be expressed by:
+  * Sequential execution:
+    - (block), We can put things into one of this
+    - (block test (return-from test 0)), We can return early from a named block with return-from
+    - (block nil (return 0)), We can return from a nil named block (which are implicit in most of the looping constructs) with return
+    - (progn) if we do not plan to return early from a block
+  * Branching: (when) (unless) (cond)
+  * Looping: We have many, unlike mainstream languages that provide a few and a way to extend them with polymorphism
+** TODO 9: Trees
+ - Most Trees are implemented as a linked DS
+   - A *linked list* might be considered a degenerate tree with all nodes having a single child.
+ - When build properly they guarentee O(log n) on search/insert/modificaiton/deleteion
+   - By keeping the leaves *sorted* AND the trees in *balanced* state
+*** Representation
+ - list, like lisp...
+ - vector, if all terminals are the same depth
+ - matrix (inneficient) but only half of it will be used (undirected)
+ - using lists for children. On BT a "left" and "right" slot can be used
+   #+begin_src lisp
+  (defstruct (tree-node (:conc-name nil))
+    key
+    children); instead of linked list's next
+  (rtl:with ((f (make-tree-node :key "f"))
+             (e (make-tree-node :key "e"))
+             (d (make-tree-node :key "d"))
+             (c (make-tree-node :key "c" :children (list f)))
+             (b (make-tree-node :key "b" :children (list d e)))
+      (make-tree-node :key "a" :children (list b c))))
+   #+end_src
+*** Tree Traversal (DFS/BFS)
+ - Ommited: (pprint-tree-dfs), ITreeVisitor
+ - DFS (traversal preorder)
+  #+begin_src lisp
+  (defun dfs-node (fn root)
+    (funcall fn (key root))
+    (dolist (child (children root))
+      (dfs-node fn child)))
+  #+end_src
+ - DFS (traversal postorder)
+   #+begin_src lisp
+   (defun dfs (fn node)
+     (dolist (child (children node))
+       (dfs fn child))
+     (funcall fn (key node)))
+   #+end_src
+ - BFS, layer by layer traversal, can handle potentially unbounded trees (on streams)
+  #+begin_src lisp
+    (defun bfs (fn nodes)
+      (let ((next-level (list)))
+        (dolist (node (rtl:mklist nodes))
+          (funcall fn (key node))
+          (dolist (child (children node))
+            (push child next-level)))
+        (when next-level
+          (bfs fn (reverse next-level)))))
+  #+end_src
+*** Binary Search Trees
+ - Classic example of *balanced* trees are BSTs (binary search trees)
+   - Which AVL and Red-Black trees are the most popular variants
+ - BSTs have the ordering property. After each inser a reordering should happen to keep the invariant.
+*** TODO BSTs: Splay Trees
+ - Property: recently accessed elements, move near the root. On each search the element searched is moved to the root.
+ - Uses: Can act as an LRU cache
+ - Not stricted balanced
+ - Can be degraded in O(n) access, avg is O(log n) due ammortization
+ - Balancing is performed by a series of operations that are called *tree rotations*, each complementary of the other
+   1) Left rotation
+   2) Right rotation
+ - Splay combine rotations into 3 possible actions https://www.youtube.com/watch?v=D9BZk1giMws
+   | Zig     | left/right rotation + assignment | make the new the new root, when is a direct child of it |
+   | Zig-Zig | 2 Zig                            | when both nodes, are left/right nodes                   |
+   | Zig-Zag | left + right                     | when both nodes, are not in the same direction          |
+** TODO 10: Graphs
+ - If you are familiar with graphs, you can spot opportunities to use them in quite different areas
+   for problems that aren't explicitly formulated with graphs in mind.
+*** Main Applications
+   | Trees  | reflecting some *hierarchy*                 |
+   | Graphs | determining *connectedness* and its magnitude |
+*** Direct Graph Applications
+   * *Pathfinding*
+   * *Network* analysis
+   * *Dependency* analysis in planning, compilers, and so on
+   * Various *optimization* problems
+   * *Distributing* and optimizing computations
+   * Knowledge representation and reasoning with it
+   * Meaning representation in *natural language* processing
+*** Representations
+ |------------------+---------------------------------------------------------------------------|
+ | Linked Structure | a *node* where each *links* are a list of node or edge                    |
+ | Adjacency Matrix | of VxV dimension, with 0 if no edge is present and >=0 for weighted edges |
+ | Adjacency List   | V length, on each enumerating which vertices is connected to              |
+ | Incidence Matrix | VxE, might be useful on *hypergraphs* (more than 2 vertices per edge)     |
+ | List of Edges    |                                                                           |
+ |------------------+---------------------------------------------------------------------------|
+  #+begin_src lisp
+  (defstruct node data links)
+  (defstruct edge source destination weight)
+  #+end_src
+*** Kinds
+ - Disjoint/Connected/Fully Connected
+ - Cyclic/Acyclic
+ - Bipartite,
+   when there are two groups of vertices,
+   and each vertex from one group is connected only to the vertices from the other group
+*** Topological Sort (TopSort)
+    https://www.youtube.com/watch?v=eL-KzMXSXXI
+ - The basic algorithm of DAGs, it creates a partial ordering of the vertices.
+   Cyclic graphs don't have it.
+   Trees have it.
+ - Steps, DFS, topological sort:
+   1) Starting from a random vertex, do DFS UNTIL a vertex without children (leaf) is found.
+      Must be an unvisited vertex.
+   2) Keep a HashSet of visited
+   3) Add vertex found on 1) to the sorted array.
+   4) Continue the DFS, now from the parent of the vertex found on 1)
+   5) Repeat until all childs are added
+   6) Repeat from 1) picking a different random vertex until no node is left unvisited
+**** Code
+#+begin_src lisp
+(defstruct node id edges)
+(defstruct edge src dst label)
+(defstruct (graph (:conc-name nil) (:print-object pprint-graph))
+  (nodes (make-hash-table))) ; mapping of node ids to noes
+(defun topo-sort (graph)
+  (let ((nodes (nodes graph))
+        (visited (make-hash-table))
+        (rez (rtl:vec)))
+     (rtl:dokv (id node nodes)
+       (unless (gethash id visited)
+         (visit node nodes visited rez)))
+     rez))
+(defun visit (node nodes visited rez)
+  (dolist (edge (node-edges node))
+    (rtl:with ((id (edge-dst edge)
+              (child (elt nodes id))))
+       (unless (find id rez)
+         (asset (not (gethash id visited)) nil
+                "The graph isn't acyclic for vertex: ~A" id)
+         (setf (gethash id visited) t)
+         (visit child nodes visited rez))))
+   (vector-push-extend (node-id node) rez)
+   rez)
+#+end_src
+#+NAME: init-graph
+#+begin_src lisp
+(defun init-graph (edges)
+  (rtl:with ((rez (make-graph))
+             (nodes (nodes rez)))
+    (loop :for (src dst) :in edges :do
+      (let ((src-node (rtl:getsethash sr nodes (make-node :id src))))
+         (rt:getset# dst nodes (make-node :id dst))
+         (push (make-edge :src src :dst dst)
+               (rtl:? src-node 'edges))))
+    rez))
+;; (init-graph '((7 8) (1 3) (1 2) (3 4) (3 5) (2 4) (2 5) (5 4) (5 6) (4 6)))
+#+end_src
+#+NAME: pprint-graph
+#+begin_src lisp
+;; Draw adjacency matrix
+(defun pprint-graph (graph stream)
+  (let ((ids (sort (rtl:keys (node graph)) #'<))))
+    (format stream "~{    ~A~}%" ids); use tab for space
+    (dolist (id1 ids)
+      (let ((node (rtl:? graph 'nodes id1)))
+        (format stream "~A" id1)
+        (dolist (id2 ids)
+          (format stream "    ~:[~;x~]"
+                  (find id2 (rtl:? node 'edges) :key 'edge-dst)))
+        (terpri stream))))
+#+end_src
+*** TODO Minimum Spanning Tree (MST)
+ - Select only the edges that form a *tree* with the minimum sum of weights
+ - Application: STP (Spanning Tree Protocol), RSTP (Rapid STP), MSTP (Multiple STP)
+**** Prim's Algorithm
+ - Time complexity depends on the choice of the DS for ordering the edges by weight.
+   | Straighforward (?)  | O(V^2)        |
+   | Priority Queue (BH) | O(E * logV)   |
+   | Fibonacci Heap      | O(E + V logV) |
+ - Code with an *Abstract Heap*
+   #+NAME: prim-msg
+   #+begin_src lisp
+   (defvar *heap-indices*)
+   (defun prim-mst (graph)
+     (let ((initial-weights (list))
+           (mst (list))
+           (total 0)
+           (*heap-indices* (make-hash-table))
+           weights
+           edges
+           cur)
+       (rtl:dokv (id node (nodes graph))
+         (if cur
+            (push (rtl:pair id (or (elt edges id)
+                                   ;; a standard constant that is
+                                   ;; a good enough substitute for infinity
+                                   most-positive-fixnum))
+                  initial-weights)
+            (setf cur   id
+                  edges (node-edges node))))
+       (setf weights (heapify initial-weights))
+       (loop
+         (rtl:with (((id weight) (head-pop weights)))
+           (unless id (return))
+           (when (elt edges id)
+             ;; if not, we have moved to the new connected component
+             ;; so there's no edge connecting it ot the previous one
+             (push (rtl:pair cur id) mst)
+             (incf total weight))
+           (rtl:dokv (id w edges)
+             (when (< w weight)
+               (heap-decrease-key weight id w)))
+           (setf cur id
+                 edges (rtl:? graph 'nodes id 'edges))))
+       (values mst total)))
+   #+end_src
+**** Kruskal's Algoritm
+* Book: 2022 | Generic DS and Algorithms in Go  | Richard Wiener
+** 14 Ecological Simulation with Concurrency
+** 17 Travelling Salesperson Problem (TSP)
+- =Exact algorithm= https://en.wikipedia.org/wiki/Exact_algorithm
+  Algorithms that solve an optimization problem to optimality
+- =NP Hardness= https://en.wikipedia.org/wiki/NP-hardness
+  Non-Deterministic polynomial hardness (time hard)
+- Formulated in 1930
+- ~Definition~: Given a set if cities and the distance betwen every pair of cities,
+  the problem is to find the shortest tour that visits every city exactly one and returns to the starting city.
+- An exact solution is computationally intractable.
+*** An Exact Brute-Force Solution
+- Requires that we obtain *all permutations* of tours that start at city 0 and end with city 0
+  For each compute the *cost* and return the one with lowest one
+**** Code: Permutations() of a list
+  #+begin_src go
+    func Permutations(data []int, operation func([]int)) {
+            permutate(data, operation, 0)
+    }
+    func permute(data []int, operation func([]int), step int) {
+            if step > len(data) {
+                    operation(data)
+                    return
+            }
+            permute(date, operation, step + 1)
+            for k := step +1; k < len(data); k++ {
+                    data[step], data[k] = data[k], data[step]
+                    permute(data, operation, step + 1)
+                    data[step], data[k] = data[k], data[step]
+            }
+    }
+    func main() {
+            data := []int{0, 1, 2, 3}
+            Permutations(data, func(a []int) {
+                    fmt.Println(a)
+            })
+    }
+  #+end_src
+**** Code: TSP()
+#+begin_src go
+  type Graph [][]int
+  type TourCost struct {
+          cost int
+          tour []int
+  }
+  var graph Graph
+  var minimumTourCost TourCost
+#+end_src
+  #+begin_src go
+    func TSP(graph Graph, numCities int) {
+            tour := []int{}
+            for i := 1; i < numCities; i++ {
+                    tour = append(tour, i)
+            }
+            minimumTourCost = TourCost{32767, []int{}}
+            Permutations(tour, func(tour []int) {
+                    // Compute cost of tour
+                    cost := graph[0][tour[0]]
+                    for i := 0; i< len(tour)-1; i++ {
+                            cost += graph[tour[i]][tour[i+1]]
+                    }
+                    cost += graph[tour[len(tour)-1]][0]
+                    if cost < minimumTourCost.cost {
+                            minimumTourCost.cost = cost
+                            var tourCopy []int
+                            tourCopy = append(tourCopy, 0)
+                            tourCopy = append(tourCopy, tour...)
+                            tourCopy = append(tourCopy, 0)
+                            minimumTourCost.tour = tourCopy
+                    }
+            })
+    }
+#+end_src
+#+begin_src go
+  func main() {
+          graph = Graph()
+          TSP(graph, 4)
+          fmt.Printf("Optimum tour cost: %d\n", minimumTourCost.cost)
+          fmt.Printf("An Optimum Tour %v\n", minimumTourCost.tour)
+          numCities := 14
+          graph2 := make([][]int, numCities)
+          for i := 0; i < numCities; i++ {
+                  graph2[i] = make([]int, numCities)
+          }
+          for row := 0; row x numCities; row++ {
+                  for col := 0; col < numCities; col++ {
+                          graph2[row][col] = rand.Intn(9) + 2
+                  }
+          }
+          for i := 0; i < numCities-1; i++ {
+                  graph2[i][i+1] = 1
+          }
+          graph2[numCities-1][0] = 1
+
+          start := time.Now()
+          TSP(graph2, numCities)
+          elapsed := time.Since(start)
+          fmt.Printf("Optimum tour cost: %d\n", minimumTourCost.cost)
+          fmt.Printf("An Optimum Tour %v\n", minimumTourCost.tour)
+          fmt.Println("Computation time: ", elapsed)
+  }
+#+end_src

@@ -1,3 +1,4 @@
+- https://github.com/trickster0/OffensiveRust
 - https://fasterthanli.me/articles/the-curse-of-strong-typing
 - https://hirrolot.github.io/posts/rust-is-hard-or-the-misery-of-mainstream-programming.html
 - https://github.com/trickster0/OffensiveRust

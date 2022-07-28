@@ -7,30 +7,105 @@
 - CSS Grid https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/CSS_Grid_Layout_and_Accessibility
 - CSS Grid examples and patterns https://gridbyexample.com/
 - Logical Properties https://www.youtube.com/watch?v=cnwOfaE5GEk
-* Book: 2021 - CSS Master - Tiffany B. Brown
-** 5 Layouts
- - in CSS everything is a box,
-   browsers generate 1 or more box for element
-   depending on their *display type*
-   - inner: flex, inline-flex, grid, inline-grid, table
-   - outer: block, inline
- - block level boxes expand to fill the available width of their containing element
-   - display: block, list-item, table, flex, grid, flow-root
-   - position: absolute, fixed
-   - contain: layout, content, strict
- - inline level boxes
-   - display: inlin, inline-block, inline-table, ruby
-   - a, span, canvas
- - Logical Properies
-   https://drafts.csswg.org/css-logical/
-   - They are flow-relative, affected by *direction* and *writing-mode*
-   - ??
- - Box model
-   - Margins collapse, unlike in grid (powerman 5k)
-   - width:
-     - *box-sizing: content-box* is defined for the content
-     - *box-sizing: border-box* IE 5.5 define it for content+padding+border
-* Book: 2018 - CSS In Depth - Keith J. Grant - Manning
+* Book: 2018 | Learning Web Design | Jennifer Robbins | O'Reilly
+https://learningwebdesign.com/5e/materials/
+** 18 Transitions, Transforms, and Animation
+*** CSS Transitions (transition-property)
+ - http://www.w3.org/TR/css-transitions-1/
+ - =tweening= are smooth transition (of colors?)
+ - transition: property duration timing-function delay
+**** Properties
+   | transition-property        | required | all  | property-name/all/none                  |
+   | transition-duration        | required | 0s   | how long?                               |
+   |----------------------------+----------+------+-----------------------------------------|
+   | transition-delay           |          | 0s   | pause before it starts?                 |
+   |----------------------------+----------+------+-----------------------------------------|
+   | transition-timing-function |          | ease | ease/linear                             |
+   |                            |          |      | ease-in/ease-out/ease-in-out            |
+   |                            |          |      | steps(#, start/end)                     |
+   |                            |          |      | step-start/step-end                     |
+   |                            |          |      | cubic-bezier(#,#,#,#)                   |
+   |----------------------------+----------+------+-----------------------------------------|
+**** Animated Properties
+   - background-color
+     background-position
+   - border-BRLT-color
+     border-BRLT-width
+     border-spacing
+     outline-color
+     outline-width
+   - color
+     opacity
+     visibility
+   - font-size
+     font-weight
+     letter-spacing
+     line-height
+     text-indent
+     text-shadow
+     word-spacing
+     vertical-align
+   - height
+     width
+     max/min-height
+     max/min-width
+     margin-BRLT
+     padding-BRLT
+   - BRLT
+   - z-index
+   - clip-path
+   - transform
+     transform-origin
+**** Example: transition background-color
+   #+begin_src css
+     .smooth {
+       display: block;
+       text-decoration: none;
+       text-align: center;
+       padding: 1em 2em;
+       width: 10em;
+       border-radius: 1.5em;
+       color: #fff;
+       background-color: mediumblue;
+       transition-property: background-color;
+       transition-duration: 0.3s;
+     }
+     .smooth:hover, .smooth:focus {
+       background-color: red;
+     }
+   #+end_src
+**** Example: multiple transitions, if a value is missing it cycles from the beginning
+   #+begin_src css
+     .smooth {
+       transition-property: background-color, color, letter-spacing;
+       transition-duration: 0.3s, 2s, 0.3s;
+       transition-timing-function: ease-out, ease-in, ease-out;
+     }
+     .smooth:hover, .smooth:focus {
+       background-color: red;
+       letter-spacing: 3px;
+       color: black;
+     }
+   #+end_src
+**** Example: transition "all"
+ #+begin_src css
+   .smooth {
+     transition: all 0.2s ease-in-out;
+   }
+ #+end_src
+*** CSS Transforms (transform)
+ | none        | matrix()     |              |           |            |
+ | skew()      | skewX()      | skewY()      |           |            |
+ | scale()     | scaleX()     | scaleY()     |           |            |
+ | translate() | translateX() | translateY() |           |            |
+ | rotate()    | rotateX()    | rotateY()    | rotateZ() | rotate3d() |
+- Elements that you CANNOT transform
+  - em
+  - span
+  - table columns
+  - table column groups
+*** CSS Animation
+* Book: 2018 | CSS In Depth        | Keith J. Grant   | Manning
   code: https://github.com/CSSInDepth/css-in-depth
   http://howtocenterincss.com/
   OOCSS http://www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code
@@ -38,6 +113,7 @@
   List of flexbox bugs https://github.com/philipwalton/flexbugs
   Use CSS Grid Layout for fullpage layout instead of flexbox https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/
   CSS Grid examples and patterns https://gridbyexample.com/
+  CSS shapes https://css-tricks.com/the-shapes-of-css/
 ** Box model and border-box sizing
 - Width and Height
   - By default:
@@ -747,5 +823,235 @@
    | align-content   |                |                              |
  - -content, is useful when the grid does NOT fill the container fully
  - CSS grid layout example and patters https://gridbyexample.com/
+** 07 Positioning and stacking contexts
+*** =position: static= (default)
+- Initial/Default value: *static*
+  - static: "not positioned"
+- it removes elements from the *document flow* entirely
+*** =position: fixed= (viewport)
+- Relative to viewport, aka =containing block=
+- arbitrary within the viewport
+- top/right/bottom/left
+  - setting 4 will define a width/height
+  - setting 1 only the 1 value
+  - setting left/right or top/bottom will set the width/height
+  - setting top/right/width
+    #+begin_src css
+      position: fixed;
+      top: 1em;
+      right: 1em;
+      width: 20%;
+    #+end_src
+- dialog with <div> with display none/block controlled by JS
+- objects behind it can have a *right-margin: 20%* to avoid beng overlapped
+*** =position: absolute= (ancestor)
+- *containing block* is not the viewport but the "closest positioned ancestor element"
+- A close button in the top right of a dialog
+  #+begin_src html
+    <button class="modal-close" id="close">close</button>
+  #+end_src
+  #+begin_src css
+    .modal-close {
+      position: absolute;
+      top: 0.3em;
+      right: 0.3em;
+      padding: 0.3em;
+      cursor: pointer;
+    }
+  #+end_src
+- Hide the "close" text with css
+  #+begin_src css
+    .modal-close {
+      /* ... */
+      /* makes it a small square */
+      font-size: 2em;
+      height: 1em;
+      width: 1em;
+      /* overflows and hides the text */
+      text-indent: 10em;
+      overflow: hidden;
+      border: 0;
+    }
+    .modal-close::after {
+      position: absolute;
+      line-height: 0.5;
+      top: 0.2em;
+      left: 0.1em;
+      text-indent: 0; /* reset indent, as is a child */
+      content: "\00D7"; /* a multiplication sign in UTF */
+    }
+  #+end_src
+*** =position: relative= ("static")
+- may seem similar to static
+- TRBL will shift to a new position, but not the elements around
+  - can't use both TB or LR at the same time, one will be ignored
+*** Example: dropdown menu
+- Using pure css.
+  A real example wuld would use JS to add some hover delay
+  Nor :hover will work with all touchscreens
+#+begin_src html
+  <div class="container">
+    <nav>
+      <div class="dropdown">
+        <div class="dropdown-label"></div> <!-- always visible -->
+        <div class="dropdown-menu">
+          <ul class="submenu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/coffees">Coffees</a></li>
+            <li><a href="/brewers">Brewers</a></li>
+            <li><a href="/specials">Specials</a></li>
+            <li><a href="/about">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <h1>Wombat Coffee Roasters</h1>
+  </div>
+#+end_src
+#+begin_src css
+  .container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 1em auto;
+  }
+  .dropdown {
+    display: inline-block;
+    position: relative;
+  }
+  .dropdown-label {
+    padding: .5em 1.5em;
+    border: 1px solid #ccc;
+    background-color: #eee;
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 2.1em;
+    min-width: 100%;
+    background-color: #eee;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  .submenu {
+    padding-left: 0;
+    margin: 0;
+    list-style-type: none;
+    border: 1px solid #999;
+  }
+  .submenu > li + li {
+    border-top: 1px solid #999;
+  }
+  .submenu > li > a {
+    display: block;
+    padding: .5em 1.5em;
+    background-color: #eee;
+    color: #369;
+    text-deoration: none;
+  }
+  .submenu > li > a:hover {
+    background-color: #fff;
+  }
+#+end_src
+*** Example: draw a triangle (absolute)
+- using borders
+  #+begin_src css
+    .dropdown-label {
+      padding: 0.5em 2em 0.5em 1.5em; /* right side padding for the arrow/triange */
+      border: 1px solid #ccc;
+      backgroudn-color: #eee;
+    }
+    .dropdown-label::after {
+      content: ""; /* empty, hence no height or width */
+      position: absolute;
+      right: 1em;
+      top: 1em;
+      border: 0.3em solid;
+      border-color: black transparent transparent;
+    }
+    /* change arrow direction on hover */
+    .dropdown:hover .dropdown-label::after {
+      top: 0.7em;
+      border-color: transparent transparent black;
+    }
+  #+end_src
+*** Stacking Contexts
+- when you remove an element from the document flow (position)
+  you are responsible for all that document flow does for you
+  - stacking
+  - overflow viewport
+  - cover/hides content
+- html -> browser -> render tree
+- painting order
+  1) non-positioned elements by the order they appear on html
+  2) positioned elements, by the same order
+- modals are usually *placed* to the end of the page, as the last bit of content before closing <body>
+  - modals use *fixed* positioning
+*** z-index
+- a property than can be set to any integer, z refers the depth dimension
+  - higher z-inder appear in front of elements of lower index
+  - negative indez appear behind *static* elements
+- only works on positioned elements, not static
+*** Stacking Contexts II
+- do NOT create SC unless you have a specific reason for it
+- an element or group of elements that are *painted together*
+  - one element is the *root* of the SC
+  - when you add z-index prop to a positioned element, it becomes the root of a new SC
+    when opacity is below one
+    when transform/filter
+- "z-index war", avoid it by...
+  - use variables to keep track of indexes
+  - use increments of 10 or 100
+*** =position: sticky= (relative/fixed)
+- elements scroll normally with the page *until* it reaches a specific point on the screen,
+  then it will "lock" in place as the scroll continues
+  eg: sidebar navegation
+- div.container > ((main.col-main > nav > div.dropdown > div.dropdown-label + driv.dropdown-menu)
+                 + (aside.col-sidebar > div.affix > ul.submenu))
+- css
+  #+begin_src css
+    .container {
+      display: flex;
+      width: 80%;
+      max-width: 1000px;
+      margin: 1em auto;
+      min-height: 100vh;
+    }
+    .col-main {
+      flex: 1 80%;
+    }
+    .col-sidebar {
+      flex: 20%;
+    }
+    .affix {
+      position: sticky;
+      top: 1em;
+    }
+  #+end_src
+** 08 Responsive Design
 ** Part 3 - CSS at scale
 ** Part 4 - Advanced topics
+* Book: 2021 | CSS Master          | Tiffany B. Brown | Sitepoint
+** 5 Layouts
+ - in CSS everything is a box,
+   browsers generate 1 or more box for element
+   depending on their *display type*
+   - inner: flex, inline-flex, grid, inline-grid, table
+   - outer: block, inline
+ - block level boxes expand to fill the available width of their containing element
+   - display: block, list-item, table, flex, grid, flow-root
+   - position: absolute, fixed
+   - contain: layout, content, strict
+ - inline level boxes
+   - display: inlin, inline-block, inline-table, ruby
+   - a, span, canvas
+ - Logical Properies
+   https://drafts.csswg.org/css-logical/
+   - They are flow-relative, affected by *direction* and *writing-mode*
+   - ??
+ - Box model
+   - Margins collapse, unlike in grid (powerman 5k)
+   - width:
+     - *box-sizing: content-box* is defined for the content
+     - *box-sizing: border-box* IE 5.5 define it for content+padding+border

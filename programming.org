@@ -1,18 +1,14 @@
+- https://github.com/codecrafters-io/build-your-own-x
+- https://github.com/chiroptical/ctfp-book-club
+  https://github.com/hmemcpy/milewski-ctfp-pdf
+- Category Theory
+  https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
+  https://www.youtube.com/playlist?list=PLbgaMIhjbmElia1eCEZNvsVscFef9m0dm
 - Cursos Uni https://www.youtube.com/channel/UCtUHm20l_zL4u8Q59i3dYow/playlists
   Cursos UNAM OS https://www.youtube.com/c/SistemasOperativosCienciasUNAM/playlists
 - Courses https://ebookfoundation.github.io/free-programming-books/courses/free-courses-en.html
 - Topics https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-subjects.html
 - Programming Languages https://ebookfoundation.github.io/free-programming-books/books/free-programming-books-langs.html
-- Competitive https://cses.fi/problemset/
-- Channel: Coding with Some Guy https://www.youtube.com/channel/UCBwH4Xj7s5C9tkeYxI3dIzA/about
-- Channel: Creel https://www.youtube.com/c/WhatsACreel/videos
-- Channel: Club de Programación Competitiva https://www.youtube.com/channel/UCZalVP2C0nwe0JjmItyKS1w/videos
-- Channel: Programacion Competitiva Bolivia https://www.youtube.com/channel/UCod9TyxrhF8QHMezaVzMDVg/videos
-- Channel: Club de Programación Competitiva UMSA https://www.youtube.com/channel/UCi3lobNX_J1cMW6BjFZGTmw/videos
-- https://github.com/matramos/elrejunte
-  https://github.com/undefinedfceia/guardian-tortuga
-- https://github.com/ec24/tc-arg
-  https://www.youtube.com/user/ltaravilse/videos
 - Article: 2014 - Is TDD Dead https://news.ycombinator.com/item?id=24281195
 - Article: Carmack https://web.archive.org/web/20120702231514/http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/
 - Article: Carmack https://www.gamedeveloper.com/programming/in-depth-functional-programming-in-c-
@@ -33,7 +29,6 @@
 - Podcast - History of computing https://open.spotify.com/show/1wdCnbj68DbWinQjmEwUaC
 - https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00-introduction-to-computer-science-and-programming-fall-2008/video-lectures/
 - Continuous Delivery https://www.youtube.com/channel/UCCfqyGl3nq_V0bo64CjZh8g/videos
-- https://ourmachinery.com/post/data-structures-part-1-bulk-data/
 - Ask HN: What are some of the best technical talks you've heard?
   https://news.ycombinator.com/item?id=18217762
 - Structure and Interpretation of a Computer Revolution https://www.youtube.com/playlist?list=PLoRl3Ht4JOcfcnpf79R9f80bqjMvsOpeg
@@ -176,74 +171,22 @@ public class Singleton {
   }
 }
 #+end_src
-* Book: Algorithmic Thinking
-** 6 Binary Search - O(? log n)
-- Ingredients (conditions needed)
-  1) Hard optimality and easy feasibility: hard to find the optimal, but easy to judge the feasibility of a solution.
-  2) Infeasible-feasible split: there is a casm that divides the solutions.
-- Feasibility is determined by an *other* algorithm separated to the BS
-- BS is a legendarily difficult to implement correctly:
-  - Should > be >= ?
-  - Should that be *mid* or *mid + 1* ?
-  - Do we want *low + high* or *low + high + 1* ?
-  - Invariant
-    low = 0
-    high = length + 1
-    or
-    high = length
-- Examples: Minimizing, maximizing, ... searching a value
-*** Example: DMOJ coci14c4p4
-- Feasibility: Tree search
-- BFS (bread-first search) would be an overkill, due no cycles
-- "...we keep dividing the range in half until it's very small"
-*** Example: POJ 3258
-- Feasibility: Greedy Algorithm (GA)
-  - GA does what looks promising right now, with no regard to the long-term consequences of its choices.
-  - Dijkstra algorithm is a GA
-- Objective: Maximize the minimum distance between rocks.
-  - Feasibility GA Attempts:
-    1) find the 2 rocks that are closest together, remove one that's closes to its other neighbor rock, and repeat.
-    2) consider each rock in order, remove if too close to the previous. Also check the rightmost kept, remove it if it's too close to the end rock. Finally count the number of rocks removed.
-*** Example: DMOJ ioi10p3
-- Feasibility: Dynamic Programming
-- Objective: find minimum median quality rank of any hxw rectangle
-- Naive Solution Problems:
-  1) getting the median with qsort
-  2) creating the array to sort from scratch
-- Binary Search Solution:
-  - Opposite of previous BS example, *low* and lower are infeasible, *high* and everything larger are feasible
-  - No longer having to determine the median of every rectangle, or median at all.
-    We just need to determine is "at most" below some some value.
-    (If a median X is feasible or not)
-  - Naive Solution:  O(m^4 log m)
-  - Dynamic Programming: can take away the need of 4 nested loops to search for feasiblity of each rectangle with dimensions provided.
-    - 1D range sum query:
-      - a new array (~prefix sum~), where "i" holds the sum of all values from "0" to "i"
-    - 2D range sum query: O(m^2 log m)
-      * a -1,1 matrix
-      * another "prefix sum" matrix
-      * an operation (+ and -) of 4 elements from 1. and 2. matrices
-*** Example: DMOJ ioi13p4
-- BS used to zone-in on a desired element.
-  NOT to find the ~optimal solution~
-- Subtask 1: n door = n switch
-  - Naive: 1door at the time, O(n) ? one for() loop
 * Book: Refactoring: Improving the Design of Existing Code - Martin Fowler
 ** 1 Refactoring: A first Example
 - "Brevity is the soul of wit, but clarity is the soul of evolvable software."
 - compile-test-commit
 - It's much easier to improve the ~performance~ of a well-factored code base.
 - Refactoring Types:
-  1) Extract Function: for example, from a case/switch to a function
-  2) Replace Temp (variable) with Query: reduces mutable parts
-  3) Change Function Declaration: like changing the name, or removing a parameter in favor of calling a function. Makes easier to 1).
-  4) Inline Variable: same as 2) ?
-  5) Split Loop: isolate the accumulation
-  6) Slide Statements: move declarations of the variable next the loop for easy 1)
-  7) Split Phase: divide logic
-  8) Move Function:
-  9) Replace Loop with Pipeline: loop to .map() and friends
-  10) Replace Conditional with Polymorphism
+ | Extract Function                      | for example, from a case/switch to a function                                                       |
+ | Replace Temp (variable) with Query    | reduces mutable parts                                                                               |
+ | Change Function Declaration           | like changing the name, or removing a parameter in favor of calling a function. Makes easier to 1). |
+ | Inline Variable                       | same as 2) ?                                                                                        |
+ | Split Loop                            | isolate the accumulation                                                                            |
+ | Slide Statements                      | move declarations of the variable next the loop for easy 1)                                         |
+ | Split Phase                           | divide logic                                                                                        |
+ | Move Function                         |                                                                                                     |
+ | Replace Loop with Pipeline            | loop to .map() and friends                                                                          |
+ | Replace Conditional with Polymorphism |                                                                                                     |
 - Javascript
   - Perform a shallow copy, to not modify aPerformance
     const result = Object.assign({}, aPerformance)
