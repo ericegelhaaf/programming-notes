@@ -1,3 +1,28 @@
+* Videos
+- https://earthly.dev/blog/golang-streamers/
+- GameDev with GO https://www.youtube.com/user/Velovix
+- Learn Go Programming - Golang Tutorial for Beginners
+  https://www.youtube.com/watch?v=YS4e4q9oBaU
+- Make a chess program https://www.youtube.com/watch?v=zlPDWBLhn6c
+- Write web applications in Go without using a framework
+  https://www.youtube.com/playlist?list=PL41psiCma00wgiTKkAZwJiwtLTdcyEyc4
+- Tutorial: https://www.youtube.com/playlist?list=PLJbE2Yu2zumCe9cO3SIyragJ8pLmVv0z9
+- /r/golang/ favorite go conference talks https://www.reddit.com/r/golang/comments/ei54kv/what_are_your_favorite_go_conference_talks/
+- /r/golang/ youtube.com https://www.reddit.com/r/golang/search?q=site%3Ayoutube.com&restrict_sr=1&sort=top
+** Channels
+- GopherCon UK https://www.youtube.com/c/GopherConUK/videos
+- Learn To Code https://www.youtube.com/c/toddmcleod-learn-to-code/videos
+- Go Class https://www.youtube.com/channel/UCC2ot8w_U6yQsq7jdpbECvQ/videos
+- Justforfunc https://www.youtube.com/c/JustForFunc/videos
+- Microservices: https://www.youtube.com/c/NicJackson/videos
+- The Go Programming Language https://www.youtube.com/c/golang/videos
+- Gopher Academy https://www.youtube.com/channel/UCx9QVEApa5BKLw9r8cnOFEA
+- GopherCon Europe https://www.youtube.com/channel/UCxm3-iHEMy7IkU0_gwDVGAQ
+- GopherCon UK https://www.youtube.com/channel/UC9ZNrGdT2aAdrNbX78lbNlQ
+- Gophercon Israel https://www.youtube.com/channel/UCV_ox3kVvV5HrUz4JOuZpdQ
+- Gophercon Russia https://www.youtube.com/channel/UCq-OB01F8YnS-FJpeJRCvMQ/videos
+- Singapore Gophers https://www.youtube.com/channel/UCazkIMpjghmT8fugD1WF_DQ
+- ArdanLabs https://www.youtube.com/channel/UCCgGRKeRM1b0LTDqqb4NqjA/videos
 * TODO Video: Golang UK Conference 2015 - Andrew Gerrand - Stupid Gopher Tricks
   https://www.youtube.com/watch?v=UECh7X07m6E
   - struct{} is a type literal, on var foo struct{}
@@ -342,6 +367,36 @@ for i := 0; i < 3; i++ {
     5) pointer vs value: shared access vs value copied
     6) Custom error: implement the interface when needed
     7) Know what is Safe and what is Unsafe
+* TODO Video: Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay
+  https://www.youtube.com/watch?v=LI1YTFMi8W4
+  https://github.com/eranyanay/1m-go-websockets
+- First problem is not having long lived connections. (ignores keep alive?)
+* Video: 2013 - Campoy - Go: Code that GFrows with Grace
+  https://www.youtube.com/watch?v=bj6EtLacsj8
+- 9:26 concurrent echo tcp server
+  #+begin_src go
+package main
+import (
+  "io"
+  "log"
+  "net"
+)
+const listenAddr = "localhost:4000"
+
+func main() {
+  l, err := net.Listen("tcp", listenAddr)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for {
+    c, err := l.Accept()
+    if err != nil {
+      log.Fatal(err)
+    }
+    go io.Copy(c, c)
+  }
+}
+  #+end_src
 * Video: Golang University
   https://www.youtube.com/playlist?list=PLEcwzBXTPUE_5m_JaMXmGEFgduH8EsuTs
 ** 2016 - Mat Ryer - Idiomatic Go Tricks - Golang UK Conference
@@ -376,33 +431,3 @@ for i := 0; i < 3; i++ {
    - you can either use new() or &Thing{}
    - When you see something complicated, it should be complicated
      12:00
-* TODO Video: Going Infinite, handling 1 millions websockets connections in Go / Eran Yanay
-  https://www.youtube.com/watch?v=LI1YTFMi8W4
-  https://github.com/eranyanay/1m-go-websockets
-- First problem is not having long lived connections. (ignores keep alive?)
-* Video: 2013 - Campoy - Go: Code that GFrows with Grace
-  https://www.youtube.com/watch?v=bj6EtLacsj8
-- 9:26 concurrent echo tcp server
-  #+begin_src go
-package main
-import (
-  "io"
-  "log"
-  "net"
-)
-const listenAddr = "localhost:4000"
-
-func main() {
-  l, err := net.Listen("tcp", listenAddr)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for {
-    c, err := l.Accept()
-    if err != nil {
-      log.Fatal(err)
-    }
-    go io.Copy(c, c)
-  }
-}
-  #+end_src
