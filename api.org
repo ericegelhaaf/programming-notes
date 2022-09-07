@@ -1,0 +1,34 @@
+* Book: 2019 | The Design of Web APIs | Arnaud Lauret
+** 1 What is API design?
+- 3 types of APIs
+  1) hardware api
+  2) a library
+  3) remote api (the book is about this one)
+- a web api is an interface
+- App     = Consumer
+  Backend = Provider
+- APIs turn software into LEGO bricks
+  eg: you as the provider of an api, can break down the request into NEW api requests to different services (APIs)
+- the *public/private* question is not a matter of how the api is exposed, but to *whom*.
+- almost public apis, where is exposed to customers or selected partners, are often called *partner* apis
+- DX = Developer Experience = registration + documentation + support
+  ammounts to nothing if the api design was not properly handled
+- design flaws increase the time, effort, and money needed to build software using the API
+- apis are interfaces for developers who build the applications consuming them
+- Elements of API design
+  1) Learning the principles beyond programming interface design
+     - Knowing the fundamental principles of *API design* gives you a solid foundation with which to design APIs of any *style*
+     - Styles: RPC, SOAP, REST, gRPC, GraphQL
+  2) Exploring all facets of API design
+     - what is the purpose, and what the user wants to achive with it
+     - once people get used to and object and its interface, changes must be made with extreme caution
+     - secure
+     - take in account the context, constraints
+** 2 Desigining an API for its users
+- an API is made for its *users* in order to help them achive their =goals=
+- The right perspective for designing every day user interfaces
+  - API designers have much to learn from the design of every day user intefaces.
+  - Focus on what happens under the hood an it will end in a total disaster.
+    - You can end up just exposing the inner working and history of something without any design.
+  - Focus on what users can do and everything will go smoothly.
+
