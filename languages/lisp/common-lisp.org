@@ -1,3 +1,7 @@
+- https://mfiano.net/posts/2022-09-04-from-common-lisp-to-julia/
+  https://gist.github.com/digikar99/24decb414ddfa15a220b27f6748165d7
+  https://news.ycombinator.com/item?id=32745318
+- https://stevelosh.com/blog/2022/08/depending-in-common-lisp/
 - https://www.csee.umbc.edu/courses/331/resources/lisp/LISP-tutorial.html
 - Article: Conditions and Restarts in Common Lisp https://z0ltan.wordpress.com/2016/08/06/conditions-and-restarts-in-common-lisp/
 - Article: https://vindarel.github.io/cl-torrents/tutorial.html
@@ -316,6 +320,7 @@ and that doesn't work if the code is provided as a *.a or *.o file
     (print (mem-aref thing '(:struct tryout) 0)))
   #+end_src
 * CLOS
+- Article: https://stevelosh.com/blog/2022/08/depending-in-common-lisp/
 ** Common Lisp Recipies
  - &key arguments on (initialize-instance :after) are valid on (make-instance)
  - 13.4 - Providing Constructors for your classes

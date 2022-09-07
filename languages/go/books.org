@@ -1129,7 +1129,7 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
     return ErrPageMoved
   }
   #+end_src
-** Chapter 6: Concurrency
+** TODO Chapter 6: Concurrency
 *** 6.11 Channel Patterns
 - for range on a channel is a blocking way to read a channel, shorter syntax for
   1) a infinite for{}
@@ -1208,6 +1208,33 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
       }(ctx)
   }
 #+end_src
+** TODO Chapter 7: Testing
+*** Basic Unit Testing
+- Go defines a unit of code as a *package*, represented as a folder in the source tree
+  The compoiler build a static library from each folder, and then links them all together.
+- Always write tests like production code
+- Unit testing, means testing the code of a single package, usually exported function
+  - one convention, defines a new package for test
+  - t.Fatal, will cause the test funtio nto return
+    t.Error, will allow the test function to continue and report potential more failures within the test
+    t.Log, logs showed when using -v on go test
+  #+begin_src go
+    package sample_test
+    import (
+        "testing"
+    )
+    func TestDownload(t *testing.T) {}
+    func TestUpload(t *testing.T) {}
+  #+end_src
+- Integration tests, will run test across multiple packages
+*** Table Unit Test
+- When I have code that can the run through a series of inputs and expected outputs
+- Perfect for *negative path testing*
+- tt := []struct { url string; statusCode int; }{ {"http..",http.StatusOK},{"http...", http.StatusNotFound}}
+*** Web Call Mocking
+- Mocking is better avoided. Eg: You can hit a docker container.
+- "A mock is only as good as the behavior being simulated."
+- Useful on NPT when it's diffcult to cause real systems to fail on demand.
 * 2022 | Network Programming with Go Language | Dr Jan Newmarch   | Apress
 ** 15 Websockets
  - HTTP 1.1 with "keep alive" keeping the connection open for a short while,

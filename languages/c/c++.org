@@ -1,3 +1,5 @@
+- Video: C++ for C programmers -- lesson 1 (classes, constructors, methods, templates, is it efficient?)
+  https://www.youtube.com/watch?v=kdlIlIIHCz0
 - Andreas Kling
   https://www.youtube.com/watch?v=gt6-TC6FtMs&feature=youtu.be
 - C++ FULL COURSE For Beginners (Learn C++ in 10 hours)

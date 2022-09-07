@@ -1,3 +1,5 @@
+- https://batsov.com/articles/2022/08/29/ocaml-at-first-glance/
+  https://lobste.rs/s/dwt32y/ocaml_at_first_glance
 - https://www.cl.cam.ac.uk/teaching/1617/L28/materials.html
 - Promises https://cs3110.github.io/textbook/chapters/ds/promises.html?highlight=async
 - https://smlfamily.github.io/
@@ -931,9 +933,9 @@ type <variant> =
 - *match*, we can use the type name when matching
   in this case "color" is the type name
   #+begin_src ocaml
-  let extended_color_to_int : extended_color -> int = function
-    | `RGBA (r,g,b,a) -> 256 + a + b * 6 + g * 36 + r * 216
-    | #color as color -> color_to_int
+    let extended_color_to_int : extended_color -> int = function
+      | `RGBA (r,g,b,a) -> 256 + a + (b * 6) + (g * 36) + (r * 216)
+      | #color as color -> color_to_int
   #+end_src
 *** ADT =Algebraic Data Types= (Variant/Record/Tuples)
 1) Product types:
@@ -947,33 +949,33 @@ type <variant> =
    - similar to disjoint unions
 **** Separate
 #+begin_src ocaml
-module Time_ns = Core.Time_ns
-module Log_entry = struct
-  type t =
-    { session_id: string;
-      time: Time_ns.t;
-      important: bool;
-      message: string;
-    }
-end
-module Heartbeat = struct
-  type t =
-    { session_id: string;
-      time: Time_ns.t;
-      status_message: string;
-    }
-end
-module Logon = struct
-  type t =
-     { session_id: string;
-       time: Time_ns.t;
-       user: string;
-       credentials: string;
-     }
-end
-type client_message = | Logon of Logon.t
-                      | Heartbeat of Heartbeat.t
-                      | Log_entry of Log_entry.t
+  module Time_ns = Core.Time_ns
+  module Log_entry = struct
+    type t =
+      { session_id: string;
+        time: Time_ns.t;
+        important: bool;
+        message: string;
+      }
+  end
+  module Heartbeat = struct
+    type t =
+      { session_id: string;
+        time: Time_ns.t;
+        status_message: string;
+      }
+  end
+  module Logon = struct
+    type t =
+       { session_id: string;
+         time: Time_ns.t;
+         user: string;
+         credentials: string;
+       }
+  end
+  type client_message = | Logon of Logon.t
+                        | Heartbeat of Heartbeat.t
+                        | Log_entry of Log_entry.t
 #+end_src
 **** Tuple of shared fields and non-shared
 #+begin_src ocaml

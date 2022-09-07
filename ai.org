@@ -92,7 +92,7 @@ https://www.youtube.com/playlist?list=PLfYUBJiXbdtRL3FMB3GoWHRI8ieU6FhfM
 - Book: "Data Source Handbook"
 - NYT has <meta> tags with information about the article.
 
-* Book: Neural Networks for Electronics Hobbyists (Apress) / Richard McKeon
+* Book: 2019 | Neural Networks for Electronics Hobbyists | Richard McKeon
 ** Preface
 - "Illustrates how ~back propagation~ can be
      used to adjust connection strengths or ~weights~ and train a network."
@@ -200,7 +200,9 @@ https://www.youtube.com/playlist?list=PLfYUBJiXbdtRL3FMB3GoWHRI8ieU6FhfM
   - Same as a Neuron in Hidden
   - a LED to the output
 ** Chapter 5 - Training with Back Propagation
-* Book: Loving Common Lisp, or the Savvy Programmer's
+* Book: 2019 | Grokking Deep Learning                    | Andrew W. Trask
+https://github.com/iamtrask/Grokking-Deep-Learning
+* Book: 2021 | Loving Common Lisp                        | Mark Watson
 ** Backpropagation Neural Networks
 - Trained by  applying training inputs to the networks
 - Compare differences/errors between
@@ -214,9 +216,7 @@ https://www.youtube.com/playlist?list=PLfYUBJiXbdtRL3FMB3GoWHRI8ieU6FhfM
 - The ~activation values~ of individual neurons are limited to the range [0,1].
   - Sum of the activation values of neurons in the previous layer *times* the values of the connecting weights and then
     Using *sigmoid* function to map the sums to desired range.
-* Book: Grokking Deep Learning
-https://github.com/iamtrask/Grokking-Deep-Learning
-* Book: Deep Learning: A Visual Approach
+* Book: 2021 | Deep Learning: A Visual Approach          | Andrew Glassner
   https://nostarch.com/deep-learning-visual-approach
   https://github.com/blueberrymusic/Deep-Learning-A-Visual-Approach (scikit-learn)
 ** Introduction
@@ -253,3 +253,7 @@ https://github.com/iamtrask/Grokking-Deep-Learning
   Loop -> Weights are adjusted carefully by a small ammount. And output is judged.
   Neurons converge into looking for *features* although we never told him to.
 ** 2 Essential Statistics
+* Book: 2020 | Programming ML From Coding to DL          | Paolo Perrotta
+** 1
+- https://news.stanford.edu/2017/11/15/algorithm-outperforms-radiologists-diagnosing-pneumonia/
+  - deep learning

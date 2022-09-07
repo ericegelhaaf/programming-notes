@@ -1,3 +1,11 @@
+- Libraries
+  | ua-based rendering | https://www.npmjs.com/package/react-device-detect        |
+  | icons              | https://www.npmjs.com/package/react-icons                |
+  | loading            | https://www.npmjs.com/package/react-loading              |
+  | popup notification | https://www.npmjs.com/package/react-toastify             |
+  | counter animation  | https://www.npmjs.com/package/react-countup              |
+  | <dialog>           | https://www.npmjs.com/package/react-modal                |
+  | <details>          | https://www.npmjs.com/package/react-accessible-accordion |
 - Filtering undefined elements from an array in TypeScript
   https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
 - https://quicktype.io/typescript/

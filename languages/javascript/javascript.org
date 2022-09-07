@@ -1,3 +1,4 @@
+- W3 DOM EVENTS https://www.w3schools.com/jsref/dom_obj_event.asp
 - https://developer.mozilla.org/en-US/docs/Learn/JavaScript
 - deno runtime https://github.com/denoland/deno
 - CPS http://matt.might.net/articles/by-example-continuation-passing-style/
@@ -31,6 +32,42 @@ https://github.com/30-seconds/30-seconds-of-interviews
 - https://frontendmasters.com/
 - https://rallycoding.com/
 - https://javascript30.com/
+* Tutorial: Linkedin JS questions
+https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/javascript/javascript-quiz.md
+- todo https://www.guru99.com/node-js-generators-compare-callbacks.html#:~:text=Generators%20are%20function%20executions%20that,resumed%20at%20a%20later%20point.
+  generators can be suspended and resumed at a later time
+- https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/javascript/javascript-quiz.md
+- https://www.codeproject.com/Tips/1221966/JavaScript-Functions-Implicit-Parameters
+  - this
+  - arguments
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
+  - get do() {}
+  - are binds a function to an object property to be called when the property is looked
+- Difference between collections created with *Map* and created with *Object*
+  - Map has a property that has the length
+- https://www.w3schools.com/tags/att_script_async.asp
+  HTML <script src="..." async>
+  can be used for external javascript
+- https://www.digitalocean.com/community/tutorials/html-defer-async#:~:text=%3E-,Async%20vs%20Defer,order%20as%20they%20are%20called.
+  HTML <script src="..." defer>
+  script will run once the whole page has been loaded, ensuring deps are respected, as it does it in order
+- [] == [] false
+- [] === [] false
+- ReferenceError - when the var does not exists
+  undefined - when the var exists but is not intialized
+- *var* allows the usage of the variable on scope but, will it will be undefined before it is intialized
+- IIFE (Immediately Invoked Function Expression
+  https://developer.mozilla.org/en-US/docs/Glossary/IIFE
+- repeated
+  - taxcalculator
+  - when asynchronous?
+  - for foreach
+  - strict logger
+  - console.log 'Two'
+  - valid arrow function
+- delete object.keyname
+- CORS
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 * TODO Video: (2021) Understanding Variance in the TypeScript Type System
   Tițian Cericova-Dragomir
   https://www.youtube.com/watch?v=EInunOVRsUU
@@ -722,10 +759,10 @@ type ColoredPoint = { x: number, y: number, color: string } // SUBtype
 | ts-node -O '{ "target": "es2020", "strict": true }' | to compile without tsconfig.json |
 *** Array and Object Type Variance
 - Theorically
-  - Only *immutable* arrays should be co-variant
-  - *mutable* arrays should be in-variant
+  - Only *immutable* arrays should be ~covariant~
+  - *mutable* arrays should be ~invariant~
 - Arrays are covariant in TS, since he types vary in the same *direction* as the element types. But...
-- on TS invariant *arrays* are inconvenient
-- on TS covariance for *objects* is also unsound
+  - on TS invariant *arrays* are inconvenient
+  - on TS covariance for *objects* is also unsound
 *** Classes
 - 

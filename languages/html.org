@@ -22,10 +22,9 @@
  | header  | child of body, article, section                                       |
  | footer  | child of body, article, section                                       |
  |---------+-----------------------------------------------------------------------|
- | section |                                                                       |
- | article | selfcontained/independent (forum/blog/news post)                      |
+ | section | eg: main>div>section+section                                          |
+ | article | selfcontained/independent (forum/blog/news post), eg: main>article*2  |
  | nav     | <a>'s container, not all, just the ones in a major navigation section |
-
 **** Other
  |-----------------+-----------------------------------------------------------------------|
  | span            | inline, to markup text                                                |

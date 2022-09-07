@@ -15,17 +15,16 @@ https://learningwebdesign.com/5e/materials/
  - =tweening= are smooth transition (of colors?)
  - transition: property duration timing-function delay
 **** Properties
-   | transition-property        | required | all  | property-name/all/none                  |
-   | transition-duration        | required | 0s   | how long?                               |
-   |----------------------------+----------+------+-----------------------------------------|
-   | transition-delay           |          | 0s   | pause before it starts?                 |
-   |----------------------------+----------+------+-----------------------------------------|
-   | transition-timing-function |          | ease | ease/linear                             |
-   |                            |          |      | ease-in/ease-out/ease-in-out            |
-   |                            |          |      | steps(#, start/end)                     |
-   |                            |          |      | step-start/step-end                     |
-   |                            |          |      | cubic-bezier(#,#,#,#)                   |
-   |----------------------------+----------+------+-----------------------------------------|
+ | transition-property        | required | all  | property-name/all/none       |
+ | transition-duration        | required | 0s   | how long?                    |
+ |----------------------------+----------+------+------------------------------|
+ | transition-delay           |          | 0s   | pause before it starts?      |
+ |----------------------------+----------+------+------------------------------|
+ | transition-timing-function |          | ease | ease/linear                  |
+ |                            |          |      | ease-in/ease-out/ease-in-out |
+ |                            |          |      | steps(#, start/end)          |
+ |                            |          |      | step-start/step-end          |
+ |                            |          |      | cubic-bezier(#,#,#,#)        |
 **** Animated Properties
    - background-color
      background-position
@@ -114,6 +113,16 @@ https://learningwebdesign.com/5e/materials/
   Use CSS Grid Layout for fullpage layout instead of flexbox https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/
   CSS Grid examples and patterns https://gridbyexample.com/
   CSS shapes https://css-tricks.com/the-shapes-of-css/
+  mdn @media features https://developer.mozilla.org/en-US/docs/Web/CSS/@media
+  responsive patterns https://bradfrost.github.io/this-is-responsive/patterns.html
+  responsive images https://jakearchibald.com/2015/anatomy-of-responsive-images/
+  stripes https://css-tricks.com/stripes-css/
+  mdn radial gradient https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/radial-gradient
+  word: imitate real world objects https://en.wikipedia.org/wiki/Skeuomorph
+  bem-style class naming https://css-tricks.com/bem-101/
+  HLS color picker https://hslpicker.com/
+  color theory https://tallys.github.io/color-theory/
+  contrast ratio calculator  https://contrast-ratio.com/
 ** Box model and border-box sizing
 - Width and Height
   - By default:
@@ -1030,8 +1039,356 @@ https://learningwebdesign.com/5e/materials/
     }
   #+end_src
 ** 08 Responsive Design
+- Popularized by Ethan Marcotte
+- Three key principles to responsive design
+  1) A mobile first approach to design, build the mobile version before
+  2) @media at-rule
+  3) use fluid layouts, allows continers to scale to different sizes
+*** Mobile first
+- A mobile layout is mostly no-frills design, highly focused on the content
+- *breakpoint*: a particular point at which the page styles change to provie the best possible layout for the screen size
+- Font size that changes depending on the size of the viewport
+  #+begin_src css
+    :root {
+      font-size: calc(1vw + 0.6em); /* might be add a media query to add an upper limit */
+    }
+  #+end_src
+- meta viewport to tell mobile browsers to NOT emulate desktop browsers, can also use "user-scalable=no" to disallow pinch zoom
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+*** media queries
+- if a style is too complex, a @media max-width can contain them, they should be an exception, no a rule
+- can also add media queries on <link rel="stylesheet">
+#+begin_src css
+  @media (min-width: 560px) {
+    .title > h1 {
+      font-size: 2.25rem;
+    }
+  }
+#+end_src
+- you should use *ems* for media query breakpoints (instead of px's here)
+  it's the only unit that performs consistently in all major browsers should the user zoom the page or change the default font-size
+  px and rem are less reliable in Safari
+  560px use 35em (560/16)
+- "The feature manyd evelopers would like to see are *container queries* (aka element queries)
+  intesd of responding to the viewport, would respond to the size of the element container."
+**** combining media queries (and ,)
+  @media (min-width: 20em) and (max-width: 35em) /// targets when both are satisfied
+  @media (max-width: 20em)  ,  (min-width: 35em) /// targets both
+**** media features
+  |                        | targets...                                                                |
+  |------------------------+---------------------------------------------------------------------------|
+  | min-height: 20em       | viewports 20em and taller                                                 |
+  | max-height: 20em       | viewports 20em and shorter                                                |
+  | orientation: landscape | viewports that are wider than they are tall                               |
+  | orientation: portrait  | viewports that are taller than they are wide                              |
+  | min-resolution: 2dppx  | devices with a screen res. of 2 dot per pixer or higher (retina displays) |
+  | max-resolution: 2dppx  | devices with a screen res. of up to 2 dots per pixel                      |
+- for retina display use, dpi instead of dppx, and a property for safari
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
+**** media types
+  for when you print the page, things like remove background, display-none non-essentail parts of the page
+  @media print
+  @media screen
+  #+begin_src css
+    @media print {
+      ,* {
+        color: black !important;
+        background: none !important;
+      }
+    }
+  #+end_src
+**** breakpoints
+- mobile applied to all breakpoints, medium and large breakpoints
+  .title {}
+  @media (min-width: 35em) {}
+  @media (min-width: 50em) {}
+*** fluid layouts (aka liquid  layout)
+- use of ontainers that grow an shrink according to the width of the viewport
+- main page container without explicit width or one defined in percentage
+- columns as percentages or flex (with grow shrink)  or grid
+  #+begin_src css
+    @media (min-width: 50em) {
+      :root {
+        font-size: 1.125em;
+      }
+    }
+  #+end_src
+- tables, can overflow the screen width if have more than a few columns
+  - you can find another way to display data
+  - or force the table to display as a normal block "display: block" applied to each row and cell
+   #+begin_src css
+     table {
+       width: 100%;
+     }
+     @media (max-diwth: 30em) {
+       table, thead, tbody, tr, th, td {
+         display: block;
+       }
+       thead tr { /* hides the headings off screen */
+         position: absolute;
+         top: -9999px;
+         left: -9999px;
+       }
+       tr {
+         margin-bottom: 1em;
+       }
+     }
+   #+end_src
+*** responsive imagesj
+- css: always ensure images don't overflow their container width.
+  img { max-width: 100%; }
+- serve different image sizes for different viewport sizes
+  - css: background-image on a @media query
+  - html: <img> srcset
+    #+begin_src html
+      <img alt="A white coffe mug on a bed of coffe beans"
+           src="coffe-beans-small.jpg"
+           srcset="coffe-beans-small.jpg 560w,
+                   coffe-beans-medium.jpg 800w,
+                   coffe-beans.jog 1280w" />
+    #+end_src
 ** Part 3 - CSS at scale
 ** Part 4 - Advanced topics
+** 11 Backgrounds, shadows, and blend modes
+  box shadows and text *shadows*
+  sizing and positioning *background images*
+  *blend modes* to combine backgrounds and content
+- "the difference between a site tha tlooks good and one that looks great is attention to detail"
+*** gradients
+- Example: you can add a "gradient color" and a "drop shadow" to a button to add "depth" to it
+- fade between two similar shades, this will be much less jarring to the user
+**** background is a short hand for
+  | background-image      | image or generated color gradient                                                   |
+  | background-position   | initial                                                                             |
+  | background-size       | within the element (cover/contain)                                                  |
+  | background-repeat     | yes/no                                                                              |
+  | background-origin     | positioning relative to border-box/padding-box(d)/content-box                       |
+  | background-clip       | fill border-box(d)/padding-box/content-box                                          |
+  | background-attachment | attached it to the element or viewport fixed                                        |
+  | background-color      |                                                                                     |
+  |-----------------------+-------------------------------------------------------------------------------------|
+**** Angle: in deg, rad, turn, grad
+  - to right (90deg)
+  - to top (0deg)
+  - to bottom (180deg)
+  - to bottom right
+**** linear gradient
+- background-image: url(coffe-beans.jpg)
+  background-image: linear-gradient(to right, white, blue)
+| linear-gradient(ANGLE,FROM_COLOR,TO_COLOR)                              |                                                  |
+| linear-gradient(ANGLE,FROM_COLOR,...,COLORN)                            |                                                  |
+| linear-gradient(ANGLE, red 0%, white 50%, blue 100%)                    | (%,px,em,..)                                     |
+| linear-gradient(ANGLE, red 40%, white 40%, white 60%, blue 60%)         | (if positions match, changes the color abruptly) |
+| repeating-linear-gradient(ANGLE, #57b, #57b 10px, #148 10px, #148 20px) | (alternating stripes)                            |
+**** radial gradient
+- supports *color stops*
+- default elliptical shape, matching the proportions of the element
+- start at a single point and proceed outward in all directions
+ | radial-gradient(white, blue)                                              |                        |
+ | radial-gradient(circle, white, blue)                                      | circle                 |
+ | radial-gradient(SIZEem at LEFT% TOP%, white blue)                         | new center             |
+ | radial-gradient(circle, blue 0%, white 75%, red 100%)                     | color stops            |
+ | repeating-radial-gradient(circle, blue 0, blue 1em, white 1em, white 2em) | repeating with stripes |
+*** shadows
+| box-shadow: XOFFSET YOFFSET COLOR                           |                                  |
+| box-shadow: XOFFSET YOFFSET BLUR_RADIUS SPREAD_RADIUS COLOR | spread is size, blur is softness |
+| text-shadow: XOFFSET YOFFSET BLUR_RADIUS COLOR              | no inset or spread               |
+**** Example: button, different shadow when button:active (inset shadow)
+- :active adds two inset box shadows
+#+begin_src css
+  .button {
+    background-image: linear-gradient(to bottom, #57b, #148);
+    box-shadow: 0.1em 0.1em 0.5em #124;
+  }
+  .button:active {
+    box-shadow: inset 0 0     0.5em #124,
+                inset 0 0.5em 1.0em rgba(0,0,0,0.4);
+  }
+  .button:focus { /* remove outline when clicked in chrome, TODO: replace it with something else */
+    outline: none;
+  }
+#+end_src
+**** Example: button, flat design
+#+begin_src css
+  .button {
+    background-color: #57b;
+    box-shadow: 0 0.2em 0.2em rgba(0,0,0,0.15);
+  }
+  .button:hover {
+    background-color: #456ab6;
+  }
+  .button:active {
+    background-color: #148;
+  }
+#+end_src
+**** Example: button, modern design, shadow with no blur
+#+begin_src css
+  .button {
+    background-color: #57b;
+    box-shadow: 0 0.4em #148;
+    text-shadow: 1px 1px #148;
+  }
+  .button:active {
+    background-color: #456ab5;
+    box-shadow: 0 0.3em #148;
+    transform: translateY(0.1em);
+  }
+#+end_src
+*** blend modes
+- background-image: acceps any number of values, first render in front of those listed afterward
+- if the background-image has some transparency other background behind it will show through the transparent areas, without blend modes
+**** background-blend-mode (s)
+  | darken      | multiply    | the lighter the front color, the more the base color will show              |
+  |             | darken      | selects the darker of the two                                               |
+  |             | color-burn  | darkens the base-color, increasing contrast                                 |
+  | lighten     | screen      | the darker the front color, the more the base color will show               |
+  |             | lighten     | selects the lighter of the two                                              |
+  |             | color-dodge | lightens the base-color, decreasing contrast                                |
+  | contrast    | overlay     | increases contrast, applies *multiply* to dark and *screen* to light colors |
+  |             | hard-light  | increases contrast, applies *multiply* or *screen* at FULL strenght         |
+  |             | soft-light  | increases contrast, applies *burn* or *dodge* at FULL strength              |
+  | composite   | hue         | applies hue            from the top color onto the bottom                   |
+  |             | saturation  | applies saturation     from the top color onto the bottom                   |
+  |             | luminosity  | applies luminosity     from the top color onto the bottom                   |
+  |             | color       | applies hue&saturation from the top color onto the bottom                   |
+  | comparative | difference  | subtracts the darker color from the lighter one                             |
+  |             | exclusion   | subtracts the darker color from the lighter one, with less contrast         |
+**** mix-blend-mode
+- let's you mix different elements, not just the backgrounds
+  #+begin_src css
+    .blend {
+      background-image: url("images/bear.jpg");
+      background-size: cover;
+      background-position: center;
+      padding: 5em 0 10em;
+    }
+    .blend > h1 {
+      mix-blend-mode: hard-light;
+      background-color: #c33;
+      color: #808080;
+    }
+  #+end_src
+**** Example: blend 2 background
+#+begin_src css
+  .blend {
+    min-height: 400px;
+    background-image: url(images/bear), url(image/bear.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: -30vw, 30vw; /* different positions to different images */
+    background-blend-mode: multiply;
+  }
+#+end_src
+** 12 Contrast, color, and  spacing
+- Converting designed mockup into HTML/CSS
+  Using *contrast* to draw attention to the right parts of a page
+  Selecting *colors*
+  Leveraging *white space*
+  Working with *line height*
+*** Contrast
+- Contrast in design is a means of drawing attention to something by making it stand out.
+  For it to work, the page must establish patterns. Cannot be exceptions.
+- One of a professional designer's key concerns is to *establish patterns* and then to *break* those patterns
+  to highlight the most important parts of the page.
+- Color/Spacing/Size
+  - When one item is surrounded bya lot of unused space (*white space*) that item stands out.
+- Every web page should have a purpose.
+  The designer's jobs is to make the most important thing stand out.
+- BEM-style
+  double-underscores indicate sub-elements of a module, eg: hero__inner
+  double-hyphens     indicate variants of a module,     eg: button-cta
+*** Color
+- a palette will typically have one primary color that everything else is based on
+- working with a palette in HSL is easier
+- hsl is atype of notation intened to be more human-readable
+  hue (0-360) saturation (intensity of color), and lightness (or luminosity)
+  hsl(198, 73%, 46%)
+- BROWSER
+  - SHIFT + CLICK on a color prop to cycle between hex,rgba,hsl
+  - right click in a html element and force their state (:active:hover:focus:visited)
+- Some things an become apparent when colors are presented in HSL
+  - all colors might have the same hue. So you might add a new color following the same pattern.
+  - all grays might not be pure gray, they might have a bit of saturation,
+    true colorless grays almost never happen in the real world. our eyes expect to see some color
+  - use var names for grays like "--gray-50" or "--gray-80" for their luminescence
+- To get new colors, find *complement* colors, colors on the opposite side of the color wheel. And change the saturation/luminescence
+- Font color
+  - not true black, but gray. Luminicence of 15% not 0%
+  - not much contrast for your text, nor too little
+  - contrast ratio:
+    - min recommended level AA
+    - stricter enhaced level AAA
+    - recommendations
+      |              | level AA | level AAA |
+      | Regular text |    4:5:1 |       7:1 |
+      | Large text   |      3:1 |     4:5:1 |
+    - Large text is 18pt/24px for regular weight
+      Large text is 14pt/18.667px for bold fonts
+**** reminder: using double container pattern
+#+begin_src css
+  .nav-container {
+    background-color: var(--medium-green);
+  }
+  .nav-container__inner {
+    margin: 0 auto;
+    max-width: 1080px;
+  }
+#+end_src
+**** you can save yourself some time by putting them on a variable
+  #+begin_src css
+    html {
+      --brand-green: #076448;
+      --drak-green: #099268;
+      --medium-green: #20c997;
+      --text-color: #212529;
+      --gray: #868e96;
+      --light-gray: #f1f3f5;
+      --extra-light-gray: #f8f9fa;
+      --white: #fff;
+      box-sizing: border-box;
+      color: var(--text-color);
+    }
+    ,*,
+    ,*::before,
+    ,*::after {
+      box-sizing: inherit;
+    }
+    body {
+      margin: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      line-height: 1.4;
+      background-color: var(--extra-light-gray);
+    }
+    h1,h2,h3,h4 {
+      font-family: Georgia, serif;
+    }
+    a {
+      color: var(--medium-green);
+    }
+    a:visited {
+      color: var(--brand-green);
+    }
+    a:hover {
+      color: var(--brand-green);
+    }
+    a:active {
+    }
+  #+end_src
+*** Spacing
+- Base Font Size: 16px
+  Margin Desired for Buttons: 10px
+  Then 10px/16px = 0.625em
+- Pick between padding and margin, based on usefulness
+- Spacing between lines of texts (paragraphs and headings) can be more finicky.
+  Since around the printed text (font-size) there is a define line height.
+  Also called *leading* as the space between lines of text.
+  - Font size: 1.95em
+    Base Default Font Size: 16px
+    Line Height: 1.4
+    1.95em * 16px = 31.2px
+    31.2px * 1.4  = 43.68px
+    Aka 6px above and 6px below the text
+- You can use *inline* or *flex* to show a line of items. Use a proper thick line-height to avoid overlapping on wrap.
 * Book: 2021 | CSS Master          | Tiffany B. Brown | Sitepoint
 ** 5 Layouts
  - in CSS everything is a box,

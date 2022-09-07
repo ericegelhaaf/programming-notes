@@ -1,3 +1,4 @@
+- talks https://nullprogram.com/blog/2018/11/21/
 - https://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html
 - A Guide to Undefined Behavior in C and C++, Part 1
   https://blog.regehr.org/archives/213

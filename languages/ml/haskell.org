@@ -148,6 +148,7 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
    - Barry (haskell book) https://www.youtube.com/channel/UCndlCtPeYygdGZ9UUKdehbw
 
 ** other
+  - https://www.youtube.com/c/tweag/videos
   - Zürich Friends of Haskell
     https://www.youtube.com/channel/UC2zfPMH_srjxUN5EYrfIhCw
   - Jappie Klooster

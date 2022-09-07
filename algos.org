@@ -1,3 +1,6 @@
+- https://dojorena.io/with/the-best-coding-challenge
+  https://dojorena.io/manuals/43
+  https://github.com/codenjoyme/codenjoy
 - https://github.com/fogleman/AdventOfCode2021/
 - https://github.com/cl2333/Grokking-the-Coding-Interview-Patterns-for-Coding-Questions
 - https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed
@@ -10,6 +13,13 @@
 - https://github.com/jwasham/coding-interview-university
 - CS170 - Efficient Algorithms and Intractable Problems https://cs170.org/
 - Competitive https://cses.fi/problemset/
+* Congruencies
+- https://en.wikipedia.org/wiki/Modular_arithmetic
+- problem https://www.codewars.com/kata/554f76dca89983cc400000bb/train/ocaml
+- Books
+  file:///home/sendai/disk/anybody/Steven%20Halim/Competitive%20Programming%203%20(4427)/Competitive%20Programming%203%20-%20Steven%20Halim.pdf#page=241
+  file:///home/sendai/disk/anybody/David%20Esparza%20Alba/Algorithms%20For%20Competitive%20Programming%20(4592)/Algorithms%20For%20Competitive%20Programming%20-%20David%20Esparza%20Alba.pdf#page=311
+  file:///home/sendai/disk/anybody/Skiena,%20Steven%20S_/Programming%20Challenges%20(4425)/Programming%20Challenges%20-%20Skiena,%20Steven%20S_.pdf#page=174
 * Videos
 ** Data Structures
    https://www.youtube.com/playlist?list=PLI1t_8YX-Apv-UiRlnZwqqrRT8D1RhriX
