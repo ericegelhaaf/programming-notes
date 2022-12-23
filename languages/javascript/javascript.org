@@ -1,3 +1,4 @@
+- https://es.javascript.info/
 - W3 DOM EVENTS https://www.w3schools.com/jsref/dom_obj_event.asp
 - https://developer.mozilla.org/en-US/docs/Learn/JavaScript
 - deno runtime https://github.com/denoland/deno

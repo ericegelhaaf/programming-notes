@@ -1,3 +1,4 @@
+- https://rapidgator.net/file/6480d14eb6e4c000aefb3f46017fcc64/[OReilly]_Erlang_By_Example_with_Cesarini_and_Thompson.part2.rar.html
 - https://github.com/duomark/epocxy
 - Video: Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
 - Article: The Joy of Pattern Matching http://blog.hellkvist.org/category/erlang/
@@ -59,6 +60,29 @@
     rebar is broken on redhat/fedora use rebar3
   - about erlang:length (avoid it, especially on guards)
     https://groups.google.com/forum/#!msg/erlang-programming/Qg4-AU7J5mM/DEM9MWvLdK4J
+* Video
+** 1
+- is useful use a match all "_" on a *receive*, because a process can receive messages we don't know and fill up the process mailbox
+- spawn(M,F,A)
+- exit(PROCESS)
+- erlang:processes()
+** 2
+- we pass a function as a parameter
+  message_router:start(fun chat_client:print_message/1).
+- register/2
+  erlang:register(atom_name, PID)
+- dict:new/0
+  dict:store/3
+  dict:erase/2
+- closures and anonymous functions still work on Erlang
+- final program "registers" each nick on a dictionary along with the function that will print the message
+  - there is still 1 process (the router)
+** 3
+- "pang" means boom/explode in sweden
+- $ erl -sname foo -setcookie somecookie
+- $ erl -sname bar -setcookie somecookie
+  bar> net_adm:ping(foo@localhost).
+- foo> rpc:call(bar@localhost, erlang, date, [])
 * Book: Learn some erlang for greater good
 - return {setup,...} from suffixed _test_() to lifecycle a test generator
 - return {foreach,...} for doing individual lifecycles for the test generators

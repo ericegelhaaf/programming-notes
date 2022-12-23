@@ -1350,5 +1350,6 @@ by generics to the concrete for the type.
 - Implementing Rosetta Code problems in Rust.
   https://github.com/rust-rosetta/rust-rosetta
 * youtube
+- https://www.youtube.com/c/timClicks/videos
 - Jon Gjengset https://www.youtube.com/channel/UC_iD0xppBwwsrM9DegC5cQQ/
 - Crazcalm's Tech Stack https://www.youtube.com/channel/UCfgXeSss8LaDtlK0ohwUX_w

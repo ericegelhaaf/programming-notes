@@ -1,4 +1,5 @@
 - https://github.com/type-challenges/type-challenges
+- https://www.youtube.com/watch?v=MbZoQlmQaWQ
 * Article: Setup a Node.js project with Typescript, ESLint, Prettier, Husky
 https://gist.github.com/silver-xu/1dcceaa14c4f0253d9637d4811948437
 yarn add --dev typescript eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser prettier
@@ -177,17 +178,17 @@ tslint --init # creates a tslint.json
 |           | access by dot(.) or bracket [], const enforces (.) only              | const enum Language { English, Spanish }       |
 | Function  | catch-all type for functions, you don't want to use it               |                                                |
 *** Valid object?
-| Value           | {}  | object | Object |
-|-----------------+-----+--------+--------|
-| {}              | yes | yes    | yes    |
-| ['a']           | yes | yes    | yes    |
-| function () {}  | yes | yes    | yes    |
-| new String('a') | yes | yes    | yes    |
-| 'a'             | yes | No     | yes    |
-| 1               | yes | No     | yes    |
-| Symbol('a')     | yes | No     | yes    |
-| null            | No  | No     | No     |
-| undefined       | No  | No     | No     |
+| Value           | {}   | object | Object |
+|-----------------+------+--------+--------|
+| {}              | yes  | yes    | yes    |
+| ['a']           | yes  | yes    | yes    |
+| function () {}  | yes  | yes    | yes    |
+| new String('a') | yes  | yes    | yes    |
+| 'a'             | yes  | *No*   | yes    |
+| 1               | yes  | *No*   | yes    |
+| Symbol('a')     | yes  | *No*   | yes    |
+| null            | *No* | *No*   | *No*   |
+| undefined       | *No* | *No*   | *No*   |
 *** Hierarchy
 #+ATTR_ORG: :width 800
 [[./typescript-types.png]]
@@ -195,14 +196,14 @@ tslint --init # creates a tslint.json
 - Useful for DRYing (don't repeat yourself) repeated complex types
 - Block-scoped
 - Define
-#+begin_src typescript
-  type Age = number
-  type Person = {
-    name: string
-    age: Age
-  }
-#+end_src
-- *Aliases are never inferred by TS*
+ #+begin_src typescript
+   type Age = number
+   type Person = {
+     name: string
+     age: Age
+   }
+ #+end_src
+- *Aliases are NEVER inferred by TS*
   #+begin_src typescript
     let age: Age = 55 // let age = 55 ... would also be valid
     let driver: person = {
@@ -224,9 +225,9 @@ tslint --init # creates a tslint.json
 - in JS functions are first-class objects
 - argument, data passed to a function, *actual parameter*
   parameter, data needed for a function to run, declared as part of the function, *formal parameter*
-- optional parameters function log(message: string, userId: string)
-- default  parameters function log(message: string, userId = 'Not signed in')
-- rest     parameters function sum(numbers: number[]): number
+| optional parameters | function log(message: string, userId: string)           |
+| default  parameters | function log(message: string, userId = 'Not signed in') |
+| rest     parameters | function sum(numbers: number[]): number                 |
 *** optional parameters typed
   #+begin_src typescript
     type Context = {
@@ -238,7 +239,7 @@ tslint --init # creates a tslint.json
       console.log(time, message, context.userId);
     }
   #+end_src
-*** Variadic: using *arguments* magic object, JS runtime automatically defines it for you in functions
+*** Variadic: using ~arguments~ magic object, JS runtime automatically defines it for you in functions
   TOTALLY TYPE UNSAFE!
   #+begin_src typescript
     function sumVariadic(): number {
@@ -255,14 +256,14 @@ tslint --init # creates a tslint.json
     }
   #+end_src
 *** (), call, apply, bind:
-  1st arg is to bind it to a value inside the function
-  #+begin_src typescript
-    add(10,20);
-    add.apply(null, [10,20]);
-    add.call(null, 10, 20);
-    add.bind(null, 10, 20)();
-  #+end_src
-*** Generator Functions (*,yield) lazy, can generate infinite lists
+- 1st arg is to bind it to a value inside the function
+#+begin_src typescript
+  add(10,20);
+  add.apply(null, [10,20]);
+  add.call(null, 10, 20);
+  add.bind(null, 10, 20)();
+#+end_src
+*** Generators: function* ~yield~ lazy, can generate infinite lists
   #+begin_src typescript
     function* createFibonacciGenerator() {
       let a = 0;
@@ -277,13 +278,13 @@ tslint --init # creates a tslint.json
     fibonacciGenerator.next() // evaluates to {value: 1, done: false}
     fibonacciGenerator.next() // evaluates to {value: 2, done: false}
   #+end_src
-*** Iterators: flip side to generators
+*** Iterators: flip side to generators, a way to consume those infinite values
   =Iterable= any object that contains a property called ~Symbol.iterator~, whose value is a function that retuns a iterator
   =Iterator= any object that defines a method called ~next~, which returns and object with the properties ~value~ and ~done~
   Manually defining an Iterator
   #+begin_src typescript
     let numbers = {
-      *[Symbol.iterator]() {
+      ,*[Symbol.iterator]() {
         for (let n = 1; n <= 10; n++) {
           yield n;
         }
@@ -477,25 +478,25 @@ tslint --init # creates a tslint.json
 #+end_src
 **** Example: Explicit *type annotation*
 #+begin_src typescript
-  let promise = new Promise<number>(resolve => resolve(45) );
+  let promise = new Promise<number>(resolve => resolve(45));
   promise.then(result => result * 4)
 #+end_src
 **** Example: filter
-  #+begin_src typescript
-    type Filter = {
-      <T>(array: T[], f: (item: T) => boolean): T[]
-    }
-  #+end_src
+#+begin_src typescript
+  type Filter = {
+    <T>(array: T[], f: (item: T) => boolean): T[]
+  }
+#+end_src
 **** Example: map
-  #+begin_src typescript
-    function map<T, U>(array: T[], f: (item: T) => U): U[] {
-      let result = [];
-      for (let i = 0; i < array.length; i++) {
-        result[i] = f(array[i])
-      }
-      return result;
+#+begin_src typescript
+  function map<T, U>(array: T[], f: (item: T) => U): U[] {
+    let result = [];
+    for (let i = 0; i < array.length; i++) {
+      result[i] = f(array[i])
     }
-  #+end_src
+    return result;
+  }
+#+end_src
 *** Type-driven development
 - A style of programming where you sketch out type signatures fist, and fill in values later.
   Leading with types.

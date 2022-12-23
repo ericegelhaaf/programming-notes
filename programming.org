@@ -1,3 +1,4 @@
+- https://github.com/mtdvio/every-programmer-should-know
 - https://github.com/codecrafters-io/build-your-own-x
 - https://github.com/chiroptical/ctfp-book-club
   https://github.com/hmemcpy/milewski-ctfp-pdf

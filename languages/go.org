@@ -1,3 +1,22 @@
+- DAP Debug
+  - emacs - https://github.com/emacs-lsp/dap-mode/issues/374
+  https://www.youtube.com/watch?v=r033vEzL6a4 "Delve: The Best Golang Debugger"
+  https://www.youtube.com/watch?v=UA0SirX6Siw
+  https://emacs-lsp.github.io/dap-mode/page/configuration/#go
+  https://github.com/syl20bnr/spacemacs/tree/develop/layers/+lang/go#debug
+  https://www.youtube.com/watch?v=0moS8UHupGc (bashbunny) neovim workflow
+  (require 'dap-dlv-mode)
+  > go install
+  > dap-debug
+  - Emacs zoom window:
+    Problem: with a poor window managing experience having the multiple windows provided by DAP-UI
+    becomes annoying and impossible to use by defaul (unless you have BIG screen).
+    And wanting to have always a debugger open is what I would like in emacs.
+    Like carmak said, and how I live in common lisp.
+    Possible solutions
+    1) Zoom into one pane https://github.com/emacsorphanage/zoom-window
+    2) ?? https://github.com/Bad-ptr/persp-mode.el
+       https://github.com/nex3/perspective-el
 - channels
   https://dev.to/sophiedebenedetto/synchronizing-go-routines-with-channels-and-waitgroups-3ke2
   https://brandur.org/go-worker-pool
@@ -67,6 +86,7 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
 - Tutorial https://github.com/hoanhan101/ultimate-go https://github.com/ardanlabs/gotraining-studyguide
 - Style https://github.com/dgryski/awesome-go-style lists of good practices
 - Style https://github.com/uber-go/guide/
+- Style https://google.github.io/styleguide/go/ https://news.ycombinator.com/item?id=33652343
 ** Interview questions
    https://github.com/shomali11/go-interview
    https://github.com/hoanhan101/algo

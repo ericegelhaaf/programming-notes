@@ -23,6 +23,28 @@
 - Amateur 3D Render
   https://www.reddit.com/r/java/comments/okebt8/i_created_a_java_3d_rendering_engine_from_scratch/
   https://github.com/nbrugger-tgm/JRender/
+* DONE Article: 2015 | Declaration-site and use-site variance explained
+- Generic types in Java are by default *invariant*
+- Annotations
+  - C# annotation is called *declaration-site variance*,
+    because the type parameters is annotated where the generic type is declared
+  - Java annotation is called *use-site variance*,
+    because is used when the type is used, not when the generic is declared
+- Arrays behave like covariants (on both Java and C#) even though they have the same problems than other generics
+  And errors due it will throw an runtime exception
+  - Code compiles but throws an exception
+    #+begin_src java
+      Apple[] apples = new Apple[10];
+      Fruit[] fruits = apples;
+      fruits[0] = new Orange();
+      Apple apple = apples[0];
+    #+end_src
+- The "flow" of data in the interface methods is what determines, how much it makes sense to have some variance
+  |                | returns | consume | example       | C#      | Java          |
+  |----------------+---------+---------+---------------+---------+---------------|
+  | Covariance     | YES     | no      | Iterable<T>   | <out T> | <? extends A> |
+  | Contravariance | no      | YES     | Comparable<T> | <in T>  | <? super B>   |
+  | Invariant      | YES     | YES     | List<T>       |         |               |
 * Video: 2016 | Optional - The Mother of All Bikesheds | Stuart Marks
 https://www.youtube.com/watch?v=Ej0sss6cq14
 ** 06:00 Rationale for =Optional=
@@ -857,6 +879,7 @@ pom.xml
 source https://horstmann.com/javaimpatient/
 logging alternative https://www.slf4j.org/
 change the log level from jsconsole https://www.oracle.com/technical-resources/articles/java/jconsole.html#LoggingControl
+checker framework https://checkerframework.org/
 ** 1 Fundamental Programming Structures
 - A method is a function declared inside  a class
 - a *package* is a set of related classes
@@ -1041,7 +1064,11 @@ change the log level from jsconsole https://www.oracle.com/technical-resources/a
     int age = in.nextInt();
   #+end_src
 - import java.util.Scanner
-- .hasNextLine() or hasNextInt() to check that there is another ? available
+  - .next()
+    .nextInt()
+    .nextLine()
+    .hasNextLine()
+    .hasNextInt() to check that there is another ? available
 - Alternatively, to control visibility (eg: a password) use *Console*
   #+begin_src java
     Console terminal = System.console();
@@ -2127,15 +2154,12 @@ assert() a way of expressing internal assumptions
   }
 #+end_src
 **** java supports ~exception handling~
-  - *decouples* the process of detecting and handling errors
-  - exception happens *when* a method encounters a situation in which it cannot fulfill its contract
-  - we use exceptions instead of returning an ~error code~, and forcing the caller to check for errors,
-    and if it cannot handle it, return an error code to his own caller
-  - one method in the ~call chain~, not necessarily the direct caller, is responsible for catching it
+- *decouples* the process of detecting and handling errors
+- exception happens *when* a method encounters a situation in which it cannot fulfill its contract
+- we use exceptions instead of returning an ~error code~, and forcing the caller to check for errors,
+  and if it cannot handle it, return an error code to his own caller
+- one method in the ~call chain~, not necessarily the direct caller, is responsible for catching it
 **** Exception Hierarchy
-It's a good idea to supply both
-  - a no-argument constructor
-  - and a constructor with a a message string
 #+begin_src java
   public class FileFormatException extends IOException {
       public FileFormatException() {}
@@ -2144,19 +2168,21 @@ It's a good idea to supply both
       }
   }
 #+end_src
+- It's a good idea to supply both
+    1) a non-argument constructor
+    2) and a constructor with a a message string
 - Throwable > Exception > Runtime Exceptoin
             > Error
-- All exceptions are subclasses of the class *Throwable*
 - Exceptions subclasses of *Error* are throw when the program cannot be expected to handle.
 - Programmer-reported exceptions are subclasses of *Exception*
-  - =Checked=: must be catch OR declared them in the method header
-  - =Unchecked=:
-    - subclass of *RuntimeException*
-    - not checked during compilation
-    - indicate logic errors caused by the programmer
-    - should spend time on catching them
-    - eg: NullPointerException
-*** 2) In java, checked =exceptions= are tracked by the compiler
+  1) =Checked=: must be catch OR declared them in the method header
+  2) =Unchecked=:
+     - subclass of *RuntimeException*
+     - not checked during compilation
+     - indicate logic errors caused by the programmer
+     - should spend time on catching them
+     - eg: NullPointerException
+*** 2) In java, =checked exceptions= are tracked by the compiler
 - ="throw early, catch late"=
 - checked exceptions must be declaared in the method header with *throws*
 - you sometimes can combine exceptions into a common superclass and just throw a superclass
@@ -2242,7 +2268,7 @@ chaining it from the original to a higher-level one
     }
     catch (SQLexception ex) {
         THrowable ex2 = new CruftyOldException("database error");
-        ext2.initCause(ex);
+        ex2.initCause(ex);
         throw ex2;
     }
   #+end_src
@@ -2388,7 +2414,7 @@ chaining it from the original to a higher-level one
   - ArrayList is *generic*
   - T is a *type parameter*
 - type parameters cannot be instaintiated with primitive types
-*** 1) A generic class is a class with one or more *type parameters*
+*** 1) A ~generic class~ is a class with one or more _type parameters_
   #+begin_src java
     public class Entry<K,V> {
         private K key;
@@ -2400,9 +2426,9 @@ chaining it from the original to a higher-level one
         public K getKey() { return key; }
         public V getValue() { return value; }
     }
-    Entry<String, Integer> entrey = new Entry<>("Fred", 42); // empty diamond, inferred
+    Entry<String, Integer> entry = new Entry<>("Fred", 42); // empty diamond, inferred
   #+end_src
-*** 2) A generic method is a method with *type parameters*, from a generic or non-generic class
+*** 2) A ~generic method~ is a method with _type parameters_, from a generic or non-generic class
   #+begin_src java
     public class Arrays {
         public static <T> void swap(T[] array, int i, int j) {
@@ -2415,15 +2441,15 @@ chaining it from the original to a higher-level one
     Arrays.swap(friends, 0, 1); // inferred from the parameters
     Arrays.<String>swap(friends, 0, 1); // explicit type parameter might help with error messages
   #+end_src
-*** Type Bounds (adds restrictions)
+*** ~Type Bounds~ (adds restrictions)
 - 3) You can require a type parameter to be a subtype of one or more types (interfaces or classes)
 #+begin_src java
-  public stateic <T extends AutoCloseable> void closeAll(ArrayList<T> elems) throws Exception {
+  public static <T extends AutoCloseable> void closeAll(ArrayList<T> elems) throws Exception {
       for (T elem : elems) elem.close();
   }
 #+end_src
 - Not needed if this was a Autocloseable[] instead of a ArrayList<T>
-- For all you would use the word *extends* that reads as "subtype" (same word using in classes, different meaning :)
+- For all, you would use the word *extends* that reads as "subtype" (same word using in classes, different meaning :)
 - (&) Could have multiple bounds, at most one can be a class, and must be the first one
   T extends Runnable & Autocloseable
 *** Type Variance and Wildcards (adds vary type parameters)
@@ -2444,11 +2470,11 @@ file:///home/sendai/disk/anybody/Cay%20S.%20Horstmann/Core%20Java(r)%20SE%209%20
   | Wildcards Capture             | <?> and <T> on a wrapper | can't use ? as a type                     |
 - Example: Collections.addAll & Collections.sort
   #+begin_src java
-    public boolean addAll(Collection<? extends E> c);
+    public                                       boolean addAll(Collection<? extends E> c);
     public static <T extends Comparable<? super T>> void sort(List<T> list);
-    public static <T extends Comparable<T>> void sort(List<T> list); // would be too restrictive
+    public static <T extends Comparable<T>>         void sort(List<T> list); // would be too restrictive
   #+end_src
-- in C# or Scala, you can declare type parameters to be covariant or contravariantp
+- in C# or Scala, you can declare type parameters to be ~covariant~ or ~contravariant~
 *** TODO For implementors of generic classes
 **** TODO Generics in the Java Virtual Machine
 - 6) Type parameters are *erased* when generic classses and methods are compiled
@@ -2609,7 +2635,7 @@ Higher conceptual level than collections.
 #+end_src
 - Differences with collections
   1) A stream does *NOT store* its elements. They may be stored in an underlying collection or generated on demand.
-  2) Stream operations do *NOT mutate* their source. For example, the filter method does not remove elements from a stream, but it yields a new stream in which they are not present.
+  2) Stream operations do *NOT mutate* their source. For example, the filter method does not remove elements from a stream, but it yields a _new stream_ in which they are not present.
   3) Stream operations are *lazy* when possible. This means they are not executed until their result is needed. You can have infinite streams.
 - Stages on a pipeline of operations:
   1) Create stream
@@ -2628,7 +2654,7 @@ Higher conceptual level than collections.
   #+begin_src java
     Stream<String> words = Pattern.compile("\\PL+").splitAsStream(contents);
     Stream<String> words = new Scanner(contents).tokens();
-    try (Stream<String> lines = File.lines(path)) { ... }
+    try (Stream<String> lines = Files.lines(path)) { ... }
   #+end_src
 *** Transformation - The filter,map,flatMap Methods
 - 3) use *filter* to select elements and *map* to transform elements
@@ -2656,25 +2682,26 @@ Higher conceptual level than collections.
 *** Terminal - Simple =Reductions=
 - 5) To obtain a result from a stream, use a reduction operator such as:
   - some of these methods benefit from running in parallel
-  - count, allMatch, noneMatch
-  - max, min
+  - .count(), .allMatch(Predicate), .noneMatch(Predicate)
+  - .max(?)
+    .min(?)
     #+begin_src java
       Optional<String> largest = words.max(String::compareToIgnoreCase);
       System.out.println("largest: " + largest.orElse(""));
     #+end_src
-  - findFirst
+  - .findFirst()
     #+begin_src java
       Optional<String> startsWithQ
           = words.filter(s -> s.startsWith("Q"))
                  .findFirst();
     #+end_src
-  - findAny
+  - .findAny()
     #+begin_src java
       Optional<String> starsWithQ
           = word.parallel().filter(s -> s.startsWith("Q"))
                            .findAny();
     #+end_src
-  - anyMatch
+  - .anyMatch(?)
     #+begin_src java
       boolean aWordStartsWithQ
           = words.parallel().anyMatch(s -> s.startsWith("Q"));
@@ -2700,7 +2727,7 @@ Higher conceptual level than collections.
    | orElseThrow | (SomeException::new) |                                                           |
  2) consume the value only if its present
    | ifPresent       | (f)     | void           | if present is passed to f, else do nothing |
-   | ifPresetnOrElse | (f1,f2) | void           | f1 arg if present, else f2 with no arg     |
+   | ifPresentOrElse | (f1,f2) | void           | f1 arg if present, else f2 with no arg     |
    | map             | (f)     | Optional<f(v)> |                                            |
 **** Creating
 - Optional.of()
@@ -2727,12 +2754,12 @@ Higher conceptual level than collections.
           .flatMap(Optional::stream)
     #+end_src
 - when mapping over a Stream, with null
-  - use .nonNull
+  - use Objects::nonNull
     #+begin_src java
       Stream<User> users = ids.map(Users::classicLookup)
           .filter(Objects::nonNull);
     #+end_src
-  - use flatMap
+  - use .flatMap(?)
     #+begin_src java
       Stream<User> users = ids.flatMap(id -> Stream.ofNullable(Users.classicLookup(id))); // OR
       Stream<User> users = ids.map(Users::classicLookup)
@@ -2766,13 +2793,14 @@ Higher conceptual level than collections.
 |---------------------------------------------------+-------------------------+----------------------------------------------------------------------|
 *** Terminal - Grouping and Partitioning
 - 8) *groupingBy* and *partitioningBy* allow you to split the contents of a stream into groups.
-- groupBy(*classifier function*)
+- .groupingBy(*classifier function*)
   #+begin_src java
     Map<String, List<Locale>> countryToLocales
         = locales.collect(Collectors.groupingBy(Locale::getCountry));
-    List<Locale> swissLocales = countryToLocales.get("CH");
+    List<Locale>
+        swissLocales = countryToLocales.get("CH");
   #+end_src
-- partitioningBy(*predicate function*), split into 2 groups
+- .partitioningBy(*predicate function*), split into 2 groups
   #+begin_src java
     Map<Boolean, List<Locale>> englishAndOtherLocales
         = locales.collect(Colectors.partitioningBy(l -> l.getLanguage().equals("en")));
@@ -2781,7 +2809,7 @@ Higher conceptual level than collections.
 *** Terminal - Downstream Collectors
 - g1 - getter function
   DC - downstream collectors
-- Second argument for groupBy, they process the result List<> (NOTE: these aren't instance methods)
+- Second argument for =groupBy=, they process the result List<> (NOTE: these aren't instance methods)
   | toSet()                         |                      |
   | counting()                      | long                 |
   | summintInt(g1)                  | int                  |
@@ -2790,7 +2818,9 @@ Higher conceptual level than collections.
   | mapping(g1,DC)                  | Optional<T>          |
   | summarizingInt(g1)              | IntSummaryStatistics |
 *** Terminal - Reduction Operations
-- .reduce() is the general method for computing a value from a stream, 3 overloads
+- If you want to use reduce with parallel streams
+  - the operation must be *associative*, order should not matter (eg: substraction is NOT)
+- ~.reduce()~ is the general method for computing a value from a stream, 3 overloads
   1) takes a binary function, applied first with the 2 first elements, returns Optional
      .reduce(Integer::sum)
      .reduce((x,y) -> x + y)
@@ -2804,13 +2834,15 @@ Higher conceptual level than collections.
         (t1,t2) -> t1 + t2
      );
      #+end_src
-- If you want to use reduce with parallel streams
-  - the operation must be *associative*, order should not matter (eg: substraction is NOT)
-- collect with 3 arguments
-  1) *supplier*, to make new instances of the target object
-  2) *accumulator*, to add an element to the target
-  3) *combiner*, to merge two objects into one
-- BitSet result = stream.collect(BitSeet::new, BitSet::set, BitSet::or);
+- ~.collect()~ with 3 arguments
+   #+begin_src java
+     BitSet result = stream.collect(BitSeet::new, BitSet::set, BitSet::or);
+   #+end_Src
+  |-------------+--------------------------------------------|
+  | supplier    | to make new instances of the target object |
+  | accumulator | to add an element to the target            |
+  | combiner    | to merge two objects into one              |
+  |-------------+--------------------------------------------|
 *** Primitive Type Streams
  | Instance or class | method                                     | result                    |
  |-------------------+--------------------------------------------+---------------------------|
@@ -2839,4 +2871,250 @@ Higher conceptual level than collections.
 | Collection<T> | .parallelStream() | Stream<T> |
 | Stream<T>     | .parallel()       | Stream<T> |
 | Stream<T>     | .unordered()      | Stream<T> |
-** 11 Annotations
+** TODO 11 Annotations
+- Annotations: Added for other tools, than can work with the source at code level or class level
+  - Same vm instructions are generated with or without them
+- eg:
+  - Junit uses them to mark methods used for testing, which then will be called by Junit
+    - some other program might remove the @test methods for the production release
+  - Java Persistence Architecture to map between classes and tables (ORM?)
+  - @NonNull, from the Checker Framework
+  - *jdeprscan* can find @Deprecated being used in jars
+*** Using Annotations
+#+begin_src java
+  public class CacheTest {
+      @BugReport(showStopper=true,
+                 assignedTo="Harry",
+                 reportedBy={"Harry", "Fred"},
+                 reportedBy="Fred", // Arrays if have 1 element, can be passed without braces {}
+                 testCase=CacheTest.class,
+                 status=BugReport.Status.CONFIRMED)
+      @Test(timeout=10000) public void checkRandomInsertions() {}
+  }
+#+end_src
+- Can have defaults
+- If only 1 annotations you can ommit the *key=* part, and just put the value
+- 1) You can *annotate declarations* just as you use modifiers such as public or static
+  * classes (including enum) and interfaces
+  * methods
+  * constructors
+  * instance variables (including enum constants)
+  * local variables (discarded when compiled)
+  * parameter variables and catch clause parameters
+  * type parameters
+  * packages (discarded when compiled)
+- 2) You can also *annotate types* that appear in:
+  * declarations
+  * casts
+  * instanceof checks
+  * method references
+- 3) An annotation starts with a =@ symbol= and may contain key/value pairs called elements
+- 4) Annotation values must be *compile-time contants*
+  - primitive types
+  - String
+  - enum constants
+  - class literals
+  - other annotations
+  - or arrays thereof
+  - NEVER null
+- 5) An item can have repeating annotations or annotations of different types
+*** Defining Annotations
+#+begin_src java
+  @Target(ElementType.METHOD)         // Meta-Annotation
+  @Retention(RetentionPolicy.RUNTIME) // Meta-Annotation
+  public @interface Test {
+      long timeout() default 0L; // even if it has (), it acts like a normal field
+      String [] reportedBy() default {} // empty array default
+      Reference ref() default @Reference(id=0) // annotation default
+  }
+#+end_src
+- 6) To define an annotation, specify an *annotation interface*, whose methods correspond to the *annotation elements*
+- @Retention
+  | RetentionPolicy. | .java | .class | runtime |
+  |------------------+-------+--------+---------|
+  | .SOURCE          | YES   |        |         |
+  | .CLASS (default) | YES   | YES    |         |
+  | .RUNTIME         | YES   | YES    | YES     |
+- @Target
+  | ElementType.     |                                              |
+  |------------------+----------------------------------------------|
+  | .ANNOTATION_TYPE |                                              |
+  | .PACKAGE         |                                              |
+  | .TYPE            | classes, including enum, and interfaces      |
+  | .METHOD          |                                              |
+  | .CONSTRUCTOR     |                                              |
+  | .FIELD           | instance variables, including enum constants |
+  | .PARAMETER       | method or constuctor parameters              |
+  | .LOCAL_VARIABLE  |                                              |
+  | .TYPE_PARAMETER  |                                              |
+  | .TYPE_USE        |                                              |
+*** Standard Annotations
+- 7) The Java library defines over a dozen annotations, and annotations are extensively used in the JEE (Java Enterprise Edition)
+- In 3 Packages:
+  * java.lang
+  * java.lang.annotation
+  * javax.annotation
+| name                 | to                       | description                                               |
+|----------------------+--------------------------+-----------------------------------------------------------|
+| @Override            | Methods                  | checks that it overrides a superclass method              |
+| @Deprecated          | Declarations (all)       |                                                           |
+| @SupressWarnings     | Declarations (all)       | takes a type of warning as argument                       |
+| @Generated           | Declarations (all)       | marks an item as source code generated by a tool          |
+| @SafeVarargs         | Methods and Constructors | asserts that varargs param is NOT corrupted in the method |
+| @FunctionalInterface | Interfaces               | with a single abstract method                             |
+|----------------------+--------------------------+-----------------------------------------------------------|
+| @PostConstruct       | Methods                  | Should be called after construction                       |
+| @PreDestroy          | Methods                  | Should be called before removal                           |
+| @Resource            | C/I/M/Fields             | C/I: to be used elsewhere M/F: dependency injection       |
+| @Resources           | C/I                      | specifies an array of resources                           |
+|----------------------+--------------------------+-----------------------------------------------------------|
+| @Target              | Annotations              |                                                           |
+| @Retention           | Annotation               |                                                           |
+| @Documented          | Annotation               | if it should be included on the documntation              |
+| @Inherited           | Annotation               | inherited by a subclass                                   |
+| @Repeatable          | Annotation               | can be applied multiple times                             |
+*** TODO Processing Annotations at Runtime
+- 8) To process annotations in a running Java program, you can use *reflection* and query the reflected items for annotations
+*** TODO Source-Level Annotation Processing
+- 9) Annotation processors process source files during compilation, using the Java language model API to locate annotated items.
+** TODO 14 Compiling and Scripting
+*** The Compiler API
+- 1) With the *compiler API*, you can generate Java code on the fly and compile it
+- eg of tools that compile java code:
+  - JavaServer Pages (web pages with embedded Java statements)
+**** System Java Compiler - .run()
+#+begin_src java
+  JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+  OutputStream outStream = ...;
+  OutputStream errStream = ...;
+  // if null the streams are send to System.out and System.err
+  // after that are compiler flags you would pass to *javac*
+  int result = compiler.run(null, outStream, errStream,
+                            "-sourcepath", "src", "Test.java");
+#+end_src
+**** CompilationTask      - .getTask()
+#+begin_src java
+  JavaCompiler.CompilationTask task
+      = compiler.getTask(errorWriter, // System.err if null
+                         fileManager, // use the standard file manager if null
+                         diagnostics, // System.err if null
+                         options, // Iterable.
+                         classes, // Iterable. For annotation processing, null if none
+                         sources);// Iterable<JavaFileObject>
+#+end_src
+- reading sources from files
+  #+begin_src java
+    StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+    Iterable<JavaFileObject> sources = fileManager.getJavaFileObjectsFromFiles("File1.java", "File2.java");
+    JavaCompiler.CompilationTask task = comipler.getTask(null, null, null, options, null, sources);
+    task.processors(annotationProcessors); // optional: to process annotations
+    Boolean success = task.call();
+  #+end_src
+- reading sources from memory: extends SimpleJavaFileObject.getCharContent()
+  - class
+    #+begin_src java
+      public class StringSource extends SimpleJavaFileObject {
+          private String code;
+          StringSource(String name, String code) {
+              super(URI.create("string:///" + name.replace('.','/') + ".java"), Kind.SOURCE);
+              this.code = code;
+          }
+          public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+              return code;
+          }
+      }
+  #+end_src
+  - instantiate
+    #+begin_src java
+      String pointCode = ...;
+      String rectangleCode = ...;
+      List<StringSource> sources
+          = List.of(new StringSource("Point", pointCode),
+                    new StringSource("Rectangle", rectangleCode));
+      task = compiler.getTask(null, null, null, null, sources);
+    #+end_src
+- writing bytecode to memory: extends SimpleJavaFileObject.getCode()
+  - class
+   #+begin_src java
+     public class ByteArrayClass extends SimpleJavaFileObject {
+         private ByteArrayOutputStream out;
+         ByteArrayClass(String name) {
+             super(URI.create("bytes:///" + name.replace('.','/') + ".class"), Kind.CLASS);
+         }
+         public byte[] getCode() {
+             return out.toByteArray();
+         }
+         public OutputStream openOutputStream() throws IOException {
+             out = new ByteArrayOutputStream();
+             return out;
+         }
+     }
+  #+end_src
+  - create a JavaFileManager
+    #+begin_src java
+      List<ByteArrayClass> classes = new ArrayList<>();
+      StandardJavaFileManager stdFileManager = compiler.getStandardFileManager(null, null, null);
+      JavaFileManager fileManager
+          = new ForwardingJavaFileManager<JavaFileManager>(stdFileManager) {
+                  public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
+                      throws IOException {
+                      if (kind == Kind.CLASS) {
+                          ByteArrayClass outfile = new BYteArrayClass(className);
+                          classes.add(outfile);
+                          return outfile;
+                      } else
+                          return super.getJavaFileForOutput(location, className, kind, sibling);
+                  }
+              }
+    #+end_src
+  - load the classes with a ClassLoader
+    #+begin_src java
+      public class ByteArrayClassLoader extends ClassLoader {
+          private Iterable<ByteArrayClass> classes;
+          public ByteArrayClassLoader(Iterable<ByteArrayClass> classes) {
+              this.classes = classes;
+          }
+          @Override
+          public Class<?> findClass(String name) throws ClassNotFoundException {
+              for (ByteArrayClass cl: classes) {
+                  if (cl.getName().equals("/" + name.replace('.','/') + ".class")) {
+                      byte[] bytes = cl.getCOde();
+                      return defineClass(name, bytes, 0, bytes.length);
+                  }
+              }
+              throw new ClassNotFoundException(name);
+          }
+      }
+    #+end_src
+  - after compiling, calls it
+    #+begin_src java
+      ByteArrayClassLoader loader = new ByteArrayClassLoader(classes);
+      Class<?> cl = Class.forName("Rectanble", true, loader);
+    #+end_src
+*** TODO The Scripting API
+- 2) The *scripting API* lets Java program ineteroperate with a number of scripting languages
+*** TODO The Nashhorn Scripting Engine
+- 3) The JDK includes =Nashhorn=, a *JavaScript interpreter* with good performance and fidelity to the JavaScript standard
+- 4) =Nashhorn= offers a convenient syntax for working with Java lists and maps, as well as JavaBeans properties
+- 5) =Nashhorn= supports lambda expressions and a limited mechanism for extending Java classes and implementing Java interfaces
+*** TODO Shell Scripting with Nashhorn
+- 6) =Nashhorn= has support for writing shell scripts in JavaScript
+* Book:  2019 | Real-World Software Development  | Raoul-Gabriel Urma
+** 1 Starting the Journey
+- =Practices and principles over technology=
+- Book Themes
+  1) Java Features: and core OOP concepts
+  2) Software Design and Architecture:
+     - couping, cohesion
+     - api design
+     - design patterns: notification pattern, builder pattern, repository pattern
+     - event-driven and hexagonal architectures
+     - functional programming
+  3) SOLID
+     - (SRP) Single Responsibility Principle
+     - (OCP) Open/Closed Principle
+     - (LSP) Liskov Substitution Principle
+     - (ISP) Interface Segregation Principle
+     - (DIP) Dependency Inversion Principle
+  4) Testing: TDD, test doubles, mocks and stubs
+** 2 The Bank Statements Analyzer

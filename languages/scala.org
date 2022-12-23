@@ -1,3 +1,9 @@
+- https://rapidgator.net/file/1ea3895cf6da644652bd31de15fce3f7/e6iBPAxK__Scala_Adva.part1.rar.html
+- Courses https://sanet.st/blogs/udemy1/functional_programming_with_scala_cats.3784310.html
+  https://rapidgator.net/file/5b05e93edf70abb52ad8be637bd43d27/Sanet.STFunctionalProgrammingwithScalaCats.part2.rar.html
+  https://rapidgator.net/file/7a20b0f758cce345c4bc6d6ad78a31ee/Sanet.STFunctionalProgrammingwithScalaCats.part3.rar.html
+  https://nitro.download/view/D03A91E80E6EA20/Sanet.ST_Functional_Programming_with_Scala_Cats.part2.rar
+  https://nitro.download/view/A66082580111F45/Sanet.ST_Functional_Programming_with_Scala_Cats.part3.rar
 - Channel: Sergei Winitzki https://www.youtube.com/channel/UCWpjX-z6_oNZhcHPzAAQy6g/videos
   Programming Papers explained with scala
 - FP library https://typelevel.org/cats/
@@ -11,12 +17,378 @@
   https://gist.github.com/chaotic3quilibrium/58e78a2e21ce43bfe0042bbfbb93e7dc
 - Framework: Play Framework.
   Conocimientos deseables: Slick, Monix Task.
+* Video: 2021 | Udemy - Functional Programming with Scala Cats | Udemy
+** 2
+*** 9.1 Trait Channel: Inheritance
+#+begin_src scala
+  trait Channel {
+    def write(
+      obj: ByteEncodable
+    ): Unit
+  }
+  trait ByteEncodable {
+    def encode(): Array[Byte]
+  }
+#+end_src
+- Good
+  * unique responsibility (encoding is on a different trait)
+  * easy to test
+  * unhandled type -> compile error
+- Bad
+  * we cannot extend classes we do not have control (eg: Int)
+  * only one implementation
+  * overloaded interface (an extra method in the class we are extending)
+    a problem if a class is big
+*** 9.2 Trait Channel: Type Classes
+#+begin_src scala
+  trait Channel {
+    def write[A](
+      obj: A,
+      enc: ByteEncoder[A]
+    ): Unit
+  }
+  trait ByteEncoder[A] {
+    def encode(a: A): Array[Byte]
+  }
+#+end_src
+- We now receive an encoder as aparameter
+- We now receive a type parameter [A]
+  - We do NOT extend, we write instances
+* Video: 2021 | #Scala Crash Course by a Scala Veteran (with some JavaScript flavor)
+- Scala 3 has python like identation support
+- everything is an *expression*
+  - every expression computes to a *value*
+    - every value is an *object*
+    - every value has a type
+- there are NOT operators
+  1 + 3
+  is infix notation for
+  1.+(3)
+- exceptions do not return a value, so their type is "nothing"
+- it is considered an anti-pattern to use *return*
+- Scala Environment Installer (jdk,.profile,ammonite,scalafmt,sbt,scala)
+  https://get-coursier.io/
+  https://github.com/coursier/coursier
+- wsl
+  wsl -l -v
+  wsl -d Ubuntu-20.04
+- cs install giter8
+- sbt new devinsideyou/scala-seed.g8
+  g8 devinsideyou/scala3-seed.g8
+- sbt> compile, run, clean, test:compile, test, scalafmtAll
+  - commands with "~" will keep watching the code like "~compile"
+- code
+  - extensions: Reload, error lens, scala(metals), disable ligatures
+  - worksheets, lets you put scala code and have the return value of the line show on a comment beside it
+- scala
+  - classes does not have to be named exactly the same as the filename
+  - not restricted to 1 class per file
+- ";" are optional but never used
+- *package* are syntatic sugar for namespaces with braces
+- *traits* are similar to java interfaces but they can contain implementation
+- "object Main" is the syntax we use when we want a single instance of a class, singleton object
+  - the body will run as their main method
+  - the body is also the constructor
+- Example
+  #+begin_src scala
+  package com.traversymedia
+  package playground
+  object Main extends App {
+    println("-" * 50)
+    println("Hello world!")
+    println("-" * 50)
+  }
+  #+end_src
+- Example
+  #+begin_src scala
+  package com.traversymedia
+  package playground
+  object Main {
+    def main(args: Array[String]): Unit = {
+      println("-" * 50)
+      println("Hello world!")
+      println("-" * 50)
+    }
+  }
+  #+end_src
+- /** */ for javadoc
+- Declarations: val, var, def, lazy, type
+  - val similar to const    in JS
+  - var similar to let      in JS
+  - def similar to function in JS
+  - lazy val
+- Top level definitions: class, object, trait
+  - Declarations can only happen inside these
+    - In Scala 3, def's CAN happen at the top level
+- 00:55:00 *Uniform Axis Principle*: means that I can leave empty parens on calls to functions with no arguments
+- 00:55:57 Type is Capitalized eg: Int
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][00:56:28]] Scala has support for *named parameters* for methods
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][00:57:06]] function names are NOT limited to alphanumeric, eg: "*"
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][00:59:44]] *top level definitions* go with uppercase
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:00:25]] is a convention to specify the types for al *public* members (default visibility)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:01:01]] Types
+  | Nothing |            | has no value, only valid code throwing exceptions     |
+  | Unit    | () or {()} |                                                       |
+  | Null    | null       |                                                       |
+  | Boolean | true       | no other truthy or falsy values exists in scala       |
+  | Byte    | 1 or       | Byte.MinValue or Byte.MaxValue                        |
+  | Short   |            |                                                       |
+  | Int     |            |                                                       |
+  | Long    |            |                                                       |
+  | Float   |            |                                                       |
+  | Double  |            |                                                       |
+  | Any     |            | at the top of scala type hierarchy                    |
+  | AnyVal  |            | at the top of scala primitive types                   |
+  | AnyRef  |            | at the top of scala classes, alias of JavaLang.Object |
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:04:36]] Type Aliases
+  type N = Int
+  val myFavoriteNumber: N = 1337
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:05:28]] names of types and names of values live in different namespaces
+  type N = Int
+  val N: N = 1337
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:09:48]] single quotes is for characters only, eg: 'a' or '\u2500'
+  |           | interp. | escape | format |
+  |-----------+---------+--------+--------|
+  | s""       | yes     |        |        |
+  | f""       | yes     |        | yes    |
+  | raw"""""" | yes     | no     |        |
+  | """"""    |         |        |        |
+  | s""""""   | yes     | yes    |        |
+  |-----------+---------+--------+--------|
+  - Where interpolation is $myvar or ${myvar + 2}
+  - """""", useful with a .stripMargin('#') which default arg is "|"
+  - you can define your own interpolator, which happens at runtime
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:22:10]] you can optionally put *end* to end a "def" or an "if" to *close the scope* of them
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:23:29]] in scala 3 you do NOT need to put parens on a if condition
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:23:36]] on scala 3 you can optionally put an *then* of "if/else if" to oneline them without parens
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:24:25]] in scala (==) delegates to .equals()
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:25:58]] Scala 3 has a more type safe (==) than Scala 2
+  - While in Java and Scala equality (==) is defined for Any
+  - Scala gives a warning when doing it with different types
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:27:56]] methods support default argument
+  def loop(acc: Int = 0): Unit
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:27:09]] Scala has *tail recursion*
+  - It will rewrite the method to use a loop (usually more performant)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:28:28]] @scala.annotation.tailrec we mark the method as being tail recursive
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:30:31]] "do while" loops are deprecated, due *do* being used elsewhere
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:30:38]] no "for loop" but instead *for comprehensions*
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:31:19]] function signature: parens are optional on args if only 1
+  eg: (Int) => String
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:33:30]] List(1,2,3).foreach(println)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:35:03]] in Scala 3, eta-expansion is deprecated for defs with an empty parameter list
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:37:49]] arrow functions (=>)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:40:01]] on a method call of 1 argument you can use {} instead of ()
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:43:02]] case match with previous var value
+  - lowercase val, use backticks
+    #+begin_src scala
+  val four = 4
+  highOrderFunction {
+    case `four` => Console.GREEN + four + Console.RESET
+    case other  => other.toString
+  }
+    #+end_src
+  - with uppercase val, no backticks
+        #+begin_src scala
+  val Four = 4
+  highOrderFunction {
+    case Four => Console.GREEN + Four + Console.RESET
+    case other  => other.toString
+  }
+    #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:43:31]] case guard
+  #+begin_src scala
+    highOrderFunction {
+      case x if x % 2 == 0 => Console.GREEN + x + Console.RESET
+      case other => other.toString
+    }
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:45:24]] match/case and (_*) and (if) guard
+  #+begin_src scala
+    val result =
+      List(1,2,3,4,5,6,7,8,9) match {
+        case List(_,_,third,fourth,_*) if third == fourth - 1 => true
+        case _ => false
+      }
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:46:16]] val pattern match (destructuring?)
+  - dangerous in case of missing "cases", it will throw an exception
+    #+begin_src scala
+      val 1337 = 1337
+      val List(_,_,third,fourth, rest @ _*) = List(1,2,3,4,5,6,7)
+    #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:50:08]] try/catch/case
+  #+begin_src scala
+    val result: Int =
+      try println(1 / 0)
+      catch {
+        case e: ArithmeticException =>
+          print(Console.RED)
+          e.printStackTrace()
+          print(Console.RESET)
+      }
+    finally println("no worries, it's all good")
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:52:34]] in scala if something is named .apply() then you don't need to call it
+  #+begin_src scala
+    val a = Array("what", "is")
+    val b = Array.apply("what", "is")
+    println(a(2))
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:54:58]] a.update(key, value) can be written as const(key) = value
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:56:11]] never import scala.collection.mutable.<BUILDERS>, otherwise you shadow the immutable
+  - import scala.collections.mutable
+    mutable.ArraySeq(1,2,3)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][01:57:58]] Iterable(1,2,3,4), Seq(), List(), IndexedSeq(), Vector(), Set()
+  - scala.collection.immutable.HashSet()
+  - must be the same type to have a non Any type
+  - Iterable() defaults to List()
+  - IndexedSeq() default to Vector()
+- mutable collections vs immutable collections
+  - immutable need to be imported
+  - import can happen anywhere
+  - fruits.mapInPlace(_.reverse).foreach(println)
+    fruits.map(_.reverse).foreach(println)
+  - is weird to use immutable functions (map) on mutable collections
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:07:08]] Map((1,"1"),(2,"2")) or Map(1 -> "1", 2 -> "2")
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:11:03]] Range(start = 0, end = 10, step = 2) or Range.inclusive()
+  - 0 to 9
+  - 0 until 9 foreach println
+  - 0 until 9 by 2 foreach println
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:14:18]] for comprehension
+  #+begin_src scala
+    for (i <- 0 to 9)
+      println(i)
+    val a =
+      for (i <- 0 to 9)
+        yield i + 2
+    // c -> n , creates a tuple
+    val b =
+      for (c <- 'a' to 'h')
+        yield for (n <- 0 to 9)
+          yield c -> n).flatten
+  #+end_src
+- nested for comprehension
+  #+begin_src scala
+    val b =
+      for (c <- 'a' to 'h')
+        yield for (n <- 0 to 9)
+          yield c -> n).flatten
+  #+end_src
+- nested for comprehension can also be understand as succesion of map's
+  #+begin_src scala
+    val c =
+      ('a' to 'h').flatMap { c =>
+        (0 to 8).map { n =>
+          c -> n
+        }
+      }
+  #+end_src
+- nested for comprehension (;)
+  #+begin_src scala
+    for(c <- 'a' to 'h'; n <- 0 to 8)
+      yield c -> n
+    // OR
+    for {
+      c <- 'a' to 'h'
+      n <- 0 to 8 if n % 2 == 0
+    } yield c -> n
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:24:45]] (::) prepend to list
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:24:06]] if a function ends with a color (:) is right associative
+  0 :: list
+  list.::(0)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:25:31]] (+:) preppend to a non-list
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:25:31]] (:+) append to list
+  list :+ 3
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:25:54]] (:::) concatenate list
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:26:10]] (++) concatenate other things
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:27:18]] Set(), no ordered (can only add (+) or concatenate (++))
+  - NOT prepend or append
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:28:17]] Map(), no ordered
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:30:44]] import scala.jdk.CollectionConverts._
+  #+begin_src scala
+  val hashSet = {
+    val result = new java.util.HashSet[Int]
+    result.add(1)
+    result
+  }
+  val scalSet = hashSet.asScala // Set(1)
+  val javaSet = scalaSet.asJava // [1]
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:31:18]] variable args parameter list (Int*)
+  #+begin_src scala
+    object MyCollection {
+      def apply(ints: Int): Seq[Int] =
+        ints
+    }
+    val c1 = MyCollection()
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:35:01]] def plus(a: Int)(b: Int): Int = a + b
+  is syntactic sugar for curried functions
+  def plus(a: Int): Int => Int = b => a + b
+  plus(1)(2)
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:37:09]] scala class & constructors
+  #+begin_src scala
+    class Calculator(a: Int) {
+      println("body of the class is executed during construction")
+      def add(b: Int): Int = a + b
+      def subtract(b: Int): Int = a - b
+    }
+    type C = Calculator
+    val c = new Calculator(a = 1)
+    val result = c.add(b = 2)
+    println(result)
+    println(c.substract(b = 2))
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:41:11]] scala object
+  #+begin_src scala
+    object C // Is the same as doing
+    val C = {
+      class C$
+      new C$
+    }
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:41:30]] companion object, similar to a static method in Java
+  #+begin_src scala
+    object Calculator {
+      private var _calculatorsCreated: Int = 0
+      def calculatorsCreated: Int = _calculatorsCreated // getter
+      private def calculatorsCreated_=(newVAlue: Int): Unit // setter
+        _calculatorsCreated = newValue
+    }
+    class Calculator(a: Int) {
+      Calculator.calculatorsCreated += 1
+      def add()
+      def subtract()
+    }
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/scala/%23Scala%20Crash%20Course%20by%20a%20Scala%20Veteran%20(with%20some%20JavaScript%20flavor)%20%5B-xRfJcwhy7A%5D.mp4][02:45:29]] scala traits, they can have implementation or be abstract
+  #+begin_src scala
+    trait Add {
+      def add(b: Int): Int
+    }
+    class Calculator(a: Int) extends Add {
+      override def add(b: Int) Int = a + b
+    }
+  #+end_src
+* Video: 2013 | 1 - Functional Programming Principles In Scala | Martin Odesky
+** Lecture 1
+** Lecture 2
+** Lecture 3
+** Lecture 4
+** Lecture 5
+** Lecture 6
+** Lecture 7
+** Lecture 8
+** Lecture 9
 * Video
 ** Course
 - Introduction to Programming and Problem Solving Using Scala
   https://www.youtube.com/playlist?list=PLLMXbkbDbVt9MIJ9DV4ps-_trOzWtphYO
-- Parallel Programming
+- 3rd - Parallel Programming
   https://www.youtube.com/channel/UCFVAx3NnF3HpQawLY6KR2DQ
+- 4th - Big Data Analysis with Scala and Spark
+  https://www.youtube.com/channel/UCaezz_KRVlM7GZdxf-4eoPA
 - (Udemy) RockTheJVM - Scala functioning and programming for beginners
   https://www.youtube.com/playlist?list=PL15cIG7aNbhtZxLafzxmld750BcFw-9Ek
 - (Udemy) RockTheJVM - Advance Scala and functional Programming
@@ -32,3 +404,21 @@ This is fixed in Scala 3, but it's only valid for Scala 3 and higher, it doesn't
 * People
 - Martin Odersky (Creator)
 - Dick Wall (Courses)
+* Book: 2020 | Scala From Scratch: Exploration | Daniel Westheide
+scala to javascript https://www.scala-js.org/
+scala on llvm https://www.scala-native.org/en/stable/
+prebuilt openjdk https://adoptopenjdk.net/
+scala build tool (-2021) https://github.com/propensive/fury
+scala build tool https://github.com/com-lihaoyi/mill
+** 1 With a REPL yell
+- templates based on https://github.com/foundweekends/giter8
+#+begin_src
+ $ sbt --script-version
+   1.3.13
+ $ sbt new dwestheide/minimal-scala-project.g8
+ $ cd my-project
+ $ sbt console
+ console> :q
+ console> :quit
+ console> :help
+#+end_src

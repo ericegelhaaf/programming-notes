@@ -1,3 +1,4 @@
+- katas https://web.archive.org/web/20160701032652/https://codingdojo.org/cgi-bin/index.pl?KataCatalogue
 - https://dojorena.io/with/the-best-coding-challenge
   https://dojorena.io/manuals/43
   https://github.com/codenjoyme/codenjoy
@@ -21,6 +22,7 @@
   file:///home/sendai/disk/anybody/David%20Esparza%20Alba/Algorithms%20For%20Competitive%20Programming%20(4592)/Algorithms%20For%20Competitive%20Programming%20-%20David%20Esparza%20Alba.pdf#page=311
   file:///home/sendai/disk/anybody/Skiena,%20Steven%20S_/Programming%20Challenges%20(4425)/Programming%20Challenges%20-%20Skiena,%20Steven%20S_.pdf#page=174
 * Videos
+- Algorithmic Toolbox (Complete Course) https://www.youtube.com/watch?v=CAfMYNNsVAo
 ** Data Structures
    https://www.youtube.com/playlist?list=PLI1t_8YX-Apv-UiRlnZwqqrRT8D1RhriX
    Balanced Parentheses in Expression
@@ -56,6 +58,8 @@
    Graph Search, DFS and BFS
    Solve 'Lonley Integer' Using Bit Manipulation
 ** Channel
+- https://www.youtube.com/@insidecode/videos
+- https://www.youtube.com/@johnlevine2909/videos
 - Reducible https://www.youtube.com/c/Reducible
 - "Algorithms with Attitude" https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
 - CodeEric https://www.youtube.com/channel/UCVUreMZC948wS-KecowbA_g/
@@ -168,6 +172,10 @@
    #+end_src
 * TODO Video: Bellman Ford   - Shortest path & Negative cycles
 https://www.youtube.com/watch?v=lyw4FaxrwHg
+- SSSP (Single Source Shortest Path)
+- O(E*V)
+- When Dijkstra fails, negative cycles
+- Real World use case: when doing an *arbitrage* in economics
 * Video: NeetCode - Top 5 Most Common =Graph Algorithms= for Coding Interviews
   https://www.youtube.com/watch?v=utDu3Q7Flrw
   - Prim's Kruska's (Minimum Spanning Tree)
@@ -1237,9 +1245,12 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
    - Distance to self is 0, distance to everything else is infinite
    - reduce the distances by finding edges that shorten the path
  - Optimizations
-   - Exit earlier than "n-1" when we cannot longer reduce distance
-   - SPFA (Short Path Faster Algorithm), maintaining a queue of nodes that might be used for reducing distances, only process the queue
- - Negative Cycles: run the algorithm for "n" rounds, if the last round reduces any distance, the graph contains a negative cycle.
+   - Exit earlier than "n-1" when we cannot longer reduce distance.
+   - SPFA (Short Path Faster Algorithm), maintaining a queue of nodes that
+     might be used for reducing distances, only process the queue.
+ - Negative Cycles:
+   run the algorithm for "n" rounds, if the last round reduces any distance,
+   the graph contains a negative cycle.
  - Code: uses a Edge List (a,b,w), builds an array "distance"
    #+begin_src c++
      for (int i = 1; i <= n; i++) {
@@ -1755,3 +1766,24 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
           fmt.Println("Computation time: ", elapsed)
   }
 #+end_src
+* Book: ???? | Algorithm Design Manual
+** 10 Dynamic Programming
+- Example: Fibonacci using memoization, by caching/tabling the intermediate values
+  - A linear amount of space for an exponential amount of time is an excellent trade-off
+  - Converting the recursion to iteration, to be more explicit
+  - Or just storing the last 2 values
+- Example: Binomial coefficients (aka how many ways to choose (n) things are from (m) things on (m/n))
+  - Problem: calculating them can cause overflow when calculating the intermediate values
+  - Solution: using the recursive relation implicit in Pascal Triangles
+    Each number is the sum of the 2 numbers directly above it
+    #+begin_src
+              1
+            1   1
+          1   2   1
+        1   3   3   1
+      1   4   6   4   1
+    1   5  10  10   5   1
+    #+end_src
+* Book: ???? | Introduction to Algorithms
+** 22 Single-Source Shortest Path
+- The INPUT of a SSSP is a weighted, directed graph.

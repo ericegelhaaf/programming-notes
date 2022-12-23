@@ -1,3 +1,5 @@
+
+- DavidWesselsVIU https://www.youtube.com/@davidwesselsviu6016/playlists
 - https://mfiano.net/posts/2022-09-04-from-common-lisp-to-julia/
   https://gist.github.com/digikar99/24decb414ddfa15a220b27f6748165d7
   https://news.ycombinator.com/item?id=32745318
@@ -15,6 +17,7 @@
 - History http://www.nhplace.com/kent/Papers/cl-untold-story.html
 - Some abbreviature macros https://github.com/cl21/cl21/blob/c36644f3b6ea4975174c8ce72de43a4524dd0696/src/stdlib/abbr.lisp
 - Blog: http://funcall.blogspot.com/
+- https://funcall.blogspot.com/2022/09/playing-with-raycasting.html
 - Video: 2008 Raytracer in lisp
   https://www.youtube.com/watch?v=N1oMRw04W3E
   https://github.com/afwlehmann/clrt-tutorial
@@ -29,7 +32,7 @@
   https://common-lisp.net/project/asdf/asdf/The-package_002dinferred_002dsystem-extension.html#The-package_002dinferred_002dsystem-extension
 - sectorLISP https://www.youtube.com/watch?v=xD14SLU2u2k
 - https://mumble.net/~campbell/scheme/style.txt
-- https://github.com/hanshuebner/bknr-datastore
+.- https://github.com/hanshuebner/bknr-datastore
 - music composition
   https://quod.lib.umich.edu/s/spobooks/bbv9810.0001.001?rgn=main;view=fulltext
 - https://bernsteinbear.com/blog/compiling-a-lisp-0/
@@ -196,6 +199,8 @@ and that doesn't work if the code is provided as a *.a or *.o file
    https://www.timmons.dev/posts/static-executables-with-sbcl-v2.html
 * Binary/stream
 ** Other
+- Successful Lisp - Chapter 18 - Very Logical, Indeed...
+  https://dept-info.labri.fr/~strandh/Teaching/MTP/Common/David-Lamkins/chapter18.html
 - Common Lisp: The Language
   17.4. Functions on =Arrays of Bits=
   https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node161.html
@@ -648,8 +653,9 @@ and that doesn't work if the code is provided as a *.a or *.o file
 - Destructuring:
   - Can destructure values easily
 ** gtwiwtg "naive generators"
-   https://github.com/cbeo/gtwiwtg
+https://github.com/cbeo/gtwiwtg
 ** SERIES
+- Note taken on [2022-12-17 Sat 05:39]
 #+CAPTION: All methods exported
 #+NAME:   fig:SED-HR4049
   [[./series.png]]
@@ -670,25 +676,25 @@ and that doesn't work if the code is provided as a *.a or *.o file
   http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
 *** Part 1
 **** Intro
-    #+begin_src lisp
-(collect-sum (choose-if #'plusp (scan '(1 -2 3 -4))))
-;; => 4
-(let ((x (subseries (scan-range :from 0 :by 2) 0 5)))
-  (values (collect x) (collect-sum x)))
-;; => (0 2 4 6 8), 20
+#+begin_src lisp
+  (collect-sum (choose-if #'plusp (scan '(1 -2 3 -4))))
+  ;; => 4
+  (let ((x (subseries (scan-range :from 0 :by 2) 0 5)))
+    (values (collect x) (collect-sum x)))
+  ;; => (0 2 4 6 8), 20
 
-;; Scanners
-(series 'a)
-(scan '(a b c))
-(scan 'vector #(a b c))
-(scan-range :from 1 :upto 3)
-(scan-plist '(a 1 b 2))
+  ;; Scanners
+  (series 'a) ;; => #Z(a a a a a ...)
+  (scan '(a b c))
+  (scan 'vector #(a b c))
+  (scan-range :from 1 :upto 3)
+  (scan-plist '(a 1 b 2))
 
-;; Transducers
-(positions #Z(a nil b c nil nil));; =>#Z(0 2 3)
-(choose #Z(nil t t nil) #Z(1 2 3 4));; => #Z(2 3))
+  ;; Transducers
+  (positions #Z(a nil b c nil nil));; =>#Z(0 2 3)
+  (choose #Z(nil t t nil) #Z(1 2 3 4));; => #Z(2 3))
 
-;; Collectors
+  ;; Collectors
 #+end_src
 **** Generators and Gatherers
 ***** Generators
@@ -942,16 +948,17 @@ https://lisp-lang.org/learn/continuous-integration
 - (/=) is a function for not equal
 - STRINGS are array and atoms
   - a string is NOT a list
-- NIL is both a list and an atom
+- NIL is both a (listp) and an (atom)
 - (let) binds to NIL by default
   (let*) binds are sequentially
 - (block TAG) and (return-from TAG RETURN-VALUE) exists..
-  https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node85.html
-- Mentions this for "enclosed variables", variables that can't be override
+  - can event (return-from 'function-name)
+  - https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node85.html
+- ?? Mentions this for "enclosed variables", variables that can't be override
   (declare (special (x))), makes them overridable
   https://gigamonkeys.com/book/variables.html
 - CLOSURE takes precedence over local vars
-- dynamic vars exists...can be (declare (special VAR)), changes binding (outer takes precedence)
+- ?? dynamic vars exists...can be (declare (special VAR)), changes binding (outer takes precedence)
   http://clhs.lisp.se/Body/d_specia.htm
 - (case)
   - to match a T or NIL, put them between parentheses
@@ -962,11 +969,13 @@ https://lisp-lang.org/learn/continuous-integration
   (cdr) on a (cons) returns the second elements (not nested into a list)
 - (push) sets place to a new cons with a new *car*
   (pop)  sets place to his *cdr*, returning car
-- (append) concats 2 lists into 1, creates new list
-  (nconc)  concats 2 lists into 1, inplace
+- (append)   concats 2 lists into 1, creates new list
+  =(nconc)=  concats 2 lists into 1, inplace
 - (last) returns the last =CONS= cell
 - =proper lists= end with NIL on the last CDR
-  =improper list= has a non-nil on the last CDR, or not has a last CDR (circular list)
+- =improper list=
+  - has a non-nil on the last CDR
+  - or not has a last CDR (circular list)
 - (list*) builds a improper list
 - =cycle list= build, setting the cdr last to self
   (setf (cdr (last cyclic-list)) cyclic-list)
@@ -1014,18 +1023,18 @@ https://lisp-lang.org/learn/continuous-integration
   both accessor can be used
   on copy, setting the slots will keep them different, but shared structures are different (the content of the slots)
 - (dolist)      returns a value
-  (dotimes) can return a value, named on the third argument
-  (do)      is kind-sort-of a for loop, 1) bindings 2) termination test 3) epilogue 4) code to run
-  1) test being "UNTIL" not "WHILE" test passes
-  2) epilogue might return a value, right after the test, enclosed on the same same s-expression
+- (dotimes) can return a value, named on the third argument
+- (do)      is kind-sort-of a for loop, 1) bindings 2) termination test 3) epilogue 4) code to run
+  - test being "UNTIL" not "WHILE" test passes
+  - epilogue might return a value, right after the test, enclosed on the same same s-expression
 - (loop), by defaults loops forever, can break from it with (return)
   you might make it look lispy
   #+begin_src lisp
-(let ((counter 0))
-  (loop (incf counter)
-      (when (>= counter 100)
-         (return counter)))
-    #+end_src
+    (let ((counter 0))
+      (loop (incf counter)
+          (when (>= counter 100)
+             (return counter)))
+  #+end_src
 - Not all vectors that contain characters are strings
 - to TRANSPOSE a list of lists, you can use
   (apply #'mapcar #'list lists)
@@ -1037,7 +1046,7 @@ https://lisp-lang.org/learn/continuous-integration
   (assert-equal '(:a :b :c) result-in)
   :on iterates over each (cons) cell on the list
   (assert-equal '((:a :b :c) (:b :c) (:c)) result-on)
-- (loop)
+- (loop) hashtables
   :for KEY :being :the :hash-keys :of HASHTABLE
   :using (hash-value VALUE)
 - (loop)
@@ -1052,15 +1061,20 @@ https://lisp-lang.org/learn/continuous-integration
   ~S for "standsard", prints them with escaped characters, KEYWORD into :KEYWORD
   ~B, ~O, ~D, ~X and ~R (for customem radix) are radix for numbers, works with lists of numbers or operations
 - (format)
-  "~{~}" to iterate over a list
-  (assert-equal "[1][2][3][4][5][6]" (format nil "~{[~A]~}" '(1 2 3 4 5 6)))
-  (assert-equal "[1 2][3 4][5 6]" (format nil "~{[~A ~A]~}" '(1 2 3 4 5 6)))
-  ~^, abords iteration when no more available
-  (assert-equal "[1], [2], [3], [4], [5], [6]" (format nil "~{[~A]~^, ~}" '(1 2 3 4 5 6)))
-  "~(~)", lowercases what is inside
-  "~:(~)", uppercase first letter of each word
-  "~@(~)", uppercase only the first letter of the sentence
-  "~:@(~)", uppercase all
+  - "~{~}" to iterate over a list
+    #+begin_src
+    (assert-equal "[1][2][3][4][5][6]" (format nil "~{[~A]~}"    '(1 2 3 4 5 6)))
+    (assert-equal "[1 2][3 4][5 6]"    (format nil "~{[~A ~A]~}" '(1 2 3 4 5 6)))
+    #+end_src
+  - ~^, aborts iteration when no more available
+     #+begin_src
+    (assert-equal "[1], [2], [3], [4], [5], [6]" (format nil "~{[~A]~^, ~}" '(1 2 3 4 5 6)))
+    #+end_src
+  - casing
+   | ~(~)   | lowercases what is inside                       |
+   | ~:(~)  | uppercase first letter of each word             |
+   | ~@(~)  | uppercase only the first letter of the sentence |
+   | ~:@(~) | uppercase all                                   |
 - Every object is of type T, no object is of type NIL
 - 'nil is nil
 - type of nil is 'NULL
@@ -1099,7 +1113,7 @@ https://lisp-lang.org/learn/continuous-integration
 - Memory order, "it prevents re-ordering across the fence"
   - (sb-thread:barrier)
 - lparallel: channels/workers support, priority, queue, pmap, promises
-* Book: https://leanpub.com/readevalprintlove001/read
+* Bnook: https://leanpub.com/readevalprintlove001/read
 - Tour of Lisp(s)
 ** Article: 2006 The Nature of Lisp
    https://www.defmacro.org/ramblings/lisp.html

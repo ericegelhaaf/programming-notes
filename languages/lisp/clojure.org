@@ -25,6 +25,19 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://github.com/functional-koans/clojure-koans/
 - https://github.com/bbatsov/clojure-style-guide
 - https://clojuredocs.org/quickref
+* Notebooks
+- Live Notebooks https://clerk.vision/
+* Babashka
+- Edit Conf https://github.com/exercism/babashka/blob/main/docs/editors.md
+  > bb --nrepl-server
+- Doc https://book.babashka.org/
+- Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
+  - As such the code is NOT compiled.
+* Courses
+- [O'Reilly Media Infinite Skills / Adam Bard / Stuart Halloway / Neal Ford] Learning path: Clojure Fundamentals (Learning Clojure, Clojure Inside Out) [2016, ENG]
+  https://rutracker.org/forum/viewtopic.php?t=5354881
+- Building Microservices with Clojure Training Video
+  https://rutracker.org/forum/viewtopic.php?t=5053153
 * Podcasts
 - Podcast - https://clojuredesign.club/
 - Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
@@ -73,428 +86,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/
 * Overtone
 - https://github.com/pjagielski/disclojure
-* Book: Clojurescript unraveled
-|        |     | New                       | pred? | IFn | Lookup        |
-|--------+-----+---------------------------+-------+-----+---------------|
-| map    | {}  | (hash-map :name 1)        | false | yes | (assoc)       |
-| list   | ()  | (list 1 2) (cons 0 '(1 2) | false | no  | (peek) (pop)  |
-| vector | []  | (vector 1 2) (vec '(1 2)) | true  | yes | (nth) (assoc) |
-| set    | #{} | (set [1 2 3 1])           | true  | yes | (get)         |
-** 3 Language (the basics)
-*** 3.1 First steps
-- Lisp has ~no operators~, it only has functions.
-*** 3.2 The base data typs
-- Types: symbols, keywords, regexes, vars, atoms, volatiles
-  - Tries to use host language provided types
-    - integers are JS floating points
-  - symbols: start with a non-numeric character
-  - strings: are immutable
-  - chars: get converted to single char JS string \a \newline
-  - arrays: like lists can contain any type
-*** 3.3 Vars
-- vars are always ~top level~ in the namespace
-*** 3.4 Functions
-- lambdas: (fn [p1 p2] (+ p1 p2))
-           (def addme (fn [p1 p2] (+ p1 p2)))
-           (defn addme [p1 p2] (+ p1 p2)))
-- ~defn~ is a macro
-- multiple arity support
-- variadic support: in the form of a list
-- Lambdas:
-  #()
-  #(+ %1 %2)
-  #(* % %)
-  #(set %&)
-*** 3.5 Flow control
-- ~(if)~ is an expression and not a statement
-- (cond & clausules)
-  static branches, uses =
-- (condp pred expr & clausules)
-  on each clausule evals (pred TEST-EXPR expr)
-*** 3.6 Truthfulness
-- nil and false are the 2 ONLY false values
-- nil is not the empty list
-- Datastructures can be used as predicates
-  - (filter MAP/SET (range 1 10))
-  - (MAP/SET (range 1 10))
-*** 3.7 Locals, blocks and loops
-- ~(do)~ blocks are usually used for side effects
-- ~(loop)~
-  (loop [x 1]
-    (if (= x 2)
-      (println "done!")
-      (recur (inc x))))
-- ~(recur)~
-  (defn afunc
-    [x 1]
-    (if (= x 2)
-      (println "done!")
-      (recur (inc x))))
-- ~(for)~ is NOT used for iteration but for ~sequence comprehension~
-  aka generating sequences
-  - :let - local bindings, to bind nonseq values (?) let*?
-  - :when - stop the generation when is not valid
-  - :while
-- ~(doseq)~ is analogous to (for) but always returns nil
-- ~(run!)~ (run! println [1 2 3]) -  uses fast reduction
-*** 3.8 Collection types
-- ~structural sharing~ is used to avoid creating new memory for the same data
-
-- ~(rest)~ is just like ~(next)~ except for empty seqs
- (rest []) => ()
- (next []) => nil
- (seq  []) => nil
-- ~nil-punning~ is testing for nil
-
-- ~(map)~ - can work on any sequence.
-  For maps, it receive a 2 item vector, key and value.
-
-- ~(coll?)~ ~(seq?)~  ~(seqable?)~
-- Collection: ~(count)~ ~(empty)~ ~(empty?)~
-              ~(conj)~ (conj [1 2 3] 4) => [1 2 3 4]
-- Maps: ~(vals)~ returns the values of a map
-- Lazyness: (~range~)
-            (~take-while~ #(< % 10) (range 100))
-- List: peek, pop, cons
-- Vector: vector, vector?, vec, nth, assoc
-  (~assoc~ COLL IDX NEW) - sets instead of looking up
-  (~mapv~) and (~filterv~) - variants that return vector
-- (sorted-map) (sorted-map-by)
-  (sorted-set) (sorted-set-by)
-- (compare a b) =>
-  -1 if less
-   0 if equal
-   1 if greater
-- queues pop from the front and push from the back
-*** DONE 3.9 Destructuring
-- everwhere when binding happens
-**** indexed sequences
-- can happen on arguments, matches any seq(?)
-#+begin_src clojure
-  (let [[fst _ thrd] [0 1 2]]
-    [thrd fst])
-  (defn swap-pair [[fst snd]]
-    [snd fst])
-  (swap-pair [1 2]) ; => [2 1]
-  (swap-pair '(3 4)); => [4 3]
-#+end_src
-- ~&~ for varying length
-- ~:as~ to keep the original
-**** associative sequences (maps,vectors)
-- ~:as~
-- keys the are binding symbols (!
-  (let [{lang :language} {:language "Clojurescript"}]
-     lang)
-- ~:or~ support for default on missing keys
-  (let [{name :name :or {name "Anon"}} {:language "Clojurescript"}]
-     name)
-- shorthand with ~:keys~ or :strs or :syms
-  (let [{:keys [name surname]} {:name "Ciri" :surname "Fio"}]
-     [name surname])
-*** DONE 3.10 Threading Macros
-- function call parens are *optional* on threading macros
-- in Clojure(script), transformation functions use...
-  - 1st arg for...datastructures
-  - last arg for...sequences or collections
-- ->      first
-  ->>     last
-  as->    replace any position marked with $
-  some->  they shortcircuit after the first nil
-  some->>
-  cond->  conditionally threads, optionally thread for each step based on a cond
-  cond->>
-*** DONE 3.11 Reader Conditionals
-- #? and #?@
-- .clj vs .cljs vs .cljc AKA conditional, ONLY work on that extension
-#+begin_src clojure
-
-;; Standard (#?)
-(defn parse-int [v]
-  #?(:clj  (Integer/parseInt v)
-     :cljs (js/parseInt v)))
-
-;; Splicing (#?@)
-(defn make-list
-  []
-  (list #?@(:clj  [5 6 7 8]
-            :cljs [1 2 3 4])))
-;; Multiple
-#?(:cljs
-   (do
-     (defn func-a [] :a)
-     (defn func-b [] :b)))
-#+end_src
-*** DONE 3.12 Namespaces
-- myapp.core and myapp.main
-- myapp/src/myapp/core.cljs
-                 /main.cljs
-- "cljs.core" is loaded by default
-- "cljs.user" is the default ns
-#+begin_src clojure
-(ns N1 "docstring for the namespace")
-(ns N1 (:require N2 N3))
-(ns N1 (:require [N2 :as N2ALIAS] [N3 :as N3ALIAS]))
-(ns N1 (:require NS2 :refer [FUNC]))
-(ns N1 (:refer-clojure :exclude [min]))
-#+end_src
-*** DONE 3.13 Abstractions and Polymorphism
-**** Protocols    - TYPES
-- defprotocol, satisfies?, extend-protocol, extend-type
-- Consists of a name(I) AND a set of functions.
-  Each function with at least 1 argument, the "self" or "this".
-  aka "type based dispatching"
-- Checks if instance satisfies the protocol
-  (satisfies? IFn #{1})
-  => true
-#+begin_src clojure
-(ns myapp.testproto)
-
-(defprotocol IProtocolName
-  "A docstring"
-  (sample-method [this] "A docstring"))
-
-(extend-type TYPE
-  PROTOCOL
-  (FUNC-NAME [this] (FUNC-IMPL)))
-
-(extend-protocol PROTOCOL
-  TYPE
-  (FUNC-NAME [this] (FUNC-IMPL)))
-#+end_src
-**** Multimethods - DISPATCHER
-- defmulti, defmethod
-- Like "filtered-functions" in CL library
-  You define a dispatcher function (defmulti) and multiple matching functions (defmethod)
-#+begin_src clojure
-(defmulti say-hello
-  "docstring"
-  (fn [param] (:locale param))
-  :default :en)
-
-(defmethod say-hello :en
-  [person]
-  (str "Hello " (:name person "Anonymous")))
-
-(defmethod say-hello :es
-  [person]
-  (str "Hola " (:name person "Anonimo")))
-#+end_src
-**** Hierarchies  - INHERITANCE
-- derive, ancestors, descendants, isa?, make-hierarchy
-  :hierarchy
-- defmulti, defmethod
-  By default multimethods call isa? without passing a local hierarchy
-#+begin_src clojure
-;; GLOBAL HIERARCHY
-;;(derive ::circle ::shape)
-;;(derive ::box    ::shape)
-
-;; LOCAL HIERARCHY
-(def h (-> (make-hierarchy)
-           (derive :box :shape)
-           (derive :circle :shape))
-
-(defmulti stringify-shape
-  "docstring"
-  identity
-  :hierarchy #'h)
-
-(defmethod stringify-shape :box
-  [_]
-  "A box")
-
-(defmethod stringify-shape :shape
-  [_]
-  "A Shape")
-
-(defmethod stringify-shape :default
-  [_]
-  "Unexpected object")
-#+end_src
-*** DONE 3.14 Data types
-- reify: create an protocol without a type beforehand
-- specify: add a proto to an already existent instance
-**** deftype
-- deftype, defrecord(preferred), ->NAME, map->NAME
-  reify
-  specify, specify!
-#+begin_src clojure
-(deftype User [firstname lastname])
-(def person (User. "Triss" "Merigold"))
-(.-firstname person) ; => "Triss"
-(defn make-user      ; Custom constructor
-  [firstname lastname]
-  (User. firstname lastname))
-#+end_src
-**** defrecord
-- records implement the *map protocol*
-          do NOT implement IFn
-          support assoc
-          dissoc! returns a dict if it is a mandatory field
-#+begin_src clojure
-(defrecord User [firstname lastname])
-(def person (User. "Yeneffer" "of Vengerberg"))
-(:firstname person)    ; => "Yeneffer"
-(get person :firstname); => "Yeneffer"
-#+end_src
-**** Implementing protocols
-- protocols, both types and records support inline proto implementations
-#+begin_src clojure
-(defprotocol IUser
-  "docstring"
-  (full-name [_] "docstring"))
-(defrecord User [firstname lastname]
-  IUser
-  (full-name [_]
-    (str firstname " " lastname)))
-#+end_src
-*** DONE 3.15 Host interoperability
-- "ClojureScript is *not interpreted*; it is always compiled down to JavaScript."
-- ~js/~ namespace interacts with platform
-- ~#js~ reader macro for literal js declaration
-  (def myobj #js {:country "FR"})
-  translates to kind of
-  var myobj = {country: "FR"};
-- ~.-~ prefix for object properties
-  e.g.
-  (.-PI js/Math)
-- ~.~ prefix for methods or properties
-  e.g.
-  (.sqrt js/Math 2)
-  (js/Math.sqrt 2)
-   js/Math.PI
-- ~clj->js~ and ~js->clj~
-  ~into-array~
-  make-array, count, aset, aget
-*** DONE 3.16 State management
-**** Vars
-cannot be changed outside their namespace
-**** Atoms
-- atom, deref, @, swap!, reset!
-#+begin_src clojure
-(def ciri (atom {:name "Cirilla"
-                 :lastname "Fiona"
-                 :age 20}))
-(deref ciri) ; GET value
-@ciri        ; GET value
-(swap! ciri update :age inc) ; UPDATE age
-(reset! ciri {:name "Cirilla", ; SET ciri
-              :lastname "Fiona",
-              :age 22})
-#+end_src
-**** Observers
-- observers: for atoms, triggered when swap! or reset! are used
-#+begin_src clojure
-(def a (atom))
-(add-watch a :logger
-  (fn [key the-atom old-value new-value]
-    (println "Key: " key "Old:" old-value "New:" new-value)))
-(remove-watch a :logger)
-#+end_src
-**** Volatiles
-- like atoms, without valiators or observers
-- volatile!, volatile?, deref, vswap!, vreset!
-** 4 Tooling & Compiler
-*** 4.1 Build
-| Target  | Print                       | Entrypoint                 |   |   |
-|---------+-----------------------------+----------------------------+---+---|
-| Node    | (nodejs/enable-util-print!) | (set! *main-cli-fn* -main) |   |   |
-| Browser | (enable-console-print!)     | NO                         |   |   |
-- Compiler tooling: leiningen, cljsbuild, boot
-- ~execution environment~, where JavaScript code can executed.
-  - Web Browser (firefox, chrome, etc...)
-  - nodejs (needs an entry point)
-  - rhino (jdk6+)
-  - nashorn (jdk8+)
-  - qtquick (qt)
-- Basic project structure:
-  * deps.edn: define the version of clojure/script
-  * build.clj: define input and output dir, target environment, entrypoint
-  * src/myapp/core.cljs
-- Build:
-  > clojure build.clj
-  > node main.js
-- cljs.build.api/build
-  cljs.build.api/watch
-- Build options:
-  ~:source-map~ connects the source to the generated javascript, for errors
-  ~:optimizations~ closure opts are none, whitespace, simple, advanced
-- Compilation process:
-  - Reader phase, static analysis?
-  - Clojuscript compiler emits javascript code
-  - Closure Compiler takes the JS code and does some optimizations
-- *clj* uses rlwrap unlike *clojure* cli command
-- Optimizations levels: none, whitespace, simple, advanced
-*** 4.2 REPL
-| Env     | deps | DOM | Completion |   |
-|---------+------+-----+------------+---|
-| nashorn |      |     |            |   |
-| nodejs  |      | NO  |            |   |
-| browser |      |     |            |   |
-| rebel   | YES  |     | YES        |   |
-- browser: needs a browser to run the js code connect back to the CLI repl.
-- rebel: works over node
-*** 4.3 Google Closure
-- Using a module of the Closure library
-#+begin_src clojure
-(ns yourapp.core
-  (:require [goog.dom :as dom]))
-
-(def element (dom/getElement "body"))
-#+end_src
-- Using modules that behave like a class or object
-#+begin_src clojure
-(ns yourapp.core
-  (:import goog.History))
-
-(def instance (History.))
-#+end_src
-- :require are used for user defined types (classes)
-- As a Javascript library, cross-browser functions for DOM
-*** 4.3 Dependency managment
-- src/ : Can contain clojurescript ns OR javascript goog closure compatible modules
-- :externs (?)
-**** Clojure Libraries https://clojars.org/
-  - Add into dep.edn
-  - (require)
-**** Javascript Libraries https://cljsjs.github.io/
-  - Add into dep.edn
-  - (require) but not alias
-    - call it from the js namespace (js/call-it)
-  - (require) and alias
-    - call just with the alias
-**** figwheel
-  - add into dep.edn
-  - add into tools.clj
-  - It does:
-    - return a repl with completion
-    - starts a ring server on :output-dir
-    - with code reloading
-**** Unit Testing
-- Advantage: ClojureScript tends to use plain data instead of complex objects
-- In namespace *cljs.test*, also *test.check*
-- main.cljs
-- :target :nodejs
-- Separate b/build
-  - Added b/inputs "src" "test"
-  - Different :main, :output-to/dir
-- Separate b/watch
-- Async Testing???
-** 5 Language (advanced topics)
-*** 5.1 Transducers
-- map,filter,mapcat can be written as reduce funtions
-- when you have several transformations (map, filter, mapcat) you can:
-  - ~comp~ the ~partial~ of each: but each step will generate intermediate results that will be dropped
-  - ~comp~ the 1 arg of each: they return the transducer version of it
-**** Transients
-- map,vectors and sets have a transient counterpart
-*** 5.5 CSP (with core.async)
-**** Channels
-- chan, put!, take!, close!
-- if we close a channel with pending takes, it returns nil
-- channels ~limit~ of 1024 take/put pending per channel
-- ~buffers~ extend it by adding a queue
-* Book: Reactive with ClojureScript Recipies
+* Book: 2017 | Reactive with ClojureScript Recipies
 ** 2 - ClojureScript
 *** Elements
 |               | Javascript              | Clojure                       |
@@ -531,13 +123,65 @@ cannot be changed outside their namespace
    "mouseover"
    #(.alert js/window "mouse detected")
    false)
-* Book: Etudes for Clojurescript
+* Book: 2016 | Etudes for Clojurescript
 *** 1
 - (in 'formulas.core)
 - (require 'formulas.core :reload)
 - (.pow js/Math NUMBER POWER)
   (js/Math.pow NUMBER POWER)
-* Book: Web development with Clojure - 2nd Edition
+* Book: 2016 | Clojure In Action
+| Type of Polymorphism | https://en.wikipedia.org/wiki/Parametric_polymorphism |
+|                      | https://en.wikipedia.org/wiki/Ad_hoc_polymorphism     |
+|                      | https://en.wikipedia.org/wiki/Subtyping               |
+|                      | https://en.wikipedia.org/wiki/Structural_type_system  |
+|----------------------+-------------------------------------------------------|
+|                      |                                                       |
+** 4 Multimethod Polymorphism
+*** Polymorphism and his types
+- "In a certain sense polymorphism provides the ability to create your own abstractions."
+- Common Types of Polymorphism
+  1) Parametric: clojure's collections or map, reduce, get, conj...
+     1(one) behaviour
+     with type variables instantiated to particular types when needed
+     sometimes calles *generic functions* and *generic datatypes*
+  2) Ad Hoc
+     many behaviours, one for each type
+
+          aka *function overloading* or *operator overloading*
+     NOT a fundamental feature of type systems
+  3) Subtype
+- In Clojure, if you want to create your own PP function, you need to look for other kinds of polymorphism.
+  Polymorphism is often a matter of perspective.
+- Example: Ad-hoc Polymorphic function, _closed dispatch_
+  #+begin_src clojure
+    (defn ad-hoc-type-name [thing]
+      (condp = (type thing);; throws exception on unmatched
+        java.lang.String             "string"
+        clojure.langPersistentVector "vector"))
+  #+end_src
+- Example: Ad-hoc Polymorphic function, _open dispatch_
+  #+begin_src clojure
+    (def type-namer-implementation
+      {java.lang.String              (fn [thing] "string")
+       clojure.lang.PersistentVector (fn [thing] "vector")})
+    (defn open-ad-hoc-type-namer [thing]
+      (let [dispatch-value (type thing)]
+        (if-let [implementation
+                 (get type-namer-implementations dispatch-value)]
+          (implementation thing)
+          (throw (IllegalArgumentException
+                  (str "No implementation found for " dispatch-value))))))
+  #+end_src
+- Subtype Polymorphism
+  - When the types (not functions) are polymorphic
+  - Expressed in OO, as class or interface hierarchies
+  - A form of SP is called _structural subtyping_
+    (me) https://youtu.be/MbZoQlmQaWQ?t=452
+    Exists in TS, Go, OCaml
+    It doesn't care abou the types but the structure and constraints of the types
+*** Polymorphism using multimethods
+*** Summary
+* Book: 2022 | Web development with Clojure - 2nd Edition
 ** Introduction
     - Focus on the *Luminous* stach
 ** 1 Getting your feet wet
@@ -655,3 +299,56 @@ SELECT * from guestbook
    - extends base.html and process the :doc through markdown
 ** resources/html/home.html
    - Setup to use Bulma CSS
+* Book: 2022 | Clojure: The Essential Reference MEAP v28
+|                         | http://manifesto.softwarecraftsmanship.org/#/es                              |
+|                         | https://cognitect.com/blog/2016/1/28/state-of-clojure-2015-survey-results    |
+| NET runtime             | https://github.com/clojure/clojure-clr                                       |
+| JS runtime              | https://clojurescript.org/                                                   |
+| CLR history             | https://soundcloud.com/defn-771544745/48-david-miller-and-clojure-on-the-clr |
+| STM support is built-in | https://en.wikipedia.org/wiki/Software_transactional_memory#Clojure          |
+| STM support is built-in | https://clojure.org/reference/refs                                           |
+** 1
+- 2007 CLR removed
+  - https://soundcloud.com/defn-771544745/48-david-miller-and-clojure-on-the-clr
+  - To see the initial CLR effort
+    git rev-list --reverse --format="- %B %cd" -n 1 HEAD — src/cli/runtime.
+  - CLR removed in commit b6db84aea2db2ddebcef58918971258464cbf46f
+- 2009 Community adoption of the CLR from Rich Hickey
+- 2011 Clojurescript announced
+- Parts of the Standard Library
+  1) clojure.core, always available without need to specify any namespace
+  2) other clojure.*
+  3) Java SDK
+- Missing from the Clojure STL, are solutions already provided by java
+  - Cryptography
+  - Low-level networking
+  - HTTP
+  - 2D Graphics
+- All other non-core namespaces
+  1) Core Support
+     - clojure.template
+     - clojure.string
+     - clojure.pprint
+     - clojure.set
+     - clojure.stacktrace
+  2) REPL
+     - clojure.main
+     - clojure.repl
+     - clojure.core.server
+  3) General Support
+     - clojure.walk
+     - clojure.zip
+     - clojure.sh
+     - clojure.xml
+     - clojure.test
+     - clojure.core.reducers
+  4) Data Serialization
+     - clojure.edn
+     - clojure.instant
+     - clojure.data
+  5) Java
+     - clojure.java.javadoc
+     - clojure.java.browse
+     - clojure.inspector
+     - clojure.reflect
+     - clojure.java.io
