@@ -1,0 +1,105 @@
+* 2022
+- Clojure Video https://www.youtube.com/playlist?list=PLbPrugU2oQ8W5qGiiiFJRlQ8vZ8AZXlG8
+- GO https://github.com/lukechampine/advent/
+- Clojure https://github.com/unclebob/AdventOfCode2022
+- Clojure https://github.com/borkdude/advent-of-babashka
+- Kotlin (beatiful solution)
+  https://github.com/ClouddJR/advent-of-code-2022/blob/main/src/main/kotlin/com/clouddjr/advent2022/Day18.kt
+- Ocaml
+  https://github.com/quernd/Advent-of-Code/blob/main/2022/07/day07.ml
+  https://github.com/hellopatrick/xmas/blob/v2022/day07/main.ml
+  https://github.com/DrearyLisper/aoc-2022
+- Ocaml parser combinator
+  https://github.com/inhabitedtype/angstrom
+** Big boys
+#+begin_src
+url:    https://0x0.st/odUF.7z
+big boy #1
+bytes:  107M
+elves:  ~1M
+silver: 4368180
+gold:   12967759
+
+big boy #2:
+bytes:  92M
+insns:  24M
+silver: 119988948
+gold:   119990335
+
+big boy #3:
+bytes:  65M
+sacks:  5M
+silver: 119031205
+gold:   31562325
+
+big boy #7
+url:    https://0x0.st/odZd.txt.7z
+bytes:  13M
+dirs:   100K
+files:  ~66M
+total disk space is 3000000000
+you need 700000000 for the update
+silver: 2414990429
+gold:   923977224
+url:    https://0x0.st/odNV.txt.7z
+bytes:  13M
+dirs:   100K
+files:  ~1M
+disk:   3000000000
+update: 700000000
+silver: 2414990429
+gold:   170301725
+
+big boy #8
+url:    https://0x0.st/od1i.txt.7z
+bytes:  100M
+grid:   9999x9999
+silver: 116882
+gold:   6852600
+
+#9
+Bigboy: https://0x0.st/oduK.txt.xz
+Part 1: 252139
+Part 2: 82629770164920
+Megaboy: https://0x0.st/odu_.txt.xz
+Part 1: 579961
+Part 2: 1874276660911504
+
+BigBoy Day10:
+https://files.catbox.moe/lyx795.zip
+Easily done with .ppm format
+
+------------------------------
+#11
+http://0x0.st/od72.txt.xz
+106033356
+196907379245217
+
+------------------------------
+#12
+    A reddit big boy:
+    >https://old.reddit.com/r/adventofcode/comments/zjypk4/2022_day_12_extra_large_input/
+
+    For the 30mb:
+
+    $ time ../local/src/aoc/aoc input-2022-12-bb-reddit.txt 
+    -- "input-2022-12-bb-reddit.txt"
+    2616490
+    2507471
+
+    real    0m11.599s
+    user    0m11.246s
+    sys     0m0.267s
+
+------------------------------
+#15
+Here's a shitty bigboy FOR PART 2 ONLY (the beacon positions don't make sense, the ones given are just placeholders so that you can calculate the signal ranges as you would normally).
+10 million input lines, so the file is big (like 130MB zipped, 700MB unzipped)
+
+http://0x0.st/ongk.tar.gz
+Result: 591420099908
+
+
+My times are 0.64s not including parsing, 3.8s including parsing.
+
+    #+end_src
