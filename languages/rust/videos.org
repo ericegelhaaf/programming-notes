@@ -1,0 +1,126 @@
+- Course: Rust analyzer https://www.youtube.com/watch?v=I3RXottNwk0&list=PLhb66M_x9UmrqXhQuIpWC5VgTdrGxMx3y
+- Implementing TCP in Rust (part 1) https://www.youtube.com/watch?v=bzja9fQWzdA
+- https://www.youtube.com/c/timClicks/videos
+- Jon Gjengset https://www.youtube.com/channel/UC_iD0xppBwwsrM9DegC5cQQ/
+- Crazcalm's Tech Stack https://www.youtube.com/channel/UCfgXeSss8LaDtlK0ohwUX_w
+* 17 | Rust 101                         | E. Dunham
+  https://www.youtube.com/watch?v=FMqydRampuo
+- "Go is a SysAdmins programming language, Rust is language for system level programming."
+- Compiler can output:
+  - LLVM IR
+  - ASM
+- Macro syntax
+  - "shorthand for funftions with variable number of arguments." ???????
+  - end with "!", ex: println!
+- Rust team compiles all public projects (?) and PR breaking changes on code in Stable to those projects.
+* 18 | Rust Programming Techniques      | Nicholas Cameron
+  https://www.youtube.com/watch?v=vqavdUGKeb4
+- A rust a reference is a pointer, BUT references can never be NULL
+- *match* the compiler checks that the matching type gets ~exhausted~
+- *if let* on the other hand does ~non-exhaustive~ pattern matching
+- A macro can hide a return
+* 19 | Why would a python programmer learn rust when there are no jobs in it
+  https://www.youtube.com/watch?v=IYLf8lUqR40
+- C++ has no stable ABI
+- Enumerated types can contain variables
+- Structures+Traits VS Objects
+- No exceptions
+- Does NOT support inheritance
+- Use the *has a* not the *is a* model
+- OO - Binding a method to a structure
+  #+begin_src rust
+  struct Point {
+    x: f64,
+    y: f64,
+  }
+  // A freestanding function - Borrowed point to a string
+  fn point_to_string(point: &Point) -> String { ... }
+  // an "inherent impl"
+  impl Point {
+    // automatically borrows the Point
+    fn to_string(&self) -> String { ... }
+  }
+  #+end_src
+- OO - Traits: A common method to multiple types
+  #+begin_src rust
+  trait Hash {
+    fn hash(&self) -> u64;
+  }
+  impl Hash for bool {
+    fn hash(&self) -> u64 {
+      if *self { 0 } else { 1 }
+    }
+  }
+  impl Hash for i64 {
+    fn hash(&self) -> u64 {
+      *self as u64
+    }
+  }
+  #+end_src
+* 19 | All about rust                   | Microsoft Developer
+  https://www.youtube.com/watch?v=FYGS2q1bljE
+- "Cost on the compiler"
+- linkerd "proxy" is written in Rust, the rest (cli, webservice) in Go
+- Libraries:
+  | Tokio | async run-time (similar to getty in Go) |
+  | Hyper | http library that uses Tokio            |
+  | Tower | service framework                       |
+- Microsoft IOT does some rust: https://github.com/Azure/iotedge/
+* 19 | Build a cryptocurrency!          | Geeklaunch
+** Blockchain in Rust #01: Blocks & Hashing
+https://www.youtube.com/watch?v=vJdT05zl6jk
+#+begin_src rust
+  use supper:**; // import all files on project
+  pub struct Block {
+    pub field1: u32,
+  }
+  [u8; 16]
+  [0; 16]
+#+end_src
+- Create      [u8; 16]
+  Instantiate [0; 16]
+- use supper:**;
+* 20 | Considering Rust                 | Jon Gjengset
+  https://www.youtube.com/watch?v=DnT-LUQgc7s
+- No GC, no runtime
+- Compiler guarantees
+  - no data races
+  - no segfautls
+  - no bufferoverflows
+  - no nullpointers
+- Zero-cost abstraction
+  - eg: in java additional interfaces or classes come at a cost
+- Generics
+  #+begin_src rust
+    struct MyVect<T> {
+        // . . .
+    }
+    impl<T> MyVect<T> {
+      pub fn find<P>(&self, predicate: P) -> Option<&T>
+       where P: Fn(&T) -> bool
+        {
+        for v in self {
+          if predicate(v) {
+            return Some(v);
+          }
+        }
+        None
+      }
+    }
+  #+end_src
+- Algebraic data types: A type that contains other types
+- ? "try operator" a error match, catch error
+- FREE ffi calls, given _there is no interpreter_ that needs to be noticed of an external call
+- unsafe{} free compiler checks
+- bindgen  - generates rust code from C header
+  cbindgen - generates a header file that you can use from other languages
+- tools that work with rust: perf, gdb/lldb, valgrind, llvm sanitizers
+* 20 | 12 Things to Help You Learn Rust | Gary explains
+https://www.youtube.com/watch?v=a8abW3RlOn8
+- println!
+  - basic:      {}
+  - alias(?:    {valx}
+  - debug:      {:?}
+  - positional: {0}
+- ALL variables are immutable by default
+- HOWEVER, shadowing of variables with the same name is possible with immutable vars

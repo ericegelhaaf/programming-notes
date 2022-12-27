@@ -1,3 +1,5 @@
+- https://github.com/mirage/ocaml-freestanding
+- MirageOS smpt https://github.com/dinosaure/ptt-deployer
 - AWS https://mirage.io/docs/xen-boot
 - (HN) The BitCoin Piñata https://news.ycombinator.com/item?id=9027743
 - Podcast Episode
@@ -8,15 +10,15 @@
 - Nomadic Labs Research Seminars #16 | Package Tezos as a MirageOS Unikernel
   https://www.youtube.com/watch?v=5Xc1hqT9Q6A
 - https://web.archive.org/web/20190903190945/http://roadtounikernels.myriabit.com/
-** Video: 2014 - Unikernels: Who, What, Where, When, Why - Adam Wick, Galois
+* Video: 2014 - Unikernels: Who, What, Where, When, Why - Adam Wick, Galois
    https://www.youtube.com/watch?v=oHcHTFleNtg
-** Video: 2015 - Rainbows and Unikernels - Garret Smith
+* Video: 2015 - Rainbows and Unikernels - Garret Smith
   https://www.youtube.com/watch?v=cUvNths_5RA
   - OS + APP = Unikernel
   - Single Process
   - Singel Address Space
   - Resume 17:00
-** Video: Unikernels: the rise of the library hypervisor in MirageOS - https://www.youtube.com/watch?v=dn4ARS4lDlQ
+* Video: Unikernels: the rise of the library hypervisor in MirageOS - https://www.youtube.com/watch?v=dn4ARS4lDlQ
 - slides: https://www.slideshare.net/Docker/unikernels-the-rise-of-the-library-hypervisor-in-mirageos
 - Hypervisors:
   - run full OS emulation
@@ -25,6 +27,6 @@
   - OS broken down into individual "libraries" (tcp/ip, device drivers, schedulers)
   - linked by conf file and a bootloader
 - RESUME: 8:00
-** Video: How to make a Netcat (with OCaml/MirageOS) - Oskar M Grande
+* Video: How to make a Netcat (with OCaml/MirageOS) - Oskar M Grande
   - https://www.youtube.com/watch?v=37cLNsnLozE
     https://github.com/musha68k/chill-netcat

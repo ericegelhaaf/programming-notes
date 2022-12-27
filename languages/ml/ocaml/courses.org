@@ -1,0 +1,770 @@
+- Course: Dan Ghica's Foundations of Computer Science https://vimeo.com/user8856528/videos
+- Course: John Whitington’s Videos https://vimeo.com/user20888710/videos
+- Course: 2013 - Washington University https://homes.cs.washington.edu/~djg/teachingMaterials/gpl/lectures/
+- Course: Columbia Proffesor http://www.cs.columbia.edu/~sedwards/classes/
+- Course: 2021 - Singapore - Introductory Data Structures and Algorithms
+  https://ilyasergey.net/YSC2229/index.html
+  Example https://github.com/ysc2229/ocaml-graphics-demo
+  Code https://github.com/ysc2229/
+  Student? https://tanrobby.github.io/teaching/ync_algo_intro/index.html
+* Course: 2021 | CS3110 | OCaml Programming: Correct + Efficient + Beautiful
+  https://cs3110.github.io/textbook/cover.html
+  https://www.youtube.com/playlist?list=PLre5AT9JnKShBOPeuiD9b-I4XROIJhkIU
+** Chapter 2
+- The =let= definition is not an expression in itself,
+  you cannot use it as a subexpression, like (let z = 1) + 2
+- The =let in= is an expression
+- On the utop/toplevel =let= definitions are understand as expression with an implicit *in*
+  - <> tells us is a unprintable value
+- OCaml does NOT have multi argument functions
+  - only have 1 argument functions
+  - Is just syntax-sugar for nested anonymous 1 argument functions
+- Variables (known value) VS Type Variables (unknown type)
+  Parametric Polymorphism
+- (*) when writting this operator as a function utop thinks is a comment, use instead:
+  ( * )
+- Declaring an infix operator
+  let ( <^> ) x y = max x y
+  1 <^> 2
+- Application Operators
+  Application (@@) (like $ in Haskell, to avoid parens, it changes the precedence rules)
+  Reverse Application (|>)
+** Chapter 3
+- types are best read, right to left
+  int list list, a list of list of integers
+- List is single linked list
+- [] is pronounced list (here too)
+- :: is pronounced cons
+- utop
+  #use "file.ml";;
+- utop, is not a good practice to repeatedly "#use" the same file
+  close utop and #use it again
+- =with= for record copy, cannot add new fields
+  { e with f1 = e1 }
+- =fst= only works with tuples, if we want to work with triplets we need to define our own
+- =#trace <function>=, shows you the calls of a function
+- =ABC= always be compiling
+  1) use dummy values
+  2) or raise and exception
+     failWith "TODO"
+     assert false
+- =match=, an exception *Match_failure* is raised if no patterns match
+- =function= syntax-sugar for match, it will take the last argument of the function
+  #+begin_src ocaml
+let f x y = function
+  | p1 -> e1
+  | p2 -> e2
+  #+end_src
+*** =Variants=
+- Constant if it carries NO data, Non-Constant if it carries data
+- Definition:
+  Cn being the *constructs* (aka tags), capitalized
+  t1 being the data *carried* by the constructor
+  #+begin_src ocaml
+  type t =
+    | C1 of t1
+    | ...
+    | Cn of tn
+  #+end_src
+*** =ADT= Algebraic Data Types
+- Another name for variants
+- They allow the combination of sum and products
+- Defined by the type of conjuction of the data
+  (OR variants, AND records or tuples)
+  (sum types  , product types)
+  (tag union  , cartesian product)
+- Variants gets us *heterogeneus* lists, a list of possible 2 different types
+- Idiomatic: Adding an uppercase letter to deal with different variant types with the same name.
+- Idiomatic: <result>_of_<~type> function naming that convert one type to another
+   instead of <~type>_to_<result>
+*** =Recursive Parameterized Variants=
+- Can be recursive and can be parametrized
+- You can think of them as "functions at the type level", from type to type.
+- Example: own type that works like, List.
+  [] and :: are just constructors
+  #+begin_src ocaml
+  type 'a mylist =
+    | []
+    | (::) of 'a * 'a mylist
+ let rec length = function
+    | [] -> 0
+    | _ :: t -> 1 + length t
+  #+end_src
+*** =Option=
+- A way to think about them is a *box*
+- Nested =match= are better with =begin/end=
+*** =Exceptions=
+- Are variants
+- type exn
+- All exceptions are subtype of it
+- exn is a built-in *extensible* variant,
+  meaning that his constructs can be define later by us
+- Predefined exceptions
+  | exception       | of     | helper      | return |   |
+  |-----------------+--------+-------------+--------+---|
+  | Failure         | string | failwith    | 'a     |   |
+  | InvalidArgument | string | invalid_arg | 'a     |   |
+*** Variant Example: Binary Trees
+Binary Tree VS List, they have an extra child
+#+begin_src ocaml
+type 'a mylist =
+  | Nil
+  | Cons of 'a * 'a mylist
+type 'a tree =
+  | Leaf
+  | Node of 'a * 'a tree * 'a tree
+#+end_src
+** Chapter 4
+- Partial application: You can leave off the argument of a function,
+  #+begin_src ocaml
+let double x = 2 * x
+let twice f x = f (f x)
+let quad x = twice double x
+let quad = twice double
+  #+end_src
+- fold       init op
+  fold_right f    acc
+  fold_left  acc  f
+- fold_left is tail-recursive
+** Chapter 5
+- https://informationisbeautiful.net/visualizations/million-lines-of-code/
+- Features for modularity
+  |---------------+--------------------+------------------------|
+  |               | OCaml              | Java                   |
+  |---------------+--------------------+------------------------|
+  | Namespaces    | struct             | Classes, packages      |
+  | Interfaces    | sig                | Interfaces             |
+  | Encapsulation | Abstract Types     | Public, private        |
+  | Code reuse    | Functors, includes | Subtyping, inheritance |
+  |---------------+--------------------+------------------------|
+- Structures give us hierarchical namespaces
+  - Can help to have the same function work with different types
+    Just put the function and type in a *module/struct*
+- Functional Datastructure: one that there are no updates
+  Persistant, rather than ephemeral
+- =module= definition syntax is similar to the one of *let*
+  still module are not like any other value (cannot bind, pass to function, or return from function)
+- Example: to get a queue with constant time for enqueue and peek at the same time
+  1) define a queue as a record of 2 lists a `front` and a `back`
+  2) front is a normal list
+  3) back is a list reversed
+- *Exceptions* makes it easier to pipeline (|>) operations
+- *Options* makes it a little bit harder (except with bind)
+- ( >>| ), Option.map
+  applies the function to an Option element
+  #+begin_src ocaml
+  let ( >>| ) opt f =
+    match opt with
+    | None -> None
+    | Some x -> Some (f x)
+  #+end_src
+- ( >>= ), Option.bind
+  it takes an option, but it does NOT add an extra level of option around
+  #+begin_src ocaml
+  let ( >>= ) opt f =
+    match opt with
+    | None -> None
+    | Some x -> f x
+  #+end_src
+- =sig= and =val= for defining interfaces/signatures
+  we define a =module type= since is the type of a module NOT the value
+  functions NOT defined in the *sig* but present on the *struct* will be unaccesible (private)
+  #+begin_src ocaml
+  module type Fact = sig
+    (** documentation comment *)
+    val fact : int -> int
+  end
+  (* We can define modules that have the type Fact *)
+  module RecursiveFact : Fact = struct
+    let rec fact n =
+      if n = 0 then 1 else
+        n * fact (n - 1)
+  end
+  #+end_src
+- can also declare a new module
+  - using a module type sig name (Queue)
+  - and using the struct definition (ListQueueImpl)
+  #+begin_src ocaml
+  module ListQueue : Queue = ListQueueImpl
+  #+end_src
+- type checker ensures that
+  1) Signature Matching: between the sig and the module definition
+  2) Encapsulation: only things in sig can be accessed outside the module
+- Abstract Data Types
+  - Help use use the same signature for different struct implementations
+  - Signatures help encapsulate types too
+  - We can then, NOT specify the actual type on the *sig*
+  - When we seal it, the outside world won't know the implementation type
+    Will only know the type of *sig* not the *struct*
+- =.mli=, no need to use =module type= or =sig=
+  the .mli would have the public/sig (without explicitly declaring it)
+  the .ml  would have the private/implementation
+- Compilation unit = .ml + .mli
+- =include=,
+  we include all the contents of another *sig* or *struct* into the new one being defined
+  make sure to include the unsealed versions of them
+  >> kind of like inheriting the fields
+- =include= is not the same as =open=
+  open imports, doesn't exports
+  include import, and exports
+- =functors= takes a module as input and outputs a module
+  always have to specify the type of input module for the functor
+  #+begin_src ocaml
+  module type X = sig
+    val x : int
+  end
+
+  module A : X = struxt
+    let x = 0
+  end
+
+  module IncX = functor (M : X) -> struct
+    let x = M.x + 1
+  end
+  (* or *)
+  module IncX (M : X) = struct
+    let x = M.x + 1
+  end
+  (* USE it, can't just IncX(A) *)
+  module B = IncX(A)
+  #+end_src
+- =Map=, binary balanced binary trees (not hashmaps)
+  #+NAME: using the functor Map.Make
+  #+begin_src ocaml
+type day = Mon | Tue | Wed | Thu | Fri | Sat | Sun
+
+let int_of_day = function
+  | Mon -> 1
+  | Tue -> 2
+  | Wed -> 3
+  | Thu -> 4
+  | Fri -> 5
+  | Sat -> 6
+  | Sun -> 7
+
+module DayKey = struct
+  type t = day
+  let compare day1 day2 =
+    int_of_day day1 - int_of_day day2
+end
+
+module DayMap = Map.Make(DayKey)
+  #+end_src
+  - like TreeMap in java
+  - To create map, call Make
+    - which takes a struct, so you pass a module
+      1) that has a type for the keys
+      2) compare functions for the keys
+** Chapter 6
+- Client/Implementer, people who deal with the the *spec*
+  - Agree on *Precondition and Postconditions* in a specification comment
+  - Notes on performance (?
+- (Docstring) specification format example
+  #+begin_src ocaml
+(** [f x] is ... aka one line summary, sometimes the postcondition
+    Examples: ... boundary cases
+    - [sort [1;3;2;3]] is [[1;2;3;3]].
+    - [sort []] is [[]].
+    Requires: ... aka precondition
+    Raises: [Failure "hd"] if [lst] .. also a postcondition
+      is empty. *)
+val f : t -> u
+  #+end_src
+- You do NOT need to assert the precondition
+- .ml  = Data Structure
+  .mli = Data Abstraction
+- When documenting the type .t of the =struct= implementation
+  - AF =Abstraction Function=, how to *interpret* the abstracted data
+    Implementation: Generally no, but a mathemathical idea.
+    Except on .to_string functions, or any that converts data to a string.
+  - RI =Representation Invariant=, which values are the *meaninful*
+    Distinguish between valid and invalid concrete values.
+    It might be not respected, while doing a concrete operation.
+    - Implementation: yes like with a *rep_ok* function to check before and after a function,
+      otherwise failwith
+    - DEBUG: rep_ok can be used for debug, in prod use an identity function
+      and in dev use the full version
+    #+begin_src ocaml
+    let rep_ok (x : t) : t =
+      if (* check RI *) then t
+      else failwith "RI"
+    #+end_src
+- Validation
+  1) Validation: social, methodogical, technological, mathematical
+  2) Testing
+  3) Debugging
+  4) Defensive Programming
+- Testing vs Verification
+  - Verification, can demostrate that it will work with ALL inputs
+- Human Error -> Fault -> Failure (something goes wrong)
+  a bug
+- BlackBox Testing
+  1) Typical Cases
+  2) Boundary Cases
+  3) Paths through spec:
+     1) representative values that generate all possible outputs (bool or one of both)
+     2) Different ways to satisfy the precondition(s)
+     3) representative of raising exceptions and not
+  4) Data Abstractions:
+     consumer functions <-> producer functions
+     test all posible interactions between
+     size <-> add 1
+     size <-> empty
+- Glass Box Testing: supplements blackbox testing
+  Coverage, more than one can be achieved
+  * Statement: evaluate every statement/expression
+  * Condition: evaluate every boolean/pattern match to each possible value
+  * Path: every possible execution path (branch and sub-branch)
+- Glass Box: look out for
+  1) base cases of recursive function
+  2) recursive calls in recursive functions
+  3) every place a exception might be raised
+- Glass Box: *bisect* is a tool to know code-coverage
+  https://github.com/aantron/bisect_ppx
+  #+NAME: leap_year_test.ml
+  #+begin_src ocaml
+open OUnit2
+open Leap_year
+
+let leap_year_test (n, y, b) =
+  n >:: fun _ -> assert_equal b (leap_year y)
+
+let tests = List.map leap_year_test [
+  "non leap year", 2010, false;
+  "non-centennial", 2020, true;
+  "quadracentennial", 2000, true;
+]
+
+let suite = "leap year" >::: tests
+let _ = run_test_tt_main suite
+  #+end_src
+  #+NAME: Makefile TODO
+  #+begin_src makefile
+test:
+  BISECT_COVERAGE=YES $(OCAMLBUILD) -tag 'debug' -use-ocamlfind -plugin-tag
+
+bisect: clen test
+  bisect-ppx-report html
+
+clean:
+  ocamlbuild -clean
+  rm -rf bisect*.coverage _coverage
+    #+end_src
+- Randomized testing (Fuzzing):
+  Generate random input, and feed it to the program.
+  #+NAME: leap_year_test.ml
+  #+begin_src ocaml
+  ...
+  let mult4_or_non_leap_year y =
+    y mod 4 == 0 || not (leap_year y)
+  let random_non_4s =
+    QCheck.Test.make ~count:1000
+      ~name: "non-multiples of 4 cannot be leap years"
+      QCheck.(1 -- 3000)
+      mult4_or_non_leap_year
+
+  let mult400_or_non_leap_year y =
+    y mod 400 = 0 || not (leap_year y)
+  let random_100s =
+    QCheck.Test.make ~count:1000
+    ~name:"100s cannot be leap years unless also"
+    QCheck.(map(( * ) 100) (1 -- 30))
+    mult400_or_non_leap_year
+
+  let qcheck_tests = List.map QCheck_onuit.to_ounit2 [
+    random_non4s;
+    random_100s;
+  ]
+  let suite = "leap years" >::: List.flatten [
+    tests;
+    qcheck_tests;
+  ]
+  ...
+  #+end_src
+- Debugging: Follow the scientific method
+  1) Formulate a falsifiable hypothesis
+  2) create and experiment that can refute that hypothesis
+  3) run the experiment
+  4) keep a lab notebook
+  5) if everything else fails, question the sanity of the whole thing
+- let ( << ) = compose
+- Induction, example on natural numbers
+  - Base case:      n = 0
+    Show: P(0)
+  - Inductive case: n = k + 1
+    IH:   P(k) (inductive hypothesis, we can have more than 1)
+    Show: P(k+1)
+- Total Correctness = partial correctness + termination
+- https://en.wikipedia.org/wiki/Halting_problem
+  https://www.youtube.com/watch?v=Iapz9pb5eRU
+** Chapter 7
+- =ref=, is a *pointer* to a typed location in memory
+  - immutable, binding of a variable to a pointer
+  - mutable, contents of a memory location
+  - (!) being a derefence operator
+  - =ref= is used for both the type and the function that creates
+  - locations are created by ref
+  - locations are values, NOT expressions
+    - no addresses arithmetic
+    - no direct creation of addresses
+- =ignore=, used to ignore a value of an expression
+  to avoid warnings on e1 if not returns a ()
+  ignore: 'a -> unit
+  e1;e2
+  ignore e1; e2
+- aliasing, when having a second variable point to the same location of another ref
+- (==) physical equality
+  (!=)
+- (=) structural equality, contents (aka structure)
+  (<>)
+- Example: counter, lambda
+  #+begin_src ocaml
+  let next =
+    let counter = ref 0 in
+    fun () ->
+      incr counter;
+      !counter
+  next () (* 1 *)
+  next () (* 2 *)
+  #+end_src
+- Example: linked list
+  #+NAME: two ways of represent a node, ref/mutable
+  #+begin_src ocaml
+    type 'a node = {
+      value : 'a;
+      mutable next : 'a node;
+    }
+
+    type 'a node = {
+      value : 'a;
+      next : 'a node ref;
+    }
+  #+end_src
+  #+NAME: using an option
+  #+begin_src ocaml
+    (** An ['a node] is a node of a mutable singly-linked list.
+        It contains a value of type ['a] and optionally has
+        a pointer to the next node. *)
+    type 'a node = {
+      value : 'a;
+      mutable next : 'a node option;
+    }
+    (** An ['a mlist] is a mutable singly-linked list with
+        elements of type ['a]. *)
+    type a mlist = {
+      mutable first : 'a node option;
+    }
+  #+end_src
+** Chapter 8
+- (,) when writing 2 type variable on a type param constructor
+  (*) when we define a list of a type, we can't use comma, so use (*)
+  #+begin_src ocaml
+    let bindings : ('k, 'v) t -> ('k * 'v) list
+  #+end_src
+- TTD
+  #+NAME: maps.ml
+  #+begin_src ocaml
+    module AssocListMap : Map = struct
+      type ('k, 'v) t = unit
+      let insert k v m =
+        failwith "uninplemented"
+    end
+  #+end_src
+  #+NAME: maps_test.ml, template
+  #+begin_src ocaml
+    open OUnit2
+    open Maps
+    let assoc_tests = [
+    ]
+    let suite "maps suite" >::: assoc_tests
+    let _ = run_test_tt_main suite
+  #+end_src
+- Tests: "There are only 3 numbers, zero, one and many"
+- Example: DAT Direct Access Table, just an array
+- When creating values of a Mutable DS, we need a function to create it, not a value
+- Map Implementation
+  |                    | insert   | find     | remove   |
+  |--------------------+----------+----------+----------|
+  | Alist              | O(1)     | O(n)     | O(n      |
+  | DAT                | O(1)     | O(1)     | O(1)     |
+  | Hash+Chaining      | O(n)**   | O(1)*    | O(n)**   |
+  | Red-Black Map Tree | O(log n) | O(log n) | O(log n) |
+  |--------------------+----------+----------+----------|
+  * expected
+  ** amortized O(1)
+- DAT, keys must be integers, fast, high space
+- Alist, any keys, but slow
+- Hashtbl
+  #+begin_src ocaml
+  type ('k, 'v) t = {
+    mutable buckets (* mutable to allow resize in case of high load factor *)
+      : ('k * 'v) list array
+  }
+  #+end_src
+  - Expected bucket length, aka the constant part of the O(?) aka "load factor"
+    = (#bindings in hash) / (#buckets in array)
+  - maps keys to integers, at O(1) time
+  - mapping accepts collisions
+  - *Bucket* integer output of a hash
+  - *Probing* dealing with the collision by moving somewhere else
+  - *Chaining* storing multiple collision values in a list in the bucket
+- Steps of a hash function
+  1) serialization: string -> bytes (injective)
+  2) diffussion: bytes -> int (maybe injective)
+     - modular        hashing
+     - multiplicative hashing
+     - universal      hashing
+     - cryptographic  hashing
+  3) compression: int -> int (from a wide range to small one)
+- Hashtbl.hash
+  - Does the *serialization*
+  - Does the *diffusion* (in native C code "MurmurHash")
+- Hashtbl.key_index
+  - Does *compression*
+- Hashtbl.Make
+  - *compression* in client
+  - a functor
+  - Hashtbl.HashedType, input signature
+    equal: t -> t -> bool
+    hash : t -> int
+- Amortized analysis of hash tables
+  Saving a budget on cheap operations for the eventual big payment (resize)
+  Amortized O(n)
+  - Techniques: banker's method, physicis's method
+- Amortized analysis of Two-list Queues
+  - peek/enqueue still O(1)
+  - Dequeue is O(n) or using this analysis "amortized O(1)"
+- Search
+  - Linear search: O(n)
+    Binary search: O(log n)
+- Binary Search Tree (BST)
+  - are not necesarilly O(log n)
+  - unbalanced trees have O(n), since they are just linked list
+  - random insertions (as oppose to ascending one) are way faster (as they don't degenerate)
+- "2-3 trees", ensure that all paths have the same length
+- "AVL-trees", length of shortest and longest differ by 1
+  OCAML uses this for his tree implementation with difference 2
+- "Red-Black trees", length of shortest and longest differ by "at most a factor of 2" (can be at most twice as long)
+  it does it by having some RI, using colors, paths and rebalances
+  give you excelent performance on random and ascending workload
+** Chapter 9
+- AST (abstract syntaxt tree)
+  -> IR (intermediate representation)
+  -> Machine code
+- Interpreted Language
+  |                      |        | output           |
+  |----------------------+--------+------------------|
+  | lexical              | lexer  | tokens           |
+  | syntactic            | parser | ast              |
+  | semantic             |        | ast/symbol table |
+  | compiler/interpreter |        | IR               |
+  |----------------------+--------+------------------|
+- .ml - test.ml
+  #+begin_src ocaml
+  open OUnit2
+  open Aast
+  open Main
+  let make_i n i s =
+    n >:: (fun _ -> assert_equal (string_if_int i) (interp s))
+  let tests = [
+    make_i "int" 22 "22";
+  ]
+  let _ = run_test_tt_main ("suite" >::: tests)
+  #+end_src
+- .ml  - main.ml
+  #+begin_src ocaml
+open Ast
+let parse (s : string) : expr =
+  let lexbuf = lexing.from_string s in
+  let ast = Parser.prog Lexer.read lexbuf in
+  ast
+
+let string_of_val (e : expr) : string =
+  match e with
+  | Int i -> string_of_int i
+
+let is_value : expr -> bool = function
+  | Int _ -> true
+let rc step : expr -> expr = function
+  | Int i -> failwith "does not step"
+
+let rec eval (e : expr) : expr =
+  if is_value e then e
+  else e |> step |> eval
+
+let interp (s : string) : string =
+  s |> parse |> eval |> string_of_val
+    #+end_src
+- .ml  - ast.ml
+  #+begin_src ocaml
+  type bop =
+    | Add
+    | Mult
+  type expr =
+    | Int of int
+    | Binop of bop * expr * expr
+  #+end_src
+- .mll - lexer.mll
+  #+begin_src
+{
+open Parser
+}
+
+let digit = ['0'-'9']
+let int = '-'? digit+
+
+rule read =
+  parse
+  | "+" { PLUS }
+  | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
+  | eof { EOF }
+  #+end_src
+- .mly - parser.mly
+  #+begin_src
+%token <int> INT
+%token PLUS
+%token EOF
+
+%start <Ast.expr> prog
+
+%%
+
+prog:
+  | e = expr; EOF { () }
+  ;
+
+expr:
+  | i = INT { Int i }
+  | e1 = expr; PLUS; e2 = expr { Binop (Add, e1, e2) }
+  ;
+    #+end_src
+* Course: 2020 | COS326 | Princeton - Functional Programming
+  2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
+  2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
+  2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
+** 03
+- Function parameters are patterns too
+  #+begin_src ocaml
+  type point = float * float
+
+  let distance ((x1,y1):point) ((x2,y2):point) : float =
+    let square x = x *. x in
+    sqrt (square (x -. x1) +. square (y2 -. y1))
+  #+end_src
+** 12 Modules
+*** 1
+- Signature = an inteface
+  Structure = an implementation
+  Function  = a parametrized module
+- Murphy's Law: "When is not enforced is broken"
+- Types of operations on a data type
+ | Constructor | return a value of the type                       |
+ | Observer    | reveals information about the status of the type |
+ | Mutator     | takes t and returns a new t                      |
+- "Sealing" a structure by a signature, limits visibility
+*** 2
+- Principles:
+  1) Fail as early as possible (ex: return irregular data)
+  2) Non-determinism is tough for clients (ex: return bad data)
+  3) Recoverable errors are better (ex: crashing)
+  4) More Non-determinism is worse (ex: it crashes or ret bad data)
+- Options and Exceptions are preferred
+  - *exception* can be declared on signatures, they can be handled
+  - *option*, adds an code overhead
+*** 3
+** 18 Parallel
+- Frameworks
+  1) Dryad https://www.microsoft.com/en-us/research/publication/dryad-distributed-data-parallel-programs-from-sequential-building-blocks/
+  2) Naiad https://www.youtube.com/watch?v=lHBCq2AbWqc&feature=emb_title
+  3) Spark
+  4) Hadoop
+  5) Pig
+- Types
+  - Data, same computation on independent items
+  - Task, different computations at the same time
+  - Pipeline, assembly line
+- Concurrency, mediates multiparty access to shared resources
+  - Thread is single core, good for concurrent programming but not for parallel
+    - That is < 2021
+- Paralleism, performs many tasks simultaneously
+  - You cannot get more parallelism than the number of virtual cores you have.
+  - CPU's cache makes parallel operations even more complicated than just interleaving
+- ~Atomicity~ is not guaranteed on a ref, on a := and !
+  - Even if it is on the operation, it won't be across threads
+    #+begin_src ocaml
+    let inc(r:int ref) = r := !r + 1
+    #+end_src
+- ~Busy waiting~
+  - Consuming CPU without doing something useful
+  - CPU could either be runnign a useful thread/program or power down
+- Thread.(create join)
+  - ~Fork-Join Paralleism~, *join*, wait for the thread t to finish and resume when done
+- Performance Bugs: for example when you run serial a code that is mean to be parallel
+*** Futures (aka promises or delays)
+- Easy to reason when there are NOT side effects, purely functional
+- Good for things worst than O(n log n), it will get at best linear time
+- Types helps remove errors at run-time, by checking types at compile-time
+- Similar to *lazy programming*, not the same
+**** Signature
+  #+begin_src ocaml
+  module type FUTURE =
+  sig
+    type 'a future
+    val future : ('a -> 'b) -> 'a -> 'b future
+    val force : 'a future -> 'a
+  end
+  #+end_src
+**** An implementation
+  #+begin_src ocaml
+  module Future : FUTURE =
+  struct
+    type 'a future = { tid   : Thread.t ;
+                      value : 'a option ref }
+
+    let future(f:'a->'b) (x:'a) : 'b future =
+      let r ref None in
+      let t = Thread.create (fun () -> r:= Some(f x)) () in
+      {tid=t ; value=r}
+
+    let force (f:'a future) : 'a =
+      Thread.join f.tid;
+      match !(f.value) with
+      | Some v -> v
+      | None -> failwith "impossible"
+  end
+  #+end_src
+**** Using it
+  #+begin_src ocaml
+  let x = future f () in
+  let y = g () in
+  let v = force x in
+  #+end_src
+* Course: 2016 | MOOC   | Introduction to Functional Programming in OCaml
+  https://www.fun-mooc.fr/en/courses/introduction-functional-programming-ocaml/
+  https://archive.org/details/fun_ocaml_mooc
+  MKV https://archive.org/compress/fun_ocaml_mooc/formats=MATROSKA&file=/fun_ocaml_mooc.zip
+  CODE https://github.com/smeruelo/mooc-ocaml
+  SLIDES https://archive.org/download/fun_ocaml_mooc/slidesAndCode.zip
+- Excercises
+  https://ocaml.org/learn/tutorials/99problems.html
+  https://github.com/VictorNicollet/99-Problems-OCaml
+  https://github.com/janestreet/learn-ocaml-workshop
+** 5.1 Exceptions
+- using exceptions to exit early of a "reduce-type" operation
+  if we didn't use exception the unwind of the stack would still happen
+- Without exception
+  #+begin_src ocaml
+    let rec multl = function
+      | [] -> 1
+      | a::rest -> if a = 0 then 0 else a * (multl rest)
+  #+end_src
+- With exception handling
+  #+begin_src ocaml
+    exception Zero
+    let multlexec l =
+       let rec aux = function
+         | [] -> 1
+         | a::rest -> if a = 0 then raise Zero else a * (aux rest)
+       in
+       try aux l with Zero -> 0
+  #+end_src

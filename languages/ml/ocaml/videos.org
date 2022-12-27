@@ -1,0 +1,131 @@
+* Video
+- 2014 Ocaml at Bloomberg http://cufp.org/2014/maxime-ransan-adopting-functional-programming-with-ocaml-at-bloomberg-lp.html
+- Podcast: Automated Trading and OCaml with Yaron Minsky
+  https://www.youtube.com/watch?v=KdAS2_Gienc
+- Video: Effective ML (Yaron Minsky)
+  https://vimeo.com/21564387
+  https://vimeo.com/21564926
+- Video: Raytracer
+  https://www.youtube.com/playlist?list=PLlw1FcLpWd42vMLPlR3K7iq-CuCtkZr8o
+  https://github.com/LesleyLai/ocamlpt
+- TODO François René Rideau- Building Distributed Applications in OCaml- λC 2019
+  https://www.youtube.com/watch?v=ZLZqe0goxF0
+  - Better to programming at scale (multiple persons)
+  - Better for hostile environments
+  - Better for Distributed applications programming
+- OCaml 2021 https://www.youtube.com/playlist?list=PLyrlk8Xaylp5CdqKE-ZqR5K5kRgPcKYN9
+- OCaml 2014: The State of OCaml (invited), Xavier Leroy https://www.youtube.com/watch?v=DMzZy1bqj6Q&list=UUP9g4dLR7xt6KzCYntNqYcw
+- Video: 2012 - Xavier Leroy - The continuation of functional programming by other means
+  https://events.inf.ed.ac.uk/Milner2012/X_Leroy-html5-mp4.html
+** Channels
+- Westley Weimer https://www.youtube.com/channel/UCSZ5lYLg6ARj4Wow3ZQXQzA/videos
+- Anwar Mamat https://www.youtube.com/playlist?list=PLF-pVzrCrXdj7rBvOOwulglwwDjVy96uI
+- Jane Street https://www.youtube.com/channel/UCDsVC_ewpcEW_AQcO-H-RDQ
+- Eduardo Rafael https://www.youtube.com/c/EduardoRFS/videos
+- Ocaml Workshops https://www.youtube.com/c/OCamlWorkshops/videos
+- Ocaml Software Foundation https://www.youtube.com/channel/UCnwkbeuXjuUTNsPoLKsBWdg
+** Video: 2015 - A Crash Course in OCaml Modules - Tim McGilchrist
+https://www.youtube.com/watch?v=lISWTUyNP4c
+- =OCaml Modules= v =Haskell Type Classes=
+- Ocaml Modules
+  - like Functors (in category theory)
+  - aka parametrized structures
+  - functions from struct to struct
+- Haskell
+  - Implicit program construction
+  - ad-hoc polymorphism
+- Ocaml
+  - Type Safe Extensions (using *include*) (aka monkeypatching)
+  - Parametrized Library
+    you can pick different "backends" or implementations for things
+    like pick between lwt and async support
+*** Typeclasses to Signatures
+  #+begin_src ocaml haskell
+  class Show a where
+      show :: a -> String
+  #+end_src
+  #+begin_src ocaml
+  module type Show = sig
+    type t
+    val show : t -> string
+  end
+  #+end_src
+*** Instances   to Structures
+  #+begin_src haskell
+  instance Show Int where
+      show = ... -- Provided by GHC
+  #+end_src
+  #+begin_src ocaml
+  module ShowInt = struct
+    type t = int
+    let show = string_of_int
+  end
+  #+end_src
+*** Using them
+  #+begin_src haskell
+  csv :: Show a => [a] String
+  csv [] = ""
+  csv [x] = show x
+  csv h:t = show h ++ "," ++ csv t
+  #+end_src
+  - 1 extra step, instanciate with the functor, a new module
+  #+begin_src ocaml
+  module Csv(S:Show) = struct
+    let rec to_csv : S.t -> string = function
+      | []   -> ""
+      | [x]  -> S.show x
+      | h::t -> S.show h ^ "," ^ to_csv t
+  end
+  module X = Csv(ShowInt) (* extra step *)
+  X.to_csv [1;2;3] (* => 1,2,3 *)
+  #+end_src
+
+** TODO Video: 2019 - GADTs and You; Writing Safer Code Using GADTs
+   Nathan Holland https://www.youtube.com/watch?v=tEQ8bTNYj5g
+   runnable slides https://github.com/nholland94/gadt-lambdaconf-talk
+- Allows us:
+  1) add *invariants* to our DT at the type level
+     - Disallow to construction of values that don't follow the invariants
+  2) restrict values we can pass to a functions
+  3) Encode simple logic
+  4) Runtime optimizations
+- Limitations of ADTs
+  - Since every constructor of and ADT (a variant) the same type
+    - We are not able to reason about the types inside an ADT
+- Use patterns
+  - Type Witness, mapping between type parametres and the constructors
+    #+begin_src ocaml
+    type 'a witness =
+      | Int : int witness
+      | Bool : float witness
+    #+end_src
+  - Recursive Type Witness
+    #+begin_src ocaml
+    type 'a witness =
+      | Int : int witness
+      | Bool : float witness
+      | List : 'a witness -> ('a list) witness
+    #+end_src
+  - Type Level Peano Numbers
+    #+begin_src ocaml
+    (* ADT *)
+    type peano =
+      | Zero
+      | Succ of peano
+    let zero = unit
+    let one = Succ zero
+    let four = Succ (Succ (Succ (Succ Zero)))
+    (* Type Level *)
+    type zero = unit
+    type 'a succ = unit -> 'a
+    type one = zero succ
+    type two = one succ
+    (* GADT *)
+    type 'a peano =
+      | Zero : zero peano
+      | Succ : 'a peano -> ('a succ) peano
+    let succ : 'a peano -> ('a succ) peano = fun n -> Succ n
+    let zero : zero peano = Zero
+    let one : one peano = Succ zero
+    #+end_src
+    13:00

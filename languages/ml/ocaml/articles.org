@@ -1,0 +1,216 @@
+- 2013 https://roscidus.com/blog/blog/2013/06/20/replacing-python-round-2/
+- 2014 https://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/
+- 2019 https://markkarpov.com/post/haskell-vs-ocaml.html
+- 2019 https://tarides.com/blog/2019-05-09-an-introduction-to-ocaml-ppx-ecosystem
+- 2020 https://medium.com/darklang/leaving-ocaml-fce7049a2a40
+- 2021 https://discuss.ocaml.org/t/plans-to-choose-an-official-package-project-manager/8620
+- 2022 Roguelike with effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
+- 2022 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
+- 2022 https://justabluddyblog.wordpress.com/2022/05/01/remaking-an-old-game-in-ocaml/
+- 2022 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
+* If Statement and Loops
+https://ocaml.org/docs/if-statements-and-loops
+- nor *for* or *while* loops have a way to *break* out of it
+  - Except throwing an exception
+  - Both return *unit*
+  - "useful" in conjuction with *ref*
+- Is a dereference (!) of a ref. Like in Forth (?)
+- List.mem
+  List.for_all
+  List.exist
+- fold_left is more efficient
+* 2018 | What I wish I knew when learning OCaml
+   https://baturin.org/docs/ocaml-faq/
+- you can also produce Javascript from OCaml Bytecode (js_of_ocaml)
+*** let ... and
+  allows mutually recursive binding
+  example: define *even* and *odd* mutually recursive
+  #+begin_src ocaml
+    let rec even x =
+      match x with
+      | 0 -> true
+      | _ -> odd (x - 1)
+    and odd x =
+      match x with
+      | 0 -> false
+      | _ -> even (x - 1)
+  #+end_src
+*** abstract types
+- reasons
+  1) abstract implementation details
+  2) prevent invariant violations
+* 2021 | Practical OCaml                    | Yawar Amin
+https://dev.to/yawaramin/practical-ocaml-314j#proof-of-concept
+- match brings the mathematical notation into OCaml
+  #+begin_src
+   f(0) = 0
+   f(x) = 1/x
+  #+end_src
+- each source file automatically becomes a module
+  myprog.ml -> Myprog
+- all modules in a project are automatically in scope/visible
+- Pipe operator to be added to JS https://github.com/tc39/proposal-pipeline-operator/
+** Sys.getenv + try/match (me: pattern)
+  #+NAME: cfg.ml
+  #+begin_src ocaml
+    let forward_host = "127.0.0.1"
+    let forward_port = 8126
+    let listen_port =
+      try
+        int_of_string(Sys.getenv "listen_port")
+      with
+        Not_found -> 8125
+
+    let blocklist =
+      try
+        "blocklist"
+        |> Sys.getenv
+        |> String.split_on_char ','
+        |> List.map Str.regexp_string
+      with
+        Not_found -> []
+  #+end_src
+** example: about statsd
+- based on Rust code/article
+  https://medium.com/tenable-techblog/optimizing-700-cpus-away-with-rust-dc7a000dbdb2
+  https://github.com/askldjd/statsd-filter-proxy-rs
+- statsd is application performance tool that runs as a deamon,
+  where you can ~send~ statistics
+- foo:1|c
+  - metric named "foo"
+  - which is a counter (due "c")
+  - we are incrementing it by "1"
+- works over UDP
+- Project: proxy+forwarder(to the real statsd deamon)+filter of metric
+** example CODE
+- Run it with:
+  OCAMLRUNPARAM=b blocklist=foo,bar dune exec ./ocaml_statsd_filter.exe
+- OCAMLRUNPARAM=b to print the full stacktrace
+- ~Unix~ module functionality is mostly portable to Windows
+- uses ~ignore~ (to ignore the output of send())
+- incoming requests are handled by ~process~ function
+- recvfrom works on a descr_of_in_channel
+- each incoming request, spin off a new process (Unix built-in functionality)
+  https://v2.ocaml.org/api/Unix.html
+  #+begin_src
+    establish_server : (in_channel -> out_channel -> unit) -> Unix.sockaddr -> unit
+    The function given as first argument is called for each connection with two buffered
+    channels connected to the client.
+    A new process is created for each connection.
+  #+end_src
+  #+begin_src ocaml
+    open Unix
+    let bufsize = 8192
+    let buf = Bytes.create bufsize
+    let forward_addr = ADDR_INET (inet_addr_of_string Cfg.forward_host,
+                                  Cfg.forward_port)
+    let forward_sock = socket PF_INET SOCK_DGRAM 0
+    let allow data = Cfg.blocklist
+      |> List.exists (fun regexp -> Str.string_match regexp data 0)
+      |> not
+    let process input_chan _ =
+      let in_descr = descr_of_in_channel input_chan in
+      let read_len, _ = recvfrom in_descr buf 0 bufsize [] in
+      let buf_str = Bytes.to_string buf in
+      if allow buf_str then begin
+          ignore(send forward_sock buf 0 read_len []);
+          print_string ("Sent: " ^ buf_str)
+        end
+      else
+        print_string ("Did not send: " ^ buf_str)
+    let () =
+      connect forward_sock forward_addr;
+      establish_server process (ADDR_INET (inet_addr_any, Cfg.listen_port))
+#+end_src
+* 2022 | Practical OCaml, Multicore Edition | Yawar Amin
+https://dev.to/yawaramin/practical-ocaml-multicore-edition-3gf2
+- library: EIO - Effects-based direct-style IO for multicore OCaml
+  https://github.com/ocaml-multicore/eio
+- EIO, uses a new paradigm for concurrent IO programming,
+  without the need for monads or async/await
+- "Function color" problem https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
+- =domain= = os thread
+  =fibers= = non blocking green threads, that run on each domain
+- https://en.wikipedia.org/wiki/Green_thread
+  "is a thread that is scheduled bya runtime library or VM, instead of natively by the OS"
+- > opam switch create 5.0.0
+  > eval $(opam env)
+  > opam install dune htop eio
+- Eio.new_domain
+  Eio.traceln
+  Eio_main.run
+  Fmt.exn
+- Eio.Buf.read_parse_exn
+  Eio.Buf_read.take_all
+  Eio.Domain.self
+  Eio.Domain_manager.run
+  Eio.Fiber.all
+  Eio.Flow.copy_string
+  Eio.Net.Ipaddr.V4.any
+  Eio.Net.accept_fork
+  Eio.Net.connect
+  Eio.Net.getaddrinfo_stream
+  Eio.Net.listen
+  Eio.Stdenv.domain_mgr
+  Eio.Stdenv.net
+  Eio.Switch.run
+** ocaml_statsd_filter.ml
+#+begin_src ocaml
+  open Eio
+  let max_size = 8192
+  let listen_addr = `TCP (Net.Ipaddr.V4.any, Cfg.listen_port)
+  let target_addr net =
+    match Net.getaddrinfo_stream net Cfg.target_host ~service:Cfg.target_port with
+    | []        -> invalid_arg Cfg.target_host
+    | addr :: _ -> addr
+  let allow data = Cfg.blocklist
+                   |> List.exists (fun regexp -> Str.string_match regexp data 0)
+                   |> not
+  let on_error = traceln "Connectionhandling error: %a" Fmt.exn
+  let main net new_domain =
+    Switch.run (fun sw ->
+        let target = Net.connect ~sw net (target_addr net) in
+        let listen_socket = Net.listen ~backlog:128 ~sw net listen_addr in
+        traceln "Listening on: %d" Cfg.listen_port;
+        let domain_loop () =
+          new_domain (fun() ->
+              let domain_id = (Domain.self () :> int) in
+              Switch.run (fun sw ->
+                  while true do
+                    Net.accept_fork ~sw listen_socket ~on_error (fun client _ ->
+                        let buf_str =
+                          client
+                          |> Buf.read_parse_exn ~max_size Buf_read.take_all
+                          |> String.trim
+                        in
+                        if allow buf_str then begin
+                            Flow.copy_string buf_str target;
+                            traceln "Domain %d: sent: %s" domain_id buf_str
+                          end
+                        else
+                          traceln "Domain %d: did not send. %s" domain_id buf_str
+                                                                 done)
+                  done)
+      in
+      let domains = List.init Cfg.num_threads (fun _ -> domain_loop) in
+      Fiber.all domains))
+  let () =
+    Eio_main.run (fun env ->
+        main
+          (Stdenv.net env)
+          (Domain_manager.run @@ Stdenv.domain_mgr env))
+#+end_src
+** cfg.ml - add the number of threads
+#+begin_src ocaml
+  let num_threads =
+    try
+      int_of_string (Sys.getenv "num_threads")
+    with
+      Not_found -> Domain.recommended_domain_count
+#+end_src
+** dune-project
+  (lang dune 3.4)
+** dune
+  (executable
+    (name ocaml_statsd_filter)
+    (libraries str eio_main))
