@@ -1,0 +1,527 @@
+- Streamers https://github.com/chiroptical/declarative-programming-streams
+- https://github.com/hzlmn/haskell-must-watch
+- Making Algorithmic Music
+  Compose NYC 2019
+  Speaker: Donya Quick
+  https://www.youtube.com/watch?v=9Fg54XAr044
+- Streamer https://www.youtube.com/c/cvladfp/videos
+- Berlin function programming https://www.youtube.com/channel/UCNp-DVb8cQRIOo32sZhWgNg
+- Talks by kowainik https://www.youtube.com/playlist?list=PL6EBWxwzgPKOHz4OQlyVHeae0EUqL6Prt
+- Functional Parsing - Computerphile https://www.youtube.com/watch?v=dDtZLm7HIJs
+* Backend Web Programming in Haskell - Tsoding
+https://www.twitch.tv/videos/743607386
+https://github.com/tsoding/tsoken/blob/master/src/Main.hs
+* Videos
+** Tsoding
+- Haskell AMA https://www.twitch.tv/videos/736842835
+- Haskell > JavaScript https://www.twitch.tv/videos/750508584
+- Functional Programming in Production https://www.twitch.tv/videos/757306194
+- [Discord + Twitch] Double Platform ... https://www.twitch.tv/videos/764093623
+- Backend Web Programming in Haskell https://www.twitch.tv/videos/743607386
+** Courses
+   - https://github.com/hzlmn/haskell-must-watch
+   - Functional Programming in Haskell: Professor Graham Hutton from the University of Nottingham.
+     https://www.youtube.com/playlist?list=PLF1Z-APd9zK7usPMx3LGMZEHrECUGodd3
+   - Haskell for imperative programmers
+     https://www.youtube.com/channel/UC3xdLFFsqG701QAyGJIPT1g/videos
+   - Haskell Summer Course
+     https://www.youtube.com/playlist?list=PLaAHmR4OoQXcrQl7kgkraWQAgQ-8FpEmS
+   - 2018 Haskell School in the Networked Imagination Laboratory
+     https://www.youtube.com/playlist?list=PLyEzdf4cdMMHGqVnAzLV8eDXn6Ajj46JA
+   - Haskell : Learn You a Haskell for Great Good
+     https://www.youtube.com/playlist?list=PLS6urCrsYES24Fwzg5-Uga1QEbNm9kiU_
+   - Haskell for Imperative Programmers
+     https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
+   - Haskell - Functional Programming Fundamentals (Dr. Erik Meijer)
+     https://www.youtube.com/playlist?list=PLoJC20gNfC2gpI7Dl6fg8uj1a-wfnWTH8
+   - Programming with Categories
+     http://brendanfong.com/programmingcats.html
+     https://www.youtube.com/playlist?list=PLhgq-BqyZ7i7MTGhUROZy3BOICnVixETS (category theory)
+** Livecoding
+   - Barry (haskell book) https://www.youtube.com/channel/UCndlCtPeYygdGZ9UUKdehbw
+
+** other
+  - https://www.youtube.com/c/tweag/videos
+  - Zürich Friends of Haskell
+    https://www.youtube.com/channel/UC2zfPMH_srjxUN5EYrfIhCw
+  - Jappie Klooster
+    https://www.youtube.com/channel/UCQxmXSQEYyCeBC6urMWRPVw/videos
+  - HaskellRank (tsoding)
+    https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
+  - lenses
+    https://www.youtube.com/watch?v=cefnmjtAolY
+    https://docs.google.com/file/d/0ByK3AAy5ubqady1YczU2UEYzODQ/edit
+  - Jeremy Gibbons: Algorithm Design with Haskell
+    https://www.youtube.com/watch?v=JJv74IJUp4E
+  - NYC Haskell User's Group
+    https://www.youtube.com/channel/UCzNYHE7Kj6pBqq5h8LG9Zcg
+* TODO 2019 | Michael Snoyman: From Haskell to Rust?
+https://www.youtube.com/watch?v=HKXmEFvsi6M
+- Creator of Yesod/Stack
+- VP at "FP Complete"
+- Moved away from GHCjs
+  - Purescript/Halogen
+- Rust, has recently has async/await (it was "callback hell")
+- Monads reinventions??: promises (js), scala (futures)
+- "GO says, we don't trust the developers. Or I don't wanna bother the programmers with stuff"
+  - Like overload of operators
+- TALK ABOUT MONADS????
+- RESUME 20:00
+
+* TODO Videos: HaskellRank by tsoding
+  playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
+** DONE HackerRank in Haskell
+- interact :: (String -> String) -> IO ()
+- We go from an expression that we can use on the repl to a function. By replacing ($) with (.)
+- Functions: ($) (.) interact words read map sum show tail
+#+begin_src haskell
+main = interact $ show . sum . map read . words
+main = interact $ show . sum . map read . tail . words
+#+end_src
+** DONE Grading Students
+- (``) , guards, where, unlines
+#+begin_src haskell
+round5 :: Int -> Int
+round5 x
+    | x >= 38 && (m5 - x) < 3 = m5
+    | otherwise               = x
+    where m5 = x + (5 - x `mod` 5)
+
+solve :: [Int] -> [Int]
+solve xs = map round5 xs
+
+main = interact $ unlines . map show . solve . map read . tail . words
+#+end_src
+** DONE Apples and Oranges
+- take, drop, filter
+#+begin_src haskell
+let (x1:x2:xs) = [1,2,3,4,5,6,7] -- Pattern Matching
+-- lambdas
+map (\x -> x + 3) [0,1,2] -- => [3,4,5]
+map (+ 3)         [0,1,2] -- => [3,4,5]
+#+end_src
+** DONE Code Warrior
+- undefined :: t -- can be assigned to any type, useful to know if code just compiles
+- !!
+- div  :: Integral a => a -> a -> a
+- even :: Integral a => a -> Bool
+- odd  :: Integral a => a -> Bool
+** DONE Between Two Sets
+- foldl1, gcd, lcm, takeWhile
+- [1 .. 4]
+  [1 ..]
+- Imperatively writing in Haskell
+#+begin_src haskell
+solve :: [Int] -> [Int] -> Int
+solve = undefined
+
+readIntList :: IO [Int]
+readIntList = do line <- getLine
+                 return $ map read $ words line
+main = do [n, m] <- readIntList
+          as     <- readIntList
+          bs     <- readIntList
+          putStrLn $ show $ solve as bs
+#+end_src
+
+** DONE Fold
+- "Neutral element" on fold
+#+begin_src haskell
+Import Prelude hiding (foldl) -- Hide!!!
+
+foldl :: (a -> b -> a) -> a -> [b] -> a
+foldl f base []     = base
+foldl f base (x:xs) = foldl f (f base x) xs
+
+foldl1 :: (a -> a -> a) -> [a] -> a
+foldl1 f []     = error "basaodka"
+foldl1 f (x:xs) = foldl f x xs
+#+end_src
+** DONE Playing Basketball with Kangaroo
+- maximum, minimum, inits, group
+#+begin_src haskell
+import Data.List
+inits :: [a] -> [[a]]
+
+λ> inits [1 .. 5]
+[[],[1],[1,2],[1,2,3],[1,2,3,4],[1,2,3,4,5]]
+
+λ> map maximum $ tail $ inits [10,5, 20, 4 ,5,2,25,1]
+[10,10,20,20,20,20,25,25]
+
+λ> group $ map maximum $ tail $ inits [10,5, 20, 4 ,5,2,25,1]
+[[10,10],[20,20,20,20],[25,25]]
+#+end_src
+** DONE Purely Functional Solutions to Imperative Problems
+*** 1
+- zip
+- List comprehension
+#+begin_src haskell
+[i     | i <- [1 .. 10]] -- [1,2,3,4,5,6,7,8,9,10]
+[(i,j) | i <- [1 .. 10], j <- [1 .. 10]] -- cartesian product [(1,1),(1,2),(1,3)...]
+[(i,j) | i <- [1 .. 10], j <- [1 .. 10], i /= 1] -- filter
+---
+-- Uses undefined as elements of an array, can also use ()
+solve :: [Int] -> Int
+solve (k:xs) =
+  length [ undefined | (i, xi) <- zip [0 ..] xs,
+                       (j, xj) <- zip [0 ..] xs,
+                       i < j,
+                       (xi + xj) `mod` k == 0]
+#+end_src
+*** 2
+- group, sort, sortBy, on, compare, reverse, flip
+- Ordening is the type that has 3 constructors: LT, EQ, GT
+- You can compare numbers, or lists. But for special orders.
+  compare :: Ord a => a -> a -> Ordering
+  map compare [1,3,4]
+- on basically adapts the first func with the second
+  on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+#+begin_src haskell
+-- :m + Data.List
+import Data.List     -- For sort
+import Data.Function -- For on
+sortBy (\x y -> compare (length x) (length y)) [[1,2,3,4],[2,2],[0,0,0,0,0,0,0]]
+sortBy (compare `on` length)                   [[1,2,3,4],[2,2],[0,0,0,0,0,0,0]]
+-- => [[2,2],[1,2,3,4],[0,0,0,0,0,0,0]]
+sortBy (compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
+reverse $ sortBy (compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
+sortBy (flip compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
+-- => [[1],[3],[4,4,4],[5,5,5]]
+#+end_src
+** DONE Solving Russian Calendar Problems in Haskell
+- sum, printf (alternative to ++)
+- ~eta conversion~ of \x -> abs being equal to abs
+#+begin_src haskell
+import Text.Printf
+
+leapDay :: Int -> String
+leapDay = printf "12.09.%d"
+
+normDay :: Int -> String
+normDay = printf "13.09.%d"
+#+end_src
+** DONE The Usefulness of Maybe monad
+- splitAt, maybe, replicateM, read
+- a type called ~Maybe~ (Just, Nothing)
+  a function ~maybe~ to unwrap it
+- replicateM to perform a task Nth times and return in an array
+#+begin_src haskell
+import Control.Monad -- for replicateM
+
+excludeNth :: Int -> [a] -> [a]
+excludeNth n xs = left ++ tail right
+    where (left, right) = splitAt n xs
+-- excludeNth 5 [1..10]
+-- => [1,2,3,4,5,7,8,9,10]
+
+getList :: Read a -> IO [a] -- read any type of input
+getList = do
+  line <- getLine
+  return $ map read $ words line
+-- getList :: IO [Int]
+-- 1 2 3 4
+-- => [1,2,3,4]
+
+solve :: Int -> [Int] -> Int -> Maybe Int
+solve k bill b
+    | b > actualPrice = Just (b - actualPrice)
+    | otherwise = Nothing
+    where actualPrice = (sum $ excludeNth k bill) `div` 2
+
+main :: IO ()
+main = do
+  [[_, k], bill, [b]] <- replicateM 3 getList
+  putStrLn $ maybe "Bon appetit" show $ solve k bill b
+#+end_src
+** DONE Tracking Hikes with Haskell
+*** Hiking
+- scanl, groupBy (Data.List), filter, all
+- scanl (+) 0 [1 .. 4]
+  => [0,1,3,6,10,15]
+- groupBy (\x y -> x /= 0 && y /= 0) [0,1,2,3,4]
+  groupBy, will iterate over the list by 2 elements at the time
+           when the function returns false, it separates that group
+- filter (all (< 0))
+*** Drawing Book
+- interact $ show . resolve . map read . words
+** DONE Treating Lists as Monads
+- fromMaybe, sortBy, listToMaybe, liftM2
+- fromMaybe - Takes a default and a maybe
+  fromMaybe 5 Nothing  => 5
+  fromMaybe 5 $ Just 6 => 6
+- sortBy (Data.List)
+- listToMaybe (Data.Maybe) -- returns Nothing or Just of the head
+- liftM2 (Control.Monad)
+  let keyboards = [3,1]
+  let drives = [5,2,8]
+  liftM2 (,) keyboards drives
+- ^ generates the same than list comprehension
+  AKA the ~cartesian product~
+- Changing to (+) instead adds then directly
+  liftM2 (+) keyboards drives
+- map read . words <$> getLine -- Threat the result of getLine as a functor
+** Solving Magic Square using Functional Programming
+#+begin_src haskell
+type Square = [[Int]]
+magic :: Square
+magic = [[8,1,6],
+         [3,5,7],
+         [4,9,2]]
+
+rot90 :: Square -> Square
+rot90 = map reverse
+
+pp :: Square -> IO ()
+pp = putStrLn . unlines . map (unwords . map show)
+
+#+end_src
+** Brute-forcing all Magic Squares
+** CodeWars Strikes Again
+* TODO 2019 | Haskell 10X - Google TechTalks
+  repo: https://github.com/google/haskell-trainings
+** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
+- EXTRA: https://ucsd-progsys.github.io/liquidhaskell-blog/
+- Everything is a function
+- Everything is immutable
+  Everything is *const* (on C++ on a function means that it will not change the state of the object)
+- Everything is an expression, no statements
+- No side effects, unless explicit
+- There is NO function that can go from impure to pure code
+  f :: IO a -> a
+- Going from pure to impure is ok
+  f :: a -> IO a
+*** Lazyness (18:00)
+- Reductions steps:
+  - Strict evaluation: inner to outer
+    Lazy evaluation: outer to inner (when needed you eval the arguments)
+(-) Memory pitfalls
+(-) IO and parallelism pitfalls: threads will just create the expressions, not evaluate them (use escape hatches)
+(+) Huge optimizations:
+  + compiler can re-arrange the code, simplify noop operations,
+  + partially thanks to knowing about pure/impurity of a function
+  + because only a part of the result of the operation might be needed
+(+) Great expressivity (e.g. infinite structures)
+*** Syntax (40:00)
+- Is NOT recommended to create your own operators.
+- ($) lowest priority
+- (.) composition
+*** Types (49:00)
+- ~type~, a weak typedef, sinonyms
+  type Point = (Int, Int)
+  type Map k v = [(k, v)] -- ~type parameters~
+- ~data structures~
+  - NO methods
+  - NO modifiers (setters)
+  - NO private members/slots
+  - YES Constructors (which are just functions)
+- Data Types
+#+begin_src haskell
+data None    = None             -- data with 1 option, have same the constructor and type name
+data Minutes = Minutes Int      -- Minutes 10
+data Bool    = False   | True
+data Maybe a = Nothing | Just a -- Just 10 -- Generic Type (a type argument)
+data List  a =     Nil | Cell a (List a)
+-- Records
+data User = User String Int
+-- Records, can also have named "fields". Fields are in the same namespace.
+data User = User {
+    userName :: String, -- Creates getters-like functions too
+    userAge  :: Int
+}
+#+end_src
+*** Functions (01:03:00)
+- Operators can be constructors
+- Operators pattern matching CAN short-circuit
+  #+begin_src haskell
+(&&) :: Bool -> Bool -> Bool
+True && True = True -- does NOT short-circuit (comment this line)
+True && y    = y    -- does short-circuit
+_    && _    = False
+  #+end_src
+- Deconstructor, pattern matching
+  #+begin_src haskell
+data Minutes = Minutes Int
+
+add :: Minutes -> Minutes -> Minutes
+add (Minutes x) (Minutes y) = Minutes $ x + y
+  #+end_src
+- "backslash because it kind of looks like a lambda"
+- in a function
+  - you cannot use something like (==) without defining Eq on the definition
+- head, is considered "bad design", as in some of the inputs panics
+  also callled "partial functions"
+- You can use pattern matching and guards at the same time
+- Point free style: is when we define functions without defining the arguments.
+                    Because it doesn't use the (.) operator.
+** TODO Haskell 102 https://www.youtube.com/watch?v=Ug9yJnOYR4U
+- If a library has 2 versions of a function, with (') is called "f prime".
+  The one with the (') is ~eager~
+  The one without the (') ~lazy~
+- Problems to solve:
+  1) Extend data types, ex: to show or compare
+  2) Type Constrains, are sometimes mandatory to declare some functions
+  3) Cascading Maybe's, might be solved with nested case's
+  4) IO
+     Can't apply regular functions
+     Can't pattern match
+     Can't get values out of it, but can operate while keeping it on IO
+*** Solution
+- 1 & 2 ) Declaring the type and implementing it, are separate things
+  #+begin_src haskell
+  -- 1)
+  class Show a where
+    show :: a -> String
+
+  data Color = Red | Green | Blue
+
+  instance Show Color where
+    show Red = "Red"
+    show Green = "Green"
+    show Blue
+  -- 2)
+  -- Constraints on functions
+  show :: Show a => a -> String -- a is an instance of show
+  sum  :: Num  a => [a] -> a
+  (==) :: Eq   a => a -> a -> Bool
+  -- Constraint on instances
+  instance Show a => Show (Maybe a) where
+    show Nothing  = "Nothing"
+    show (Just x) = "Just " ++ show x
+  -- Classes can have DEFAULT implementations
+  class Eq a where (==) :: a -> a -> Bool
+    (==) :: a -> a -> Bool
+    (/=) :: a -> a -> Bool
+    a == b = not $ a /= b
+    a /= b = not $ a == b
+  -- Classes can also have constraints, minimun implementation is either compare or <=
+  class Eq a => Ord a where
+    compare :: a -> a -> Ordering
+    (<=)    :: a -> a -> Bool
+    (>=)    :: a -> a -> Bool
+    (<)     :: a -> a -> Bool
+    (>)     :: a -> a -> Bool
+    max     :: a -> a -> a
+    min     :: a -> a -> a
+  -- Bounded, things on a class definition, can also be "values" in the class
+  class Bounded a where
+    minBound :: a
+    maxBound :: a
+  #+end_src,
+- 3)
+  Functions to deal with values in a context "C", or "<>" as context
+  | Functor     | <$> | fmap | :: | (a -> b)   | -> | C a | -> | C b |
+  | Applicative | <*> | ap   | :: | C (a -> b) | -> | C a | -> | C b |
+  | Monad       | >>= | bind | :: | (a -> C b) | -> | C a | -> | C b |
+- 4)
+  We use *do* syntax on IO monad, as we could do with anything else that implemented
+  do guarantees sequencial execution, ap can parallelize
+  #+begin_src haskell
+  class Applicative m => Monad m where
+    return :: a -> m a
+    (>>=)  :: m a -> (a -> m b) -> m b
+  #+end_src
+*** CodeLab (01:00:00)
+fmapValue
+apValue
+bindValue
+* DONE What is a Monad? - Computerphile
+  https://www.youtube.com/watch?v=t1e8gqXLbsU
+  - Maybe, >>=, do, return
+  - A way to handle failure and """unwrap""" a series of Maybe operations
+  - "A monad is some kind of type constructor like Maybe or ... together with 2 functions (return, >>=)"
+  - Works with other "effects"
+* 2013 | Simon Peyton - Adventure with Types in Haskell
+  - Simon Peyton Jones Compiling without continuations
+    https://www.youtube.com/watch?v=qx5NZmrFnvs
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FC_in_GHC_July13.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Kinds_and_GADTs.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Type_inference.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FunWithTypeFuns.pdf
+** 1 https://www.youtube.com/watch?v=6COvD8oynmI
+  slides https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/ClassesJimOPLSS.pdf
+- 18:40 When we declare a function with a type class (constraint?)
+  - the compiler "adds an extra argument" to the function, the arg is kind of like a "vtable/read-table"
+    - like a implicit argument passing
+    - a record with the instance declarations functions for the typeclass
+- A *class* declaration turns into a *data* declaration
+- *instance* declarations turns into a record with the function instances
+- Constants are also overloaded, "1" is "(fromInteger d 1)"
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][00:47:14]] differences between haskell class and OO interface
+  1) NO problem with *multiple constraints*
+     #+begin_src haskell
+     f :: (Num a, Show a) => a ->
+     #+end_src
+  2) Existing types can _retroactively_ be made instances of new type classes
+     #+begin_src haskell
+     class Wibble a where
+       wib :: a -> Bool
+     instance Wibble Int where
+       wib n = n+1
+      #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][00:49:05]] Haskell has type based dispatch, is NOT value-based dispatch
+  We do NOT have a vtable attached to the value.
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:00:40]] Two approaches to polymorphism
+  Polymorphism: same code works on a variety of different argument types.
+  1) SubTyping (subclassing) from the OO world
+     On OO you can _retroactively_ subclass
+  2) Parametric polymorphism (generics) from the ML world.
+     You need to _anticipate_ the need to act on arguments of various types.
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:09:55]] java and c# support *constrained generics*
+  #+begin_src csharp
+    A inc<A>(A x)
+        where A:Inum {
+        // ...
+    }
+  #+end_src
+  - Which is like
+    #+begin_src haskell
+      inc :: Num a => a -> a
+    #+end_Src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:09:20]] OO languages also adopted *variants*
+  #+begin_src csharp
+    interface IEnumerator<out T> {
+        T Current;
+        bool MoveNext();
+    }
+    //...
+    m ( IEnumerator<Control> )
+    IEnumerator<Button> b
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:13:22]] the combination of parametric polymorphism and sub-typing is hard
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:21:32]] "Language design is all about the balance between, intellectual, compiler and programmer complexity.
+  Against the expresiveness and naturalness of the programming language."
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:29:04]] "finding type classes is simply a weak proof search"
+** 2
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:02:54]] the joy of types
+  1) Types guarantee the absence of ceratin classes of errors
+     - True + 'c'
+     - segfaults
+  2) The static type of a function is a *partial (machine checked) specification*
+  3) Types are a design language. The UML of Haskell.
+  4) Types massively support interactive program development.
+  5) Their support for software maintenance
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:16:12]] GADT (generalized algebraic data types)
+  #+begin_src haskell
+    data Maybe a = Nothing | Just a
+      -- OLD
+    data Maybe a where
+      Just :: a -> Maybe a
+      Nothing :: Maybe a
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:34:33]] Higher Kinds
+  - Sometimes you need a kind system that does for types what types does for terms.
+  - Kinds are way to classify types
+  - Abstracting types out of types
+    (a for type, f for type constructor)
+    #+begin_src haskell
+      data Tree f a = Leaf a
+                    | Node (f (Tree f a))
+
+      type RoseTree a = Tree [] a
+      type BinTree  a = Tree Pair a
+      type AnnTree  a = Tree AnnPair a
+
+      data Pair a    = P a a
+      data AnnPair a = AP String a a
+    #+end_src
