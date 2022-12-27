@@ -1,3 +1,41 @@
+* Advent Of Code Community Repo
+- Repo comun
+- Benchmark
+  - https://benchmarksgame-team.pages.debian.net/benchmarksgame/why-measure-toy-benchmark-programs.html
+- Usando github actions
+  - Ejemplo: Corriendo varios lenguajes
+    https://github.com/geohot/mergesorts/blob/master/run.sh
+  - Ejemplo: Instalar dependencies para cada lenguaje
+    https://github.com/geohot/mergesorts/blob/master/.github/workflows/main.yaml
+  - Cada job tiene 6hs para completar
+    https://docs.github.com/en/actions/learn-github-actions/usage-limits-billing-and-administration#usage-limits
+  - Ejemplo: usando docker y asdf
+    https://github.com/drujensen/fib/blob/master/Dockerfile
+  - Ejemplo: running and table stats
+    https://github.com/drujensen/fib/blob/master/run.sh
+- Ideas
+  - ¿guardar los bigboys comprimidos y descomprimirlos como parte de cada dia?
+    - en git-lfs?
+  - Probablemente usando PR's y veted approvers
+  - Filename:
+    day<N>_<USERNAME>.<EXTENSION>
+    day<N>/<USERNAME>/
+    day<N>/<LANGUAGE>/<USERNAME>
+  - ¿no aceptar PR's despues del dia del challenge?
+- Pro:
+  - Medir performance en un lugar comun
+  - ¿Competencia? ¿Basados en el mismo lenguaje?
+  - ¿Premios por performance?
+  - ¿Equipos?
+- Contra:
+  - como proveer starter packages?
+    - day 0 example?
+  - casi depende en que la gente cree "big boys"
+    - alternativamente se podria multiplicar la input
+  - manejo de dependencias puede ser complicado
+  - mantener todo en stdlib
+    - aunque no deberia ser complicado(tm) instalar deps globales
+  - muy probablemente mantener todo en un 1(un) archivo
 * 2022
 - Clojure Video https://www.youtube.com/playlist?list=PLbPrugU2oQ8W5qGiiiFJRlQ8vZ8AZXlG8
 - GO https://github.com/lukechampine/advent/
@@ -11,6 +49,46 @@
   https://github.com/DrearyLisper/aoc-2022
 - Ocaml parser combinator
   https://github.com/inhabitedtype/angstrom
+** review 15-
+#+begin_src
+ 15 is fun if you don't slap it onto a constraint solver for a quick no-brain solution
+ 16 is the biggest filter so far, not really fun but not tedious either
+ 17 is pretty fun, and part 2 filtered a lot of people
+ 18 is short and easy, not much to say
+ 19 is also a big filter and probably the hardest one this year so far, there are a lot of unique solutions for this one
+ 20 is simple and easy, but easy to make bugs on
+ 21 is annoying and tedious, and my least favorite puzzle that takes longer than 10 minutes to solve this year. I didn't even go back to solve it without a constraint solver, fuck that
+ 22 is fun but also tedious to write in one sitting, I don't think I'd like it if I didn't get on the top 100 on it
+ 23 is short and easy and mostly just reading comprehension test, no clue why it's put here so late
+#+end_src
+** review
+#+begin_src
+ 01: trivial adding
+ 02: slightly annoying ordering
+ 03: irritating string splitting and matching
+ 04: overlapping ranges
+ 05: moving stuff between stacks, incredibly irritating input parsing
+ 06: find first occurrence of n distinct characters
+ 07: the filesystem one. seems to have brutally filtered normies
+ 08: the tall trees one
+ 09: The rope bridge one (this was fun!)
+ 10: becoming a CGA card to render dumb messages to the screen
+ 11: Monkeys throwing stuff
+ 12: Hill climb. everyone remembered Dijkstra for this
+ 13: [how do [[you]] feel [about [nested lists]]]
+ 14: The sandpile. Everyone remembered deterministic automatons, after completing it another way, of course. Produced the most satisfying visualisations of the year.
+ 15: The beacons. Are you retarded enough to iterate over all possible locations?
+ 16: The valves. The first really difficult one. Filtered many anons who forgot what a pruned DFS was
+ 17: Tetris. Part 2 way more brutal than part 1.
+ 18: Surface areas and flood fills. A little breather.
+ 19: Following on from 16 another brutal DFS tree pruning exercise involving mining robots. Many anons were filtered.
+ 20: Circular buffers, linked lists, and modular arithmetic. Did you forget about % (n-1)?
+ 21: Algebra with four letter identifiers. could be done in excel quite easily.
+ 22: The Cube. Part 2 was by far the most horrifying puzzle this year. Did you, anon, also make a shitty paper cube? Did you, anon, also avoid the filter only by hardcoding your edge maps?
+ 23: Elves discover social distancing. The peak of the year is over. Also produced nice visualisations.
+ 24: Blizzard Beasts. I actually liked this one.
+ 25: slightly tricking base changing but nothing really compared to previous days
+#+end_src
 ** Big boys
 #+begin_src
 url:    https://0x0.st/odUF.7z

@@ -1,3 +1,4 @@
+- https://github.com/microsoft/checkedc
 - talks https://nullprogram.com/blog/2018/11/21/
 - https://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html
 - A Guide to Undefined Behavior in C and C++, Part 1
@@ -25,7 +26,6 @@
     "Using JITing to skip PLT inderection"
     "Same on C would be -fno-plt"
 - https://fastcompression.blogspot.com/2019/01/writing-safer-c-code.html
-- Video: How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
 - https://github.com/AnthonyCalandra/modern-cpp-features
 - https://github.com/gerasdf/InsecureProgramming/
 - https://github.com/junegunn/fzf
@@ -35,6 +35,8 @@
 - http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
   https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
 * Videos
+- tic-tac toe https://www.youtube.com/watch?v=gCVMkKgs3uQ
+- How I program C - Eskil Steenberg - https://www.youtube.com/watch?v=443UNeGrFoM
 ** "New" Features in C - Daniel Saks
    https://www.youtube.com/watch?v=ieERUEhs910
 - C++ dev, working also on C
@@ -79,67 +81,68 @@
 - static_assert()
 - Example: using sokol gfx, we describe a pipeline, we initialize the others to 0/default
   #+begin_src c
-sg_pipeline_desc pip_desc = {
-  .layout = {
-    .buffers[0].stride = 28,
-    .attrs = {
-      [ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3,
-      [ATTR_vs_color0].format   = SG_VERTEXFORMAT_FLOAT4
-    }
-  },
-  .shared = shd,
-  .index_type = SG_INDEXTYPE_UINT16,
-  .depth_stencil = {
-    .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
-    .depth_write_enagled = true,
-  }
-  .rasterizer.cull_mode = SG_CULLMODE_BACK,
-  .rasterizer.sample_count = SAMPLE_COUNT,
-  .label = "cube-pipeline"
-};
+    sg_pipeline_desc pip_desc = {
+      .layout = {
+        .buffers[0].stride = 28,
+        .attrs = {
+          [ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3,
+          [ATTR_vs_color0].format   = SG_VERTEXFORMAT_FLOAT4
+        }
+      },
+      .shared = shd,
+      .index_type = SG_INDEXTYPE_UINT16,
+      .depth_stencil = {
+        .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
+        .depth_write_enagled = true,
+      }
+      .rasterizer.cull_mode = SG_CULLMODE_BACK,
+      .rasterizer.sample_count = SAMPLE_COUNT,
+      .label = "cube-pipeline"
+    };
   #+end_src
 - C11 _Generic and Overloading
   #define min(a,b) _Generic((a), float. minf(a,b), int: mini(a,b))
 - C11 atomics, thread_local
 - defer macro
   #+begin_src c
-#define macro_var(name) concat(name, __LINE__)
-#define defer(start,end) for (     \
-   int macro_var(_i_) = (start,0); \
-   !macro_var(_i_);                \
-   (macro_var(_i_) +=, end)
-#define profile defer(profile_begin(), profile_end())
-profile
-{
- ...
-}
-#define gui defer(gui_begin(),gui_end()
-gui
-{
-  ...
-}
+    #define macro_var(name) concat(name, __LINE__)
+    #define defer(start,end) for (     \
+       int macro_var(_i_) = (start,0); \
+       !macro_var(_i_);                \
+       (macro_var(_i_) +=, end)
+    #define profile defer(profile_begin(), profile_end())
+    profile
+    {
+     ...
+    }
+    #define gui defer(gui_begin(),gui_end()
+    gui
+    {
+      ...
+    }
   #+end_src
 - scope macro
   #+begin_src c
-  file_handle_t file = file_open(filename, file_mode_read);
-  scope(file_close(file))
-  {
-    ...
-  }
+    file_handle_t file = file_open(filename, file_mode_read);
+    scope(file_close(file))
+    {
+      ...
+    }
   #+end_src
 - Unions: We can refer to the same thing in different ways
   #+begin_src c
-  typedef union hmm_vec2
-  {
-    struct { float X, Y; };
-    struct { float U, V; };
-    struct { float Left, Right; };
-    struct { float Width, Height; };
-    float Elements[2];
-  } hmm_vec2;
+    typedef union hmm_vec2
+    {
+      struct { float X, Y; };
+      struct { float U, V; };
+      struct { float Left, Right; };
+      struct { float Width, Height; };
+      float Elements[2];
+    } hmm_vec2;
   #+end_src
 - Error: return a struct with a *valid* field
 * Libraries
+- Webserver https://mongoose.ws/
 - (3K) minimal cross-platform standalone C headers
   https://github.com/floooh/sokol
 - (800) math lib https://github.com/HandmadeMath/Handmade-Math
@@ -161,19 +164,18 @@ gui
   https://news.ycombinator.com/item?id=29783585
 - overhead is 9ms of linker and glibc
 - strace -tt shows time in microseconds
-- baseline time without stdlib 0.5ms
-   -ffreestanding -nostdlib
-   #+begin_src c
-// gcc -m32 -ffreestanding -nostdlib
-void _start() {
-    /* exit system call */
-    asm("movl $1,%eax;"
-        "xorl %ebx,%ebx;"
-        "int  $0x80"
-    );
-}
-   #+end_src
-- Bloom filter, to test SET belongs, for big datasets
+- baseline time without stdlib 0.5ms (-ffreestanding -nostdlib)
+  #+begin_src c
+    // gcc -m32 -ffreestanding -nostdlib
+    void _start() {
+        /* exit system call */
+        asm("movl $1,%eax;"
+            "xorl %ebx,%ebx;"
+            "int  $0x80"
+        );
+    }
+  #+end_src
+- =Bloom filter=, to test SET belongs, for big datasets
   gives false-positive
   do not gives false-negatives
   https://en.wikipedia.org/wiki/Bloom_filter
@@ -181,7 +183,9 @@ void _start() {
 - 5ms in glibc load
 - portable startime libc https://github.com/lunixbochs/lib43
 * 0x00sec
-** II Remote Shells. Part II. Crypt your link 
+** I Remote Shells
+https://0x00sec.org/t/remote-shells-part-i/269/1
+** II Remote Shells. Part II. Crypt your link
 - https://0x00sec.org/t/remote-shells-part-ii-crypt-your-link/306
 - https://en.wikipedia.org/wiki/Loop_unrolling
 - SocketPair
@@ -190,13 +194,13 @@ void _start() {
     Something like runing a client and a server in 1 call
   - Kind of like a bidirectional PIPE
   - Convenient IPC
-- secure_shel()
-| Parent       | Child              |
-|--------------+--------------------|
-| socketpair() |                    |
-| fork()       | fork()             |
-| close(sp[0]) | close(sp[1])       |
-| async_read() | start_shell(sp[0]) |
+- secure_shell()
+  | Parent       | Child              |
+  |--------------+--------------------|
+  | socketpair() |                    |
+  | fork()       | fork()             |
+  | close(sp[0]) | close(sp[1])       |
+  | async_read() | start_shell(sp[0]) |
 - async_read()
   select()
   memset()
@@ -212,7 +216,7 @@ void _start() {
 ** clang-format
   https://emacs.stackexchange.com/questions/55635/how-can-i-set-up-clang-format-in-emacs
   clang-format -style=llvm -dump-config > .clang-format
-* Book: 2020 Effective C
+* Book: 2020 | Effective C
 ** 1 Getting Started with C
 - C defines 2 possible execution environments:
   - Freestanding: no OS, embedded programming
@@ -431,7 +435,7 @@ void _start() {
 | external  | by default at file level                                          |
 | internal  | explicit *static* at file level                                   |
 | nolinkage | variable at block level (static gives it static storage duration) |
-* Book: 2019 Modern C
+* Book: 2019 | Modern C
 ** TODO 18 Threads
 - Are another variation of *control flow*
 - thrd_create()
@@ -440,7 +444,7 @@ void _start() {
   the behavior of the execution becomes undefined."
 - "There are no atomic array types.W
 - Race Free Initilization and ...
-* Book: 2002 Expert C Programming
+* Book: 2002 | Expert C Programming
 ** Introduction
 - some people do: if(3==i); in order to catch if they miss a =
 * 6.S081: Learning by doing

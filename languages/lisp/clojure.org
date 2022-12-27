@@ -134,8 +134,6 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 |                      | https://en.wikipedia.org/wiki/Ad_hoc_polymorphism     |
 |                      | https://en.wikipedia.org/wiki/Subtyping               |
 |                      | https://en.wikipedia.org/wiki/Structural_type_system  |
-|----------------------+-------------------------------------------------------|
-|                      |                                                       |
 ** 4 Multimethod Polymorphism
 *** Polymorphism and his types
 - "In a certain sense polymorphism provides the ability to create your own abstractions."

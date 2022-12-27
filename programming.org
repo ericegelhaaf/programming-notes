@@ -1,3 +1,7 @@
+- CS173 Brown University - Programming Languages
+  Instructor : Shriram Krishnamurthi
+  https://www.youtube.com/playlist?list=PL-R-PWkyRREf3Zjk6UFI5mhKt9XuLMC3G
+  https://cs.brown.edu/courses/cs173/2012/Videos/
 - https://github.com/mtdvio/every-programmer-should-know
 - https://github.com/codecrafters-io/build-your-own-x
 - https://github.com/chiroptical/ctfp-book-club
