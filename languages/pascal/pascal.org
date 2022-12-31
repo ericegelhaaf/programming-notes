@@ -1,0 +1,36 @@
+- https://en.wikipedia.org/wiki/Pascal_(programming_language)
+- https://github.com/Fr0sT-Brutal/awesome-pascal
+
+- https://wiki.lazarus.freepascal.org/GLScene
+- Game engine https://castle-engine.io/
+- raytracer turbo-pascal https://github.com/Postrediori/Pascal-Raytracer
+
+* Implementations
+** Free Pascal
+- https://www.freepascal.org/
+- https://wiki.freepascal.org/LCL
+- https://gitlab.com/freepascal.org/fpc/
+- https://www.lazarus-ide.org/
+- https://forum.lazarus.freepascal.org/
+- https://www.freepascal.org/docs-html/current/fcl/index.html
+- https://www.freepascal.org/docs-html/current/rtl/index.html
+- https://www.freepascal.org/docs.var
+** Delphi Pascal
+- $$$ https://www.embarcadero.com/products/delphi
+** Turbo Pascal
+- https://en.wikipedia.org/wiki/Turbo_Pascal
+* Personalities
+** Anders Hejlsberg
+- 2022 | https://www.youtube.com/watch?v=6udlQakSXZY
+  - works with TS, VSCode
+  - started writting ALGOL
+  - VC firm had a 100M "java fund"
+  - Worked with C# for 10 years
+  - Works now on TS
+  - TS features
+    - Abstract data types with ~discriminated unions~ you can do ~exhaustiveness checking~
+- 2019 | https://www.youtube.com/watch?v=tmOmFfcA9us
+  - Created Turbo Pascal
+  - Borland bought TB
+  - Worked at MS in the C#/.NET begginings
+  - Worked at MS in the TS begginings

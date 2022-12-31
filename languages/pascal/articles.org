@@ -1,0 +1,59 @@
+- 1983 | http://www.pbm.com/~lindahl/real.programmers.html
+  https://en.wikipedia.org/wiki/Real_Programmers_Don%27t_Use_Pascal
+- 1996 | https://marktheunissen.com/posts/tech/2006-06-03-denthor-of-asphyxia-s-graphics-tutorials/files/denthor-asphyxia-grant-smith-vga-trainers.txt
+- 1997 | https://www.cnet.com/tech/services-and-software/borland-sues-microsoft-over-brain-drain/
+- 2021 | https://mdhughes.tech/2021/07/12/freepascal-building/
+* 2017 | Why I use Object Pascal
+  https://dubst3pp4.github.io/post/2017-10-03-why-i-use-object-pascal/
+  https://news.ycombinator.com/item?id=15490345
+- Initially developed on 1969
+- First versions of PS was made on pascal
+- Historical different dialects
+  1) Borland's Turbo Pascal
+  2) Later added OO in Object Pascal
+- Current dialects
+  1) Delphi: turbo pascal successor. A RAD (rapid application development) environment
+     - OPascal
+     - compiler
+     - RTL (runtime library)
+     - designed for GUI applications
+     - ~runs ONLY on windows~, but it can compile to windows, linux, mac, android, ios
+  2) Free Pascal
+- Compiled, statically-typed
+  - it forces you to think about how to structure your data
+- Types
+  - Enumerators
+  - Sets
+  - Arrays
+  - Records
+  - Classes
+  - Or subrange of types
+  - Or rename existing ones
+- ~Procedural types~
+  Functions and procedures can also be passed to variables or other functions.
+- It is possible to ~overload operators~ for specific types.
+- ~OOP Support~
+  * NOT in the sense that most data types are instances of classes (eg: smalltalk, ruby, cl)
+  * encapsulation
+  * inheritance
+  * polymorphism
+  * baseclass of all classes is ~TObject~
+  * classes can define ~methods~, which are functions or procedures
+  * classes can define data called ~fields~
+  * classes can define ~properties~ that define how the data is accessed
+  * ~class helpers~ are comparable with ~extension methods~ in C# or smalltalk
+    let you add methods to existing classes without the need to derive a new class
+  * default classes for lists, dictionaries, streams,...
+- ~interfaces~ support
+- ~exceptions~ support, define your own
+- ~generics~ support
+- FCL Free Component Library
+- RTL Runtime Library
+- LCL Lazarus Component Library
+- Is modular
+  - What is called "packages" or "modules" is ~unit~ in Pascal
+  - You can define which data/functions are visible outside it (the interface)
+    And which are invisible/private (aka the implementation)
+  - Can define an ~initialization~ code that is run when the unit is included
+  - Can define an ~finalization~  that gets executed when the program terminates
+- no lambdas?
