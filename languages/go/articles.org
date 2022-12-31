@@ -1,3 +1,5 @@
+- https://withinboredom.info/blog/2022/12/29/golang-is-evil-on-shitty-networks/
+  https://news.ycombinator.com/item?id=34179426
 * DONE Article: I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,

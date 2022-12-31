@@ -1,3 +1,5 @@
+- Course  Simon Thompson on Erlang (all 13 videos)
+  https://www.youtube.com/playlist?list=PLoFxPv8jwGVVlajiMxaW9zG1IZgHODTuq
 - https://rapidgator.net/file/6480d14eb6e4c000aefb3f46017fcc64/[OReilly]_Erlang_By_Example_with_Cesarini_and_Thompson.part2.rar.html
 - https://github.com/duomark/epocxy
 - Video: Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw

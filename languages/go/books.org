@@ -1,4 +1,4 @@
-* 2015 | The Go Programming Language          | Alan A. Donovan   | Addison
+* 15 | The Go Programming Language          | Alan A. Donovan   | Addison
 Code: https://github.com/adonovan/gopl.io/
 ** DONE 6 Methods
 *** Method Declaration
@@ -197,7 +197,7 @@ type error interface {
    concrete types that must be dealt with ina uniform way."
 - Exception being when the interface and the (single only) type can't be on the same package.
 - ~ask only for what you need~, rule of thumb for interface design
-* 2016 | Go in practice                       | Matt Butcher      | Manning
+* 16 | Go in practice                       | Matt Butcher      | Manning
 ** 4 Handling Errors and Panics
 - errors.New
   fmt.Errorf
@@ -226,7 +226,7 @@ type error interface {
   - unwind the stack
   - if unhandled unwind the whole stack
   - signature is ~panic(interface{})~
-* 2016 | Go Programming Blueprints            | Mat Ryer          | Packt
+* 16 | Go Programming Blueprints            | Mat Ryer          | Packt
    https://github.com/matryer/goblueprints
 ** 1 - Chat Application with Web Sockets
 - we are using *package main* because we want to build and run our program from the CLI
@@ -286,7 +286,7 @@ type error interface {
       // ...
     }
   #+end_src
-* 2018 | Get Programming with Go              | Nathan Youngman   | Manning
+* 18 | Get Programming with Go              | Nathan Youngman   | Manning
 Code: https://github.com/nathany/get-programming-with-go
 ** 5 State and behavior
 *** DONE 21 A little Structure
@@ -396,14 +396,14 @@ Code: https://github.com/nathany/get-programming-with-go
   p1.book()
   p2.book()
   #+end_src
-* 2019 | Black Hat Go                         | Tom Steele        | nostarch
+* 19 | Black Hat Go                         | Tom Steele        | nostarch
   https://github.com/blackhat-go/bhg/
 ** Chapter 5 DNS
 - with "net" package you can't set the resolver or run deep inspection (? on the result
 - RR interface doesn't have methods to get the response IP
 - to get the IP from a RR struct we use *type assertion* to create the data
 - you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
-* 2021 | Cloud Native Go                      | Matthew A. Titmus | OReilly
+* 21 | Cloud Native Go                      | Matthew A. Titmus | OReilly
   Repo: https://github.com/cloudnativego/
 ** 9 Building Web Application with Go
    https://github.com/cloudnativego/web-application/3
@@ -425,7 +425,7 @@ Code: https://github.com/nathany/get-programming-with-go
    - ~net/http~ defines the Cookie struct
      http.SetCookie(w, &cookie)
      r.Cookie("acookie")
-* 2021 | Network Programming with Go          | Adam Woodbeck     | nostarch
+* 21 | Network Programming with Go          | Adam Woodbeck     | nostarch
 ** Introduction
 - Writing network software using Go's *Asynchronous* features
 - Emphasis on security
@@ -575,7 +575,7 @@ scheme://authority/path?query=abc&d=1#fragment
       There is no harm in drain a close a previously drain and closed request
     - Subtree (/a/path/) vs absolute path (/another/path)
       Go will try to match the absolute path, if not matches, will add a / and try to match and 301 to it
-* 2021 | Distributed Services with Go         | Travis Jeffery    | Pragmatic Bookshelf
+* 21 | Distributed Services with Go         | Travis Jeffery    | Pragmatic Bookshelf
 Source: https://pragprog.com/titles/tjgo/distributed-services-with-go/
 Source: https://github.com/travisjeffery/proglog
 - Author: Works at Confluence (kafka)
@@ -1038,7 +1038,7 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
   1) pull-based: the consumer polls the *data source* to check fr new data to consume.
      great for systems where consumers have different work loads
   2) push-based: the *data sources* pushes the data to the replica (eg:raft)
-* 2021 | Ultimate Go Notebook                 | William Kennedy   |
+* 21 | Ultimate Go Notebook                 | William Kennedy   |
 ** Chapter 4: Decoupling
 *** Method receiver, data semantics
 - Pick between value and pointer
@@ -1235,7 +1235,7 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
 - Mocking is better avoided. Eg: You can hit a docker container.
 - "A mock is only as good as the behavior being simulated."
 - Useful on NPT when it's diffcult to cause real systems to fail on demand.
-* 2022 | Network Programming with Go Language | Dr Jan Newmarch   | Apress
+* 22 | Network Programming with Go Language | Dr Jan Newmarch   | Apress
 ** 15 Websockets
  - HTTP 1.1 with "keep alive" keeping the connection open for a short while,
    helped mostly for images

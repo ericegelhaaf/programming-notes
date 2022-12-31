@@ -1,1 +1,12 @@
-https://www.cs.virginia.edu/~evans/cs655/readings/smalltalk.html
+- Playlist: Smalltalk FIUBA
+  https://www.youtube.com/playlist?list=PLjAkTa6GqXRdYkY2cWXTRWTYy7A0gms13
+- Playlist: Aprendiendo Smalltalk epoca del Covid
+  Hernan Wilkinson
+  https://www.youtube.com/watch?v=blj7itWxk2Y&list=PLMkq_h36PcLCtLKrrdOKKFV2r267VFH_t
+- Channel: Cincom Smalltalk
+  https://www.youtube.com/@CincomSmalltalk/playlists
+- Mooc Immersive Object Programming with Pharo - English voice over
+  https://www.youtube.com/playlist?list=PL2okA_2qDJ-kCHVcNXdO5wsUZJCY31zwf
+- Squeak from the very start
+  https://www.youtube.com/playlist?list=PL6601A198DF14788D
+- https://www.cs.virginia.edu/~evans/cs655/readings/smalltalk.html

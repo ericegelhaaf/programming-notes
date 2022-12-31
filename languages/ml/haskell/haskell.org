@@ -1,3 +1,4 @@
+- https://lokathor.gitbooks.io/using-haskell/content/opengl/
 - Course for webservices https://github.com/qfpl/applied-fp-course
 - Course https://github.com/serokell/hse-haskell-course-src
 - Tutorial https://devtut.github.io/haskell/

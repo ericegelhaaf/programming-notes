@@ -1,3 +1,5 @@
+- Interviews: https://www.youtube.com/playlist?list=PLUN7koCjqU7D6CT76Vprf_xLmaInshvGV
+- https://grugbrain.dev/
 - CS173 Brown University - Programming Languages
   Instructor : Shriram Krishnamurthi
   https://www.youtube.com/playlist?list=PL-R-PWkyRREf3Zjk6UFI5mhKt9XuLMC3G

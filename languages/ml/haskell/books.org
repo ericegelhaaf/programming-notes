@@ -1,3 +1,5 @@
+- https://leanpub.com/simple-haskell-book
+- https://leanpub.com/production-haskell
 * DONE Book: Seven Languages in 7 weeks
 ** Haskell
 - "In Haskell, indentation is significant." (?

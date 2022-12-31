@@ -1,5 +1,6 @@
 - Streamers https://github.com/chiroptical/declarative-programming-streams
 - https://github.com/hzlmn/haskell-must-watch
+- https://github.com/hellerve/programming-talks#haskell
 - Making Algorithmic Music
   Compose NYC 2019
   Speaker: Donya Quick
@@ -55,20 +56,107 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
     https://www.youtube.com/watch?v=JJv74IJUp4E
   - NYC Haskell User's Group
     https://www.youtube.com/channel/UCzNYHE7Kj6pBqq5h8LG9Zcg
-* TODO 2019 | Michael Snoyman: From Haskell to Rust?
-https://www.youtube.com/watch?v=HKXmEFvsi6M
-- Creator of Yesod/Stack
-- VP at "FP Complete"
-- Moved away from GHCjs
-  - Purescript/Halogen
-- Rust, has recently has async/await (it was "callback hell")
-- Monads reinventions??: promises (js), scala (futures)
-- "GO says, we don't trust the developers. Or I don't wanna bother the programmers with stuff"
-  - Like overload of operators
-- TALK ABOUT MONADS????
-- RESUME 20:00
+* 2013 | Adventure with Types | Simon Peyton
+  - Simon Peyton Jones Compiling without continuations
+    https://www.youtube.com/watch?v=qx5NZmrFnvs
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FC_in_GHC_July13.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Kinds_and_GADTs.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Type_inference.pdf
+  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FunWithTypeFuns.pdf
+** 1 https://www.youtube.com/watch?v=6COvD8oynmI
+  slides https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/ClassesJimOPLSS.pdf
+- 18:40 When we declare a function with a type class (constraint?)
+  - the compiler "adds an extra argument" to the function, the arg is kind of like a "vtable/read-table"
+    - like a implicit argument passing
+    - a record with the instance declarations functions for the typeclass
+- A *class* declaration turns into a *data* declaration
+- *instance* declarations turns into a record with the function instances
+- Constants are also overloaded, "1" is "(fromInteger d 1)"
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][00:47:14]] differences between haskell class and OO interface
+  1) NO problem with *multiple constraints*
+     #+begin_src haskell
+     f :: (Num a, Show a) => a ->
+     #+end_src
+  2) Existing types can _retroactively_ be made instances of new type classes
+     #+begin_src haskell
+     class Wibble a where
+       wib :: a -> Bool
+     instance Wibble Int where
+       wib n = n+1
+      #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][00:49:05]] Haskell has type based dispatch, is NOT value-based dispatch
+  We do NOT have a vtable attached to the value.
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:00:40]] Two approaches to polymorphism
+  Polymorphism: same code works on a variety of different argument types.
+  1) SubTyping (subclassing) from the OO world
+     On OO you can _retroactively_ subclass
+  2) Parametric polymorphism (generics) from the ML world.
+     You need to _anticipate_ the need to act on arguments of various types.
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:09:55]] java and c# support *constrained generics*
+  #+begin_src csharp
+    A inc<A>(A x)
+        where A:Inum {
+        // ...
+    }
+  #+end_src
+  - Which is like
+    #+begin_src haskell
+      inc :: Num a => a -> a
+    #+end_Src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:09:20]] OO languages also adopted *variants*
+  #+begin_src csharp
+    interface IEnumerator<out T> {
+        T Current;
+        bool MoveNext();
+    }
+    //...
+    m ( IEnumerator<Control> )
+    IEnumerator<Button> b
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:13:22]] the combination of parametric polymorphism and sub-typing is hard
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:21:32]] "Language design is all about the balance between, intellectual, compiler and programmer complexity.
+  Against the expresiveness and naturalness of the programming language."
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:29:04]] "finding type classes is simply a weak proof search"
+** 2
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:02:54]] the joy of types
+  1) Types guarantee the absence of ceratin classes of errors
+     - True + 'c'
+     - segfaults
+  2) The static type of a function is a *partial (machine checked) specification*
+  3) Types are a design language. The UML of Haskell.
+  4) Types massively support interactive program development.
+  5) Their support for software maintenance
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:16:12]] GADT (generalized algebraic data types)
+  #+begin_src haskell
+    data Maybe a = Nothing | Just a
+      -- OLD
+    data Maybe a where
+      Just :: a -> Maybe a
+      Nothing :: Maybe a
+  #+end_src
+- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:34:33]] Higher Kinds
+  - Sometimes you need a kind system that does for types what types does for terms.
+  - Kinds are way to classify types
+  - Abstracting types out of types
+    (a for type, f for type constructor)
+    #+begin_src haskell
+      data Tree f a = Leaf a
+                    | Node (f (Tree f a))
 
-* TODO Videos: HaskellRank by tsoding
+      type RoseTree a = Tree [] a
+      type BinTree  a = Tree Pair a
+      type AnnTree  a = Tree AnnPair a
+
+      data Pair a    = P a a
+      data AnnPair a = AP String a a
+    #+end_src
+* 2017 | What is a Monad?     | Computerphile
+https://www.youtube.com/watch?v=t1e8gqXLbsU
+  - Maybe, >>=, do, return
+  - A way to handle failure and """unwrap""" a series of Maybe operations
+  - "A monad is some kind of type constructor like Maybe or ... together with 2 functions (return, >>=)"
+  - Works with other "effects"
+* 2018 | HaskellRank          | tsoding
   playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
 ** DONE HackerRank in Haskell
 - interact :: (String -> String) -> IO ()
@@ -278,250 +366,15 @@ pp = putStrLn . unlines . map (unwords . map show)
 #+end_src
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
-* TODO 2019 | Haskell 10X - Google TechTalks
-  repo: https://github.com/google/haskell-trainings
-** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
-- EXTRA: https://ucsd-progsys.github.io/liquidhaskell-blog/
-- Everything is a function
-- Everything is immutable
-  Everything is *const* (on C++ on a function means that it will not change the state of the object)
-- Everything is an expression, no statements
-- No side effects, unless explicit
-- There is NO function that can go from impure to pure code
-  f :: IO a -> a
-- Going from pure to impure is ok
-  f :: a -> IO a
-*** Lazyness (18:00)
-- Reductions steps:
-  - Strict evaluation: inner to outer
-    Lazy evaluation: outer to inner (when needed you eval the arguments)
-(-) Memory pitfalls
-(-) IO and parallelism pitfalls: threads will just create the expressions, not evaluate them (use escape hatches)
-(+) Huge optimizations:
-  + compiler can re-arrange the code, simplify noop operations,
-  + partially thanks to knowing about pure/impurity of a function
-  + because only a part of the result of the operation might be needed
-(+) Great expressivity (e.g. infinite structures)
-*** Syntax (40:00)
-- Is NOT recommended to create your own operators.
-- ($) lowest priority
-- (.) composition
-*** Types (49:00)
-- ~type~, a weak typedef, sinonyms
-  type Point = (Int, Int)
-  type Map k v = [(k, v)] -- ~type parameters~
-- ~data structures~
-  - NO methods
-  - NO modifiers (setters)
-  - NO private members/slots
-  - YES Constructors (which are just functions)
-- Data Types
-#+begin_src haskell
-data None    = None             -- data with 1 option, have same the constructor and type name
-data Minutes = Minutes Int      -- Minutes 10
-data Bool    = False   | True
-data Maybe a = Nothing | Just a -- Just 10 -- Generic Type (a type argument)
-data List  a =     Nil | Cell a (List a)
--- Records
-data User = User String Int
--- Records, can also have named "fields". Fields are in the same namespace.
-data User = User {
-    userName :: String, -- Creates getters-like functions too
-    userAge  :: Int
-}
-#+end_src
-*** Functions (01:03:00)
-- Operators can be constructors
-- Operators pattern matching CAN short-circuit
-  #+begin_src haskell
-(&&) :: Bool -> Bool -> Bool
-True && True = True -- does NOT short-circuit (comment this line)
-True && y    = y    -- does short-circuit
-_    && _    = False
-  #+end_src
-- Deconstructor, pattern matching
-  #+begin_src haskell
-data Minutes = Minutes Int
-
-add :: Minutes -> Minutes -> Minutes
-add (Minutes x) (Minutes y) = Minutes $ x + y
-  #+end_src
-- "backslash because it kind of looks like a lambda"
-- in a function
-  - you cannot use something like (==) without defining Eq on the definition
-- head, is considered "bad design", as in some of the inputs panics
-  also callled "partial functions"
-- You can use pattern matching and guards at the same time
-- Point free style: is when we define functions without defining the arguments.
-                    Because it doesn't use the (.) operator.
-** TODO Haskell 102 https://www.youtube.com/watch?v=Ug9yJnOYR4U
-- If a library has 2 versions of a function, with (') is called "f prime".
-  The one with the (') is ~eager~
-  The one without the (') ~lazy~
-- Problems to solve:
-  1) Extend data types, ex: to show or compare
-  2) Type Constrains, are sometimes mandatory to declare some functions
-  3) Cascading Maybe's, might be solved with nested case's
-  4) IO
-     Can't apply regular functions
-     Can't pattern match
-     Can't get values out of it, but can operate while keeping it on IO
-*** Solution
-- 1 & 2 ) Declaring the type and implementing it, are separate things
-  #+begin_src haskell
-  -- 1)
-  class Show a where
-    show :: a -> String
-
-  data Color = Red | Green | Blue
-
-  instance Show Color where
-    show Red = "Red"
-    show Green = "Green"
-    show Blue
-  -- 2)
-  -- Constraints on functions
-  show :: Show a => a -> String -- a is an instance of show
-  sum  :: Num  a => [a] -> a
-  (==) :: Eq   a => a -> a -> Bool
-  -- Constraint on instances
-  instance Show a => Show (Maybe a) where
-    show Nothing  = "Nothing"
-    show (Just x) = "Just " ++ show x
-  -- Classes can have DEFAULT implementations
-  class Eq a where (==) :: a -> a -> Bool
-    (==) :: a -> a -> Bool
-    (/=) :: a -> a -> Bool
-    a == b = not $ a /= b
-    a /= b = not $ a == b
-  -- Classes can also have constraints, minimun implementation is either compare or <=
-  class Eq a => Ord a where
-    compare :: a -> a -> Ordering
-    (<=)    :: a -> a -> Bool
-    (>=)    :: a -> a -> Bool
-    (<)     :: a -> a -> Bool
-    (>)     :: a -> a -> Bool
-    max     :: a -> a -> a
-    min     :: a -> a -> a
-  -- Bounded, things on a class definition, can also be "values" in the class
-  class Bounded a where
-    minBound :: a
-    maxBound :: a
-  #+end_src,
-- 3)
-  Functions to deal with values in a context "C", or "<>" as context
-  | Functor     | <$> | fmap | :: | (a -> b)   | -> | C a | -> | C b |
-  | Applicative | <*> | ap   | :: | C (a -> b) | -> | C a | -> | C b |
-  | Monad       | >>= | bind | :: | (a -> C b) | -> | C a | -> | C b |
-- 4)
-  We use *do* syntax on IO monad, as we could do with anything else that implemented
-  do guarantees sequencial execution, ap can parallelize
-  #+begin_src haskell
-  class Applicative m => Monad m where
-    return :: a -> m a
-    (>>=)  :: m a -> (a -> m b) -> m b
-  #+end_src
-*** CodeLab (01:00:00)
-fmapValue
-apValue
-bindValue
-* DONE What is a Monad? - Computerphile
-  https://www.youtube.com/watch?v=t1e8gqXLbsU
-  - Maybe, >>=, do, return
-  - A way to handle failure and """unwrap""" a series of Maybe operations
-  - "A monad is some kind of type constructor like Maybe or ... together with 2 functions (return, >>=)"
-  - Works with other "effects"
-* 2013 | Simon Peyton - Adventure with Types in Haskell
-  - Simon Peyton Jones Compiling without continuations
-    https://www.youtube.com/watch?v=qx5NZmrFnvs
-  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FC_in_GHC_July13.pdf
-  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Kinds_and_GADTs.pdf
-  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/Type_inference.pdf
-  - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FunWithTypeFuns.pdf
-** 1 https://www.youtube.com/watch?v=6COvD8oynmI
-  slides https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/ClassesJimOPLSS.pdf
-- 18:40 When we declare a function with a type class (constraint?)
-  - the compiler "adds an extra argument" to the function, the arg is kind of like a "vtable/read-table"
-    - like a implicit argument passing
-    - a record with the instance declarations functions for the typeclass
-- A *class* declaration turns into a *data* declaration
-- *instance* declarations turns into a record with the function instances
-- Constants are also overloaded, "1" is "(fromInteger d 1)"
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][00:47:14]] differences between haskell class and OO interface
-  1) NO problem with *multiple constraints*
-     #+begin_src haskell
-     f :: (Num a, Show a) => a ->
-     #+end_src
-  2) Existing types can _retroactively_ be made instances of new type classes
-     #+begin_src haskell
-     class Wibble a where
-       wib :: a -> Bool
-     instance Wibble Int where
-       wib n = n+1
-      #+end_src
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][00:49:05]] Haskell has type based dispatch, is NOT value-based dispatch
-  We do NOT have a vtable attached to the value.
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:00:40]] Two approaches to polymorphism
-  Polymorphism: same code works on a variety of different argument types.
-  1) SubTyping (subclassing) from the OO world
-     On OO you can _retroactively_ subclass
-  2) Parametric polymorphism (generics) from the ML world.
-     You need to _anticipate_ the need to act on arguments of various types.
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:09:55]] java and c# support *constrained generics*
-  #+begin_src csharp
-    A inc<A>(A x)
-        where A:Inum {
-        // ...
-    }
-  #+end_src
-  - Which is like
-    #+begin_src haskell
-      inc :: Num a => a -> a
-    #+end_Src
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:09:20]] OO languages also adopted *variants*
-  #+begin_src csharp
-    interface IEnumerator<out T> {
-        T Current;
-        bool MoveNext();
-    }
-    //...
-    m ( IEnumerator<Control> )
-    IEnumerator<Button> b
-  #+end_src
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:13:22]] the combination of parametric polymorphism and sub-typing is hard
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:21:32]] "Language design is all about the balance between, intellectual, compiler and programmer complexity.
-  Against the expresiveness and naturalness of the programming language."
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%201)%20%5B6COvD8oynmI%5D.webm][01:29:04]] "finding type classes is simply a weak proof search"
-** 2
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:02:54]] the joy of types
-  1) Types guarantee the absence of ceratin classes of errors
-     - True + 'c'
-     - segfaults
-  2) The static type of a function is a *partial (machine checked) specification*
-  3) Types are a design language. The UML of Haskell.
-  4) Types massively support interactive program development.
-  5) Their support for software maintenance
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:16:12]] GADT (generalized algebraic data types)
-  #+begin_src haskell
-    data Maybe a = Nothing | Just a
-      -- OLD
-    data Maybe a where
-      Just :: a -> Maybe a
-      Nothing :: Maybe a
-  #+end_src
-- [[file:///home/sendai/disk2/videos/Programming/haskell/Simon_Peyton_Jones/Adventure%20with%20Types%20in%20Haskell%20-%20Simon%20Peyton%20Jones%20(Lecture%202)%20%5BbrE_dyedGm0%5D.webm][00:34:33]] Higher Kinds
-  - Sometimes you need a kind system that does for types what types does for terms.
-  - Kinds are way to classify types
-  - Abstracting types out of types
-    (a for type, f for type constructor)
-    #+begin_src haskell
-      data Tree f a = Leaf a
-                    | Node (f (Tree f a))
-
-      type RoseTree a = Tree [] a
-      type BinTree  a = Tree Pair a
-      type AnnTree  a = Tree AnnPair a
-
-      data Pair a    = P a a
-      data AnnPair a = AP String a a
-    #+end_src
+* 2019 | From Haskell to Rust?           | Michael Snoyman
+https://www.youtube.com/watch?v=HKXmEFvsi6M
+- Creator of Yesod/Stack
+- VP at "FP Complete"
+- Moved away from GHCjs
+  - Purescript/Halogen
+- Rust, has recently has async/await (it was "callback hell")
+- Monads reinventions??: promises (js), scala (futures)
+- "GO says, we don't trust the developers. Or I don't wanna bother the programmers with stuff"
+  - Like overload of operators
+- TALK ABOUT MONADS????
+- RESUME 20:00

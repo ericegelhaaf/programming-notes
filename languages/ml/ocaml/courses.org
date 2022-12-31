@@ -7,6 +7,136 @@
   Example https://github.com/ysc2229/ocaml-graphics-demo
   Code https://github.com/ysc2229/
   Student? https://tanrobby.github.io/teaching/ync_algo_intro/index.html
+* Course: 2016 | MOOC   | Introduction to Functional Programming in OCaml
+  https://www.fun-mooc.fr/en/courses/introduction-functional-programming-ocaml/
+  https://archive.org/details/fun_ocaml_mooc
+  MKV https://archive.org/compress/fun_ocaml_mooc/formats=MATROSKA&file=/fun_ocaml_mooc.zip
+  CODE https://github.com/smeruelo/mooc-ocaml
+  SLIDES https://archive.org/download/fun_ocaml_mooc/slidesAndCode.zip
+- Excercises
+  https://ocaml.org/learn/tutorials/99problems.html
+  https://github.com/VictorNicollet/99-Problems-OCaml
+  https://github.com/janestreet/learn-ocaml-workshop
+** 5.1 Exceptions
+- using exceptions to exit early of a "reduce-type" operation
+  if we didn't use exception the unwind of the stack would still happen
+- Without exception
+  #+begin_src ocaml
+    let rec multl = function
+      | [] -> 1
+      | a::rest -> if a = 0 then 0 else a * (multl rest)
+  #+end_src
+- With exception handling
+  #+begin_src ocaml
+    exception Zero
+    let multlexec l =
+       let rec aux = function
+         | [] -> 1
+         | a::rest -> if a = 0 then raise Zero else a * (aux rest)
+       in
+       try aux l with Zero -> 0
+  #+end_src
+* Course: 2020 | COS326 | Princeton - Functional Programming
+  2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
+  2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
+  2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
+** 03
+- Function parameters are patterns too
+  #+begin_src ocaml
+  type point = float * float
+
+  let distance ((x1,y1):point) ((x2,y2):point) : float =
+    let square x = x *. x in
+    sqrt (square (x -. x1) +. square (y2 -. y1))
+  #+end_src
+** 12 Modules
+*** 1
+- Signature = an inteface
+  Structure = an implementation
+  Function  = a parametrized module
+- Murphy's Law: "When is not enforced is broken"
+- Types of operations on a data type
+ | Constructor | return a value of the type                       |
+ | Observer    | reveals information about the status of the type |
+ | Mutator     | takes t and returns a new t                      |
+- "Sealing" a structure by a signature, limits visibility
+*** 2
+- Principles:
+  1) Fail as early as possible (ex: return irregular data)
+  2) Non-determinism is tough for clients (ex: return bad data)
+  3) Recoverable errors are better (ex: crashing)
+  4) More Non-determinism is worse (ex: it crashes or ret bad data)
+- Options and Exceptions are preferred
+  - *exception* can be declared on signatures, they can be handled
+  - *option*, adds an code overhead
+*** 3
+** 18 Parallel
+- Frameworks
+  1) Dryad https://www.microsoft.com/en-us/research/publication/dryad-distributed-data-parallel-programs-from-sequential-building-blocks/
+  2) Naiad https://www.youtube.com/watch?v=lHBCq2AbWqc&feature=emb_title
+  3) Spark
+  4) Hadoop
+  5) Pig
+- Types
+  - Data, same computation on independent items
+  - Task, different computations at the same time
+  - Pipeline, assembly line
+- Concurrency, mediates multiparty access to shared resources
+  - Thread is single core, good for concurrent programming but not for parallel
+    - That is < 2021
+- Paralleism, performs many tasks simultaneously
+  - You cannot get more parallelism than the number of virtual cores you have.
+  - CPU's cache makes parallel operations even more complicated than just interleaving
+- ~Atomicity~ is not guaranteed on a ref, on a := and !
+  - Even if it is on the operation, it won't be across threads
+    #+begin_src ocaml
+    let inc(r:int ref) = r := !r + 1
+    #+end_src
+- ~Busy waiting~
+  - Consuming CPU without doing something useful
+  - CPU could either be runnign a useful thread/program or power down
+- Thread.(create join)
+  - ~Fork-Join Paralleism~, *join*, wait for the thread t to finish and resume when done
+- Performance Bugs: for example when you run serial a code that is mean to be parallel
+*** Futures (aka promises or delays)
+- Easy to reason when there are NOT side effects, purely functional
+- Good for things worst than O(n log n), it will get at best linear time
+- Types helps remove errors at run-time, by checking types at compile-time
+- Similar to *lazy programming*, not the same
+**** Signature
+  #+begin_src ocaml
+  module type FUTURE =
+  sig
+    type 'a future
+    val future : ('a -> 'b) -> 'a -> 'b future
+    val force : 'a future -> 'a
+  end
+  #+end_src
+**** An implementation
+  #+begin_src ocaml
+  module Future : FUTURE =
+  struct
+    type 'a future = { tid   : Thread.t ;
+                      value : 'a option ref }
+
+    let future(f:'a->'b) (x:'a) : 'b future =
+      let r ref None in
+      let t = Thread.create (fun () -> r:= Some(f x)) () in
+      {tid=t ; value=r}
+
+    let force (f:'a future) : 'a =
+      Thread.join f.tid;
+      match !(f.value) with
+      | Some v -> v
+      | None -> failwith "impossible"
+  end
+  #+end_src
+**** Using it
+  #+begin_src ocaml
+  let x = future f () in
+  let y = g () in
+  let v = force x in
+  #+end_src
 * Course: 2021 | CS3110 | OCaml Programming: Correct + Efficient + Beautiful
   https://cs3110.github.io/textbook/cover.html
   https://www.youtube.com/playlist?list=PLre5AT9JnKShBOPeuiD9b-I4XROIJhkIU
@@ -638,133 +768,3 @@ expr:
   | e1 = expr; PLUS; e2 = expr { Binop (Add, e1, e2) }
   ;
     #+end_src
-* Course: 2020 | COS326 | Princeton - Functional Programming
-  2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
-  2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
-  2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
-** 03
-- Function parameters are patterns too
-  #+begin_src ocaml
-  type point = float * float
-
-  let distance ((x1,y1):point) ((x2,y2):point) : float =
-    let square x = x *. x in
-    sqrt (square (x -. x1) +. square (y2 -. y1))
-  #+end_src
-** 12 Modules
-*** 1
-- Signature = an inteface
-  Structure = an implementation
-  Function  = a parametrized module
-- Murphy's Law: "When is not enforced is broken"
-- Types of operations on a data type
- | Constructor | return a value of the type                       |
- | Observer    | reveals information about the status of the type |
- | Mutator     | takes t and returns a new t                      |
-- "Sealing" a structure by a signature, limits visibility
-*** 2
-- Principles:
-  1) Fail as early as possible (ex: return irregular data)
-  2) Non-determinism is tough for clients (ex: return bad data)
-  3) Recoverable errors are better (ex: crashing)
-  4) More Non-determinism is worse (ex: it crashes or ret bad data)
-- Options and Exceptions are preferred
-  - *exception* can be declared on signatures, they can be handled
-  - *option*, adds an code overhead
-*** 3
-** 18 Parallel
-- Frameworks
-  1) Dryad https://www.microsoft.com/en-us/research/publication/dryad-distributed-data-parallel-programs-from-sequential-building-blocks/
-  2) Naiad https://www.youtube.com/watch?v=lHBCq2AbWqc&feature=emb_title
-  3) Spark
-  4) Hadoop
-  5) Pig
-- Types
-  - Data, same computation on independent items
-  - Task, different computations at the same time
-  - Pipeline, assembly line
-- Concurrency, mediates multiparty access to shared resources
-  - Thread is single core, good for concurrent programming but not for parallel
-    - That is < 2021
-- Paralleism, performs many tasks simultaneously
-  - You cannot get more parallelism than the number of virtual cores you have.
-  - CPU's cache makes parallel operations even more complicated than just interleaving
-- ~Atomicity~ is not guaranteed on a ref, on a := and !
-  - Even if it is on the operation, it won't be across threads
-    #+begin_src ocaml
-    let inc(r:int ref) = r := !r + 1
-    #+end_src
-- ~Busy waiting~
-  - Consuming CPU without doing something useful
-  - CPU could either be runnign a useful thread/program or power down
-- Thread.(create join)
-  - ~Fork-Join Paralleism~, *join*, wait for the thread t to finish and resume when done
-- Performance Bugs: for example when you run serial a code that is mean to be parallel
-*** Futures (aka promises or delays)
-- Easy to reason when there are NOT side effects, purely functional
-- Good for things worst than O(n log n), it will get at best linear time
-- Types helps remove errors at run-time, by checking types at compile-time
-- Similar to *lazy programming*, not the same
-**** Signature
-  #+begin_src ocaml
-  module type FUTURE =
-  sig
-    type 'a future
-    val future : ('a -> 'b) -> 'a -> 'b future
-    val force : 'a future -> 'a
-  end
-  #+end_src
-**** An implementation
-  #+begin_src ocaml
-  module Future : FUTURE =
-  struct
-    type 'a future = { tid   : Thread.t ;
-                      value : 'a option ref }
-
-    let future(f:'a->'b) (x:'a) : 'b future =
-      let r ref None in
-      let t = Thread.create (fun () -> r:= Some(f x)) () in
-      {tid=t ; value=r}
-
-    let force (f:'a future) : 'a =
-      Thread.join f.tid;
-      match !(f.value) with
-      | Some v -> v
-      | None -> failwith "impossible"
-  end
-  #+end_src
-**** Using it
-  #+begin_src ocaml
-  let x = future f () in
-  let y = g () in
-  let v = force x in
-  #+end_src
-* Course: 2016 | MOOC   | Introduction to Functional Programming in OCaml
-  https://www.fun-mooc.fr/en/courses/introduction-functional-programming-ocaml/
-  https://archive.org/details/fun_ocaml_mooc
-  MKV https://archive.org/compress/fun_ocaml_mooc/formats=MATROSKA&file=/fun_ocaml_mooc.zip
-  CODE https://github.com/smeruelo/mooc-ocaml
-  SLIDES https://archive.org/download/fun_ocaml_mooc/slidesAndCode.zip
-- Excercises
-  https://ocaml.org/learn/tutorials/99problems.html
-  https://github.com/VictorNicollet/99-Problems-OCaml
-  https://github.com/janestreet/learn-ocaml-workshop
-** 5.1 Exceptions
-- using exceptions to exit early of a "reduce-type" operation
-  if we didn't use exception the unwind of the stack would still happen
-- Without exception
-  #+begin_src ocaml
-    let rec multl = function
-      | [] -> 1
-      | a::rest -> if a = 0 then 0 else a * (multl rest)
-  #+end_src
-- With exception handling
-  #+begin_src ocaml
-    exception Zero
-    let multlexec l =
-       let rec aux = function
-         | [] -> 1
-         | a::rest -> if a = 0 then raise Zero else a * (aux rest)
-       in
-       try aux l with Zero -> 0
-  #+end_src

@@ -7,6 +7,20 @@
 * Codebases
 - some random paint https://github.com/mrgaturus/npainter
 - zoom for linux by tsoding https://github.com/tsoding/boomer
+* Video: 2020 | Boomer | Tsoding
+https://www.twitch.tv/videos/463963305?filter=all&sort=time
+https://www.twitch.tv/videos/468009266?filter=all&sort=time
+https://www.twitch.tv/videos/470931124?filter=all&sort=time
+https://www.twitch.tv/videos/474198218?filter=all&sort=time
+https://www.twitch.tv/videos/478605555?filter=all&sort=time
+https://www.twitch.tv/videos/480601925?filter=all&sort=time
+https://www.twitch.tv/videos/483963539?filter=all&sort=time
+https://www.twitch.tv/videos/483963986?filter=all&sort=time
+https://www.twitch.tv/videos/486585497?filter=all&sort=time
+https://www.twitch.tv/videos/489880649?filter=all&sort=time
+https://www.twitch.tv/videos/492671715?filter=all&sort=time
+* Video: 2021 | Programming in Nim (Wang Tiles 01)
+https://www.youtube.com/watch?v=IGTuv_KKLFs
 * Video: 2022 | Nim in 100 Seconds
   https://www.youtube.com/watch?v=WHyOHQ_GkNo
   - no need of a main function
@@ -21,5 +35,5 @@
   - First class functions
 * Video: 2022 | ⚡ Learning Nim - First Look
 https://www.youtube.com/watch?v=Htjq9yF11m0
-- Right tool for _security hacking_ tools? Like go, but NOT rust.
+- Right tool for _security hacking_ tools? Like Go, but NOT Rust.
 - Small binaries

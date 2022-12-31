@@ -1,4 +1,3 @@
-* Video
 - 2014 Ocaml at Bloomberg http://cufp.org/2014/maxime-ransan-adopting-functional-programming-with-ocaml-at-bloomberg-lp.html
 - Podcast: Automated Trading and OCaml with Yaron Minsky
   https://www.youtube.com/watch?v=KdAS2_Gienc
@@ -17,14 +16,15 @@
 - OCaml 2014: The State of OCaml (invited), Xavier Leroy https://www.youtube.com/watch?v=DMzZy1bqj6Q&list=UUP9g4dLR7xt6KzCYntNqYcw
 - Video: 2012 - Xavier Leroy - The continuation of functional programming by other means
   https://events.inf.ed.ac.uk/Milner2012/X_Leroy-html5-mp4.html
-** Channels
+- 2020 Retrofitting Parallelism onto Ocaml (ICFP 2020) https://www.youtube.com/watch?v=9ClMPz7QaIs
+* Channels
 - Westley Weimer https://www.youtube.com/channel/UCSZ5lYLg6ARj4Wow3ZQXQzA/videos
 - Anwar Mamat https://www.youtube.com/playlist?list=PLF-pVzrCrXdj7rBvOOwulglwwDjVy96uI
 - Jane Street https://www.youtube.com/channel/UCDsVC_ewpcEW_AQcO-H-RDQ
 - Eduardo Rafael https://www.youtube.com/c/EduardoRFS/videos
 - Ocaml Workshops https://www.youtube.com/c/OCamlWorkshops/videos
 - Ocaml Software Foundation https://www.youtube.com/channel/UCnwkbeuXjuUTNsPoLKsBWdg
-** Video: 2015 - A Crash Course in OCaml Modules - Tim McGilchrist
+* 2015 | A Crash Course in OCaml Modules - Tim McGilchrist
 https://www.youtube.com/watch?v=lISWTUyNP4c
 - =OCaml Modules= v =Haskell Type Classes=
 - Ocaml Modules
@@ -40,7 +40,7 @@ https://www.youtube.com/watch?v=lISWTUyNP4c
     you can pick different "backends" or implementations for things
     like pick between lwt and async support
 *** Typeclasses to Signatures
-  #+begin_src ocaml haskell
+#+begin_src haskell
   class Show a where
       show :: a -> String
   #+end_src
@@ -49,38 +49,37 @@ https://www.youtube.com/watch?v=lISWTUyNP4c
     type t
     val show : t -> string
   end
-  #+end_src
+#+end_src
 *** Instances   to Structures
-  #+begin_src haskell
+#+begin_src haskell
   instance Show Int where
-      show = ... -- Provided by GHC
-  #+end_src
-  #+begin_src ocaml
+    show = ... -- Provided by GHC
+#+end_src
+#+begin_src ocaml
   module ShowInt = struct
     type t = int
     let show = string_of_int
   end
-  #+end_src
+#+end_src
 *** Using them
-  #+begin_src haskell
+#+begin_src haskell
   csv :: Show a => [a] String
   csv [] = ""
   csv [x] = show x
   csv h:t = show h ++ "," ++ csv t
-  #+end_src
-  - 1 extra step, instanciate with the functor, a new module
+#+end_src
+- 1 extra step, instanciate with the functor, a new module
   #+begin_src ocaml
-  module Csv(S:Show) = struct
-    let rec to_csv : S.t -> string = function
-      | []   -> ""
-      | [x]  -> S.show x
-      | h::t -> S.show h ^ "," ^ to_csv t
-  end
-  module X = Csv(ShowInt) (* extra step *)
-  X.to_csv [1;2;3] (* => 1,2,3 *)
+    module Csv(S:Show) = struct
+      let rec to_csv : S.t -> string = function
+        | []   -> ""
+        | [x]  -> S.show x
+        | h::t -> S.show h ^ "," ^ to_csv t
+    end
+    module X = Csv(ShowInt) (* extra step *)
+    X.to_csv [1;2;3] (* => 1,2,3 *)
   #+end_src
-
-** TODO Video: 2019 - GADTs and You; Writing Safer Code Using GADTs
+* TODO 2019 | GADTs and You; Writing Safer Code Using GADTs
    Nathan Holland https://www.youtube.com/watch?v=tEQ8bTNYj5g
    runnable slides https://github.com/nholland94/gadt-lambdaconf-talk
 - Allows us:
@@ -129,3 +128,45 @@ https://www.youtube.com/watch?v=lISWTUyNP4c
     let one : one peano = Succ zero
     #+end_src
     13:00
+* TODO 2020 | Fast Parser Combinator Library from Scratch in OCaml (no dependencies)
+TODO 01:16:00
+https://www.youtube.com/watch?v=Y5IIXUBXvLs
+- > cd src
+  > utop
+  #load_rec "some.cmo";;
+- .bytecode has a shebang
+  #!/home/sendai/.opam/default/bin/ocamlrun
+  <BYTECODE_HERE>
+** parcoom.ml - types definition
+- A parser combinator is just a type that wraps and handles the state of a constantly being consumed input
+  #+begin_src ocaml
+    type 'a parser =
+      { run : input -> (input * 'a, error) result
+      }
+  #+end_src
+- Defining input
+  #+begin_src ocaml
+    (* is an incomplete definition if we would want to keep track of the current position *)
+    type input = string
+    type input = { text: string; pos: int }
+  #+end_src
+- Defining error
+  #+begin_src ocaml
+    type error = { desc: string; pos: int }
+  #+end_src
+** ini.ml - parsing INI files
+#+begin_src ocaml
+  type key = string
+  type value = string
+  type pair = key * value
+  type section = pair list
+  let ini: section list Parcoom.parser =
+    failWith "TODO"
+#+end_src
+** Makefile
+#+begin_src makefile
+  ini: src/parcoom.ml examples/ini.ml
+          ocamlfind ocamlopt -I src/ -I examples/ -o ini src/parcoom.ml examples/ini.ml
+  ini.byte:
+          ocamlfind ocamlc -I src/ -I examples/ -o ini.bytes src/parcoom.ml examples/ini.ml
+#+end_src

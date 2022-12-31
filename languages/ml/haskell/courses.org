@@ -17,75 +17,7 @@
 - Haskell MOOC University of Helsinki
   https://haskell.mooc.fi/material/
   https://github.com/moocfi/haskell-mooc
-* 2018 | Data61 fp-course
-code https://github.com/system-f/fp-course
-authors works at marketplace.atlassian.com, which is made in Scala
-pointfree https://hackage.haskell.org/package/pointfree
-pointful https://hackage.haskell.org/package/pointful
-https://wiki.haskell.org/Pointfree
-** Part #1: syntax, Optional, List
-https://www.youtube.com/watch?v=NzIZzvbplSM
-#+begin_src haskell
-  headOr = foldRight const
-  length = foldRight (const (1 +)) 0
-  map f = foldRight ((:.) . f) Nil
-  filter p = foldRight (\a as -> if p a then a :. as else as) Nil
-  (++) = flip (foldRight (:.))
-  flatten = foldRight (++) Nil
-  flatMap f xs = flatten (map f xs)
-  flatMap f xs = (flatten . map f) xs
-  flatMap f    =  flatten . map f
-  flatMap f    =  flatten . map f
-  flatMap      =  (flatten .) . map
-  flattenAgain = flatMap id
-  seqOptional = foldRight (twiceOptional (:.)) (Full Nil)
-#+end_src
-- 00:09:11 In haskell all functions take 1 argument.
-  Right associative.
-  f :: Int -> (Int -> Int)
-- 00:14:17 "scala is not ideal to do FP"
-  Is good for learning trampoline. Which fixes the stack overflow problem.
-  You have to do workarounds.
-- 00:33:07 ghci
-  :info Z
-  :type x
-  :set -fderer-type-errors
-  :reload
-- 00:57:00
-  Using typing holes to "find" the implementation based on types, and the errors returned by GHCI.
-  1) Return a typed hole variable eg: "_todo"
-  2) Look the "Found hole" section
-  3) Look at the "Relevant bindings include" section
-- 01:15:00 foldr
-  is *constructor replacement*, don't think "I am folding from the right"
-  where the function it takes is the constructor we are going to use to replace
-  replace for example ":" cons on lists
-- 01:20:00 foldl
-  the way to think it is *for loop*, or .forEach on JS
-   can be implemented with foldr
-- 01:28:00 foldr vs pattern matching
-  whether you see pattern matching,
-  usually you can replace it with construction replacement
-  (aka foldr)
-- 01:37:00 function *const a b* returns the first argument (a)
-** Part #2: List, Functor, Applicative
-#+begin_src haskell
-  find p = foldRight _todo Empty
-  find p = foldRight (\a o -> _todo) Empty
-  find p = foldRight (\a o -> if p a then Full a else o) Empty
-  lengthGT4 (_ :. _ :. _ :. _ :. _ :. _) =
-    True
-  lengthGT4 _ =
-    False
-  reverse = foldLeft (\as b -> b :. as) Nil
-  reverse = foldLeft (flip (:.)) Nil
-  produce f x = x :. produce f (f x)
-#+end_src
-- 00:11:23 twiceOptional, is a function that takes 1 function and puts them into optional
-- 00:27:00 you """can""" implement foldr with foldl but it won't do the right thing with infinity
-  since foldr is _replacing constructors_ is has lazy support
-  this means that the foldr on Haskell is different than the one on Javascript
-* DONE Course: Functional Programming in Haskell: Supercharge Your Coding
+* 2016 | Functional Programming in Haskell: Supercharge Your Coding
 Source: https://github.com/wimvanderbauwhede/HaskellMOOC
 ** 1 Haskell First Steps
 - Pure functional programming languages do NOT have any statements,
@@ -405,7 +337,7 @@ instance MonadPlus Maybe where
 - https://blog.plover.com/prog/burritos.html
   https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/
   https://chrisdone.com/posts/monads-are-burritos/
-* Course: Packt - Learning Haskell Programming
+* 2016 | Learning Haskell Programming | Packt
 - stack new words
   stack ghci
   stack build
@@ -464,7 +396,30 @@ coords4 = zipWith zip rows8 cols8
       #+end_src
 - (map . map)
 - (zipWith . zipWith)
-* TODO 2016 | Haskell | Bartosz Milewski
+* 2016 | Category Theory I | Bartosz Milewski
+  https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
+  https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/
+** 1.1: Motivation and Philosophy
+** 1.2: What is a category?
+** 2.1: Functions, epimorphisms
+** 2.2: Monomorphisms, simple types
+** 3.1: Examples of categories, orders, monoids
+** 3.2: Kleisli category
+** 4.1: Terminal and initial objects
+** 4.2: Products
+** 5.1: Coproducts, sum types
+** 5.2: Algebraic data types
+** 6.1: Functors
+** 6.2: Functors in programming
+** 7.1: Functoriality, bifunctors
+** 7.2: Monoidal Categories, Functoriality of ADTs, Profunctors
+** 8.1: Function objects, exponentials
+** 8.2: Type algebra, Curry-Howard-Lambek isomorphism
+** 9.1: Natural transformations
+** 9.2: bicategories
+** 10.1: Monads
+** 10.2: Monoid in the category of endofunctors
+* 2016 | Haskell           | Bartosz Milewski
   playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
 ** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
 - "Web programming is horrible-cheap imitation of programming"
@@ -908,30 +863,314 @@ runEval $ do
 ** 7-2 => Parallel sudoku solver, strategies, overview of Haskell parallelism.
 ** 8-1 => Concurrent Haskell, MVars
 ** 8-2 => Software Transactional Memory
-* 20?? | Category Theory I | Bartosz Milewski
-  https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
-  https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/
-** 1.1: Motivation and Philosophy
-** 1.2: What is a category?
-** 2.1: Functions, epimorphisms
-** 2.2: Monomorphisms, simple types
-** 3.1: Examples of categories, orders, monoids
-** 3.2: Kleisli category
-** 4.1: Terminal and initial objects
-** 4.2: Products
-** 5.1: Coproducts, sum types
-** 5.2: Algebraic data types
-** 6.1: Functors
-** 6.2: Functors in programming
-** 7.1: Functoriality, bifunctors
-** 7.2: Monoidal Categories, Functoriality of ADTs, Profunctors
-** 8.1: Function objects, exponentials
-** 8.2: Type algebra, Curry-Howard-Lambek isomorphism
-** 9.1: Natural transformations
-** 9.2: bicategories
-** 10.1: Monads
-** 10.2: Monoid in the category of endofunctors
-* 20?? | Advanced Haskell Programming | Graham Hutton
+* 2018 | Data61 fp-course  | Brian McKenna
+code https://github.com/system-f/fp-course
+authors works at marketplace.atlassian.com, which is made in Scala
+pointfree https://hackage.haskell.org/package/pointfree
+pointful https://hackage.haskell.org/package/pointful
+https://wiki.haskell.org/Pointfree
+** Part #1: syntax, Optional, List
+https://www.youtube.com/watch?v=NzIZzvbplSM
+#+begin_src haskell
+  headOr = foldRight const
+  length = foldRight (const (1 +)) 0
+  map f = foldRight ((:.) . f) Nil
+  filter p = foldRight (\a as -> if p a then a :. as else as) Nil
+  (++) = flip (foldRight (:.))
+  flatten = foldRight (++) Nil
+  flatMap f xs = flatten (map f xs)
+  flatMap f xs = (flatten . map f) xs
+  flatMap f    =  flatten . map f
+  flatMap f    =  flatten . map f
+  flatMap      = (flatten .) . map
+  flattenAgain = flatMap id
+  seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
+#+end_src
+*** 00:09:11 In haskell all functions take 1 argument.
+  Right associative.
+  f :: Int -> (Int -> Int)
+*** 00:14:17 "scala is not ideal to do FP"
+  Is good for learning trampoline.
+  Which fixes the stack overflow problem.
+  You have to do workarounds.
+*** 00:33:07 ghci
+  :info Z
+  :type x
+  :set -fderer-type-errors
+  :reload
+*** 00:57:00
+  Using =typing holes= to "find" the implementation based on types, and the errors returned by GHCI.
+  1) Return a typed hole variable eg: "_todo"
+  2) Look the "Found hole" section
+  3) Look at the "Relevant bindings include" section
+*** 01:15:00 foldr
+  is *constructor replacement*, don't think "I am folding from the right"
+  where the function it takes is the constructor we are going to use to replace
+  replace for example ":" cons on lists
+*** 01:20:00 foldl
+  the way to think it is *for loop*, or .forEach on JS
+  can be implemented with foldr
+*** 01:28:00 foldr vs pattern matching
+  whether you see pattern matching,
+  usually you can replace it with construction replacement
+  (aka foldr)
+*** 01:37:00 function *const a b* returns the first argument (a)
+** Part #2: List, Functor, Applicative
+#+begin_src haskell
+  find p = foldRight _todo Empty
+  find p = foldRight (\a o -> _todo) Empty
+  find p = foldRight (\a o -> if p a then Full a else o) Empty
+  lengthGT4 (_ :. _ :. _ :. _ :. _ :. _) = True
+  lengthGT4 _                            = False
+  reverse = foldLeft (\as b -> b :. as) Nil
+  reverse = foldLeft (flip (:.)) Nil
+  produce f x = x :. produce f (f x)
+#+end_src
+*** 00:11:23 twiceOptional, is a function that takes 1 function and puts them into optional
+*** 00:27:00 you """can""" implement foldr with foldl but it won't do the right thing with infinity
+  since foldr is _replacing constructors_ is has lazy support
+  this means that the foldr on Haskell is different than the one on Javascript
+* 2019 | Haskell 10X       | Antoine Leblanc
+repo: https://github.com/google/haskell-trainings
+** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
+- EXTRA: https://ucsd-progsys.github.io/liquidhaskell-blog/
+  - Allows you to place constraints on the values
+- Everything is a function
+- Everything is immutable
+  Everything is *const* (on C++ on a function means that it will not change the state of the object)
+- Everything is an expression, no statements
+- No side effects, unless explicit
+- There is NO function that can go from impure to pure code
+  f :: IO a -> a
+- Going from pure to impure is ok
+  f :: a -> IO a
+- in OO, the concept of ~dependency injection~ is kind of similar to IO/pure/impure
+  your logic/module is completely independent, knows nothing about the outside world
+  your outer layer connect it to the rest of the world by connecting its dependencies
+- difference with DI is that this in enforced by the compiler
+*** Lazyness (18:00)
+- Reductions steps:
+  - Strict evaluation: inner to outer evaluation
+    Lazy evaluation: outer to inner evaluation (when needed you eval the arguments)
+(-) Memory pitfalls
+(-) IO and parallelism pitfalls: threads will just create the expressions, not evaluate them (you can use escape hatches)
+(+) Huge optimizations:
+  + lazyness and purity work together
+  + compiler can re-arrange the code, simplify noop operations,
+  + partially thanks to knowing about pure/impurity of a function
+  + because only a part of the result of the operation might be needed
+(+) Great expressivity (e.g. infinite structures)
+   #+begin_src haskell
+     let naturalNumbers = [0,1..]
+     let squaredNumbers = map (^2) naturalNumbers
+     take 5 squaredNumbers -- [0,1,4,9,16]
+   #+end_src
+- Every function takes 1 argument
+  - get ~partial application~ for free
+*** Syntax (40:00)
+- Is NOT recommended to create your own operators.
+- ($) lowest priority
+- (.) composition
+*** Types (49:00)
+- ~type~, a weak typedef (meaning you can use them interchangable), synonyms
+  #+begin_src haskell
+    type Point   = (Int, Int)
+    type Polygon = [Point]
+    type Map k v = [(k, v)] -- k and v are type parameters
+  #+end_src
+- Immutable ~data structures~
+  1) NO methods
+  2) NO modifiers (setters)
+  3) NO private members/slots
+  4) YES Constructors (which are just constants or functions)
+- Data Types, list the constructors that create an expression of a type
+ #+begin_src haskell
+   -- data with 1 option, per convention, have same the constructor and type name
+   data None    = None
+   data Minutes = Minutes Int -- Minutes 10
+
+   data Bool    =   False | True
+   data Maybe a = Nothing | Just a -- Just 10 -- Generic Type (a type argument)
+   data List  a =     Nil | Cell a (List a)
+
+   -- Records (aka c struct)
+   data User = User String Int
+   -- Records, can also have named "fields". Fields are in the same namespace.
+   data User = User {
+       userName :: String, -- Creates getters functions too
+       userAge  :: Int
+   }
+ #+end_src
+*** Functions (01:03:00)
+- Operators can be constructors
+- Operators pattern matching CAN short-circuit
+  #+begin_src haskell
+    (&&) :: Bool -> Bool -> Bool
+    True && True = True -- does NOT short-circuit (comment this line)
+    True && y    = y    -- will short-circuit
+    _    && _    = False
+  #+end_src
+- Deconstructor + pattern matching
+  #+begin_src haskell
+    data Minutes = Minutes Int
+    add :: Minutes -> Minutes -> Minutes
+    add (Minutes x) (Minutes y) = Minutes $ x + y
+  #+end_src
+- "backslash because it kind of looks like a lambda"
+*** Exercises/Codelab (01:19:50)
+- in a function
+  - you cannot use something like (==) without defining Eq on the definition
+- ~head~, is considered "bad design", as in some of the inputs panics
+  also called "partial functions" as it does NOT have an output for some values of List
+- You can use pattern matching and guards at the same time
+  - guards can have *otherwise* or True as their fallback match
+    #+begin_src haskell
+      filter :: (a-> Bool) -> [a] -> [a]
+      filter _ [] = []
+      filter f (x:xs)
+        | f x       = x : filter f xs
+        | otherwise =     filter f xs
+    #+end_src
+- =Point free style=:
+  Is when we define functions without defining the arguments.
+** TODO Haskell 102 https://www.youtube.com/watch?v=Ug9yJnOYR4U
+TODO 00:46:00
+- 00:06:40 end of recap
+- If a library has 2 versions of a function, with (') is read as "f prime".
+  The one with the (') is ~eager~
+  The one without it is ~lazy~
+- Problems to solve with our current knowledge gap
+  1) Extend data types, ex: to show or compare
+  2) Type Constraints, are sometimes mandatory to declare some functions
+  3) Cascading Maybe's, might be solved with nested case's
+  4) IO
+     Can't apply regular functions on it
+     Can't get values out of it, BUT can operate while keeping it on IO
+     Can't pattern match on it
+- ~read~ function is partial, eg: trying to read "0" as a Color it will panic
+*** 1 ) How to extend our types
+- Declaring the type and implementing it
+- You can think of typeclasses as interfaces
+#+begin_src haskell
+  class Show a where -- define the contract
+    show :: a -> String
+
+  data Color = Red | Green | Blue
+
+  instance Show Color where
+    show Red   = "Red"
+    show Green = "Green"
+    show Blue  = "Blue"
+#+end_src
+*** 2 ) How to express type constraints
+- deriving only works with TC the compiler knows about
+  cannot extend the compiler knowledge of TC
+  might be with a compiler extension
+  #+begin_src haskell
+    data Color = Red | Green | Blue
+        deriving (Show,
+                  Read,
+                  Eq,
+                  Ord,
+                  Bounded,
+                  Enum)
+  #+end_src
+- declaring and constraining
+  #+begin_src haskell
+    -- Constraints on Functions
+    show :: Show a => a -> String -- a is an instance of show
+    sum  :: Num  a => [a] -> a
+    (==) :: Eq   a => a -> a -> Bool
+
+    -- Constraints on Instances
+    instance Show a => Show (Maybe a) where
+      show Nothing  = "Nothing"
+      show (Just x) = "Just " ++ show x
+
+    -- Constraints on Classes
+    -- Classes can have DEFAULT implementations
+    class Eq a where (==) :: a -> a -> Bool
+      (==) :: a -> a -> Bool
+      (/=) :: a -> a -> Bool
+      a == b = not $ a /= b
+      a /= b = not $ a == b
+
+    -- Constraints on Classes
+    --  minimun implementation is either compare or <=
+    class Eq a => Ord a where
+      compare :: a -> a -> Ordering
+      (<=)    :: a -> a -> Bool
+      (>=)    :: a -> a -> Bool
+      (<)     :: a -> a -> Bool
+      (>)     :: a -> a -> Bool
+      max     :: a -> a -> a
+      min     :: a -> a -> a
+
+    -- Bounded, things on a class definition, can also be "values" in the class
+    class Bounded a where
+      minBound :: a
+      maxBound :: a
+
+    class Enum a where
+      succ           :: a -> a
+      pred           :: a -> a
+      toEnum         :: Int -> a
+      fromEnum       :: a -> Int
+      enumFrom       :: a -> [a]
+      enumFromThen   :: a -> a ->
+      enumFromTo     :: a -> a ->
+      enumFromThenTo :: a -> a ->
+#+end_src
+*** 3 ) How to chain contextual functions
+Functions to deal with values in a context/wrapper "C",
+or "<>" as context like "<$>" being like "$" function application but inside a context
+ | Type Class  |     | Func |    |                            |
+ |-------------+-----+------+----+----------------------------|
+ | Functor     | <$> | fmap | :: | __(a ->   b) -> C a -> C b |
+ | Applicative | <*> | ap   | :: | C (a ->   b) -> C a -> C b |
+ | Monad       | >>= | bind | :: | __(a -> C b) -> C a -> C b |
+**** ap(pply)
+  - Solves a problem of using fmap
+  - What happens when you use fmap on a function with >1 argument, on the value inside C
+  - There are better abstractions than ap, build on top of it
+  - eg: sum of 2 maybe ints
+    #+begin_src haskell
+      fmap (+) (Just 3)        = Just (3+)
+      ap (Just (3+)) (Just 39) = Just 42
+      (+) <$> Just 3 <*> Just 39 = Just 42
+    #+end_src
+
+**** bind (solves 4)
+- eg: apply div2 twice
+- this won't work
+  #+begin_src haskell
+    div2 :: Int -> Maybe Int
+    div4 :: Int -> Maybe Int
+    div4 x = let y = div2 x -- Maybe Int
+             in fmap div2 y -- Maybe (Maybe Int)
+  #+end_src
+- instead
+  #+begin_src haskell
+    div4 x = let y = div2 x
+             in bind div2 $ div2 x
+
+    div4 x = bind div2 $ div2 x
+
+    div4 x = div2 x >>= div2
+  #+end_src
+*** 4 ) How to use IO
+We use *do* syntax on IO monad, as we could do with anything else that implemented
+do guarantees sequencial execution, ap can parallelize
+#+begin_src haskell
+  class Applicative m => Monad m where
+    return :: a -> m a
+    (>>=)  :: m a -> (a -> m b) -> m b
+#+end_src
+*** CodeLab (01:00:00)
+fmapValue
+apValue
+bindValue
+* 20?? | Advanced Haskell  | Graham Hutton
 ** 06 Functors
 - Functor: Generalizing further the concept of *map*, we can map over things other than lists.
 - class definition, we use fmap since map already exists

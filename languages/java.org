@@ -1,3 +1,4 @@
+- https://developer.okta.com/blog/2022/04/08/state-of-ffi-java
 - Library https://developer.okta.com/blog/2022/08/26/state-of-java-project-loom
 - Article: Optional: https://davidleongz.medium.com/optional-a-pragmatic-approach-c736705c2deb
 - Article: Optional: https://homes.cs.washington.edu/~mernst/advice/nothing-is-better-than-optional.html

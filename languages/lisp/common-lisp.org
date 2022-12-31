@@ -1,4 +1,6 @@
-
+- incudine project
+  https://github.com/ormf/cl-ats
+  https://selma.hfmdk-frankfurt.de/gitlab/orm.finnendahl/ats-cuda/-/blob/master/examples.lisp
 - DavidWesselsVIU https://www.youtube.com/@davidwesselsviu6016/playlists
 - https://mfiano.net/posts/2022-09-04-from-common-lisp-to-julia/
   https://gist.github.com/digikar99/24decb414ddfa15a220b27f6748165d7
@@ -834,7 +836,7 @@ https://github.com/cbeo/gtwiwtg
 | trivia          | pattern matching       | defun-match*, ppcre | https://github.com/guicho271828/trivia         |
 | fare-quasiquote | extensions for trivia  |                     | https://github.com/fare/fare-quasiquote        |
 | let-plus        | destructuring          | defun+              | https://github.com/tpapp/let-plus              |
-| metabang-bind   | destructuring          |                     | https://common-lisp.net/project/metabang-bind/ |
+| metabang-bind   | destructuring          | bind                | https://common-lisp.net/project/metabang-bind/ |
 | serapeum        |                        | mvlet               |                                                |
 |-----------------+------------------------+---------------------+------------------------------------------------|
 - https://common-lisp.net/project/metabang-bind/user-guide.html

@@ -2220,45 +2220,102 @@ For smaller examples (like the ones showed here, direct match of Option is gener
       Md5.sigest_file_blocking file |> Md5.to_hex |> print_endline
   #+end_src
 ** 16 Concurrent Programming with Async
-- The _inverted_ *control structure* of an event-driven program
-  often means that your own *control flow* has to be threaded awkwardly
-  through the system's event loop.
-  Leading to a maze of event callbacks.
-- A middle road between a event-callback and threads
-- Functions like In_channel.read_all that return a string can be assumed to "block" the execution of the program until complete.
+- Other approaches gotchas
+  - Threads:
+    - System threads require significant memory (and other resources)
+    - Also the OS can interleave them arbitrarily.
+    - Leading to error-prone methods to handle shared memory (locks, conditions)
+  - Event Loop:
+    The inverted control structure often means that, your own control flow has to be threaded awkwardly through the system event loop.
+    Leading to a maze of event callbacks.
+- =Async= is a middle road between a event-callback and threads
+- Functions like =In_channel.read_all= that return a string can be assumed to "block" the execution of the program until complete.
+- Deferred.t is handled by the Async scheduler
 - utop
   - Will block until *Deferred.t* is determined
   - When writting a standalone program you need to start the Async scheduler _manually_
-  - Can start the scheduler _automatically_
+  - utop can start the scheduler _automatically_
   - loading
     - #require "async";;
       open Async;;
-*** Async functions return a value of type Deferred.t
-  | Function             | input                                    | output     |                                          |
-  |----------------------+------------------------------------------+------------+------------------------------------------|
-  | Reader.file_contents | Deferred.t                               |            |                                          |
-  | Deferred.peek        | Deferred.t                               | option     |                                          |
-  | Deferred.bind        | 'a Deferred.t -> f:('a -> 'b Deferred.t) | Deferred.t | with a """callback""" type function call |
-  | >>=                  |                                          |            | like bind                                |
-  | return               | 'a                                       | Deferred.t |                                          |
-  | Deferred.map         | Deferred.t                               | Deferred.t | bind + return                            |
-  | >>¦                  |                                          |            |                                          |
-  |----------------------+------------------------------------------+------------+------------------------------------------|
-*** ppx_let
-  let%bind
-  let%map
-*** ivar, low-level manual filling of variable
-- Ivar.create
-- Ivar.fill
-- Ivar.read
-- Deferred.peek works with ivar's
-*** upon
-- Thunk: a function whose argument is of type *unit*
-- upon: schedules a callback to be called when the passed Deferred is resolved
-  - upon: 'a Deferred.t -> ('a -> unit) -> unit
-  - no new Deferred is created
-*** Example: Queue of scheduled thunks
+*** Async functions return a value of type =Deferred.t= which acts as placeholder
+- Deferred.bind >>=
+  - expects a function that returns Deferred.t
+  - is a way of waiting for a deferred computation to finish
+  - is a way of sequencing concurrent computations
+  - ~f is a "callback" like function
+  - ~f is called AFTER the value of d has been detemined
+- Deferred.map  >>|
+  - Like bind + return
+  - Together bind + return form a design pattern in FP known as ~monad~
+| Function             | input                                    | output            |
+|----------------------+------------------------------------------+-------------------|
+| Reader.file_contents | string                                   | string Deferred.t |
+| Deferred.peek        | 'a Deferred.t                            | 'a option         |
+| Deferred.bind        | 'a Deferred.t -> f:('a -> 'b Deferred.t) | 'b Deferred.t     |
+| return               | 'a                                       | 'a Deferred.t     |
+| Deferred.map         | 'a Deferred.t -> f:('a -> 'b)            | 'b Deferred.t     |
+|----------------------+------------------------------------------+-------------------|
+*** Example: uppercase_file - Deferred.bind
 #+begin_src ocaml
+  let uppercase_file filename =
+    Deferred.bind (Reader.file_contents filename)
+    ~f:(fun text ->
+      Writer.save filename ~contents:(String.uppercase text))
+#+end_src
+*** Example: uppercase_file - >>=
+#+begin_src ocaml
+  let uppercase_file filename =
+    Reader.file_contents filename
+    >>= fun text ->
+    Writer.save filename ~contents:(String.uppercase text)
+#+end_src
+*** Example: count_lines    - >>|
+#+begin_src ocaml
+  let count_lines filename =
+    Reader.file_contents filename
+    >>| fun text ->
+    List.length (String.split text ~on:'\n')
+#+end_src
+*** ppx_let
+- Let syntax works for any monad, and you decide which is by opening the appropiate ~Let_syntax~ module.
+  Opening =Async= also implicitly opens ~Deferred.Let_syntax~
+- let%bind
+  #+begin_src ocaml
+    let count_lines filename =
+      let%bind text = Reader.file_contents filename in
+      return (List.Length (String.split text ~on:'\n'))
+  #+end_src
+- let%map
+  #+begin_src ocaml
+    let count_lines filename =
+      let%map text = Reader.file_contents filename in
+      List.length (String.split text ~on:'\n'
+  #+end_src
+*** Ivar, low-level manual filling of variable
+- the "i" of ivar stands for incremental
+- Internally ~Deferred.peek~ works with ivar's
+- Are a low-level feature
+  - Useful when you want to build a synchronization pattern that isn't already well supported
+- Ivar.create
+- Ivar.read
+- Ivar.fill
+*** upon
+- ~Thunk~: a function whose argument is of type *unit*
+- =Async.after= : Time_unix.Span.t -> unit Deferred.t
+  - taks a time span and returns a deferred which becomes determined after that time span elapses
+- =Async.upon=  : 'a Deferred.t -> ('a -> unit) -> unit
+  - schedules a callback to be called when the passed Deferred is resolved
+  - no new Deferred.t is created (unlike bind and return)
+*** Example: Queue of scheduled thunks
+1) we want a way of scheduling a sequence of actions that would run after a fixed delay
+2) additionally we would like to guarantee the actions to run in the same order they were scheduled in
+#+begin_src ocaml
+  module type Delayer_intf = sig
+    type t
+    val create : Time.span.t -> t
+    val schedule : t -> (unit -> 'a Deferred.t) -> 'a Deferred.t
+  end
   module Delayer : Delayer_intf = struct
     type t = { delay: Time.Span.t;
                jobs: (unit -> unit) Queue.t;
@@ -2277,7 +2334,8 @@ For smaller examples (like the ones showed here, direct match of Option is gener
       Ivar.read ivar
   end;;
 #+end_src
-*** Example: Bind made with ivar and upon
+*** Example: Bind is made with *Ivar* and *upon*
+- NOTE: real implementation has more optmizations and is more complicated
 #+begin_src ocaml
 let my_bind d ~f =
   let i = Ivar.create () in
@@ -2285,34 +2343,68 @@ let my_bind d ~f =
   Ivar.read i;;
 #+end_src
 *** Example: Echo server
+- copy_blocks
+  - each ~bind~ marks a place we wait
+  - provides *pushback*, meaning it holds until progress can be made, otherwise it could lead to a memory leak
+  - arguments
+    - *buffer* uses it a scratch space
+    - *r/w* are input and output channels
+- Async knows how to optimize
+  - It will create the minimum ammount necessary of ~Deferred.t~
+  - It will create a single ~Deferred.t~ on our recursive copy_blocks example, instead 2 per iteration
+  - Aka a form of tail-call-optimization
+    - The bind that creates the deferred is in tail-position
+**** copy_blocks
 #+begin_src ocaml
-open Core
-open Async
-
-let rec copy_blocks buffer r w =
-  Reader.read r buffer
-  >>= function
-  | `Eof -> return ()
-  | `Ok  -> bytes_read ->
-    Writer.write w (Bytes.to_string buffer) ~len:bytes_read;
-    Writer.flushed w
-    >>= fun () ->
-    copy_blocks buffer r w
+  let rec copy_blocks buffer r w =
+    match%bind Reader.read r buffer with
+      | `Eof -> return ()
+      | `Ok bytes_read ->
+         Writer.write w (Butes.to_string buffer) ~len:bytes_read;
+         let%bind () = Writer.flushed w in
+         copy_blocks buffer r w
 #+end_src
-- provides *pushback*, it holds until progress can be made, otherwise it could lead to a a memory leak
-- bind + tail recursion
+**** copy_blocks - version with operators
+  #+begin_src ocaml
+    open Core
+    open Async
+
+    let rec copy_blocks buffer r w =
+      Reader.read r buffer
+      >>= function
+      | `Eof           ->
+         return ()
+      | `Ok bytes_read ->
+        Writer.write w (Bytes.to_string buffer) ~len:bytes_read;
+        Writer.flushed w
+        >>= fun () ->
+        copy_blocks buffer r w
+  #+end_src
+**** run () - using Async.Tcp
+#+begin_src ocaml
+  let run () =
+    let host_and_port =
+      Tcp.Server.create
+        ~on_handler_error:`Raise
+        (Tcp.Where_to_listen.of_port 8765)
+        (fun _addr r w ->
+          let buffer = Bytes.create (16*1024) in
+          copy_blocks buffer r w)
+    in
+    ignore (host_and_port : (Socket.Address.Inet.t, int) Tcp.Server.t Deferred.t)
+#+end_src
 *** Example: Echo server - Async.Tcp
 #+begin_src ocaml
-let run () =
-  let host_and_port =
-    Tcp.Server.create
-      ~on_handler_error:`Raise
-      (tcp.Where_to_listen.of_port 8765)
-      (fun _addr r w ->
-        let buffer = Bytes.create (16 * 1024) in
-        copy_blocks buffer r w)
-  in
-  ignore (host_and_port : (Socket.Address.Inet.t, in) Tcp.Server.t Deferred.t)
+  let run () =
+    let host_and_port =
+      Tcp.Server.create
+        ~on_handler_error:`Raise
+        (tcp.Where_to_listen.of_port 8765)
+        (fun _addr r w ->
+          let buffer = Bytes.create (16 * 1024) in
+          copy_blocks buffer r w)
+    in
+    ignore (host_and_port : (Socket.Address.Inet.t, in) Tcp.Server.t Deferred.t)
 #+end_src
 ** TODO 17 Testing
 - dune does NOT support inline_tests declaration in source files that are part of an executable

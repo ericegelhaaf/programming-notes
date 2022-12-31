@@ -1,3 +1,6 @@
+- https://github.com/ocaml-multicore/awesome-multicore-ocaml
+  https://v2.ocaml.org/releases/5.0/manual/parallelism.html
+  https://v2.ocaml.org/releases/5.0/manual/effects.html
 - editor https://tarides.com/blog/2022-12-21-advanced-merlin-features-destruct-and-construct
 - profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
 - optimizing http://ocamlverse.net/content/optimizing_performance.html
