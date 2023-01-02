@@ -1,0 +1,171 @@
+* Book: Nim by Example
+- nim c -r --verbosity:0 file.nim
+ | c             |   | compile |
+ | -r            |   | --run   |
+ | --verbosity:0 |   |         |
+ | --threads:on  |   |         |
+- Comments:
+  - #
+  - #[]#
+- const - are defined at compile time, can run nim code
+- var   - mutable, have a implicit default (eg: 0, "")
+- let   - immutable
+- in a proc, *result* is declare a var
+- low(T) high(T)
+- =uniform function call= syntax
+  - foo(a, b)
+  - a.foo(b)
+- export symbols (proc,object fields) using (*)
+- -> from sugar, provides a macro that simplifies writing type declaration
+  (char) -> char
+- (discard) can be used to discard the result of an operation
+- use *distinct* to create distinct (non interchangable) type aliases
+  - none of the base type's procedures will follow the type (no operators)
+    #+begin_src nim
+      type
+        Dollars = distinct float
+        Cents {.borrow: `.`.} = distinct float
+    #+end_src
+- objects are like structs, they are GC'd by default
+  - proc on a method can be passes as *var* to modify it
+  - *object* immutable, created on the stack memory
+  - *ref object* mutable, is a reference to an object allocated on the heap memory
+- =virtual methods= (aka dynamically dispatched methods)
+  - method called is determined at run-time
+- =inheritance=
+  - determined using the ~of~ keyword on the object declaration
+    ~of~ can also be used to test/check subtypes
+  - parent object must inherit from ~RootObj~
+  - otherwise objects are considered "final"
+- ??? https://nim-lang.org/docs/manual.html#special-types-static-t
+- threads
+  - createthread()
+  - joinThreads(array of threads)
+  - spawn()
+  - sync()
+- channels
+  - .open() .open(N) - nothing means unlimited queue size
+  - Blocking: .send(T) - .recv()
+  - NON-Blocking:
+    - .tryRecv() -> .msg .dataAvailable
+    - .trySend()
+** enums
+  - can hold values, and also a stringify version
+  - don't NEED to be qualified (but you might want it)
+  - can have disjoint values (not recommended)
+  - are ordinal (support low/high/inc/dev/ord methods)
+** arrays
+  - can use ordinal values to index (enums)
+  - the first type parameter is actually a range
+    array[20, int] is
+    array[0..19,int]
+  - so you can make it start at 1
+** varargs
+  proc printThings(things: varargs[string]) =
+  proc printThings(things: varargs[string, `$`]) =
+** seq
+- dynamically expandable storage
+- add/delete, len(), high(), items/pairs
+- for i, v in a: (where a is a seq)
+- still mutable if used *var* or immutable if *let*
+- can be passed as EITHER as *var/ref* to a proc to modify it
+** Strings (quoted/raw/proc)
+- use "unicode" module to get glyphs
+- like seq[char]
+- null terminated by default (so cstring() requires zero copying)
+- =quoted strings= """ what """
+  - multiline
+  - no escape chars
+- =raw string=
+  r"whatis"
+- =proc strings= raw strings, but you can define your own
+  proc somefunction(s: string): string = s
+  somefunction"sometring"
+** Lambdas (do,proc,=>)
+#+begin_src nim
+  import sequtils, sugar
+  proc greaterThan32(x: int): bool = x > 32
+  let powersOfTwo = @[1,2,4,8,16,32,64,128,256]
+  powersOfTwo.filter do (x: int) -> bool: x > 32
+  powersOfTwo.filter proc (x:int): bool = x > 32
+  powersOfTwo.filter(greaterThan32)
+  powersOfTwo.filter((x) => bool(x > 32))
+#+end_src
+** Generic Functions
+#+begin_src nim
+  proc `+`(a, b: string): string = a & b
+  proc `*`[T](a: T, b: int): T =
+    result = default(T)
+    for i in 0..b-1:
+      result = result + a
+#+end_src
+** Iterators
+- *yield* out of it
+- used with for loops
+- to implement method *items()* when iterating over an object with 1(one) item
+  to implement method *pair()* when iterating over an object with 2(two) items
+  #+begin_src nim
+    type
+      CustomRange = object
+        bottom: int
+        top: int
+
+    iterator items(range: CustomRange): int =
+      var i = range.bottom
+      while i <= range.top:
+        yield i
+        inc i
+
+    iterator pairs(range: CustomRange): tuple[a: int, b: char] =
+      for i in range:
+        yield (i, char(i + ord('a)))
+
+    for i, ci in CustomRange(bottom: 1, top: 3):
+      echo c
+#+end_src
+- an operator can work with iterators
+- Example: =Closure Iterators=, hold state and can be *resumed* at any time
+  #+begin_src nim
+    proc countTo(n: int): iterator() : int =
+      return iterator(): int =
+               var i = 0
+               while i <= n:
+                 yield i
+                 inc i
+
+    let countTo20 = countTo(20)
+    var output = ""
+    # raw iterator usage
+    while true:
+      let next = countTo20() # graphs an element
+      if finished(countTo20): # discard bogus element if end of iterator
+        break
+      output.add($next & " ")
+
+    output = ""
+    let countTo9 = countTo(9)
+    for i in countTo9():
+      output.add($i)
+  #+end_src
+- Example: =Inline Iterators=, if use carelessly may increase code size dramatically
+  #+begin_src nim
+    iterator countTo(n: int): int =
+      var i = 0
+      while i <= n:
+        yield i
+        inc i
+
+    for i in countTo(5):
+      echo i # 0 1 2 3 4 5
+  #+end_src
+- Example: toy example implementation of `..`
+  #+begin_src nim
+    iterator `...`*[T](a: T, b: T): T =
+      var res: T = a
+      while res <= b:
+        yield res
+        inc res
+
+    for i in 0...5:
+      echo i
+  #+end_src

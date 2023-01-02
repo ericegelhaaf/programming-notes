@@ -1,0 +1,62 @@
+- pre builds https://github.com/nim-lang/nightlies/
+- https://nim-lang.org/docs/manual.html#types-tuples-and-object-types
+- exercises https://github.com/sergiotapia/nimlings
+* Language
+** Types
+|------------+-------------------+-------------------------------|
+| tuple      | tuple[a: T, b: T] | (a: 1, b: 2)                  |
+| array      | array[N,T]        | ["foo","bar"]                 |
+| seq(uence) | seq[T]            | @[], newSeq[char](10)         |
+| tables     |                   | initCountTable[T]             |
+| set        | set[T]            | {1,2,3}                       |
+| bitset     | bitset[T]         | {'a'..'b'}                    |
+| enums      |                   |                               |
+| object     |                   | Name(a: "foo")                |
+| ref object |                   | Name(a: "foo")                |
+| thread     | Thread[T]         | createThread(thread, fn, arg) |
+| channel    | Channel[T]        |                               |
+|------------+-------------------+-------------------------------|
+** std(lib) modules
+|----------------+-----------------------------------------------------|
+| asyncfile      |                                                     |
+| asyncnet       |                                                     |
+| asynchtpserver |                                                     |
+| asyncdispatch  | waitFor(), runForever(), await, {.async.}           |
+| json           |                                                     |
+| macros         |                                                     |
+| os             | sleep(N)                                            |
+| randomiz       | rand(N), randomize()                                |
+| sets           |                                                     |
+| sequtils       | filter(S)                                           |
+| strformat      |                                                     |
+| strutils       | parseInt(N), stdin.readLine, split({}), contains(S) |
+| sugar          | ->, =>                                              |
+| tables         |                                                     |
+| threadpool     | joinThreads(), spawn(fn(arg)), sync()               |
+| unicode        |                                                     |
+|----------------+-----------------------------------------------------|
+** Operators
+|---------+-------------------------------------------------------|
+| $a      | returns string version of a                           |
+| &       | string concatenation                                  |
+| ..      | iterator?                                             |
+| `/`     | returns a floating-point result                       |
+| div     | returns a integer division result                     |
+| %*      | json: used to create JSON objects                     |
+| "" % [] | strutils: format string                               |
+| fmt""   | strformat: interpolate raw string with {variable}     |
+| &""     | strformat: interpolate non-raw string with {variable} |
+|---------+-------------------------------------------------------|
+** pragmas
+|--------------------+--------+--------------------------------------------------|
+| {. noSideEffect .} | proc   | ensures that there are no side effects           |
+| {. async .}        | proc   | makes the proc async                             |
+| {. thread .}       | proc   | marks it to be used for threads                  |
+| {. borrow .}       | proc   | bring proc from original type                    |
+| {. base .}         | method |                                                  |
+| {. pure .}         | enum   | requires all ambiguos references to be qualified |
+|--------------------+--------+--------------------------------------------------|
+* Codebases
+- https://github.com/treeform/shady
+- some random paint https://github.com/mrgaturus/npainter
+- zoom for linux by tsoding https://github.com/tsoding/boomer

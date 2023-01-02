@@ -1,3 +1,4 @@
+- SerenityOS https://github.com/awesomekling/serenity
 - Books https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list/388282#388282
 - Video: C++ for C programmers -- lesson 1 (classes, constructors, methods, templates, is it efficient?)
   https://www.youtube.com/watch?v=kdlIlIIHCz0
