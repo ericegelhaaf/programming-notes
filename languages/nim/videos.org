@@ -1,14 +1,12 @@
-- tsoding wang https://www.youtube.com/playlist?list=PLpM-Dvs8t0VYgJXZyQzWjfYUm3MxcvqR0
+- Channel https://www.youtube.com/@nimprogramminglanguage3130
+- Channel https://www.youtube.com/@kiloneie/playlists
 - tsoding aoc 2020 day 11 https://www.youtube.com/watch?v=lHzbWWjdloM
-- Video Course: https://www.youtube.com/playlist?list=PLvxZJTnSXMLrCF9lXyg8D5kxTlXjwPsHE
 - Video: #ChillCode | Nim for Pentesting w/HuskyHacks! https://www.youtube.com/watch?v=NirjqeUWi9o
   starts 12:00
 - Video: 16. BYOT: Build Your Own Tools for Fun and Profit by Cas van Cooten  https://www.youtube.com/watch?v=PAxYI99A0mg
 - Video: Aaron Haymore - Red Team Tooling with Nim-Lang https://www.youtube.com/watch?v=s9B3LsSnesU
-- Channel https://www.youtube.com/@nimprogramminglanguage3130
-- Channel https://www.youtube.com/@kiloneie/playlists
-  - Videos: Nim for Beginners https://www.youtube.com/playlist?list=PLvwc2YT9MFOlPPexrsY-t7BNTdg2Vsx06
-* Video: 2019 | Boomer | Tsoding
+- Video: The SECRET of NIM! - Creating RED TEAM TOOLS with Nim-Lang  https://www.youtube.com/watch?v=1l9169qW2FA
+* 19 | Boomer                    | Tsoding
 Source: https://github.com/tsoding/boomer
 ** https://www.twitch.tv/videos/463963305
 - Nim is almost case insensitive (like pascal)
@@ -22,8 +20,18 @@ Source: https://github.com/tsoding/boomer
   - f x
   - x.f()
   - x.f
-  - 00:53:00
+- parens() are the same as discard (?
+- x11
+  - display is the connection
+  - screen is the monitor
+  - window is a window
+- nimble build
+  does NOT return a parsable error by emacs (like other languages)
+- IN PASCAL or in Jai, but *NOT* in nim
+  you can use ~using~ on an object type to reduce noise
+  instead of "result.fielda = 1" is "fielda = 1"
 ** https://www.twitch.tv/videos/468009266
+- 00:22:00
 ** https://www.twitch.tv/videos/470931124
 ** https://www.twitch.tv/videos/474198218
 ** https://www.twitch.tv/videos/478605555
@@ -33,9 +41,15 @@ Source: https://github.com/tsoding/boomer
 ** https://www.twitch.tv/videos/486585497
 ** https://www.twitch.tv/videos/489880649
 ** https://www.twitch.tv/videos/492671715
-* Video: 2021 | Programming in Nim (Wang Tiles 01)
+* 21 | Nim Lang for pentersters
+** I - Bypass antivirus using platform independent reverse shell https://www.youtube.com/watch?v=JhpUALY4o8U
+** II - Classic Shellcode Injection using Nim  https://www.youtube.com/watch?v=QuhYARcuW6I
+** III - Antivirus assessment using PS reverse shell without PowerShell.exe  https://www.youtube.com/watch?v=DR6wZbCKnOA
+** IV - Automate Macro Embedded Excel and assessment of anti virus  https://www.youtube.com/watch?v=SBjaCYNlj2A
+** V - Create Undetectable Payload by loading your exe to memory  https://www.youtube.com/watch?v=jhHmdfXXOHI
+* 21 | Wang Tiles 01             | Tsoding
 https://www.youtube.com/watch?v=IGTuv_KKLFs
-* Video: 2022 | Nim in 100 Seconds
+* 22 | Nim in 100 Seconds
   https://www.youtube.com/watch?v=WHyOHQ_GkNo
   - no need of a main function
   - identation matters
@@ -47,7 +61,7 @@ https://www.youtube.com/watch?v=IGTuv_KKLFs
   - Later compiled by Clang
   - Macros/Metaprogramming
   - First class functions
-* Video: 2022 | ⚡ Learning Nim - First Look
+* 22 | ⚡ Learning Nim - First Look
 https://www.youtube.com/watch?v=Htjq9yF11m0
 - Right tool for _security hacking_ tools? Like Go, but NOT Rust.
 - Small binaries
