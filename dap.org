@@ -1,0 +1,27 @@
+|-------------+--------------+------+-----+-----------------------------------------------------------------------|
+| name        | (require)    | down |     | url                                                                   |
+|-------------+--------------+------+-----+-----------------------------------------------------------------------|
+| lldb-vscode | dap-lldb     | no   |   ? | https://github.com/llvm/llvm-project/tree/main/lldb/tools/lldb-vscode |
+| vscode-lldb | dap-codelldb | yes  | 1.6 | https://github.com/vadimcn/vscode-lldb/                               |
+| code-debug  | dap-gdb-lldb | yes  | 0.3 | https://github.com/WebFreak001/code-debug                             |
+|-------------+--------------+------+-----+-----------------------------------------------------------------------|
+- setup
+  https://alpha2phi.medium.com/emacs-lsp-and-dap-7c1786282324
+- Compiler options
+  - C/C++ : clang some.c -g -O0 -o some
+- lldb-vscode
+  - building https://lldb.llvm.org/resources/build.html#building-lldb-with-cmake
+- OCAML
+  - https://discuss.ocaml.org/t/debug-ocaml-code/10867
+    "debuggers never work for concurrent code, nor for really complex D.S." - someone
+  - (abandoned on 2021?) https://github.com/hackwaly/ocamlearlybird/
+- Erlang
+  (require 'dap-erlang)
+  https://erlang-ls.github.io/articles/tutorial-debugger/
+  https://github.com/erlang-ls/erlang_ls
+- Emacs
+  - configs https://emacs-lsp.github.io/dap-mode/page/configuration/
+  - features https://emacs-lsp.github.io/dap-mode/page/features/
+  - troubleshooting for lldb https://github.com/emacs-lsp/dap-mode/issues/6
+  - dap-mode https://github.com/emacs-lsp/dap-mode/
+  - cpp https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/

@@ -448,6 +448,950 @@ https://0x00sec.org/t/remote-shells-part-i/269/1
 * Book: 2002 | Expert C Programming
 ** Introduction
 - some people do: if(3==i); in order to catch if they miss a =
+* Book: 2022 | Beej's Guide to Network Programming
+** 2 What is a socket?
+- ~socket()~ creates the fd
+- use it with ~recv/send~ calls
+- you can use ~read/write~, but they have less control over data transmission
+- Types of Internet Sockets (more)
+  1) raw sockets
+  2) stream sockets   | SOCK_STREAM | TCP | RFC 793
+     - connect()
+     - ordered
+     - "error free"
+     - send()
+  3) datagram sockets | SOCK_DGRAM | UDP | RFC 768
+     - no guarantees of: order, arrival
+     - "error free"
+     - sendto()
+** 3 Ip Addresses, *structs*, and Data Munging
+- ipv6
+  - in hexadecimal representation
+  - each two-byte chunk separated by a colon
+  - :: for "compressing" zeros, either in the middle, or at the edges
+  - ipv4 into an ipv6 notation
+    ::fff:192.0.2.33
+  - 2001:0db8:c9d2:aee5:73e3:934a:a5ae:9551
+    ::1
+  - has a "netmask" style with a slash
+    2001:db8::/32
+    2001:db8:5413:4028::9db9/64
+- Big-Endian: ordered
+  - subtypes:
+    - Network Byte Order
+    - Host Byte Order
+- Little-Endian: reverse order
+- Types of number to convert
+  | short | 2(two) bytes  |
+  | long  | 4(four) bytes |
+- You just assume the endianess is wrong and run the value through a function to set it as NBO
+  =htons()= (aka "Host To Network Short")
+- You'll want to cgonver the number sto NBO before they go out on the wire.
+  And convert them to HBO as they come in off the wire.
+- ipv6 has private networks too, in a sense. They'll start with ~fdXX:~ (perhaps ~fcXX:~ too in the future)
+  RFC4193
+*** structs
+**** addrinfo
+- used to prep the socket address structures for subsequent use
+- used in host name lookups
+- used in service name lookups
+- used by =getaddrinfo()=, which will return a pointer to a NEW linked list of these structure
+  BUT filled out with all the goodies you need.
+- AF_UNSPEC to use whatever, aka ip version-agnostic
+  linked list because we can receive many results
+- before this struct existed, you needed to package all this stuff by hand
+#+begin_src c
+  struct addrinfo {
+    int ai_flags; // AI_PASSIVE, AI_CANONNAME, etc
+    int ai_family; // AF_INET, AF_INET6, AF_UNSPEC
+    int ai_socktype; // SOCK_STREAM, SOCK_DGRAM
+    int ai_protocol; // 0 for "any"
+    size_t ai_addlen; // size of ai_addr in bytes
+    struct sockaddr *ai_addr; // struct sockaddr_in or _in6
+    char *ai_canonname; // full canonical hostname
+    struct addrinfo *ai_next; // linked list, next node
+  }
+#+end_src
+**** sockaddr
+- sa_data contains a destination address and port number for the socket
+#+begin_src c
+  struct sockaddr
+  {
+    unsigned short sa_family;   // address family, AF_INET, AF_INET6, AF_XXX
+    char           sa_data[14]; // 14 bytes of protocol address
+  };
+#+end_src
+**** sockaddr_in
+- IPV4 only
+- "in" for internet
+- created to deal with "struct sockaddr"
+- can be cast to and from "struct sockaddr"
+- sin_zero should be set to zeroes with memset()
+- sin_port in NBO (use htons())
+#+begin_src c
+  struct sockaddr_in
+  {
+    short int          sin_family;  // address family, AF_INET
+    unsigned short int sin_port;    // port number
+    struct in_addr     sin_addr;    // internet address
+    unsigned char      sin_zero[8]; // padding
+  };
+#+end_src
+**** in_addr
+- it used to be an union
+- saddr in NBO
+#+begin_src c
+  struct in_addr
+  {
+    uint32_t saddr; // that's a 32-bit int (4 bytes)
+  };
+#+end_src
+**** sockaddr_in6
+#+begin_src c
+  struct sockaddr_in6
+  {
+    u_int16_t       sin6_family;   // address family, AF_INET6
+    u_int16_t       sin6_port;     // port number, NBO
+    u_int32_t       sin6_flowinfo; // ipv6 flow information
+    struct in6_addr sin6_addr;     // ipv6 address
+    u_int32_t       sin6_scope_id; // scope id
+  };
+#+end_src
+**** in6_addr
+#+begin_src c
+  struct in6_addr
+  {
+    unsigned char s6_addr[16]; // ipv6 address
+  };
+#+end_src
+**** sockaddr_storae
+- designed to be large enough to hold both ipv4 and ipv6 struct
+- due for some calls you don't know in advance if it's going to be fill out your struct sockaddr with ipv4 or ipv6 address.
+- you check the ss_family field, then cast it out to sockaddr_in or sockaddr_in6
+#+begin_src c
+  struct sockaddr_storage
+  {
+    sa_family_t ss_family; // address family
+
+    // all this is padding, implementation specific, ignore it
+    char    __ss_pad1[_SS_PAD1_SIZE];
+    int64_t __ss_align;
+    char    __ss_pad2[_SS_PAD2_SIZE];
+  };
+#+end_src
+*** Ip Addresses, Part Deux
+**** inet_pton() - Presentation To Network (aka Printable To Network)
+- returns
+  - -1 on error
+  - 0 if the address is messed up
+- converst an ip address in numbers-and-dots notation into either, depending of the AF_NET? you specify
+  1) struct in_addr
+  2) struct in6_addr
+#+begin_src c
+  struct sockaddr_in sa;
+  struct sockaddr_in6 sa6;
+  inet_pton(AF_INET, "10.12.110.57", &(sa.sin_addr));
+  inet_pton(AF_INET6, "2001:db8:63b3:1::3490", &(sa6.sin6.addr));
+#+end_src
+**** DEPRECATED: inet_addr() & inet_aton()
+- the old way of doing things
+- won't work with ipv6
+**** inet_ntop() - Network To Presentation (aka Network To Printable)
+- ipv4
+  #+begin_src c
+    char ip4[INET_ADDRSTRLEN]; // space to hold the ipv4 string
+    struct sockaddr_in sa;     // pretend this is loaded with something
+    inet_ntop(AF_INET,
+              &(sa.sin_addr),
+              ip4,
+              INET_ADDRSTRLEN);
+    printf("The ipv4 address is: %s\n", ip4);
+  #+end_src
+- ipv6
+  #+begin_src c
+    char ip6[INET6_ADDRSTRLEN];
+    struct sockaddr_in6 sa6;
+    inet_ntop(AF_INET6, &(sa6.sin6_addr), ip6, INET6_ADDRSTRLEN);
+    printf("The address is: %s\n", ip6);
+  #+end_src
+**** DEPRECATED: inet_ntoa()
+- won't work with ipv6
+** 4 Jumping from IPv4 to IPv6
+1) =getaddinfo()= to get a all the ~struct sockaddr~ info, this will keep you IP version-agnostic, and avoid below steps
+2) If you are hardcoding a version, try to wrap it up in a helper function
+3) AF_INET to AF_INET6
+   PF_INET to PF_INET6
+4) change assignments
+   sa.sin_addr.s_addr = INADDR_ANY
+   sa6.sin6_addr = in6addr_any
+5) use initializer for in6_addr
+   struct in6_addr ia6 = IN6ADDR_ANY_INIT
+6) change struct sockaddr_in to sockaddr_in6
+7) change struct in_addr to in6_addr
+8) instead of inet_aton/inet_addr use inet_pton
+9) instead of inet_ntoa use inet_ntop
+10) instead of gethostbyname() use getaddrinfo()
+11) instead of gethostbyaddr() use getnameinfo()
+12) INADDR_BROADCAST no longer works
+** 5 System Calls or Bust
+- getaddrinfo() + socket() + setsockopt + bind() + listen() + accept()
+- getaddrinfo() + socket() + connect()
+*** getaddrinfo(node, service, hints, res)
+#+begin_src c
+  int getaddrinfo(const char *node,    // eg: "www.example.com" or IP
+                  const char *service, // eg: "http" or port number like "80"
+                  const struct addrinfo *hints,
+                  struct addrinfo **res);
+#+end_src
+- helps setup the sturcts you need later on
+- DEPRECATES ~gethostbyname()~ to do DNS lookups.
+  Which then you needed to fill the struct sockaddr_in by hand.
+- you give it 3 input parameters, and it gives you a pointer to a linked-list, res of results
+- AI_PASSIVE tells it to assign the address of my local host to the structure socket structures
+- =freeaddrinfo()= - frees dynamically allocated memory from a linked list (struct addrinfo **res)
+- =gai_strerror()= - translate error codes into human readable ones
+**** Example: server who wants to listen
+#+begin_src c
+  int status;
+  struct addrinfo hints;
+  struct addrinfo *servinfo;       // will point to the results
+  memset(&hints, 0, sizeof hints); // make sure the struct is empty
+  hints.ai_family = AF_UNSPEC;     // don't care ipv4 or ipv6
+  hints.ai_socktype = SOCK_STREAM; // tcp
+  hints.ai_flags = AI_PASSIVE;     // fill in my IP for me
+  if ((status = getaddrinfo(NULL, "3490", &hints, &servinfo)) != 0) {
+    fprintf(stderr, "getaddrinfo error", gai_strerror(status));
+    exit(1);
+   }
+  // ... when you don't need it anymore
+  freeaddrinfo(servinfo);
+#+end_src
+**** Example: Client who wants to connect
+#+begin_src c
+  int status;
+  struct addrinfo hints;
+  struct addrinfo *servinfo;
+  memset(&hints, 0, sizeof hints);
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  status = getaddinfo("www.example.net", "3490", &hints, &servinfo);
+#+end_src
+**** Example: Show IP addresses returned by getaddrinfo()
+#+begin_src c
+  #include <stdio.h>
+  #include <string.h>
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  #include <netdb.h>
+  #include <arpa/inet.h>
+  #include <netinet/in.h>
+
+  int main(int argc, char *argv[])
+  {
+    struct addinfo hints, *res, *p;
+    int status;
+    char ipstr[INET6_ADDRSTRLEN];
+    if (argc != 2) {
+      fprintf(stderr, "usage: showip hostname\n");
+      return 1;
+    }
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC; // AF_INET or AF_INET6 to force version
+    hints.ai_socktype = SOCK_STREAM;
+    if ((status = getaddrinfo(argv[1], NULL, &hints, &res)) != 0) {
+      fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+      return 2;
+    }
+    printf("IP addresses for %s:\n\n", argv[1]);
+    for (p = res; p != NULL; p = p->ai_next) { // walk over linked-list
+      void *addr;
+      char *ipver;
+      // get the pointer to the address itself,
+      // different field in ipv4 and ipv6
+      if (p->ai_family == AF_INET) {
+        struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+        addr = &(ipv4->sin_addr);
+        ipver = "IPv4";
+      } else {
+        struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)p->ai_addr;
+        addr = &(ipv6->sin6_addr);
+        ipver = "IPv6";
+      }
+      // convert the IP to a string and print it:
+      inet_ntop(p->ai_family, addr, ipstr, sizeof ipstr);
+      printf("  %s: %s\n", ipver, ipstr);
+    }
+    freeaddrinfo(res);
+    return 0;
+  }
+
+#+end_src
+*** socket(domain, type, protocol)
+#+begin_src c
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  int socket (int domain,    // PF_INET or PF_INET6
+              int type,      // SOCK_STREAM or SOCK_DGRAM
+              int protocol); // 0 for auto or getprotobyname(?)
+#+end_src
+- use AF_INET on struct sockaddr_in
+  use PF_INET on socket()
+- returns your socket descriptor, or -1 on error
+- uses errno()
+**** Example
+#+begin_src c
+  int s;
+  struct addrinfo hints, *res;
+  // TODO: lookup...hints fillup..etc
+  getaddrinfo("www.example.com", "http", &hints, &res);
+  // TODO: error checking, walk over the res linked list for a valid result
+  // here we just assume the first result is valid
+  s = socket(res->ai_family,
+             res->ai_socktype,
+             res->ai_protocol);
+#+end_src
+*** bind    (fd, my_addr,  addrlen)
+#+begin_src c
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  int bind(int sockd,
+           struct sockaddr *my_addr,
+           int addrlen);
+#+end_src
+- associate the socket with a ~port~ on YOUR local machine
+  - eg: when listen() for connections on a specific port
+- returns -1 on error and set "errno"
+**** Example
+#+begin_src c
+  struct addrinfo hints, *res;
+  int sockfd;
+  memset (&hints, 0, sizeof hints);
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hint.ai_flags = AI_PASSIVE;
+  getaddrinfo(NULL, "3490", &hints, &res);
+  sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+  bind(sockfd, res->ai_addr, res->ai_addrlen);
+#+end_src
+**** Example (the old way)
+#+begin_src c
+  int sockfd;
+  struct sockaddr_in my_addr;
+  sockfd = socket(PF_INET, SOCK_STREAM, 0);
+  my_addr.sin_family = AF_INET;
+  my_addr.sin_port = htons(MYPORT);
+  my_addr.sin_addr.s_addr = inet_addr("10.12.110.57"); // or INADDR_ANY or in6addr_any to suckaddr_in6.sin6_addr
+  memset(myaddr.sin_zero, '\0', sizeof my_addr.sin_zero);
+  bind(sockfd, (struct sockaddr *)&myaddr, sizeof my_addr);
+#+end_src
+**** Example: allow reuse of port when "Address already in use"
+#+begin_src c
+  int yes=1;
+  if (setsockopt(listener, SOL_SOCKET, SO_REUSEADDR,&yes,sizeof yes) == -1) {
+    perror("setsockopt");
+    exit(1);
+  }
+#+end_src
+*** connect (fd, serv_adr, addlen)
+#+begin_src c
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  int connect(int sockfd,
+              struct sockaddr *serv_addr,
+              int addrlen);
+#+end_src
+**** Example
+#+begin_src c
+  struct addrinfo hints, *res;
+  int sockfd;
+  memset(&hints, 0, sizeof hints);
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  getaddrinfo("ww.example.com", "3490", &hints, &res);
+  socketfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+  connect(sockfd, res->ai_addr, res->ai_addrlen);
+#+end_src
+- returns -1 on error, and sets ~errno~
+- no bind()
+- Old programs filled out their own struct sockaddr_in to pass to connect()
+*** listen  (fd, backlog)
+#+begin_src c
+  int listen(int sockfd,
+             int backlog); // number of connections allowed on the incoming queue
+#+end_src
+- backlog: incoming connections are goint to wait in this queue until you =accept()=
+  - 20 is common value, you can use 5 or 10
+- returns -1 on error and set ~errno~
+- you need to call bind() before listen, so that the server listens on a ip/port
+*** accept  (fd, addr, addrlen)
+#+begin_src c
+  #incluse <sys/types.h>
+  #include <sys/socket.h>
+  int accept(int sockfd,            // socket fd listen()ing
+             struct sockaddr *addr, // incoming connection information to be filled
+             socklen_t *addrlen);   // integer, sizeof(struct sockaddr_storage)
+#+end_src
+- won't put more bytes on ~addr~ than those on ~addrlen~,
+  if put less it'll change the value of ~addrlen~
+- it will _return_ a brand new socket file descriptor to use for this single connection
+  - returns -1 and sets errno on, error
+- if you are listening for only 1(one) connection EVER, you can _close()_ the listen()ing socket
+**** Example
+#+begin_src c
+  #include <string.h>
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  #include <netdb.h>
+  #define MYPORT "3490"
+  #define BACKLOG 10
+  int main(void)
+  {
+    struct sockaddr_storage their_addr;
+    socklen_t addr_size;
+    struct addrinfo hints, *res;
+    int sockfd, new_fd;
+    // TODO: error checking
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+    getaddrinfo(NULL, MYPORT, &hints, &res);
+    sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    bind(sockfd, res->ai_addr, res -> ai_addrlen);
+    listen(sockfd, BACKLOG);
+    addr_size = sizeof their_addr;
+    new_fd = accept(sockfs, (struct sockaddr *)&theiraddr, &addr_size);
+  }
+
+#+end_src
+*** send    (fd, msg,  len, flags)
+#+begin_src c
+  int send(int sockfd,      // either the one returned by socket() or accept()
+           const void *msg, // pointer to data you want to send
+           int len,         // lenght of that data IN BYTES
+           int flags);      // set it to 0(zero)
+#+end_src
+- for stream sockets OR connected datagram sockets
+- returns
+  - the number of bytes _actually send_ out, might be less that what you told it to send
+    it's up to you to send the rest later (less than 1K should be fine)
+  - OR -1 and sets ~errno~ on error
+*** recv    (fd, buf,  len, flags)
+#+begin_src c
+  int recv(int sockfd,
+           void *buf,  // buffer to read into
+           int len,    // maximum lenght of the buffer
+           int flags); // set it to 0(zero)
+#+end_src
+- returns
+  - number of bytes actually read into the buffer
+  - or -1 with errno set, on error
+  - or 0, if the remote side has closed the connection on you
+*** sendto  (fd, msg,  len, flags, to,   tolen)
+#+begin_src c
+  int sendto(int sockfd,
+             const void *msg,
+             int len,
+             unsigned int flags,
+             const struct sockaddr *to, // probably a struct sockaddr_in/sockaddr_in6/sockaddr_storage
+             socklen_t tolen); // sizeof *to OR sizeof(struct sockaddr_storage)
+#+end_src
+- for regular _unconnected_ datagram sockets
+- you get the destination address either from
+  1) getaddrinfo()
+  2) recvfrom()
+  3) or you'll fill it out by hand
+- returns
+  - bytes actually sent, might be less that you told it
+  - or -1 on error
+*** recvfrom(fd, buf,  len, flags, from, fromlen)
+#+begin_src c
+  int recvfrom(int sockfd,
+               void *buf,
+               int len,
+               unsigned int flags,
+               struct sockaddr *from, // ponter to sockaddr_storage, will be filled for you
+               int *fromlen); // should be initialized to sizeof *from OR sizeof(struct sockaddr_storage), will be updated
+#+end_src
+- for regular _unconnected_ datagram sockets
+- returns
+  - number of bytes received
+  - or -1 and ~errno~ on error
+- from
+  - sockaddr_storage will be enough for both ipv4 and ipv6
+*** close   (fd)
+- both ways
+- will prevent any more reads and writes to the socket, anyone trying will get an error
+- closesocket() on windows
+*** shutdown(fd, how)
+- It does NOT actually close the FD, it just changes its usability
+  to free a FD you need to use close()
+- returns
+ |  0 | on success          |
+ | -1 | and errno, on error |
+- how
+ | 0 | further receives are disallowed                          |
+ | 1 | further sends are disallowed                             |
+ | 2 | further sends and receives are disallowed (like close()) |
+*** getpeername(fd, addr, addrlen)
+#+begin_src c
+  #include <sys/socket.h>
+  int getpeername(int sockfd,
+                  struct sockaddr *addr, // to struct sockaddr OR struct sockaddr_in
+                  int *addrlen);         // sizeof *addr OR sizeof(struct sockaddr)
+#+end_src
+- tells you who is at the other side of a connect()ed stream socket
+- return
+  - -1 and errno, on error
+- later you can use either, to print or get more information
+  1) inet_ntop()
+  2) getnameinfo()
+  3) gethostbyaddr()
+*** gethostname(hostname, size)
+#+begin_src c
+  #include <unistd.h>
+  int gethostname(char *hostname,
+                  size_t size); // the length in BYTES of the hostname array
+#+end_src
+- returns the name of the computer that your program is running on
+  - can later be used by =gethostbyname()= to determine the IP address of your machine
+- returns
+  - 0 on sucessful completion
+  - -1 and errno on error
+** 6 Client-Server Background
+*** 6.1 A simple Stream Server
+- server will wait for a connection, accept()it and fork() a child process to handle it
+- perror() to handle errno stuff
+- waitpid() - suspends the execution of the calling thread until thread changes state
+  - with PID -1 it waits for any child process
+- signal usage to "reap dead processes"
+  - struct sigaction
+  - sigemptyset()
+  - sigaction()
+- fork
+  - returns
+    - to the parent, the pid of the child process or -1
+    - to the child, 0
+#+begin_src c
+  #include <arpa/inet.h>
+  #include <errno.h>
+  #include <netdb.h>
+  #include <netinet/in.h>
+  #include <signal.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <sys/socket.h>
+  #include <sys/types.h>
+  #include <sys/wait.h>
+  #include <unistd.h>
+
+  #define PORT "3490"
+  #define BACKLOG 10
+
+  // waitpid() might overwrite errno, so we savfe and restore it
+  void sigchld_handler(int s) {
+    int saved_errno = errno;
+    while (waitpid(-1, NULL, WNOHANG) > 0)
+      ;
+    errno = saved_errno;
+  }
+  void *get_in_addr(struct sockaddr *sa) {
+    if (sa->sa_family == AF_INET)
+      return &(((struct sockaddr_in *)sa)->sin_addr);
+    return &(((struct sockaddr_in6 *)sa)->sin6_addr);
+  }
+  int main(void) {
+
+    struct addrinfo hints, *servinfo, *p;
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE; // use my IP
+
+    int rv;
+    if ((rv = getaddrinfo(NULL, PORT, &hints, &servinfo)) != 0) {
+      fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+      return 1;
+    }
+
+    int sockfd, yes = 1;
+    for (p = servinfo; p != NULL; p = p->ai_next) {
+      if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+        perror("server: socket");
+        continue;
+      }
+      if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+        perror("setsockopt");
+        exit(1);
+      }
+      if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+        close(sockfd);
+        perror("server: bind");
+        continue;
+      }
+      break;
+    }
+    freeaddrinfo(servinfo);
+    if (p == NULL) {
+      fprintf(stderr, "server: failed to bind\n");
+      exit(1);
+    }
+    if (listen(sockfd, BACKLOG) == -1) {
+      perror("listen");
+      exit(1);
+    }
+
+    struct sigaction sa;
+    sa.sa_handler = sigchld_handler; // reap all dead processes
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;
+    if (sigaction(SIGCHLD, &sa, NULL) == -1) {
+      perror("sigaction");
+      exit(1);
+    }
+    printf("server: waiting for connections...\n");
+
+    struct sockaddr_storage their_addr; // connector's address information
+    int new_fd;
+    char s[INET6_ADDRSTRLEN];
+    socklen_t sin_size;
+    while (1) { // main accept() loop
+      sin_size = sizeof their_addr;
+      new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
+      if (new_fd == -1) {
+        perror("accept");
+        continue;
+      }
+      inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr),
+                s, sizeof s);
+      printf("server: got connection from %s\n", s);
+      if (!fork()) {   // this is the child process
+        close(sockfd); // child does NOT need the listener
+        if (send(new_fd, "Hello, world!", 13, 0) == -1)
+          perror("send");
+        close(new_fd);
+        exit(0);
+      }
+      close(new_fd); // parent does NOT needs this
+    }
+    return 0;
+  }
+#+end_src
+*** 6.2 A Simple Stream Client
+- connects and receives a 1(one) message from the server, before exiting
+#+begin_src c
+  #include <arpa/inet.h>
+  #include <errno.h>
+  #include <netdb.h>
+  #include <netinet/in.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <sys/socket.h>
+  #include <sys/types.h>
+  #include <unistd.h>
+
+  #define PORT "3490"
+  #define MAXDATASIZE 100
+
+  void *get_in_addr(struct sockaddr *sa) {
+    if (sa->sa_family == AF_INET)
+      return &(((struct sockaddr_in *)sa)->sin_addr);
+    return &(((struct sockaddr_in6 *)sa)->sin6_addr);
+  }
+
+  int main(int argc, char *argv[]) {
+
+    if (argc != 2) {
+      fprintf(stderr, "usage: client hostname\n");
+      exit(1);
+    }
+
+    struct addrinfo hints, *servinfo;
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+
+    int rv;
+    if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
+      fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+      return 1;
+    }
+
+    int sockfd;
+    struct addrinfo *p;
+    for (p = servinfo; p != NULL; p = p->ai_next) {
+      if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+        perror("client: socket");
+        continue;
+      }
+      if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+        close(sockfd);
+        perror("client: connect");
+        continue;
+      }
+      break;
+    }
+
+    if (p == NULL) {
+      fprintf(stderr, "client: failed to connect\n");
+      return 2;
+    }
+
+    char s[INET6_ADDRSTRLEN];
+    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
+    printf("client: connecting to %s\n", s);
+    freeaddrinfo(servinfo);
+
+    int numbytes;
+    char buf[MAXDATASIZE];
+    if ((numbytes = recv(sockfd, buf, MAXDATASIZE - 1, 0)) == -1) {
+      perror("recv");
+      exit(1);
+    }
+    buf[numbytes] = '\0';
+    printf("client: received '%s'\n", buf);
+
+    close(sockfd);
+    return 0;
+  }
+#+end_src
+*** 6.3 Datagram Sockets
+- we use specifically ipv6, to avoid stituation where the server is listening on ipv6 and the client sends on ipv4
+  in which case the dat will not be received
+- if we were connect()ing
+  - it would have failed there
+  - I would be ONLY able to talk to the connected host, and as such use send/recv instead
+- listener.c
+  #+begin_src c
+    #include <arpa/inet.h>
+    #include <errno.h>
+    #include <netdb.h>
+    #include <netinet/in.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <sys/socket.h>
+    #include <sys/types.h>
+    #include <unistd.h>
+
+    #define MYPORT "4950"
+    #define MAXBUFLEN 100
+
+    void *get_in_addr(struct sockaddr *sa) {
+      if (sa->sa_family == AF_INET)
+        return &(((struct sockaddr_in *)sa)->sin_addr);
+      return &(((struct sockaddr_in6 *)sa)->sin6_addr);
+    }
+
+    int main(void) {
+      struct addrinfo hints, *servinfo;
+      memset(&hints, 0, sizeof hints);
+      hints.ai_family = AF_INET6;
+      hints.ai_socktype = SOCK_DGRAM;
+      hints.ai_flags = AI_PASSIVE;
+
+      int rv;
+      if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+        return 1;
+      }
+
+      struct addrinfo *p;
+      int sockfd;
+      for (p = servinfo; p != NULL; p = p->ai_next) {
+        if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+          perror("listener: socket");
+          continue;
+        }
+        if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+          close(sockfd);
+          perror("listener: bind");
+          continue;
+        }
+        break;
+      }
+      if (p == NULL) {
+        fprintf(stderr, "listener: failed to bind socket\n");
+        return 2;
+      }
+      freeaddrinfo(servinfo);
+      printf("listener: waiting to recvfrom...\n");
+
+      struct sockaddr_storage their_addr;
+      char buf[MAXBUFLEN];
+      socklen_t addr_len = sizeof their_addr;
+      int numbytes;
+      if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN - 1, 0,
+                               (struct sockaddr *)&their_addr, &addr_len)) == -1) {
+        perror("recvfrom");
+        exit(1);
+      }
+
+      char s[INET6_ADDRSTRLEN];
+      printf("listener: got packet from %s\n",
+             inet_ntop(their_addr.ss_family,
+                       get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
+      printf("listener: packet is %d bytes long\n", numbytes);
+      buf[numbytes] = '\0';
+      printf("listener: packet contains \"%s\"\n", buf);
+      close(sockfd);
+      return 0;
+    }
+  #+end_src
+- talker.c
+  #+begin_src c
+    #include <arpa/inet.h>
+    #include <errno.h>
+    #include <netdb.h>
+    #include <netinet/in.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <sys/socket.h>
+    #include <sys/types.h>
+    #include <unistd.h>
+
+    #define SERVERPORT "4950"
+
+    int main(int argc, char *argv[]) {
+
+      if (argc != 3) {
+        fprintf(stderr, "usage: talker hostname message\n");
+        exit(1);
+      }
+
+      struct addrinfo hints, *servinfo;
+      memset(&hints, 0, sizeof hints);
+      hints.ai_family = AF_INET6;
+      hints.ai_socktype = SOCK_DGRAM;
+
+      int rv;
+      if ((rv = getaddrinfo(argv[1], SERVERPORT, &hints, &servinfo)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+        return 1;
+      }
+
+      int sockfd;
+      struct addrinfo *p;
+      for (p = servinfo; p != NULL; p = p->ai_next) {
+        if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+          perror("talker: socket");
+          continue;
+        }
+        break;
+      }
+
+      if (p == NULL) {
+        fprintf(stderr, "talker: failed to create socket\n");
+        return 2;
+      }
+
+      int numbytes;
+      if ((numbytes = sendto(sockfd, argv[2], strlen(argv[2]), 0, p->ai_addr,
+                             p->ai_addrlen))) {
+        perror("talker: sendto");
+        exit(1);
+      }
+      freeaddrinfo(servinfo);
+
+      printf("talker: sent %d bytes to %s\n", numbytes, argv[1]);
+      close(sockfd);
+      return 0;
+    }
+  #+end_src
+** 7 Slightly Advanced Techniques
+*** fcntl()  - Blocking
+- techie jargon for ~sleep~
+- lots of functions block, because they are allowed to
+  - accept()
+  - recv()
+- you can make the socket non-blocking with =fcntl()=
+  #+begin_src c
+    #include <unistd.h>
+    #include <fcntl.h>
+    sockfd = socket(PF_INET, SOCK_STREAM, 0);
+    fcntl(sockfd, FSETFL, O_NONBLOCK);
+  #+end_src
+- now you can effectively "poll" the socket for information
+  - things that blocked now will _return_ -1 and errno to EAGAIN or EWOULDBLOCK (check both)
+  - a naive polling based on the return code will be ~busy-wait~ work for the CPU
+  - instead use poll()
+*** poll()   - Synchronous IO Multiplexing
+#+begin_src c
+  #include <poll.h>
+  int poll(struct pollfd fds[], // array of information
+           nfds_t nfds,         // count of elements in the array
+           int timeout);        // in milliseconds, negative for FOREVER
+#+end_src
+- WHY?
+  - monitor a _bunch of sockets_ at once and then handle the ones that have data ready
+  - without actively poll every socket to know which are ready to read
+- returns
+  - the number of elements in the array that have had an event occur
+- SLOW for giant numbers of connections, use libevent in that case https://libevent.org/
+- we ask the OS to tell us when a socket is ready
+  meanwhile our process can go to sleep
+- the OS will block on the =poll()= until:
+  1) 1(one) of those events occurs
+  2) or a user specified timeout occurs
+- keep an array of ~struct pollfds~, with information about
+  1) which _socket_ descriptors we want to monitor
+  2) and which kind of _events_ we want to monitor
+- If we want to _add a new socket_ descript to the set I passed to poll
+  1) make sure you have enough space on the array
+  2) or realloc()
+- If we want to _delete an item_ from the set, either
+  * copy the last element in the array over-top the one you are deleting
+    then pass in one fewer as the count to poll()
+  * you can set the fd field to anegateive number and poll() will ignore it
+**** struct pollfd
+- events field is the bitwise-OR of
+ | POLLIN  | alert me when data is ready to recv()                           |
+ | POLLOUT | alert me when i can send() data to this socket without blocking |
+#+begin_src c
+  struct pollfd {
+    int fd;        // the socket descriptor
+    short events;  // bitmap of events we are interested in
+    short revents; // when poll() returns, bitmap of events that occurred
+  };
+#+end_src
+**** Example: simple use of poll() with STDIN
+#+begin_src c
+  #include <poll.h>
+  #include <stdio.h>
+  #include <sys/poll.h>
+
+  int main(void) {
+
+    struct pollfd pfds[1];
+    pfds[0].fd = 0;          // Standard Input
+    pfds[0].events = POLLIN; // Tell me when ready to read
+
+    printf("Hit RETURN or wait 2.5 seconds for timeout\n");
+
+    int num_events = poll(pfds, 1, 2500);
+    if (num_events == 0)
+      printf("Poll timed out!\n");
+    else {
+      int pollin_happened = pfds[0].revents & POLLIN;
+      if (pollin_happened)
+        printf("File descriptor %d is ready to read\n", pfds[0].fd);
+      else
+        printf("Unexpected event occurred: %d\n", pfds[0].revents);
+    }
+    return 0;
+  }
+#+end_src
+**** Example: a cheezy multiperson chat server
+- malloc/realloc array for poll() as neede
+-  
+*** select() - Synchronous IO Multiplexing, old school
+*** Handling partial send()s
+*** Serialization
+*** SOn of Data Encapsulation
+*** Broadcast Packets
 * 6.S081: Learning by doing
 Catalog description: Design and implementation of operating systems,
 and their use as a foundation for systems programming. Topics include
