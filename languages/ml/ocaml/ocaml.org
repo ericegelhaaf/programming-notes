@@ -36,6 +36,7 @@
 - Tutorial: 2016 https://github.com/caiorss/Functional-Programming/tree/master/ocaml
 - Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
 - Tutorial: 2019 https://github.com/lindig/ocaml-style
+- https://github.com/imandra-ai/ocaml-tracy
 * ocamldebug
 - https://www.youtube.com/watch?v=DGvJk14sfi8
   - let _ = print_string;
@@ -59,6 +60,7 @@
   (ocd) (r)un
   (ocd) (p)rint VARIABLE
 ** Emacs
+- https://v2.ocaml.org/releases/4.14/htmlman/debugger.html#s:inf-debugger
 - Under Emacs you call the debugger using =ESC-x ocamldebug a.out=
 - Then Emacs will send you directly to the file and character reported by the debugger,
   and you can step back and forth using =ESC-b= and =ESC-s=,

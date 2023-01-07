@@ -2219,7 +2219,7 @@ For smaller examples (like the ones showed here, direct match of Option is gener
     let do_hash file =
       Md5.sigest_file_blocking file |> Md5.to_hex |> print_endline
   #+end_src
-** 16 Concurrent Programming with Async
+** TODO 16 Concurrent Programming with Async
 - Other approaches gotchas
   - Threads:
     - System threads require significant memory (and other resources)
@@ -2343,6 +2343,10 @@ let my_bind d ~f =
   Ivar.read i;;
 #+end_src
 *** Example: Echo server
+  open Core
+  open Async
+- Using Async.Reader and Async.Writer modules
+- Using Async.Tcp module
 - copy_blocks
   - each ~bind~ marks a place we wait
   - provides *pushback*, meaning it holds until progress can be made, otherwise it could lead to a memory leak
@@ -2350,35 +2354,33 @@ let my_bind d ~f =
     - *buffer* uses it a scratch space
     - *r/w* are input and output channels
 - Async knows how to optimize
-  - It will create the minimum ammount necessary of ~Deferred.t~
+  - It will create the minimum amount necessary of ~Deferred.t~
   - It will create a single ~Deferred.t~ on our recursive copy_blocks example, instead 2 per iteration
   - Aka a form of tail-call-optimization
     - The bind that creates the deferred is in tail-position
+- Async.never_returns
+  Async.Scheduler.go
 **** copy_blocks
 #+begin_src ocaml
   let rec copy_blocks buffer r w =
     match%bind Reader.read r buffer with
       | `Eof -> return ()
       | `Ok bytes_read ->
-         Writer.write w (Butes.to_string buffer) ~len:bytes_read;
+         Writer.write w (Bytes.to_string buffer) ~len:bytes_read;
          let%bind () = Writer.flushed w in
          copy_blocks buffer r w
 #+end_src
 **** copy_blocks - version with operators
-  #+begin_src ocaml
-    open Core
-    open Async
-
-    let rec copy_blocks buffer r w =
-      Reader.read r buffer
-      >>= function
-      | `Eof           ->
-         return ()
-      | `Ok bytes_read ->
-        Writer.write w (Bytes.to_string buffer) ~len:bytes_read;
-        Writer.flushed w
-        >>= fun () ->
-        copy_blocks buffer r w
+#+begin_src ocaml
+  let rec copy_blocks buffer r w =
+    Reader.read r buffer
+    >>= function
+    | `Eof           -> return ()
+    | `Ok bytes_read ->
+      Writer.write w (Bytes.to_string buffer) ~len:bytes_read;
+      Writer.flushed w
+      >>= fun () ->
+      copy_blocks buffer r w
   #+end_src
 **** run () - using Async.Tcp
 #+begin_src ocaml
@@ -2387,24 +2389,38 @@ let my_bind d ~f =
       Tcp.Server.create
         ~on_handler_error:`Raise
         (Tcp.Where_to_listen.of_port 8765)
-        (fun _addr r w ->
-          let buffer = Bytes.create (16*1024) in
-          copy_blocks buffer r w)
+        (fun _addr r w -> let buffer = Bytes.create (16*1024) in
+                          copy_blocks buffer r w)
     in
     ignore (host_and_port : (Socket.Address.Inet.t, int) Tcp.Server.t Deferred.t)
 #+end_src
-*** Example: Echo server - Async.Tcp
+*** Example: Echo server - Async.Pipe
+- A sort of consumer/producer queue that uses deferreds for communicating,
+  when the pipe is ready to be read from or written to.
+  - A pipe has a certain amount of internal slack, a number of slots in the pipe to be written before block
+    - defaults to 0(zero)
 #+begin_src ocaml
-  let run () =
+  let run ~uppercase ~port =
     let host_and_port =
       Tcp.Server.create
         ~on_handler_error:`Raise
-        (tcp.Where_to_listen.of_port 8765)
+        (Tcp.Where_to_listen.of_port 8765)
         (fun _addr r w ->
-          let buffer = Bytes.create (16 * 1024) in
-          copy_blocks buffer r w)
+          Pipe.transfer
+            (Reader.pipe r)
+            (Writer.pipe w)
+            ~f:(if uppercase then String.uppercase else Fn.id))
     in
-    ignore (host_and_port : (Socket.Address.Inet.t, in) Tcp.Server.t Deferred.t)
+    ignore (host_and_port : (Socket.Address.Inet.t, int) Tcp.Server.t Deferred.t);
+    Deferred.never()
+
+  let () =
+    Command.async ~summary:"Start an echo server"
+      (let%map_open.Command uppercase = flag "-uppercase" no_arg ~doc:" Convert to uppercase before echoing back" and
+          port = flag "-port" (optional_with_default 8765 int) ~doc:" Port to liste on (default 8765)"
+       in
+      fun () -> run ~uppercase ~port)
+  |> Command.run
 #+end_src
 ** TODO 17 Testing
 - dune does NOT support inline_tests declaration in source files that are part of an executable

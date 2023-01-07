@@ -8,6 +8,11 @@
 - 2022 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
 - 2022 https://justabluddyblog.wordpress.com/2022/05/01/remaking-an-old-game-in-ocaml/
 - 2022 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
+* LWT
+- Lwt in 5 minutes https://ocsigen.org/tuto/latest/manual/lwt
+- 2013 https://mirage.io/docs/tutorial-lwt
+- https://www.baturin.org/code/lwt-counter-server/
+- Lwt Translations of the Async Code Examples in Real World OCaml https://github.com/dkim/rwo-lwt#readme
 * If Statement and Loops
 https://ocaml.org/docs/if-statements-and-loops
 - nor *for* or *while* loops have a way to *break* out of it
