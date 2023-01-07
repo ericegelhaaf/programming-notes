@@ -1,0 +1,7 @@
+- Course  Simon Thompson on Erlang (all 13 videos)
+  https://www.youtube.com/playlist?list=PLoFxPv8jwGVVlajiMxaW9zG1IZgHODTuq
+- erlang español - https://www.youtube.com/playlist?list=PLmoxkf3gS-juT5cDrzP_ARdkqqSFU5X_3
+- Erlang MOOC
+  Language https://www.youtube.com/playlist?list=PLlML6SMLMRgAooeL26mW502jCgWikqx_n
+  Concurrency https://www.youtube.com/playlist?list=PLR812eVbehlwq4qbqswOWH7NLKjodnTIn
+  OTP https://www.youtube.com/playlist?list=PLR812eVbehlx6vgWGf2FLHjkksAEDmFjc

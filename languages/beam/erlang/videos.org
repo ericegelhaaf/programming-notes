@@ -1,0 +1,8 @@
+- basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
+- Video: Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
+* Channels
+- https://www.twitch.tv/josevalim/videos
+- zxq9 (erlang) https://www.youtube.com/channel/UCMnRVG50iFEpkgbUu1mZrMA/videos
+- CodeSync https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw
+- EMPEX https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q
+- ErlangSolutions https://www.youtube.com/user/ErlangSolutions
