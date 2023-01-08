@@ -1,0 +1,20 @@
+- https://developer.okta.com/blog/2022/04/08/state-of-ffi-java
+- Library https://developer.okta.com/blog/2022/08/26/state-of-java-project-loom
+- Android: https://developer.android.com/jetpack/compose
+- Microservices Frameworks:
+  - https://quarkus.io/
+  - https://micronaut.io/
+  - https://projects.eclipse.org/proposals/eclipse-microprofile
+- https://jackson.sh/posts/2021-04-java-underrated/ https://news.ycombinator.com/item?id=26827766
+- https://advancedweb.hu/new-language-features-since-java-8-to-18/ https://news.ycombinator.com/item?id=28979048
+- https://www.avanwyk.com/revisiting-java-in-2021-i/
+  https://www.avanwyk.com/revisiting-java-in-2021-ii/
+- Android App https://github.com/oversecured/ovaa
+- CS2110 Cornell. OO Prog and Data Structures
+  https://www.youtube.com/channel/UCqKMFnMYBRgusWhHZaa0F-A/videos
+- Java Keywords https://www.w3schools.com/java/java_ref_keywords.asp
+- Deege U Beginners
+  https://www.youtube.com/playlist?list=PLZlGOBonMjFVq9FF0eiS_emcFmP-0fSBe
+- Amateur 3D Render
+  https://www.reddit.com/r/java/comments/okebt8/i_created_a_java_3d_rendering_engine_from_scratch/
+  https://github.com/nbrugger-tgm/JRender/

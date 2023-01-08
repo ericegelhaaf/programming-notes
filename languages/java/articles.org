@@ -1,0 +1,24 @@
+- Article: Optional: https://davidleongz.medium.com/optional-a-pragmatic-approach-c736705c2deb
+- Article: Optional: https://homes.cs.washington.edu/~mernst/advice/nothing-is-better-than-optional.html
+* DONE Article: 2015 | Declaration-site and use-site variance explained
+- Generic types in Java are by default *invariant*
+- Annotations
+  - C# annotation is called *declaration-site variance*,
+    because the type parameters is annotated where the generic type is declared
+  - Java annotation is called *use-site variance*,
+    because is used when the type is used, not when the generic is declared
+- Arrays behave like covariants (on both Java and C#) even though they have the same problems than other generics
+  And errors due it will throw an runtime exception
+  - Code compiles but throws an exception
+    #+begin_src java
+      Apple[] apples = new Apple[10];
+      Fruit[] fruits = apples;
+      fruits[0] = new Orange();
+      Apple apple = apples[0];
+    #+end_src
+- The "flow" of data in the interface methods is what determines, how much it makes sense to have some variance
+  |                | returns | consume | example       | C#      | Java          |
+  |----------------+---------+---------+---------------+---------+---------------|
+  | Covariance     | YES     | no      | Iterable<T>   | <out T> | <? extends A> |
+  | Contravariance | no      | YES     | Comparable<T> | <in T>  | <? super B>   |
+  | Invariant      | YES     | YES     | List<T>       |         |               |

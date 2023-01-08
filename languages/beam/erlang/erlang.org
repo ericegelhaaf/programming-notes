@@ -15,6 +15,8 @@
   [A,B,C|D] = [1,2,3,4,5,6]
 - f({athing,{A,B},N}=C) ->
     C
+- build tool https://erlware.github.io/relx/
+- build tool https://erlang.mk/
 - concurrency is an abstraction, parallelism is the real thing
 - from pattern matching with multiple signatures to "recieve"
 - doc https://erlang.org/doc/reference_manual/users_guide.html

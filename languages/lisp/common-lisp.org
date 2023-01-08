@@ -1115,7 +1115,7 @@ https://lisp-lang.org/learn/continuous-integration
 - Memory order, "it prevents re-ordering across the fence"
   - (sb-thread:barrier)
 - lparallel: channels/workers support, priority, queue, pmap, promises
-* Bnook: https://leanpub.com/readevalprintlove001/read
+* Book: https://leanpub.com/readevalprintlove001/read
 - Tour of Lisp(s)
 ** Article: 2006 The Nature of Lisp
    https://www.defmacro.org/ramblings/lisp.html

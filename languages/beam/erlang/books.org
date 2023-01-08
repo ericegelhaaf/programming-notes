@@ -4,22 +4,24 @@
 - return {setup,...} from suffixed _test_() to lifecycle a test generator
 - return {foreach,...} for doing individual lifecycles for the test generators
 - spawn,timeout,inorder,inparallel are some other test generator options
-** TODO 16 Event Handlers
-- Used when there is no need to wait in standby for new events
-- In the shape of a ~event manager~ or ~event forwarder~
-- No new process spawned for short-lived tasks
-- ~gen_event~
+** TODO 16 Event Handlers (gen_event)
+- In the shape of a ~Event Manager~ or ~Event Forwarder~
+  - No new process are spawned for short-lived tasks
+  - Used when there is no need to wait in standby for new events
 - Event handlers run in the same process as their managers
 - Might be useful when there are many "listener" for the event
 - the handler is a gen_event too, where the important part is the ~handle_event~
 ** 18 Building an Application
-- Types of State: static, recomputable dynamic, uncomputable dynamic
-- "The idea of an onion-layered system is to allow all of these different
-   states to be protected correctly by isolating *different* kinds of code from
-   each other. In other words, it’s process segregation."
+- Different Types of State:
+  1) static
+  2) recomputable dynamic
+  3) uncomputable dynamic
+- "The idea of an ~onion-layered system~ is to allow all of these _different states_
+   to be protected correctly, by isolating different kinds of code from
+   each other. In other words, it’s _process segregation._"
 - The ~error kernel~ of your application is the place where your app is
   not allowed to fail, due non recomputable data loss.
-  You use try ..  catch expressions here.
+  You use *try ..  catch* expressions here.
 - Keep things on different supervision trees
 ** 19 Building Applications the OTP way
 - Properties on .app.src file are optional.
@@ -216,11 +218,11 @@ remote >
   rpc:nb_yield(Key, Timeout)
   rpc:nb_yield(Key)          -- Pooling
 - execute remotely but get the result locally
-#+begin_src erlang
-rpc:call/4
-rpc:call/5 /4 + Timeout
-rpc:call(Node, Module, Function, Args)
-#+end_src
+  #+begin_src erlang
+    rpc:call/4
+    rpc:call/5 /4 + Timeout
+    rpc:call(Node, Module, Function, Args)
+  #+end_src
 ** 27 Distributed OTP Application
 - a single ~application controler~
     over many ~application masters~
