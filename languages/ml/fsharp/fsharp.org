@@ -1,0 +1,50 @@
+- https://fsharp.github.io/fsharp-core-docs/reference/
+- https://github.com/fsharp/fslang-design
+- Makefile
+  #+begin_src makefile
+.PHONY: debug release run clean
+
+debug:   ; dotnet build
+release: ; dotnet build --configuration Release
+run:     ; dotnet run
+clean:   ; dotnet clean ; rm -rf bin/ obj/
+  #+end_src
+- F# Cheatsheet
+  https://dungpa.github.io/fsharp-cheatsheet/
+  https://github.com/dungpa/fsharp-cheatsheet
+- dotnet run
+  dotnet run arg1 arg2
+  dotnet watch run arg1 arg2
+https://blog.darklang.com/new-backend-fsharp/
+https://bartoszsypytkowski.com/tag/fsharp/
+https://bartoszsypytkowski.com/writing-high-performance-f-code/
+https://fsharp.org/use/linux/
+- Tool: Fsharp to ASM/C# https://sharplab.io/
+- Book: https://zaid-ajaj.github.io/the-elmish-book/#/
+- Raytracer:
+  https://github.com/bmitc/the-ray-tracer-challenge-fsharp
+- JS https://fable.io/
+- https://h3tech.dev/post/wtfsharp-is-next/
+- c# vs c++ https://news.ycombinator.com/item?id=4444904
+- dotnet 6 performance https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-6/
+- Editor: Ionide extension for CODE
+- Fix snap syslink
+  #+begin_src
+  # cd /snap/bin
+  # mv dotnet dotnet.bin
+  # ln -s /snap/dotnet-sdk/current/dotnet .
+  #+end_src
+- https://dotnet.microsoft.com/en-us/learn/fsharp
+- Documentation https://docs.microsoft.com/en-us/dotnet/fsharp/?WT.mc_id=dotnet-35129-website
+- https://dotnet.microsoft.com/en-us/learn/languages/fsharp-hello-world-tutorial/create
+  $ dotnet --list-sdks
+  $ dotnet new console -lang F# -o MyFsharpApp
+  $ cd MyFsharpApp/
+  $ dotnet run
+- Courses: https://github.com/dcook-net/FSharpLearningResources
+- https://github.com/pavsaund/awesome-learning-fsharp
+- https://github.com/fsprojects/awesome-fsharp
+- Learning resources https://fsharpforfunandprofit.com/
+* Libraries
+- F# -> Javascript https://github.com/fable-compiler/Fable
+- ELM like abstraction https://github.com/elmish/elmish

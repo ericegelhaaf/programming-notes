@@ -1,0 +1,10 @@
+- Articles https://wiki.tcl-lang.org/page/Articles
+* Article: 2020 | Why I'm TCL-ish
+https://colin-macleod.blogspot.com/2020/10/why-im-tcl-ish.html
+https://news.ycombinator.com/item?id=24897326
+- Most programming languages blend syntax and semantics.
+  Each language construct has individual rules for how it is written (syntax) and how it operates (semantics).
+  The language definition as a whole includes all of these.
+- In contrast TCL
+  - only syntactic rule are those which define how to invoke a generic command and pass data to/from it
+  - Core has no syntax for arithmetic expressions, this is delegated to *expr*

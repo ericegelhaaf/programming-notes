@@ -1,0 +1,122 @@
+- Austin 2019 https://usergroup.tv/videos/category/group/austin-f-meetup/
+- Video: Stop worrying https://www.youtube.com/watch?v=XuY8Qttvqys&t=235s
+- Video: F# for the Masses - with Ian Russell https://www.youtube.com/watch?v=MSM16DfU7Lo
+- Video: Tutorial - F# for beginners
+  https://www.youtube.com/watch?v=yGzu0iDuMNQ&list=PLdo4fOcmZ0oUFghYOp89baYFBTGxUkC7Z
+- Course: Norway University - Functional Programming in F#
+  https://www.youtube.com/playlist?list=PLiLMQyqbPyEMTGBoJ0Y1lG2SRv525dqq8
+  Slides https://github.com/juselius/inf-3910-5
+* Channel
+- Microsoft Research https://www.youtube.com/user/MicrosoftResearch/videos
+- Microsoft Developer https://www.youtube.com/c/MicrosoftDeveloper/videos
+- Mid-2000s Throwback https://www.youtube.com/channel/UCELigndXajlVr6VoZEdOO2A/videos
+- Casual F# with Kit Eason https://www.youtube.com/channel/UCcmY0UZ5XqK2g7e4gynenWQ/videos
+- Community F# https://vimeo.com/channels/c4fsharp/videos https://www.youtube.com/c/C4fsharpNet/videos
+- F# Online https://www.youtube.com/channel/UC1SQsRYPRV0Kw3KCowGJXzA
+* 2016 - System Crafters - Introduction to Functional Programming with F#
+** 1
+- CODE, ionide plugin
+- let mutable a = 10
+  a <- 20
+- Ranges: [1..3]
+- << and >> for function composition
+- Seq. are lazy
+  - Seq.iter does the job
+** 2 Data Model
+- Records have structural equality
+- Recursive types use the *and* keyword
+- Unions/enums can have a value and a description
+  #+begin_src fsharp
+  type Details =
+    { Name: string
+      Description: string }
+  type Item =
+    { Details: Details }
+  type Exit =
+    | PassableExit of Details * destination: Room
+    | LockedExit of Details * key: Item * next: Exit
+    | NoExit of Details option
+  and Exits =
+    { North: Exit
+      South: Exit
+      East: Exit
+      West: Exit }
+  and Room =
+    { Details: Details
+      Items: Item list
+      Exits: Exits }
+  #+end_src
+
+** 3 Game Logic
+   code https://gist.github.com/daviwil/3419811b3bfed172b7888efe2a0e1436
+- https://fsharpforfunandprofit.com/posts/recipe-part2/
+- 2014 - Railway oriented programming: Error handling in functional languages by Scott Wlaschin
+  https://vimeo.com/113707214
+- "Railway Oriented Programming", aka monad transformation (using a result type and bind)
+  #+begin_src fsharp
+    let bind processFunc lastResult =
+        match lastResult with
+      | Success s -> proccessFunc s
+      | Failure f -> Failure f
+
+    let (>>=) x f = bind f x
+
+    let switch processFunc input =
+      Success (processFunc input)
+  #+end_src
+** 4 Actor Model
+   code https://github.com/thedevaspect/aspect-fsharp/blob/60f18ddd0b1a82cba498e62880a8eccb01dbe86f/Game.fs
+- MailboxProcessor, simple implementation of the Actor Model
+- Computation Expression: async
+- try/with for exception handling
+- :? type comparison operator
+- let rand = System.Random()
+  rand.Next 4
+- New lines can separate items in a list definition
+* 2021 - What's New in F# 5/6 - Don Syme
+|-------------------------------------+---------------------|
+| dotnet new lang -F#                 |                     |
+| dotnet build                        |                     |
+|-------------------------------------+---------------------|
+| dotnet new -i "giraffe-template::*" | new backend         |
+| dotnet giraffe                      |                     |
+|-------------------------------------+---------------------|
+| dotnet new -i "Fable.Template::*"   | new frontend        |
+| dotnet new fable                    |                     |
+| npm install                         |                     |
+| npm start                           |                     |
+|-------------------------------------+---------------------|
+| dotnet new -i SAFE.Template         | new fullstack       |
+| dotnet new SAFE                     | giraffe+fable+azure |
+| dotnet tool restore                 |                     |
+| dotnet run                          |                     |
+|-------------------------------------+---------------------|
+- String interpolation "{pi}" or "%s{foo}" to enforce type
+- open type
+- 27:00
+* DONE Video: 2014 - Railway oriented programming: Error handling in functional languages by Scott Wlaschin
+  https://vimeo.com/113707214
+- 22:22
+  Functions that don't fit in bind (two tracks) paradigm
+  1) Single track functions:              map function
+  2) Dead-end functions (return nothing): tee/tap? function
+  3) Functions that throw exceptions:     try/catch, convert exceptions into failures
+  4) Supervisory functions (when both tracks need to be handled)
+  5) From 2 tracks back to 1 (like a string for the browser)
+- 30:40
+  Desigining for Errors
+  - Using strings for errors is not a good idea, use Enums (or a choice type)
+    1) You can have them listed in 1 place, same with the error strings on the 2to1 track functint
+    2) Documentation of everything that can go wrong
+    3) Conversation starters
+    4) Translation easy
+    5) Test code can compare with errors codes, not strings
+    6) Typesafe
+- 37:40
+  Parallel Tracks
+  For example, if you want all validation errors listed at once. The validations needs to be parallel.
+  Monoids (map and reduce the 2 tracks)
+  https://fsharpforfunandprofit.com/posts/monoids-without-tears/
+- 39:15
+  Domain Events
+  Pass around more information of the action done, add domain events to the choices

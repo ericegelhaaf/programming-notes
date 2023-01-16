@@ -1,0 +1,84 @@
+* Book: 2008
+** TODO 16 Developing Reactive Functional Programs
+- Principle is sometimes called ~inversion of control~ (aka The Hollywood Principle, don't call us we call you)
+- The most straighforward way is with an ~event handler~, which need a *local state*
+- Using events/callbacks isn't very declarative. It's imperative.
+- Event.(filter map listen scan merge)
+- Example: buttons and counter
+  #+begin_src fsharp
+    let always x = (fun _ -> x)
+    let incEvt = (btnUp.Click |> Event.map (always  1))
+    let decEvt = (btnDw.Click |> Event.map (always -1))
+    Event.merge invEvt decEvt
+    |> Event.scan (+) 0
+    |> Event.listen (fun sum ->
+       lbl.Txt <- sprintf "Count: %d" sum)
+  #+end_src
+* 2021 | Stylish F# 6 | Kit Eason
+| C# formatter | 1.1 | https://github.com/StyleCop/StyleCop |
+| C# formatter |  $$ | https://www.jetbrains.com/resharper/ |
+** Introduction
+- There are 3(three) distinct philosphies which you can apply to computer progrmaming.
+  1) As a science: progress is how well you _discover and reflect_ fundamental mathematical concepts in your code.
+  2) As a discipline: you seek to establish and _follow rules_ about how code should be written and organized
+  3) As a craft: science + discipline + creativity (an intuitive process)
+** 1 - The Sense of Style
+*** Understanding beats obedience
+- Not coding standards, but a style guide.
+- Stylish writing isn't mereley an aesthetic exercise:
+  - It is also a means to an end, that end being the spread of ideas.
+  - The aim is to communicate.
+*** Good guidance from bad code
+- What to avoid.
+**** 1) "It's hard to work out what's going on when loking closely at any particular piece of code"
+- Code that requires the developer to keep so much context in their personal working memory.
+- The number of "what if?" questions increases as one explores the call chain.
+- It should instead be readable with minimum context.
+- aka good ~semantic focus~
+**** 2) "It's hard to be sure that any change will have the =effects= one wants, and ONLY those effects"
+- hard to refactor
+- hard to extend
+- hard to isolate (could the code here be undermined in the future by some change elsewhere?)
+- aka poor ~revisability~
+**** 3) "It's hard to be certain of the author's =intent="
+- does the code does what the author intended?
+- was the author aware of gaps in the logic or code is being missread?
+- are the logic gaps, prevented or handled elsewhere?
+  or do they randomly happen but things still work
+- aka having poor ~motivational transparency~
+- Example:
+  The problem being that *request* carries 2 meanings, an object and a marker terminator for do/while.
+  We do need to keep both representations of it on our head.
+  #+begin_src csharp
+    ListVersionRequest request = new ListVersionsRequest()
+    {
+        BucketName = bucketName,
+        MaxKeys = 2
+    };
+    do {
+        ListVersionsResponse response = client.ListVersions(request);
+        foreach (ObjectVersion entry in response.Versions)
+        {
+            Console.WriteLine("key = {0} size = {1}",
+                              entry.Key,
+                              entry.Size);
+        }
+        if (response.IsTruncated) {
+            request.KeyMarker = response.NextKeyMarker;
+            request.VersionIdMarker = response.NextVersionIdMarker;
+        } else {
+            request = null;
+        }
+    } while (request != null)
+  #+end_src
+**** 4) "It's hard to tell without experimentation wheter the code will be =efficient="
+- If you are looking at code with:
+  - a tangle of flags
+  - special cases
+  - and ill-thought-out data structures
+  - it is going to be very difficult to keep efficiency and performance in mind.
+- code should be written in way that satisfies both the human and electronic audiences
+- aka code having poor ~mechanical sympathy~
+*** Complexity explosions
+- sources of uncertainty exert an inexorable pressure toward a complexity explosion
+*** Summary

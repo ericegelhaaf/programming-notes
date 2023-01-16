@@ -1,0 +1,27 @@
+- Channel https://www.youtube.com/@videotcltk
+* Video: 2016 | coroutine is the new main | Nathan Coulter
+https://www.youtube.com/watch?v=yCC--STRzo4
+- TODO 06:40 https://wiki.tcl-lang.org/page/ycl%20coro%20relay
+- A coroutine is a "possible callstack"
+- It gives you a possible callstack that can pause in the middle a while/for loop
+  This is all cooperative.
+  There is NO way to preemptively tell a coroutine context to stop.
+- Example: you can then call c1 and c2
+  #+begin_src tcl
+    proc counter {} {
+        while 1 {
+            yield [incr 1]
+        }
+    }
+    coroutine c1 counter
+    coroutine c2 counter
+  #+end_src
+- Example: with "lambda", which in TCL is just an *apply*
+  #+begin_src tcl
+    coroutine c1 apply [list {} {
+        while 1 {
+            yield [incr i]
+        }
+    }[namespace current]]
+  #+end_src
+* Video: 2021 | Karl Lehenbauer, "TCL: The Tool Command Language - LISP for the Masses"
