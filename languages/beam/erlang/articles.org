@@ -1,0 +1,14 @@
+- https://www.erlang-solutions.com/blog/the-sound-of-erlang-how-to-use-erlang-as-an-instrument.html
+- https://abstractmachines.dev/posts/am012-why-typing-erlang-is-hard.html
+- The Joy of Pattern Matching http://blog.hellkvist.org/category/erlang/
+- Mix Erlang/Elixir https://dev.to/wesleimp/elixir-and-erlang-code-in-the-same-project-2l83
+- Calling Erlang from Elixir https://nickcanzoneri.com/elixir/erlang/2015/08/03/calling-erlang-code-from-elixir.html
+- Calling Elixir from Erlang
+  https://joearms.github.io/published/2017-12-18-Calling-Elixir-From-Erlang.html
+  https://elixir-lang.org/crash-course.html
+- https://bugzilla.redhat.com/show_bug.cgi?id=1672916
+  rebar is broken on redhat/fedora use rebar3
+- about erlang:length (avoid it, especially on guards)
+  https://groups.google.com/forum/#!msg/erlang-programming/Qg4-AU7J5mM/DEM9MWvLdK4J
+- https://spawnedshelter.com/
+- https://github.com/0xAX/erlang-bookmarks/blob/master/ErlangBookmarks.md

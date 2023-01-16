@@ -17,7 +17,13 @@
   https://gist.github.com/chaotic3quilibrium/58e78a2e21ce43bfe0042bbfbb93e7dc
 - Framework: Play Framework.
   Conocimientos deseables: Slick, Monix Task.
-* Video: 2021 | Udemy - Functional Programming with Scala Cats | Udemy
+* Video: 2011 | What Scala Adopted from Erlang         | Martin Odersky
+- Quotes from the man that wrote the java spec.
+  Gilad Bracha
+  - "Threads are to concurrency as witchcraft to physics."
+  - "Hanging by a thread is the punishment for shared state concurrency."
+- 08:00
+* Video: 2021 | Functional Programming with Scala Cats | Udemy
 ** 2
 *** 9.1 Trait Channel: Inheritance
 #+begin_src scala

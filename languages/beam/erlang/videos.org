@@ -1,8 +1,46 @@
 - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
-- Video: Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
+- Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
 * Channels
-- https://www.twitch.tv/josevalim/videos
+- josevalim https://www.twitch.tv/josevalim/videos
 - zxq9 (erlang) https://www.youtube.com/channel/UCMnRVG50iFEpkgbUu1mZrMA/videos
 - CodeSync https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw
 - EMPEX https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q
 - ErlangSolutions https://www.youtube.com/user/ErlangSolutions
+* 2008 | Erlang In Practice | Kevin Smith
+** 1
+- is useful use a "match all" on a *receive*, because a process can receive messages we don't know
+  and fill up the process mailbox.
+- spawn(M,F,A)
+- exit(PROCESS)
+- erlang:processes()
+** 2
+- we can pass a function as a parameter
+  message_router:start(fun chat_client:print_message/1).
+- register/2
+  erlang:register(atom_name, PID)
+- dict:new/0
+  dict:store/3
+  dict:erase/2
+- closures and anonymous functions still work on Erlang
+- final program "registers" each nick on a dictionary along with the function that will print the message
+  - there is still 1 process (the router)
+** 3 Distributed Erlang Programming
+- "pang" means boom/explode in sweden
+  Is wthat net_adm:ping/1 returns when you ping a node that doesn't exists
+- Example:
+  - Multi-node
+  - A single "message router"
+  - Multiple "chat clients"
+- Setup 2 nodes
+  #+begin_src
+  $ erl -sname foo -setcookie somecookie
+  $ erl -sname bar -setcookie somecookie
+  #+end_src
+- Ping a remote node
+  #+begin_src
+  bar> net_adm:ping(foo@localhost).
+  #+end_src
+- Execute a function on a remote node
+  #+begin_src
+  foo> rpc:call(bar@localhost, erlang, date, [])
+  #+end_src

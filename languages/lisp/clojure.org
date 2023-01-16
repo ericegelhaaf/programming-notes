@@ -25,13 +25,14 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://github.com/functional-koans/clojure-koans/
 - https://github.com/bbatsov/clojure-style-guide
 - https://clojuredocs.org/quickref
-* Notebooks
 - Live Notebooks https://clerk.vision/
 * Babashka
+- Pods https://github.com/babashka/pod-registry
+- Node.js https://github.com/babashka/nbb
 - Edit Conf https://github.com/exercism/babashka/blob/main/docs/editors.md
   > bb --nrepl-server
 - Doc https://book.babashka.org/
-- Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
+- Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
   - As such the code is NOT compiled.
 * Courses
 - [O'Reilly Media Infinite Skills / Adam Bard / Stuart Halloway / Neal Ford] Learning path: Clojure Fundamentals (Learning Clojure, Clojure Inside Out) [2016, ENG]

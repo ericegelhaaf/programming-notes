@@ -1,221 +1,4 @@
-* Book:  2022 | DevOps Tools for Java Developers | Stephen Chin
-source https://github.com/devops-tools-for-java-developers/code-snippets
-- maven  git *plugin* https://github.com/git-commit-id/git-commit-id-maven-plugin
-- gradle git *plugin* https://github.com/nemerosa/versioning/
-- maven resources filtering on the resources plugin (part of the core plugins)
-  https://maven.apache.org/plugins/maven-resources-plugin/index.html
-  https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html
-** TODO 6 Package Managment
-- Action Items
-*** 1) Determining the Metadata
-- Timestamp ISO 8601
-  using java.text.SimpleDateFormats is "yyyy-MM-dd'T'HH:mm:ssXXX"
-- System properties, os, jvm version
-- version
-- scm
-- build host information
-*** 2) Capturing Metadata
-- System properties
-**** Maven
-pom.xml
-#+begin_src xml
-  <project xmlns="http://maven.apache.org/POM/4.0.0"
-           xmlns:xsi="http://ww.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.acme</groupId>
-    <artifactId>example</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <build.jdk>${java.version} (${java.vendor} ${java.vm.version})</build.jdk>
-      <build.os>${os.name} ${os.arch} ${os.version}</build.os>
-      <build.revision>${git.commit.id}</build.revision>
-      <build.timestamp>${git.build.time}</build.timestamp>
-    </properties>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>pl.projec13.maven</groupId>
-          <artifactId>git-commit-id-plugin</artifactId>
-          <version>4.0.3</version>
-          <executions>
-            <execution>
-              <id>resolve-git-properties</id>
-              <goals>
-                <goal>revision</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <verbose>false</verbose>
-            <failOnNoGitDirectory>false</failOnNoGitDirectory>
-            <generateGitPropertiesFile>true<generateGitPropertiesFile>
-            <generateGitPropertiesFilename>
-              ${project.build.directory}/git.properties
-            </generateGitPropertiesFilename>
-            <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-#+end_src
-**** Gradle
-- Two Formats available
-  * Apache Groovy DSL
-  * Kotlin DSL
-#+begin_src sh
-  plugins {
-    id 'java-library'
-    id 'net.nemerosa.versioning' version '2.14.0'
-  }
-  version = '1.0.0-SNAPSHOT'
-  ext {
-    buildJdk = [
-      System.properties['java.version'],
-      '(' + System.properties['java.vendor'] + ')'
-    ].join(' ')
-    buildOs = [
-      System.properties['os.name'],
-      System.properties['os.arch'],
-      System.properties['os.version']
-    ].join(' ')
-    buildRevision = project.extensions.versioning.info.commit
-    buildTimestamp = new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX")
-  }
-#+end_src
-*** 3) Writing the Metadata
-- In this example 2 output files, a jar manifest and a java properties file
-**** Maven
-- mvn package
-  resolves the captured properties,
-  copies the metadata properties file with resolved values into target/classes directory where it will be addes to the final JAR
-  and injects the metadat into the JAR's manifest
-- mvn verify
-  jar tvf target/example-1.0.0-SNAPSHOT.jar
-- template src/main/resources/META-INF/metadata.properties
-  #+begin_src
-    build.jdk = ${build.jdk}
-    build.os = ${build.os}
-    build.revision = ${build.revision}
-    build.timestamp = ${build.timestamp}
-  #+end_src
-- pom.xml: properties file
-  #+begin_src xml
-    <resources>
-      <resouce>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-  #+end_src
-- pom.xml: JAR manifest
-  #+begin_src xml
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.2.0</version>
-      <configuration>
-        <archive>
-          <manifestEntries>
-            <Build-Jdk>${build.jdk}</BuildJdk>
-            <Build-Os>${build.os}</Build-Os>
-            <Build-Revision>${build.revision}</Build-Revision>
-            <Build-Timestamp>${build.timestamp}</Build-Timestamp>
-          </manifestEntries>
-        </archive>
-      </configuration>
-    </plugin>
-  #+end_src
-**** Gradle
-- properties file
-  #+begin_src sh
-    processResources {
-        expand(
-            'build_jdk' :project.buildJdk,
-            'build_os'  :project.buildOs,
-            'build_revision': project.buildRevision,
-            'build_timestamp': project.buildTimestamp
-        )
-    }
-#+end_src
-- manifest
-  #+begin_src sh
-    jar {
-        manifest {
-            attributes(
-                'Build-Jdk' :project.buildJdk,
-                'Build-Os'  :project.buildOs,
-                'Build-Revision': project.buildRevision,
-                'Build-Timestamp': project.buildTimestamp
-            )
-        }
-    }
-  #+end_src
-*** TODO Dependency managment
-**** Maven on pom.xml
-- =Maven Coordinates= or GAV coordinates
-  dependencies are identifies by 3 required elements: groupId, artifactId and version
-  sometimes a 4th, the classifier (eg: for different operative systems, or "sources" and "javadoc")
-- mvn dependency:tree
-- <dependency> : <optional> boolean, <scope>
-- scopes
-  |          |                                                        | transitive |
-  |----------+--------------------------------------------------------+------------|
-  | compile  | *default*, will used for all classpaths in the project |            |
-  | provided | it does NOT affect the runtime classpath               | no         |
-  | runtime  | NOT required for compilation, but for execution        |            |
-  | test     | for compiling and running tests                        | no         |
-  | system   | DO NOT USE (? paths of dependencies must be passed     |            |
-  | import   | for pom dependencies on <dependencyManagement>         |            |
-  |----------+--------------------------------------------------------+------------|
-- *Maven never looks at the version, but looks only athe location within the graph*
-  That is why we get different result if we change the order of dependencies
-- <dependencyManagement> goals
-  1) provide version hints for transitive dependencies
-     <dependencyManagement/dependencies/dependency/GAV
-  2) provide dependencies to be used for an *import* scope
-     - BOM dependencies (aka bill of materials)
-       - Library: declared dependencies belong to the same project even they have different groupids (eg: helidon-bom)
-       - Stack: Dependencies are grouped by behavior and the synergy they bring (eg: helidon dependencies)
-     - Provide deps
-       dependencyManagement/dependencies/dependency/GAV
-     - Consume deps
-       dependencyManagement/dependencies/dependency/BOM_GAV
-       dependencyManagement/dependencies/dependency/type  = pom (default is jar)
-       dependencyManagement/dependencies/dependency/scope = import
-       dependencies/dependency/GA
-  3) provide defaults for parent-child POM
-     - Produce
-       <dependencyManagment/dependencies/dependency/GAV
-     - Consume
-       <parent/GAV
-       <dependencies/dependency/GA
-**** TODO Gradle on build.gradle or build.gradle.kts
-- group instead of groupId
-  name  instead of artifactId
-- single literal
-  'org.apache.commons:commons-collection4:4.4'
-- map literal
-  #+begin_src yaml
-  group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
-  #+end_src
-- dependencies configurations
-  |                    |                                    | classpath | pom mapped |
-  |--------------------+------------------------------------+-----------+------------|
-  | api                | for compiling production code      | yes       | compile    |
-  | implementation     | for compiling                      | yes       | runtime    |
-  | compileOnly        | for compiing, not execution        | no        | no         |
-  | runtimeOnly        | for execution                      | yes       | runtime    |
-  | testImplementation | compilation                        | yes       | test       |
-  | testCompileOnly    | compiling test code, not execution | yes       | no         |
-  | testRuntimeOnly    | needed for execution               | yes       | test       |
-- legacy options from gradle 6:
-  | compile     | api and implementation |
-  | runtime     | runtimeOnly            |
-  | testCompile | testImplementation     |
-  | testRuntime | testRuntimeOnly        |
-* Book:  2017 | Core Java for the Impatient      | Cay S. Horstmann
+* 2017 | Core Java for the Impatient      | Cay S. Horstmann
 source https://horstmann.com/javaimpatient/
 logging alternative https://www.slf4j.org/
 change the log level from jsconsole https://www.oracle.com/technical-resources/articles/java/jconsole.html#LoggingControl
@@ -1755,19 +1538,19 @@ chaining it from the original to a higher-level one
   - T is a *type parameter*
 - type parameters cannot be instaintiated with primitive types
 *** 1) A ~generic class~ is a class with one or more _type parameters_
-  #+begin_src java
-    public class Entry<K,V> {
-        private K key;
-        private V value;
-        public Entry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-        public K getKey() { return key; }
-        public V getValue() { return value; }
-    }
-    Entry<String, Integer> entry = new Entry<>("Fred", 42); // empty diamond, inferred
-  #+end_src
+#+begin_src java
+  public class Entry<K,V> {
+      private K key;
+      private V value;
+      public Entry(K key, V value) {
+          this.key = key;
+          this.value = value;
+      }
+      public K getKey() { return key; }
+      public V getValue() { return value; }
+  }
+  Entry<String, Integer> entry = new Entry<>("Fred", 42); // empty diamond, inferred
+#+end_src
 *** 2) A ~generic method~ is a method with _type parameters_, from a generic or non-generic class
   #+begin_src java
     public class Arrays {
@@ -2439,7 +2222,7 @@ Higher conceptual level than collections.
 - 5) =Nashhorn= supports lambda expressions and a limited mechanism for extending Java classes and implementing Java interfaces
 *** TODO Shell Scripting with Nashhorn
 - 6) =Nashhorn= has support for writing shell scripts in JavaScript
-* Book:  2019 | Real-World Software Development  | Raoul-Gabriel Urma
+* 2019 | Real-World Software Development  | Raoul-Gabriel Urma
 ** 1 Starting the Journey
 - =Practices and principles over technology=
 - Book Themes
@@ -2458,3 +2241,220 @@ Higher conceptual level than collections.
      - (DIP) Dependency Inversion Principle
   4) Testing: TDD, test doubles, mocks and stubs
 ** 2 The Bank Statements Analyzer
+* 2022 | DevOps Tools for Java Developers | Stephen Chin
+source https://github.com/devops-tools-for-java-developers/code-snippets
+- maven  git *plugin* https://github.com/git-commit-id/git-commit-id-maven-plugin
+- gradle git *plugin* https://github.com/nemerosa/versioning/
+- maven resources filtering on the resources plugin (part of the core plugins)
+  https://maven.apache.org/plugins/maven-resources-plugin/index.html
+  https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html
+** TODO 6 Package Managment
+- Action Items
+*** 1) Determining the Metadata
+- Timestamp ISO 8601
+  using java.text.SimpleDateFormats is "yyyy-MM-dd'T'HH:mm:ssXXX"
+- System properties, os, jvm version
+- version
+- scm
+- build host information
+*** 2) Capturing Metadata
+- System properties
+**** Maven
+pom.xml
+#+begin_src xml
+  <project xmlns="http://maven.apache.org/POM/4.0.0"
+           xmlns:xsi="http://ww.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.acme</groupId>
+    <artifactId>example</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <build.jdk>${java.version} (${java.vendor} ${java.vm.version})</build.jdk>
+      <build.os>${os.name} ${os.arch} ${os.version}</build.os>
+      <build.revision>${git.commit.id}</build.revision>
+      <build.timestamp>${git.build.time}</build.timestamp>
+    </properties>
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>pl.projec13.maven</groupId>
+          <artifactId>git-commit-id-plugin</artifactId>
+          <version>4.0.3</version>
+          <executions>
+            <execution>
+              <id>resolve-git-properties</id>
+              <goals>
+                <goal>revision</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <verbose>false</verbose>
+            <failOnNoGitDirectory>false</failOnNoGitDirectory>
+            <generateGitPropertiesFile>true<generateGitPropertiesFile>
+            <generateGitPropertiesFilename>
+              ${project.build.directory}/git.properties
+            </generateGitPropertiesFilename>
+            <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+#+end_src
+**** Gradle
+- Two Formats available
+  * Apache Groovy DSL
+  * Kotlin DSL
+#+begin_src sh
+  plugins {
+    id 'java-library'
+    id 'net.nemerosa.versioning' version '2.14.0'
+  }
+  version = '1.0.0-SNAPSHOT'
+  ext {
+    buildJdk = [
+      System.properties['java.version'],
+      '(' + System.properties['java.vendor'] + ')'
+    ].join(' ')
+    buildOs = [
+      System.properties['os.name'],
+      System.properties['os.arch'],
+      System.properties['os.version']
+    ].join(' ')
+    buildRevision = project.extensions.versioning.info.commit
+    buildTimestamp = new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX")
+  }
+#+end_src
+*** 3) Writing the Metadata
+- In this example 2 output files, a jar manifest and a java properties file
+**** Maven
+- mvn package
+  resolves the captured properties,
+  copies the metadata properties file with resolved values into target/classes directory where it will be addes to the final JAR
+  and injects the metadat into the JAR's manifest
+- mvn verify
+  jar tvf target/example-1.0.0-SNAPSHOT.jar
+- template src/main/resources/META-INF/metadata.properties
+  #+begin_src
+    build.jdk = ${build.jdk}
+    build.os = ${build.os}
+    build.revision = ${build.revision}
+    build.timestamp = ${build.timestamp}
+  #+end_src
+- pom.xml: properties file
+  #+begin_src xml
+    <resources>
+      <resouce>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+  #+end_src
+- pom.xml: JAR manifest
+  #+begin_src xml
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.2.0</version>
+      <configuration>
+        <archive>
+          <manifestEntries>
+            <Build-Jdk>${build.jdk}</BuildJdk>
+            <Build-Os>${build.os}</Build-Os>
+            <Build-Revision>${build.revision}</Build-Revision>
+            <Build-Timestamp>${build.timestamp}</Build-Timestamp>
+          </manifestEntries>
+        </archive>
+      </configuration>
+    </plugin>
+  #+end_src
+**** Gradle
+- properties file
+  #+begin_src sh
+    processResources {
+        expand(
+            'build_jdk' :project.buildJdk,
+            'build_os'  :project.buildOs,
+            'build_revision': project.buildRevision,
+            'build_timestamp': project.buildTimestamp
+        )
+    }
+#+end_src
+- manifest
+  #+begin_src sh
+    jar {
+        manifest {
+            attributes(
+                'Build-Jdk' :project.buildJdk,
+                'Build-Os'  :project.buildOs,
+                'Build-Revision': project.buildRevision,
+                'Build-Timestamp': project.buildTimestamp
+            )
+        }
+    }
+  #+end_src
+*** TODO Dependency managment
+**** Maven on pom.xml
+- =Maven Coordinates= or GAV coordinates
+  dependencies are identifies by 3 required elements: groupId, artifactId and version
+  sometimes a 4th, the classifier (eg: for different operative systems, or "sources" and "javadoc")
+- mvn dependency:tree
+- <dependency> : <optional> boolean, <scope>
+- scopes
+  |          |                                                        | transitive |
+  |----------+--------------------------------------------------------+------------|
+  | compile  | *default*, will used for all classpaths in the project |            |
+  | provided | it does NOT affect the runtime classpath               | no         |
+  | runtime  | NOT required for compilation, but for execution        |            |
+  | test     | for compiling and running tests                        | no         |
+  | system   | DO NOT USE (? paths of dependencies must be passed     |            |
+  | import   | for pom dependencies on <dependencyManagement>         |            |
+  |----------+--------------------------------------------------------+------------|
+- *Maven never looks at the version, but looks only athe location within the graph*
+  That is why we get different result if we change the order of dependencies
+- <dependencyManagement> goals
+  1) provide version hints for transitive dependencies
+     <dependencyManagement/dependencies/dependency/GAV
+  2) provide dependencies to be used for an *import* scope
+     - BOM dependencies (aka bill of materials)
+       - Library: declared dependencies belong to the same project even they have different groupids (eg: helidon-bom)
+       - Stack: Dependencies are grouped by behavior and the synergy they bring (eg: helidon dependencies)
+     - Provide deps
+       dependencyManagement/dependencies/dependency/GAV
+     - Consume deps
+       dependencyManagement/dependencies/dependency/BOM_GAV
+       dependencyManagement/dependencies/dependency/type  = pom (default is jar)
+       dependencyManagement/dependencies/dependency/scope = import
+       dependencies/dependency/GA
+  3) provide defaults for parent-child POM
+     - Produce
+       <dependencyManagment/dependencies/dependency/GAV
+     - Consume
+       <parent/GAV
+       <dependencies/dependency/GA
+**** TODO Gradle on build.gradle or build.gradle.kts
+- group instead of groupId
+  name  instead of artifactId
+- single literal
+  'org.apache.commons:commons-collection4:4.4'
+- map literal
+  #+begin_src yaml
+  group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+  #+end_src
+- dependencies configurations
+  |                    |                                    | classpath | pom mapped |
+  |--------------------+------------------------------------+-----------+------------|
+  | api                | for compiling production code      | yes       | compile    |
+  | implementation     | for compiling                      | yes       | runtime    |
+  | compileOnly        | for compiing, not execution        | no        | no         |
+  | runtimeOnly        | for execution                      | yes       | runtime    |
+  | testImplementation | compilation                        | yes       | test       |
+  | testCompileOnly    | compiling test code, not execution | yes       | no         |
+  | testRuntimeOnly    | needed for execution               | yes       | test       |
+- legacy options from gradle 6:
+  | compile     | api and implementation |
+  | runtime     | runtimeOnly            |
+  | testCompile | testImplementation     |
+  | testRuntime | testRuntimeOnly        |

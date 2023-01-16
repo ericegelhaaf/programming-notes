@@ -1,5 +1,11 @@
+- https://github.com/ericdouglas/distributed-systems-journey
+- https://github.com/zkessin/testing-erlang-book
+- https://github.com/inaka/erlang_guidelines
+- https://adoptingerlang.org/
 - https://github.com/oreillymedia/etudes-for-erlang
 - https://github.com/heroku/erlang-in-anger
+- beam https://github.com/happi/theBeamBook
+- beam http://beam-wisdoms.clau.se/en/latest/
 * Book: Learn some erlang for greater good
 - return {setup,...} from suffixed _test_() to lifecycle a test generator
 - return {foreach,...} for doing individual lifecycles for the test generators
@@ -247,3 +253,112 @@ remote >
 - Mnesia tables
   - Have no built-in type constrains
   - Are global to all nodes in the cluster (add a prefix)
+* Book: Erlang and OTP in Action | Martin Logan
+- include/ .hrl files part of your public API, private ones should be kept on src/
+** 6 Implementing a Cache System
+*** The design of the cache
+|--------------+-------------+-------------------------------------------------|
+| simple_cache | code        | user API, the application's face to the outside |
+| sc_app       | application | the application behavior implementation         |
+| sc_sup       | supervisor  | the root supervisor implementation              |
+| sc_store     | process     | does the key - pid mapping, uses ETS            |
+| sc_element   | gen_server  | that spawn to store each key of data            |
+|--------------+-------------+-------------------------------------------------|
+- Modules naming convention
+  - use a common prefix for all modules of an application
+    eg: sc_ for "simple cache"
+  - except, for a main "user API" module, which uses the same name as the application
+    eg: simple_cache
+- sc_store   - while you keep a map of key->PID
+  sc_element - you store different key values on different processes
+*** Creating the basic OTP application skeleton
+- applications
+  - OTP needs metadata about the application in order to start or perform safe hot-code upgrades
+  - name of the .app should match the name of the application
+    - which is not necessarily the name of any module
+  - {modules [M1,M2]}
+    list the modules involved in this application
+  - {registered [M1,M2]}
+    list the modules that are properly registered
+    eg: the root supervisor's name
+  - {app, N}
+    name of the application behaviour module
+- =simple_one_for_one=
+  - is limited to only 1(one) type of children
+  - can start any number of children
+  - dynamicallly added at runtime
+  - no child is started when the supervisor starts up
+  - restart   => temporaty,
+  - shutdown  => brutal_kill
+    tells what happens when the supervisor shutdown
+- supervisor:start_child/2
+  - second argument are given to the child's ~start_link/?~ with arity same as the numbers of arguments
+    which are then passed to ~init/2~ by ~gen_server:start_link~
+*** From application skeleton to a working cache
+- Encapsulation
+  - Users of the gen_server, don't need to know about (other modules?) the root supervisor.
+    You create an wrapper API for it that calls the root supervisor function create_child
+  - if a function returns a value or none, you can wrap it on {ok,} {error,}
+    which is more palatable, and a more general shape that we can then use with different backend
+- There is no registed name for any of the sc_element processes.
+  This means the API functions MUST include the PID.
+  It's the client problem to keep track of these identifiers.
+- gen_server:start_link/3 blocks until init/1 returns
+- ~timeout~, aka the thir value of the return tuple
+  - is NOT passed as argument to the handler, so you need recompute it
+  - in milliseconds
+  - is passed around from init/1 to handle_call/handle_info
+  - if you forget it, it will rever to _infinity_
+- {stop, normal, State}
+  return value of a handler to stop the gen_server process, "normal"lly without restaring it
+- ~ETS~
+  - in memory "hash-tables"
+  - entries stored as _tuples_, where the first value is the key
+  - may be _shared_ by a number of different processes *on* the VM
+  - mainly flat, and preferably _without foreign key_ relationships with other table
+  - can be a _named_table_ for easier access
+  - ets:match - '_', '$1'
+- Style: Where to put initialization triggering code? sc_store:init/1 call
+  - sc_app
+    - YES
+    - on start/2
+  - sc_sup
+    - NO
+    - it's a good design principle to avoid application code on supervisors.
+    - Keep them small and reliable.
+    - forgivable to put in init/1, because if it fails the application won't start
+- try/catch
+  - _Class:_Exception
+  - useful when you have a sequence of things that must be done in order,
+    and the result be the same if any of the steps fail
+    eg: several actions trying matching {ok, _} OR catch it with and {error,}
+    me: like a monad (?!) sorta
+** TODO 7 Logging and Event Handling in Erlang
+*** Logging in Erlang OTP
+- SASL (System Architecture Support Libraries)
+  - OTP SASL is unrelated to SASL library for authentication
+- error_logger:
+  - [warning,error,info]_msg/[1,2]
+    - args are formatString and arguments
+  - [warning,error,info]_report[1,2]
+    - args are string OR *type* and string
+- Custom *types* are ignored unless you define your own _event handler_
+- SASL adds such handlers, which listen for reports send by OTP behaviours when supervisors start/stop/"dies"
+  - aka provides "crash reports"
+- the purpose of ~handle_info~ on gen_server is to handle _out-of-band messages_
+- > application:start(sasl)
+- erlang:spawn() will NOT give you the SASL report
+  proc_lib:spawn() will give you the SASL report, spawns the OTP way
+*** A custom event handler with gen_event
+- replaces *handle_cast* with *handle_event*
+- gen_event
+  - container is often called a _event manager_
+  - it initially has no callback module
+    instead one or more handlers can be added (and removed again) dynamically after the container initialized
+  - when an event is posted ALL currently _event handlers_ modules are called individually to handle the event
+  - be mindful of how you handle the state in the _event handler_ because other handlers will touch it too
+- gen_server
+  - you tell it which callback module to use
+    aka tied to a particular implementation (callback)
+- 179
+*** Adding a custom event stream to "simple cache"

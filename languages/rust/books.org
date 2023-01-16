@@ -286,3 +286,10 @@ by generics to the concrete for the type.
   #+end_src
 
 *** Lifetimes: Validating references with it
+* Book: Rust Sampler
+- Edition
+  - 2015 - Rust version 1.0-
+  - 2018 - Rust version 1.3-
+- Editions are supported at the MIR level
+- Source Code -> MIR (Mid-Level Intermediate Representation)
+- Editions won't make a major change to Rust, like removing the borrow checker.

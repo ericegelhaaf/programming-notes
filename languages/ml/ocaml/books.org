@@ -2019,6 +2019,12 @@ For smaller examples (like the ones showed here, direct match of Option is gener
       String.("one" = "two")
     #+end_src
   - Due being easy to mix up, it also hides (==) and provides phys_equal instead (me: renaming)
+*** Sets
+#+begin_src ocaml
+  Set.of_list (module Int) [1;2;3] |> Set.to_list
+  Set.union (Set.of_list (module Int) [1;2;3;2]) (Set.of_list (module Int) [3;5;1])
+  |> Set.to_list
+#+end_src
 *** Maps
 **** Example: counter of words using Map (me: selfcointained, where won't need to manipulate it with Map.)
 #+begin_src ocaml
@@ -2026,6 +2032,7 @@ For smaller examples (like the ones showed here, direct match of Option is gener
   type t = (string, int, String.comparator_witness) Map.t
   let emtpy = Map.empty(module String)  (* to provide the comparison function required to build the map *)
   let to_list = Map.to_alist
+
   let touch t s =
     let count =
       match Map.find t s with
@@ -2034,12 +2041,7 @@ For smaller examples (like the ones showed here, direct match of Option is gener
     in
     Map.set t ~key:s ~data:(count + 1)
   #+end_src
-**** Sets
-#+begin_src ocaml
-  Set.of_list (module Int) [1;2;3] |> Set.to_list
-  Set.union (Set.of_list (module Int) [1;2;3;2]) (Set.of_list (module Int) [3;5;1])
-  |> Set.to_list
-#+end_src
+
 **** .of_alist_exn
 #+begin_src ocaml
   let digit_map = Map.of_alist_exn (module Int) digit_alist

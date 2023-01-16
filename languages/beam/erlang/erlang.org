@@ -1,91 +1,57 @@
 - https://github.com/duomark/epocxy
-- Article: The Joy of Pattern Matching http://blog.hellkvist.org/category/erlang/
-- Mix Erlang/Elixir https://dev.to/wesleimp/elixir-and-erlang-code-in-the-same-project-2l83
-- Calling Erlang from Elixir
-  https://nickcanzoneri.com/elixir/erlang/2015/08/03/calling-erlang-code-from-elixir.html
-- Calling Elixir from Erlang
-  https://joearms.github.io/published/2017-12-18-Calling-Elixir-From-Erlang.html
-  https://elixir-lang.org/crash-course.html
-- https://erlang.org/mailman/listinfo
-- https://abstractmachines.dev/posts/am012-why-typing-erlang-is-hard.html
-- https://www.erlang-solutions.com/blog/the-sound-of-erlang-how-to-use-erlang-as-an-instrument.html?utm_source=twitter&utm_medium=social+
+- https://github.com/Telichkin/otp_cheatsheet
 - examples https://rosettacode.org/wiki/Category:Erlang
-- #{akey = AValue, ...} = AMap
-- [A,B|C]   = [1,2,3,4,5,6]
-  [A,B,C|D] = [1,2,3,4,5,6]
-- f({athing,{A,B},N}=C) ->
-    C
+- build tool https://github.com/erlang/rebar3
 - build tool https://erlware.github.io/relx/
 - build tool https://erlang.mk/
-- concurrency is an abstraction, parallelism is the real thing
-- from pattern matching with multiple signatures to "recieve"
+- mailing list https://erlang.org/mailman/listinfo
 - doc https://erlang.org/doc/reference_manual/users_guide.html
 - doc https://erlang.org/doc/apps/stdlib/index.html
-* libs
+* Types
+- Destructuring can happen on the function parameter
+  - f({athing,{A,B},N}=C) -> C
+|--------+-------------+----------------+----------------------------+--------------------------+---------|
+| type   | creating    | p. matching    | accesing                   | updating                 | spec    |
+|--------+-------------+----------------+----------------------------+--------------------------+---------|
+| map    | #{a => 1}   | #{a := Value}  | maps:get(K,M)              | maps:update(K,V,M)       | map()   |
+|        |             |                |                            | M#{key => 1}             |         |
+|        |             |                |                            | M#{key := 1}             |         |
+| list   | [1,2]       | [A,B!C]        | lists:nth(N,L)             |                          | list()  |
+| tuple  | {a,1}       | {A,B}          | erlang:element(K,T)        | erlang:setelement(K,V,T) | {T1,T2} |
+| record | #name{a=23} | #name{a=Value} | Rec#r1.field               | Rec#name{field = 23}     | #name{} |
+|        |             |                | Record#r1.field1#r2.field2 |                          |         |
+|--------+-------------+----------------+----------------------------+--------------------------+---------|
+- https://www.erlang.org/doc/reference_manual/data_types.html
+- https://www.erlang.org/doc/reference_manual/records.html
+- https://www.erlang.org/doc/reference_manual/expressions.html
+- https://www.erlang.org/doc/reference_manual/typespec.html
+* Libraries
 | https://github.com/whatsapp/erlfmt     | 0.3 | code formatter           |
 | https://github.com/erlang-ls/erlang_ls | 0.5 | LSP                      |
 | https://github.com/g-andrade/locus     | 0.1 | ASN                      |
 | https://github.com/eproxus/grapherl    | 0.1 | graph otp system         |
 | https://github.com/savonarola/agent    | 0.0 | otp agent implementation |
 | https://github.com/aerosol/gen_cycle   | 0.0 | otp recurring task       |
-* Learn
-  - https://github.com/ericdouglas/distributed-systems-journey
-  - https://github.com/zkessin/testing-erlang-book
-  - https://github.com/inaka/erlang_guidelines
-  - https://github.com/Telichkin/otp_cheatsheet (cheatsheet of otp behaviours)
-  - https://adoptingerlang.org/
-  - https://spawnedshelter.com/ (links)
-  - https://github.com/0xAX/erlang-bookmarks/blob/master/ErlangBookmarks.md (links)
-** beam
-  - https://github.com/happi/theBeamBook
-  - http://beam-wisdoms.clau.se/en/latest/
-* misc
-  - https://bugzilla.redhat.com/show_bug.cgi?id=1672916
-    rebar is broken on redhat/fedora use rebar3
-  - about erlang:length (avoid it, especially on guards)
-    https://groups.google.com/forum/#!msg/erlang-programming/Qg4-AU7J5mM/DEM9MWvLdK4J
-* Video
-** 1
-- is useful use a match all "_" on a *receive*, because a process can receive messages we don't know and fill up the process mailbox
-- spawn(M,F,A)
-- exit(PROCESS)
-- erlang:processes()
-** 2
-- we pass a function as a parameter
-  message_router:start(fun chat_client:print_message/1).
-- register/2
-  erlang:register(atom_name, PID)
-- dict:new/0
-  dict:store/3
-  dict:erase/2
-- closures and anonymous functions still work on Erlang
-- final program "registers" each nick on a dictionary along with the function that will print the message
-  - there is still 1 process (the router)
-** 3
-- "pang" means boom/explode in sweden
-- $ erl -sname foo -setcookie somecookie
-- $ erl -sname bar -setcookie somecookie
-  bar> net_adm:ping(foo@localhost).
-- foo> rpc:call(bar@localhost, erlang, date, [])
-* Rebar3 projects
- rebar.config
+* rebar3
+** new
+rebar.config
 .gitignore
  LICENSE
  README.md
-** lib     (built-in): Complete OTP Library application (no processes) structure
+*** lib     (built-in): Complete OTP Library application (no processes) structure
 #+begin_src
 > rebar3 new lib <NAME>
  src/<NAME>.erl
  src/<NAME>.app.src
 #+end_src
-** app     (built-in): Complete OTP Application structure.
+*** app     (built-in): Complete OTP Application structure.
 #+begin_src
 > rebar3 new app <NAME>
  src/<NAME>_app.erl
  src/<NAME>_sup.erl
  src/<NAME>.app.src
 #+end_src
-** release (built-in): OTP Release structure for executable programs
+*** release (built-in): OTP Release structure for executable programs
 #+begin_src
 > rebar3 new release <NAME>
  apps/<NAME>/src/<NAME>_app.erl
