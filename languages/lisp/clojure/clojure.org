@@ -1,0 +1,73 @@
+Guys what about?:
+Core:
+Official Website: https://clojure.org/
+Documentation: https://clojuredocs.org/
+Cheat-sheet: https://clojure.org/api/cheatsheet
+Community Resources: https://clojure.org/community/resources
+Clojure Libraries: https://clojars.org/
+Libraries Documentation: https://cljdoc.org/
+
+Practice:
+4Clojure: https://www.4clojure.com/
+Koans: https://github.com/functional-koans/clojure-koans
+Clojure problems on Exercism: https://exercism.io/tracks/clojure
+
+Tools:
+Clojure Toolbox: https://www.clojure-toolbox.com/
+EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-api.html
+
+- Blog https://www.juxt.pro/blog
+- https://github.com/mfikes/esprit ESP
+- Transforming Data with ClojureScript¶ https://langintro.com/cljsbook/
+- https://github.com/magomimmo/modern-cljs
+- https://www.cs.utexas.edu/users/novak/cs378contents.html
+- Simulating Machines in Clojure https://stopa.io/post/255
+- https://github.com/functional-koans/clojure-koans/
+- https://github.com/bbatsov/clojure-style-guide
+- https://clojuredocs.org/quickref
+- Live Notebooks https://clerk.vision/
+- (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
+- (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
+* Courses
+- [O'Reilly Media Infinite Skills / Adam Bard / Stuart Halloway / Neal Ford] Learning path: Clojure Fundamentals (Learning Clojure, Clojure Inside Out) [2016, ENG]
+  https://rutracker.org/forum/viewtopic.php?t=5354881
+- Building Microservices with Clojure Training Video
+  https://rutracker.org/forum/viewtopic.php?t=5053153
+* Podcasts
+- Podcast - https://clojuredesign.club/
+- Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
+* Personalities
+** Rich Hickey
+- Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr
+- https://github.com/tallesl/Rich-Hickey-fanclub
+* Tools
+- nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
+  https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
+** GraalVM
+- native-image on deps.edn https://github.com/taylorwood/clj.native-image
+  - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
+  - AWS Example https://github.com/latacora/lamed-sample-app
+  - Lein Plugin https://github.com/taylorwood/lein-native-image
+- https://clojure.atlassian.net/browse/CLJ-2582
+- https://github.com/clj-easy/graal-docs
+- https://www.graalvm.org/reference-manual/native-image/StaticImages/
+- https://www.innoq.com/en/blog/native-clojure-and-graalvm/
+- https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
+* Web
+- https://www.youtube.com/watch?v=wEjNWUMCX78&list=PLVi9lDx-4C_T7jkihlQflyqGqU4xVtsfi
+** threeagent
+- https://martin.varela.fi/2019/11/01/webgl-react-and-no-javascript/
+  https://www.youtube.com/watch?v=myigRnZHhTw
+** quil
+- https://github.com/quil/quil-templates/
+- https://gist.github.com/mmzsource/340322e6ff4b17be8b7dcb84d16d5172
+#+begin_src
+:profiles {:dev {:source-paths ["src"]
+                   :repl-options {:nrepl-middleware
+                                  [cider.piggieback/wrap-cljs-repl]}
+                   :dependencies [[figwheel-sidecar "0.5.19"]
+                                  [cider/piggieback "0.4.1"]]}}
+#+end_src
+- https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/
+* Overtone
+- https://github.com/pjagielski/disclojure

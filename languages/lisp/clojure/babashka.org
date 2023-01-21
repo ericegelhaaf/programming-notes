@@ -1,0 +1,12 @@
+- Libraries
+  https://babashka.org/toolbox/
+- Pods
+  https://github.com/babashka/pod-registry
+  https://book.babashka.org/#pods
+- Node.js https://github.com/babashka/nbb
+- Edit Conf https://github.com/exercism/babashka/blob/main/docs/editors.md
+  > bb --nrepl-server
+- Doc https://book.babashka.org/
+- Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
+  - As such the code is NOT compiled.
+- Article: https://rattlin.blog/bbgum.html
