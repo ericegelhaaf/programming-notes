@@ -7,3 +7,32 @@
 - C++ FULL COURSE For Beginners (Learn C++ in 10 hours)
   15:00
   https://www.youtube.com/watch?v=GQp1zzTwrIg&t=28139s
+* Video: C++Now 2018: Mark Zeren “-Os Matters”
+https://www.youtube.com/watch?v=vGV5u1nxqd8
+| compiler explorer          | https://godbolt.org/             |
+| size profiler for binaries | https://github.com/google/bloaty |
+- how to herd developers?
+- experiment using binary size as a metric to reduce complexity
+  - on part of the VMWare codebase
+  - they used multiple directories (me: maybe git subtree)
+  - team looks for big wins or easy targets, unlike on a regular work
+  - They had a goal of having a 40% of final file size
+    once they reach it they are not enforcing it that much
+- size https://www.man7.org/linux/man-pages/man1/size.1.html
+  - list section sizes and total size of binary files
+- General things
+  - simplifiy class structure
+  - remove dead features
+  - remove layers of indirection
+  - remove un-used instrumentation
+  - remove simulators and test code
+  - rationalize logging
+  - exception factories
+- C++11
+  - output paramters to return values
+  - reference types (in heap) to value type
+  - continuations from bind to lambda
+  - range based for
+  - final
+- The rule is to measure
+  The measure is not the rule

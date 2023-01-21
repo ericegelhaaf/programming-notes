@@ -2,3 +2,4 @@
 - Article: 2021 | Nim 2.0 - Thoughs
   https://forum.nim-lang.org/t/7983
   https://news.ycombinator.com/item?id=27165366
+- https://github.com/nim-lang/Nim/wiki/Nim-for-Python-Programmers

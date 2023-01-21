@@ -26,13 +26,21 @@
 - https://www.erlang.org/doc/reference_manual/expressions.html
 - https://www.erlang.org/doc/reference_manual/typespec.html
 * Libraries
-| https://github.com/whatsapp/erlfmt     | 0.3 | code formatter           |
-| https://github.com/erlang-ls/erlang_ls | 0.5 | LSP                      |
-| https://github.com/g-andrade/locus     | 0.1 | ASN                      |
-| https://github.com/eproxus/grapherl    | 0.1 | graph otp system         |
-| https://github.com/savonarola/agent    | 0.0 | otp agent implementation |
-| https://github.com/aerosol/gen_cycle   | 0.0 | otp recurring task       |
+| https://github.com/ferd/recon/         | 1.1 | for inspecting prod nodes   |
+| https://github.com/talentdeficit/jsx   | 0.6 | .json                       |
+| https://github.com/elli-lib/elli       | 0.2 | web server                  |
+| https://github.com/tsloughter/grpcbox  | 0.1 | gprc                        |
+| https://github.com/artemeff/eql        | 0.1 | SQL ORM                     |
+| https://github.com/erleans/pgo         | 0.1 | pSQL connection pool        |
+| https://github.com/g-andrade/locus     | 0.1 | ASN                         |
+| https://github.com/eproxus/grapherl    | 0.1 | graph otp system            |
+| https://github.com/dnsimple/dns_erlang | 0.1 | DNS + TSIG + EDNS0 + DNSSEC |
+| https://github.com/savonarola/agent    | 0.0 | otp agent implementation    |
+| https://github.com/aerosol/gen_cycle   | 0.0 | otp recurring task          |
+| https://github.com/zyro/elixir-uuid    | 0.3 | ELIXIR uuid()               |
 * rebar3
+- Docs https://rebar3.org/docs/
+- Dependencies https://hex.pm/
 ** new
 rebar.config
 .gitignore
@@ -60,3 +68,10 @@ rebar.config
  config/sys.config
  config/vm.args
 #+end_src
+* Code
+- Gradual type checker https://github.com/josefs/Gradualizer
+- Example: Fly.io https://github.com/baden/flyio-erlang
+- Example: https://github.com/adoptingerlang/service_discovery
+- Formatter https://github.com/whatsapp/erlfmt
+- LSP https://github.com/erlang-ls/erlang_ls
+- DNS authoritative server https://github.com/dnsimple/erldns

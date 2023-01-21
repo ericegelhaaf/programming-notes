@@ -1,3 +1,5 @@
+- 2023 https://chriswarrick.com/blog/2023/01/15/how-to-improve-python-packaging/
+  https://lobste.rs/s/gzi3vk/how_improve_python_packaging_why_14_tools
 - python -> c compiler https://mypyc.readthedocs.io/en/latest/
   https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html
 - https://dropbox.tech/application/our-journey-to-type-checking-4-million-lines-of-python

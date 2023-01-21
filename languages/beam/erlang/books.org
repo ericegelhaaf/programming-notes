@@ -6,6 +6,48 @@
 - https://github.com/heroku/erlang-in-anger
 - beam https://github.com/happi/theBeamBook
 - beam http://beam-wisdoms.clau.se/en/latest/
+* TODO Book: Adopting Erlang
+** Releases
+- Starting an erlang release is similar to an OS boot sequence
+- =boot file= an Erlang node starts by running instructions found in it
+  http://erlang.org/doc/man/script.html
+- .rel (Release resource file)
+  - modules to load and the dependencies of each
+- .rel + .app(s) (Application resource file) of each app
+  ->
+  systools
+  ->
+  .script
+  ->
+  systools:script2boot/1
+  -> .boot
+- History of release tools:
+  systools -> reltool (bundled with OTP) -> relx (bundled with rebar3)
+- ~sasl~ application is required by ~rebar3 release~ ONLY IF you need release upgrades or downgrades functionality
+  if working with container images, it's not needed to be included
+- _build/default/rel/service_discovery/bin/service_discovery console
+- rebar3 release
+  rebar3 as prod tar
+  rebar3 as prod release
+*** relx
+- {dev_mode,true}
+  causes to use symlinks for apps directories for faster development loops when starting/stopping the release
+- relx section on rebar3.config
+  - {release,{NAME,VERSION},APPLICATIONS}
+    - VERSION can be {git,long}
+    - APPLICATIONS order is important
+*** Building a development release
+*** Building a production release
+- {profiles, [{prod, [{relx, []}]}]}
+  - override:
+    | dev_mode       | false       | to copy NOT symlink _build/             |
+    | include_erts   | true        | to include erlang runtime               |
+    | include_src    | false       | save space                              |
+    | debug_info     | strip       | save space, used by debugger,xref,cover |
+    | sys_config_src | path string |                                         |
+    | vm_args_src    | path string |                                         |
+*** TODO Runtime configuration
+*** Coming up
 * Book: Learn some erlang for greater good
 - return {setup,...} from suffixed _test_() to lifecycle a test generator
 - return {foreach,...} for doing individual lifecycles for the test generators

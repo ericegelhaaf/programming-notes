@@ -1,3 +1,4 @@
+- Article: https://rauljordan.com/rust-concepts-i-wish-i-learned-earlier/
 - tutorial https://google.github.io/comprehensive-rust/
 - https://github.com/trickster0/OffensiveRust
 - https://fasterthanli.me/articles/the-curse-of-strong-typing

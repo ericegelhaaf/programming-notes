@@ -1,6 +1,6 @@
-https://thesearch.space/
-https://www.metalevel.at/prolog
-https://www.metalevel.at/prolog/videos/
+- https://thesearch.space/
+- https://www.metalevel.at/prolog
+- Book: The power of Prolog https://www.metalevel.at/prolog/videos/
 * Video: 2014 - Production Prolog - Michael Hendricks - StrangeLoop
   https://www.youtube.com/watch?v=G_eYTctGZw8
   - First-order logic

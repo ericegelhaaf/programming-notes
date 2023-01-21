@@ -47,15 +47,18 @@ source https://github.com/tsoding/mine
      Col := Random(Field.Cols);
      FieldRandomCell := FieldGet(Field, Row, Col);
   end;
+
   function FieldGet(Field: Field; Row, Col: Integer): Cell;
   begin
      FieldGet := Field.Cells[Row*Field.Cols + Col];
   end;
+
   function FieldCheckedGet(Field: Field, Row, Col: Integer, var Cell: Cell): Boolean;
   begin
      FieldCheckedGet := (0 <= Row) and (Row < Field.Rows) and (0 <= Col) and (Col < Field.Cols);
      if FieldCheckedGet then FieldGet(Field, Row, Col);
   end;
+
   function FieldCountNbors(Field: Field, Row, Col: Integer): Integer;
   var
      DRow, Dcol: Integer;
@@ -70,12 +73,13 @@ source https://github.com/tsoding/mine
                     inc(FieldCountNbors);
   end;
   #+end_src
-** ~procedure~ do NOT return a value, ~var~ is to pass by reference
+** ~procedure~ do NOT return a value, ~var~ can be used on args to pass by reference
 #+begin_src opascal
   procedure FieldResize(var Field: Field, Row, Cell: Integer; Cell: Cell);
   begin
      Field.Cells[Row*Field.Cols + Col] := Cell;
   end;
+
   procedure FieldWrite(Field: Field);
   var
      Col, Row, Nbors: Integer;
@@ -93,6 +97,7 @@ source https://github.com/tsoding/mine
         WriteLn;
      end;
   end;
+
   procedure FieldRandomize(var Field: Field, BombsPercentage: Integer);
   var
      Index, BombsCount : Integer;
@@ -109,7 +114,7 @@ source https://github.com/tsoding/mine
   end;
   #+end_src
 ** With ~dynamic arrays~ you can set his length directly
-basically like a realloc
+basically like doing a realloc
 #+begin_src opascal
   procedure FIeldResize(var Field: Field; Rows, Cols: Integer);
   var

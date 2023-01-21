@@ -2223,6 +2223,8 @@ Higher conceptual level than collections.
 *** TODO Shell Scripting with Nashhorn
 - 6) =Nashhorn= has support for writing shell scripts in JavaScript
 * 2019 | Real-World Software Development  | Raoul-Gabriel Urma
+code https://github.com/Iteratr-Learning/Real-World-Software-Development
+code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/master/src/main/java/com/iteratrlearning/shu_book
 ** 1 Starting the Journey
 - =Practices and principles over technology=
 - Book Themes
@@ -2241,6 +2243,181 @@ Higher conceptual level than collections.
      - (DIP) Dependency Inversion Principle
   4) Testing: TDD, test doubles, mocks and stubs
 ** 2 The Bank Statements Analyzer
+- A program that will automate the processing of bank statements
+- Implementation 1: single class
+  - problems with coping for _changing requirements_
+  - problems with _maintenance_ of the project
+- Input bank transactions: 30-01-2017,-100,Deliveroo
+- Outputs:
+  1) sum
+  2) positive or negative?
+  3) how many in month M?
+  4) top 10
+  5) category of most losses
+- the use of ~final~ does NOT guarantee immutability of the object in question
+  - you can have a final field that refers to an _object with mutable state_
+  - less drawbacks when used on _method parameters_
+  - on _abstract methods_ is pointless
+  - _diminished utility_ with the ~var~ keyword of java 10
+- =code maintainability=
+  - easy to locate code of a _feature_
+  - simpe to add or remove _features_
+  - simple to _understand_ what it does
+  - good ~encapsulation~ (implementation hidden from users of the code)
+- =anti-patterns= from copy-pasting code
+  - hard to understand because you have a giant ~god class~
+  - brittle code due ~code duplication~
+- You need to balance between DRY and KISS
+  - DRY  - Don't Repeat Yourself
+  - KISS - Keep It Simple Idiot
+*** (SRP) Single Responsibility Principle
+- To complementary ways to think about *SRP*
+  1) A class has responsability over a single functionality
+  2) There is only one single reason for a class to change
+- a ~domain class~, matches the business problem (ie the domain at hand)
+  - useful so different parts of our application share the same common understanding
+- Cohesion
+- Coupling
+*** Attempt 1 - sum - single class
+- Gotchas:
+  - file empty
+  - parsing error
+    - aka on corrupt data
+    - missing data
+#+begin_src java
+  public class BankTransactionAnalyzerSimple {
+      private static final String RESOURCES = "src/main/resources/";
+      public static void main(final String... args) throws IOException {
+          final Path path = Paths.get(RESOURCES + args[0]);
+          final List<String> lines = Files.readAllLines(path);
+          double total = 0d;
+          for(final String line : lines) {
+              final String[] colums = line.split(",");
+              final double amount = Double.parseDouble(columns[1]);
+              total += amount;
+          }
+          System.out.println("The total for all transactiosn is " + total);
+      }
+  }
+#+end_src
+*** Attempt 1 - per month - single class
+- basically copying the other code and adding the data parsing
+  - DateTimeFormatter.orPattern()
+#+begin_src java
+  final Path path = Paths.get(RESOURCES + args[0]);
+  final LIst<String> lines = Files.readAllLines(path);
+  double total = 0d;
+  final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.orPattern("dd-MM-yyy");
+  for (final String line : lines) {
+      final String[] colums = line.split(",");
+      final LocalData date = LocalDate.parse(columns[0], DATA_PATTERN);
+      if (date.getMonth() == Month.JANUARY) {
+          final double amount = Double.parseDouble(columns[1]);
+          total += amount;
+      }
+  }
+  System.out.println("The total for all transactions in January is " + total);
+#+end_src
+*** Attempt 2 - extracting parsing logic in a separate class
+#+begin_src java
+  public class BankStatementCSVParser {
+
+      private static final DateTimeFormatter DATE_PATTERN
+          = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+      private BankTransaction parseFromCSV(final String line) {
+          final String[] columns = line.split(",");
+          final LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
+          final double amount = Double.parseDouble(columns[1]);
+          final String description = columns[2];
+          return new BankTransaction(date, amount, description);
+      }
+
+      public List<BankTransaction> parseLinesFromCSV(final List<String> lines) {
+          final List<BankTransaction> bankTransactions = new ArrayList<>();
+          for (final String line : lines) {
+              bankTransactions.add(parseFromCSV(line));
+          }
+          return bankTransactions;
+      }
+  }
+#+end_src
+*** Attempt 2 - a domain class for a BankTransaction
+#+begin_src java
+  public class BankTransaction {
+      private final LocalDate date;
+      private final double amount;
+      private final String description;
+      public void BankTransaction(final LocalDate date, final double amount, final String description) {
+          this.date = date;
+          this.amount = amount;
+          this.description = description;
+      }
+      public LocalDate getDate() {
+          return date;
+      }
+      public double getAmount() {
+          return amount;
+      }
+      public String getDescription() {
+          return description;
+      }
+      @Override
+      public String toString() {
+          return "BankTransaction{" +
+              "date=" + date +
+              ", amount=" + amount +
+              ", description='" + description + '\'' +
+              '}';
+      }
+      @Override
+      public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClasss() != o.getClass()) return false;
+          BankTransaction that = (BankTransaction) o;
+          return Double.compare(that.amount, amount) == 0 &&
+              date.equals(that.date) &&
+              description.equals(that.description);
+      }
+      @Override
+      public int hashCode() {
+          return Objects.hash(date, amount, description);
+      }
+  }
+#+end_src
+*** Attempt 2 - using the parsing methods/class above
+#+begin_src java
+  final BankStatementCSVParser bankStatementParser = new BankTransactionCSVParser();
+  final String filename = args[0];
+  final Path path = Paths.get(RESOURCES + fileName);
+  final List<String> lines = Files.readAllLines(path);
+  final List<BankTransaction> bankTransactions
+      = bankStatementParser.parseLinesFromCSV(lines);
+  System.out.println("The total for all transactions is " + calculateTotalAmount(bankTransactions));
+  System.out.println("Transactions in January " + selectInMonth(BankTransactions, Month.JANUARY));
+
+
+#+end_src
+*** Attempt 2 - implementing methods using the domain class
+#+begin_src java
+  public static double calculateTotalAmount(final LIst<BankTransaction> bankTransactions) {
+      double total = 0d;
+      for (final BankTransaction bankTransaction : bankTransactions) {
+          total += bankTransaction.getAmount();
+      }
+      return total;
+  }
+
+  public static List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions, final Month month) {
+      final List<BankTransaction> bankTransactionsInMonth = newArrayList<>();
+      for (final BankTransaction bankTransaction : bankTransactions) {
+          if (bankTransaction.getDate().getMonth() == month) {
+              bankTransactionsInMonth.add(bankTransaction);
+          }
+      }
+      return bankTransactionsInMonth;
+   }
+#+end_src
 * 2022 | DevOps Tools for Java Developers | Stephen Chin
 source https://github.com/devops-tools-for-java-developers/code-snippets
 - maven  git *plugin* https://github.com/git-commit-id/git-commit-id-maven-plugin

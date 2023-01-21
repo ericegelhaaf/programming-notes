@@ -42,6 +42,8 @@
   - -w turns off DWARF debugging information (no gdb/pprof)
   - -s turns off the generation of symbol table (no go tool nm)
   > strip -x
+- TUI Libraries
+  https://charm.sh/
 * Personalities
 ** Rob Pike
 https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd

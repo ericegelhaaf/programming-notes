@@ -1,17 +1,41 @@
 - https://ziglang.org/learn/why_zig_rust_d_cpp/
 - https://github.com/ratfactor/ziglings
+- https://github.com/michal-z/zig-gamedev
+
 * Video
 - Tsoding - Paid Zig Stream https://www.youtube.com/watch?v=eIX9zER9vjY
-** DONE How Zig is used at Uber - Motiejus Jakštys
+** Video: 2023 | Thoughts on Zig         | Zach Oakes
+https://www.youtube.com/watch?v=zlWqpRTgXBg
+- almost the opposite design desition of *nim*
+  - nim said no to interfaces
+  - nim said yes to source code filters
+  - nim imports are by default qualified (pull everything in) like in C
+  - nim has exceptions
+  - compiles to C, but not a single file
+- *zig* says no to almost every feature
+  - no function overloading
+  - no operator overloading
+  - you can stil put a function inside a struct
+  - threats erros as values that you return
+    - you cannot pass data with the error
+  - nulls are *union* types "better than wrappig and unwrapping in the monadic style"
+  - no package manager
+  - drop-in c compiler
+- comptime is good
+  - 80% of the power of macros without the complexity
+  - multi_array_list https://github.com/ziglang/zig/blob/master/lib/std/multi_array_list.zig
+    - takes a struct, and creates a struct of arrays
+    - common in data oriented design to get better cache locallity
+** Video: 2022 | How Zig is used at Uber | Motiejus Jakštys
    https://www.youtube.com/watch?v=SCj2J3HcEfc
-   Position:
-     - Past: Erlang Developer
-     - Present: Infrastructure
-   Uber
-     - Primarly Go (for infra) and Java (some rare C++)
-     - Monorepo per language
-     - Will use the Zig's C toolchain for crosscompilation
-   Hermetic: when the tool to compile the program comes with the source.
-     - Go is Hermetic (with bazel?), C++ is not.
+- Position:
+    - Past: Erlang Developer
+    - Present: Infrastructure
+- Uber
+    - Primarly Go (for infra) and Java (some rare C++)
+    - Monorepo per language
+    - Will use the Zig's C toolchain for crosscompilation
+- Hermetic: when the tool to compile the program comes with the source.
+    - Go is Hermetic (with bazel?), C++ is not.
 ** Channel
 - https://www.youtube.com/c/ZigSHOWTIME

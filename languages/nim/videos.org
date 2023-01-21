@@ -6,6 +6,7 @@
 - Video: 16. BYOT: Build Your Own Tools for Fun and Profit by Cas van Cooten  https://www.youtube.com/watch?v=PAxYI99A0mg
 - Video: Aaron Haymore - Red Team Tooling with Nim-Lang https://www.youtube.com/watch?v=s9B3LsSnesU
 - Video: The SECRET of NIM! - Creating RED TEAM TOOLS with Nim-Lang  https://www.youtube.com/watch?v=1l9169qW2FA
+- Video: [FOSDEM 2022] Pararules - a Nim rules engine for reactive programs and games https://www.youtube.com/watch?v=uYFEJUEOHPI
 * 19 | Boomer                    | Tsoding
 Source: https://github.com/tsoding/boomer
 ** https://www.twitch.tv/videos/463963305

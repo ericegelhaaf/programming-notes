@@ -10,6 +10,9 @@ https://elixirschool.com/en/
 https://github.com/elixirkoans/elixir-koans
 https://github.com/exercism/elixir
 - Book https://joyofelixir.com/toc.html
+* Code
+- 323 gradual type-checker https://github.com/esl/gradient
+- 4.5K code analysis/linter https://github.com/rrrene/credo
 * Data Types
 - Records vs Structs https://groups.google.com/g/elixir-lang-talk/c/6kn7J2XnFg8/m/I5poTNCEHwAJ
 |-------------------+---------+------------------------------+-----------------------------------------------|
