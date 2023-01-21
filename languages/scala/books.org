@@ -1,0 +1,18 @@
+* 20 | Scala From Scratch: Exploration | Daniel Westheide
+scala to javascript https://www.scala-js.org/
+scala on llvm https://www.scala-native.org/en/stable/
+prebuilt openjdk https://adoptopenjdk.net/
+scala build tool (-2021) https://github.com/propensive/fury
+scala build tool https://github.com/com-lihaoyi/mill
+** 1 With a REPL yell
+- templates based on https://github.com/foundweekends/giter8
+#+begin_src
+ $ sbt --script-version
+   1.3.13
+ $ sbt new dwestheide/minimal-scala-project.g8
+ $ cd my-project
+ $ sbt console
+ console> :q
+ console> :quit
+ console> :help
+#+end_src

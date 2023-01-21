@@ -1,0 +1,57 @@
+- Introduction to Programming and Problem Solving Using Scala
+  https://www.youtube.com/playlist?list=PLLMXbkbDbVt9MIJ9DV4ps-_trOzWtphYO
+- 3rd - Parallel Programming
+  https://www.youtube.com/channel/UCFVAx3NnF3HpQawLY6KR2DQ
+- 4th - Big Data Analysis with Scala and Spark
+  https://www.youtube.com/channel/UCaezz_KRVlM7GZdxf-4eoPA
+- (Udemy) RockTheJVM - Scala functioning and programming for beginners
+  https://www.youtube.com/playlist?list=PL15cIG7aNbhtZxLafzxmld750BcFw-9Ek
+- (Udemy) RockTheJVM - Advance Scala and functional Programming
+  https://www.youtube.com/playlist?list=PL15cIG7aNbhshROiDuYpFTwoCRXeyBNYx
+* 13 | 1 - Functional Programming Principles In Scala | Martin Odesky
+** Lecture 1
+** Lecture 2
+** Lecture 3
+** Lecture 4
+** Lecture 5
+** Lecture 6
+** Lecture 7
+** Lecture 8
+** Lecture 9
+* 21 | Functional Programming with Scala Cats | Udemy
+** 2
+*** 9.1 Trait Channel: Inheritance
+#+begin_src scala
+  trait Channel {
+    def write(
+      obj: ByteEncodable
+    ): Unit
+  }
+  trait ByteEncodable {
+    def encode(): Array[Byte]
+  }
+#+end_src
+- Good
+  * unique responsibility (encoding is on a different trait)
+  * easy to test
+  * unhandled type -> compile error
+- Bad
+  * we cannot extend classes we do not have control (eg: Int)
+  * only one implementation
+  * overloaded interface (an extra method in the class we are extending)
+    a problem if a class is big
+*** 9.2 Trait Channel: Type Classes
+#+begin_src scala
+  trait Channel {
+    def write[A](
+      obj: A,
+      enc: ByteEncoder[A]
+    ): Unit
+  }
+  trait ByteEncoder[A] {
+    def encode(a: A): Array[Byte]
+  }
+#+end_src
+- We now receive an encoder as aparameter
+- We now receive a type parameter [A]
+  - We do NOT extend, we write instances
