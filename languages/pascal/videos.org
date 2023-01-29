@@ -1,7 +1,24 @@
 - 2010 | Making a game in Free Pascal https://www.youtube.com/watch?v=hPmJB0mS-GA
-- 2020 | Advent of Code 2020 — Day 15 in Pascal https://www.youtube.com/watch?v=ech9Re2bi_E
-* TODO 2022 | Coding in Pascal in 2022 | Tsoding
-01:15:00
+* TODO 2020 | AOC2020 — Day 15         | Tsoding
+57:00
+https://www.youtube.com/watch?v=ech9Re2bi_E
+- Paramstr
+  Paramcount
+  #+begin_src opascal
+    for i := 1 to ParamCount -1 do // skip the program name in 0
+    begin
+       WriteLn(ParamStr(i));
+    end;
+  #+end_src
+- You can initialize arrays on declaration
+  #+begin_src opascal
+    var
+       sample1 : array of Integer = (0,6,3)
+  #+end_src
+- <2018 You cannot initialize dynamic arrays
+  https://lists.freepascal.org/pipermail/fpc-pascal/2018-May/053892.html
+- You can use ~Exit()~ to return from a function with a value
+* 2022 | Coding in Pascal in 2022 | Tsoding
 https://www.youtube.com/watch?v=8UJNQt8DAWE
 source https://github.com/tsoding/mine
 - Project: programming a tic-tac-toe
@@ -24,11 +41,14 @@ source https://github.com/tsoding/mine
 - on functions you can assign the result AND then read it back
 - You CANNOT define a *variable* with the same name AND type
   BUT you CAN define an *argument* with it
-- An empty statement can be provided either by a "begin/end" pair or just a ";"
+- An empty statement can be provided either by a "begin/end" pair or just a ~;~
   - Useful for ~while~ loops with side-effects
+    while <EXPRESSION> do;
 - Random(N)
   Randomize - changes the seed
 - everything you put after "end." is ignored
+- ME: since parameters can be modified using *var*, is impossible to know from the caller POV
+- bit operators are overloaded with and/or/not
 ** ~type~ for a row based array matrix
 #+begin_src opascal
   type
@@ -125,6 +145,10 @@ basically like doing a realloc
      Field.Cols := Cols;
   end;
 #+end_src
+** 00:42:45 trick to use a percentage without using floating point numbers
+#+begin_src opascal
+  BombsCount := (Field.Rows*Field.Cols*BombsPercentage + 99) div 100;
+#+end_src
 ** 00:52:12 Fog
 - It then adds a boolean array to indicate if the cell is open or closed
 ** 01:00:46 Interactivity - Redraw on Enter
@@ -148,8 +172,46 @@ basically like doing a realloc
 #+begin_src opascal
   uses
      Termio
+  const
+     STDIN_FILENO = 0;
   var
-     TAttr: Termios;
+     MainField         : Field;
+     Quit              : Boolean = False;
+     SavedTAttr, TAttr : Termios;
+     Cmd               : Char;
   begin
+     if IsATTY(STDIN_FILENO) = 0 then
+     begin
+        WriteLn('ERROR. this is not a terminal');
+        Exit;
+     end;
+     TCGetAttr(STDIN_FILENO, TAttr);
+     TCGetAttr(STDIN_FILENO, SavedTAttr);
+     TAttr.c_lflag := TAttr.c_flag and (not (ICANON or ECHO));
+     TAttr.c_cc[VMIN] := 1;
+     TAttr.c_cc[VTIME] := 0;
+     TCSetAttr(STDIN_FILENO, TCSAFLUSH, &tattr);
+     FieldWrite(MainField);
+     while not Quit do
+     begin
+        Read(Cmd);
+        case Cmd of
+           'w': if MainField.CursorRow > 0 then dec(MainField.CursorRow);
+           's': if MainField.CursorRow < MainField.Rows-1 then inc(MainField.CursorRow);
+           ' ': if FiledOpenAtCursor(MainField) = Bomb then
+                   begin
+                      FieldOpenEverything(MainField);
+                      Write(Chr(27), '[', MainField.Rows, 'A');
+                      Write(Chr(27), '[', MainField.Cols*3, 'D');
+                      FieldWrite(MainField);
+                      WriteLn('Oops!');
+                      break;
+                   end;
+        end;
+        Write(Chr(27), '[', Field.Rows, 'A');
+        Write(Chr(27), '[', Field.COls*3, 'D');
+        FieldWrite(MainField);
+     end;
+     TCSetAttr(STDIN_FILENO, TCSANOW, SavedTAttr); // reset all
   end;
 #+end_src

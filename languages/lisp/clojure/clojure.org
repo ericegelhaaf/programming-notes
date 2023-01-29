@@ -28,11 +28,14 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Live Notebooks https://clerk.vision/
 - (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
-* Courses
-- [O'Reilly Media Infinite Skills / Adam Bard / Stuart Halloway / Neal Ford] Learning path: Clojure Fundamentals (Learning Clojure, Clojure Inside Out) [2016, ENG]
-  https://rutracker.org/forum/viewtopic.php?t=5354881
-- Building Microservices with Clojure Training Video
-  https://rutracker.org/forum/viewtopic.php?t=5053153
+* Types
+|     |         | Implementation     | Types |
+|-----+---------+--------------------+-------|
+| ()  | lists   | singly-linked list | mixed |
+| []  | vector  | hash-map like      | mixed |
+| {}  | hashmap |                    | mixed |
+| #{} | sets    |                    |       |
+|-----+---------+--------------------+-------|
 * Podcasts
 - Podcast - https://clojuredesign.club/
 - Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ

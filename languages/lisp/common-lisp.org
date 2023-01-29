@@ -1,3 +1,4 @@
+- https://github.com/marcoheisig/common-lisp-tweaks
 - incudine project
   https://github.com/ormf/cl-ats
   https://selma.hfmdk-frankfurt.de/gitlab/orm.finnendahl/ats-cuda/-/blob/master/examples.lisp
@@ -75,6 +76,16 @@
 - One can use reinitialize-instance to avoid allocating a new instance of
   a thing and instead reset the values to the default initargs
   http://www.method-combination.net/blog/archives/2009/12/16/using-reinitialize-instance.html
+- eval-when quickload
+  - STILL DON'T KNOW
+  - allow us to tell the *file compiler* to execute code at compile time
+  - serapeum:eval-always
+    serapeum:eval-and-compile
+  - https://stackoverflow.com/questions/33313636/loading-quicklisp-package-for-use-in-another-lisp-file
+  #+begin_src lisp
+    (eval-when (:compile-toplevel :load-toplevel :execute)
+      (ql:quickload '(:alexandria)))
+  #+end_src
 * Elf Binary Release
 |-----------------+-------------+-------+-----+-----|
 |                 | compression | extra | .so | X11 |

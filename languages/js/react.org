@@ -6,6 +6,7 @@
   | counter animation  | https://www.npmjs.com/package/react-countup              |
   | <dialog>           | https://www.npmjs.com/package/react-modal                |
   | <details>          | https://www.npmjs.com/package/react-accessible-accordion |
+  | componenents       | https://github.com/mantinedev/mantine                    |
 - Filtering undefined elements from an array in TypeScript
   https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
 - https://quicktype.io/typescript/

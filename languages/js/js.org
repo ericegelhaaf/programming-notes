@@ -25,6 +25,7 @@ https://github.com/30-seconds/30-seconds-of-interviews
   https://github.com/lydiahallie/javascript-questions
 - Libraries
   https://github.com/sorrycc/awesome-javascript
+  - framework https://alpinejs.dev/
 - browserify: https://github.com/browserify/browserify-handbook
 - http://callbackhell.com/
   - name lambdas OR use separate functions

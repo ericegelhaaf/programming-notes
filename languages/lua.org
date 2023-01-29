@@ -1,3 +1,16 @@
+- article: 2014 https://garry.blog/i-fell-out-of-love-with-lua/
+  - by Garry's mod creator
+  - syntax:
+    - use of ".." over "+"  for string concatenation
+    - use of "--" over "//" for comments
+    - use of "~=" over "!=" for inequality
+  - habits:
+    - arrays that start at 1, are not going to help future programmers
+  - missing features
+    - no unicode support
+    - no var++
+    - no var += 1
+    - no continute
 - love2d tutorials https://www.youtube.com/channel/UCcq3KOawHtjyN0ibjL4RzXQ
 - https://learnxinyminutes.com/docs/lua/
 - https://lua.programmingpedia.net/

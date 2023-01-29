@@ -2,7 +2,7 @@
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
 - ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW
 - Fulcro – Part 1: Getting Started https://www.youtube.com/watch?v=wEjNWUMCX78
-** Channel
+* Channel
 - London Clojurians https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw
 - on the code again https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig
 - Sci Cloj https://www.youtube.com/c/SciCloj/videos

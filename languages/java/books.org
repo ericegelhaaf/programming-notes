@@ -2225,6 +2225,12 @@ Higher conceptual level than collections.
 * 2019 | Real-World Software Development  | Raoul-Gabriel Urma
 code https://github.com/Iteratr-Learning/Real-World-Software-Development
 code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/master/src/main/java/com/iteratrlearning/shu_book
+JUnit https://junit.org/junit5/docs/current/user-guide/
+mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
+- Code Coverage
+  - JaCoco https://www.jacoco.org/jacoco/
+  - emma https://emma.sourceforge.net/
+  - cobertura https://cobertura.github.io/cobertura/
 ** 1 Starting the Journey
 - =Practices and principles over technology=
 - Book Themes
@@ -2242,7 +2248,7 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
      - (ISP) Interface Segregation Principle
      - (DIP) Dependency Inversion Principle
   4) Testing: TDD, test doubles, mocks and stubs
-** 2 The Bank Statements Analyzer
+** 2 (S) The Bank Statements Analyzer
 - A program that will automate the processing of bank statements
 - Implementation 1: single class
   - problems with coping for _changing requirements_
@@ -2265,20 +2271,15 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
   - simple to _understand_ what it does
   - good ~encapsulation~ (implementation hidden from users of the code)
 - =anti-patterns= from copy-pasting code
-  - hard to understand because you have a giant ~god class~
+  - hard to understand because you have a giant =god class=
   - brittle code due ~code duplication~
-- You need to balance between DRY and KISS
-  - DRY  - Don't Repeat Yourself
-  - KISS - Keep It Simple Idiot
-*** (SRP) Single Responsibility Principle
-- To complementary ways to think about *SRP*
-  1) A class has responsability over a single functionality
-  2) There is only one single reason for a class to change
-- a ~domain class~, matches the business problem (ie the domain at hand)
-  - useful so different parts of our application share the same common understanding
-- Cohesion
-- Coupling
-*** Attempt 1 - sum - single class
+- ~Principle of Least Surprise~ (aka POLA Principle of least astonishment)
+  https://en.wikipedia.org/wiki/Principle_of_least_astonishment
+  "components of a system should behave in a way that most users will expect it to behave"
+  1) use self-documenting method names
+  2) do not change the state of parameters
+*** KISS
+**** Code: sum
 - Gotchas:
   - file empty
   - parsing error
@@ -2300,7 +2301,7 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
       }
   }
 #+end_src
-*** Attempt 1 - per month - single class
+**** Code: per month
 - basically copying the other code and adding the data parsing
   - DateTimeFormatter.orPattern()
 #+begin_src java
@@ -2318,7 +2319,16 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
   }
   System.out.println("The total for all transactions in January is " + total);
 #+end_src
-*** Attempt 2 - extracting parsing logic in a separate class
+*** (SRP) =Single Responsibility Principle=
+- You need to balance between DRY and KISS
+  - DRY  - Don't Repeat Yourself
+  - KISS - Keep It Simple Idiot
+- To complementary ways to think about *SRP*
+  1) A class has responsability over a single functionality
+  2) There is only one single reason for a class to change
+- a ~domain class~, matches the business problem (ie the domain at hand)
+  - useful so different parts of our application share the same common understanding
+**** Code - extracting parsing logic in a separate class
 #+begin_src java
   public class BankStatementCSVParser {
 
@@ -2342,7 +2352,7 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
       }
   }
 #+end_src
-*** Attempt 2 - a domain class for a BankTransaction
+**** Code - a domain class for a BankTransaction
 #+begin_src java
   public class BankTransaction {
       private final LocalDate date;
@@ -2385,7 +2395,7 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
       }
   }
 #+end_src
-*** Attempt 2 - using the parsing methods/class above
+**** Code - using the parsing methods/class above
 #+begin_src java
   final BankStatementCSVParser bankStatementParser = new BankTransactionCSVParser();
   final String filename = args[0];
@@ -2398,7 +2408,7 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
 
 
 #+end_src
-*** Attempt 2 - implementing methods using the domain class
+**** Code - implementing methods using the domain class
 #+begin_src java
   public static double calculateTotalAmount(final LIst<BankTransaction> bankTransactions) {
       double total = 0d;
@@ -2418,6 +2428,763 @@ code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/ma
       return bankTransactionsInMonth;
    }
 #+end_src
+*** =Cohesion=
+- Aim to high cohesion
+- Cohesion, Is concerned with /how strongly related/ things are.
+  - How strong related responsabilities of a class or method are
+  - Goal is to have *high cohesion*
+    1) class-level cohesion (concept generally applied to this)
+    2) method-level cohesion
+- Previous *BankStatementAnalyzer* had /poor cohesion/
+  - due having methods to do calculations,
+    while its responsability is to wire up the different parts and report back on the screen.
+- DAO = Data Access Object pattern, eg: you have a class with create/read/update/delete methods
+**** Class-level cohesion
+- Ways to group /cohesion/ methods
+ |---------------+---------------------------------------------------------------------------------------------|
+ | functional    | when _methods_ are working together, careful to not have classes with 1 method              |
+ | informational | they work on the same data or _domain object_                                               |
+ | utility       | when is not obvious eg: an "utility class"                                                  |
+ | logical       | not recommended. when methods are doing the "same" eg: different parsing formats in 1 class |
+ | sequential    | group all methods part of a sequence of steps. not recommended.                             |
+ | temporal      | related in time eg: initialization and clean-up operations                                  |
+ |---------------+---------------------------------------------------------------------------------------------|
+- pros and cons of different /cohesion/ levels
+ |               | Level of | Pro                                             | Con                                         |
+ |---------------+----------+-------------------------------------------------+---------------------------------------------|
+ | Functional    | high     | Easy to understand                              | can lead to overly simplistic classes       |
+ | Informational | medium   | Easy to understand                              | can lead to unnecessary dependencies        |
+ | Sequential    | medium   | Easy to locate related operations               | Encourages violation of SRP                 |
+ | Logical       | medium   | Provides some form of high-level categorization | Encourages violation of SRP                 |
+ | Utility       | low      | Simple to pu in place                           | Harder to reason about the responsability   |
+ | Temporal      | low      | N/A                                             | Harder to undersantd and use individual ops |
+ |---------------+----------+-------------------------------------------------+---------------------------------------------|
+**** Method-level cohesion
+- The more different _functionalities_ a method performs, the harder it becomes to understand what that method does.
+  - Low /cohesion/ makes them harder _to test_
+  - if a method contains a series of _if/else_ blocks that make modifications _to many different fields_ of a class or parameters.
+    then is a sign you should break down the method oin more cohesive parts
+**** Code: new BankStatementProcessor
+#+begin_src java
+  public class BankStatementProcessor {
+      private final List<BankTransaction> bankTransactions;
+      public void BankStatementProcessor(final List<BankTransaction> bankTransactions) {
+          this.bankTransactions = bankTrasactions;
+      }
+      public double calculateTotalAmount() {
+          double total = 0;
+          for (final BankTransaction bankTransaction : bankTransactions) {
+              total += bankTransaction.getAmount();
+          }
+          return total;
+      }
+      public double calculateTotalInMonth(final Month month) {
+          double total = 0;
+          for (final BankTrnsaction bankTrnsaction : bankTransactions) {
+              if (bankTransaction.getDate().getMonth() == month) {
+                  total += bankTransaction.getAmount();
+              }
+          }
+          return total;
+      }
+      public double calculateTotalForCategory(final String category) {
+          double total = 0;
+          for (final BankTransaction bankTransaction : bankTransactions) {
+              if (bankTransaction.getDescription().equals(category)) {
+                  total += bankTransaction.getAmount();
+              }
+          }
+          return total;
+       }
+  }
+#+end_src
+**** Code: update BankStatementAnalyzer
+#+begin_src java
+  public class BankStatementAnalyzer {
+      private static final String RESOURCES = "src/main/resources/";
+      private static final BankStatementCSVParser bankStatementParser = new BankStatementCSVParser();
+      public static void main(final String... args) throws IOException {
+          final String filename = args[0];
+          final Path path = Paths.get(RESOURCES + fileName);
+          final List<String> lines = Files.readAllLines(path);
+
+          final List<BankTransaction> bankTransactions = bankStatementParser.parseLineFrom(lines);
+          final BankStatementProcessor bankStatementPRocessor = new BankStatementProcessor(bankTransactions);
+
+          collectSummary(bankStatementProcessor);
+      }
+      private static void collectSummary(final BankStatementProcessor bankStatementProcessor) {
+          System.out.println("The total for all transactions is "
+                             + bankStatementProcessor.calculateTotalAmount());
+          System.out.println("The total for transactions in January is "
+                             + bankStatementProcessor.calculateTotalInMonth(Month.JANUARY));
+          System.out.println("The total for transactions in February is "
+                             + bankStatementProcessor.calculateTotalInMonth(Month.FEBRUARY));
+          System.out.println("The total salary received is"
+                             + bankStatementProcessor.calculateTotalForCategory("Salary"));
+      }
+  }
+#+end_src
+*** =Coupling=
+- aim for _low coupling_
+- about how ~dependant~ you are on *other* classes
+  - how much knowledge (specific implementation) you rely on about certain classes
+  - the more classes you rely on, the _less flexible_ your code become to changes
+  - interface and implementation
+**** Code: BankStatementParser *interface* to support different type of files
+#+begin_src java
+  public interface BankStatementParser {
+      BankTransaction parseFrom(String line);
+      List<BankTransaction> parseLinesFrom(List<String> lines);
+  }
+  public class BankStatementCSVParser implements BankStatementParser {
+      // ...
+  }
+#+end_src
+**** Code: BankStatementAnalyzer, using the interface
+#+begin_src java
+  public class BankStatementAnalyzer {
+      private static final String RESOURCES = "src/main/resources/";
+      public void analyze(final String filename, final BankStatementParser bankStatementParser) throws IOException{
+          final Path path = Paths.get(RESOURCES + fileName);
+          final List<String> lines = Files.readAllLines(path);
+
+          final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFrom(lines);
+          final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
+          collectSummary(bankStatementProcessor);
+      }
+      // ...
+  }
+#+end_src
+**** Code: MainApplication
+#+begin_src java
+  public class MainApplication {
+      public static void main(String[] args) {
+          final BankStatementAnalyzer bankStatementAnalyzer
+              = new BankStatementAnalyzer();
+          final BankStatementParser bankStatementParser
+              = new BankStatemnetCSVParser();
+          bankStatementAnalyzer.analyze(args[0], bankStatementParser);
+      }
+  }
+#+end_src
+*** Testing
+- "On an average day, a professional developer will often run 100(hundreds) or 1000(thousands of automated tests."
+- Using JUnit https://junit.org/junit5/docs/current/user-guide/
+- Code Coverage
+  - JaCoco https://www.jacoco.org/jacoco/
+  - emma https://emma.sourceforge.net/
+  - cobertura https://cobertura.github.io/cobertura/
+- Why?
+  1) Confidence: that you have met the requirements of your client.
+  2) Robustness to changes:
+  3) Program Comprehension: useful to help you understand how the different components inside the source code project works.
+- Unit tests:
+  - They are code too
+  - You have to think in their longer maintenance
+  - which verify a small isolated unit of behavior for correctness,
+    such a _method_ or a small _class_
+- Convention from Maven and Gradle
+  src/main/java
+  src/test/java
+- Conventions
+  - use the Test suffix on the classname
+  - descriptive method name (@Test)
+  - you can declare helper methods as private, they won't be executed
+- Assert.fail(MESSAGE)
+  Assert.assertEquals(EXPECTED, ACTUAL)
+  Assert.assertEquals(EXPECTED, ACTUAL, DELTA)
+  AssertNotNull(OBJECT)
+- =Given-When-Then= formula https://www.agilealliance.org/glossary/gwt/
+  1) setup (GIVEN) the context for your test
+  2) (WHEN) carry out the action
+  3) specify assertions of (THEN) the expected output
+- Recommended to aim for 70-90% of =code coverage=
+  - test getters and setters provide little value
+  - favor ~branch coverage~ over ~line coverage~
+**** Code: failing test
+#+begin_src java
+  import org.junit.Assert;
+  import org.junit.Test;
+  public class BankStatementCSVParserTest {
+      private final BankStatementParser statementParser = new BankStatementCSVParser();
+      @Test
+      public void shouldParseOneCorrectLine() throws Exception {
+          Assert.fail("Not yet implemented!");
+      }
+  }
+#+end_src
+**** Code: valid test
+#+begin_src java
+  @Test
+  public void shouldParseOneCorrectLine() {
+      final String line = "30-01-2017,-50,Tesco";
+      final BankTransaction result = statementParser.parseFrom(line);
+      final BankTransaction expected = new BankTransaction(LocalDate.of(2017, Month.JANUARY, 30), -50, "Tesco");
+      final double tolerance = 0.0d;
+      Assert.assertEquals(expected.getDate(), result.getDate());
+      Assert.assertEquals(expected.getAmount(), result.getAmount(), tolerance);
+      Assert.assertEquals(expected.getDescription(), result.getDescription());
+  }
+#+end_src
+** 3 (O) Extensing the Bank Statements Analyzer
+- New features
+  - searching for different kind of transactions
+    - return all on a date-range
+    - or a specific category
+  - multiple formats
+  - exporting to different formats (html)
+*** =Open/Closed Principle=, for flexibility
+- ME: aparrently is *Open* for extension but *Closed* to modification
+- If you try to get values based on a criteria, you will find yourself writing the same code each time
+  - is code smell
+  - Leads to code that is brittle
+  - if you want to use 2 different criteria, adds a 3rd function
+- Open/Closed principle
+  - Promotes the idea of being able to _change the behavior_ of a method/class
+    without having to modify the code.
+  - _reduces fragility_ of code by not changing existing code
+    promotes /resusability/ of existing code, avoids code duplications
+    promotes /decoupling/, which leads to better code maintenance
+  - eg. use *interfaces* to _decouple_ the iteration and the business logic.
+- =@FunctionalInterface= aka an interface that only contains a single abstract method
+  - JAVA8 defines java.util.function.Predicate<T> interface
+**** Code 1.1: findTransactionsGreaterThanEqual
+#+begin_src java
+  public List<BankTransaction> findTransactionsGreaterThanEqual(final int amount) {
+      final List<BankTransaction> result = new ArrayList<>();
+      for (final BankTransaction bankTransaction : bankTransactions) {
+          if (bankTransaction.getAmount() >= amount) {
+              result.add(bankTransaction);
+          }
+      }
+      return result;
+   }
+#+end_src
+**** Code 1.2: findTransactionsInMonth
+#+begin_src java
+  public List<BankTransaction> findTransactionsInMonth(final Month month) {
+      final List<BankTransaction> result = new ArrayList<>();
+      for (final BankTransaction bankTransaction : bankTransactions) {
+          if (bankTransaction.getDate().getMonth() == month) {
+              result.add(bankTransaction);
+          }
+      }
+      return result;
+   }
+#+end_src
+**** Code 1.3: finTransactionsInMonthAndGreater
+#+begin_src java
+  public List<BankTransaction> findTrnsactionsInMonthAndGreater(final Month month, final int amount) {
+      final List<BankTransaction> result = new newArrayList<>();
+      for (final BankTransaction bankTransaction : bankTransactions) {
+          if (bankTransaction.getDate().getMonth() == month && bankTransaction.getAmount() >= amount) {
+              result.add(bankTransaction);
+          }
+      }
+      return result;
+  }
+#+end_src
+**** Code 2.1: BankTransactionFilter - interface for the selection logic
+- models the concept of a selection criteria for BankTransaction
+#+begin_src java
+  @FunctionalInterface
+  public interface BankTransactionFilter {
+      boolean test(BankTransaction bankTransaction);
+  }
+#+end_src
+**** Code 2.2: findTransactions - using the interface to create a filter
+- docouple of the iteration logic from the business logic through the interface
+#+begin_src java
+  public List<BankTransaction> findTransactions(final String BankTransactionFilter bankTransactionFilter) {
+      final List<BankTransaction> result = new ArrayList<>();
+      for (final BankTransaction bankTransaction : bankTransactions) {
+          if (bankTransactionFilter.test(bankTransaction)) {
+              result.add(bankTransaction);
+          }
+      }
+      return result;
+   }
+#+end_src
+**** Code 2.3: BankTransactionInFebruraryAndExpensive - using the filter
+#+begin_src java
+  class BankTransactionIsInFebruaryAndExpensive implements BankTransactionFilter {
+      @Override
+      public boolean test(final BankTransaction bankTransaction) {
+          return bankTransaction.getDate().getMonth() == Month.FEBRUARY
+              && bankTransaction.getAmount() >= 1_000;
+      }
+  }
+#+end_src
+**** Code 2.4: caliing calling it
+#+begin_src java
+  final List<BankTransaction> transactions
+      = bankStatementProcessor.findTransactions(new BankTransactionIsInFebruaryAndExpensive());
+#+end_src
+**** Code 3.1: Lambda expressions - using the filter (aka 2.3 and 2.4)
+#+begin_src java
+  final List<BanKTransaction> transactions
+      = bankStatementProcessor.findTransactions(bankTransaction ->
+                                                bankTransaction.getDate().getMonth() == Month.FEBRUARY
+                                                && bankTransaction.getAmount() >= 1_000)
+#+end_src
+*** Interfaces Gotchas
+- =god interface= Is discouraged to put everything into one single interface: the
+  - *coupling*, every single implementation of the interface has to provide implementation for each operation
+    increasing the scope for pontential problems down the line
+  - *coupling*, concrete /properties/ (month/category) have _cropped up_ as part of the /method names/
+    would be a problem if the internals of the domain object change
+  #+begin_src java
+    interface BankTransactionProcessor {
+        double calculateTotalAmount();
+        double calculateTotalInMonth(Month month);
+        double calculateTotalInJanuary();
+        double calculateAverageAmount();
+        double calculateAverageAmountForCategory(Category category);
+        List<BankTransaction> findTransactions(BankTransactionFilter bankTransactionFilter);
+    }
+  #+end_src
+- =too granular= aka define one interface for each operation
+  - also not useful for improving code maintenance
+  - introduces ~anti-cohesion~, it becomes harder to _discover_ the operations of interest
+  #+begin_src java
+    interface CalculateTotalAmount {
+        double calculateTotalAmount();
+    }
+    interface CalculateAverage {
+        double calculateAverage();
+    }
+    interface CalculateTotalInMonth {
+        double calculateTotalInMonth(Month month);
+    }
+  #+end_src
+*** Explicit Versus Implicit API
+- Explicit VS Implicit API
+  - eg: if you need to provide ~(1)~ findTransactionsGreaterThanEqual() or just use ~(2)~ findTransactions()
+    1) this method is restricted to a particular case and you can easily have an explosion of new methods.
+       It makes sense if it is a very common operation.
+       An _explicit API_ would maket it easier for users to understand and use.
+    2) more difficult to use, but it provides an _unified API_
+- Pragmatic approach:
+  - Follow the O/C Principle
+  - Define the most common cases as part of the class.
+  - An interface might not be warranted
+**** Domain Class or Primitive Value
+- it might be a bad idea return *double* on the interface method as the result of an _aggregation_
+  if we want to return multiple values later, you would need to change every single implementation of it
+  Introduce a new _domain class_ such as Summary, that wraps the *double* value
+**** Code: build using 2 interfaces + 1 class BankTransactionProcessor
+#+begin_src java
+  @FunctionalInterface
+  public interface BankTransactionSummarizer {
+      double summarize(double accumulator, BankTransaction bankTransaction);
+  }
+
+  @FunctionalInterface
+  public interface BankTransactionFilter {
+      boolean test(BankTransaction bankTransaction);
+  }
+
+  public class BankTransactionProcessor {
+
+      private final List<BankTransaction> bankTransactions;
+
+      public void BankStatementProcessor(final List<BanKTransaction> bankTransactions) { // setter
+          this.bankTransactions = bankTransactions;
+      }
+
+      public double summarizeTransactions(final BankTransactionSummarizer bankTransactionSummarizer) {
+          double result = 0;
+          for (final BankTransaction bankTransaction : bankTransactions) {
+              result = bankTransactionSummarizer.summarize(result, bankTransaction);
+          }
+          return result;
+       }
+
+      public double calculateTotalInMonth(final Month month) {
+          return summarizeTransactions((acc, bankTransaction) ->
+                                       bankTransaction.getDate().getMOnth() == month
+                                       ? acc + bankTransaction.getAmount()
+                                       : acc);
+       }
+
+      // ...
+
+      public List<BankTransaction> findTransactions(final BankTransactionFilter bankTransactionFilter) {
+          final List<BankTransaction> result = new ArrayList<>();
+          for (final BankTransaction bankTransaction : bankTransactions) {
+              if (bankTransactionFilter.test(bankTransaction)) {
+                  result.add(bankTransaction);
+              }
+          }
+          return bankTransactions;
+       }
+
+      // ...
+      public List<BankTransaction> findTransactionsGreaterThanEqual(final int amount) {
+          return findTransactions(bankTransaction -> bankTransaction.getAmount() >= amount);
+       }
+  }
+#+end_src
+**** Code: using Streams API
+#+begin_src java
+  bankTransactions
+      .stream()
+      .filter(bankTransaction -> bankTransaction.getAmount() >= 1_000)
+      .collect(toList());
+#+end_src
+*** Multiple Exporters
+**** Introducing a Domain object
+- Things we can export (ME: a single or multiple values, wrapped into a type)
+ | number                    | somewhat inflexible                                   |
+ | collection                | still a bit inflexible (even returning Iterable)      |
+ | specialized domain object | introduces a form of decoupling eg: SummaryStatistics |
+#+begin_src java
+  public class SummaryStatistics {
+      private final double sum;
+      private final double max;
+      private final double min;
+      private final double average;
+
+      public void SummaryStatistics(final double sum, final double max, final double min, final double average) {
+          this.sum       = sum;
+          this.max       = max;
+          this.min       = min;
+          this.averarage = average;
+       }
+
+      public double getSum() {
+          return sum;
+      }
+      public double getMax() {
+          return max;
+      }
+      public double getMin() {
+          return min;
+      }
+      public double getAverage() {
+          return average;
+      }
+  }
+#+end_src
+**** Defining and Implementing the Appropriate Interface
+- Define an interface called /Exporter/
+  To let you _decouple_ from multiple implementations of exporters. (O/C principle).
+- Code: Interface attempt 1 - void
+  - void is not useful and its difficult to _reason_ about
+  - signature implies some _state_ changed somewhere, we don't know
+  - hard to _test_ with assertions
+  #+begin_src java
+    public interface Exporter {
+        void export(SummaryStatistics summaryStatistics);
+    }
+  #+end_src
+- Code: Interface attempt 2 - String, more useful and testable
+  #+begin_src java
+    public interface Exporter {
+        String export(SummaryStatistics summaryStatistics);
+    }
+  #+end_src
+- Code: implementing the interface
+  #+begin_src java
+    public class HtmlExporter implements Exporter {
+        @Override
+        public String export(final SymmaryStatistics summaryStatistics) {
+            String result = "<!doctype html>";
+            result += "<html lang='en'>";
+            result += "<head><title>Bank Transaction Report</title></head>";
+            result += "<body>";
+            result += "<ul>";
+            result += "<li><strong>The sum is </strong>: " + summaryStatistics.getSum() + "</li>";
+            result += "<li><strong>The average is </strong>: " + summaryStatistics.getAverage() + "</li>";
+            result += "<li><strong>The max is </strong>: " + summaryStatistics.getMax() + "</li>";
+            result += "<li><strong>The min is </strong>: " + summaryStatistics.getMin() + "</li>";
+            result += "</ul>";
+            result += "</body>";
+            result += "</html>";
+            return result;
+        }
+    }
+  #+end_src
+*** Exception Handling
+- One /external exception/ could be if the system runs out of resources (eg: memory or disk space)
+  - these are unchecked exception, as there's nothing the client can do
+**** Error handling on C
+- relies on _global shared mutable state_ to look up the most recent error
+- relies you to distinguish between real values and _errors encoded as values_
+- _control flow mixed_ with the business logic, make harder to maintain an test in isolation
+**** Exception Types
+| type      |                                         | declared |
+|-----------+-----------------------------------------+----------|
+| checked   | client is expected to _recover_ from it | explicit |
+| unchecked | can be throw at any time                | implicit |
+**** Exception Hierarchy
+  Throwable -> (C) Exception -> (U) RuntimeException
+            -> (U) Error
+**** CODE: csv parsing exception
+- eg: on csv parsing, 1) syntax and 2) data validation
+#+begin_src java
+  final String[] columns = line.split(",");
+  if (columns.length < EXPECTED_ATTRIBUTES_LENGTH) {
+      throw new CSVSyntaxException();
+  }
+#+end_src
+**** Anti-Pattern: Overly specific
+- Example: Where to add validation logic?
+  - It could be right at the construction time
+  - Recommendation: on a dedicated ~Validator~ class
+- If you are to specific (declaring each possible exception possibility) is unproductive
+#+begin_src java
+  public class OverlySpecificBankStatementValidator {
+      private String description;
+      private String date;
+      private String amount;
+
+      public void OverlySPecificBankStatementValidator(final String description, final String date, final String amount) {
+          this.description = Objects.requireNonNull(description);
+          this.date = Objects.requireNonNul(description);
+          this.amount = Objects.requireNonNull(description);
+       }
+
+      public boolean validate() throws DescriptiontooLongException,
+                                       InvalidDateFormat,
+                                       DateInTheFutureException,
+                                       InvalidAmountException {
+          if (this.description.length() > 100) {
+              throw new DescriptionTooLongException();
+          }
+
+          final LocalDate parsedDate;
+          try {
+              parsedDate = LocalDate.parse(this.date);
+          }
+          catch (DateTimeParseException e) {
+              throw new InvalidDateFormat();
+          }
+          if (parsedDate.isAfter(LocalDate.now())) throw new DateInTheFutureException();
+
+          try {
+              Double.parseDouble(this.amount);
+          }
+          catch (NumberFormatException e) {
+              throw new InvalidAmountException
+          }
+          return true;
+      }
+  }
+#+end_src
+**** Anti-Pattern: Overly apathetic
+- With this you cannot have specific recovery logic because all the exceptions are the same!
+- Example: using ~IllegalArgumentException~ for everything
+#+begin_src java
+  public boolean validate() {
+      if (this.description.length() > 100) {
+          throw new IllegalArgumentException("The description is too long");
+      }
+      final LocalDate parsedDate;
+      try {
+          parsedDate = LocalDate.parse(this.date);
+      }
+      catch (DateTimeParseException e) {
+          throw new IllegalArgumentException("Invalid format to date", e);
+      }
+      if (parsedDate.isAfter(LocalDate.now())) throw new IllegalArgumentException("date cannot be in the future");
+      try {
+          Double.parseDouble(this.amount);
+      }
+      catch (NumberFormatException e) {
+          throw new IllegalArgumentException("Invalid format for amount", e);
+      }
+      return true;
+   }
+#+end_src
+**** =Notification Pattern=
+- A solution for when you are using too many _unchecked exceptions_
+- The solution is to introduce a _domain class_ to collect errors.
+  - able to collect multiple errors in one pass
+- Code: Notification class
+  #+begin_src java
+    public class Notification {
+        private final List<String> errors = new ArrayList<>();
+        public void addError(final String message) {
+            errors.add(message);
+        }
+        public boolean hasErrors() {
+            return !errors.isEmpty();
+        }
+        public String errorMessage() {
+            return errors.toString();
+        }
+        public List<String> getErrors() {
+            return this.errors;
+        }
+    }
+#+end_src
+- Code: Notification method validate()
+  #+begin_src java
+    public Notification validate() {
+        final Notification notification = new Notification();
+        if (this.description.length() > 100) {
+            notification.addError("The description is too long");
+        }
+        final LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(this.date);
+            if (parsedDate.isAfter(LocalDate.now())) {
+                notification.addError("date cannot be in the future");
+            }
+        }
+        catch (DateTimeParseException e) {
+            notification.addError("Invalid format for date");
+        }
+        final double amount;
+        try {
+            amount = Double.parseDouble(this.amount);
+        }
+        catch (NumberFormatException e) {
+            notification.addError("invalid format for amount");
+        }
+        return notification;
+    }
+  #+end_src
+**** Guidelines for Using Exceptions
+| Do not ignore an exception                       | you won't be able to diagnose the root of the problem      |
+|                                                  | if you don't know how to handle it, throw an unchecked     |
+| Do not catch the generic *Exception*             | it also includes RuntimeException                          |
+| Document exceptions                              | including unchecked ones (aka @throws)                     |
+| Watch out for implementation-specific exceptions | it breaks API encapsulation (eg: throws OracleException{}) |
+| Exception versus Control flow                    | do not use exceptions for control flow (eg: to exit a loop) |
+**** Alternatives to Exceptions
+1) Using null:
+   this is to be _absolutely avoided_ as you have to explicitly remember to check for nulla s a result of your api.
+   Leads to NullPointerException(s)
+   #+begin_src java
+     final String[] columns = line.split(",");
+     if (columns.lenght < EXPECTED_ATTRIBUTES_LENGHT) {
+         return null;
+     }
+   #+end_src
+2) The Null Object pattern
+   - An Object that implements the expected interface but whose methods bodies are empty
+   - It does nothing functionally
+   - May hide potential issues in the date with an object that simply ignored the real problem.
+   - Difficult to troubleshoot
+3) java.util.Optional<T>
+   - Java 8
+   - represents the presence or absence of a value
+   - allows you to compose many of them together
+4) Try<T>
+   - an operation that might _succeed or fail_
+   - like Optional<T>, BUT instead of values you work with operations
+     also composable, but helps _reduce the scope_ for errors
+   - not in the JDk but in _external libraries_
+*** Using a Build Tool
+- Automates repetitive taks in the software development life cycle
+  - building
+  - testing
+  - deploying
+- Benefits
+  - provides a _common structure_ to think about a project
+  - repeatable and _standarized processs_ to build and run
+  - more _time spend_ on development than on low-level configuration and setup
+  - _reduce building errors_ due configuration
+  - save time
+**** Maven
+- 2004
+- Declaration of the build process is done in XML
+- Project structure
+  | pom.xml            |                                 |
+  | src/main/java      |                                 |
+  | src/main/resources | extra resources, eg: text files |
+  | src/test/java      |                                 |
+  | src/test/resources | extra resources, eg: text files |
+- pom.xml elements
+  | project      | top-level element                         |
+  | groupId      | uniq identifier of the organization       |
+  | artifactId   | unique name for the artifact              |
+  | packaging    | eg: jar, war, ear, etc.. (default is jar) |
+  | version      |                                           |
+  | build        | misc conf eg: plugins and resources       |
+  | dependencies |                                           |
+  | modelVersion | ????                                      |
+- pom.xml example
+  #+begin_src html
+    <?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+      <modelVersion>4.0.0</modelVersion>
+
+      <groupId>com.iteratrlearning</groupId>
+      <artifactId>bankstatement_analyzer</artifactId>
+      <version>1.0-SNAPSHOT</version>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.7.0</version>
+            <configuration>
+              <source>9</source>
+              <target>9</target>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+
+      <dependencies>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </project>
+  #+end_src
+- mvn
+  - clean
+  - compile: into /target/ folder
+  - test
+  - package: into .jar
+  - exec: plugin https://www.mojohaus.org/exec-maven-plugin/usage.html
+**** Gradle
+- Maven deficiencies
+  - xml
+    sometimes is necessary to provide system commands, such as cp and mv files around
+    they don't come natural in XML syntax
+- Uses groovy or kotlin programming languages to specify the build process.
+- features: cache, incremental compilation, faster build time
+- buid.gradle
+  settings.gradle: configuration variable and setup for multiproject build
+- build.gradle
+  #+begin_src
+    apply plugin: 'java'
+    apply plugin: 'application'
+
+    group = 'com.iteratrlearning'
+    version = '1.0-SNAPSHOT'
+
+    sourceCompatibility = 9
+    targetCompatibility = 9
+
+    mainClassName = "com.iteratrlearning.MainApplication"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation group: 'junit', name: 'junit', version: '4.12'
+    }
+  #+end_src
+- gradle
+  - clean
+  - build
+  - test
+  - run
+** 4 (L) The Document Management System
 * 2022 | DevOps Tools for Java Developers | Stephen Chin
 source https://github.com/devops-tools-for-java-developers/code-snippets
 - maven  git *plugin* https://github.com/git-commit-id/git-commit-id-maven-plugin
@@ -2443,9 +3210,11 @@ pom.xml
            xmlns:xsi="http://ww.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.acme</groupId>
     <artifactId>example</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.jdk>${java.version} (${java.vendor} ${java.vm.version})</build.jdk>
@@ -2453,12 +3222,15 @@ pom.xml
       <build.revision>${git.commit.id}</build.revision>
       <build.timestamp>${git.build.time}</build.timestamp>
     </properties>
+
     <build>
       <plugins>
         <plugin>
+
           <groupId>pl.projec13.maven</groupId>
           <artifactId>git-commit-id-plugin</artifactId>
           <version>4.0.3</version>
+
           <executions>
             <execution>
               <id>resolve-git-properties</id>
@@ -2467,6 +3239,7 @@ pom.xml
               </goals>
             </execution>
           </executions>
+
           <configuration>
             <verbose>false</verbose>
             <failOnNoGitDirectory>false</failOnNoGitDirectory>
@@ -2476,6 +3249,7 @@ pom.xml
             </generateGitPropertiesFilename>
             <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
           </configuration>
+
         </plugin>
       </plugins>
     </build>

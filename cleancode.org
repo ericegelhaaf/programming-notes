@@ -111,6 +111,81 @@
     - Also from "efficiency" arguments
       - Holds true, if only, on the core loop of your program
   - A long function is where classes go to hide
+* 4 - Function Structure
+People:
+- "Structured Programming" - Edgard Dijkstra, Hoare, Dull
+- Cunningham's Rule?
+  - Kepp the code what you expect
+- ="Avoid double takes"=
+** function signature should be small
+  - each argument might confuse
+  - each argument can break the flow
+  - 3 max arguments
+  - same for constructors
+    - use setters
+    - or builder pattern
+    - or a map/struct
+** what _types_ should be passed
+  - no booleans: the function does 2 things
+  - avoid output arguments (in java, clojure, ruby there is no need)
+  - null: also 2 behaviours/2 functions
+** ~defensive programming~ is a code smell
+  - in public apis is fine
+  - test should cover the rest
+** ~scissor rule~ (is NOT the convention in Java)
+  - public at the top
+  - private at the bottom
+** ~stepdown rule~
+  - identation each stepdown of methods
+    or even having a language with true inner functions like ALGOL (or js)
+  - no backwards references
+  - public (static?) variables
+    private variables
+    public methods
+    private methods...
+  - not necesarilly ALL public functions at the top, but is divided into "steps" where each step has a public method
+** self evident function structures
+** switch/if
+- switch statements are a missed opportunity to use _polymorphism_
+  switch statements are _not OO_
+- one of the main benefits of OO is the ability to manage _dependencies_
+ | Flow control (aka runtime dependency) | eg a code from module A that calls a function from module B |
+ | Source code dependency                | eg the import/include in module A that refers to module B   |
+- OO allows us to invert the _source code dependency_ by using an interface
+  - which makes it able to compile the modules separately, aka _independent deployability_
+- Switch's =fan out problem=
+  - each case of it, is likely to have a dependency outwards on an external module
+  - forces recompile/redeploy if the modules in the switch change
+- Solution:
+  - replace the switch with a _baseclass_ with a method that corresponds with the action of the switch
+  - each case becomea a _derived class_
+** Main
+- in every application you write, you should be able to draw a line through the module diagram
+  - that separates
+    1) App: the core application functionality
+    2) Main: from the low level details, should be kept small and with not much subdivision
+  - =Dependency Injection=
+    the main partition should depend on the app partition, NOT the other way around
+** FP
+- first to be invented
+- no side effects
+  - when there are side-effects
+    - a function might change the behaviour of a function or some other functions
+    - =temporal coupling=
+      functions with it come in pair set/get, open/close, new/delete, called in order
+    - 
+- immutable
+- no assigment
+- recurse instead of looping
+** SP
+** clean error handling
+** Story: Sun Nucleo
+- the internal of the sun is so hot that the ripped the electrons of the hidrogen, exposing the protons (+)
+- the force of magnet repulsion is inversing proportional to the square of the distance
+- other force "strong nuclear force" is stronger and attracts them, but is distance limited
+- the attraction could lead to _fusion_, which releases energy
+- 4M tons of hidrogen _fuse_ into helium every second
 * 6 - TDD Test Driven Development (Part 1)
 - Code Rot
   - When you touch some code it becomes "yours".
+* 8 - Foundations of SOLID

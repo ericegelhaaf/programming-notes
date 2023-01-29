@@ -1,3 +1,4 @@
+- Article: https://degoes.net/articles/scala-resurrection
 - FP library https://typelevel.org/cats/
 - Async https://zio.dev/
 - Async https://typelevel.org/cats-effect/
