@@ -1,0 +1,179 @@
+- tic-tac toe https://www.youtube.com/watch?v=gCVMkKgs3uQ
+* 16 | How I program C                        | Eskil Steenberg
+- video https://www.youtube.com/watch?v=443UNeGrFoM
+* 19 | "New" Features in C                    | Daniel Saks
+   https://www.youtube.com/watch?v=ieERUEhs910
+- C++ dev, working also on C
+- 4 Standards C89=C90/C99/C11/C18(bugfix of 11)
+- Reserved identifiers
+  - for global scope, starting with undersore
+  - for all, starting with 2 underscores, or underscore and uppercase
+- C99 boolean type
+- C90 _STDC_
+  C99 _STDC_VERSION_
+- C99 long long
+- C99 <stdint.h> for exact length ints
+- C90 you couldn't declare after the first line
+     for loop variables declared at the beginning
+  C99 relaxed it, and allows declaration after
+     for loop variables declared inplace
+- C99 inline for functions
+- C99 ~compound literals~, where rational is a typedef struct with 2 members
+  (rational){1,2}
+  (int [m]){8,6,3,1,2,3,4,5,6}
+  (int []){8,6,3,1,2,3,4,5,6}
+- C99 ~designated initializers~, nice for unions or structs (to avoid confusion) or arrays
+  glop g1 = { .i = 10}
+  glop g2 = { .d = 12.3 }
+  int x[10] = { 0, 0, 0, 8, 0, 0, 0,  2}
+  int x[10] = { [3] = 8, [7] = 2 }
+- C99 ~variable length arrays~ VLAs, declaring and as parameters
+  void f(size_t m, size_t n) {
+    int x[m][n];
+- C99 ~Flexible Array Members~, useful for packet-like structures
+  struct packet {
+    header h;
+    data d[]; // THIS
+  }
+* 21 | Modern C and What We Can Learn From It | Luca Sas
+   https://www.youtube.com/watch?v=QpAhX-gsHMs
+- WG14 Standarization Group https://www.open-std.org/jtc1/sc22/wg14/
+- designated initializers, initialize everything else to 0
+- header macro to differentiate between c++ and c
+  __cplusplus
+- Instead using malloc/fopen ask for allocators iocallbacks
+- static_assert()
+- Example: using sokol gfx, we describe a pipeline, we initialize the others to 0/default
+  #+begin_src c
+    sg_pipeline_desc pip_desc = {
+      .layout = {
+        .buffers[0].stride = 28,
+        .attrs = {
+          [ATTR_vs_position].format = SG_VERTEXFORMAT_FLOAT3,
+          [ATTR_vs_color0].format   = SG_VERTEXFORMAT_FLOAT4
+        }
+      },
+      .shared = shd,
+      .index_type = SG_INDEXTYPE_UINT16,
+      .depth_stencil = {
+        .depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL,
+        .depth_write_enagled = true,
+      }
+      .rasterizer.cull_mode = SG_CULLMODE_BACK,
+      .rasterizer.sample_count = SAMPLE_COUNT,
+      .label = "cube-pipeline"
+    };
+  #+end_src
+- C11 _Generic and Overloading
+  #define min(a,b) _Generic((a), float. minf(a,b), int: mini(a,b))
+- C11 atomics, thread_local
+- defer macro
+  #+begin_src c
+    #define macro_var(name) concat(name, __LINE__)
+    #define defer(start,end) for (     \
+       int macro_var(_i_) = (start,0); \
+       !macro_var(_i_);                \
+       (macro_var(_i_) +=, end)
+    #define profile defer(profile_begin(), profile_end())
+    profile
+    {
+     ...
+    }
+    #define gui defer(gui_begin(),gui_end()
+    gui
+    {
+      ...
+    }
+  #+end_src
+- scope macro
+  #+begin_src c
+    file_handle_t file = file_open(filename, file_mode_read);
+    scope(file_close(file))
+    {
+      ...
+    }
+  #+end_src
+- Unions: We can refer to the same thing in different ways
+  #+begin_src c
+    typedef union hmm_vec2
+    {
+      struct { float X, Y; };
+      struct { float U, V; };
+      struct { float Left, Right; };
+      struct { float Width, Height; };
+      float Elements[2];
+    } hmm_vec2;
+  #+end_src
+- Error: return a struct with a *valid* field
+* 21 | Searching duplicate files with C       | Tsoding
+00:53:00
+https://www.youtube.com/watch?v=bpCJf67e1lI
+- Task: Hashing each file
+- you can use "(void) varname" to silence warning of unused variable.
+- #include <dirent.h>
+  - =opendir()=
+  - =readdir()= - returns the next entry within the directory
+  - =closedir()=
+- unix filenames can only be upto 256
+- we ignore "." and ".."
+  if ((strcmp(ent->d_name, ".") != 0) && strcmp(ent->d_name, "..") != 0)
+- string literals are null terminated
+  #+begin_src c
+    #define PATH_SEP "/" // string literals come with the null termitor character
+    #define PATH_SEP_LEN (sizeof(PATH_SEP) - 1)
+  #+end_src
+- join_path function, a very c way to append strings with =malloc/memcpy= and pointer adding
+  #+begin_src c
+    char *join_path(const char *base, const char *file) {
+      size_t base_len = strlen(base);
+      size_t file_len = strlen(file);
+
+      char *begin = malloc(base_len + file_len + PATH_SEP_LEN + 1);
+      assert(begin != NULL);
+
+      char *end = begin;
+      memcpy(end, base, base_len);
+      end += base_len;
+      memcpy(end, PATH_SEP, PATH_SEP_LEN);
+      end += PATH_SEP_LEN;
+      memcpy(end, file, file_len);
+      end += file_len;
+      *end = '\0';
+
+      return begin;
+    }
+  #+end_src
+- to be able to perform an action on each file, WITHOUT interacting with the recursion of readdir()
+  we creates a wrapper API struct that keep an array of DIR* around
+* 21 | Using C instead of Bash                | Tsoding
+- =fopen()= returns NULL on error
+- =fclose()=
+- =fprintf= (SINK,STRING)
+  - you can pass to the first argument the FILE *value returned by fopen()
+- assert(0 && "TODO: description");
+- =fork()=
+  - returns
+    - to the parent the child id
+    - to the child 0
+    - or negative on error
+- =wait()=
+  - waits for state changes in a child of the calling process
+  - returns the pid of the process that changed state
+- =execvp()=
+  - the "p" means that it will look into PATH
+  - replaces the current process image with the one passed to it
+  - you NEED to run in on a fork()ed child
+  - 2nd argument list must end with NULL
+- for(; *argv != NULL; argv++) can have a missing initialization parameter
+*** shlex
+- strchr()
+  - locates a character in string
+- python shlex.quote, escapes a string to be parsed by a command
+- we do string concatenation by
+  - doing a single memory allocation of an array of charj
+  - and providing an API to memcpy into it cstrings
+- gdb
+  > break shell_escape
+  > run
+  > tui enable
+  > n
