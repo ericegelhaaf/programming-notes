@@ -1,0 +1,60 @@
+- Libraries
+  | ua-based rendering | https://www.npmjs.com/package/react-device-detect        |
+  | icons              | https://www.npmjs.com/package/react-icons                |
+  | loading            | https://www.npmjs.com/package/react-loading              |
+  | popup notification | https://www.npmjs.com/package/react-toastify             |
+  | counter animation  | https://www.npmjs.com/package/react-countup              |
+  | <dialog>           | https://www.npmjs.com/package/react-modal                |
+  | <details>          | https://www.npmjs.com/package/react-accessible-accordion |
+  | componenents       | https://github.com/mantinedev/mantine                    |
+- Filtering undefined elements from an array in TypeScript
+  https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
+- https://quicktype.io/typescript/
+- https://frontendmastery.com/posts/the-new-wave-of-react-state-management/
+- Beta Documentation https://beta.reactjs.org/
+- Tutorial https://www.w3schools.com/react/default.asp
+- websockets example https://www.freecodecamp.org/news/react-websockets-project-build-real-time-order-book-app/
+- https://github.com/sudheerj/reactjs-interview-questions
+- https://github.com/learning-zone/react-interview-questions
+- https://www.zhenghao.io/posts/react-rerender
+- https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/
+- React Internal https://jser.dev/
+- Random projct https://github.com/arkflame/web-frontend/
+- https://egghead.io/courses/the-beginner-s-guide-to-react
+- https://github.com/typescript-cheatsheets/react
+- https://github.com/facebook/create-react-app
+- Typescript Utility Types
+  https://www.typescriptlang.org/docs/handbook/utility-types.html
+- https://www.typescriptlang.org/docs/handbook/intro.html
+- Example web3
+  https://github.com/kennyflaten/KNNY-Market-v4/blob/c4ebc8699ab07066b0746715e13e33652d01b715/pages/%5Bcontract%5D/%5BtokenId%5D/index.tsx
+  https://github.com/search?q=router.push+shallow+next%2Frouter+query&type=Code
+- The “reconciliation” algorithm in React is how the decision to re-render the component is made.
+- Question
+  #+begin_src
+  https://reactjs.org/docs/portals.html
+  Q66. When using a portal, what is the first argument?
+
+  ReactDOM.createPortal(x, y);
+
+      the current state
+    x the element to render
+      the App component
+      the page
+  #+end_src
+- Other Question
+  #+begin_src
+  Q71. When using a portal, what is the second argument?
+
+  ReactDOM.createPortal(x, y);
+
+      the App component
+      the page
+      the current state
+    x the DOM element that exists outside of the parent component
+  #+end_src
+- vite
+  yarn create vite
+  cd
+  yarn add -DE prettier
+  yarn add -D eslint-config-prettier eslint-plugin-prettier @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react

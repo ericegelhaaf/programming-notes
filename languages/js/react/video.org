@@ -1,0 +1,210 @@
+- React Boston https://www.youtube.com/channel/UCYjLoCbltSD_o2gLlM_yS8g/videos
+- React Loop https://www.youtube.com/channel/UCBoSWHAAhkqrCBsTAeS5cCA/videos
+- React Training https://www.youtube.com/c/ReactTraining/videos
+- React.JS Conf 2015 https://www.youtube.com/playlist?list=PLb0IAmt7-GS1cbw4qonlQztYV1TAW0sCr
+* 14 - Pete Hunt: The Secrets of React's Virtual DOM -- FutureJS
+  https://www.youtube.com/watch?v=-DX3vJiqxm4
+  - Ideas not implementations
+  - UIs are difficult to test, sometimes you might have the "height" attribute on a element and automated testing won't catch it.
+  - Is difficult to visualize changes in time.
+    - We traditionally use *data binding*
+  - Key-Value Observation: Based on observables & Computed properties.
+    - Ember, Knockout, Backbone, Meteor.
+    - Use a DSL, no JS, limited.
+    - You are not allowed to use JS to compose your application.
+  - Dirty Checking
+  - 16:00
+* 14 - Pete Hunt: React: RESTful UI Rendering -- StrangeLoop
+  https://www.youtube.com/watch?v=IVvHPPcl2TM
+  - The evolution of distributed systems.
+    - 80' Message Passing: MPI
+      90' Distributed Objects: CORBA, RMI, SOAP, DCOM
+      - Generally unpredictable, what/when/where is hard to answer.
+      - Leaky abstractions are often worse than no abstractions.
+        - One could prefer plain MPI over Objects passing
+      00' REST
+        - Client-server, separates the UI concerns from the data concern
+        - Stateless, no client context on the server
+        - Cachable, by default and optionably disable
+        - Layered, clients can tell if cache or server
+        - Uniform Interface, same URL fro write/read
+  - The evolution of UI development
+    - Ad-Hoc: php, no separation of concerns
+    - MVC: Separating the managment of that data, from the display part.
+           To being able to render it in multiple ways.
+           With a controller that glues it together, absorving change events. And mutates both MV.
+           The observer pattern.
+           Different order might give you a different state.
+    - React:
+      - RESTful, properties
+        . Stateless (no need to know the state of the DOM)
+        . Cachable (is memoizable) shouldComponentUpdate(), which is a cache invalidator (to avoid calculating the diff of the VDOM)
+        . Layered, how we render native elements or user-defined is the same
+        . Uniform Interface, same with creation or instantiation
+      - getInitialStage()
+      - onChange(), handles the event, defines an explicit change transition
+      - handleSubmit()!??
+      - render(), called whenever the *data* (that the component depends on) changes
+* 14 - Christopher Chedeau: React's Architecture -- OSCON
+  https://www.youtube.com/watch?v=eCf5CquV_Bw
+  - '04 String Concatenation (on php)
+    - Problem: XSS injection, one mistake and there's a vulnerability.
+  - '10 XHP
+    - Extended PHP syntax, to put XML inside of it.n
+    - Markup is markup, and everything is going to be escaped by default.
+  - '13 JSX
+    - Started as a port of XHP to Javascript
+    - On PHP, we just re-render everything.
+    - Problem: DOM is stateful (input focus, input selection, scroll position, iframe)
+    - "I tend to think of React as Version Control for the DOM" -- AdonisSMU
+    - a "key=" attribute is added to uniq identify each node on the DOM by React
+    - bool shouldComponentUpdate(nextProps, nextState)
+      can help re-rendering by pruning parts of the Virtual DOM
+      can also be solved with an immutable data structure
+* 14 - Christopher Chedeau: Why does React Scale? -- JSConf
+  https://www.youtube.com/watch?v=D-ioDiacTm8
+  - min(Time to find the root cause)
+  - ReactDevTools: Browser extension
+    https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=es
+    https://addons.mozilla.org/es/firefox/addon/react-devtools/
+  - Debugger: Forward in time, execute every line
+  - Developer: Backard in time, jump to update (where the variable changes)
+  - With react, the scope of a variable/state is limited to a "component"
+  - In general you want types on the function arguments, and everything else untyped.
+  - .cloneWithProps(), you can modify an prop by making a new one
+* 14 - React London 2014
+  https://www.youtube.com/playlist?list=PL-IjEC9Tyk8a-GEpAHL5OoUaTHXr9JacX
+** Video: Lee Campbell & Matt Barrett - Event Driven User Interfaces
+  https://github.com/AdaptiveConsulting/ReactiveTrader
+  - Challenge: making the UI visually responsive, predictable latency
+    - Server and Client
+    - Async: avoid on the UI thread: I/O, heavy computations, enumerating long lists of data, mapping/translating
+             There are dimishing returns when just adding threads.
+    - Stream data (some .NET microsoft propietary stuff, instead of websockets)
+    - Fixed FPS (number of draws per second)
+    - 33:00
+** Video: Erik Meijer - What does it mean to be Reactive?
+- "The Reactive Manifesto" (2013), is just buzzwords (Architect Astronaut Speak)
+  v1 https://www.reactivemanifesto.org/pdf/the-reactive-manifesto.pdf
+  v2 https://www.reactivemanifesto.org/
+  - This architecture allows developers to build systems that are
+    - event-driven
+    - scalable
+    - resilent
+    - responsive
+- "...we should be using (mathematics) as a way of thinking about what we build" -- Lesli Lamport
+- The Four Fundamental Effects (about side effects)
+  |       | One       | Many          |
+  |-------+-----------+---------------|
+  | Sync  | T         | Enumerable[T] |
+  | Async | Future[T] | Observable[T] |
+  +-------+-----------+---------------+
+  1) Sync/One: Imperative programming
+  2) Future's allows you to get 1 value, but deal with it Async
+     A Future captures an effect.
+     A Future is a Monad
+- Objects are the thing that like to be mutated.
+  - the real tpe of a getter, a function that gets no arguments but returns something
+    Where Try, is a value or an exception
+    Where Option, is a value or nothing
+    ()=>Try[Option[A]]
+    - A getter of a getter ????!!
+    #+MSG: The exception part is removed...
+    #+begin_src
+    trait Enumerable[+T]{
+      def getEnumerator(): Enumerator[T]
+    }
+    trait Enumerable[+T]{
+      def moveNext(): Boolean
+      def current: T
+    }
+    #+end_src
+  - the setter
+               A  => ()
+           Try[A] => ()
+    Try[Option[A]] => ()
+- "I hate pattern matching, it's all noise.
+  Never do pattern matching, just pass-in all the functions that you would do on the different matches."
+  #+begin_src scala
+  trait Observable[+T] {
+    def Subscribe(o: Observer[T]): ()
+  }
+  trait Observer[-T]{
+    def onCompleted(): ()
+    def onError(error: Throwable): ()
+    def onNext(value: T): ()
+  }
+  #+end_src
+- So he gets 2 types of collections
+  - from getters, pull-based, the enumerables
+  - From setters, push-based, the observables
+- Iterable and observable are just interfaces to pull/push based collections.
+  - Interfaces in itself are useless, you need implementations of them.
+- Other effects: Latency, protections agains a slow "consumer" or "producer"
+              () => Future[Try[Option[A]]]
+  Try[Option[A]] => Future[()]
+- More Choice, pick the effect for the problem you have at hand.
+  |       | One       | Many               |
+  |-------+-----------+--------------------|
+  | Sync  | T         | Enumerable[T]      |
+  |       |           | AsyncIterable[T]   |
+  | Async | Future[T] | Observable[T]      |
+  |       |           | AsyncObservable[T] |
+- If you use futures, you should use a language that has language support for it (try/catch)
+** Video: Joe Armstrong - K things I know about building Resilient Reactive Systems
+* 13 - Tom Occhino & Jordan Walke: JS Apps at Facebook -- JSConf US
+  https://www.youtube.com/watch?v=GW0rj4sNH2w
+  - Defacto at the time was, MVC, MVVM, MVW (model view whatever)
+    - Models implements *observable* objects with an *events* api
+    - Bi-directional bind *views* to the models, as models change the view gets updated, and as view changes it can change the models
+    - Encourages ~mutation~
+  - Declarative components (non mutable description of what the UI should be)
+  - No observable data binding
+  - It isn't an object oriented framework, though it uses some OO
+  - JSX, embeddable XML syntax (so is just a meta-language!?)
+    - Using Custom Components, just like you would use any other <div>, or <span>
+    - Creating
+      - React.createClass
+      - provide a render() function
+        - Optional getInitialState()
+  - There are "Escape Hatches" to allow you to integrate it with other JS code (tools)
+* 13 - Pete Hunt: React: Rethinking best practices     -- JSConf EU
+  https://www.youtube.com/watch?v=x7cQ3mrcKaY
+  - https://signalvnoise.com/posts/3124-give-it-five-minutes (Jason Fried)
+    - "The faster you react, the less you think. Not always, but often." (about life)
+    - Ideas are Fragile. Often start powerless. Easy to ignore them or skip them.
+  - Renders and UI, and responds to events.
+    - Some people say, the "V" of MVC. Or sometimes the controller too.
+** 1 - Building components, not templates. (Mixing markup and display logic)
+    - Separation of concerns:
+      - reduce *coupling* (a module that depends on other module)
+      - increase in *cohesion* (single responsability, put everything that belongs to a module together)
+    - Templates encourage a poor separation of concerns.
+      - Separates technologies, not concerns.
+    - Display logic and markup are inevitable *tightly coupled*
+    - Problems with MVC:
+      - Controllers/Models/Views tend to get really fat
+      - The frameworks is telling you how to separate your components.
+    - Components are Reusable and Composable and Unit Testable
+    - Only put *display logic* in your components. Not validation, fetching or data access. Put it on a library.
+    - JSX, for designers too, to understand a contribute code.
+** 2 - Re-Render the whole app on every update (15:17)
+   - Data changing over time is the root of all evil.
+   - "Our intellectual powers are rather geared to master static relations and our powers to
+     visualize processes evolving in time are realtively poorly developed..." Dijkstra
+   - In the 90's you could just refresh the page when the data changed. Server rendering the whole HTML again.
+   - React *components* are basically just idempotent functions.
+     They describe your UI at any point in time, just like a server-renderer app.
+     - Nowhere on their code are "searches" for *where* something must be update.
+   - Everything is *declarative*, no explicit DOM operations
+** 3 - Virtual DOM (19:08)
+   - Along with an virtual event system
+     - Automatic top-level event delegation (?)
+   - Reconciliation (react looks a lot like DOOM 3 engine), to calculate the min number of operations from the VDOM to DOM
+   - Batches reads and writes for optimal DOM performance
+   - It can run on Node.JS
+     - Fast: We can render a static HTML page, without a DOM on the server
+             While still shipping React to the client.
+   - Testability
+   - SVG, CML and <canvas> support
+   - Web worker support (experimental)

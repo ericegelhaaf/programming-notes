@@ -1,0 +1,216 @@
+* Tutorial: Next.js https://nextjs.org/docs
+** Pages https://nextjs.org/docs/basic-features/pages
+- Pre-rendering
+  * Static Generation: generated at *build* time
+  * Server-side rendering (SSR): on each request
+  * Client-side rendering: some parts of a page can be rendered by the client JS
+*** Static Generation, with data =getStaticProps()= and =getStaticPaths()=
+  1) getStaticProps(), page *content* depends on external data
+     pages/blog.js
+     #+begin_src js
+     function Blog({ posts }) { }
+     export async function getStaticProps() {
+       const res = await fetch('https://.../posts');
+       const posts = await res.json();
+       return { props: { posts } }
+     }
+     #+end_src
+  2) getStaticPaths() page *paths* depends on external data (usually in addition to 1)
+     pages/posts/[id].js
+     #+begin_src js
+     export async function getStaticPaths() {
+       const res = await fetch('https://.../posts');
+       const posts = await res.json();
+       const paths = posts.map((post) => ({
+         params: { id: post.id },
+       }));
+       return { paths, fallback: false }; // other routes should 404
+     }
+     // export async function getStaticProps({ params })
+     #+end_src
+*** Server-side rendering =getServerSideProps()=
+    #+begin_src js
+    export default function Page({ data }){
+    }
+    export async function getServerSideProps() {
+      const res = await fetch('https://.../data');
+      const data = await res.json();
+      return { props: { data } };
+    }
+    #+end_src
+** Built-in CSS Support
+*** Global Stylesheet
+   ONLY imported on pages/_app.js
+   #+begin_src js
+   import '../styles.css'
+   // default export required
+   export default function MyApp({ Component, pageProps }) {
+     return <Component {...pageProps} />
+   }
+   #+end_src
+*** import from node_modules
+   ANYWHERE, globals like bootstrap or nprogress on pages/_app.js
+   - page/_app.js
+     #+begin_src js
+     import 'bootstrap/dist/css/bootstrap.css';
+     #+end_src
+   - components/ExampleDialog.js
+     #+begin_src js
+     import '@reach/dialog/styles.css';
+     #+end_src
+*** Component-Level CSS (.module.css)
+ - components/Button.module.css
+   Do not worry about collision.
+   #+begin_src css
+   .error {
+     color: white;
+     background-color: red;
+   }
+   #+end_src
+ - components/Button.js
+   #+begin_src js
+   import styles from './Button.module.css';
+   export function Button() {
+     <button
+       type="button"
+       className={styles.error} // accessed as a prop (.error)
+     >
+       Destroy
+     </button>
+   }
+   #+end_src
+*** SASS support (.scss .sass)
+ - npm install --save-dev sass
+ - .scss https://sass-lang.com/documentation/syntax#scss
+ - .sass https://sass-lang.com/documentation/syntax#the-indented-syntax
+ - next.config.js: add sassOptions
+   #+begin_src js
+   const path = require('path')
+
+   module.exports = {
+     sassOptions: {
+       includePaths: [path.join(__dirname, 'styles')],
+     },
+   }
+   #+end_src
+**** Variables
+ - styles/variables.module.sss
+   #+begin_src css
+   $primary-color: #64FF00
+   :export {
+     primaryColor: $primary-color
+   }
+   #+end_src
+ - pages/_app.js
+   #+begin_src js
+   import variables from '../styles/variables.module.scss';
+   export default function MyApp({ Component, pageProps }) {
+     return (
+       <Layout color={variables.primaryColor}>
+         <Component {..pageProps} />
+       </Layout>
+     );
+   }
+   #+end_src
+*** CSS-in-JS
+ - inline
+   #+begin_src js
+   function HiTHere() {
+     return <p style={{ color: 'red' }}>hi there</p>
+   }
+   #+end_src
+ - styled-jsx (prebundled) https://github.com/vercel/styled-jsx
+ - https://github.com/vercel/next.js/tree/canary/examples/with-styled-components
+ - https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss-emotion
+** API Routes - pages/api/* => api/*
+ - Anything there will be treated as an API endpoint. Instead of a page.
+ - Server-Side only
+ - Need to export a function as default takes 2 args, instance of
+   - req:
+     https://nodejs.org/api/http.html#class-httpincomingmessage
+     https://nextjs.org/docs/api-routes/api-middlewares
+   - res:
+     https://nodejs.org/api/http.html#class-httpserverresponse
+     https://nextjs.org/docs/api-routes/response-helpers
+ - pages/api/user.js
+   #+begin_src js
+   export default function handler(req, res) {
+     res.status(200).json({ name: 'John Doe' })
+   }
+   #+end_src
+** Routing
+   route/params is kind messy on some use cases https://github.com/vercel/next.js/discussions/11484
+*** Introduction
+    https://nextjs.org/docs/routing/introduction
+  |---------------+--------------------------------------+------------------------------|
+  | Index Routes  | pages/index.js                       | /                            |
+  |               | pages/blog/index.js                  | /blog                        |
+  |---------------+--------------------------------------+------------------------------|
+  | Nested Routes | pages/blog/first-post.js             | /blog/first-post             |
+  |               | pages/dashboard/settings/username.js | /dashboard/settings/username |
+  |---------------+--------------------------------------+------------------------------|
+  | Dynamic Route | pages/blog/[slug].js                 | /blog/:slug                  |
+  |---------------+--------------------------------------+------------------------------|
+  | Segments      | pages/[username]/settings.js         | /:username/settings          |
+  |               | pages/post/[...all].js               | /post/*                      |
+  |---------------+--------------------------------------+------------------------------|
+ - Linking with <Link href="">Woo</Link>
+   | href=             |                      |
+   |-------------------+----------------------|
+   | /                 | pages/index.js       |
+   | /about            | pages/about.js       |
+   | /blog/hello-world | pages/blog/[slug].js |
+ - <Link> can also be used with dynamic generated href=
+   #+begin_src js
+   <Link href={`blog/${envodeURICOmponent(post.slug}}`}>
+   #+end_src
+ - Or using he URL Object
+   #+begin_src js
+   <Link
+     href={{
+       pathname: 'blog/[slug]',
+       query: { slug: post.slug },
+     }}
+   >
+   #+end_src
+*** Dynamic Routing
+    https://nextjs.org/docs/routing/dynamic-routes
+    example https://github.com/vercel/next.js/tree/canary/examples/dynamic-routing
+ - pages/post/[pid].js
+  #+begin_src js
+  import { useRouter } from 'next/router';
+  const Post = () => {
+    const router = useRouter();
+    const { pid } = router.query
+    return <p>Post: {pid}</p>;
+  }
+  export default Post;
+  #+end_src
+ - Mappings for pages/post/[pid].js
+   | /post/abc         | { "pid": "abc" }               |
+   | /post/abc?foo=bar | { "pid": "abc", "foo": "bar" } |
+   | /post/abc?pid=123 | { "pid": "abc" }               |
+ - Catch All Routes
+   - pages/post/[...slug].js
+   - /post/a/b
+   - { "slug": ["a","b"] }
+ - Optional Catch all Routes
+   - pages/post/[[...slug]].js
+*** Shallow Routing
+    https://nextjs.org/docs/routing/shallow-routing
+ - Allows to change the URL iwhtout running data fetching again
+ - Updated pathname/query on useRouter() response
+   #+begin_src js
+   import { useEffect } from 'react';
+   import { useRouter } from 'next/router';
+   export default function Page() {
+     const router = useRouter();
+     useEffect(()=> {
+       router.push('/?counter=10', undefined, { shallow: true });
+     }, []);
+     useEffect(()=>{
+     // The counter changed!
+     }, [router.query.counter]);
+   }
+   #+end_src
+ - componentDidUpdate() {}
