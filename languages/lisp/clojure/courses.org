@@ -1,0 +1,4 @@
+- [O'Reilly Media Infinite Skills / Adam Bard / Stuart Halloway / Neal Ford] Learning path: Clojure Fundamentals (Learning Clojure, Clojure Inside Out) [2016, ENG]
+  https://rutracker.org/forum/viewtopic.php?t=5354881
+- Building Microservices with Clojure Training Video
+  https://rutracker.org/forum/viewtopic.php?t=5053153
