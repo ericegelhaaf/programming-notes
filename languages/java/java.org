@@ -1,3 +1,4 @@
+- https://www.baeldung.com/
 - https://developer.okta.com/blog/2022/04/08/state-of-ffi-java
 - Library https://developer.okta.com/blog/2022/08/26/state-of-java-project-loom
 - Android: https://developer.android.com/jetpack/compose

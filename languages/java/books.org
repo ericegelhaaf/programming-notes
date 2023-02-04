@@ -3185,6 +3185,158 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
   - test
   - run
 ** 4 (L) The Document Management System
+- Example: Manage dentist patient's documents.
+- ~Liskov Substitution Principle~
+  - named after computer scientists Barbara Liskov
+*** Document AManagment System Requirements
+- Task: Import, index and search through documents
+- Types of documents
+  1) Reports: text, consultation of operation on a patient
+  2) Letters: text
+  3) Images: x-rays, they have a size
+- Each document needs to record the _path_ of the file and the _patient_ is about.
+*** Fleshing Out the Design
+- One way to approach the problem is _thinking about the behaviours_ that your
+  software needs to perform and incrementally fleshing out the code that implements it.
+- The class ~DocumentManagmentSystem~, has 2 methods
+  #+begin_src java
+  void importFile(String path) // Uses string for our Public API
+  List<document> contents()
+  #+end_src
+- Example:
+  - our query lang - "patient:Joe,body:Diet Coke"
+  - search is done by
+    - doing a linear scan over all documents
+    - finding subsequences
+**** A _switch/case_ to process each file extension can be replaces with an _interface_
+- Each *Importer* will be a class that can import a different type of file
+- Uses _java.nio.Path_ or _java.io.File_ that is more type-safe than _string_
+  for this internal API
+  #+begin_src java
+    interface Importer {
+        Document importFile(File file) throws IOException;
+    }
+  #+end_src
+**** =Ubiquitous Language=
+- coined by Eric Evans on "Domain Driven Design"
+- refers to the use of a _common language_ that is clearly deisgned and shared between both devs and users.
+**** Uses a _domain class_ to model each document, as opposed to directly using Map<String,String>
+#+begin_src java
+  public class Document {
+      private final Map<String, String> attributes;
+
+      Document(final Map<String,String> attributes) { // "package scoped constructor"
+          this.attributes = attributes;
+      }
+
+      public String getAttribute(final String attributeName) {
+          return attributes.get(attributeName);
+      }
+  }
+#+end_src
+  - maintanability++
+  - readability++
+  - discoverabilty++ (mapping between code and and the _common language_ you use to communicate with clients/collegues)
+  - strong-typing++
+  - it will be inmutable
+  - why NOT extend HashMap<String,String>
+    - because it is *mutable*
+**** Attributes and Hierarchical Documents
+- "stringly typed"
+  - as oppposed to being "strongly typed"
+  - is when you use *String* as type _when_ there are better types for it
+  - passing *String* around through an application is often a bad idea
+- in this exercise, using String is good enough as we only want to search in the string
+  - if, we were to look for something more complex, like ranges, we would use something else
+- the right way to _model classes_ in OOP setting is to think in terms of =behavior AND data=
+  - we ~won't use subclassing~ (eg: Report class extends Document class)
+  - because we use a _very generic_ HashMap<S,S> for attributes, rather than specific fields for each subclass.
+  - also because there is _little behaviour_ associated with the Documents
+  - follows KISS, there is no benefit to adding the class hierarchy
+**** Implementing and Registering Importers
+- Java's core library provides a way to read an image file using ImageIO.read
+  #+begin_src java
+    import static com.iteratrlearning.shu_book.chapter_04.Attributes.*;
+    class ImageImporter implements Importer {
+        @Override
+        public Document importFile(final File file) throws IOException {
+            final Map<String,String> attributes = new HashMap<>();
+            attributes.put(PATH, file.getPath());
+            final BufferedImage image = ImageIO.read(file);
+            attributes.put(WIDTH, String.valueOf(image.getWidth()));
+            attributes.put(HEIGHT, String.valueOf(image.getHeight()));
+            attributes.put(TYPE, "IMAGE");
+            return new Document(attributes);
+        }
+    }
+#+end_src
+- attribute names are _constants_ defined in the Attributes class
+  #+begin_src java
+    public static final String PATH = "path";
+  #+end_src
+- registering the importers
+  #+begin_src java
+    private final Map<String, Importer> extensionToImporter = new HashMap<>();
+    public void DocumentManagementSystem() {
+        extensionToImporter.put("letter", new LetterImporter());
+        extensionToImporter.put("report", new ReportImporter());
+        extensionToImporter.put("jpg", new ImpageImporter());
+     }
+  #+end_src
+*** The Liskov Substitution Principle (LSP)
+- Helps us understand how to _subclass_ and implement _interfaces_ correctly.
+  - Here "Type" referes to a class or interface
+  - Here "Subtype" means estblish a parent-to-child relationship between types.
+- LSP
+  - Let ~q(x)~ be a property provable about objects of ~x~ of type ~T~.
+    Then ~q(y)~ should be true for objects ~y~ of type ~S~, where ~S~ is a subtype of ~T~
+**** LSP 1) Preconditions cannot be strenghthened in a subtype
+- You CANNOT require any more restrictive preconditions that your parent required.
+  Eg: requiring your document to be smaller than 100KB
+#+begin_src java
+  public void importFile(final String path) throws IOException {
+      final File file = new File(path);
+      if (!file.exists()) {
+          throw new FileNotFoundException(path);
+      }
+
+      final int separatorIndex = path.lastIndexOf('.');
+      if (separatorIndex != -1) {
+        if (separatorIndex == path.length()) {
+            throw new UnknownFileTypeException("No extension found for file: " + path);
+        }
+        final String extension = path.substring(separatorIndex + 1);
+        final Importer importer = extensionToImporter.get(extension);
+        if (importer == null) {
+            throw new UnknownFileTypeException("For file: " + path);
+        }
+        final Document document = importer.importFile(file);
+        documents.add(document);
+      } else {
+          throw new UnknownFileTypeException("No extensions found for file: " + path);
+      }
+   }
+#+end_src
+**** LSP 2) Postconditions cannot be weakened in a subtype
+- things that have to be true after the code is run
+- if a parent has
+  - some kind of side effect
+  - or returns some value
+- then the child must do so as well
+**** LSP 3) Invariants of the supertype(parent) must be preserved in a subtype(child)
+**** LSP 4) The History Rule
+- The child class should not allow _state changes_ that the parent disallows.
+- Eg: do not subclass *Document* to make it mutable
+*** Alternative Approaches
+1) Making Importer a Class: use a class hierarchy for importers if
+   - you want to model a strong /is a/ relationship
+   - in your problem domain that involes state
+   - or a lot of behavior
+2) Scoping and Encapuslation Choices
+   - package scoping (when there is no attribute put) helps to encapsulate design decisions
+   - stops 
+*** Extending and Reusing Code
+*** Test Hygiene
 * 2022 | DevOps Tools for Java Developers | Stephen Chin
 source https://github.com/devops-tools-for-java-developers/code-snippets
 - maven  git *plugin* https://github.com/git-commit-id/git-commit-id-maven-plugin

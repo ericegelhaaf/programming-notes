@@ -23,11 +23,12 @@ https://www.youtube.com/watch?v=8UJNQt8DAWE
 source https://github.com/tsoding/mine
 - Project: programming a tic-tac-toe
 - ME: to ocaml
+  - (* *)
   - begin/end
   - <>
   - ;
   - for/to/to
-  - := (waller separator?)
+  - := (for assignment)
   - = (for equality and not for assignment)
 - Uses FreePascal
 - tsoding uses OPascal, not the buildin pascal

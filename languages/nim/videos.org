@@ -32,7 +32,13 @@ Source: https://github.com/tsoding/boomer
   you can use ~using~ on an object type to reduce noise
   instead of "result.fielda = 1" is "fielda = 1"
 ** https://www.twitch.tv/videos/468009266
-- 00:22:00
+- 00:58:00
+- =helm-do-grep-ag=
+- Exploring a codebase
+  - There are IDE's that build you the hierarchy of a particular functions.
+  - Or you can do it manually, from the bottom (the function you care about) to the top (main)
+- copy current file position as a ORG-MODE link
+  https://github.com/rexim/dotfiles/blob/57585e93c01238b4cd7ec1b70c7c2c5e4abf7733/.emacs.rc/misc-rc.el#L35
 ** https://www.twitch.tv/videos/470931124
 ** https://www.twitch.tv/videos/474198218
 ** https://www.twitch.tv/videos/478605555

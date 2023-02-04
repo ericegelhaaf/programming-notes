@@ -1,3 +1,4 @@
+- The “Build Your Own Redis” Book Is Completed https://news.ycombinator.com/item?id=34572263
 - Article: 2016 https://matt.sh/howto-c
 - Article: https://suckless.org/coding_style/
 - Article: 2021 - unfashionable C

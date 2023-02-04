@@ -111,7 +111,7 @@
     - Also from "efficiency" arguments
       - Holds true, if only, on the core loop of your program
   - A long function is where classes go to hide
-* 4 - Function Structure
+* TODO 4 - Function Structure
 People:
 - "Structured Programming" - Edgard Dijkstra, Hoare, Dull
 - Cunningham's Rule?
@@ -166,7 +166,7 @@ People:
     2) Main: from the low level details, should be kept small and with not much subdivision
   - =Dependency Injection=
     the main partition should depend on the app partition, NOT the other way around
-** FP
+** TODO FP 00:42:00
 - first to be invented
 - no side effects
   - when there are side-effects

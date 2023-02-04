@@ -1,3 +1,4 @@
+- 2023 https://lukeplant.me.uk/blog/posts/pythons-disappointing-superpowers/
 - 2023 https://chriswarrick.com/blog/2023/01/15/how-to-improve-python-packaging/
   https://lobste.rs/s/gzi3vk/how_improve_python_packaging_why_14_tools
 - python -> c compiler https://mypyc.readthedocs.io/en/latest/
