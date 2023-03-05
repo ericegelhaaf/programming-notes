@@ -1,3 +1,7 @@
+- graalvm
+  - native-image https://www.graalvm.org/22.0/reference-manual/native-image/
+  - reduce size https://www.graalvm.org/latest/reference-manual/native-image/guides/use-graalvm-dashboard/
+- features https://www.marcobehler.com/guides/a-guide-to-java-versions-and-features#_java_features_8_19
 - Article: Optional: https://davidleongz.medium.com/optional-a-pragmatic-approach-c736705c2deb
 - Article: Optional: https://homes.cs.washington.edu/~mernst/advice/nothing-is-better-than-optional.html
 * DONE Article: 2015 | Declaration-site and use-site variance explained

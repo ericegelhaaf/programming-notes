@@ -56,6 +56,8 @@
   - https://github.com/ndmitchell/ghcid "flymake"
   - https://github.com/ndmitchell/hlint "flycheck"
   - https://github.com/chrisdone/hindent "gofmt"
+* Standard Library
+- Base https://hackage.haskell.org/package/base
 * Libraries
 - A fast, light-weight web server for WAI applications.
   https://hackage.haskell.org/package/warp

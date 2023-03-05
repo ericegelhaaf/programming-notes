@@ -180,20 +180,21 @@ public class Singleton {
 #+end_src
 * Book: Refactoring: Improving the Design of Existing Code - Martin Fowler
 ** 1 Refactoring: A first Example
+49:00
 - "Brevity is the soul of wit, but clarity is the soul of evolvable software."
 - compile-test-commit
 - It's much easier to improve the ~performance~ of a well-factored code base.
 - Refactoring Types:
- | Extract Function                      | for example, from a case/switch to a function                                                       |
- | Replace Temp (variable) with Query    | reduces mutable parts                                                                               |
- | Change Function Declaration           | like changing the name, or removing a parameter in favor of calling a function. Makes easier to 1). |
- | Inline Variable                       | same as 2) ?                                                                                        |
- | Split Loop                            | isolate the accumulation                                                                            |
- | Slide Statements                      | move declarations of the variable next the loop for easy 1)                                         |
- | Split Phase                           | divide logic                                                                                        |
- | Move Function                         |                                                                                                     |
- | Replace Loop with Pipeline            | loop to .map() and friends                                                                          |
- | Replace Conditional with Polymorphism |                                                                                                     |
+ | Extract Function                      | for example, from a case/switch to a function                                                  |
+ | Replace Temp (variable) with Query    | reduces *mutable* parts                                                                        |
+ | Change Function Declaration           | fn name change, or removing a parameter in favor of calling a function. Makes easier to 1). |
+ | Inline Variable                       | same as 2) ?                                                                                   |
+ | Split Loop                            | isolate the accumulation                                                                       |
+ | Slide Statements                      | move declarations of the variable next the loop for easy 1)                                    |
+ | Split Phase                           | divide logic                                                                                   |
+ | Move Function                         |                                                                                                |
+ | Replace Loop with Pipeline            | loop to .map() and friends                                                                     |
+ | Replace Conditional with Polymorphism |                                                                                                |
 - Javascript
   - Perform a shallow copy, to not modify aPerformance
     const result = Object.assign({}, aPerformance)

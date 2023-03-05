@@ -431,3 +431,150 @@ func main() {
    - you can either use new() or &Thing{}
    - When you see something complicated, it should be complicated
      12:00
+
+* Video: 2015 | The Go Programming Language | Brian Will
+** 1 https://www.youtube.com/watch?v=UvpSDtbdGDM
+- _var_ syntax for type inference on declaration
+  #+begin_src go
+    var foo int = 20
+    var a [4]int
+  #+end_src
+- go compiler adds semicolons(;) in a lot places so we don't have to
+  - us adding a comma(,) at the end of many arguments works to stop the compiler to adding one
+    #+begin_src go
+      a := foo(
+              x,
+              4,
+              z,
+      )
+    #+end_src
+*** arrays
+1) out of bounds arrays
+   - explicit with literals, can be catch at compile-time
+   - implicit using variables, will trigger at runtime
+2) the variables of arrays, are values, NOT references
+3) assigning between arrays (of the same type), _copies_ all values from one to another
+   #+begin_src go
+     var a [4]int
+     a[0] = 55
+     var b [4]int
+     b = a
+   #+end_src
+** 2 https://www.youtube.com/watch?v=J_RSXE4B1rk
+- import aliasname "github.com/asd/foo"
+- all .go files in a folder must have the same package
+*** variadic functions
+1) last argument would be a *slice* denoted with (...)
+   #+begin_src go
+     func foo(a int, b ...string)  {
+     }
+     foo(2)
+     foo(3,"what","is")
+   #+end_src
+2) can take a function that return multiple values
+   #+begin_src go
+     func bar() (string,string,string) {
+             return "what", "you", "do"
+     }
+     foo(3, bar(), "more")
+   #+end_src
+*** slices
+#+begin_src go
+  var a[] int
+  a = make([]int, 5, 8)
+  var b []int = a // copies slice, but NOT its array
+#+end_src
+- is a *type* that references arrays
+  - type does not include lenght or capacity
+- each slice value has 3 components, all zero initialized
+  1) address
+  2) length
+  3) capacity
+- ~append()~ returns a new slice, might use the same existing array or a new one
+- slice subscripts return a new slice, same underlying array, different slice index
+  a[:] returns a new slice that covers the whole length, same for arrays
+** 3 https://www.youtube.com/watch?v=UbFYR_puHgM
+*** struct
+- a struct value /directly/ contains all of his fields (me: not a reference)
+#+begin_src go
+  type Cat struct {
+          Name string
+          Lives int
+          Age float32
+          Children []Cat
+          Mother Cat // compiler ERROR: invalid recursive type
+  }
+  c := Cat{Name: "mittens", Lives: 9, Age: 4.3}
+  d := Cat{"mittens",9,4.3}
+#+end_src
+*** maps
+#+begin_src go
+  var x map[string]int
+  x = make(map[string]int)
+#+end_src
+- have no sense of _order_
+- slices, maps and functions may NOT be _map keys_
+  - they need to be comparable
+- like slices, are merely _references_ to storage elsewhere in memory
+- uses _subscripts_ to access to values
+  - if the specified key is NOT on the map, we get a "zero value"
+  - returns a multi-value
+    1) the value
+    2) a boolean if it is or not present
+*** pointers
+- pointer to self in struct
+  #+begin_src go
+    type Cat struct {
+        Name string
+        Lives int
+        Age float32
+        Children []Cat
+        Mother *Cat // OK
+    }
+  #+end_src
+- ponter to pointer
+  #+begin_src go
+    func max(a *int, b *int, p **int) {
+        if *a > *b {
+            ,*p = a
+        } else {
+            ,*p = a
+        }
+    }
+
+    i := 3
+    j := 5
+    var k *int
+    max(&i, &j, &k)
+  #+end_src
+- pointers to structs
+  - ~implicit deference~ we can access the fields of a pointer to struct
+    #+begin_src go
+      c.Lives--
+      (*c).Lives--
+      #+end_src
+*** named types
+- cannot use them abritrarily
+- can convert between them
+- types created with a *type* statement
+  #+begin_src go
+    type Amy string
+    type Brett []int
+    type Carol func (int, byte) int
+  #+end_src
+*** methods
+- a method is special type of function that has a =receiver=
+- real significance comes when talking about =interfaces=
+- you can only _define methods_
+  - on types defined of the same package
+  - more specifically, on named types or pointers to named types
+*** interfaces
+- in memory is represented as
+  1) address of value it stores
+  2) address of the ~method table~
+- is a _list of methods_ names with their return types, without the receiver types
+- a type implements an interface, as long as implements all the methods of an interface, anywhere in the program
+** 4 https://www.youtube.com/watch?v=HaeH6KYCcmM
+- you run code based on the type of the variable using:
+  1) =type assertions= (with if/else)
+  2) or =type switches= (with switch/case/default)

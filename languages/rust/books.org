@@ -1,15 +1,22 @@
-* Book: Command-Line Rust (OReilly)
+* 22 | Rust Sampler
+- Edition
+  - 2015 - Rust version 1.0-
+  - 2018 - Rust version 1.3-
+- Editions are supported at the MIR level
+- Source Code -> MIR (Mid-Level Intermediate Representation)
+- Editions won't make a major change to Rust, like removing the borrow checker.
+* 22 | Command-Line Rust (OReilly)
 source: https://github.com/kyclark/command-line-rust
 ** 1
-   - cargo.toml, add test and benchark only dependencies
-     [dev-dependencies]
-     assert_cmd = "1"
-   - .rs file in bin directory
-     src/bin/true.rs
-     cargo run --quiet --bin true
-   - std::process::exit(1)
-     std::process::abort()
-* Book: Rust In Action (Manning)
+- cargo.toml, add test and benchark only dependencies
+  [dev-dependencies]
+  assert_cmd = "1"
+- .rs file in bin directory
+  src/bin/true.rs
+  cargo run --quiet --bin true
+- std::process::exit(1)
+  std::process::abort()
+* 21 | Rust In Action (Manning)
 ** DONE 1 Introducing Rust
 - Not all security bugs can be solved
   - Hearthbleed: buffer reutilization bug
@@ -57,68 +64,7 @@ source: https://github.com/kyclark/command-line-rust
 *** Vector, dynamic size
   - Type: Vec<T>
   - Vec::with_capacity(N) size allocation hint
-* Book: Rust Programming By Example (PACKT)
-** 2 Starting with SDL
-- You need to import a Trait to use his methods
-- io::Result definition
-  type Result<T> = Result<T, Error>;
-- Ok(()) is the Rust equivalet to *void*
-- Equivalent:
-  - try!()
-  - match of Ok() and Err()
-  - ? operator
-- collect() calls next()
-** 3 Events and Basic Game Mechanisms
-- Game:
-  - Tetrimino: A tetris piece, all are 4 blocks
-  - Grid: 16 height and 10 width
-- match _ branch can use *unreachable!()* macro
-- *static* variables, don't die when the scope dies
-  - changing the value of it is an *unsafe{}* operation
-- Tetramino: impl and traits
-  #+begin_src rust
-  struct Tetrimino {..}
-
-  // trait, struct, impl..for
-  trait TeGenerator {
-    fn new() -> Tetrimino;
-  }
-  struct TeI;
-  impl TeGenerator for TeI {
-    fn new() -> Tetrimino {..}
-  }
-
-  // Random function
-  fn create_random_tetrimino() -> Tetrimino {..}
-
-  // Method
-  impl Tetrimino {
-    fn rotate(&mut self) {..}
-  }
-  #+end_src
-- When you send a non-mutable reference over a vector
-  Vec<T> is deferenced into a &[T]
-- Tetris: impl and structs
-  #+begin_src rust
-  struct Tetris {..}
-  impl Tetris {
-    fn new() -> Tetris {..}
-    fn check_lines(&mut self) {..}
-    fn make_permanent(&mut self) {..}
-  }
-  #+end_src
-- An example on *borrow* and *ownership*
-  On: for line in self.game_map
-  game_map is non-mutably borrowed by *for* and we cannot mutate it in the loop.
-- ref sidetrack https://doc.rust-lang.org/rust-by-example/scope/borrow/ref.html
-  - same on the left side of = as & on the right side
-  - can be pared with *mut* to take mutable references *ref mut*
-  - used on let or destruring
-- Another example of *ownership*:
-  if an element of a type(struct) is borrowed the parent is also borrowed
-** Implementing the engine for the music player
-- Trait bounds can be added to a type as well than as a generic param of a function
-* Book: Practial Rust Projects (Apress)
+* 20 | Practial Rust Projects (Apress)
 ** 5 Physical Computing in Rust
 Crate: rust_gpiozero
 *** Hardware
@@ -217,7 +163,7 @@ let mut writer = csv::Writer::from_writer()
        writer.write_record()
              .serialize()
 *** Supervised (Neural Network)
-* Book: The Rust Programming Language (nostarch)
+* 19 | The Rust Programming Language (nostarch)
 ** 10 Generic Types, Traits, and lifetimes
 impl Type
 impl Trait for Type
@@ -286,10 +232,64 @@ by generics to the concrete for the type.
   #+end_src
 
 *** Lifetimes: Validating references with it
-* Book: Rust Sampler
-- Edition
-  - 2015 - Rust version 1.0-
-  - 2018 - Rust version 1.3-
-- Editions are supported at the MIR level
-- Source Code -> MIR (Mid-Level Intermediate Representation)
-- Editions won't make a major change to Rust, like removing the borrow checker.
+* 18 | Rust Programming By Example (PACKT)
+** 2 Starting with SDL
+- You need to import a Trait to use his methods
+- io::Result definition
+  type Result<T> = Result<T, Error>;
+- Ok(()) is the Rust equivalet to *void*
+- Equivalent:
+  - try!()
+  - match of Ok() and Err()
+  - ? operator
+- collect() calls next()
+** 3 Events and Basic Game Mechanisms
+- Game:
+  - Tetrimino: A tetris piece, all are 4 blocks
+  - Grid: 16 height and 10 width
+- match _ branch can use *unreachable!()* macro
+- *static* variables, don't die when the scope dies
+  - changing the value of it is an *unsafe{}* operation
+- Tetramino: impl and traits
+  #+begin_src rust
+  struct Tetrimino {..}
+
+  // trait, struct, impl..for
+  trait TeGenerator {
+    fn new() -> Tetrimino;
+  }
+  struct TeI;
+  impl TeGenerator for TeI {
+    fn new() -> Tetrimino {..}
+  }
+
+  // Random function
+  fn create_random_tetrimino() -> Tetrimino {..}
+
+  // Method
+  impl Tetrimino {
+    fn rotate(&mut self) {..}
+  }
+  #+end_src
+- When you send a non-mutable reference over a vector
+  Vec<T> is deferenced into a &[T]
+- Tetris: impl and structs
+  #+begin_src rust
+  struct Tetris {..}
+  impl Tetris {
+    fn new() -> Tetris {..}
+    fn check_lines(&mut self) {..}
+    fn make_permanent(&mut self) {..}
+  }
+  #+end_src
+- An example on *borrow* and *ownership*
+  On: for line in self.game_map
+  game_map is non-mutably borrowed by *for* and we cannot mutate it in the loop.
+- ref sidetrack https://doc.rust-lang.org/rust-by-example/scope/borrow/ref.html
+  - same on the left side of = as & on the right side
+  - can be pared with *mut* to take mutable references *ref mut*
+  - used on let or destruring
+- Another example of *ownership*:
+  if an element of a type(struct) is borrowed the parent is also borrowed
+** Implementing the engine for the music player
+- Trait bounds can be added to a type as well than as a generic param of a function

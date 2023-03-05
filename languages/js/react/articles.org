@@ -1,3 +1,4 @@
+- https://www.zachleat.com/web/react-criticism/
 * Tutorial: Next.js https://nextjs.org/docs
 ** Pages https://nextjs.org/docs/basic-features/pages
 - Pre-rendering

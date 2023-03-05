@@ -616,3 +616,19 @@ https://www.youtube.com/watch?v=sjGjoDiD2F8
 ** 2:15:46 =private/public/protected= are an ~access modifiers~
 no modifier (aka package modifier) means that it can be accessed by the same package
 ** 2:19:00 =method signature= = access modifier + (static) + return type + method name + argument list
+* 2022 | Parsing Java Bytecode with Python      | Tsoding
+** JelloVM Ep.01
+https://www.youtube.com/watch?v=67FmRyv8jTM
+- code https://github.com/tsoding/JelloVM
+- Class File Format https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html
+  - in big-endian
+- "0xCAFEBABE" is the java class file "magic"
+- placeholder python
+  #+begin_src python
+    assert False, "not implemented"
+  #+end_src
+- format string
+  #+begin_src python
+  variable = 10
+  f"the value of variable = {variable}"
+  #+end_src

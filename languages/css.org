@@ -1,3 +1,4 @@
+- https://www.matuzo.at/blog/2022/100-days-of-more-or-less-modern-css/
 - https://developer.mozilla.org/en-US/docs/Web/CSS
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/css/css-quiz.md
 - aria-live https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-live
@@ -26,35 +27,35 @@ https://learningwebdesign.com/5e/materials/
  |                            |          |      | step-start/step-end          |
  |                            |          |      | cubic-bezier(#,#,#,#)        |
 **** Animated Properties
-   - background-color
-     background-position
-   - border-BRLT-color
-     border-BRLT-width
-     border-spacing
-     outline-color
-     outline-width
-   - color
-     opacity
-     visibility
-   - font-size
-     font-weight
-     letter-spacing
-     line-height
-     text-indent
-     text-shadow
-     word-spacing
-     vertical-align
-   - height
-     width
-     max/min-height
-     max/min-width
-     margin-BRLT
-     padding-BRLT
-   - BRLT
-   - z-index
-   - clip-path
-   - transform
-     transform-origin
+- background-color
+  background-position
+- border-BRLT-color
+  border-BRLT-width
+  border-spacing
+  outline-color
+  outline-width
+- color
+  opacity
+  visibility
+- font-size
+  font-weight
+  letter-spacing
+  line-height
+  text-indent
+  text-shadow
+  word-spacing
+  vertical-align
+- height
+  width
+  max/min-height
+  max/min-width
+  margin-BRLT
+  padding-BRLT
+- BRLT
+- z-index
+- clip-path
+- transform
+  transform-origin
 **** Example: transition background-color
    #+begin_src css
      .smooth {

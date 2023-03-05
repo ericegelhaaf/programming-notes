@@ -1,13 +1,31 @@
 - https://github.com/CookieCollective/4k-Demo-Oven
-- Article: how to assemble assembly with NASM assembler to 32-bit or 64-bit ELF binary with or without libc
-  phttps://gist.github.com/yellowbyte/d91da3c3b0bc3ee6d1d1ac5327b1b4b2
-- Article Smallest x86 ELF Hello World http://timelessname.com/elfbin/
-- Tool: Compiler
-  https://bellard.org/tcc/
-  https://en.wikipedia.org/wiki/Tiny_C_Compiler
-- NOT A 4k, ray tracing on microcontrollers with Ulisp http://www.ulisp.com/show?2NWA
-- NOT A 4K, but a raymarched donut made in C https://www.a1k0n.net/2011/07/20/donut-math.html
-- Article: Rust 151Bytes http://mainisusuallyafunction.blogspot.com/2015/01/151-byte-static-linux-binary-in-rust.html
+- Haskell
+  - https://dfithian.github.io/2021/02/28/haskell-executable-sizes.html
+- ELF
+  - Article: how to assemble assembly with NASM assembler to 32-bit or 64-bit ELF binary with or without libc
+    phttps://gist.github.com/yellowbyte/d91da3c3b0bc3ee6d1d1ac5327b1b4b2
+  - Article Smallest x86 ELF Hello World http://timelessname.com/elfbin/
+- Ulisp
+  - ray tracing on microcontrollers http://www.ulisp.com/show?2NWA
+- C
+  - Tool: Compiler
+    https://bellard.org/tcc/
+    https://en.wikipedia.org/wiki/Tiny_C_Compiler
+  - raymarched donut made in C https://www.a1k0n.net/2011/07/20/donut-math.html
+- Ocaml
+  - 190k https://stackoverflow.com/questions/58028824/how-to-get-the-smallest-ocamlopt-compiled-native-binary
+  - Duplo: A Framework for OCaml Post-Link Optimisation https://www.cl.cam.ac.uk/~nl364/docs/duplo.pdf
+- Golang
+  - https://github.com/xaionaro/documentation/blob/master/golang/reduce-binary-size.md
+  - https://www.youtube.com/watch?v=yJrDllXI8ok
+    - "strip" produces random panics on Go binaries, use -ldflags instead
+- Rust
+  - raycaster 2k https://grantshandy.github.io/posts/raycasting/
+  - https://dl.acm.org/doi/abs/10.1145/3519941.3535075
+    https://dl.acm.org/doi/pdf/10.1145/3519941.3535075
+  - https://github.com/johnthagen/min-sized-rust
+  - https://lifthrasiir.github.io/rustlog/why-is-a-rust-executable-large.html
+  - 151Bytes http://mainisusuallyafunction.blogspot.com/2015/01/151-byte-static-linux-binary-in-rust.html
 - Synth https://github.com/askeksa/Oidos
 - Intro 1k (ASM,sdl,opengl) https://github.com/baines/demostuff
 - Intro 4k (D) https://github.com/kubo39/tiny-d-demo
@@ -429,24 +447,24 @@ https://www.youtube.com/watch?v=qengC-Ezigs
 * Article: NIM 160Bytes
   https://github.com/def-/nim-binary-size/
   http://hookrace.net/blog/nim-binary-size/
-  1. 160K initial
+  1) 160K initial
      - -d:release
      - --opt:size
      - strip -s
-  2. LIBC Start by replacing glibc with musl gcc, statically
-  3. GC Disable
+  2) LIBC Start by replacing glibc with musl gcc, statically
+  3) GC Disable
      --gc:none
-  4. Disable dynamic memory, error handling (needs to provide rawoutout() and panic())
+  4) Disable dynamic memory, error handling (needs to provide rawoutout() and panic())
      --os:standalone
-  5. LIBC: Remove libc dependency, we remove the print
+  5) LIBC: Remove libc dependency, we remove the print
      --passL:-nostdlib
      - We need to supply a _start function, and exit the program with a syscall
-  6. GCC Put function and data items into separate sections
+  6) GCC Put function and data items into separate sections
      -ffunction-sections
      -fdata-sections
-  7. LD and at the linking sections
+  7) LD and at the linking sections
      --passL:-Wl,--gc-sections
-  8. Custom LD and ELF header, we create the object
+  8) Custom LD and ELF header, we create the object
      ld/objcopy/nm/nasm
      --app:staticlib
      https://github.com/def-/nim-binary-size/blob/master/elf.s

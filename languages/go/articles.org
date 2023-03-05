@@ -1,3 +1,6 @@
+- https://benhoyt.com/writings/flyio/
+  https://pkg.go.dev/embed
+- https://preslav.me/2023/02/06/golang-do-we-need-struct-pointers-everywhere/
 - https://withinboredom.info/blog/2022/12/29/golang-is-evil-on-shitty-networks/
   https://news.ycombinator.com/item?id=34179426
 * DONE Article: I want off Mr. Golang's Wild Ride

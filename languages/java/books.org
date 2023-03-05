@@ -1,4 +1,4 @@
-* 2017 | Core Java for the Impatient      | Cay S. Horstmann
+* 17 | Core Java for the Impatient      | Cay S. Horstmann
 source https://horstmann.com/javaimpatient/
 logging alternative https://www.slf4j.org/
 change the log level from jsconsole https://www.oracle.com/technical-resources/articles/java/jconsole.html#LoggingControl
@@ -2222,7 +2222,7 @@ Higher conceptual level than collections.
 - 5) =Nashhorn= supports lambda expressions and a limited mechanism for extending Java classes and implementing Java interfaces
 *** TODO Shell Scripting with Nashhorn
 - 6) =Nashhorn= has support for writing shell scripts in JavaScript
-* 2019 | Real-World Software Development  | Raoul-Gabriel Urma
+* 19 | Real-World Software Development  | Raoul-Gabriel Urma
 code https://github.com/Iteratr-Learning/Real-World-Software-Development
 code https://github.com/Iteratr-Learning/Real-World-Software-Development/tree/master/src/main/java/com/iteratrlearning/shu_book
 JUnit https://junit.org/junit5/docs/current/user-guide/
@@ -3337,7 +3337,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
    - stops 
 *** Extending and Reusing Code
 *** Test Hygiene
-* 2022 | DevOps Tools for Java Developers | Stephen Chin
+* 22 | DevOps Tools for Java Developers | Stephen Chin
 source https://github.com/devops-tools-for-java-developers/code-snippets
 - maven  git *plugin* https://github.com/git-commit-id/git-commit-id-maven-plugin
 - gradle git *plugin* https://github.com/nemerosa/versioning/
@@ -3561,3 +3561,71 @@ pom.xml
   | runtime     | runtimeOnly            |
   | testCompile | testImplementation     |
   | testRuntime | testRuntimeOnly        |
+* 22 | Java 17 Recipes                  | Josh Juneau
+** 12 Working with Databases
+*** Connecting to a Database
+- you need to download the JAR that contains the JDBC driver you need
+#+begin_src java
+  import java.sql.Connection;
+  import java.sql.DriveManager;
+  import java.sql.SQLException;
+  import java.util.Properties;
+  public class CreateConnection {
+      static Properties props = new Properties();
+      // host, port, db, username, password
+      public Connection getConnection() {
+          Connection conn = null; // ... snipped...
+          conn = DriveManager.getConnection("jdbd:mysql://localhost:3306/apressbooks",this.user,this.pass);
+          return conn;
+      }
+      public static void main(String[] args) {
+          CreateConnection createConnection = new CreateConnection();
+          try {
+              createConnection.getConnection();
+          }
+          catch (SQLException e) {
+              e.printStackTrace();
+          }
+      }
+  }
+#+end_src
+*** Handling Connection and SQL Exceptions
+- connections and statements need to be closed for memory allocation cleanup
+- ~java.sql.SQLException~ - is a *checked* exception
+- sometimes JDBC code might require nested try-catch blocks
+- using *try/catch/finally* to close resources is a *old style*
+  use *try(with-resources)* instead for both, rather than manual closes
+*** Querying a Database and Retrieving Results
+- Steps, using in java.sql.
+  -> Connection
+  -> createStatement()
+  -> Statement
+  -> executeQuery(STRING)
+  -> ResultSet
+  -> getString("COLUMN")
+  #+begin_src java
+    public class QueryDatabase {
+        private static CreateConnection createConn;
+        public static void main(String[] args) {
+            createConn = new CreateConnection();
+            queryDatabase();
+        }
+        public static void queryDatabase() {
+            String qry = "select recipe_num, recipe_name, description from recipes";
+            try (Connection conn = createConn.getConnection();
+                  Statement stmt = conn.createStatement();) {
+                ResultSet rs = stmt.executeQuery(qry);
+                while (rs.next()) {
+                    String recipe = rs.getString("RECIPE_NUM");
+                    String name = rs.getString("RECIPE_NAME");
+                    String desc = rs.getString("DESCRIPTION");
+                    System.out.println("recipe" + "\t" + name + "\t" + desc);
+                }
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+         }
+    }
+  #+end_src

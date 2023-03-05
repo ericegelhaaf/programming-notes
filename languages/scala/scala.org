@@ -1,3 +1,4 @@
+- Article: https://www.scrapingbee.com/blog/web-scraping-scala/
 - Article: https://degoes.net/articles/scala-resurrection
 - FP library https://typelevel.org/cats/
 - Async https://zio.dev/
@@ -10,6 +11,7 @@
   https://gist.github.com/chaotic3quilibrium/58e78a2e21ce43bfe0042bbfbb93e7dc
 - Framework: Play Framework.
   Conocimientos deseables: Slick, Monix Task.
+- https://en.wikipedia.org/wiki/Scala_(programming_language)
 * Binary
 ** Compatibility
 #+begin_src

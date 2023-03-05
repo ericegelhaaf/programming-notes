@@ -1,3 +1,5 @@
+- Libraries https://github.com/nim-lang/Nim/wiki/Curated-Packages
+- Libraries https://github.com/ringabout/awesome-nim
 - pre builds https://github.com/nim-lang/nightlies/
 - https://nim-lang.org/docs/manual.html#types-tuples-and-object-types
 - exercises https://github.com/sergiotapia/nimlings

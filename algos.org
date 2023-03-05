@@ -1,19 +1,30 @@
 - katas https://web.archive.org/web/20160701032652/https://codingdojo.org/cgi-bin/index.pl?KataCatalogue
-- https://dojorena.io/with/the-best-coding-challenge
   https://dojorena.io/manuals/43
-  https://github.com/codenjoyme/codenjoy
-- https://github.com/fogleman/AdventOfCode2021/
+  https://www.youtube.com/user/ltaravilse/videos
+- https://dojorena.io/with/the-best-coding-challenge
+
 - https://github.com/cl2333/Grokking-the-Coding-Interview-Patterns-for-Coding-Questions
+- https://github.com/codenjoyme/codenjoy
+- https://github.com/ec24/tc-arg
+- https://github.com/fogleman/AdventOfCode2021/
+- https://github.com/jwasham/coding-interview-university
+- https://github.com/matramos/elrejunte
+- https://github.com/undefinedfceia/guardian-tortuga
+
 - https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed
 - https://malisper.me/an-algorithm-for-passing-programming-interviews/
 - https://ourmachinery.com/post/data-structures-part-1-bulk-data/
-- https://github.com/matramos/elrejunte
-  https://github.com/undefinedfceia/guardian-tortuga
-- https://github.com/ec24/tc-arg
-  https://www.youtube.com/user/ltaravilse/videos
-- https://github.com/jwasham/coding-interview-university
 - CS170 - Efficient Algorithms and Intractable Problems https://cs170.org/
-- Competitive https://cses.fi/problemset/
+
+- https://cses.fi/problemset/
+- https://codeforces.com/
+- https://www.codechef.com/
+- https://www.hackerearth.com/
+- https://www.codingame.com/
+- https://www.hackerrank.com/
+- https://www.codewards.com/
+- https://projecteuler.net/
+
 * Congruencies
 - https://en.wikipedia.org/wiki/Modular_arithmetic
 - problem https://www.codewars.com/kata/554f76dca89983cc400000bb/train/ocaml
@@ -401,10 +412,10 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 - It can be viewed from the angle of *group theory* or *linear algebra*
 - The book deals with LinA, taking advantage of Matrix Operations
 - https://teachyourselfcs.com/#algorithms
-* Book: 2006 | Art of Programming Contest       | Ahmed Shamsul Arefin
+* Book: 06 | Art of Programming Contest       | Ahmed Shamsul Arefin
 ** 06 Brute Force Method
 - This method should almost always be the first algorithm/solution you consider.
-  - If this wors within time/space constraints then do it
+  - If this works within time/space constraints then do it
 - If you have this kind of reasoning ability.
   Many seemingly hard problems is eventually solvable using brute force.
 *** Problem 1 : Party Lamps
@@ -510,7 +521,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   - Kruskal's, Prims's for MST.
   - Algorithm for finding optimum Huffman trees.
   - matroids and theory of greedoids
-* Book: 2012 | Coding Interviews                | Harry He
+* Book: 12 | Coding Interviews                | Harry He
 ** 4 Algorithms
 *** Backtracking
 - is a refinement of the *brute-force* approach, which systematically searches for a solution to a problem among all available options.
@@ -521,7 +532,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 - If an interview problem has *optimal substructure* and *overlapping subproblems*, it might be solved by DP.
 | optimal substructure    | means that the solution to a given ~optimization~ problem can be obtained by a combination of optimal solutions. |
 | overlapping subproblems | means a recursive algorithm solves subproblems over and over, rather than always generating new subproblems.     |
-* Book: 2013 | Competitive Programming 3        | Steven Halim
+* Book: 13 | Competitive Programming 3        | Steven Halim
 ** 1
 - "Given well-known Computer Science Problems, solve them as quickly as possible!"
 - Doing a *complete search* using recursive backtracking might yield *time limit exceeded* (TLE)
@@ -572,7 +583,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   - can be found using a greedy algorithm, choosing the largest fibonacci number at each step.
 - Pisano Period
 **** TODO Binomial Coefficients
-* Book: 2015 | Cracking the Coding Interview    | Gayle Laakmann
+* Book: 15 | Cracking the Coding Interview    | Gayle Laakmann
   SELF: Why interviews don't flip the roles. Ask us to give an opinion about something they did.
   Ask us to predict the beheviour and results of it.
 ** II Behind the scenes
@@ -820,7 +831,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
  | Stack of Boxes     | larger boxes below, height of the tallest possible stack of boxes   |
  | Boolean Evaluation | eval a string                                                       |
  |--------------------+---------------------------------------------------------------------|
-* Book: 2016 | Grokking Algorithms              | Aditya Y. Bhargava
+* Book: 16 | Grokking Algorithms              | Aditya Y. Bhargava
 ** DONE 6 BFS Bread-First Search - O(V + E)
  - What is the *shortest path* to go to X?
  - Uses a Queue/FIFO/deque (double-ended queue in python)
@@ -901,7 +912,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   | 2 | How do you divide this problem into *subproblems*? | compare sub-substrings          |
   | 3 | What are the *axes* of the grid?                   |                                 |
  - The answer might not be in the last cell, in this case is the largest number in the grid
-* Book: 2020 | Algorithmic Thinking             | Daniel Zingaro
+* Book: 20 | Algorithmic Thinking             | Daniel Zingaro
 ** 3 Memoization And Dynamic Programming
 - =Optimization Problem= involves choosing the *optimal* (best) solution out of all *feasible* solutions.
 *** Burger Fevor - UVA 10465
@@ -1143,7 +1154,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   NOT to find the ~optimal solution~
 - Subtask 1: n door = n switch
   - Naive: 1door at the time, O(n) ? one for() loop
-* Book: 2020 | Data Structures and Algorithms   | Jay Wengrow
+* Book: 20 | Data Structures and Algorithms   | Jay Wengrow
 ** 12 Dynamic Programming
  - https://en.wikipedia.org/wiki/Overlapping_subproblems
    - Lec 13 | MIT 6.00 Introduction to Computer Science and Programming, Fall 2008
@@ -1162,7 +1173,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
    |                            |                                                  | DP/Bottom-up                |
 ** TODO 13 Recursive Algorithms for Speed
  - Partitioning
-* Book: 2020 | Guide to Competitive Programming | Antti Laaksonen
+* Book: 20 | Guide to Competitive Programming | Antti Laaksonen
 ** TODO 7 Graph Algorithms
  - 7.3 *Dijkstra* is more efficient that *Bellman-Ford's*, but it requires non-negative weights.
    And *Floyd-Warshall's* ????
@@ -1371,7 +1382,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 - Special case of a GP
   1 + 2 + 4 + 8 + ... + 2^(n-1) = 2^n - 1
 - Upper bound is: log 2 (n) + 1
-* Book: 2021 | Programming Algorithms in Lisp   | Vsevolod Domkin
+* Book: 21 | Programming Algorithms in Lisp   | Vsevolod Domkin
   Source: https://github.com/vseloved/progalgs-code
 ** Notes on rtl:
    https://github.com/vseloved/rutils/blob/master/docs/tutorial.md
@@ -1664,7 +1675,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
        (values mst total)))
    #+end_src
 **** Kruskal's Algoritm
-* Book: 2022 | Generic DS and Algorithms in Go  | Richard Wiener
+* Book: 22 | Generic DS and Algorithms in Go  | Richard Wiener
 ** 14 Ecological Simulation with Concurrency
 ** 17 Travelling Salesperson Problem (TSP)
 - =Exact algorithm= https://en.wikipedia.org/wiki/Exact_algorithm
@@ -1766,7 +1777,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
           fmt.Println("Computation time: ", elapsed)
   }
 #+end_src
-* Book: ???? | Algorithm Design Manual
+* Book: ?? | Algorithm Design Manual
 ** 10 Dynamic Programming
 - Example: Fibonacci using memoization, by caching/tabling the intermediate values
   - A linear amount of space for an exponential amount of time is an excellent trade-off
@@ -1784,6 +1795,6 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
       1   4   6   4   1
     1   5  10  10   5   1
     #+end_src
-* Book: ???? | Introduction to Algorithms
+* Book: ?? | Introduction to Algorithms
 ** 22 Single-Source Shortest Path
 - The INPUT of a SSSP is a weighted, directed graph.
