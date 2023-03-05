@@ -1,0 +1,372 @@
+* 2022 | Java Master Class | AmigosCode
+- Exception tutorial https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html
+** 030
+- Java keywords https://www.w3schools.com/java/java_ref_keywords.asp
+- Java API specification https://docs.oracle.com/en/java/javase/19/docs/api/index.html
+  - String https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html
+- intellij
+  - generate
+    - constructor/getter/setter/equals/hashCode/toString
+  - "sout" snippet
+  - you can view the bytecode of any class
+  - "rainbow braces" is a plugin
+  - shows "hits" of the argument name in constructors
+  - move line down (same as emacs)
+    alt+shift+downarrow
+  - optimize imports
+    Ctrl+Alt+O
+  - list and search through subclasses (eg: Exception)
+- BODMAS: operators precedence
+  - Brackets
+  - Orders (powers/indices or roots)
+  - Multiplication
+  - Addition
+  - Substractions
+- variable++ - return the number and increment
+  ++variable - increment         and return the number
+- naming
+  - variables:
+    - boolean: prefix with "is" or "has"
+- java.awt.Point
+- reference types vs primitive types
+  - reference: objects, String
+- new objects are allocated in the ~Heap~, but references to those objects are stored in the ~Stack~
+- a stack =frame= contains all the data for one function call
+  exists during the execution time of a function including any references
+- a =string pool= lives in the ~Heap~
+- (38) Java is ALWAYS ~passed by value~
+** 040 arrays
+- int[]     arrays are initialized with 0(zero)
+  String[]  arrays are initialized with null
+- you can put *i+=1* instead of i++ in the 3rd statement of a ~for loop~
+- ~enhanced for loop~ for (String name : names)
+** 050
+** 060 switch statement/expressions - packages
+- ~switch~ case stament, needs a break
+  #+begin_src java
+    switch (grade) {
+    case 'A':
+        System.out.println("Excellent");
+        break;
+    case 'B':
+    case 'C':
+        System.out.println("Pass");
+        break;
+    default:
+        System.out.println("Fail");
+    }
+  #+end_src
+- supported types for ~switch~
+  byte, short, int, char, enums, String
+  Byte, Short, Integer, Character (the =wrapper classes=)
+- new version (>14) of ~switch expressions~
+  #+begin_src java
+    String result = switch (grade) {
+        case 'A' -> "Excellent";
+        default -> "Fail";
+    };
+  #+end_src
+*** a =package= is a folder that allows you structure your application
+  - requires always have a ~root package~
+  - usually the organization domain eg: com.amigoscode
+  - package prefix should be
+    - in lowercase
+    - one of the TLD (com,edu,gov,mil.net,org)
+    - or 2 letter country code)
+  - package com.amigoscode
+    src/com/amigoscode/Main.java
+  - java.sql.Date
+    - java.sql is the package
+    - Date is the class
+  - import 2 classes with the /same name/
+    #+begin_src java
+      import java.util.Date;
+      // .. main() ..
+      Date date = new Date();
+      java.sql.Date date1 = new java.sql.Date();
+    #+end_src
+  - java.lang.* is already imported
+** 070 access modifiers + static
+- access modifiers
+  - control the /access level/
+  - apply to: classes, methods, attributes, constructors
+  - are: default, public, private, protected
+- These are 2 different packages
+  com.amigoscode.foo
+  com.amigoscode
+- ~static~
+  - means that the marked method/attribute belongs to the class not the instance itself
+  - within a ~static context~ you are only allowed to use anything that has a ~static~ keyword on it
+    - you can access static vars without *this.* on the static class methods
+    - you can create an instance, and then access non-static variables
+- ~parameters~, defined on the method definition
+  ~arguments~, are passed in a function call
+** 080 javac FQDN + var
+- methods naming
+  - should be verbs
+  - in camelcase
+- the JVM uses the method main() to start the application
+- after javac, java takes the FQN eg:
+  > java com.amigoscode.Main
+- =var= type inference
+  - > java 10
+  - allows the automatic detection of variables
+  - only can be used for local method variables
+  - final var name = "Alex"
+** 090 enum + string pool
+- type casting
+  | implicit | widening  | from smaller to bigger                 |
+  | explicit | narrowing | from bigger to smaller, lose precision |
+- primitives are stored within the *stack*
+  objects are stored in the *heap*
+- Integer.parseInt(S?)
+  Double.parseDouble(S?)
+*** string pool
+- Java looks into the ~string pool~ for allocations that match the string one is creating, pointing to the same place
+  - as such strings are _immutable_, the value does not change, the reference might
+- String /literal/ *vs* String /object/
+  - literal = "astring"
+    object  = new String("astring") - in the heap, but NOT in the ~string pool~, do NOT use
+*** enums
+#+begin_src java
+  enum Gender {
+      MALE,
+      FEMALE
+  }
+#+end_src
+- it is prefered to declare an enum in their own file
+  #+FILENAME: TShirtSize.java
+  #+begin_src java
+    package com.amigoscode;
+    public enum TShirtSize {
+        S, M, L, XL
+    }
+  #+end_src
+- string to enum        - Gender.valueOf("FEMALE")
+- array of enums values - Gender.values()
+** 100 LocalDateTime + .equals()
+- string equality (==)
+  - compares *references*
+  - does NOT work mixing literal an object
+  - use .equals() instead
+- String static methods
+  - .valueOf(int)
+  - .format() - like C's printf
+  - .join(delimiter, iterable)
+*** working with dates
+https://stackoverflow.com/questions/32437550/whats-the-difference-between-instant-and-localdatetime
+1) java.time.LocalDateTime
+   - static methods: from/now/parse/of
+   - instance methods: getMonth/getDayOfYear/getdayOfWeek/getHour/isAfter/minusDays/equals/...
+2) java.time.LocalDate
+3) java.time.LocalTime
+4) java.time.ZoneId
+5) java.time.ZonedDateTime
+6) java.time.Instant - a specific point in time, used for events timestamp , stored with nanosecond precision
+7) LEGACY java.util.Date
+8) LEGACY java.sql.Timestamp
+** 110 BigDecimal + java.util.Scanner + Exceptions
+*** BigDecimal
+  new BigDecimal(1.2)
+- type used for money
+- BigDecimal.TEN
+- .subtract/.add/.max/.compareTo
+*** java.util.Scanner
+- new Scanner(path/file/inputstream/readable)
+  new Scanner(System.in)
+- .nextLine(), .nextInt(), .hasNext()
+*** Exceptions
+- java.lang.ArithmeticException
+  java.lang.NumberFormatException
+- you can catch multiple on the same catch using *|*
+  catch (NumberFormatException | ArithmeticException e) {}
+- *e.getMessage()*
+- catch all
+  catch (Exception e)
+- ~finally~ mainly used for cleanup purposes
+- Error(s), we do not have control
+  Exceptions, we have control
+** 120 Exception Types + WRITE to a File
+*** Exception
+|           |              | declared in methods | expectation   |
+|-----------+--------------+---------------------+---------------|
+| Checked   | Compile Time | yes                 | recoverable   |
+| Unchecked | Runtime      | no                  | unrecoverable |
+#+begin_src java
+  throw new IllegalArgumentException("cannot divide by 0");
+
+  class NewException extends RuntimeException { // or Exception for Checked exception
+      public NewException(String message) {
+          super(message);
+      }
+  }
+#+end_src
+- Object -> Throwable -> Error
+                      -> Exception(C) -> IOException (C)
+                                      -> RuntimeException
+- using *throws* does NOT change any behaviour, is just for the reader or documentation (?)
+  - use throws when you don't want to deal with an exception in this module
+  - it is "bad" using throws on the main(), you should deal with them in the class methods
+  - is better /not to swallow/ the exception in the implementation
+    and instead let the caller handle it
+*** read from a file
+1) java.io.File
+   - new File(String) - can throw IOException
+   - .exits()
+     .isFile()
+     .canWrite()
+     .delete()
+     .rename()
+     .createNewFile()
+2) java.io.FileWriter(File)
+   - optional boolean append argument
+   - new can throw an IOException
+3) java.io.PrintWriter - what allow us to actually write into the file
+   - new PrintWriter(FileWriter)
+   - .println()
+   - .flush()
+   - .close()
+4) retrowing but wrapped in a new exception
+   #+begin_src java
+     private static File createFile(String path) {
+         try {
+             File file = new File(path);
+             if (!file.exists()) {
+                 file.createNewFile();
+             }
+             return file;
+         } catch (IOException e) {
+             System.out.println(e.getMessage());
+             throw new IllegalStateException(e);
+         }
+
+     }
+   #+end_src
+** 130 READ from a File + WRITE try with resources + Classes
+*** java.io.Scanner
+  - new Scanner(File) - can throw a FileNotFoundException, checked
+  - .hasNext(), can be used on a while loop
+  - .nextLine()
+*** use  =try-with-resources= If you have any class which implements, Closeable and Flushable
+  #+begin_src java
+    try(
+        FileWriter fileWriter = new File(file, false);
+        PrintWriter writer = new PrintWriter(fileWriter);
+    ) {
+        writer.println("Jamila");
+    } catch (IOException e) {
+        System.out.println(e.getMessage());
+    }
+  #+end_src
+*** classes part 1
+- In order to use a class in a *static method* you need to to use a *static class*
+- on methods, ~this~ refers to the current instance of the current class
+- if you don't define a constructor, Java gives you a =default constructor=
+  #+begin_src java
+  public Cat() {}
+  #+end_src
+- class *constructors* can be /overloaded/ different number of arguments
+- override =Object.toString()= to have a string representation for the instances of your class
+  - like java already does elsewhere (eg: Arrays.toString())
+** 140
+- on a method's class, you can use the bare variable *NAME* or *this.NAME* if needed to disambiguate
+- when *overloading constructors*, you can use ~this()~ to call other constructors from one
+  #+begin_src java
+    class Cat {
+        public Cat(String name, int age, String color) {
+            this(name, age);
+            this.color = color;
+        }
+        public Cat(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+  #+end_src
+- we can set class attributes to a default value
+  #+begin_src java
+    class Cat {
+        private String name = "Felix";
+        public Cat() {}
+        public Cat(String name) {
+            this.name = name;
+        }
+    }
+  #+end_src
+- on your class, you need to override =.equals()= if you want to compare them (by default does ==)
+  Intelije IDE generated code for "Java 7+"
+  Everytime you override .equals() you should override the .hashCode()
+  #+begin_src java
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Cat cat = (Cat) o;
+        return age == cat.age &&
+            Objects.equals(name, cat.name) &&
+            Objects.equals(color, cat.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age, color);
+    }
+  #+end_src
+** 150 POJO + Java Beans + static
+- POJO: Plain Old Java Object
+  - used to emphasize that a given object has no association with any framework.
+  - doesn't *extend* or *implement* nor has an *annotation*
+  - focus on the ~Business Logic~
+- Java Beans, is a class that has to obey 3 contracts
+  1) must have a *no arg constructor*
+  2) all properties must be *private*
+  3) should implement *Serializable* (aka can be written to streams)
+- static is useful, for example
+  1) when writting an utility class (aka when one does not need an instance to use it)
+  2) =Static block initialization=
+     - when you want to perform some code /and then/ have the final static variable
+     - runs *only once*, the first time the class loads into memory
+     #+begin_src java
+       public class Person {
+           public static int count;
+           static {
+               System.out.println("start: static initialization");
+               count = 0;
+               System.out.println("end: static initialization");
+           }
+       }
+     #+end_src
+  3) for performance
+  4) =instance block initializer=
+     - to assign default values
+     - to run common code BEFORE any of the constructors run
+     #+begin_src java
+       class Person {
+           public static int count;
+           private int age;
+           private String name;
+           {
+               count++;
+           }
+           public Person(String name) {
+               this.name = name;
+           }
+           public Person(String name, int age) {
+               this.name = name;
+               this.age = age;
+           }
+       }
+     #+end_src
+  5) =static import=
+     eg: Math.max
+     #+begin_src java
+       import static java.lang.Math.max;
+       import static java.lang.Math.*; // not recommended
+       //...
+       max(10,20)
+     #+end_src
+** 160 Code Organization
+- Classes that do 1 thing (Single Responsability)
+- packages, service classes, dao, utility classes, controllers
