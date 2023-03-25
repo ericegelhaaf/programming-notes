@@ -1,0 +1,443 @@
+- Article: https://www.scrapingbee.com/blog/web-scraping-101-with-python/
+- PEP - Python Enhancement Proposals
+- Tutorial https://github.com/pro1code1hack/Senior-Dev-Roadmap
+- 2023 https://lukeplant.me.uk/blog/posts/pythons-disappointing-superpowers/
+- 2023 https://chriswarrick.com/blog/2023/01/15/how-to-improve-python-packaging/
+  https://lobste.rs/s/gzi3vk/how_improve_python_packaging_why_14_tools
+- python -> c compiler https://mypyc.readthedocs.io/en/latest/
+  https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html
+- https://dropbox.tech/application/our-journey-to-type-checking-4-million-lines-of-python
+- https://gto76.github.io/python-cheatsheet/
+- https://news.ycombinator.com/item?id=29582437
+- James Powell: So you want to be a Python expert? | PyData Seattle 2017
+  https://www.youtube.com/watch?v=cKPlPJyQrt4
+- https://docs.python-guide.org/
+- https://github.com/realpython/python-guide
+- https://github.com/sfermigier/awesome-functional-python
+- https://github.com/Suor/funcy
+- https://www.youtube.com/channel/UCuiPVmvqC0IBpOFhzSG7f8Q
+- https://github.com/crista/exercises-in-programming-style
+- Style
+  https://google.github.io/styleguide/pyguide.html
+  https://peps.python.org/pep-0008/
+- Modules Index https://docs.python.org/3/py-modindex.html
+- Type Hints
+  - PEP 484 – Type Hints https://peps.python.org/pep-0484/
+  - PEP 483 – The Theory of Type Hints https://peps.python.org/pep-0483/
+  - PEP 482 – Literature Overview for Type Hints https://peps.python.org/pep-0482/
+* Language
+- .format() https://pyformat.info/
+- f"string" https://fstring.help/
+** New Changes
+| year | ver  | usage                                            |  PEP | description                                  |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2015 | [[https://docs.python.org/3/whatsnew/3.5.html][3.5]]  | typing package                                   | 0484 | type hints                                   |
+|      |      | zipapp package                                   | 0441 | .pyz a way to package source code            |
+|      |      | mat1 @ mat2                                      | 0465 | matrix multiplication                        |
+|      |      | async/await                                      | 0492 | coroutines with async and await syntax       |
+|      |      | *[1, 2]             => 1, 2                      | 0448 | additional *unpacking generalizations*       |
+|      |      | **{'a': 1, 'c': 3}  => a=1, c=3                  |      | (ME: like JS spead operator)                 |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2016 | [[https://docs.python.org/3/whatsnew/3.6.html][3.6]]  | f"hello {name}"                                  | 0498 | formatted string literals                    |
+|      |      | 1_000_000                                        | 0515 | underscores in numeric literals              |
+|      |      | captain: string                                  | 0526 | type annotations(aka hints) for variables    |
+|      |      | can use await and yield on 1 async function      | 0525 | asynchronous generators                      |
+|      |      | [ i async for i in aiter() if i % 2]             | 0530 | asynchronous comprehensions                  |
+|      |      | [await fun() for fun in functs if await cond()]  |      |                                              |
+|      |      | secrets package                                  | 0506 |                                              |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2018 | [[https://docs.python.org/3/whatsnew/3.7.html][3.7]]  | breakpoint()                                     |      |                                              |
+|      |      | __getattr__                                      | 0562 |                                              |
+|      |      | _ns                                              | 0564 |                                              |
+|      |      | dicts remember insertion                         |      |                                              |
+|      |      | @dataclass                                       | 0567 |                                              |
+|      |      | importlib.resources                              |      |                                              |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2019 | [[https://docs.python.org/3/whatsnew/3.8.html][3.8]]  | (:=) "walrus operator"                           | 0572 | assignment as an expression                  |
+|      |      | @functor.cached_property                         |      |                                              |
+|      |      | importlib.metadata                               |      |                                              |
+|      |      | typing.TypedDict                                 |      | specify the keys                             |
+|      |      | typing.Final                                     |      | mark as a constant                           |
+|      |      | typing.Literal                                   |      |                                              |
+|      |      | f'{name=}'                                       |      | print the name and value                     |
+|      |      | (, /) positional only parameters                 | 0570 | forbids explicitly passing the name          |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2020 | [[https://docs.python.org/3/whatsnew/3.9.html][3.9]]  | parser from LLI to PEG                           | 0617 |                                              |
+|      |      | zoneinfo package                                 |      |                                              |
+|      |      | ¦  dictionary merge                              |      |                                              |
+|      |      | ¦= dictionary update                             |      |                                              |
+|      |      | str.removesuffix()                               |      |                                              |
+|      |      | str.removeprefix()                               |      |                                              |
+|      |      | generic typing.Dict as dict                      | 0585 |                                              |
+|      |      | generic typing.List as list                      |      |                                              |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2021 | [[https://docs.python.org/3/whatsnew/3.10.html][3.10]] | match/case                                       | 0634 | a sort of "switch"                           |
+|      |      | with (ctx1() as e1, ctx2() as e2):               |      | parentheses on with context managers         |
+|      |      | (int ¦ float) instead of typing.Union[int,float] | 0604 | type union operator                          |
+|      |      | statistics.(covariance/correlation/lregression)  |      |                                              |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+| 2022 | [[https://docs.python.org/3/whatsnew/3.11.html][3.11]] | tomllib package                                  |      | to read toml files, like pyproject.toml      |
+|      |      | x: NotRequired[str]                              | 0655 | for potentially missing keys on a TypedDict  |
+|      |      | x: Required[str]                                 |      |                                              |
+|      |      | LiteralString type                               | 0675 | raises and error if the string is not static |
+|      |      | .add_not() to all exceptions                     | 0678 | to enrich exceptions without *raise* another |
+|------+------+--------------------------------------------------+------+----------------------------------------------|
+** Standard Library
+- https://docs.python.org/3/library/
+*** Binary Data Services
+
+| struct | Interpret bytes as packed binary data |
+| codecs | Codec registry and base classes       |
+
+*** Concurrent Execution
+
+| concurrent                    | The concurrent package                           |
+| concurrent.futures            | Launching parallel tasks                         |
+| contextvars                   | Context Variables                                |
+| multiprocessing               | Process-based parallelism                        |
+| multiprocessing.shared_memory | Shared memory for direct access across processes |
+| queue                         | A synchronized queue class                       |
+| sched                         | Event scheduler                                  |
+| subprocess                    | Subprocess management                            |
+| _thread                       | Low-level threading API                          |
+| threading                     | Thread-based parallelism                         |
+
+*** Cryptographic Services
+
+| hashlib | Secure hashes and message digests                   |
+| hmac    | Keyed-Hashing for Message Authentication            |
+| secrets | Generate secure random numbers for managing secrets |
+
+*** Custom Python Interpreters
+
+| code   | Interpreter base classes |
+| codeop | Compile Python code      |
+
+*** Data Compression and Archiving
+
+| bz2     | Support for bzip2 compression        |
+| gzip    | Support for gzip files               |
+| lzma    | Compression using the LZMA algorithm |
+| tarfile | Read and write tar archive files     |
+| zipfile | Work with ZIP archives               |
+| zlib    | Compression compatible with gzip     |
+
+*** Data Persistence
+
+| copyreg | Register pickle support functions         |
+| dbm     | Interfaces to Unix “databases”            |
+| marshal | Internal Python object serialization      |
+| pickle  | Python object serialization               |
+| shelve  | Python object persistence                 |
+| sqlite3 | DB-API 2.0 interface for SQLite databases |
+
+*** Data Types
+
+| array           | Efficient arrays of numeric values                  |
+| bisect          | Array bisection algorithm                           |
+| calendar        | General calendar-related functions                  |
+| collections     | Container datatypes                                 |
+| collections.abc | Abstract Base Classes for Containers                |
+| copy            | Shallow and deep copy operations                    |
+| datetime        | Basic date and time types                           |
+| enum            | Support for enumerations                            |
+| graphlib        | Functionality to operate with graph-like structures |
+| heapq           | Heap queue algorithm                                |
+| pprint          | Data pretty printer                                 |
+| reprlib         | Alternate repr() implementation                     |
+| types           | Dynamic type creation and names for built-in types  |
+| weakref         | Weak references                                     |
+| zoneinfo        | IANA time zone support                              |
+
+*** Debugging and Profiling
+
+| bdb          | Debugger framework                            |
+| faulthandler | Dump the Python traceback                     |
+| pdb          | The Python Debugger                           |
+| timeit       | Measure execution time of small code snippets |
+| trace        | Trace or track Python statement execution     |
+| tracemalloc  | Trace memory allocations                      |
+
+*** Development Tools
+
+| typing                        | Support for type hints                                |
+| pydoc                         | Documentation generator and online help system        |
+| doctest                       | Test interactive Python examples                      |
+| unittest                      | Unit testing framework                                |
+| unittest.mock                 | mock object library                                   |
+| unittest.mock                 | getting started                                       |
+| 2to3                          | Automated Python 2 to 3 code translation              |
+| test                          | Regression tests package for Python                   |
+| test.support                  | Utilities for the Python test suite                   |
+| test.support.socket_helper    | Utilities for socket tests                            |
+| test.support.script_helper    | Utilities for the Python execution tests              |
+| test.support.bytecode_helper  | Support tools for testing correct bytecode generation |
+| test.support.threading_helper | Utilities for threading tests                         |
+| test.support.os_helper        | Utilities for os tests                                |
+| test.support.import_helper    | Utilities for import tests                            |
+| test.support.warnings_helper  | Utilities for warnings tests                          |
+
+*** File and Directory Access
+
+| filecmp   | File and Directory Comparisons                 |
+| fileinput | Iterate over lines from multiple input streams |
+| fnmatch   | Unix filename pattern matching                 |
+| glob      | Unix style pathname pattern expansion          |
+| linecache | Random access to text lines                    |
+| os.path   | Common pathname manipulations                  |
+| pathlib   | Object-oriented filesystem paths               |
+| shutil    | High-level file operations                     |
+| stat      | Interpreting stat() results                    |
+| tempfile  | Generate temporary files and directories       |
+
+*** File Formats
+
+| csv          | CSV File Reading and Writing          |
+| configparser | Configuration file parser             |
+| tomllib      | Parse TOML files                      |
+| netrc        | netrc file processing                 |
+| plistlib     | Generate and parse Apple .plist files |
+
+*** Functional Programming Modules
+
+| itertools | Functions creating iterators for efficient looping        |
+| functools | Higher-order functions and operations on callable objects |
+| operator  | Standard operators as functions                           |
+
+*** Generic Operating System Services
+
+| argparse         | Parser for command-line options, arguments and sub-commands |
+| ctypes           | A foreign function library for Python                       |
+| curses           | Terminal handling for character-cell displays               |
+| curses.ascii     | Utilities for ASCII characters                              |
+| curses.panel     | A panel stack extension for curses                          |
+| curses.textpad   | Text input widget for curses programs                       |
+| errno            | Standard errno system symbols                               |
+| getopt           | C-style parser for command line options                     |
+| getpass          | Portable password input                                     |
+| io               | Core tools for working with streams                         |
+| logging          | Logging facility for Python                                 |
+| logging.config   | Logging configuration                                       |
+| logging.handlers | Logging handlers                                            |
+| os               | Miscellaneous operating system interfaces                   |
+| platform         | Access to underlying platform’s identifying data            |
+| time             | Time access and conversions                                 |
+
+*** Graphical User Interfaces with Tk
+
+| tkinter              | Python interface to Tcl/Tk |
+| tkinter.colorchooser | Color choosing dialog      |
+| tkinter.font         | Tkinter font wrapper       |
+| tkinter.messagebox   | Tkinter message prompts    |
+| tkinter.scrolledtext | Scrolled Text Widget       |
+| tkinter.dnd          | Drag and drop support      |
+| tkinter.ttk          | Tk themed widgets          |
+| tkinter.tix          | Extension widgets for Tk   |
+
+*** Importing Modules
+
+| importlib    | The implementation of import          |
+| modulefinder | Find modules used by a script         |
+| pkgutil      | Package extension utility             |
+| runpy        | Locating and executing Python modules |
+| zipimport    | Import modules from Zip archives      |
+
+*** Internationalization
+
+| gettext | Multilingual internationalization services |
+| locale  | Internationalization services              |
+
+*** Internet Data Handling
+
+| email     | An email and MIME handling package            |
+| json      | JSON encoder and decoder                      |
+| mailbox   | Manipulate mailboxes in various formats       |
+| mimetypes | Map filenames to MIME types                   |
+| base64    | Base16, Base32, Base64, Base85 Data Encodings |
+| binascii  | Convert between binary and ASCII              |
+| quopri    | Encode and decode MIME quoted-printable data  |
+
+*** Internet Protocols and Support
+
+| ftplib             | FTP protocol client                         |
+| http               | HTTP modules                                |
+| http.client        | HTTP protocol client                        |
+| http.cookiejar     | Cookie handling for HTTP clients            |
+| http.cookies       | HTTP state management                       |
+| http.server        | HTTP servers                                |
+| imaplib            | IMAP4 protocol client                       |
+| ipaddress          | IPv4/IPv6 manipulation library              |
+| poplib             | POP3 protocol client                        |
+| smtplib            | SMTP protocol client                        |
+| socketserver       | A framework for network servers             |
+| urllib             | URL handling modules                        |
+| urllib.error       | Exception classes raised by urllib.request  |
+| urllib.parse       | Parse URLs into components                  |
+| urllib.request     | Extensible library for opening URLs         |
+| urllib.response    | Response classes used by urllib             |
+| urllib.robotparser | Parser for robots.txt                       |
+| uuid               | UUID objects according to RFC 4122          |
+| webbrowser         | Convenient web-browser controller           |
+| wsgiref            | WSGI Utilities and Reference Implementation |
+| xmlrpc             | XMLRPC server and client modules            |
+| xmlrpc.client      | XML-RPC client access                       |
+| xmlrpc.server      | Basic XML-RPC servers                       |
+
+*** MS Windows Specific Services
+
+| msvcrt   | Useful routines from the MS VC++ runtime |
+| winreg   | Windows registry access                  |
+| winsound | Sound-playing interface for Windows      |
+
+*** Multimedia Services
+
+| wave     | Read and write WAV files          |
+| colorsys | Conversions between color systems |
+
+*** Networking and Interprocess Communication
+
+| asyncio   | Asynchronous I/O                     |
+| socket    | Low-level networking interface       |
+| ssl       | TLS/SSL wrapper for socket objects   |
+| select    | Waiting for I/O completion           |
+| selectors | High-level I/O multiplexing          |
+| signal    | Set handlers for asynchronous events |
+| mmap      | Memory-mapped file support           |
+
+*** Numeric and Mathematical Modules
+
+| cmath      | Mathematical functions for complex numbers        |
+| decimal    | Decimal fixed point and floating point arithmetic |
+| fractions  | Rational numbers                                  |
+| math       | Mathematical functions                            |
+| numbers    | Numeric abstract base classes                     |
+| random     | Generate pseudo-random numbers                    |
+| statistics | Mathematical statistics functions                 |
+
+*** Program Frameworks
+
+| turtle | Turtle graphics                                |
+| cmd    | Support for line-oriented command interpreters |
+| shlex  | Simple lexical analysis                        |
+
+*** Python Language Services
+
+| ast         | Abstract Syntax Trees                  |
+| symtable    | Access to the compiler’s symbol tables |
+| token       | Constants used with Python parse trees |
+| keyword     | Testing for Python keywords            |
+| tokenize    | Tokenizer for Python source            |
+| tabnanny    | Detection of ambiguous indentation     |
+| pyclbr      | Python module browser support          |
+| py_compile  | Compile Python source files            |
+| compileall  | Byte-compile Python libraries          |
+| dis         | Disassembler for Python bytecode       |
+| pickletools | Tools for pickle developers            |
+
+*** Python Runtime Services
+
+| abc         | Abstract Base Classes                                |
+| atexit      | Exit handlers                                        |
+| builtins    | Built-in objects                                     |
+| contextlib  | Utilities for with-statement contexts                |
+| dataclasses | Data Classes                                         |
+| __future__  | Future statement definitions                         |
+| gc          | Garbage Collector interface                          |
+| inspect     | Inspect live objects                                 |
+| __main__    | Top-level code environment                           |
+| site        | Site-specific configuration hook                     |
+| sys         | System-specific parameters and functions             |
+| sysconfig   | Provide access to Python’s configuration information |
+| traceback   | Print or retrieve a stack traceback                  |
+| warnings    | Warning control                                      |
+
+*** Software Packaging and Distribution
+
+| distutils | Building and installing Python modules |
+| ensurepip | Bootstrapping the pip installer        |
+| venv      | Creation of virtual environments       |
+| zipapp    | Manage executable Python zip archives  |
+
+*** Structured Markup Processing Tools
+
+| html                  | HyperText Markup Language support      |
+| html.parser           | Simple HTML and XHTML parser           |
+| html.entities         | Definitions of HTML general entities   |
+| xml.etree.ElementTree | The ElementTree XML API                |
+| xml.dom               | The Document Object Model API          |
+| xml.dom.minidom       | Minimal DOM implementation             |
+| xml.dom.pulldom       | Support for building partial DOM trees |
+| xml.sax               | Support for SAX2 parsers               |
+| xml.sax.handler       | Base classes for SAX handlers          |
+| xml.sax.saxutils      | SAX Utilities                          |
+| xml.sax.xmlreader     | Interface for XML parsers              |
+| xml.parsers.expat     | Fast XML parsing using Expat           |
+
+*** Superseded Modules
+
+| aifc        | Read and write AIFF and AIFC files           |
+| asynchat    | Asynchronous socket command/response handler |
+| asyncore    | Asynchronous socket handler                  |
+| audioop     | Manipulate raw audio data                    |
+| cgi         | Common Gateway Interface support             |
+| cgitb       | Traceback manager for CGI scripts            |
+| chunk       | Read IFF chunked data                        |
+| crypt       | Function to check Unix passwords             |
+| imghdr      | Determine the type of an image               |
+| imp         | Access the import internals                  |
+| mailcap     | Mailcap file handling                        |
+| msilib      | Read and write Microsoft Installer files     |
+| nis         | Interface to Sun’s NIS (Yellow Pages)        |
+| nntplib     | NNTP protocol client                         |
+| optparse    | Parser for command line options              |
+| ossaudiodev | Access to OSS-compatible audio devices       |
+| pipes       | Interface to shell pipelines                 |
+| smtpd       | SMTP Server                                  |
+| sndhdr      | Determine type of sound file                 |
+| spwd        | The shadow password database                 |
+| sunau       | Read and write Sun AU files                  |
+| telnetlib   | Telnet client                                |
+| uu          | Encode and decode uuencode files             |
+| xdrlib      | Encode and decode XDR data                   |
+
+*** Text Processing Services
+
+| difflib     | Helpers for computing deltas         |
+| re          | Regular expression operations        |
+| readline    | GNU readline interface               |
+| rlcompleter | Completion function for GNU readline |
+| string      | Common string operations             |
+| stringprep  | Internet String Preparation          |
+| textwrap    | Text wrapping and filling            |
+| unicodedata | Unicode Database                     |
+
+*** Unix Specific Services
+
+| posix    | The most common POSIX system calls |
+| pwd      | The password database              |
+| grp      | The group database                 |
+| termios  | POSIX style tty control            |
+| tty      | Terminal control functions         |
+| pty      | Pseudo-terminal utilities          |
+| fcntl    | The fcntl and ioctl system calls   |
+| resource | Resource usage information         |
+| syslog   | Unix syslog library routines       |
+
+** Decorators (@)
+ | @classmethod | def   |
+ | @dataclass   | class |
+** Special Methods
+ | len(a)                     | __len__()      |
+ | a[n]                       | __getitem__(n) |
+ | constructor                | __init__(self) |
+ |----------------------------+----------------|
+ | unambiguous representation | __repr__(self) |
+ | readable representation    | __str__(self)  |
+ |----------------------------+----------------|
+ | iterator                   | __iter__(self) |
+ | iterator                   | __next__(self) |
+* Libraries
+|-----------+----+-----+-----------------------------------+-------------------------------------|
+| psutil    | 23 | 9.1 | process and system monitoring     | https://github.com/giampaolo/psutil |
+| unidecode | 23 | 0.4 | ascii transliterations of unicode | https://github.com/avian2/unidecode |
+|-----------+----+-----+-----------------------------------+-------------------------------------|

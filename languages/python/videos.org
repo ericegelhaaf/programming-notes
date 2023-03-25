@@ -1,0 +1,22 @@
+- Micha Gorelick, Fast Forward Labs | Innovation Day 2016
+  https://www.youtube.com/watch?v=vE7fWPAwY-M
+  word2vec > recurrent neural networks
+- Tools for High Performance Python - Ian Ozsvald | ODSC Europe 2019
+  https://www.youtube.com/watch?v=I1xyjc-JgGM
+  - linear regression with sckt learn and also with numpy directly
+  - %timeit
+  - line_profiler
+  - using:
+    - a for loop
+    - " "   " with df.iterrows()
+    - df.apply()
+    - df.apply(raw=True)
+    - df.swifter (runs over dask module)
+    - @numba.jit(nopython=True) // when raw=True due it works with numpy not pandas code (atm)
+* Anna Nicanorova: Optimizing Life Everyday Problems Solved with Linear Programing in Python
+  https://www.youtube.com/watch?v=7yZ5xxdkTb8
+  - Uses Pulp
+  - A linear programming problem consists of:
+    - An objective (min/max/...)
+    - Variables
+    - Constrains
