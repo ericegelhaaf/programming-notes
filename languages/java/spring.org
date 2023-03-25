@@ -1,0 +1,2 @@
+- Article: A Controller, Service and DAO Example with Spring Boot and JSF
+  https://www.baeldung.com/jsf-spring-boot-controller-service-dao

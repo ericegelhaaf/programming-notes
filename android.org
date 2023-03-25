@@ -1,0 +1,7 @@
+- French - https://aurelien-esnard.emi.u-bordeaux.fr/teaching/doku.php?id=android:helloworld
+- https://developer.android.com/training/basics/firstapp/index.html
+- 2022 | Android From Scratch: Building Your First Android Application
+  https://code.tutsplus.com/tutorials/android-from-scratch-building-your-first-android-application--cms-26024
+- 2016 | Absolutely minimal Android project
+  https://czak.pl/2016/01/13/minimal-android-project.html
+  https://github.com/czak/minimal-android-project

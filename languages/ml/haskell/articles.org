@@ -1,0 +1,34 @@
+- https://www.haskellforall.com/2018/05/how-i-evaluate-haskell-packages.html
+- https://github.com/bitemyapp/fp-course
+- https://github.com/hmemcpy/milewski-ctfp-pdf
+- https://threadreaderapp.com/thread/1277615394560360449.html
+- https://github.com/Kuratoro/haskell.zettel.page/blob/master/2012502.md
+- Applied Haskell is a commercial training program focusing on teaching intermediate Haskell.
+  https://www.fpcomplete.com/haskell/syllabus/
+- http://learnyouahaskell.com/chapters
+- https://www.reddit.com/r/haskell/comments/d5og5n/which_book/
+- https://github.com/i-am-tom/haskell-exercises (extensions)
+- https://github.com/caiorss/Functional-Programming
+- What I Wish I Knew When Learning Haskell
+  http://dev.stephendiehl.com/hask/
+- https://kowainik.github.io/posts/haskell-mini-patterns
+- https://github.com/soupi/haskell-study-plan
+- https://github.com/alpacaaa/zero-bullshit-haskell
+- https://github.com/tssm/up-to-date-real-world-haskell
+- https://github.com/graninas/software-design-in-haskell
+- https://github.com/bitemyapp/learnhaskell
+* Monad Tutorials
+- https://www.lambdacat.com/the-midnight-monad-a-journey-to-enlightenment/
+- https://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
+- https://en.wikibooks.org/wiki/Haskell/Understanding_monads
+- http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html
+- https://web.archive.org/web/20081206204420/http://www.loria.fr/~kow/monads/index.html
+- https://blog.plover.com/prog/burritos.html
+  https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/
+  https://chrisdone.com/posts/monads-are-burritos/
+- https://blog.plover.com/prog/burritos.html
+- https://paulspontifications.blogspot.com/2013/01/when-haskell-is-faster-than-c.html
+- https://github.com/soupi/haskell-study-plan#about-this-guide
+- https://kowainik.github.io/posts/haskell-mini-patterns
+- https://serokell.io/blog/haskell-in-production-noredink
+- https://www.cis.upenn.edu/~cis1940/fall16/lectures/05-real-world-haskell.html
