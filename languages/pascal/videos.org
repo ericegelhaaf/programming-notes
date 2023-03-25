@@ -1,6 +1,6 @@
 - 2010 | Making a game in Free Pascal https://www.youtube.com/watch?v=hPmJB0mS-GA
-* TODO 2020 | AOC2020 — Day 15         | Tsoding
-57:00
+* 2020 | AOC2020 — Day 15         | Tsoding
+57:00 TODO
 https://www.youtube.com/watch?v=ech9Re2bi_E
 - Paramstr
   Paramcount
@@ -15,7 +15,7 @@ https://www.youtube.com/watch?v=ech9Re2bi_E
     var
        sample1 : array of Integer = (0,6,3)
   #+end_src
-- <2018 You cannot initialize dynamic arrays
+- <2018 You canNOT initialize dynamic arrays
   https://lists.freepascal.org/pipermail/fpc-pascal/2018-May/053892.html
 - You can use ~Exit()~ to return from a function with a value
 * 2022 | Coding in Pascal in 2022 | Tsoding

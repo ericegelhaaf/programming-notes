@@ -1,6 +1,13 @@
 - https://github.com/CookieCollective/4k-Demo-Oven
+- Android
+  - https://github.com/fractalwrench/ApkGolf
+    https://github.com/fractalwrench/ApkGolf/blob/master/blog/BLOG_POST.md
 - Haskell
   - https://dfithian.github.io/2021/02/28/haskell-executable-sizes.html
+  - 84k dyn link https://stackoverflow.com/questions/6115459/small-haskell-program-compiled-with-ghc-into-huge-binary
+  - http://brandon.si/code/linking-smaller-haskell-binaries/
+    -split-sections
+    --gc-sections
 - ELF
   - Article: how to assemble assembly with NASM assembler to 32-bit or 64-bit ELF binary with or without libc
     phttps://gist.github.com/yellowbyte/d91da3c3b0bc3ee6d1d1ac5327b1b4b2

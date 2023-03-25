@@ -1,6 +1,108 @@
-- https://leanpub.com/simple-haskell-book
-- https://leanpub.com/production-haskell
-* DONE Book: Seven Languages in 7 weeks
+- Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
+  https://unsafeperform.io/retroclash/
+- https://leanpub.com/simple-haskell-book/read
+- https://leanpub.com/production-haskell/read
+- https://leanpub.com/haskell-cookbook/read
+- https://leanpub.com/haskell-stdlibs
+* 00 | The Haskell School of Expressive Language | Paul Hudak
+** 3 Simple Graphics
+*** 3.1 Basic Input/Output
+- ~Standard Prelude~ and ~Standard Libraries~
+- () is called ~unit type~, ans has only () as value
+- IO
+  There is a special kind of ~value~ called ~action~.
+  It won't try to display it but it will take action.
+  Ex: writing to a file or reading from keyboard.
+  ~expressions~ or functions that evaluate to an action are called ~commands~
+- IO () is often called a ~noop~, it is an action that returns ()
+- putStr, putChar, writeFile, readFile, do, getLine
+- ??? you can put actions on a list, but won't "do" anything unless on a do or a main ???
+- sequence applied to IO has this signature
+  sequence :: [IO a] -> IO ()
+
+*** 3.2 Graphics Windows
+- sierpinsky
+#+begin_src haskell
+fillTri :: Window -> Int -> Int -> Int -> IO ()
+fillTri w x y size =
+  drawInWindow w
+  $ withColor Green
+  $ polygon [(x,y), (x + size, y), (x, y - size), (x,y)]
+
+minSize :: Int
+minSize = 8
+
+sierpinskiTri :: Window -> Int -> Int -> Int -> IO ()
+sierpinskiTri w x y size
+  | size <= minSize = fillTri w x y size
+  | otherwise       = let size2 = size `div` 2
+                      in do sierpinskiTri w x y size2
+                            sierpinskiTri w x (y - size2) size2
+                            sierpinskiTri w (x + size2) y size2
+#+end_src
+- david star:
+  1) draw a equilateral triangle
+  2) draw a new one rotated 180
+  3) do 1 and 2 for each corner, but with 1/3 of a triangle size
+** 4 Shapes II: Drawing shapes
+- Many indirect graphics functions, to:
+  1) being able to work with each shape properties
+** 5 Polymorphic and High-order Funtions
+* 08 | Real World Haskell                        | Bryan O'Sullivan
+- Updated code version https://github.com/tssm/up-to-date-real-world-haskell/
+- Real World Haskell outdated parts https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
+- Online http://book.realworldhaskell.org/read/
+** 6 Using Typeclasses
+*** Defining
+- Different implementation depending on the type of data given.
+- Defining a new ~Typeclass~ named "BasicEq3".
+  We can provide *default implementations* for Typeclasses, and make one depend on the other.
+#+begin_src haskell
+class BasicEq3 a where
+  isEqual3 :: a -> a -> Bool
+  isEqual3 x y = not (isNotEqual3 x y)
+
+  isNotEqual3 :: a -> a -> Bool
+  isNotEqual3 x y = not (isEqual3 x y)
+#+end_src
+- An ~Instance Type~ of this typeclass, is any type that implements the functions defined in it.
+- isEqual :: BasicEq a => a -> a -> Bool
+  Reads:
+  "For all types of *a*,
+   so long as *a* is an instance of BasicEq,
+   isEqual takes two parameters of type *a* and returns Bool""
+*** Type Instancing
+#+begin_src haskell
+instance BasicEq3 Color where
+  isEqual3 Red   Red   = True
+  isEqual3 Green Green = True
+  isEqual3 Blue  Blue  = True
+  isEqual3 _     _     = False
+#+end_src
+*** Build-in
+- Show, and the function show which returns a string from something showable
+  show :: (Show a) => a -> String
+  (you can derive it or explicitly Type Instance it)
+  - To define your own show redefine ~show~
+- Read, and the function read which takes a string and returns something readable
+  read :: (Read a) => String -> a
+  e.g. (read readVar)::Double
+  - To define your own parser redefine ~readsPrec~
+** 7
+- ~Type classes~ provide ad-hoc polymorphism
+  - Can define default "implementations" for the class
+- ~Types~ are made instances of a particular type class
+- Typeclasses
+  - Show: Used to display your custom types. ghci repl uses it.
+    #+begin_src haskell
+data Color = Red | Green | Blue
+
+instance Show Color where
+  show Red = "rojo"
+  show Green = "verde"
+  show Blue = "azul"
+    #+end_src
+* 10 | Seven Languages in 7 weeks                | Bruce A. Tate
 ** Haskell
 - "In Haskell, indentation is significant." (?
 - on Haskell, IF is a function, not a control structure, it returns a value.
@@ -25,7 +127,7 @@ factorio x
   | x > 1     = x * factorio (x - 1)
   | otherwise = 1
 #+end_src
-* Book: Haskell School of Music
+* 18 | Haskell School of Music                   | Donya Quick
 ** 1 Computer Music, Euterpea, and Haskell
 *** 1.1 The Note versus Signal Dichotomy
 - High/Low    level music concepts a.k.a.
@@ -235,125 +337,453 @@ data InstrumentName = AcousticGrandPiano | BrightAcousticPiano ...
   2) the single portamento on note three of bar sixteen.
   These situations will be addressed differently in a later chapter.
 *** 4.4 Simple Algorithmic Composition
-* Book: Real World Haskell
-- Updated code version https://github.com/tssm/up-to-date-real-world-haskell/
-- Real World Haskell outdated parts https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
-- Online http://book.realworldhaskell.org/read/
-** 6 Using Typeclasses
-*** Defining
-- Different implementation depending on the type of data given.
-- Defining a new ~Typeclass~ named "BasicEq3".
-  We can provide *default implementations* for Typeclasses, and make one depend on the other.
-#+begin_src haskell
-class BasicEq3 a where
-  isEqual3 :: a -> a -> Bool
-  isEqual3 x y = not (isNotEqual3 x y)
-
-  isNotEqual3 :: a -> a -> Bool
-  isNotEqual3 x y = not (isEqual3 x y)
-#+end_src
-- An ~Instance Type~ of this typeclass, is any type that implements the functions defined in it.
-- isEqual :: BasicEq a => a -> a -> Bool
-  Reads:
-  "For all types of *a*,
-   so long as *a* is an instance of BasicEq,
-   isEqual takes two parameters of type *a* and returns Bool""
-*** Type Instancing
-#+begin_src haskell
-instance BasicEq3 Color where
-  isEqual3 Red   Red   = True
-  isEqual3 Green Green = True
-  isEqual3 Blue  Blue  = True
-  isEqual3 _     _     = False
-#+end_src
-*** Build-in
-- Show, and the function show which returns a string from something showable
-  show :: (Show a) => a -> String
-  (you can derive it or explicitly Type Instance it)
-  - To define your own show redefine ~show~
-- Read, and the function read which takes a string and returns something readable
-  read :: (Read a) => String -> a
-  e.g. (read readVar)::Double
-  - To define your own parser redefine ~readsPrec~
-** 7
-- ~Type classes~ provide ad-hoc polymorphism
-  - Can define default "implementations" for the class
-- ~Types~ are made instances of a particular type class
-- Typeclasses
-  - Show: Used to display your custom types. ghci repl uses it.
-    #+begin_src haskell
-data Color = Red | Green | Blue
-
-instance Show Color where
-  show Red = "rojo"
-  show Green = "verde"
-  show Blue = "azul"
-    #+end_src
-* Book: The Haskell School of Expressive Language
-** 3 Simple Graphics
-*** 3.1 Basic Input/Output
-- ~Standard Prelude~ and ~Standard Libraries~
-- () is called ~unit type~, ans has only () as value
-- IO
-  There is a special kind of ~value~ called ~action~.
-  It won't try to display it but it will take action.
-  Ex: writing to a file or reading from keyboard.
-  ~expressions~ or functions that evaluate to an action are called ~commands~
-- IO () is often called a ~noop~, it is an action that returns ()
-- putStr, putChar, writeFile, readFile, do, getLine
-- ??? you can put actions on a list, but won't "do" anything unless on a do or a main ???
-- sequence applied to IO has this signature
-  sequence :: [IO a] -> IO ()
-
-*** 3.2 Graphics Windows
-- sierpinsky
-#+begin_src haskell
-fillTri :: Window -> Int -> Int -> Int -> IO ()
-fillTri w x y size =
-  drawInWindow w
-  $ withColor Green
-  $ polygon [(x,y), (x + size, y), (x, y - size), (x,y)]
-
-minSize :: Int
-minSize = 8
-
-sierpinskiTri :: Window -> Int -> Int -> Int -> IO ()
-sierpinskiTri w x y size
-  | size <= minSize = fillTri w x y size
-  | otherwise       = let size2 = size `div` 2
-                      in do sierpinskiTri w x y size2
-                            sierpinskiTri w x (y - size2) size2
-                            sierpinskiTri w (x + size2) y size2
-#+end_src
-- david star:
-  1) draw a equilateral triangle
-  2) draw a new one rotated 180
-  3) do 1 and 2 for each corner, but with 1/3 of a triangle size
-** 4 Shapes II: Drawing shapes
-- Many indirect graphics functions, to:
-  1) being able to work with each shape properties
-** 5 Polymorphic and High-order Funtions
-* Book: Haskell Tutorial and Cookbook
+* 21 | Haskell Tutorial and Cookbook             | Mark Watson
 ** 1
 #+begin_src haskell
 module Main where
 module Main (main) where
 #+end_src
-- : concatenates Char to [Char]
-- !! for list index access
-- ++ concatenate lists
+- (:) concatenates Char to [Char]
+- (!!) for list index access
+- (++) concatenate lists
 - length of tuples will always be one (1)
 |       |       |           | destructuring     |   |
 |-------+-------+-----------+-------------------+---|
 | tuple | (A,B) | fst/snd   | let (a,b)=('a',1) |   |
 | list  | [T]   | head/tail |                   |   |
-* Book: 2022 | Practical Haskell | Alejandro Serrano Mena
+* 20 | Finding Success and Failure               | Julie Moronuki
+** Preface
+- Most programming languages have, in some form or other, a way of dealing with failure.
+  A way to *combine* multiple smaller programs /that might fail/
+  into a larger program /that might fail/
+- Halting on error (like on imperative code)
+  - Doesn't always provide us with as much information as we might like
+    Can only give us information about the *first* problem that was encounterd.
+- the ~Monad~ class is our tool for generalizing the notion of /program/
+  beyond "run a series of subprograms until one fails".
+- The book teaches about ~Monad~ and ~Applicative~
+  - how they are similiar
+  - how they differ
+  - and how to use types to rethink our solutions to problems
+** 1 Case Expression in Practice
+- *case* expression,
+  - serve similiar branching role as *if/then/else* but with much more generality.
+  - allow behavior to branch on values other than booleans
+- ~polymorphic~ has a type variable, it can take many types.
+  ~monomorphic~ has NO type variables.
+- Bool has only 2 values, also called *constructors*, True and False
+- ~partial functions~ functions that do NOT handle all their /constructors/
+- ~total functions~ functions that handle all /constructors/
+- order of the *case/of* expression matter only when patterns are *overlapping*
+- ~sum types~ is having more than 1(one) constructor
+  (aka: disjuntion, disjoint union, tagged union)
+- Bool type, a ~concrete type~
+  #+begin_src haskell
+    data Bool = True | False
+  #+end_src
+- Maybe type, a ~parametrized type~ aka *type constructor*
+  #+begin_src haskell
+    data Maybe a = Nothing | Just a
+  #+end_src
+** 2 Case Expression Practice
+- Example: checks two strings inputs to determine whether they are anagrams of one another.
+- we use the idiom (xy, ys) to indicate variables that are lists or strings
+*** Example: pattern matching on Bool values to return Maybe values
+  #+begin_src haskell
+isWord :: String -> Maybe String
+isWord word =
+  case null word of
+    True -> Nothing
+    False ->
+      case (all isAlpha word) of
+        False -> Nothing
+        True -> Just word
+
+checkAnagram :: String -> String -> String
+checkAnagram word1 word2 =
+  case (isWord word1) of
+    Nothing -> "The first word is invalid"
+    Just word1 ->
+      case (isWord word2) of
+        Nothing -> "The second word is invalid"
+        Just word2 ->
+          case (isAnagram word1 word2) of
+            False -> "These words are not anagrams."
+            True -> "These words are anagrams."
+  #+end_src
+** 3 Validating Functions
+- New Stack project: where *simple* is the most minimal of the templates that stack provides
+  $ stack new validation-book simple
+- Project aware REPL that give us their dependencies:
+  $ stack repl
+- The module name is *Main* because an /executable/ must always be named *Main*
+** 4 The =Maybe= Monad
+- Solution in this capter
+  - will use the bind operator (>>=)
+  - won't tell you which of the validtion rule failed
+- INTERNET: https://stackoverflow.com/questions/62018158/string-concatenation-via-or
+  - when concatenating strings you can use (++) or (<>)
+  - but (<>) is preferable because it works with Text types other than *Prelude.String*
+  - but it might become ambiguos due polymorphism and when using *-XOverloadedStrings*
+- ~infix operators~
+  - the reader has to know the /associativity/ of the operator.
+  - associativity matters also when thinking on performance
+- the (.) operator might help to only work with 1(one) list
+  #+begin_src haskell
+f  x = drop 2 (map toUpper (reverse x))
+f' x = (drop 2 . map toUpper . reverse) x
+  #+end_src
+*** Enter the monad
+- The bind operator
+  #+begin_src haskell
+(>>=) :: Monad m => m a -> (a -> m b) -> m b
+  #+end_src
+- validatePassword without using case/of
+  #+begin_src haskell
+validatePassword' :: String -> Maybe String
+validatePassword' password =
+  cleanWhitespace password
+    >>= requireAlphaNum
+    >>= checkPasswordLength''
+  #+end_src
+*** Classes and instances
+- Monad is a *typeclass*
+- A *typeclass* defines a set of /generic functions/ that work
+  with a set of types.
+- A =class= declaration gives only the type signatures in their
+  most polymorphic forms.
+- An =instance= declaration gives a /concrete implementation/
+  of the generic function of that class for a given
+  concrete type.
+- TIP: thinking about types as instances of a certain typeclass
+  allows you to focus on the similarities between the types.
+*** TypeApplications (language extension)
+#+begin_src haskell
+*Main> :type (>>=) @Maybe
+(>>=) @Maybe
+  :: Maybe a -> (a -> Maybe b) -> Maybe b
+
+*Main> :type (>>=) @Maybe @String
+(>>=) @Maybe @String
+  :: Maybe String -> (String -> Maybe b) -> Maybe b
+
+*Main> :type (>>=) @Maybe @String @String
+(>>=) @Maybe @String @String
+  :: Maybe String -> (String -> Maybe String) -> Maybe String
+#+end_src
+- Allows you to specify
+  - what type you will apply a polymorphic function to
+  - and see the resulting type.
+- aka querying the type signature
+*** Case and binds
+- A type can have /at most/ one instnace of a typeclass
+- Using ~bind(>>=)~ and ~Maybe~ here means we lost the ability to
+  tell which *Nothing* we returned and,
+  thus, what our error is.
+- Haskell *do* syntax is intended to allow something like
+  imperative-style programming that ignores the monadic
+  underpinnings.
+- main rewritten from *do* to using bind
+  #+begin_src haskell
+main :: IO ()
+main =
+  getLine >>= \password ->
+  print (cleanWhitespace password)
+  #+end_src
+- main rewritten from *do* to bind, without explicit argument passing
+  #+begin_src haskell
+main :: IO ()
+main = getLine >>= (print . cleanWhitespace)
+  #+end_src
+** 5 Refactoring with =Either=
+*** Adding error messages
+- we can have *validatePassword* return a *String* with an error message if it fails.
+  It becomes again a sequence of case/of
+  validatePassword :: String -> String
+- =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
+  Removed during compilation.
+  #+begin_src haskell
+    "Your password cannot be \
+    \longer than 20 characters."
+  #+end_src
+*** Introducing =Either=
+#+begin_src haskell
+data Either a b = Left a | Right b
+#+end_src
+- Where *Right b* is similar to *Just a* from Maybe
+  Where *Left a* can carry data unlike *Nothing* form Maybe
+*** The =Either= Monad
+#+begin_src haskell
+  instance Monad Maybe
+    where
+      Nothing >>= _   = Nothing
+      Just x  >>= f   = f x
+
+  instance Monad (Either e) -- leftmost type parameter is fixed, whatever type it is, it cannot be transformed
+    where
+      Left  l >>= _   = Left l
+      Right r >>= f   = f r
+#+end_src
+- In Haskell, a ~Monad~ must be a unary *type constructor*.
+  So in order to use bind(>>=) you need to partially apply ~Either~ to its leftmost parameter.
+- Showing it with TypeApplications, with String or _
+#+begin_src
+  > :type (>>=) @(Either String)
+  (>>=) @(Either String) ::
+      Either String a -> (a -> EIther String b) ->
+      Either String b
+
+  > :type (>>=) @(Either_)
+  (>>=) @(Either String) ::
+      Either w a -> (a -> Either w b) ->
+      Either w b
+#+end_src
+*** Using =Either=
+- the final *validatePassword* function using /Either/ will be
+  the exact same as the one using /Maybe/
+*** Kinds
+- In haskell, we use a notation called ~kinds~ to talk about the /arity/ of a type constructor.
+  Kinds are sometimes also defined as "the types of types"
+| :kind Bool         | Bool :: *         |                           |
+| :kind Maybe        | Maybe :: * -> *   | all monads have this kind |
+| :kind Maybe String | Maybe String :: * |                           |
+- Kinds of different types
+ | String                 | *           |                    |
+ | []                     | * -> *      | *could* be a monad |
+ | (,)                    | * -> * -> * |                    |
+ | (,) Int                | * -> *      | *could* be a monad |
+ | data Pair a = Pair a a | * -> *      | *could* be a monad |
+** 6 Working with =newtype=
+*** Introducing
+- ~type aliases~ do not offer *safety*, it only gives you another name for the same type
+  we can accidentally provide a /Password/ to a function that expects a /Username/
+  #+begin_src haskell
+    type Password = String
+    type Username = String
+  #+end_src
+- ~newtype~
+  it has a *data constructor* that is named differently from the underlying type's constructor.
+  #+begin_src haskell
+    newtype Password = Password String
+      deriving Show
+  #+end_src
+- differences of *newtype* with *data*
+  1) /newtype/ may only have single unary constructor
+  2) /newtype/ optimizations due 1)
+  3) /newtype/ offers a cheap coercion, between newtype and the underlying type,
+     /data/ does not
+  4) GeneralizedNewtypeDeriving language extension
+  5) /newtype/ and /data/ have different behavior on non-strictness
+*** Declaring
+  #+begin_src haskell
+newtype Password = Password String
+  deriving (Show)
+
+newtype Error = Error String
+  deriving (Show)
+
+newtype Username = Username String
+  deriving (Show)
+#+end_src
+*** Using
+#+begin_src haskell
+checkPasswordLength :: String -> Either Error Password
+checkPasswordLength password =
+  case (length password > 20) of
+    True -> Left (Error "Password is too long.")
+    False -> Right (Password password)
+
+checkUsernameLength :: String -> Either Error Username
+checkUsernameLength name =
+  case (length name > 20) of
+    True -> Left (Error "Password is too long.")
+    False -> Right (Username name)
+
+requireAlphaNum :: String -> Either Error String
+requireAlphaNum xs =
+  case (all isAlphaNum xs) of
+    False -> Left (Error "Invalid password")
+    True -> Right xs
+
+cleanWhitespace :: String -> Either Error String
+cleanWhitespace "" = Left (Error "String is empty")
+cleanWhitespace (x : xs) =
+  case (isSpace x) of
+    True -> cleanWhitespace xs
+    False -> Right (x : xs)
+
+validatePassword :: Password -> Either Error Password
+validatePassword (Password password) =
+  cleanWhitespace password
+    >>= requireAlphaNum
+    >>= checkPasswordLength
+#+end_src
+*** Revising main
+- naive, introducing a new let
+  #+begin_src haskell
+main :: IO ()
+main =
+  do
+    putStr "Please enter a password\n> "
+    password <- getLine
+    let password' = Password password
+    print (validatePassword password')
+#+end_src
+- naive, without let
+  #+begin_src haskell
+main :: IO ()
+main =
+  do
+    putStr "Please enter a password\n> "
+    password <- getLine
+    print (validatePassword (Password password))
+#+end_src
+- fmap(<$>)
+  will apply the Password constructor *inside* the IO (changing from an IO String to an IO Password)
+  #+begin_src haskell
+main :: IO ()
+main =
+  do
+    putStr "Please enter a password\n> "
+    password <- Password <$> getLine
+    print (validatePassword password)
+  #+end_src
+*** Exercises
+(>>=) @IO :: IO a -> (a -> IO b) -> IO b
+(>>)  @IO :: IO a ->       IO b  -> IO b
+- from using *do*
+  #+begin_src haskell
+main =
+  do
+    putStr "Please enter a password\n> "
+    password <- Password <$> getLine
+    print (validatePassword password)
+  #+end_src
+- to using >>=
+  #+begin_src haskell
+main =
+  putStr "Please enter a password\n> "
+    >> (Password <$> getLine)
+    >>= (print . validatePassword)
+  #+end_src
+*** Notes on monadic style
+- When to use >>= or do
+  1) *Too many lambdas*, if it seems like you're writing way too many lambdas, use *do*
+  2) *Too many variables*, that get introduced one line, only to get used on the next, use >>=
+  3) Or both
+     #+begin_src haskell
+       do
+         x1 <- a1 >>= f1 >>= f2
+         x2 <- a2 >>= f3 >>= f4
+         f5 x1 x2
+     #+end_src
+** 7 Introducing =Applicative=
+- A ~product type~, the conjuction (and) of two or more types
+  - *tuples* are the canonical product types, sometimes called *anonymous products*
+  #+begin_src haskell
+    data User = User Username Password
+      deriving (Show)
+  #+end_src
+- we introduce a =makeUser= function that unlike =User= introduces a possibility of failure
+  #+begin_src haskell
+makeUser :: Username -> Password -> Either Error User
+    User :: Username -> Password -> User
+  #+end_src
+- Applicative typeclass operator (<*>), aka ~tie-fighter~ or ~apply~ or ~app~
+  Allows us for function application in the presence of some outer type structure (aka context)
+  Unlike "bind" there is nothing that would force us to "short-circuit" on an error value.
+  #+begin_src haskell
+    (<*>) :: Applicative f => f (a -> b) -> f a -> f b
+  #+end_src
+*** Constructors are functions
+- We are constructing a functions *inside* and applicative type ~Either~
+  #+begin_src haskell
+    > :type (validateUsername (Username "name"))
+      :: Either Error Username
+    > :type (User <$> (validateUsername (Username "name")))
+      :: Either Error (Password -> User)
+  #+end_src
+*** Using Applicative
+#+begin_src haskell
+makeUser :: Username -> Password -> Either Error User
+makeUser name password =
+  User <$> validateUsername name
+    <*> validatePassword password
+#+end_src
+*** Using Applicative with checkAnagram
+#+begin_src haskell
+checkAnagram :: String -> String -> String
+
+promptWord1 :: IO String
+promptWord1 =
+  do
+    putStr "Please enter a word.\n> "
+    getLine
+
+promptWord2 :: IO String
+promptWord2 =
+  do
+    putStr "Please enter a second word.\n> "
+    getLine
+
+main :: IO ()
+main =
+  do
+    result <- checkAnagram <$> promptWord1 <*> promptWord2
+    print result
+#+end_src
+** 8 Refactorign with =Validation=
+- refactor from =Either= to =Validation=
+  - from the package https://github.com/system-f/validation
+  - both types are ~isomorphic~, we can convert back and forth between them
+  - their Applicative instance is different, we an accumulate errores on the Left1
+  - uses the typeclass =Semigruop=
+  - depends on *lens* library
+*** Introducing validation
+> stack repl --package validation
+> cabal repl --build-depends validation
+- Has one module, =Data.Validation=
+  #+begin_src haskell
+    data Validation err a = Failure err | Success a
+  #+end_src
+- Validation is NOT a ~Monad~,
+  - if it were a monad, it would have to "short circuit" and lose the accumulation on the left values.
+- Since functions chained together with *applicative* (<*>) can be evaluated independently:
+  - we can /accumulate/ the errors from several function applications.
+  - /concatenate/ them using the underlying *semigroup*
+  - and /return/ as many errors as there are.
+- err needs a semigroup constraint
+  #+begin_src haskell
+    instance Semigroup err => Applicative (Validation err)
+  #+end_src
+- We will still use ~Error~ we created before,
+  - while it is a *newtype* from String, and String is a semigrup
+  - we don't inherit the instances of the underlying type by default
+*** Adding a dependency
+- add a executable stanza, into .cabal
+  #+begin_src yaml
+    execultable validation
+      hs-source-dirs:   src
+      main-is:          Main.hs
+      default-language: Haskell2010
+      build-depends:    base >= 4.7 && < 5
+                      , validation
+  #+end_src
+*** Nominal refactoring
+- Change the ~Error~ type
+  #+begin_src haskell
+    newtype Error = Error [String]
+      deriving (Show)
+  #+end_src
+*** Interpreting the errors
+*** An Error semigroup
+*** Using Applicative
+* 22 | Practical Haskell                         | Alejandro Serrano Mena
 source https://github.com/Apress/practical-haskell
 - Packages https://hackage.haskell.org/
 - Packages https://www.stackage.org/ (subset of hackage)
 - Installation Manager https://www.haskell.org/ghcup/
 - GHCI https://wiki.haskell.org/GHC/GHCi
-- library https://hackage.haskell.org/package/containers https://haskell-containers.readthedocs.io/en/latest/
 - library https://www.yesodweb.com/book/persistent
 - Package Version Policy https://pvp.haskell.org/
 - Encyclopedia of Typeclasses https://wiki.haskell.org/Typeclassopedia
@@ -1660,3 +2090,516 @@ After Step 2
 **** Pattern Matching and Laziness
 **** Profiling with GHC
 *** Strictness annotations
+* 22 | Sockets & Pipes                           | Chris Martin
+- cabal environment
+  https://hackage.haskell.org/package/sockets-and-pipes
+  https://github.com/joyofhaskell/sockets-and-pipes
+- someone's code https://github.com/brhutchins/sockets-and-pipes/blob/main/Book.hs
+** Preface
+- Libraries: bytestring, text, sockets, network, attoparsec
+- Monad Transformers: ResourceT, ListT, ExceptT
+- once you have the file:
+  $ cabal repl
+  ghci> getDataDir
+  "/home/sendai/.local/share/sockets-and-pipes"
+*** book.cabal
+#+begin_src yaml
+  cabal-version: 3.0 # NECESSARY
+  name: book         # NECESSARY
+  version: 0         # NECESSARY
+  data-files: **/*.txt
+
+  library # no colon (:), nor this comment
+    default-language:   Haskell2010
+    default-extensions: BlockArguments
+                        QuasiQuotes
+                        TypeApplications
+                        ScopedTypeVariables
+    ghc-options:        -Wall -fdefer-typed-holes
+    build-depends:      sockets-and-pipes ^>=0.3
+    exposed-modules:    Book
+    #+end_src
+*** Book.hs
+#+begin_src haskell
+module Book where
+
+import Prelude ()
+import Relude
+import qualified System.Directory as Dir
+import System.FilePath ((</>))
+
+getDataDir :: IO FilePath
+getDataDir = do
+  dir <- Dir.getXdgDirectory Dir.XdgData "sockets-and-pipes"
+  Dir.createDirectoryIfMissing True dir
+  return dir
+#+end_src
+** 1 Handles
+- ~multiplexing~ is allowing many "tenants" to share the same facilities without interfering with one another
+- IO =~ system calls to the OS
+- a "handle" is the identifier for the OS<->Process "conversation
+  - windows: file handle
+  - linux: file descriptor
+- IO.(openFile/hClose/hPutStrLn/putStrLn)
+- what could go wrong?
+  1) IO Exceptions: eg: disk is full
+  2) Asynchronous exceptions: eg: someone throws an interrupt (Control.Exception.throwTo function)
+- the ~T~ at the end of a type stands for *transformer*
+  wherever there are monad transformers we find an abundance of polymorphism
+- ~ResourceT~ is a monad transformer
+  if *m* is a monad *mT* is a monad as well
+- ~ResourceT IO~
+  - represents the concept of ~IO~ that has been transformed or modified by adding a certain safety feature.
+  - anything that you can do in ~IO~ can also be done in ~ResourceT IO~
+    by lifting the ordinary ~IO~ inot a resource-safety-agumented ResourceT IO context
+- whenever learning about a new type, pay attention to:
+  1) Introduction: which functions introduce that type (eg: liftIO, allocate)
+  2)  Elimination: which functions eliminate it (eg: runResource)
+- This tell us wht is the general structure of a program using the type will look like.
+*** writeGreetingFile
+#+begin_src haskell
+writeGreetingFile :: IO ()
+writeGreetingFile = do
+  dir <- getDataDir
+  h   <- IO.openFile (dir </> "greeting.txt") WriteMode
+  IO.hPutStrLn h "hello"
+  IO.hPutStrLn h "world"
+  IO.hClose h
+#+end_src
+*** hello-world.hs
+#+begin_src haskell
+module Main (main) where
+import qualified System.IO as IO
+main = IO.putSTrLn "hello world!"
+#+end_src
+*** writeGreetingFile - handle-closing reliably
+#+begin_src haskell
+import Control.Monad.Trans.Resource
+    (ReleaseKey, ResourceT, allocate, runResourceT) -- Types are not redundant to import
+
+writeGreetingSafe :: IO ()
+writeGreetingSafe = runResourceT @IO do
+  dir <- liftIO getDataDir
+  (_releaseKey, h) <- allocate
+    (IO.openFile (dir </> "greeting.txt") WriteMode)
+    IO.hClose
+  liftIO (IO.hPutStrLn h "hello")
+  liftIO (IO.hPutStrLn h "world")
+#+end_src
+*** resourcet classes
+- ~MonadIO~
+  describes any (m)onad that an ~IO~ action can be lifted into.
+  sole method is:
+  liftIO :: MonadIO m => IO a -> m a
+  classes that belong to it; ResourceT IO, IO
+- ~MonadUnliftIO~
+  you don't need to know ... every constraint in a polymorphic type signature means
+- ~MonadResource~
+  class describes the safety augmentation of IO
+  exists because ~ResourceT IO~ can have further monad transformers applied to it
+*** resourcet functions type signatures AND specialization in the example
+- ~allocate~, takes 2 parameters
+  1) IO a      - creates/opens/adquires a resource
+  2) a -> IO a - an action that destroys/closes/releases a resource
+- ~release~
+  - for the cases when you know you can close the resource early,
+  - takes a *ReleaseKey* as parameter
+  - it is tidier to use *release* intead of applying IO.hClose directly,
+    because the *release* also releases the behind the scene record kept by *ResourceT*
+#+begin_src haskell
+liftIO       :: MonadIO m       => IO a           -> m a
+liftIO       ::                    IO a           -> ResourceT IO a
+
+allocate     :: MonadResource m => IO a           -> (a -> IO ()) -> m         (ReleaseKey, a)
+allocate     ::                    IO a           -> (a -> IO ()) -> ResourceT (ReleaseKey, a)
+
+runResourceT :: MonadUnliftIO m => ResourceT m  a -> m  a
+runResourceT ::                    ResourceT IO a -> IO a
+
+release      :: MonadIO m       => ReleaseKey     -> m ()
+#+end_src
+*** MonadIO class - programmer's relationship to it
+- when introducing a new *monad transformer* like ~ResourceT~ into an ~IO~ sequence,
+  every line under the ~do~ whose type is not already of type ~ResourceT IO~
+  will have to be lift into it using *liftIO*
+* 23 | Learn Haskell by building a blogGenerator | Gil Mizrahi
+- 04 https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning
+** 02 - Hello World
+- The order in which we declare the binding does NOT matter
+** 03 Building an HTML printer library
+#+begin_src haskell
+wrapHtml content = "<html><body>" <> content <> "</body></html>"
+#+end_src
+- operators ~fixity~ (left or right)
+  operators ~precedence~ (a number between 0 and 10)
+- (<>) has right fixity
+- =referential transparency= is pretty unique to haskell
+  allows to /substitute/ two sided of an equal sign with another.
+- multiple argument lambda
+  \num1 -> \num2 -> num1 + num2
+  \num1     num2 -> num1 + num2
+- =combinator pattern= used in Haskell by many EDSLs (embedded domain specific language)
+  - ~primitives~ basic building block of the language
+  - ~combinators~ functions that combine primitves
+*** Safe HTML construction with types
+- =newtype=
+  - to define a new distinct type for an *existing* type
+  - wrapping/unwrapping has not performance cost
+- =type= we reference the type name directly without a constructor, just a name alias
+- =data= kind of a struct+enum chimera, where we can define multiple constructs to a type
+- composition
+  (.) f g x = f (g x)
+*** Preventing incorrect use with modules
+#+begin_src haskell
+  module ModuleName where                     -- Exports ALL
+  module ModuleName ( <export-list> ) where
+  module ModuleName ( Type(TypeConstructor) ) -- Export 1 constructor of type
+  module ModuleName ( Type(..) )              -- Export all constructors for type
+#+end_src
+- same name as the source file
+- sub-directories should also be par tof the name, we use (.) to denote a subdirectory
+- except the module ~Main~ that defines *main*, can have any filename
+- Linked Lists
+  - not particularly space efficient
+  - slow for appending
+  - slow for random access
+- What HTML characteprs to escape: https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html
+  &<>"'
+*** Exposing internal functionality (Internal Modules)
+- We can expose some ~Internal Modules~ to provide some flexibility to external users.
+- It's a common design pattern or idiom in Haskell.
+- *<something>.Internal* which exports all of the functionality and implementation details of the module.
+  while the module <something> imports and re-exports only what we want public
+- hello.hs
+  Html.hs
+  Html/Internal.hs
+** 04 Custom Markup Language
+- Features
+  | Headings        | prefix by a number of * characters              |
+  | Paragraphs      | a group of lines without empty lines in between |
+  | Unordered lists | a group of lines each prefix with -             |
+  | Ordered lists   | a group of lines each prefix with #             |
+  | Code blocks     | a group of lines each prefix with >             |
+*** Representing the markup language as a haskell data type
+#+begin_src haskell
+  type Document = [Structure]
+  data Structure
+    = Heading Natural String
+    | Paragram String
+    | UnorderedLIst [String]
+    | OrderedList [String]
+    | CodeBlock [String]
+#+end_src
+- We represent the markup as a type, instead of a String for *flexibility* and *modularity*
+- If the /parsing/ was *coupled* with /HTML generation/, we would lose the ability to pre-process the markup document.
+  - For example:
+    - Take only a small part of the document, and present it
+    - Or create a ToC from headings
+*** Parsing markup part 01 - Recursion
+- split by lines, and group by paragraphs (which are separated by empty lines)
+- Lazy *vs* Strict - Evaluation Strategy
+  - *Evaluation Strategy*: refers to /when/ do we evaluate a computation
+  - *Strict*: we _evaluate_ the arguments of a function before entering the function
+  - *Lazy*: we only _evaluate_ computation when we need it (aka when it will have some effect on the outside world)
+- Steps to think a problem recursively:
+  1) Finding the *base case*, the most simple, the one we know how to answer
+  2) Figuring out how to *reduce* the problem to something simpler, closer to 1)
+  3) *Mitigating the difference* between 2) and the solution we need
+- 2 & 3 are called ~recursive step~
+- ~mutual recursion~ instead of directly calling ourselves in a function,
+  we call another function that will eventually call ourselves back.
+  #+begin_src haskell
+even' :: Int -> Bool
+even' 0 = True
+even' n = odd (n - 1)
+
+odd' :: Int -> Bool
+odd' 0 = False
+odd' n = even' (n - 1)
+  #+end_src
+- ~partial function~ a function that NOT returns for some value
+  either due not terminating, or returning an error
+- =Numeric.Natural= type throws an exception if you try to assign it a negative number
+- =Data.List.NonEmpty= type promises that the list has at least 1 element
+*** Displaying the parsing results (type classes)
+#+begin_src haskell
+  class Semigroup a where
+    (<>) :: a -> a -> a
+  instance Semigroup [a] where
+    (<>) = (++)
+#+end_src
+- *print* works by calling show
+  #+begin_src haskell
+print' :: Show a => a IO ()
+print' = putStrLn . show
+  #+end_src
+- defining an instance of the class ~Show~, aka providing an implemenation for the interface of a specific type
+  can be done by just *deriving*
+- ~typeclasses~
+  - are often just interface with laws (aka expected behaviours)
+  - can be used to create abstractions, were we don't actually care about concrete details, just their API
+- ~typeclasses~ can provide rules or laws that the instances should satisfy
+  example:
+  - can combine two values in some way, and (<>) should b e associativce
+  - which Haskell type system cannot "prove"
+*** Parsing markup part 02 - Pattern Matching
+- Author encourages to NOT use the multiple function definitions in favor of *case/of*
+  - https://twitter.com/_gilmi/status/1257225601079029760
+  - Reasons: (ME: 4 is the strongest)
+    1) More to write
+    2) More effort to change the name of the function
+    3) More effort to add another argument
+    4) For longer functions, harder to tell where it stars and where it ends (identation)
+    5) Especially when you want to remove clutter by adding new lines between cases
+- =Data.Maybe.listToMaybe= aka safeHead
+  =Data.Maybe.maybeToList=
+- ~Maybe~ a way to avoid writing *partial functions*
+  #+begin_src haskell
+    data Maybe a = Nothing | Just a
+  #+end_src
+- sometimes, to avoid dealing with strings and unword'in in the middle of algorithm
+  we could create a new data type with the correct structure
+  #+begin_src haskell
+    data Context
+      = CtxHeading Natural String
+      | CtxParagraph [String]
+      | CtxUnorderedList [String]
+      | CtxOrderedList [String]
+      | CtxCodeBlock [String]
+  #+end_src
+**** ~Data.Maybe.maybe~
+- takes
+  - a default value
+  - a function to apply to 3rd value if not Nothing
+  - a Maybe value
+- We use it here to return a partially applied (:) function or (id)
+  #+begin_src haskell
+    -- parseLines :: ... -> [Structure]
+    -- context :: Maybe Structure
+    maybe id (:) context (parseLines Nothing rest)
+  #+end_src
+- ME: maybe is like a .OrValue() type of function in java/rust,
+      but here we also use it with partial application
+** 05 Gluing things together
+*** Converting Markup to HTML
+- notice how each module Markup and Html have their own ~Structure~ data type
+- Convert.hs
+  #+begin_src haskell
+import qualified Html
+import qualified Html.Internal as HI
+import qualified Markup
+  #+end_src
+- We take advantage that Html.Structure is a *Semigroup*, and create an empty value.
+  In Html.Internal
+  We also create a function *concatStructure* to concat (<>) the values of [Html.Structure]
+  #+begin_src haskell
+empty_ :: Structure
+empty_ = Structure ""
+
+concatStructure :: [Structure] -> Structure
+concatStructure list =
+  case list of
+    [] -> empty_
+    x : xs -> x <> concatStructure xs
+  #+end_src
+- =Monoid=
+  - using an *empty* value along with (<>) is what a *Monoid* is
+  #+begin_src haskell
+    class Semigroup a => Monoid a where
+          mempty :: a
+    instance Monoid Structure
+      mempty = empty_
+  #+end_src
+  - Implementing a monoid, gives you access to *mconcat*, which does what concatStructure did
+  - ~Sum~ and ~Product~ are instances of =Monoid= due a type cannot be instance of 2 different monoids
+    As integers are instace of (+ 0) and (* 1)
+- =Foldable=
+  - unifies *map* and *mconcat* pattern
+  - *foldMap* is the function you call to apply the function and then (<>)
+  - *mconcat* is just a specialized version of fold for lists
+    #+begin_src haskell
+      fold    :: (Foldable t, Monoid m) => t m -> m
+      mconcat :: Monoid m               => [m] -> m
+    #+end_src
+- Final convert funcion
+  #+begin_src haskell
+convert :: Html.Title -> Markup.Document -> Html.Html
+convert title = Html.html_ title . foldMap convertStructure
+  #+end_src
+*** Working with IO
+- We are goint to support different use cases
+  1) If the user calls the program without arguments, reads/writes to stdin/stdout
+  2) if the user calls the program with 2(two) arguments, takes them as the input/output file
+  3) if OUTPUT already exists, asks for confirmation
+  4) else print usage information
+- Haskell is designed to support *non-strict semantics*, we use *Lazy Evaluation Strategy* (in GHC) to implement it.
+- Lazyness /conflicts/ with the desire of have any type of IO (aka side-effects)
+  #+begin_src haskell
+addWithInput :: Int -> Int
+addWithInput n = readIntFromStdin + 2
+
+main =
+  let result1 = addWithInput 1  -- won't be evaluated until we print
+      result2 = addWithInput 2
+  in
+    print (result2 - result1) -- we ask first for (2)
+  #+end_src
+- There is an *interface*, along with the *type* IO.
+  Requires that in order to /combine/ IO ops, we need to specify an *order*
+- IO is an opaque type
+  - Executing ~IO a~ is different from evaluating it.
+  - Evaluating an ~IO a~ expression is pure. It will always reduce to the same description of a program.
+**** *(>>=)* aka "bind"
+      #+begin_src haskell
+        (>>=) :: IO a -> (a -> IO b) -> b
+
+        getLine >>= (\line -> putStrLn line) -- or
+        getLine >>= putStrLn
+
+        getLine >>= \honorific ->
+          getLIne >>= \name ->
+            putStrLn ("Hello " ++ honorific ++ " " ++ name)
+      #+end_src
+**** *(*>) and (>>)*
+      same thing
+      *> is a slightly more generalized version of >> and can always be used instead
+      >> only exists to avoid breaking backward compatibility
+      It means run the first IO, discard the result then run the second operation
+      #+begin_src haskell
+        (*>) :: IO a -> IO b -> IO b
+        (>>) :: IO a -> IO b -> IO b
+      #+end_src
+**** *pure* and *return*
+/pure/ is a more general version of /return/
+useful when we want ot do some uneffectul computation that depnds on IO
+"lift" a value into IO context, does NOT add any I/O effects
+#+begin_src haskell
+  confirm :: IO Bool
+  confirm =
+    putStrLn "Are you sure? (y/n)" *>
+      getLine >>= \answer ->
+        case answer of
+          "y" -> pure True  -- !
+          "n" -> pure False -- !
+          _ ->
+            putStrLn "Invalid response. use y or n" *>
+              confirm
+      #+end_src
+**** fmap and <$>
+#+begin_src haskell
+  fmap :: (a -> b) -> IO a -> IO b
+#+end_src
+- The unified version of using *>>=* and *pure*
+  #+begin_src haskell
+    getLine >>= \line -> pure (line ++ "!")
+    fmap (\line -> line ++ "!") getLine
+  #+end_src
+**** Functional core, imperative shell
+- Is a pattern
+- In Haskell, we like to keep IO usage minimal, and we like to push it ot the edged of the program.
+- In many programming languages, we might interleave:
+  - reading from the file parsing
+  - writing to the file wiht HTML conversion
+- But we don't mix these here.
+- Especially good pattern to write batch programs
+**** main.hs
+- We use the auxiliary functions confirm/whenIO to write output only when we confirm
+#+begin_src haskell
+  import System.Directory (doesFileExists)
+  import System.Environment (getArgs)
+  -- import System.IO (getContents, readFile, writeFile) -- already imported by Prelude
+  confirm :: IO Bool
+  whenIO :: IO Bool -> IO () -> IO ()
+#+end_src
+**** do
+- provides syntactic sugar for:
+  1) expressions of type *IO ()* aka (*>)
+  2) *let* statement inside it do NOT have *in* (aka let in)
+  3) when using "var <- something" aka (>>=)
+*** Defining a project description
+- https://gilmi.me/blog/post/2021/08/14/hs-core-tools#using-external-packages-in-ghci
+  Using external packages on ghci. Without a project description.
+  > cabal repl --build-depends async --build-depends say
+  > stack exec --package       async --package       say -- ghci
+- initialize
+  > cabal init --libandexe
+  > stack new
+- needs this on HsBlog.Html.Internal.hs, for deriving Semigroup
+  {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+**** .cabal - package metadata
+    - version: most use semver (https://semver.org/), but some use PvP (https://pvp.haskell.org/)
+    - extra-doc-files: README CHANGELOG
+**** .cabal - common common-settings
+    - shared among all targets
+    - default-language: Haskell2010
+      ghc-options: -Wall
+    - later on our targets we can include it by doing *import: common-settings*
+**** .cabal - library
+    - hs-source-dir: where to find the source files
+    - build-depends: packages dependencies
+    - exposed-modules: public modules
+    - other-modules: private modules
+**** .cabal - executable
+    - main-is: where is Main module file
+    - build-depends: we import our library here
+**** cabal.project and stack.yaml
+- additional files to add additional informations on how to build the package
+- /stack.yaml/ is necessary for stack
+  - resolver: snapshot to use for packages and ghc version (eg: lts-18.22)
+  - packages: list of locations of the packages to build, use "- ."
+- /cabal.project/ isn't for cabal
+- build artifacts are on
+  - dist
+  - dist-newstyle
+  - .stack-work
+*** Fancy option parsing
+- We want to add the feature of processing a while directory
+- We could model our program use cases with *data*
+  #+begin_src haskell
+    data Options
+      = ConvertSingle SingleInput SingleOutput
+      | ConvertDir FilePath FilePath
+      deriving (Show)
+
+    data SingleInput
+      = Stdin
+      | InputFile FilePath
+      deriving (Show)
+
+    data SingleOutput
+      = Stdout
+      | OutputFile FilePath
+      deriving (Show)
+  #+end_src
+- We could have used *Maybe FilePath* to encode *SingleInput* and *SingleOutput*,
+  but then we would need to remember what *Nothing* means in each context.
+- New use cases
+  - they will use the command ~convert~ with flags *--input* and *--output*
+  - if *--output* is not supplied it will STDOUT
+  - if *--input* is not supplied it will take STDIN
+  - for a directory it would use ~convert-dir~ command, where input/output are mandatory
+**** <$> fmap
+- allows to "lift" a function (a -> b) to work in a context of (C a -> C -> b)
+- it belongs to the typeclass =Functor=
+  #+begin_src haskell
+    class Functor f where
+      fmap :: (a -> b) -> f a -> f b
+  #+end_src
+- It has the following laws:
+ | Identity    | fmap id = id                    | if we don't change the values, nothing should change                    |
+ | Composition | fmap (f . g) == fmap f . fmap g | composing the lifted functions is the same as composing them after fmap |
+- This won't follow the first law. Haskell doesn't help us make sure the laws are satisfied.
+  #+begin_src haskell
+    mapMaybe :: (a -> b) -> Maybe a -> Maybe b
+    mapMaybe f maybeX = Nothing
+  #+end_src
+** 06 Handing errors and multiple files
+*** Handing errors with Either
+*** Either with IO
+*** Exceptions
+*** Lets code already!
+*** Summary
+** 07 Passing and Environment
+** 08 Writing tests
+** 09 Generating documentation
+** 10 Recap

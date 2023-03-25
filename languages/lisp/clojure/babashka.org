@@ -10,3 +10,50 @@
 - Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
   - As such the code is NOT compiled.
 - Article: https://rattlin.blog/bbgum.html
+* Example: newspod.clj - sqlite3
+#+begin_src clojure
+  #!/usr/bin/env bb
+
+  ;; TODO: gh-actions
+  ;; https://stackoverflow.com/questions/24098792/how-to-force-github-pages-build/61706020#61706020
+
+  (require '[clojure.string :as str])
+  (require '[babashka.tasks :refer [shell]])
+  (require '[cheshire.core :refer [parse-string]])
+  (require '[hiccup.core :refer [html]])
+
+
+  (def URLS "/home/sendai/.newsboat/urls")
+  (def DB "/home/sendai/.newsboat/cache.db")
+
+  ;; TODO: parse "exec:~/" lines
+  ;; TODO: ensure http urls is the only thing returned
+  ;; TODO: get feed title from sqlite3/rss_feed
+  (defn get-feeds []
+    (->> (slurp URLS)
+         (str/split-lines)
+         (filter #(not (str/starts-with? % "#")))
+         (filter #(not (str/starts-with? % "\"")))
+         (filter #(str/includes? % " podcast"))
+         (map #(str/split % #" "))
+         (map first)))
+
+  ;; TODO: content
+  (defn get-episodes [feed]
+    (->> (shell {:out :string} "sqlite3" DB ".mode json"
+                (format "SELECT title, enclosure_url, pubDate
+                           FROM rss_item
+                          WHERE feedUrl = '%s'
+                       ORDER BY pubDate DESC
+                          LIMIT 2"
+                        feed))
+         :out parse-string))
+
+  (defn now []
+    (.format (java.time.ZonedDateTime/now)
+             (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd")))
+
+  (html
+   [:head [:title (format "Newspod %s" (now))]]
+   [:body [:table]])
+#+end_src

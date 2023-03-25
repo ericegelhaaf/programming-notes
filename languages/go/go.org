@@ -44,6 +44,290 @@
   > strip -x
 - TUI Libraries
   https://charm.sh/
+* Standard Library
+- https://pkg.go.dev/std
+  https://pkg.go.dev/strconv
+** archive
+
+| /tar     | implements access to tar archives.                                                                                                                                                                      |
+| /zip     | provides support for reading and writing ZIP archives.                                                                                                                                                  |
+| /bufio   | implements buffered I/O. It wraps an io.Reader or io.Writer object, creating another object (Reader or Writer) that also implements the interface but provides buffering and some help for textual I/O. |
+| /builtin | provides documentation for Go's predeclared identifiers.                                                                                                                                                |
+| /bytes   | implements functions for the manipulation of byte slices.                                                                                                                                               |
+
+** compress
+
+| /bzip2 | implements bzip2 decompression.                                                                                                                                              |
+| /flate | implements the DEFLATE compressed data format, described in RFC 1951.                                                                                                        |
+| /gzip  | implements reading and writing of gzip format compressed files, as specified in RFC 1952.                                                                                    |
+| /lzw   | implements the Lempel-Ziv-Welch compressed data format, described in T. A. Welch, “A Technique for High-Performance Data Compression”, Computer, 17(6) (June 1984), pp 8-19. |
+| /zlib  | implements reading and writing of zlib format compressed data, as specified in RFC 1950.                                                                                     |
+
+** container
+
+| /heap | provides heap operations for any type that implements heap.Interface. |
+| /list | implements a doubly linked list.                                      |
+| /ring | implements operations on circular lists.                              |
+
+** context  - defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.
+** crypto   - collects common cryptographic constants.
+
+| /aes       | implements AES encryption (formerly Rijndael), as defined in U.S. Federal Information Processing Standards Publication 197.                                                 |
+| /cipher    | implements standard block cipher modes that can be wrapped around low-level block cipher implementations.                                                                   |
+| /des       | implements the Data Encryption Standard (DES) and the Triple Data Encryption Algorithm (TDEA) as defined in U.S. Federal Information Processing Standards Publication 46-3. |
+| /dsa       | implements the Digital Signature Algorithm, as defined in FIPS 186-3.                                                                                                       |
+| /ecdh      | implements Elliptic Curve Diffie-Hellman over NIST curves and Curve25519.                                                                                                   |
+| /ecdsa     | implements the Elliptic Curve Digital Signature Algorithm, as defined in FIPS 186-4 and SEC 1, Version 2.0.                                                                 |
+| /ed25519   | implements the Ed25519 signature algorithm.                                                                                                                                 |
+| /elliptic  | implements the standard NIST P-224, P-256, P-384, and P-521 elliptic curves over prime fields.                                                                              |
+| /hmac      | implements the Keyed-Hash Message Authentication Code (HMAC) as defined in U.S. Federal Information Processing Standards Publication 198.                                   |
+| /md5       | implements the MD5 hash algorithm as defined in RFC 1321.                                                                                                                   |
+| /rand      | implements a cryptographically secure random number generator.                                                                                                              |
+| /rc4       | implements RC4 encryption, as defined in Bruce Schneier's Applied Cryptography.                                                                                             |
+| /rsa       | implements RSA encryption as specified in PKCS #1 and RFC 8017.                                                                                                             |
+| /sha1      | implements the SHA-1 hash algorithm as defined in RFC 3174.                                                                                                                 |
+| /sha256    | implements the SHA224 and SHA256 hash algorithms as defined in FIPS 180-4.                                                                                                  |
+| /sha512    | implements the SHA-384, SHA-512, SHA-512/224, and SHA-512/256 hash algorithms as defined in FIPS 180-4.                                                                     |
+| /subtle    | implements functions that are often useful in cryptographic code but require careful thought to use correctly.                                                              |
+| /tls       | partially implements TLS 1.2, as specified in RFC 5246, and TLS 1.3, as specified in RFC 8446.                                                                              |
+| /x509      | implements a subset of the X.509 standard.                                                                                                                                  |
+| /x509/pkix | contains shared, low level structures used for ASN.1 parsing and serialization of X.509 certificates, CRL and OCSP.                                                         |
+
+** database
+
+| /sql        | provides a generic interface around SQL (or SQL-like) databases.                 |
+| /sql/driver | defines interfaces to be implemented by database drivers as used by package sql. |
+
+** debug
+
+| /buildinfo | provides access to information embedded in a Go binary about how it was built.                                                                                |
+| /dwarf     | provides access to DWARF debugging information loaded from executable files, as defined in the DWARF 2.0 Standard at http://dwarfstd.org/doc/dwarf-2.0.0.pdf. |
+| /elf       | implements access to ELF object files.                                                                                                                        |
+| /gosym     | implements access to the Go symbol and line number tables embedded in Go binaries generated by the gc compilers.                                              |
+| /macho     | implements access to Mach-O object files.                                                                                                                     |
+| /pe        | implements access to PE (Microsoft Windows Portable Executable) files.                                                                                        |
+| /plan9obj  | implements access to Plan 9 a.out object files.                                                                                                               |
+
+** embed    - provides access to files embedded in the running Go program.
+** encoding - defines interfaces shared by other packages that convert data to and from byte-level and textual representations.
+
+| /ascii85 | implements the ascii85 data encoding as used in the btoa tool and Adobe's PostScript and PDF document formats. |
+| /asn1    | implements parsing of DER-encoded ASN.1 data structures, as defined in ITU-T Rec X.690.                        |
+| /base32  | implements base32 encoding as specified by RFC 4648.                                                           |
+| /base64  | implements base64 encoding as specified by RFC 4648.                                                           |
+| /binary  | implements simple translation between numbers and byte sequences and encoding and decoding of varints.         |
+| /csv     | reads and writes comma-separated values (CSV) files.                                                           |
+| /gob     | manages streams of gobs - binary values exchanged between an Encoder (transmitter) and a Decoder (receiver).   |
+| /hex     | implements hexadecimal encoding and decoding.                                                                  |
+| /json    | implements encoding and decoding of JSON as defined in RFC 7159.                                               |
+| /pem     | implements the PEM data encoding, which originated in Privacy Enhanced Mail.                                   |
+| /xml     | implements a simple XML 1.0 parser that understands XML name spaces.                                           |
+
+** errors   - implements functions to manipulate errors.
+** expvar   - provides a standardized interface to public variables, such as operation counters in servers.
+** flag     - implements command-line flag parsing.
+** fmt      - implements formatted I/O with functions analogous to C's printf and scanf.
+** go
+
+| /ast              | declares the types used to represent syntax trees for Go packages.                                                                                                                             |
+| /build            | gathers information about Go packages.                                                                                                                                                         |
+| /build/constraint | implements parsing and evaluation of build constraint lines.                                                                                                                                   |
+| /constant         | implements Values representing untyped Go constants and their corresponding operations.                                                                                                        |
+| /doc              | extracts source code documentation from a Go AST.                                                                                                                                              |
+| /doc/comment      | implements parsing and reformatting of Go doc comments, (documentation comments), which are comments that immediately precede a top-level declaration of a package, const, func, type, or var. |
+| /format           | implements standard formatting of Go source.                                                                                                                                                   |
+| /importer         | provides access to export data importers.                                                                                                                                                      |
+| /parser           | implements a parser for Go source files.                                                                                                                                                       |
+| /printer          | implements printing of AST nodes.                                                                                                                                                              |
+| /scanner          | implements a scanner for Go source text.                                                                                                                                                       |
+| /token            | defines constants representing the lexical tokens of the Go programming language and basic operations on tokens (printing, predicates).                                                        |
+| /types            | declares the data types and implements the algorithms for type-checking of Go packages.                                                                                                        |
+
+** hash     - provides interfaces for hash functions.
+
+| adler32 | implements the Adler-32 checksum.                                                                                      |
+| crc32   | implements the 32-bit cyclic redundancy check, or CRC-32, checksum.                                                    |
+| crc64   | implements the 64-bit cyclic redundancy check, or CRC-64, checksum.                                                    |
+| fnv     | implements FNV-1 and FNV-1a, non-cryptographic hash functions created by Glenn Fowler, Landon Curt Noll, and Phong Vo. |
+| maphash | provides hash functions on byte sequences.                                                                             |
+
+** html     - provides functions for escaping and unescaping HTML text.
+
+| /template | implements data-driven templates for generating HTML output safe against code injection. |
+
+** image    - implements a basic 2-D image library.
+
+| /color         | implements a basic color library.            |
+| /color/palette | provides standard color palettes.            |
+| /draw          | provides image composition functions.        |
+| /gif           | implements a GIF image decoder and encoder.  |
+| /jpeg          | implements a JPEG image decoder and encoder. |
+| /png           | implements a PNG image decoder and encoder.  |
+
+** index
+
+| suffixarray | implements substring search in logarithmic time using an in-memory suffix array. |
+
+** io       - provides basic interfaces to I/O primitives.
+
+| fs     | defines basic interfaces to a file system. |
+| ioutil | implements some I/O utility functions.     |
+
+** log      - implements a simple logging package.
+
+| syslog | provides a simple interface to the system log service. |
+
+** math     - provides basic constants and mathematical functions.
+
+| /big   | implements arbitrary-precision arithmetic (big numbers).                                       |
+| /bits  | implements bit counting and manipulation functions for the predeclared unsigned integer types. |
+| /cmplx | provides basic constants and mathematical functions for complex numbers.                       |
+| /rand  | implements pseudo-random number generators unsuitable for security-sensitive work.             |
+
+** mime     - implements parts of the MIME spec.
+
+| /multipart       | implements MIME multipart parsing, as defined in RFC 2046.     |
+| /quotedprintable | implements quoted-printable encoding as specified by RFC 2045. |
+
+** net      - provides a portable interface for network I/O, including TCP/IP, UDP, domain name resolution, and Unix domain sockets.
+
+| /http           | provides HTTP client and server implementations.                                                           |
+| /http/cgi       | implements CGI (Common Gateway Interface) as specified in RFC 3875.                                        |
+| /http/cookiejar | implements an in-memory RFC 6265-compliant http.CookieJar.                                                 |
+| /http/fcgi      | implements the FastCGI protocol.                                                                           |
+| /http/httptest  | provides utilities for HTTP testing.                                                                       |
+| /http/httptrace | provides mechanisms to trace the events within HTTP client requests.                                       |
+| /http/httputil  | provides HTTP utility functions, complementing the more common ones in the net/http package.               |
+| /http/pprof     | serves via its HTTP server runtime profiling data in the format expected by the pprof visualization tool.  |
+| /mail           | implements parsing of mail messages.                                                                       |
+| /netip          | defines an IP address type that's a small value type.                                                      |
+| /rpc            | provides access to the exported methods of an object across a network or other I/O connection.             |
+| /rpc/jsonrpc    | implements a JSON-RPC 1.0 ClientCodec and ServerCodec for the rpc package.                                 |
+| /smtp           | implements the Simple Mail Transfer Protocol as defined in RFC 5321.                                       |
+| /textproto      | implements generic support for text-based request/response protocols in the style of HTTP, NNTP, and SMTP. |
+| /url            | parses URLs and implements query escaping.                                                                 |
+
+** os       - provides a platform-independent interface to operating system functionality.
+
+| /exec   | runs external commands.                    |
+| /signal | implements access to incoming signals.     |
+| /user   | allows user account lookups by name or id. |
+
+** path     - implements utility routines for manipulating slash-separated paths.
+
+| /filepath | implements utility routines for manipulating filename paths in a way compatible with the target operating system-defined file paths. |
+
+** plugin   - implements loading and symbol resolution of Go plugins.
+** reflect  - implements run-time reflection, allowing a program to manipulate objects with arbitrary types.
+** regexp   - implements regular expression search.
+
+| /syntax | parses regular expressions into parse trees and compiles parse trees into programs. |
+
+** runtime  - contains operations that interact with Go's runtime system, such as functions to control goroutines.
+
+| /cgo      | contains runtime support for code generated by the cgo tool.                                     |
+| /coverage |                                                                                                  |
+| /debug    | contains facilities for programs to debug themselves while they are running.                     |
+| /metrics  | provides a stable interface to access implementation-defined metrics exported by the Go runtime. |
+| /pprof    | writes runtime profiling data in the format expected by the pprof visualization tool.            |
+| /race     | implements data race detection logic.                                                            |
+| /trace    | contains facilities for programs to generate traces for the Go execution tracer.                 |
+
+** sort	    - provides primitives for sorting slices and user-defined collections.
+** strconv  - implements conversions to and from string representations of basic data types.
+** strings  - implements simple functions to manipulate UTF-8 encoded strings.
+** sync	    - provides basic synchronization primitives such as mutual exclusion locks.
+
+| /atomic | provides low-level atomic memory primitives useful for implementing synchronization algorithms. |
+
+** syscall  - contains an interface to the low-level operating system primitives.
+
+| /js | gives access to the WebAssembly host environment when using the js/wasm architecture. |
+
+** testing  - provides support for automated testing of Go packages.
+
+| /fstest | implements support for testing implementations and users of file systems. |
+| /iotest | implements Readers and Writers useful mainly for testing.                 |
+| /quick  | implements utility functions to help with black box testing.              |
+
+** text
+
+| /scanner        | provides a scanner and tokenizer for UTF-8-encoded text.                                                         |
+| /tabwriter      | implements a write filter (tabwriter.Writer) that translates tabbed columns in input into properly aligned text. |
+| /template       | implements data-driven templates for generating textual output.                                                  |
+| /template/parse | builds parse trees for templates as defined by text/template and html/template.                                  |
+
+** time	    - provides functionality for measuring and displaying time.
+
+| /tzdata | provides an embedded copy of the timezone database. |
+
+** unicode  - provides data and functions to test some properties of Unicode code points.
+
+| /utf16 | implements encoding and decoding of UTF-16 sequences.                |
+| /utf8  | implements functions and constants to support text encoded in UTF-8. |
+
+** unsafe   - contains operations that step around the type safety of Go programs.
+** internal
+
+| /abi                      |                                                                                                                                                                          |
+| /buildcfg                 | buildcfg provides access to the build configuration described by the current environment.                                                                        |
+| /bytealg                  |                                                                                                                                                                          |
+| /cfg                      | cfg holds configuration shared by the Go command and internal/testenv.                                                                                           |
+| /coverage                 |                                                                                                                                                                          |
+| /coverage/calloc          |                                                                                                                                                                          |
+| /coverage/cformat         |                                                                                                                                                                          |
+| /coverage/cmerge          |                                                                                                                                                                          |
+| /coverage/decodecounter   |                                                                                                                                                                          |
+| /coverage/decodemeta      |                                                                                                                                                                          |
+| /coverage/encodecounter   |                                                                                                                                                                          |
+| /coverage/encodemeta      |                                                                                                                                                                          |
+| /coverage/pods            |                                                                                                                                                                          |
+| /coverage/rtcov           |                                                                                                                                                                          |
+| /coverage/slicereader     |                                                                                                                                                                          |
+| /coverage/slicewriter     |                                                                                                                                                                          |
+| /coverage/stringtab       |                                                                                                                                                                          |
+| /coverage/uleb128         |                                                                                                                                                                          |
+| /cpu                      | cpu implements processor feature detection used by the Go standard library.                                                                                      |
+| /dag                      | dag implements a language for expressing directed acyclic graphs.                                                                                                |
+| /diff                     |                                                                                                                                                                          |
+| /fmtsort                  | fmtsort provides a general stable ordering mechanism for maps, on behalf of the fmt and text/template packages.                                                  |
+| /fuzz                     | fuzz provides common fuzzing functionality for tests built with "go test" and for programs that use fuzzing functionality in the testing package.                |
+| /goarch                   | package goarch contains GOARCH-specific constants.                                                                                                                       |
+| /godebug                  | godebug makes the settings in the $GODEBUG environment variable available to other packages.                                                                     |
+| /goexperiment             | goexperiment implements support for toolchain experiments.                                                                                                       |
+| /goos                     | package goos contains GOOS-specific constants.                                                                                                                           |
+| /goroot                   |                                                                                                                                                                          |
+| /goversion                |                                                                                                                                                                          |
+| /intern                   | intern lets you make smaller comparable values by boxing a larger comparable value (such as a 16 byte string header) down into a globally unique 8 byte pointer. |
+| /itoa                     |                                                                                                                                                                          |
+| /lazyregexp               | lazyregexp is a thin wrapper over regexp, allowing the use of global regexp variables without forcing them to be compiled at init.                               |
+| /lazytemplate             | lazytemplate is a thin wrapper over text/template, allowing the use of global template variables without forcing them to be parsed at init.                      |
+| /nettrace                 | nettrace contains internal hooks for tracing activity in the net package.                                                                                        |
+| /obscuretestdata          | obscuretestdata contains functionality used by tests to more easily work with testdata that must be obscured primarily due to golang.org/issue/34986.            |
+| /oserror                  | oserror defines errors values used in the os package.                                                                                                            |
+| /pkgbits                  | pkgbits implements low-level coding abstractions for Unified IR's export data format.                                                                            |
+| /platform                 |                                                                                                                                                                          |
+| /poll                     | poll supports non-blocking I/O on file descriptors with polling.                                                                                                 |
+| /profile                  | profile provides a representation of github.com/google/pprof/proto/profile.proto and methods to encode/decode/merge profiles in this format.                     |
+| /race                     | race contains helper functions for manually instrumenting code for the race detector.                                                                            |
+| /reflectlite              | reflectlite implements lightweight version of reflect, not using any package except for "runtime" and "unsafe".                                                  |
+| /safefilepath             | safefilepath manipulates operating-system file paths.                                                                                                            |
+| /saferio                  | saferio provides I/O functions that avoid allocating large amounts of memory unnecessarily.                                                                      |
+| /singleflight             | singleflight provides a duplicate function call suppression mechanism.                                                                                           |
+| /syscall/execenv          |                                                                                                                                                                          |
+| /syscall/unix             |                                                                                                                                                                          |
+| /syscall/windows          |                                                                                                                                                                          |
+| /syscall/windows/registry | registry provides access to the Windows registry.                                                                                                                |
+| /syscall/windows/sysdll   | sysdll is an internal leaf package that records and reports which Windows DLL names are used by Go itself.                                                       |
+| /sysinfo                  | sysinfo implements high level hardware information gathering that can be used for debugging or information purposes.                                             |
+| /testenv                  | testenv provides information about what functionality is available in different testing environments run by the Go team.                                         |
+| /testlog                  | testlog provides a back-channel communication path between tests and package os, so that cmd/go can see which environment variables and files a test consults.   |
+| /testpty                  | testpty is a simple pseudo-terminal package for Unix systems, implemented by calling C functions via cgo.                                                        |
+| /trace                    |                                                                                                                                                                          |
+| /txtar                    | txtar implements a trivial text-based file archive format.                                                                                                       |
+| /types/errors             |                                                                                                                                                                          |
+| /unsafeheader             | unsafeheader contains header declarations for the Go runtime's slice and string implementations.                                                                 |
+| /xcoff                    | xcoff implements access to XCOFF (Extended Common Object File Format) files.                                                                                     |
 * Personalities
 ** Rob Pike
 https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd

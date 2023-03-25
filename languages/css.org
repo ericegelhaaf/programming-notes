@@ -8,7 +8,7 @@
 - CSS Grid https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/CSS_Grid_Layout_and_Accessibility
 - CSS Grid examples and patterns https://gridbyexample.com/
 - Logical Properties https://www.youtube.com/watch?v=cnwOfaE5GEk
-* Book: 2018 | Learning Web Design | Jennifer Robbins | O'Reilly
+* Book: 18 | Learning Web Design | Jennifer Robbins | O'Reilly
 https://learningwebdesign.com/5e/materials/
 ** 18 Transitions, Transforms, and Animation
 *** CSS Transitions (transition-property)
@@ -105,7 +105,7 @@ https://learningwebdesign.com/5e/materials/
   - table columns
   - table column groups
 *** CSS Animation
-* Book: 2018 | CSS In Depth        | Keith J. Grant   | Manning
+* Book: 18 | CSS In Depth        | Keith J. Grant   | Manning
   code: https://github.com/CSSInDepth/css-in-depth
   http://howtocenterincss.com/
   OOCSS http://www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code
@@ -130,7 +130,7 @@ https://learningwebdesign.com/5e/materials/
     Element size = width/height + padding + border + margin
   - box-sizing: border-box
     Element-size = width/height + margin
-** Part 1 - Reviewing the fundamentals
+** > Part 1 - Reviewing the fundamentals
 - Topics: Cascade, relative units, box model
 ** 01 Cascade, specificity, and inheritance
 *** Specificity
@@ -256,7 +256,7 @@ https://learningwebdesign.com/5e/materials/
 *** Unitless numbers and "line-height"
  - Properties that accept unitless values
    line-height, z-index, font-weight (700=bold 400=normal)
-   - Those that are "lengths" can cause issue if calculated with a unit and inherited
+n   - Those that are "lengths" can cause issue if calculated with a unit and inherited
  - Length: a value that denotes a distance measurement
    1) Absolute: with a unit
    2) Relative: unitless
@@ -423,7 +423,7 @@ https://learningwebdesign.com/5e/materials/
      margin-top: 0; /* reset an unwanted margin */
    }
    #+end_src
-** Part 2 - Mastering layout
+** > Part 2 - Mastering layout
 ** 04 Making sense of floats
  - NOT originally intended to construct page layouts.
  - A *float* pulls an element (often an image) at one side of its container,
@@ -542,16 +542,16 @@ https://learningwebdesign.com/5e/materials/
  - Introduces 12 new properties to CSS (included some shorthands)
 *** Flexbox Principles
  - ~Flex Container~ = *display: flex*
-   ~Flex Items~ (are he childrens)
+   ~Flex Items~ (are the childrens)
  - TIP: there is also *display: inline-flex*
    - Won't grow auto to 100% width
    - Like inline-block, it flows inline, with other inline elements
  - ~Main Axis~  (x) items are placed along it (from main-start to main-end)
  - ~Cross Axis~ (y) from top to bottom (cross-start to cross-end)
  - Older browsers would use, so you might want to use both. A browser ignores declaration it doesn't understand.
-   display: -ms-flexbox;
-   display: -webkit-flex;
-   display: flex;
+   *display*: -ms-flexbox;
+   *display*: -webkit-flex;
+   *display*: flex;
  - Recommended to autoprefix https://github.com/postcss/autoprefixer
 **** Example
  - <ul> as the flex container
@@ -559,7 +559,7 @@ https://learningwebdesign.com/5e/materials/
  - ul/li/a
    display block  would make the padding+content  add to the parent
    display inline would make only the line height add to the parent
- - margin-left: auto
+ - *margin-left*: auto
    will fill the available space (push it to the right)
 *** Flex item sizes
  - Instead margin for space between items
@@ -567,12 +567,12 @@ https://learningwebdesign.com/5e/materials/
    - Example: Two columns, each column 2/3 and 1/3
      - flex: 2
      - flex: 1
-   - Is a shorthand for: flex-grow|shrink(1)|basis(0%)
-     - flex-grow:   (=0) it will NOT   grow beyond the basis,     (>0) it will grow beyond, at N speed
-     - flex-shrink: (=0) it will NOT shrink to prevent overflows, (>0) it will shrink, at N speed
-     - flex-basis: (px,ems,%,auto) defines the *starting point* for the size of an element, initial "main size"
-*** Flex direction
- - flex-direction: row(default) | column | row-reverse | column-reverse
+   - Is a shorthand for: *flex-grow|shrink(1)|basis(0%)*
+     - *flex-grow*   (=0) it will NOT grow beyond the basis,       (>0) it will grow beyond, at N speed
+     - *flex-shrink* (=0) it will NOT shrink to prevent overflows, (>0) it will shrink, at N speed
+     - *flex-basis*  (px,ems,%,auto) defines the *starting point* for the size of an element, initial "main size"
+*** =flex-direction=
+ - *flex-direction*: row(default) | column | row-reverse | column-reverse
    On container. Shift the direction of the axes
  - PROBLEM: On our example, the <sidebar> elements will NOT grow vertically if the <main> did
  - SOLUTION: nested flexboxes for he sidebar, in the column direction
@@ -612,15 +612,19 @@ https://learningwebdesign.com/5e/materials/
 |                 |            | space-between |                                        |
 |                 |            | space-around  |                                        |
 **** Item props
-- flex-grow flex-shrink flex-basis flex
-| align-self | *auto*     | aligned on the cross axis |
-|            | center     | (override of align-items) |
-|            | flex-start |                           |
-|            | flex-end   |                           |
-|            | stretch    |                           |
-|            | baseline   |                           |
-|------------+------------+---------------------------|
-| order      | <int>      | moves to position         |
+| flex-grow   |            |                           |
+| flex-shrink |            |                           |
+| flex-basis  |            |                           |
+| flex        |            |                           |
+|-------------+------------+---------------------------|
+| align-self  | *auto*     | aligned on the cross axis |
+|             | center     | (override of align-items) |
+|             | flex-start |                           |
+|             | flex-end   |                           |
+|             | stretch    |                           |
+|             | baseline   |                           |
+|-------------+------------+---------------------------|
+| order       | <int>      | moves to position         |
 **** Example:
  - TIP: using <span> instead of <div> might make the site more accesible (? in failure of css load
  - It uses both *center* on both axes (justify-content, align-items)
@@ -1148,8 +1152,8 @@ https://learningwebdesign.com/5e/materials/
                    coffe-beans-medium.jpg 800w,
                    coffe-beans.jog 1280w" />
     #+end_src
-** Part 3 - CSS at scale
-** Part 4 - Advanced topics
+** > Part 3 - CSS at scale
+** > Part 4 - Advanced topics
 ** 11 Backgrounds, shadows, and blend modes
   box shadows and text *shadows*
   sizing and positioning *background images*
@@ -1390,7 +1394,7 @@ https://learningwebdesign.com/5e/materials/
     31.2px * 1.4  = 43.68px
     Aka 6px above and 6px below the text
 - You can use *inline* or *flex* to show a line of items. Use a proper thick line-height to avoid overlapping on wrap.
-* Book: 2021 | CSS Master          | Tiffany B. Brown | Sitepoint
+* Book: 21 | CSS Master          | Tiffany B. Brown | Sitepoint
 ** 5 Layouts
  - in CSS everything is a box,
    browsers generate 1 or more box for element

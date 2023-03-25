@@ -1,3 +1,4 @@
+- Haskell Projects Playlist https://www.youtube.com/watch?v=qbDQdXfcaO8&list=PLyQXlWxYAh8_9_Q-XeyIF4CmQbE9b0Oc0
 - Streamers https://github.com/chiroptical/declarative-programming-streams
 - https://github.com/hzlmn/haskell-must-watch
 - https://github.com/hellerve/programming-talks#haskell
@@ -56,7 +57,7 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
     https://www.youtube.com/watch?v=JJv74IJUp4E
   - NYC Haskell User's Group
     https://www.youtube.com/channel/UCzNYHE7Kj6pBqq5h8LG9Zcg
-* 2013 | Adventure with Types | Simon Peyton
+* 13 | Adventure with Types  | Simon Peyton
   - Simon Peyton Jones Compiling without continuations
     https://www.youtube.com/watch?v=qx5NZmrFnvs
   - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FC_in_GHC_July13.pdf
@@ -150,13 +151,13 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
       data Pair a    = P a a
       data AnnPair a = AP String a a
     #+end_src
-* 2017 | What is a Monad?     | Computerphile
+* 17 | What is a Monad?      | Computerphile
 https://www.youtube.com/watch?v=t1e8gqXLbsU
   - Maybe, >>=, do, return
   - A way to handle failure and """unwrap""" a series of Maybe operations
   - "A monad is some kind of type constructor like Maybe or ... together with 2 functions (return, >>=)"
   - Works with other "effects"
-* 2018 | HaskellRank          | tsoding
+* 18 | HaskellRank           | tsoding
   playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
 ** DONE HackerRank in Haskell
 - interact :: (String -> String) -> IO ()
@@ -263,19 +264,20 @@ solve (k:xs) =
 - You can compare numbers, or lists. But for special orders.
   compare :: Ord a => a -> a -> Ordering
   map compare [1,3,4]
-- on basically adapts the first func with the second
+- ~on~ basically adapts the first func with the second
   on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
 #+begin_src haskell
--- :m + Data.List
-import Data.List     -- For sort
-import Data.Function -- For on
-sortBy (\x y -> compare (length x) (length y)) [[1,2,3,4],[2,2],[0,0,0,0,0,0,0]]
-sortBy (compare `on` length)                   [[1,2,3,4],[2,2],[0,0,0,0,0,0,0]]
--- => [[2,2],[1,2,3,4],[0,0,0,0,0,0,0]]
-sortBy (compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
-reverse $ sortBy (compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
-sortBy (flip compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
--- => [[1],[3],[4,4,4],[5,5,5]]
+  -- :m + Data.List
+  import Data.List     -- For sort
+  import Data.Function -- For on
+
+  sortBy (\x y -> compare (length x) (length y)) [[1,2,3,4],[2,2],[0,0,0,0,0,0,0]]
+  sortBy (compare `on` length)                   [[1,2,3,4],[2,2],[0,0,0,0,0,0,0]]
+  -- => [[2,2],[1,2,3,4],[0,0,0,0,0,0,0]]
+  sortBy (compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
+  reverse $ sortBy (compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
+    sortBy (flip compare `on` length) $ group $ sort [1,4,4,4,5,5,5,3]
+  -- => [[1],[3],[4,4,4],[5,5,5]]
 #+end_src
 ** DONE Solving Russian Calendar Problems in Haskell
 - sum, printf (alternative to ++)
@@ -294,7 +296,7 @@ normDay = printf "13.09.%d"
 - a type called ~Maybe~ (Just, Nothing)
   a function ~maybe~ to unwrap it
 - replicateM to perform a task Nth times and return in an array
-#+begin_src haskell
+  #+begin_src haskell
 import Control.Monad -- for replicateM
 
 excludeNth :: Int -> [a] -> [a]
@@ -366,7 +368,7 @@ pp = putStrLn . unlines . map (unwords . map show)
 #+end_src
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
-* 2019 | From Haskell to Rust?           | Michael Snoyman
+* 19 | From Haskell to Rust? | Michael Snoyman
 https://www.youtube.com/watch?v=HKXmEFvsi6M
 - Creator of Yesod/Stack
 - VP at "FP Complete"

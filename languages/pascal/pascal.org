@@ -5,95 +5,124 @@
 - Game engine https://castle-engine.io/
 - raytracer turbo-pascal https://github.com/Postrediori/Pascal-Raytracer
 
+* Compile directives
+{$mode-objfpc}{$H+}{$J-} // use this line in all modern sources//
+{$scopedenums on}        // enums not on global unit//
+{$R+}                    // range checking on - nice for debugging//
+{$apptype CONSOLE}       // both are important distinction for Windows application
+{$apptype GUI}
+* Types
+- Enumerated types
+  #+begin_src opascal
+    type TAnimalKind = (akDuck, akCat, akDog);
+  #+end_src
+- Sets (bit-fields internally), see functions (Include, Exclude)
+  #+begin_src opascal
+    TAnimals = set of TAnimalKind;
+  #+end_src
+- Ordinal?
+  #+begin_src opascal
+    type
+       TMyNumber = 0..9;
+  #+end_src
+- Arrays, see the High/Low function
+  #+begin_src opascal
+    array [0..9] of string;
+    array [1..10] of string;
+    array [TAnimalKind] of string;
+  #+end_src
+- records
+  #+begin_src opascal
+  #+end_src
+- class
+  #+begin_src opascal
+    type
+       TMyClass = class
+          I, Square: Integer;
+       end;
+    var
+       List: TMyClassList;
+    begin
+       List := TMyClassList.Create(true); // true = owns children
+       try
+       finally
+          FreeAndNil(List);
+       end;
+    end.
+  #+end_src
+- generic list
+  #+begin_src opascal
+    uses
+       SysUtils, FGL;
+    type
+       TMyClassList = specialize TFPGObjectList<TMyClass>;
+  #+end_src
 * Standard Library (FreePascal)
   https://wiki.freepascal.org/Package_List
-| aspell        | Aspell header unit.                                                                                                        |
-| bfd           | Header to GNU Binary File Descriptor library (part of binutils)                                                            |
-| cdrom         | A linux/windows unit to detect cdrom drives, and get a list of TOC entries (Linux version=Ancient?)                        |
-| chm           | .CHM helpfile reader/writer package. Used for textmode IDE, fpdoc, lazarus chmhelp component/package.                      |
-| dbus          | Headers for dbus inter-process communication library. See also the FPC and DBus article                                    |
-| fcl-async     | Provides Unix-only units for asynchronous input/output.                                                                    |
-| fcl-base      | Contains a number of units that are either really "base" functionality or more misc stand-alone units.                     |
-| fcl-extra     | FCL former fcl-base parts with many dependancies. Currently Daemon/service unit "daemonapp".                               |
-| fcl-fpcunit   | FCL FPCUNIT testing framework                                                                                              |
-| fcl-json      | A JSON (Javascript Object Notation) implementation                                                                         |
-| fcl-net       | Networking parts of the FCL, including the former netdb. DNS resolving                                                     |
-| fcl-passrc    | Units for dealing with Pascal source files                                                                                 |
-| fcl-process   | Provides an easy way to start and manipulate the running of other programs (processes) by your application.                |
-| fcl-registry  | Provides access to the registry                                                                                            |
-| fcl-res       | Provides resource handling for various executable formats                                                                  |
-| fcl-web       | A server side web system for FPC                                                                                           |
-| fcl-xml       | XML, XHTML and HTML sax based parsing, related DOM units and writers.                                                      |
-| fftw          | FFTW. Fastest Fourier Transform in the West library (so apparantly the Eastern one is faster?)                             |
-| fpindexer     | Text, Pascal, HTML, database indexer with database/flat file backend.                                                      |
-| fpmkunit      | Linkable parts of fpmake and fppkg subsystem                                                                               |
-| fuse          | Bindings for libfuse, a library of a daemon that allows implementations of filesystem(-mapping)s in userspace              |
-| gdbint        | Interface to gdblib. (static linking to GDB), for the IDE.                                                                 |
-| gmp           | interface to libGMP (GNU Multiple Precision Arithmetic Library, library for handling "big" numbers)                        |
-| graph         | Implementation of Graph unit compatible to that one originally available with TP/BP                                        |
-| hash          | Contains implementations for crc, md5, NTLM (1?) and, under Linux, crypt. Crypt might be better used from pkg "user"       |
-| hermes        | Port of the "hermes" library. Graphics related                                                                             |
-| httpd13       | A translation of the Apache 1.3.x headers to develop modules.                                                              |
-| httpd20       | A translation of the Apache 2.0.x headers to develop modules.                                                              |
-| httpd22       | A translation of the Apache 2.2.x headers to develop modules.                                                              |
-| ibase         | Interbase and Firebird headers                                                                                             |
-| iconvenc      | A header translation of the iconv library headers.                                                                         |
-| ldap          | Headers for OpenLDAP An implementation of the Lightweight Directory Access Protocol. See OpenLDAP Homepage                 |
-| libc          | Deprecated Kylix compatibility lib. Linux/x86 only. See libc unit                                                          |
-| libcurl       | A header translation of the libcurl library headers                                                                        |
-| libxml2       | Headers for Libxml2, the XML C parser and toolkit developed for the Gnome project. See libxml2 Homepage                    |
-| modplupg      | headers for modplug decoder. see sourceforge page ModPlug XMMS Plugin                                                      |
-| newt          | Erik Troan's newt text-mode windowing toolkit                                                                              |
-| numlib        | Numeric math lib (TP dialect) from TU/E.                                                                                   |
-| objcrtl       | A package that is enabled for Darwin/i386/x86_64/arm but not for PPC/PPC64. "Objective-C Runtime-Library"                  |
-| OpenCL        | Headers for Open Computing Language                                                                                        |
-| openssl       | Headers for openssl, a secure sockets library.                                                                             |
-| pcap          | Headers for the Packet Capture library                                                                                     |
-| proj4         | Headers for Proj.4 a Cartographic Projections Library. See Homepage                                                        |
-| pthreads      | Headers for pthreads unix threading libraries.                                                                             |
-| pxlib         | A library to read and write Paradox DB files                                                                               |
-| regexpr       | Regex (regular expression) engine                                                                                          |
-| rexx          | Interface to REXX SAA headers allowing to use Pascal code in REXX scripts                                                  |
-| symbolic      | Expression parser with minimal symbolic manipulation                                                                       |
-| syslog        | Provides an interface to the Unix system logger Daemon                                                                     |
-| univint       | Mac OS X interfaces (Carbon, CoreServices; CoreFoundation, CoreAudio, CoreGraphics, CoreType, CoreVideo, AudioUnits, ...). |
-| unixutil      | Some old kylix wrapper. Delete?                                                                                            |
-| users         | Various routines to work with Unix users and groups                                                                        |
-| utmp          | Various routines to work with Unix /var/run/utmp, the unix login logfile                                                   |
-| uuid          | A basic libuuid header.                                                                                                    |
-| winceunits    | WinCE API                                                                                                                  |
-| winunits-base | Additional windows units. Mostly Delphi compat (activex, comobj)                                                           |
-| winunits-jedi | Very complete winapi header translation from Jedi                                                                          |
-| zorba         | Zorba XQuery Processor.                                                                                                    |
-** Alternative Platforms
-| amunits   | Amiga related units (68k?)                                           |
-| gbaunits  | Gameboy Advance libraries                                            |
-| libndsfpc | Nintendo DS libraries                                                |
-| os2units  | Interfaces to various libraries available under OS/2 and eComStation |
-| palmunits | Palm OS SDK 4.0                                                      |
+| aspell        | Aspell header unit.                                                                                                  |
+| cdrom         | A linux/windows unit to detect cdrom drives, and get a list of TOC entries (Linux version=Ancient?)                  |
+| chm           | .CHM helpfile reader/writer package. Used for textmode IDE, fpdoc, lazarus chmhelp component/package.                |
+| fcl-base      | Contains a number of units that are either really "base" functionality or more misc stand-alone units.               |
+| fcl-extra     | FCL former fcl-base parts with many dependancies. Currently Daemon/service unit "daemonapp".                         |
+| fcl-fpcunit   | FCL FPCUNIT testing framework                                                                                        |
+| fcl-passrc    | Units for dealing with Pascal source files                                                                           |
+| fcl-registry  | Provides access to the registry                                                                                      |
+| fcl-res       | Provides resource handling for various executable formats                                                            |
+| fftw          | FFTW. Fastest Fourier Transform in the West library (so apparantly the Eastern one is faster?)                       |
+| fpindexer     | Text, Pascal, HTML, database indexer with database/flat file backend.                                                |
+| fpmkunit      | Linkable parts of fpmake and fppkg subsystem                                                                         |
+| gdbint        | Interface to gdblib. (static linking to GDB), for the IDE.                                                           |
+| gmp           | interface to libGMP (GNU Multiple Precision Arithmetic Library, library for handling "big" numbers)                  |
+| graph         | Implementation of Graph unit compatible to that one originally available with TP/BP                                  |
+| hash          | Contains implementations for crc, md5, NTLM (1?) and, under Linux, crypt. Crypt might be better used from pkg "user" |
+| hermes        | Port of the "hermes" library. Graphics related                                                                       |
+| ibase         | Interbase and Firebird headers                                                                                       |
+| iconvenc      | A header translation of the iconv library headers.                                                                   |
+| ldap          | Headers for OpenLDAP An implementation of the Lightweight Directory Access Protocol. See OpenLDAP Homepage           |
+| libc          | Deprecated Kylix compatibility lib. Linux/x86 only. See libc unit                                                    |
+| modplupg      | headers for modplug decoder. see sourceforge page ModPlug XMMS Plugin                                                |
+| newt          | Erik Troan's newt text-mode windowing toolkit                                                                        |
+| numlib        | Numeric math lib (TP dialect) from TU/E.                                                                             |
+| OpenCL        | Headers for Open Computing Language                                                                                  |
+| proj4         | Headers for Proj.4 a Cartographic Projections Library. See Homepage                                                  |
+| pxlib         | A library to read and write Paradox DB files                                                                         |
+| regexpr       | Regex (regular expression) engine                                                                                    |
+| rexx          | Interface to REXX SAA headers allowing to use Pascal code in REXX scripts                                            |
+| symbolic      | Expression parser with minimal symbolic manipulation                                                                 |
+| unixutil      | Some old kylix wrapper. Delete?                                                                                      |
+| winceunits    | WinCE API                                                                                                            |
+| winunits-base | Additional windows units. Mostly Delphi compat (activex, comobj)                                                     |
+| winunits-jedi | Very complete winapi header translation from Jedi                                                                    |
+| zorba         | Zorba XQuery Processor.                                                                                              |
+** File Formats
+| libxml2  | Headers for Libxml2, the XML C parser and toolkit.                    |
+| fcl-xml  | XML, XHTML and HTML sax based parsing, related DOM units and writers. |
+| fcl-json | A JSON (Javascript Object Notation) implementation                    |
+| pcap     | Headers for the Packet Capture library                                |
+| openssl  | Headers for openssl, a secure sockets library.                        |
+** Web
+| fcl-async | Provides Unix-only units for asynchronous input/output.       |
+| fcl-web   | A server side web system for FPC                              |
+| libcurl   | A header translation of the libcurl library headers           |
+| httpd13   | A translation of the Apache 1.3.x headers to develop modules. |
+| httpd20   | A translation of the Apache 2.0.x headers to develop modules. |
+| httpd22   | A translation of the Apache 2.2.x headers to develop modules. |
+| uuid      | A basic libuuid header.                                       |
+** Linux
+| fcl-process | Provides an easy way to start and manipulate the running of other programs (processes) by your application.   |
+| fcl-net     | Networking parts of the FCL, including the former netdb. DNS resolving                                        |
+| bfd         | Header to GNU Binary File Descriptor library (part of binutils)                                               |
+| fuse        | Bindings for libfuse, a library of a daemon that allows implementations of filesystem(-mapping)s in userspace |
+| dbus        | Headers for dbus inter-process communication library. See also the FPC and DBus article                       |
+| pthreads    | Headers for pthreads unix threading libraries.                                                                |
+| syslog      | Provides an interface to the Unix system logger Daemon                                                        |
+| users       | Various routines to work with Unix users and groups                                                           |
+| utmp        | Various routines to work with Unix /var/run/utmp, the unix login logfile                                      |
 ** Compression
 | unzip   | Routines for unzipping .zip files.                                            |
 | bzip2   | bzip2 decoding. Turbo Pascal object, standalone, not a header.                |
 | zlib    | Basic interface to the zlib compression library.                              |
 | paszlib | A Pascal conversion (thus without dependancies) of the standard zlib library. |
-** Media - Audio/Video
-| a52       | Unit for A-52 stream decoder. See SourceForge Page liba52                                                          |
-| dts       | libdts headers, which provides a low-level interface to decoding audio frames encoded using DTS Coherent Acoustics |
-| mad       | libmad header, (MPEG Audio Decoder) Also part of openal now?                                                       |
-| matroska  | An extensible open standard Audio/Video container. See Matroska Homepage                                           |
-| oggvorbis | An open music codec and container format. See OggVorbis Homepage                                                   |
-| openal    | A cross-platform 3D audio API See OpenAL Homepage                                                                  |
-| sndfile   | An interface to the linux (?) libsndfile library.                                                                  |
-** Media - Image
-| cairo       | Headers for cairo, a vector graphics library with display and print output. (GTK related, win32 prepared)    |
-| fcl-image   | FCL fpimage, fpcanvas generic image support plus helpers.                                                    |
-| fpvectorial | A library for reading, writing and modifying vectorial images.                                               |
-| imagemagick | ImageMagick headers for pascal.                                                                              |
-| imlib       | A dynamic image creation library. See Imlib2 Homepage                                                        |
-| libpng      | Interface to the libpng library. This library can be used to read/write/manipulate image files in PNG format |
-| librsvg     | Free, Open Source SVG Rendering library. See page in Gnome.org                                               |
-| libgd       | GD is an open source code library for the dynamic creation of images. See LibGD Homepage                     |
-| pasjpeg     | A Pascal conversion (thus without dependancies) of the libjpeg library.                                      |
 ** DB
 | fcl-db   | FCL Database support (including sqldb and tdbf)                                                                |
 | gdbm     | Interface to the GNU database system. (libgdbm)                                                                |
@@ -117,9 +146,36 @@
 | sdl      | Simple DirectMedia Layer                                                                                |
 | x11      | Basic X Windows System (xlib) headers                                                                   |
 | xforms   | Basic XForms headers                                                                                    |
+** Media - Audio/Video
+| a52       | Unit for A-52 stream decoder. See SourceForge Page liba52                                                          |
+| dts       | libdts headers, which provides a low-level interface to decoding audio frames encoded using DTS Coherent Acoustics |
+| mad       | libmad header, (MPEG Audio Decoder) Also part of openal now?                                                       |
+| matroska  | An extensible open standard Audio/Video container. See Matroska Homepage                                           |
+| oggvorbis | An open music codec and container format. See OggVorbis Homepage                                                   |
+| openal    | A cross-platform 3D audio API See OpenAL Homepage                                                                  |
+| sndfile   | An interface to the linux (?) libsndfile library.                                                                  |
+** Media - Image
+| cairo       | Headers for cairo, a vector graphics library with display and print output. (GTK related, win32 prepared)    |
+| fcl-image   | FCL fpimage, fpcanvas generic image support plus helpers.                                                    |
+| fpvectorial | A library for reading, writing and modifying vectorial images.                                               |
+| imagemagick | ImageMagick headers for pascal.                                                                              |
+| imlib       | A dynamic image creation library. See Imlib2 Homepage                                                        |
+| libpng      | Interface to the libpng library. This library can be used to read/write/manipulate image files in PNG format |
+| librsvg     | Free, Open Source SVG Rendering library. See page in Gnome.org                                               |
+| libgd       | GD is an open source code library for the dynamic creation of images. See LibGD Homepage                     |
+| pasjpeg     | A Pascal conversion (thus without dependancies) of the libjpeg library.                                      |
+** Alternative Platforms
+| amunits   | Amiga related units (68k?)                                            |
+| gbaunits  | Gameboy Advance libraries                                             |
+| libndsfpc | Nintendo DS libraries                                                 |
+| os2units  | Interfaces to various libraries available under OS/2 and eComStation  |
+| palmunits | Palm OS SDK 4.0                                                       |
+| univint   | Mac OS X interfaces (Carbon, CoreServices; CoreFoundation, CoreAudio, |
+|           | CoreGraphics, CoreType, CoreVideo, AudioUnits, ...).                  |
 ** Scripting
-| lua | Headers for lua scripting language      |
-| tcl | An interface to the tcl/tk interpreter. |
+| objcrtl | A package that is enabled for Darwin/i386/x86_64/arm but not for PPC/PPC64. "Objective-C Runtime-Library" |
+| lua     | Headers for lua scripting language                                                                        |
+| tcl     | An interface to the tcl/tk interpreter.                                                                   |
 * Implementations
 ** Free Pascal
 - https://www.freepascal.org/
@@ -149,3 +205,11 @@
   - Borland bought TB
   - Worked at MS in the C#/.NET begginings
   - Worked at MS in the TS begginings
+* Codebases/Examples
+- https://www.getlazarus.org/learn/tutorials/examples/
+  https://github.com/sysrpl/Lazarus.Scrabble
+  https://github.com/sysrpl/Codebot.ImageShop
+  https://github.com/sysrpl/Codebot.SoundShop
+  https://github.com/sysrpl/Codebot.FractalsGL
+  https://github.com/sysrpl/Codebot.Fractals
+  https://github.com/sysrpl/Codebot.Animator

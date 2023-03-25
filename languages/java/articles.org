@@ -1,6 +1,7 @@
 - graalvm
   - native-image https://www.graalvm.org/22.0/reference-manual/native-image/
   - reduce size https://www.graalvm.org/latest/reference-manual/native-image/guides/use-graalvm-dashboard/
+  - UI (>20)  https://www.praj.in/posts/2021/compiling-swing-apps-ahead-of-time/
 - features https://www.marcobehler.com/guides/a-guide-to-java-versions-and-features#_java_features_8_19
 - Article: Optional: https://davidleongz.medium.com/optional-a-pragmatic-approach-c736705c2deb
 - Article: Optional: https://homes.cs.washington.edu/~mernst/advice/nothing-is-better-than-optional.html

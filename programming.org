@@ -50,6 +50,8 @@
 - Course: 2022 - Waterloo - Principles of Programming Languages
   https://student.cs.uwaterloo.ca/~cs442/W22/notes/
   https://www.youtube.com/channel/UCnmJoeNk2mrItxXJ2-XOCcQ/videos
+- L01 Functional Programming | UC Berkeley CS 61A, Spring 2010
+  https://www.youtube.com/watch?v=4leZ1Ca4f0g&list=PLhMnuBfGeCDNgVzLPxF9o5UNKG1b-LFY9
 * gamelisp.rs
   https://gamelisp.rs/reference/overview.html
 * Lisp Cast

@@ -28,6 +28,36 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Live Notebooks https://clerk.vision/
 - (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
+* Standard Library
+- https://clojure.github.io/clojure/
+  https://clojuredocs.org/clojure.zip
+  https://clojure.github.io/clojure/clojure.zip-api.html
+| clojure       |                                                                                 |
+|---------------+---------------------------------------------------------------------------------|
+| .core         | Fundamental library of the Clojure language                                     |
+| .data         | Non-core data functions.                                                        |
+| .datafy       | Functions to turn objects into data. Alpha, subject to change                   |
+| .edn          |                                                                                 |
+| .inspector    | Graphical object inspector for Clojure data structures.                         |
+| .instant      |                                                                                 |
+| .java.browse  | Start a web browser from Clojure                                                |
+| .java.io      | This file defines polymorphic I/O utility functions for Clojure.                |
+| .java.javadoc | A *REPL* helper to quickly open javadocs.                                       |
+| .java.shell   | Conveniently launch a sub-process providing its stdin and collecting its stdout |
+| .main         | Top-level main function for Clojure *REPL* and scripts.                         |
+| .math         | Clojure wrapper functions for java.lang.Math static methods.                    |
+| .pprint       | A Pretty Printer for Clojure                                                    |
+| .reflect      |                                                                                 |
+| .repl         | Utilities meant to be used interactively at the *REPL*                          |
+| .set          | Set operations such as union/intersection.                                      |
+| .stacktrace   | Print stack traces oriented towards Clojure, not Java.                          |
+| .string       | Clojure String utilities                                                        |
+| .template     | Macros that expand to repeated copies of a template expression.                 |
+| .test         | A unit testing framework.                                                       |
+| .walk         |                                                                                 |
+| .xml          | XML reading/writing.                                                            |
+| .zip          | Functional hierarchical zipper, with navigation, editing, and enumeration.      |
+|---------------+---------------------------------------------------------------------------------|
 * Types
 |     |         | Implementation     | Types |
 |-----+---------+--------------------+-------|
@@ -56,12 +86,21 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://www.graalvm.org/reference-manual/native-image/StaticImages/
 - https://www.innoq.com/en/blog/native-clojure-and-graalvm/
 - https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
-* Web
+* Overtone
+- https://github.com/pjagielski/disclojure
+* Libraries
+- java.time
+  https://stackoverflow.com/questions/62969992/clojure-whats-the-way-to-have-current-time-string-with-babashka-with-least-dep
+** Web
 - https://www.youtube.com/watch?v=wEjNWUMCX78&list=PLVi9lDx-4C_T7jkihlQflyqGqU4xVtsfi
-** threeagent
+*** hiccup
+- https://clojurebridgelondon.github.io/community-docs/docs/web-applications/hiccup/
+- https://github.com/yokolet/hiccup-samples/blob/master/src/hiccup_templating/views/contents.clj
+- https://github.com/weavejester/hiccup/blob/master/src/hiccup/element.clj
+*** threeagent
 - https://martin.varela.fi/2019/11/01/webgl-react-and-no-javascript/
   https://www.youtube.com/watch?v=myigRnZHhTw
-** quil
+*** quil
 - https://github.com/quil/quil-templates/
 - https://gist.github.com/mmzsource/340322e6ff4b17be8b7dcb84d16d5172
 #+begin_src
@@ -71,6 +110,4 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
                    :dependencies [[figwheel-sidecar "0.5.19"]
                                   [cider/piggieback "0.4.1"]]}}
 #+end_src
-- https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/
-* Overtone
-- https://github.com/pjagielski/disclojure
+- https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/  

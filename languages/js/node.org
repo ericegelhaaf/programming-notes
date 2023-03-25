@@ -25,6 +25,41 @@
   unset MANPATH # delete if you already modified MANPATH elsewhere in your config
   MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   #+end_src
+* Standard Modules
+- https://www.w3schools.com/nodejs/ref_modules.asp
+  Here is a list of the built-in modules of Node.js version 6.10.3:
+- https://www.w3schools.com/nodejs/ref_fs.asp
+| Module         | Description                                             |
+|----------------+---------------------------------------------------------|
+| assert         | Provides a set of assertion tests                       |
+| buffer         | handle binary data                                      |
+| child_process  | run a child process                                     |
+| cluster        | split a single Node process into multiple processes     |
+| crypto         | handle OpenSSL cryptographic functions                  |
+| dgram          | Provides implementation of UDP datagram sockets         |
+| dns            | do DNS lookups and name resolution functions            |
+| domain         | Deprecated. handle unhandled errors                     |
+| events         | handle events                                           |
+| fs             | handle the file system                                  |
+| http           | make Node.js act as an HTTP server                      |
+| https          | make Node.js act as an HTTPS server.                    |
+| net            | create servers and clients                              |
+| os             | Provides information about the operation system         |
+| path           | handle file paths                                       |
+| punycode       | Deprecated. A character encoding scheme                 |
+| querystring    | handle URL query strings                                |
+| readline       | handle readable streams one line at the time            |
+| stream         | handle streaming data                                   |
+| string_decoder | decode buffer objects into strings                      |
+| timers         | execute a function after a given number of milliseconds |
+| tls            | implement TLS and SSL protocols                         |
+| tty            | Provides classes used by a text terminal                |
+| url            | parse URL strings                                       |
+| util           | access utility functions                                |
+| v8             | access information about V8 (the JavaScript engine)     |
+| vm             | compile JavaScript code in a virtual machine            |
+| zlib           | compress or decompress files                            |
+|----------------+---------------------------------------------------------|
 * DONE Article: 2019  Reduce Promises memory usage in Node.js
   https://dev.to/shaggydoag/reduce-promises-memory-usage-in-node-js-1a3i
   - 3000MB max ammount of memory on AWS lambda

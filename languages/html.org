@@ -26,43 +26,42 @@
  | article | selfcontained/independent (forum/blog/news post), eg: main>article*2  |
  | nav     | <a>'s container, not all, just the ones in a major navigation section |
 **** Other
- |-----------------+-----------------------------------------------------------------------|
- | span            | inline, to markup text                                                |
- | dialog          | open= middle of screen                                                |
- | address         | block/italic (contact info)                                           |
- | data            | to add metadata in ul/li attributes                                   |
- | details>summary | open= toggable                                                        |
+ | span            | inline, to markup text              |
+ | dialog          | open= middle of screen              |
+ | address         | block/italic (contact info)         |
+ | data            | to add metadata in ul/li attributes |
+ | details>summary | open= toggable                      |
 *** Font
-  | abbr         | title=                                             |
-  | address      | block/italic (contact info)                        |
-  | b            | bold (last resort after hN/em/strong/mark)         |
-  | cite         | italic                                             |
-  | del/ins      | line-through/underline                             |
-  | s            | line-through                                       |
-  | dfn          | italic                                             |
-  | em           | italic                                             |
-  | i            | italic (last resort after em/string/mark/cite/dfn) |
-  | mark         | bg-yellow                                          |
-  | pre          | preformatted, preserves spaces and line breaks     |
-  | q/blockquote | short/long quotation                               |
-  | small        | font size smaller                                  |
-  | strong       | bold (important text)                              |
-  | sub/sup      | small valign sub/sup                               |
-  | time         | can also add machine readable datetime=            |
-  | u            | misspelled (unarticulated)                         |
-  | wbr          | word break opportunity                             |
+ | abbr         | title=                                             |
+ | address      | block/italic (contact info)                        |
+ | b            | bold (last resort after hN/em/strong/mark)         |
+ | cite         | italic                                             |
+ | del/ins      | line-through/underline                             |
+ | s            | line-through                                       |
+ | dfn          | italic                                             |
+ | em           | italic                                             |
+ | i            | italic (last resort after em/string/mark/cite/dfn) |
+ | mark         | bg-yellow                                          |
+ | pre          | preformatted, preserves spaces and line breaks     |
+ | q/blockquote | short/long quotation                               |
+ | small        | font size smaller                                  |
+ | strong       | bold (important text)                              |
+ | sub/sup      | small valign sub/sup                               |
+ | time         | can also add machine readable datetime=            |
+ | u            | misspelled (unarticulated)                         |
+ | wbr          | word break opportunity                             |
 **** UI
-  | template       | hidden content (JS showable) |
-  | progress/meter | id= value= max= progress var |
+ | template       | hidden content (JS showable) |
+ | progress/meter | id= value= max= progress var |
 **** Computer
-  | kbd  | monospace       |
-  | code | monospace       |
-  | var  | variable        |
-  | samp | "sample output" computer output |
+ | kbd  | monospace                       |
+ | code | monospace                       |
+ | var  | variable                        |
+ | samp | "sample output" computer output |
 **** Idiom
-  | ruby/rt+rp | japanese                                                 |
-  | bdi        | "bi-directional isolation", for lang with diff direction |
-  | bdo        | "bi-directional override"                                |
+ | ruby/rt+rp | japanese                                                 |
+ | bdi        | "bi-directional isolation", for lang with diff direction |
+ | bdo        | "bi-directional override"                                |
 *** media et all
  | img                      |                                            |
  | picture>img+source*N     | sets different images for different widths |

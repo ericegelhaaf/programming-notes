@@ -12,6 +12,8 @@
 - Framework: Play Framework.
   Conocimientos deseables: Slick, Monix Task.
 - https://en.wikipedia.org/wiki/Scala_(programming_language)
+* Standard Library
+- https://www.scala-lang.org/api/current/
 * Binary
 ** Compatibility
 #+begin_src

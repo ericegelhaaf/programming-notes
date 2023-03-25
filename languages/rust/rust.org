@@ -44,6 +44,8 @@
   https://www.codeslow.com/2020/07/writing-winning-4k-intro-in-rust.html
   https://www.youtube.com/watch?v=SIkkYRQ07tU
 - https://research.mozilla.org/rust/
+* Standard Library
+- https://doc.rust-lang.org/std/#modules
 * Tutorial: EasyRust
   https://github.com/Dhghomon/easy_rust
 

@@ -93,7 +93,7 @@
 *** Summary
 * 22 | Web development with Clojure - 2nd Edition
 ** Introduction
-    - Focus on the *Luminous* stach
+- Focus on the *Luminous* stack
 ** 1 Getting your feet wet
 - Clojure libraries https://clojars.org/
 - myapp/src/myapp/core.clj
@@ -138,7 +138,7 @@
 - Default repl namespace is *user* from *env/dev/clj/user.clj*
   - Include functions that we won't want packaged in our application
   - start/stop functions
-** resources/migration/*
+*** resources/migration/*
 - Delete template migrations, and create a new one (after (start))
   rm -f resources/migration/*
 - (create-migration "guestbook")
@@ -157,7 +157,7 @@ timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
   (restart)
 - Dependencies CANNOT be loades dynamically by the JVM,
   they need a restart of the REPL
-** resources/sql/queries.sql
+*** resources/sql/queries.sql
    Used by HugSQL, which creates function to interact with a database, based on SQL files
    :! indicates the query is destructive
    :n returns the number of affected rows
@@ -173,19 +173,19 @@ VALUES (:name, :message)
 -- :doc selects all available messages
 SELECT * from guestbook
    #+end_src
-** src/clj/guestbook/db/core.clj
+*** src/clj/guestbook/db/core.clj
    (conman/bind-connection *db* "sql/queries.sql")
-** {dev,test}-config.edn
+*** {dev,test}-config.edn
    - Not supposed to be commited to svn
     :database-url "jdbc:h2:./guestbook_dev.db"
    - Uses the :jvm-opts flags found in :project/{test,dev} profile in project.clj
-** Running queries
+*** Running queries
    (in-ns 'guestbook.db.core)
    (conman/bind-connection *db* "sql/queries.sql")
    (get-messages)
    (save-message! {:name "bob" :message "hello world"})
    (get-messages)
-** test/clj/guestbook/db/core_test.clj
+*** test/clj/guestbook/db/core_test.clj
    - Update (deftest)
       #+begin_src clojure
 (deftest test-users
@@ -203,11 +203,11 @@ SELECT * from guestbook
        #+end_src
    - lein test
    - lein test-refresh
-** src/clj/guestbook/routes/home.clj
+*** src/clj/guestbook/routes/home.clj
    Where the paths, functions, middleware are put together.
-** resources/html/home.html
+*** resources/html/home.html
    - extends base.html and process the :doc through markdown
-** resources/html/home.html
+*** resources/html/home.html
    - Setup to use Bulma CSS
 * 22 | Clojure: The Essential Reference MEAP v28
 |                         | http://manifesto.softwarecraftsmanship.org/#/es                              |

@@ -3,6 +3,7 @@
 - 1996 | https://marktheunissen.com/posts/tech/2006-06-03-denthor-of-asphyxia-s-graphics-tutorials/files/denthor-asphyxia-grant-smith-vga-trainers.txt
 - 1997 | https://www.cnet.com/tech/services-and-software/borland-sues-microsoft-over-brain-drain/
 - 2021 | https://mdhughes.tech/2021/07/12/freepascal-building/
+- 2022 | https://www.getlazarus.org/guides/intro/
 * 2017 | Why I use Object Pascal
   https://dubst3pp4.github.io/post/2017-10-03-why-i-use-object-pascal/
   https://news.ycombinator.com/item?id=15490345

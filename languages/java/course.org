@@ -1,9 +1,9 @@
 * 2022 | Java Master Class | AmigosCode
 - Exception tutorial https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html
-** 030
 - Java keywords https://www.w3schools.com/java/java_ref_keywords.asp
 - Java API specification https://docs.oracle.com/en/java/javase/19/docs/api/index.html
   - String https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html
+** 030
 - intellij
   - generate
     - constructor/getter/setter/equals/hashCode/toString
@@ -57,7 +57,8 @@
     }
   #+end_src
 - supported types for ~switch~
-  byte, short, int, char, enums, String
+  enums, String
+  byte, short, int,     char,
   Byte, Short, Integer, Character (the =wrapper classes=)
 - new version (>14) of ~switch expressions~
   #+begin_src java
@@ -369,4 +370,111 @@ https://stackoverflow.com/questions/32437550/whats-the-difference-between-instan
      #+end_src
 ** 160 Code Organization
 - Classes that do 1 thing (Single Responsability)
-- packages, service classes, dao, utility classes, controllers
+*** Packages
+- in java they are folders
+  com/amigoscode/car/Car.java
+  com/amigoscode/cat/Cat.java
+  com/amigoscode/person/Gender.java
+  com/amigoscode/person/Person.java
+  com/amigoscode/Main.java
+*** Domain or Model /classes/
+- Are the POJOs or BEANs classes of your project
+  - NOT hold business logic
+  - and just refer to the *domain* (aka data)
+*** Service         /classes/ (aka Business Logic)
+- within each package with a Domain class, you would have a corresponding service class
+  - Example: com.amigoscode.person.PersonService
+    #+begin_src java
+      package com.amigoscode.person;
+      public class PersonService {
+          public int addPerson(Person person) {
+              if (person.getFirstName().isBlank()) { // business logic
+                  throw new IllegalargumentException("First name cannot b enull or empty");
+              }
+              // store person to db
+              return 1; // in the real world it will be the number of affected rows
+          }
+      }
+    #+end_src
+  - Example: com.amigoscode.garage.GarageService
+    #+begin_src java
+      package com.amigoscode.garage;
+      import com.amigoscode.car.Car;
+      public class GarageService {
+          public boolean addCarToGarage(Car car, Garage garage) {
+              if (car == null) {
+                  throw new IllegalArgumentException("Car cannot be null");
+              }
+              int count = 0;
+              for (Car c : garage.getCars()) {
+                  if (c != null) {
+                      count++;
+                  }
+              }
+              if (count >= garage.getCapacity()) {
+                  return false;
+              }
+              // add car to garage
+              return true;
+          }
+      }
+    #+end_src
+  - Example: com.amigoscode.car.CarService
+    - check car is not null
+    - check if car registration number is valid
+    - check if car registration number is not take
+    - if car price is < 0
+
+*** DAO - Data Access Object
+- They would work better with an ~Interface~ instead of a class
+#+begin_src java
+  package com.amigoscode.car;
+  public class CarDAO {
+      private static Car[] cars;
+      private static int nextAvailableSlot = 0;
+      private static final int CAPACITY = 100;
+      static {
+          cars = new Car[CAPACITY];
+      }
+      public void saveCar(Car car) {
+          if (nextAvailableSlot + 1 >= CAPACITY) {
+              // grow db
+          }
+          cars[nextAvailableSlot++] = car;
+      }
+  }
+#+end_src
+*** Utility Classes
+- Connecting DAO with the Service
+  1) store in the Service class (slightly incorrect, due testing, dependency injection)
+    #+begin_src java
+      package com.amigoscode.car;
+      class CarService {
+          private CarDAO carDAO = new CarDAO();
+          public int registerNewCar(Car car) {
+              // ... all the service checks go in here
+              carDAO.saveCar(car);
+              return 1;
+          }
+      }
+    #+end_src
+  2) store in the Service class, correct version
+    #+begin_src java
+      package com.amigoscode.car;
+      class CarService {
+          private CarDAO carDAO;
+          public CarService() {
+              this.carDAO = new CarDAO();
+          }
+          public int registerNewCar(Car car) {
+              // ... all the service checks go in here
+              carDAO.saveCar(car);
+              return 1;
+          }
+          public Car[] getCars() {
+              carDAO.selectAllCars();
+          }
+      }
+    #+end_src
+*** Configuration Class
+*** ?controllers

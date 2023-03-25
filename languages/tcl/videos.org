@@ -25,3 +25,4 @@ https://www.youtube.com/watch?v=yCC--STRzo4
     }[namespace current]]
   #+end_src
 * Video: 2021 | Karl Lehenbauer, "TCL: The Tool Command Language - LISP for the Masses"
+https://www.youtube.com/watch?v=3YwFHPFL20c
