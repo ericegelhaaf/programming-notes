@@ -44,7 +44,19 @@
   https://www.codeslow.com/2020/07/writing-winning-4k-intro-in-rust.html
   https://www.youtube.com/watch?v=SIkkYRQ07tU
 - https://research.mozilla.org/rust/
-* Standard Library
+* Language
+** Types
+|---------+----------------+-----------+--------------+-------------------|
+|         | Create         | Access    | Match        | Insert            |
+|---------+----------------+-----------+--------------+-------------------|
+| Tuple   |                | .0        | (a,_b)       |                   |
+| struct  |                | .FIELD    |              |                   |
+| enum    |                |           | ENUM::Val(a) |                   |
+| HashMap | HashMap::new() | .get(key) | (key,val)    | .insert(key, val) |
+| Vector  | vec![]         |           |              |                   |
+| Array   | []             |           |              |                   |
+|---------+----------------+-----------+--------------+-------------------|
+** Standard Library
 - https://doc.rust-lang.org/std/#modules
 * Tutorial: EasyRust
   https://github.com/Dhghomon/easy_rust
@@ -56,16 +68,6 @@
 | Enum           | YES            |            |   |   |
 | Variables      |                | YES        |   |   |
 | Functions      |                | YES        |   |   |
-
-
-|         | Create         | Access    | Match        | Insert            |
-|---------+----------------+-----------+--------------+-------------------|
-| Tuple   |                | .0        | (a,_b)       |                   |
-| struct  |                | .FIELD    |              |                   |
-| enum    |                |           | ENUM::Val(a) |                   |
-| HashMap | HashMap::new() | .get(key) | (key,val)    | .insert(key, val) |
-| Vector  | vec![]         |           |              |                   |
-| Array   | []             |           |              |                   |
 ** Comments
 #+begin_src rust
 // Comment
@@ -98,7 +100,7 @@ let d = 1u8;     // uses type u8
 - Rust compiler miiiight infer to use f32n
 ** Printing 'hello, world!'
 - ~macros~ have a ~!~ after them
-- return and ~;~
+- return and (;)
   #+begin_src rust
   fn beta() -> i32 {
     8 // without a ; it can be used like this, otherwise it would return ()
@@ -106,11 +108,12 @@ let d = 1u8;     // uses type u8
     // 8;         // It will return ()
   }
   #+end_src
-- ~->~ is called *skinny arrow*, shows the return type of a function
+- (->) is called *skinny arrow*, shows the return type of a function
 - {} *code blocks* can be def anywhere, and return values from it
 ** Display and debug
 - {} and ~pretty printers~ {:?} {:#?}
-- std::i8::MIN, std::i8::MAX
+- std::i8::MIN
+  std::i8::MAX
 ** Mutability
 - let mut x = 10; - ~mutability~, when a variable can be changed
 - let x = 2;      - ~shadowing~, if are the same type, although effectively are different variables
@@ -120,8 +123,10 @@ let d = 1u8;     // uses type u8
 |-------+---------+---------------------|
 | Stack | Fastest | yes                 |
 | Heap  | Fast    | no                  |
+|-------+---------+---------------------|
 - let x: isize = 3;
-  let b = &x; // b is a ~reference~ to x, b ~borrows~ x
+  let b = &x; // b is a ~reference~ to x
+              // b ~borrows~ x
               // b has type &isize
 ** More about printing
 - r#""raw"\tlines\n"#
@@ -141,6 +146,7 @@ let d = 1u8;     // uses type u8
 |--------+--------------------------------+-----------+--------+---------|
 | &str   | let a = "hello";               | borrowed  | data?  | fastest |
 | String | let a = String::from("hello"); | owned     | heap   | fast    |
+|--------+--------------------------------+-----------+--------+---------|
 - std::mem::size_of::<String>() = 24bytes
   std::mem::size_of::<i8>()     =  1bytes
   std::mem::size_of_val("abc")  =  3bytes
@@ -157,10 +163,10 @@ static SEASONS: [&str; 4] = ["Spr", "Su", "F", "Win"];
 - outside main
 ** More on references
 - Memory refences live by scope (function, block?)
-  -  A function cannot return a reference that it created
+  - A function cannot return a reference that it created
 - While you own *String*, you can't pass around ownership through &String
 ** Mutable references
-- * ~dereferencing~ ("I dont't want the value...I want the value behind")
+- (*) ~dereferencing~ ("I dont't want the value...I want the value behind")
 - &mut instead of &
   - defined both on referee and reference
 - many immutable references allowed
@@ -385,13 +391,13 @@ enum Entry<K,V> {
 - .pop_front() .pop_back()
   .push_front()
 ** DONE The ? Operator
-- Unwraps if Ok otherwise, returns Error and ends (function)
+- Unwraps if *Ok* otherwise, returns *Error* and ends (function)
+- .expect() - instead of using a lot of .unwrap() to explain the error
+- .unwrap_or() - to provide a default when a normal unwrap fails
 - panic!()
   assert!()
   assert_eq!()
   assert_ne!()
-- ~.expect()~ instead of using a lot of .unwrap() to explain the error
-- ~.unwrap_or()~ to provide a default when a normal unwrap fails
 ** DONE Traits
 - Traits about what a struct *can do*
 - Once defined a *trait* you can *impl* for a type
@@ -402,12 +408,14 @@ enum Entry<K,V> {
 - ~Trait bounds~, where neither the trait or the impl have method
   instead traits are used as *restrictions* for regular functions
 - ~From<T>~
-  - use std::convert::From
-  - impl From<T> for S {
+  #+begin_src rust
+    use std::convert::From
+    impl From<T> for S {
       fn from (a: T) -> Self {
-         Self { a }
+          Self { a }
       }
     }
+  #+end_src
 - ~AsRef~
   - We can use the trait Asref<str> + Display to accept both &str and String on a function
 ** DONE Chaining methods
@@ -423,10 +431,9 @@ enum Entry<K,V> {
 - .iter()      - iterator of references
   .iter_mut()  - iterator of mutable references (a for loop for example)
   .into_iter() - iterator of values (not references) as a result it destroys the values (ownage)
-- .map()     - iters over each element and pass it on
-  .for_each()- iters over each element
-- An iterator in the backend are calling .next()
-    which gives an Option.
+- .map()       - iters over each element and pass it on
+  .for_each()  - iters over each element
+- An iterator in the backend are calling .next(), which gives an *Option*
 - ~Associated Type~ means "a type that goes together"
     they might be required to define for impl (?)
   #+begin_src rust

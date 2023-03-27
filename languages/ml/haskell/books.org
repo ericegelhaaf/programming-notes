@@ -2588,11 +2588,20 @@ useful when we want ot do some uneffectul computation that depnds on IO
 - It has the following laws:
  | Identity    | fmap id = id                    | if we don't change the values, nothing should change                    |
  | Composition | fmap (f . g) == fmap f . fmap g | composing the lifted functions is the same as composing them after fmap |
-- This won't follow the first law. Haskell doesn't help us make sure the laws are satisfied.
-  #+begin_src haskell
-    mapMaybe :: (a -> b) -> Maybe a -> Maybe b
-    mapMaybe f maybeX = Nothing
-  #+end_src
+  - Example: This won't follow the first law. Haskell doesn't help us make sure the laws are satisfied.
+    #+begin_src haskell
+      mapMaybe :: (a -> b) -> Maybe a -> Maybe b
+      mapMaybe f maybeX = Nothing
+    #+end_src
+**** <*> Applicative
+#+begin_src haskell
+  class Functor f => Applicative f where
+    pure   :: a             -> f a
+    liftA2 :: (a -> b -> c) -> f a -> f b -> f c
+    (<*>)  :: f (a -> b)    -> f a -> f b
+#+end_src
+- combining <*> and <$> allow us to apply a function with many argument instead of just 2(two)
+  - both associate to the left
 ** 06 Handing errors and multiple files
 *** Handing errors with Either
 *** Either with IO

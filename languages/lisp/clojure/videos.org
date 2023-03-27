@@ -1,3 +1,5 @@
+- Podcast - https://clojuredesign.club/
+- Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
 - Course - Brian Will - the Clojure language - https://www.youtube.com/playlist?list=PLAC43CFB134E85266
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
 - ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW

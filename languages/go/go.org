@@ -168,6 +168,67 @@
 
 | suffixarray | implements substring search in logarithmic time using an in-memory suffix array. |
 
+** internal
+
+| /abi                      |                                                                                                                                                                          |
+| /buildcfg                 | buildcfg provides access to the build configuration described by the current environment.                                                                        |
+| /bytealg                  |                                                                                                                                                                          |
+| /cfg                      | cfg holds configuration shared by the Go command and internal/testenv.                                                                                           |
+| /coverage                 |                                                                                                                                                                          |
+| /coverage/calloc          |                                                                                                                                                                          |
+| /coverage/cformat         |                                                                                                                                                                          |
+| /coverage/cmerge          |                                                                                                                                                                          |
+| /coverage/decodecounter   |                                                                                                                                                                          |
+| /coverage/decodemeta      |                                                                                                                                                                          |
+| /coverage/encodecounter   |                                                                                                                                                                          |
+| /coverage/encodemeta      |                                                                                                                                                                          |
+| /coverage/pods            |                                                                                                                                                                          |
+| /coverage/rtcov           |                                                                                                                                                                          |
+| /coverage/slicereader     |                                                                                                                                                                          |
+| /coverage/slicewriter     |                                                                                                                                                                          |
+| /coverage/stringtab       |                                                                                                                                                                          |
+| /coverage/uleb128         |                                                                                                                                                                          |
+| /cpu                      | cpu implements processor feature detection used by the Go standard library.                                                                                      |
+| /dag                      | dag implements a language for expressing directed acyclic graphs.                                                                                                |
+| /diff                     |                                                                                                                                                                          |
+| /fmtsort                  | fmtsort provides a general stable ordering mechanism for maps, on behalf of the fmt and text/template packages.                                                  |
+| /fuzz                     | fuzz provides common fuzzing functionality for tests built with "go test" and for programs that use fuzzing functionality in the testing package.                |
+| /goarch                   | package goarch contains GOARCH-specific constants.                                                                                                                       |
+| /godebug                  | godebug makes the settings in the $GODEBUG environment variable available to other packages.                                                                     |
+| /goexperiment             | goexperiment implements support for toolchain experiments.                                                                                                       |
+| /goos                     | package goos contains GOOS-specific constants.                                                                                                                           |
+| /goroot                   |                                                                                                                                                                          |
+| /goversion                |                                                                                                                                                                          |
+| /intern                   | intern lets you make smaller comparable values by boxing a larger comparable value (such as a 16 byte string header) down into a globally unique 8 byte pointer. |
+| /itoa                     |                                                                                                                                                                          |
+| /lazyregexp               | lazyregexp is a thin wrapper over regexp, allowing the use of global regexp variables without forcing them to be compiled at init.                               |
+| /lazytemplate             | lazytemplate is a thin wrapper over text/template, allowing the use of global template variables without forcing them to be parsed at init.                      |
+| /nettrace                 | nettrace contains internal hooks for tracing activity in the net package.                                                                                        |
+| /obscuretestdata          | obscuretestdata contains functionality used by tests to more easily work with testdata that must be obscured primarily due to golang.org/issue/34986.            |
+| /oserror                  | oserror defines errors values used in the os package.                                                                                                            |
+| /pkgbits                  | pkgbits implements low-level coding abstractions for Unified IR's export data format.                                                                            |
+| /platform                 |                                                                                                                                                                          |
+| /poll                     | poll supports non-blocking I/O on file descriptors with polling.                                                                                                 |
+| /profile                  | profile provides a representation of github.com/google/pprof/proto/profile.proto and methods to encode/decode/merge profiles in this format.                     |
+| /race                     | race contains helper functions for manually instrumenting code for the race detector.                                                                            |
+| /reflectlite              | reflectlite implements lightweight version of reflect, not using any package except for "runtime" and "unsafe".                                                  |
+| /safefilepath             | safefilepath manipulates operating-system file paths.                                                                                                            |
+| /saferio                  | saferio provides I/O functions that avoid allocating large amounts of memory unnecessarily.                                                                      |
+| /singleflight             | singleflight provides a duplicate function call suppression mechanism.                                                                                           |
+| /syscall/execenv          |                                                                                                                                                                          |
+| /syscall/unix             |                                                                                                                                                                          |
+| /syscall/windows          |                                                                                                                                                                          |
+| /syscall/windows/registry | registry provides access to the Windows registry.                                                                                                                |
+| /syscall/windows/sysdll   | sysdll is an internal leaf package that records and reports which Windows DLL names are used by Go itself.                                                       |
+| /sysinfo                  | sysinfo implements high level hardware information gathering that can be used for debugging or information purposes.                                             |
+| /testenv                  | testenv provides information about what functionality is available in different testing environments run by the Go team.                                         |
+| /testlog                  | testlog provides a back-channel communication path between tests and package os, so that cmd/go can see which environment variables and files a test consults.   |
+| /testpty                  | testpty is a simple pseudo-terminal package for Unix systems, implemented by calling C functions via cgo.                                                        |
+| /trace                    |                                                                                                                                                                          |
+| /txtar                    | txtar implements a trivial text-based file archive format.                                                                                                       |
+| /types/errors             |                                                                                                                                                                          |
+| /unsafeheader             | unsafeheader contains header declarations for the Go runtime's slice and string implementations.                                                                 |
+| /xcoff                    | xcoff implements access to XCOFF (Extended Common Object File Format) files.                                                                                     |
 ** io       - provides basic interfaces to I/O primitives.
 
 | fs     | defines basic interfaces to a file system. |
@@ -267,67 +328,6 @@
 | /utf8  | implements functions and constants to support text encoded in UTF-8. |
 
 ** unsafe   - contains operations that step around the type safety of Go programs.
-** internal
-
-| /abi                      |                                                                                                                                                                          |
-| /buildcfg                 | buildcfg provides access to the build configuration described by the current environment.                                                                        |
-| /bytealg                  |                                                                                                                                                                          |
-| /cfg                      | cfg holds configuration shared by the Go command and internal/testenv.                                                                                           |
-| /coverage                 |                                                                                                                                                                          |
-| /coverage/calloc          |                                                                                                                                                                          |
-| /coverage/cformat         |                                                                                                                                                                          |
-| /coverage/cmerge          |                                                                                                                                                                          |
-| /coverage/decodecounter   |                                                                                                                                                                          |
-| /coverage/decodemeta      |                                                                                                                                                                          |
-| /coverage/encodecounter   |                                                                                                                                                                          |
-| /coverage/encodemeta      |                                                                                                                                                                          |
-| /coverage/pods            |                                                                                                                                                                          |
-| /coverage/rtcov           |                                                                                                                                                                          |
-| /coverage/slicereader     |                                                                                                                                                                          |
-| /coverage/slicewriter     |                                                                                                                                                                          |
-| /coverage/stringtab       |                                                                                                                                                                          |
-| /coverage/uleb128         |                                                                                                                                                                          |
-| /cpu                      | cpu implements processor feature detection used by the Go standard library.                                                                                      |
-| /dag                      | dag implements a language for expressing directed acyclic graphs.                                                                                                |
-| /diff                     |                                                                                                                                                                          |
-| /fmtsort                  | fmtsort provides a general stable ordering mechanism for maps, on behalf of the fmt and text/template packages.                                                  |
-| /fuzz                     | fuzz provides common fuzzing functionality for tests built with "go test" and for programs that use fuzzing functionality in the testing package.                |
-| /goarch                   | package goarch contains GOARCH-specific constants.                                                                                                                       |
-| /godebug                  | godebug makes the settings in the $GODEBUG environment variable available to other packages.                                                                     |
-| /goexperiment             | goexperiment implements support for toolchain experiments.                                                                                                       |
-| /goos                     | package goos contains GOOS-specific constants.                                                                                                                           |
-| /goroot                   |                                                                                                                                                                          |
-| /goversion                |                                                                                                                                                                          |
-| /intern                   | intern lets you make smaller comparable values by boxing a larger comparable value (such as a 16 byte string header) down into a globally unique 8 byte pointer. |
-| /itoa                     |                                                                                                                                                                          |
-| /lazyregexp               | lazyregexp is a thin wrapper over regexp, allowing the use of global regexp variables without forcing them to be compiled at init.                               |
-| /lazytemplate             | lazytemplate is a thin wrapper over text/template, allowing the use of global template variables without forcing them to be parsed at init.                      |
-| /nettrace                 | nettrace contains internal hooks for tracing activity in the net package.                                                                                        |
-| /obscuretestdata          | obscuretestdata contains functionality used by tests to more easily work with testdata that must be obscured primarily due to golang.org/issue/34986.            |
-| /oserror                  | oserror defines errors values used in the os package.                                                                                                            |
-| /pkgbits                  | pkgbits implements low-level coding abstractions for Unified IR's export data format.                                                                            |
-| /platform                 |                                                                                                                                                                          |
-| /poll                     | poll supports non-blocking I/O on file descriptors with polling.                                                                                                 |
-| /profile                  | profile provides a representation of github.com/google/pprof/proto/profile.proto and methods to encode/decode/merge profiles in this format.                     |
-| /race                     | race contains helper functions for manually instrumenting code for the race detector.                                                                            |
-| /reflectlite              | reflectlite implements lightweight version of reflect, not using any package except for "runtime" and "unsafe".                                                  |
-| /safefilepath             | safefilepath manipulates operating-system file paths.                                                                                                            |
-| /saferio                  | saferio provides I/O functions that avoid allocating large amounts of memory unnecessarily.                                                                      |
-| /singleflight             | singleflight provides a duplicate function call suppression mechanism.                                                                                           |
-| /syscall/execenv          |                                                                                                                                                                          |
-| /syscall/unix             |                                                                                                                                                                          |
-| /syscall/windows          |                                                                                                                                                                          |
-| /syscall/windows/registry | registry provides access to the Windows registry.                                                                                                                |
-| /syscall/windows/sysdll   | sysdll is an internal leaf package that records and reports which Windows DLL names are used by Go itself.                                                       |
-| /sysinfo                  | sysinfo implements high level hardware information gathering that can be used for debugging or information purposes.                                             |
-| /testenv                  | testenv provides information about what functionality is available in different testing environments run by the Go team.                                         |
-| /testlog                  | testlog provides a back-channel communication path between tests and package os, so that cmd/go can see which environment variables and files a test consults.   |
-| /testpty                  | testpty is a simple pseudo-terminal package for Unix systems, implemented by calling C functions via cgo.                                                        |
-| /trace                    |                                                                                                                                                                          |
-| /txtar                    | txtar implements a trivial text-based file archive format.                                                                                                       |
-| /types/errors             |                                                                                                                                                                          |
-| /unsafeheader             | unsafeheader contains header declarations for the Go runtime's slice and string implementations.                                                                 |
-| /xcoff                    | xcoff implements access to XCOFF (Extended Common Object File Format) files.                                                                                     |
 * Personalities
 ** Rob Pike
 https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd

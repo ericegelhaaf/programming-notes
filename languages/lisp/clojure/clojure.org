@@ -28,7 +28,17 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Live Notebooks https://clerk.vision/
 - (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
-* Standard Library
+* Language
+** Types
+| instancing           |            | Implementation     | Types | destructuring |
+|----------------------+------------+--------------------+-------+---------------|
+| '(1 2 3)             | (list)     | singly-linked list | mixed |               |
+| [1 2 3]              | (vector)   | hash-map like      | mixed | [a b]         |
+| #{1 2 3}             | sets       |                    |       |               |
+| {"age" 12}           | (hash-map) |                    | mixed | {age "age"}   |
+| (defrecord rr [age]) | record     |                    |       |               |
+|----------------------+------------+--------------------+-------+---------------|
+** Standard Library
 - https://clojure.github.io/clojure/
   https://clojuredocs.org/clojure.zip
   https://clojure.github.io/clojure/clojure.zip-api.html
@@ -58,36 +68,6 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 | .xml          | XML reading/writing.                                                            |
 | .zip          | Functional hierarchical zipper, with navigation, editing, and enumeration.      |
 |---------------+---------------------------------------------------------------------------------|
-* Types
-|     |         | Implementation     | Types |
-|-----+---------+--------------------+-------|
-| ()  | lists   | singly-linked list | mixed |
-| []  | vector  | hash-map like      | mixed |
-| {}  | hashmap |                    | mixed |
-| #{} | sets    |                    |       |
-|-----+---------+--------------------+-------|
-* Podcasts
-- Podcast - https://clojuredesign.club/
-- Podcast - Clojurescript - https://open.spotify.com/show/3lnWCN0PAAywiN7gaxNzKZ
-* Personalities
-** Rich Hickey
-- Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr
-- https://github.com/tallesl/Rich-Hickey-fanclub
-* Tools
-- nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
-  https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
-** GraalVM
-- native-image on deps.edn https://github.com/taylorwood/clj.native-image
-  - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
-  - AWS Example https://github.com/latacora/lamed-sample-app
-  - Lein Plugin https://github.com/taylorwood/lein-native-image
-- https://clojure.atlassian.net/browse/CLJ-2582
-- https://github.com/clj-easy/graal-docs
-- https://www.graalvm.org/reference-manual/native-image/StaticImages/
-- https://www.innoq.com/en/blog/native-clojure-and-graalvm/
-- https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
-* Overtone
-- https://github.com/pjagielski/disclojure
 * Libraries
 - java.time
   https://stackoverflow.com/questions/62969992/clojure-whats-the-way-to-have-current-time-string-with-babashka-with-least-dep
@@ -111,3 +91,22 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
                                   [cider/piggieback "0.4.1"]]}}
 #+end_src
 - https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/  
+*** Overtone
+- https://github.com/pjagielski/disclojure
+* Tools
+- nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
+  https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
+** GraalVM
+- native-image on deps.edn https://github.com/taylorwood/clj.native-image
+  - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
+  - AWS Example https://github.com/latacora/lamed-sample-app
+  - Lein Plugin https://github.com/taylorwood/lein-native-image
+- https://clojure.atlassian.net/browse/CLJ-2582
+- https://github.com/clj-easy/graal-docs
+- https://www.graalvm.org/reference-manual/native-image/StaticImages/
+- https://www.innoq.com/en/blog/native-clojure-and-graalvm/
+- https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
+* Personalities
+** Rich Hickey
+- Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr
+- https://github.com/tallesl/Rich-Hickey-fanclub
