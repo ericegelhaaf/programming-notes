@@ -1,0 +1,189 @@
+- https://www.youtube.com/@insidecode/videos
+- https://www.youtube.com/@johnlevine2909/videos
+- Reducible https://www.youtube.com/c/Reducible
+- "Algorithms with Attitude" https://www.youtube.com/channel/UCUGQA2H6AXFolADHf9mBb4Q
+- CodeEric https://www.youtube.com/channel/UCVUreMZC948wS-KecowbA_g/
+- Coding with Some Guy https://www.youtube.com/channel/UCBwH4Xj7s5C9tkeYxI3dIzA/about
+- Creel https://www.youtube.com/c/WhatsACreel/videos
+- Club de Programación Competitiva https://www.youtube.com/channel/UCZalVP2C0nwe0JjmItyKS1w/videos
+- Programacion Competitiva Bolivia https://www.youtube.com/channel/UCod9TyxrhF8QHMezaVzMDVg/videos
+- Club de Programación Competitiva UMSA https://www.youtube.com/channel/UCi3lobNX_J1cMW6BjFZGTmw/videos
+* Video: Balanced binary search tree rotations.
+   https://www.youtube.com/watch?v=q4fnJZr8ztY
+   - We move the nodes without breaking the tree invariants (the hierarchy of the rest of the nodes)
+     We do NOT care about the structure, only of the invariants of the BST (left<right)
+     The level does NOT matter, the left-right does.
+   - code (missing update of possible parent link on A to point to B)
+     #+begin_src python
+     function righRotate(A):
+       B := A.left
+       A.left = B.right
+       B.right = A
+       return B
+     #+end_src
+* Video: Floyd Warshall - All Pairs Shortest Path Algorithm
+  https://www.youtube.com/watch?v=4NQ3HnhyNfQ
+ - Ideal for <200 nodes
+ - APSP = All Pairs Shortest Path algorithm
+ - m[i][j] = 2D Adjacency Matrix
+   0        for self
+   infinity for unreachable
+ - We use a memoized table of the previous optimal solutions
+   from i to j
+   routing through nodes 0..k
+   #+begin_src c
+     dp[k][i][j];
+     dp[k][i][j] = m[i][j]; // if k = 0
+     dp[k][i][j] = min(dp[k-1][i][j],
+                       dp[k-1][i][k]+dp[k-1][k][j]);
+     // OR
+     dp[i][j] = m[i][j]; // if k = 0
+     dp[i][j] = min(dp[i][j],
+                    dp[i][k]+dp[k][j]);
+   #+end_src
+ - Comparison
+  |            | BFS      | Dijkstra    | Bellman | Floyd    |
+  |            |          |             | Ford    | Warshall |
+  |------------+----------+-------------+---------+----------|
+  | Complexity | V + E    | (V+E) log V | V . E   | V^3      |
+  | Graph Size | large    | large       | medium  | small    |
+  | APSP?      | unweight | ok          | ~bad~   | yes      |
+  | (-) Cycles | no       | no          | yes     | yes      |
+  | weighted   | no       | =Best=      | ok      | ~bad~    |
+  | unweighted | =Best=   | ok          | ~bad~   | ~bad~    |
+  |------------+----------+-------------+---------+----------|
+** Code
+   #+begin_src python
+     function propagateNegativeCycles(dp, n):
+         # Execute FW APSP algorithm a 2nd time but
+         # this time if the distance can be improved
+         # set the optimal distance to be -INFINITY
+         # Every edge (i,j) marked with -INFINITY is either
+         # part of OR reaches into a negative cycle.
+         for(k := 0; k < n; k++):
+             for(i := 0; i < n; i++):
+                 for(j := 0; j < n; j++):
+                     if(dp[i][k] + dp[k][j] < dp[i][j]):
+                         dp[i][j] = -INFINITY
+                         next[i][j] = -1
+     function setup(m):
+         # dp   = empty matrix of size n x n
+         # next = empty integer matrix of size n x n
+         # Do a deep copy of the input matrix
+         # ...and setup the next matrix for path reconstruction
+         for(i := 0; i < n; i++):
+             for(j := 0; i < n; j++):
+                 dp[i][j] = m[i][j]
+                 if m[i][j] != +INFINITE:
+                     next[i][j] = j
+     # n    = size of adjacency matrix
+     # dp   = memp table
+     # next = matrix used to reconstruct shortest paths
+     function floydWarshall(m):
+         setup(m)
+         # Execute FW all pairs shortest path algorithm
+         for(k := 0; k < n; k++):
+             for(i := 0; i < n; i++):
+                 for(j := 0; j < n; j++):
+                     if(dp[i][k] + dp[k][j] < dp[i][j]):
+                         dp[i][j] = dp[i][k] + dp[k][j]
+                         next[i][j] = next[i][k]
+         # Detect and propagate negative cycles
+         propagateNegativeCycles(dp, n)
+         # Return APSP matrix
+         return dp
+     # Reconstructs the shortest path between nodes
+     # 'start' and 'end.
+     # Returns null if path is affected by negative cycle.
+     function reconstructPath(start, end):
+         path = []
+         # Check if there exists a path between
+         # the start and the end node.
+         if dp[start][end] == +INFINITY: return path
+         at := start
+         # reconstrct path from =next= matrix
+         for(;at != end; at = next[at][end]):
+             if at == -1: return null
+             path.add(at)
+
+         if next[at][end] == -1: return null
+         path.add(end)
+         return path
+   #+end_src
+* TODO Video: Bellman Ford   - Shortest path & Negative cycles
+https://www.youtube.com/watch?v=lyw4FaxrwHg
+- SSSP (Single Source Shortest Path)
+- O(E*V)
+- When Dijkstra fails, negative cycles
+- Real World use case: when doing an *arbitrage* in economics
+* Video: NeetCode - Top 5 Most Common =Graph Algorithms= for Coding Interviews
+  https://www.youtube.com/watch?v=utDu3Q7Flrw
+  - Prim's Kruska's (Minimum Spanning Tree)
+  - Floyd Warshall's Algorithm
+ | DFS         | O(n)     | HashSet(cycles) | Recursive |
+ | DFS         | O(n)     | Stack           | Iterative |
+ |-------------+----------+-----------------+-----------|
+ | BFS         | O(n)     | (de)Queue       | Iterative |
+ |             |          | HashSet(cycles) |           |
+ |-------------+----------+-----------------+-----------|
+ | Union       | O(nlogn) | Forest of Trees |           |
+ | Find        |          |                 |           |
+ |-------------+----------+-----------------+-----------|
+ | Topological | O(n)     | HashSet         |           |
+ | Sort (DFS)  |          |                 |           |
+ |-------------+----------+-----------------+-----------|
+ | Dijstra's   | O(ElogV) | Heap            |           |
+ | Shortest    |          | HashSet         |           |
+ | Path        |          |                 |           |
+* Video: NeetCode - Top 5 =Dynamic Programming= Patterns for Coding Interviews - For Beginners
+  https://www.youtube.com/watch?v=mBNrRy2_hVs
+ - Dimensions
+   - 1D:
+     - Fibonacci
+   - 2D: (size of target, if we use a coin or not)
+     - 0/1 Knapsack: in diagonal
+     - Unbounded Knapsack: from the bottom right, to the left
+ - Types
+   1) Fibonnaci Numbers: solved using bottom-up approach, starting from the bottom
+      - from F(0) to F(1) and so on...
+      - we also do NOT need to keep everything (N) on memory, just the last 2
+   2) 0/1 Knapsack: Can we sum to TARGET with these ITEMS
+      - We can use the ITEMS 0 or 1 times
+      - Combinations being 2^n
+   3) Unbounded Knapsack:
+      - We are allowed to use ITEMS infinite number of times
+      - TARGET still exists
+   4) Longest Common Subsequence:
+      - 
+   5) Palindromes
+** Original Table
+1. Fibonacci Numbers
+| Climbing Stairs                     | https://youtu.be/Y0lT9Fck7qI | https://leetcode.com/problems/climbing-stairs/                     |
+| House Robber                        | https://youtu.be/73r3KWiEvyk | https://leetcode.com/problems/house-robber/                        |
+| Maximum Alternating Subsequence Sum | https://youtu.be/4v42XOuU1XA | https://leetcode.com/problems/maximum-alternating-subsequence-sum/ |
+| Fibonacci Number                    |                              | https://leetcode.com/problems/fibonacci-number/                    |
+2. Zero / One Knapsack
+| Partition Equal Subset Sum | https://youtu.be/IsvocB5BJhw                | https://leetcode.com/problems/partition-equal-subset-sum/ |
+| Target Sum                 | https://www.youtube.com/watch?v=g0npyaQtAQM | https://leetcode.com/problems/target-sum/                 |
+3. Unbounded Knapsack
+| Coin Change              | https://youtu.be/H9bfqozjoqs                | https://leetcode.com/problems/coin-change/              |
+| Coin Change II           | https://www.youtube.com/watch?v=Mjy4hd2xgrs | https://leetcode.com/problems/coin-change-2/            |
+| Minimum Cost for Tickets | https://www.youtube.com/watch?v=4pY1bsBpIY4 | https://leetcode.com/problems/minimum-cost-for-tickets/ |
+4. Longest Common Subsequence
+| Longest Common Subsequence     | https://youtu.be/Ua0GhsJSlWM | https://leetcode.com/problems/longest-common-subsequence/     |
+| Longest Increasing Subsequence | https://youtu.be/cjWnW0hdF1Y | https://leetcode.com/problems/longest-increasing-subsequence/ |
+| Edit Distance                  | https://youtu.be/XYi2-LPrwm4 | https://leetcode.com/problems/edit-distance/                  |
+| Distinct Subsequences          | https://youtu.be/-RDzMJ33nx8 | https://leetcode.com/problems/distinct-subsequences/          |
+5. Palindromes
+| Longest Palindromic Substring   | https://youtu.be/XYQecbcd6_c | https://leetcode.com/problems/longest-palindromic-substring    |
+| Palindromic Substrings          | https://youtu.be/4RACzI5-du8 | https://leetcode.com/problems/palindromic-substrings/          |
+| Longest Palindromic Subsequence |                              | https://leetcode.com/problems/longest-palindromic-subsequence/ |
+* Video: freeCodeCamp - Solve Coding Interview Backtracking Problems - Crash Course
+https://www.youtube.com/watch?v=A80YzvNwqXA
+- LeetCode Problems: NQueen, Sudoku
+- Components: State
+- Functions:
+  - is_valid_state(state)
+  - get_candidates(state)
+  - search(state, solutions)
+  - solve()

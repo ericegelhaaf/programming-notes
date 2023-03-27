@@ -1,0 +1,245 @@
+- CS170 - Efficient Algorithms and Intractable Problems https://cs170.org/
+* Algorithmic Toolbox (Complete Course) https://www.youtube.com/watch?v=CAfMYNNsVAo
+** Data Structures
+   https://www.youtube.com/playlist?list=PLI1t_8YX-Apv-UiRlnZwqqrRT8D1RhriX
+   Balanced Parentheses in Expression
+   Queue With Two Stacks
+   Stacks and Queues
+   Cycles in a Linked List
+   Linked Lists
+   Binary Search Tree
+   Trees
+   Solve 'Contacts' Using Tries
+   Tries
+   Heaps
+   Solve 'Find the Running Median' Using Heaps
+   Anagram Problem Solution
+   Hash Tables
+   Solve 'Ransom Note' Using Hash Tables
+   Hash Tables
+** Algorithms
+   https://www.youtube.com/playlist?list=PLI1t_8YX-ApvMthLj56t1Rf-Buio5Y8KL
+   Recursion
+   Solve 'Ice Cream Parlor' Using Binary Search
+   Binary Search
+   Solve 'Shortest Reach' Using BFS
+   Solve 'Connected Cells' Using DFS
+   Solve 'Recursive Staircase' Using Recursion
+   Quicksort
+   Merge Sort
+   Bubble Sort
+   Solve 'Coin Change' Using Memoization and DP
+   Memoization and Dynamic Programming
+   Sort An Array with Comparator
+   Bit Manipulation
+   Graph Search, DFS and BFS
+   Solve 'Lonley Integer' Using Bit Manipulation
+* 15 | MIT 6.046J Design and Analysis of Algorithms
+https://www.youtube.com/playlist?list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp
+* 20 | MIT 6.006 Introduction to Algorithms
+https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
+** DONE 1. Algorithms and Computation
+- Solve Computational Problems, communicating, correct and efficiently
+- A problem is a relation between an INPUT and an OUTPUT (like a bipartite graph)
+  f: I -> O
+- Efficicency: use Asyntotic Analysis, measure in "ops". Depends on size of input.
+  O() upper bounds
+  n() lower bounds - Omega
+  8() both  bounds - Tetha
+- O(1)
+  O(log n)   after some time itstarts to look like constant
+  O(n)
+  O(n log n) after some time it start to look linear
+  O(n ^ ?)
+  2^O(n)
+- Design our own algorithm
+  1) Brute Force
+  2) Decrease and Conquer
+  3) Divide and Conquer
+  4) Dynamic Programming
+  5) Greedy / Incremental
+- Reduce to a problem you already know (use a DS or algo)
+ | Data Structures      | Sort Algorithms | Shortest Path Algo |
+ |----------------------+-----------------+--------------------|
+ | Static Array         | Insertion Sort  | BFS                |
+ | Linked List          | Selection Sort  | DFS                |
+ | Dynamic Array        | Merge Sort      | Topological Sort   |
+ | Sorted Array         | Counting Sort   | Bellman-Ford       |
+ | Direct Access Array  | Radix Sort      | Dijkstra           |
+ | Hash Table           | AVL Sort        | Johnson            |
+ | Balanced Binary Tree | Heap Sort       | Floyd-Warshall     |
+ | Binary Heap          |                 |                    |
+** DONE 2. Data Structures and Dynamic Arrays
+- Interface (API/ADT) vs Data Structures
+  | Interface           | Data Structure                |
+  |---------------------+-------------------------------|
+  | specification       | representation                |
+  | what data can store | how to store data             |
+  | what the ops do     | algorithms to support the ops |
+  | problem             | solution                      |
+- Approaches
+  - Arrays
+  - Pointers
+- Static  Sequence (Interface) : Static Array (Data Structure)
+  - build(X)
+  - len()
+  - iter_seq()
+  - get_at(i)
+  - set_at(i,x)
+  - get_first/last()
+  - set_first/last(x)
+- Dynamic Sequence (Interface) : Linked Lists (DS, pointer based)
+  - insert_at(i,x)
+  - delete_at(i)
+  - insert/delete_first/last(x)/()
+- *DS Augmentation* can be done to a simple LL by adding a extra pointer to the tail,
+  which would make insert_last O(1)
+- Dynamic Sequence OPS
+ |               | get/set_at | insert/delete_first | insert/delete_last | insert/delete_at |
+ | Static Array  | =1=        | n                   | n                  | n                |
+ | Linked List   | n          | =1=                 | n                  | n                |
+ | Dynamic Array | =1=        | n                   | =1=                | n                |
+- How can we get BOTH the benefits of Static Arrays and Linked Lists?
+  Dynamic Arrays, implemented in Python as "Lists"
+  (ME: Implementation looks like Go Slices)
+  Static Arrays being resized
+  DS: 1) array pointer 2) length 3) size
+  length <= size
+- Geometric Series: are dominated for by the last term (the biggest term)
+  O(E 2^i) = O(2^(log n)) = O(n)
+- Amortization: a particular kind of avg (charging 1 cost all the others that make it happen)
+  operation takes T(n) amortized time
+  if any k ops take <=  k T(n)
+** DONE 3. Sets and Sorting
+- Interface     : collection of OPS (eg: sequence & set)
+  Data Structure: way to store data that supports a set of OPS
+- Possible DS for Set Interface
+  |                | build   | find  | insert | find_min | find_prev |
+  |                |         |       | delete | find_max | find_next |
+  |----------------+---------+-------+--------+----------+-----------|
+  | Unsorted Array | n       | n     | n      | n        | n         |
+  | Sorted Array   | n log n | log n | n      | 1        | log n     |
+- Destructive: overrides the input array
+  In Place   : uses O(1) extra space
+- n! is the number of permutations on a list with n members
+- Permutation Sort
+  #+begin_src python
+    def permutation_sort(A):
+        for B in permutation(A):
+            if is_sorted(B):
+                return B
+  #+end_src
+- Selection Sort:
+  1) find max with index <= 1
+  2) swap
+  3) sort rest (back to step 1)
+  #+begin_src python
+    def prefix_max(A, i):
+        '''Return index of maximum in A[:i + 1]'''
+        if i > 0:
+            j = prefix_max(A, i - 1)
+            if A[i] < A[j]:
+                return j
+        return i
+  #+end_src
+- Insertion Sort...
+- Merge Sort
+  #+begin_src python
+    def merge_sort(A, a = 0, b = None):
+        if b is None: b = len(A)
+        if 1 < b - a:
+            c = (a + b + 1) // 2
+            merge_sort(A, a, c)
+            merge_sort(A, c, b)
+            L, R = A[a:c], A[c:b]
+            merge(L, R, A, len(L), len(R), a, b)
+  #+end_src
+** 4. Hashing
+** 5. Linear Sorting
+** 6. Binary Trees, Part 1
+- Missing some performant operations on the current DS
+- "Inspired" by Linked List, with 3 links instead of 1 or 2 like in Double-LL
+- depth(X) = #ancestors = #edges in path from X to root (downward)
+ height(X) = #edges in longest downward path (upward, from node)
+           = max depth() of a node in subtree
+- traversal ops: both O(h) where h is the height
+  - subtree_first(node): leftmost leaf
+  - successor(node): next after node, leftmost leaf on the right child subtree, or walkup tree until up a left branch
+  - subtree_insert_after(node, new)
+** 7. Binary Trees, Part 2: AVL
+** 8. Binary Heaps
+** 9. Breadth-First Search
+** Quiz 1 review
+** 10. Depth-First Search
+** 11. Weighted Shortest Paths
+** 12. Bellman-Ford
+** 13. Dijkstra
+** 14. APSP and Johnson
+** Quiz 2 Review
+** 15. Dynamic Programming, Part 1: SRTBOT, Fib, DAGs, Bowling
+** 16. Dynamic Programming, Part 2: LCS, LIS, Coins
+** 17. Dynamic Programming, Part 3: APSP, Parens, Piano
+** 18. Dynamic Programming, Part 4: Rods, Subset Sum, Pseudopolynomial
+** 19. Complexity
+** 20. Course Review
+** 21. Algorithms Next Steps
+* 21 | AlgoExpert
+** Data Structures
+- Are defined by
+  1) their values
+  2) their relationships between the values
+  3) the operations you can do with their values
+** Complexity Analysis
+- Comes into play to judge which solution is better than the others.
+- Complexity in regards to:
+  1) Time Complexity: how fast it is
+  2) Space Complexity: how much memory uses
+- Both the /relationships/ and the /operations/ of a data structure have complexity ramifications
+** Memory
+- Memory can be seen a *bounded* /memory canvas/ of memory slots (aka 2D)
+- One "memory slot" here is "1 byte"
+- Memory stores values (variables/arrays) "back to back"
+  (aka in chunks of /memory slots/ without holes belonging to other data)
+- Accessing a memory slot given a memory address is know as the most basic elementary memory operation.
+  It is very fast.
+** Big O Notation
+- Notation to describe complexity
+- We measure the change of speed of the algorithm, with respect of the size of the input
+  - =Asymptotic Analysis=: study of the behavior of "f(n)" as the value "n" tends towards infinity
+    - We do not care about the exact number of operations
+    - We only care if the number has a direct relationship with the number "n" or their size
+- The 1(one) on "O(1)" represents the elemental operation
+  - Example: access to a memory slot, addition, multiplication, declaring a variable
+- O(1)          - constant
+  O(log(n))     - logaritmic
+  O(n)          - linear
+  O(n . log(n)) -
+  O(n^?)        - (?) is a constant, >1, that we DO NOT drop
+  O(2^n)
+  O(n!)         - factorial
+- Big O, determines the complexity on the worst case scenario
+- If we were to take 2 arrays, n and m, and we did something more complex with m than with n
+  We would still NOT DROP the "n".
+  O(m^2 + n)
+** Logarithm
+- log(n) => b^? = n
+- log(n) we always assume that the b(ase) is "2", aka the "binary logarithm"
+- log(n) => 2^? = n
+- In practical terms, in each step we are duplicating the previous value
+  Aka as "n" doubles, the power only increases by 1(one)
+  They increase at different velocities.
+- "I am cutting the input by half on each step of the function?"
+  "If I double the size of the input, I am only going to do an extra operation?"
+- Example? binary search.
+- Example? traversing a balanced binary tree
+** Array
+- called "lists" on python
+- Types
+  - Static
+  - Dynamic
+- accessing an element of an array "a[2]" is constant
+  setting an element of an array "a[2] = 3" is constant
+  initialization an array is linear
+  traversing an array is linear (map/filter/reduce)
+  copying array is linear
+  inserting

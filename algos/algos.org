@@ -1,0 +1,33 @@
+- katas https://web.archive.org/web/20160701032652/https://codingdojo.org/cgi-bin/index.pl?KataCatalogue
+  https://dojorena.io/manuals/43
+  https://www.youtube.com/user/ltaravilse/videos
+- https://dojorena.io/with/the-best-coding-challenge
+
+- https://github.com/cl2333/Grokking-the-Coding-Interview-Patterns-for-Coding-Questions
+- https://github.com/codenjoyme/codenjoy
+- https://github.com/ec24/tc-arg
+- https://github.com/fogleman/AdventOfCode2021/
+- https://github.com/jwasham/coding-interview-university
+- https://github.com/matramos/elrejunte
+- https://github.com/undefinedfceia/guardian-tortuga
+
+- https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed
+- https://malisper.me/an-algorithm-for-passing-programming-interviews/
+- https://ourmachinery.com/post/data-structures-part-1-bulk-data/
+
+- Sites
+  - https://cses.fi/problemset/
+  - https://codeforces.com/
+  - https://www.codechef.com/
+  - https://www.hackerearth.com/
+  - https://www.codingame.com/
+  - https://www.hackerrank.com/
+  - https://www.codewards.com/
+  - https://projecteuler.net/
+* Congruencies
+- https://en.wikipedia.org/wiki/Modular_arithmetic
+- problem https://www.codewars.com/kata/554f76dca89983cc400000bb/train/ocaml
+- Books
+  file:///home/sendai/disk/anybody/Steven%20Halim/Competitive%20Programming%203%20(4427)/Competitive%20Programming%203%20-%20Steven%20Halim.pdf#page=241
+  file:///home/sendai/disk/anybody/David%20Esparza%20Alba/Algorithms%20For%20Competitive%20Programming%20(4592)/Algorithms%20For%20Competitive%20Programming%20-%20David%20Esparza%20Alba.pdf#page=311
+  file:///home/sendai/disk/anybody/Skiena,%20Steven%20S_/Programming%20Challenges%20(4425)/Programming%20Challenges%20-%20Skiena,%20Steven%20S_.pdf#page=174
