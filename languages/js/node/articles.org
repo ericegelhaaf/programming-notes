@@ -1,0 +1,8 @@
+* DONE 19 | Reduce Promises memory usage in Node.js
+  https://dev.to/shaggydoag/reduce-promises-memory-usage-in-node-js-1a3i
+  - 3000MB max ammount of memory on AWS lambda
+  - Promise are not memory friendly
+    https://github.com/nodejs/node/issues/6673
+  - bluebird
+    http://bluebirdjs.com/docs/getting-started.html
+  - Solution was to reduce the number of concurrent promises
