@@ -1,0 +1,266 @@
+- Book https://joyofelixir.com/toc.html
+* Book: Elixir In Action
+- SELF: redefine variables? (shoddy closures), start from 0, dot operator, <> compares all?, what is the point of *with*???
+** 1 First Steps
+- Elixir code compiles to BEAM-compliant bytecode.
+- Ecto: brings LINQ-style queries to Elixir, using macros
+- Most Elixir is written in Elixir
+- ~staircaising~ is the style of nesting function calls
+  clumsy as you have to parse it inside-out
+- |> aka the "pipeline operator"
+** 2 Building Blocks
+- Everything in Elixir is an *expression* that returns a value
+- .ex, and .exs for scripts
+- *def* and *defmodule* are actually macros
+- # Comments
+- mix run -e "IO.puts(MyProject.hello())
+  elixir --no-halt script.exs
+  iex my_source.ex
+*** Variables: are_underscored_and_lowercase
+- Assignment is called *binding*
+- you CAN rebind the variable!!!!
+  (internally creates a new variable)
+*** Modules: CamelCase
+- maybe (.) for hierarchy convinience (not actual meaning or way to query hierarchy)
+- you CAN nest defmodule definitions
+- import Module
+- alias Geometry.Rectangle, as: Rectangle
+  alias Geometry.Rectangle # SAME
+- module @ attributes: compile-time constants
+  defmodule Circle do
+    @pi 3.14159
+    def area(r), do: r*r*@PI
+  end
+  - @doc @moduledoc
+  - ex_doc uses those to generate html documentation
+  - Typespec
+    @spec area(number) :: number
+*** Functions: named_as_variables
+- ALWAYS part of a module
+- end with:
+  - ? for a boolean function
+  - ! for something that can raise an runtime error
+- short form
+  def area(a,b), do: a * b
+- You can ommit parenthesis on call (not recommended)
+- shorthand to default arg value, generate multiple functions
+  def sum(a, b \\ 0) do
+    a + b
+  end
+- *def*  creates public functions
+  *defp* creates private functions
+*** IEX
+- do NOT try to measure performance from IEX (as what you type will be interpreted)
+  unless you define a module (which will be compiled)
+- *-pa* switch for alternative _code paths_
+  code.get_path() to check live
+- h() Module
+*** Types
+**** Numbers
+  2         (integer)
+  0xFF      (integer written in hex)
+  3.14      (float)
+  1.0e-2    (float, exponential notation)
+  1_000_000 (rust!?)
+  - no integer limit
+**** Atoms
+  :an_atom
+  :"another atom with spaces"
+  AnAtom == :"Elixir.AnAtom" (an alias)
+**** Nil and Truth
+  :true and :false are atoms and can be written as true and false (syntatic sugar)
+  :nil or nil
+  && returns the last false OR the last one
+  || returns the first that is not false
+**** Tuple {}
+  Kernel.put_elem/3 to modify a value
+  - Modifying tuples creates shallow copies
+  - Rebinding creates new copies
+**** Lists []
+  For random access use tuples, maps or...¡?
+  Enum.at/2 # to get an element from a list
+  *in* operator
+    5 in prime_numbers
+  List.replace_at/3 # to modify a list
+  List.insert_at/3  # to add a element at a position, -1 to the end
+  There are also ~improper lists~, that is where the tail is NOT a list.
+  Modifying Lists 1) creates shallow copies of the elements before the new one
+                  2) allocates the new value
+                  3) rest of the tail is shared
+**** Maps %{}
+- dynamically sized
+  #+begin_src elixir
+    %{1 => 2, 2 => 4, 3 => 9}
+    amap = Map.new([{1,1},{2,4},{3,9}])
+    amap[2] # OR Map.get/3    with a default value
+            # OR Map.fetch/2  with {:ok, val} or :error returns
+            # OR Map.fetch!/2 for an exception version
+    Map.put/3
+    Map.update/4
+    Map.delete/2
+  #+end_src
+- Structured data
+  #+begin_src elixir
+    alice = %{:name => "Alice", :age => 25}
+    bob = %{name: "Bob", age: 25} # shorthand if keys are atoms
+    bob[:age] == bob.age
+    %{bob | age: 26} # modify value, already existing
+  #+end_src
+**** Binary <<>>
+- a chuck of bytes
+- <<1,2,3>>
+- truncated/mod to 255
+- 1::N to tell the number of N bits to use
+- <> can be used to concatenate binaries
+**** Binary strings ""
+  String.to_charlist/1
+  - Recommended over...
+  - #{} to place an expresion inside a string constant
+  - ~s() also declared used *sigils*, useful include a quoted (") text
+    ~S() same but not #{} support or escape
+  - *heredocs* support """hey"""
+  - <> can be used
+**** Character List ''
+  List.to_string/1
+  - #{} ~c() ~C() '''hey'''
+**** Lambdas
+#+begin_src elixir
+square = fn x -> x * x end
+square.(5)
+&IO.puts/1 # to refer to the function
+           # capture operator
+Enum.each([1,2,3], &IO.puts/1)
+# same
+&(&1 * &2 + &3)
+fn x,y,z -> x * y + z end
+#+end_src
+*** Higher-level Types
+- Range, Keyword, MapSet
+  Date, Time, NaiveDateTime, Datetime
+**** Range 1..2
+- in operator
+  > 2 in 1..10
+  true
+- are Enum
+**** Keyword List [:monday 1, :tuesday 2]
+- aka proplist
+- internally as [{:monday, 1}]
+- [] operator suport
+- used for arbitrary number of arguments
+  IO.inspect([100,200,300],[width: 3])
+  IO.inspect([100,200,300, width: 3)
+  def my_fun(arg1, arg2, opts \\ []) do
+  end
+**** MapSet (aka a set)
+- Enum
+- No order
+- MapSet.New([:monday, :tuesday])
+  MapSet.member?(days, :monday)
+  MapSet.put(days, :friday)
+**** Time and Dates
+#+begin_src elixir
+date = ~D[2018-01-31]
+adate.year  # 2018
+time = ~T[11:59:12.00007]
+time.hour   # 11
+naive_datetime = ~N[2018-01-31 11:59:12.00007]
+naive_datetime.year # 2018
+datetime = DateTime.from_naive!(naive_datetime, "Etc/UTC")
+datetime.year # 2018
+#+end_src
+**** IO List
+- Integer 0 to 255
+  A binary
+  An IO list
+- iolist = [[['H', 'e'], "llo,"], " worl", "d!"]
+- appending is O(1) unlike lists
+*** Operators
+#+begin_src elixir
+1 ==  1.0 # true weak
+1 === 1.0 # false strict
+#+end_src
+- Logical: and or not
+- Short-circuit: || &&
+*** Runtime
+- Each modules is compiled into a separate file
+  - With .beam extension
+  - With name Elixir.ModuleName due the nature of Atoms
+- BEAM Bogdan Bjorn's
+       Erlang
+       Abstract
+       Machine
+** 3 Control Flow
+*** Pattern matching
+- pattern matching returns the right side of the =
+- _ is called ~anonymous variable~
+- the *PIN operator* ^ on matching ensure that a variable is not rebound,
+  and match fails if it tries with something different than what already has binded
+- When matching a map, you don't need to have all the fields on the left side
+- matching strings
+  > command = "ping www.example.com"
+  > "ping" <> url = command
+  > url
+  "www.example.com
+- = is called ~match operator~
+  - is right associative
+  - you can chain several
+  #+begin_src elixir
+    date_time = {_, {hour, _, _}} = :calendar.local_time()
+    {_, {hour, _, _}} = date_time = :calendar.local_time()
+  #+end_src
+*** Pattern Matching in Functions
+- ~multiclause functions~ is a type of function overloading of the same arity
+  - you can't reference a specific clause
+- Elixir terms can be compared with the operators < and >,
+  even if they’re not of the same type. In this case, the type ordering determines the result:
+  number < atom < reference < fun < port < pid < tuple < map < list < bitstring (binary)
+- Errors on guards are internally handled
+- Multi-clause lambdas are allowed
+*** Branching
+- Multiclauses can give some kind of polymorphism
+- if, if else, unless, cond (true), case (_)
+  with:
+  - binds several expressions in his scope
+  - and returns the one that failed, if it did
+*** Recursion
+- Tail call recursion looks more procedural.
+  While non-tail looks more declarative.
+*** Comprehension
+- Can return anything that is a *Collectable*
+#+begin_src elixir
+  for x <- [1,2,3] do
+    x*x
+  end
+  for x <- [1,2,3], y <- [1,2,3], do: {x,y,x*y} # one liner, nested iteration
+  for x <- 1..9, y <- 1..9,
+    x <= y,      # comprehension filter
+  into: %{} do # specify the type of collectable to return
+    {{x,y},x*y}    # first elem will be the KEY, second the VALUE
+  end
+#+end_src
+*** Streams
+- Is a lazy Enumerable
+- useful when multiple actions happen on a Enumerable
+  so instead of iterate several times
+  you lazily Stream. over it and then Enum.each/
+#+begin_src elixir
+  # Create the stream
+  stream = [1,2,3] |>
+    Stream.map(fn x -> 2 * x end)
+  Enum.to_list/1
+  Enum.take/2
+  File.stream!/1
+#+end_src
+** 4 Data Abstractions
+- Elixir promotes decoupling of date from the code.
+- Modifier functions: return the same type as their input
+  Query function: return a different type as their input
+- Structs: define an abstraction and bind it to a module
+#+begin_src elixir
+  defmodule Fraction do
+    defstruct a: nil, b: nil
+  end
+  one_half %Fraction{a: 1, b: 2}   # Initialization
+  %Fraction{a: a, b: b} = one_half # Patter Matching
+  %Fraction{} = one_half           # Type Assertion
+#+end_src

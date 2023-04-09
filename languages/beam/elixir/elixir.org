@@ -1,0 +1,32 @@
+- https://github.com/bitwalker/libcluster
+  https://github.com/derekkraan/horde
+- https://elixir-lang.org/getting-started/mix-otp/config-and-releases.html#releases
+- https://github.com/lucasvegi/Elixir-Code-Smells
+- https://github.com/Zensavona/domainatrex
+  A library for parsing TLDs from urls in Elixir
+https://elixirschool.com/en/
+https://github.com/elixirkoans/elixir-koans
+https://github.com/exercism/elixir
+* Language
+** Types
+- Records vs Structs https://groups.google.com/g/elixir-lang-talk/c/6kn7J2XnFg8/m/I5poTNCEHwAJ
+| instantiation     | match     | access             | update                      | name         | description                                   |
+|-------------------+-----------+--------------------+-----------------------------+--------------+-----------------------------------------------|
+| :atom             |           |                    |                             | Atoms        | start with ":"                                |
+| true/false/nil    |           |                    |                             |              | syntactic sugar for atoms of the same name    |
+| ~D[]              |           |                    |                             | date,        |                                               |
+| ~T[]              |           |                    |                             | timestamp    |                                               |
+| ~N[]              |           |                    |                             | native date  |                                               |
+| %r/[0-9]/         |           |                    |                             | regex        |                                               |
+|-------------------+-----------+--------------------+-----------------------------+--------------+-----------------------------------------------|
+| []                | [x,_]     | Enum.at(l,N)       |                             | lists        |                                               |
+| {}                | {x,_}     |                    |                             | tuples       |                                               |
+| [a: 1, b: 2]      |           | Keyword.get(kw, K) |                             | keyword list |                                               |
+| %Abc{a: a, b: b}  |           |                    | %Abc{astruct ¦ name: "BOB"} | structs      | declared with *defstruct*                     |
+| A.new a: a        | A[a: a]   |                    |                             | records      | declared with *defrecord*, compile-time based |
+| %{name: "bob"}    | %{foo: a} | amap[:name]        | %{amap ¦ name: "BOB" }      | maps         | run-time based                                |
+| %{:name => "bob"} |           | amap.name          |                             |              |                                               |
+|-------------------+-----------+--------------------+-----------------------------+--------------+-----------------------------------------------|
+* Editor
+- 323 gradual type-checker https://github.com/esl/gradient
+- 4.5K code analysis/linter https://github.com/rrrene/credo
