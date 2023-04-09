@@ -37,7 +37,8 @@
 - Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
 - Tutorial: 2019 https://github.com/lindig/ocaml-style
 - https://github.com/imandra-ai/ocaml-tracy
-* Standard Library
+* Language
+** Standard Library
 - https://v2.ocaml.org/manual/stdlib.html
   example module url https://v2.ocaml.org/api/Seq.html
 | module         | description                                                |
@@ -101,6 +102,26 @@
 | Uchar          | Unicode characters                                         |
 | Unit           | unit values                                                |
 | Weak           | arrays of weak pointers                                    |
+** Types
+|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
+| Type      | Init                   | Access | Modifying | Pattern Matching                | Adding | Appending      |
+|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
+| Unit      | ()                     |        |           |                                 |        |                |
+| bool      | x = true,false         |        |           |                                 | &&,¦¦  |                |
+| Tuples    | (a , b)                |        |           | let (x , y) =                   |        |                |
+| List      | [a ; a]                | L.hd   |           | let (x :: y) =                  | ::     | @, List.append |
+| Option    | Some a                 |        |           |                                 |        |                |
+| String    | "abcd"                 | .[2]   | <-        |                                 |        | ^              |
+| Record    | {a = VAL ; b = VAL}    | .a     |           | let { x = x_pos ; y = y_pos } = |        |                |
+|           | a=VAL; B=VAL; {a ; b}  |        |           | let { x ; y } =                 |        |                |
+|           |                        |        |           | let v1 = v1.x + v2.y            |        |                |
+| Variant   |                        |        |           |                                 |        |                |
+| Array     | [¦ a ; b ¦]            | .(2)   | <-        | let [¦ a ; b ¦] = some_array    |        |                |
+| Big Array |                        | .{2}   | <-        |                                 |        |                |
+| Mutable   |                        |        | <-        |                                 |        |                |
+| Refs      | ref <expr>             | !x     | :=        |                                 |        |                |
+| struct    | struct let foo = 3 end |        |           |                                 |        |                |
+|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
 * ocamldebug
 - https://www.youtube.com/watch?v=DGvJk14sfi8
   - let _ = print_string;

@@ -35,8 +35,8 @@
 |      |      | zipapp package                                   | 0441 | .pyz a way to package source code            |
 |      |      | mat1 @ mat2                                      | 0465 | matrix multiplication                        |
 |      |      | async/await                                      | 0492 | coroutines with async and await syntax       |
-|      |      | *[1, 2]             => 1, 2                      | 0448 | additional *unpacking generalizations*       |
-|      |      | **{'a': 1, 'c': 3}  => a=1, c=3                  |      | (ME: like JS spead operator)                 |
+|      |      | *[1, 2]             => 1, 2                      | 0448 | additional unpacking generalizations         |
+|      |      | **{'a': 1, 'c': 3}  => a=1, c=3                  |      | aka *splat operator*                         |
 |------+------+--------------------------------------------------+------+----------------------------------------------|
 | 2016 | [[https://docs.python.org/3/whatsnew/3.6.html][3.6]]  | f"hello {name}"                                  | 0498 | formatted string literals                    |
 |      |      | 1_000_000                                        | 0515 | underscores in numeric literals              |
@@ -427,15 +427,41 @@
  | @classmethod | def   |
  | @dataclass   | class |
 ** Special Methods
- | len(a)                     | __len__()      |
- | a[n]                       | __getitem__(n) |
- | constructor                | __init__(self) |
- |----------------------------+----------------|
- | unambiguous representation | __repr__(self) |
- | readable representation    | __str__(self)  |
- |----------------------------+----------------|
- | iterator                   | __iter__(self) |
- | iterator                   | __next__(self) |
+https://docs.python.org/3/reference/datamodel.html#object.__setitem__
+|                    | *2nd*    | *3rd*     | *4th*     | *Description*                  |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __init__()         |          |           |           | constructor                    |
+| __call__()         | x        |           |           |                                |
+| __bool__()         |          |           |           |                                |
+| __hash__()         |          |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __enter__()        |          |           |           | with statement context manager |
+| __exit__()         | exc_type | exc_value | traceback |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __eq__()           | other    |           |           |                                |
+| __lt__()           | other    |           |           |                                |
+| __gt__()           | other    |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __repr__()         |          |           |           | unambiguous representation     |
+| __str__()          |          |           |           | readable representation        |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __len__()          |          |           |           | len(a)                         |
+| __getitem__()      | index    |           |           | a[n]                           |
+| __setitem__()      | index    | element   |           |                                |
+| __contains__()     | element  |           |           |                                |
+| __reversed__()     |          |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __getattribute__() | name     |           |           |                                |
+| __getattr__()      | name     |           |           |                                |
+| __setattr__()      | name     | value     |           |                                |
+| __delattr__()      | name     |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __iter__()         |          |           |           | iterator                       |
+| __next__()         |          |           |           | iterator                       |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __add__()          | other    |           |           | emulating numeric types        |
+| __sub__()          | other    |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
 * Libraries
 |-----------+----+-----+-----------------------------------+-------------------------------------|
 | psutil    | 23 | 9.1 | process and system monitoring     | https://github.com/giampaolo/psutil |

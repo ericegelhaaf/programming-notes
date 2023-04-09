@@ -33,7 +33,8 @@
 - https://tek256.com/posts/code-hardening/
 - http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
   https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
-* Types
+* Language
+** Types
 - struct intialization
   #+begin_src c
     typedef struct {
@@ -63,7 +64,7 @@
     #+begin_src c
       
     #+end_src
-* Standard Library
+** Standard Library
 - https://en.cppreference.com/w/c/header
 - https://en.wikibooks.org/wiki/C_Programming/stdbool.h
 |---------------+-----+---------------------------------------------------------------------------------------------------------|
@@ -99,6 +100,8 @@
 | wchar.h       | C95 | Extended multibyte and wide character utilities                                                         |
 | wctype.h      | C95 | Functions to determine the type contained in wide character data                                        |
 |---------------+-----+---------------------------------------------------------------------------------------------------------|
+* Codebases
+https://github.com/curl/trurl/blob/master/trurl.c
 * Libraries
 - Webserver https://mongoose.ws/
 - (3K) minimal cross-platform standalone C headers

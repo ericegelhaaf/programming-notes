@@ -1,3 +1,26 @@
+* readline | Developer Productivity | FrontEnd Masters
+- nodejs script that reads from stdin and writes to stdout
+ #+begin_src javascript
+   var readline = require('readline');
+   var rl = readline.createInterface({
+       input: proces..stdin,
+       output: process.stdout,
+       terminal: false
+   });
+   rl.on('line', function(line) {
+       console.log("LINE ", line.split(" ").reduce((sum, x) => sum + +x, 0));
+   });
+#+end_src
+- echo "5 4 2\n1 3 9" | node pipe.js
+- *tr* can only do single character substition (? but it can take multiple chars to replace 1 to 1
+  > echo foo | tr of 12
+    211
+- *zsh* has a *bindkey* buildin command to bind a key
+  - Example: binds to C-f, enter this string, aka run the command
+    bindkey -s ^f "tmux-sessionizer\n"
+- curl cht.sh/javascript/splice+array
+  curl cht.sh/find~exec
+  curl cht.st/typescript/enum
 * DONE 19 | Reduce Promises memory usage in Node.js
   https://dev.to/shaggydoag/reduce-promises-memory-usage-in-node-js-1a3i
   - 3000MB max ammount of memory on AWS lambda

@@ -23,6 +23,7 @@
   - 190k https://stackoverflow.com/questions/58028824/how-to-get-the-smallest-ocamlopt-compiled-native-binary
   - Duplo: A Framework for OCaml Post-Link Optimisation https://www.cl.cam.ac.uk/~nl364/docs/duplo.pdf
 - Golang
+  - https://totallygamerjet.hashnode.dev/the-smallest-go-binary-5kb
   - https://github.com/xaionaro/documentation/blob/master/golang/reduce-binary-size.md
   - https://www.youtube.com/watch?v=yJrDllXI8ok
     - "strip" produces random panics on Go binaries, use -ldflags instead
@@ -33,6 +34,9 @@
   - https://github.com/johnthagen/min-sized-rust
   - https://lifthrasiir.github.io/rustlog/why-is-a-rust-executable-large.html
   - 151Bytes http://mainisusuallyafunction.blogspot.com/2015/01/151-byte-static-linux-binary-in-rust.html
+  - 4k demo https://github.com/janiorca/sphere_dance
+    https://www.codeslow.com/2020/07/writing-winning-4k-intro-in-rust.html
+    https://www.youtube.com/watch?v=SIkkYRQ07tU
 - Synth https://github.com/askeksa/Oidos
 - Intro 1k (ASM,sdl,opengl) https://github.com/baines/demostuff
 - Intro 4k (D) https://github.com/kubo39/tiny-d-demo

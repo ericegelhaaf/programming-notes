@@ -40,9 +40,6 @@
 - Type on destructuring = instead of :
 - https://github.com/bevyengine/bevy
 - tut dns server https://github.com/EmilHernvall/dnsguide
-- 4k demo https://github.com/janiorca/sphere_dance
-  https://www.codeslow.com/2020/07/writing-winning-4k-intro-in-rust.html
-  https://www.youtube.com/watch?v=SIkkYRQ07tU
 - https://research.mozilla.org/rust/
 * Language
 ** Types
@@ -58,6 +55,8 @@
 |---------+----------------+-----------+--------------+-------------------|
 ** Standard Library
 - https://doc.rust-lang.org/std/#modules
+* Codebases
+- https://github.com/pop-os/system76-power
 * Tutorial: EasyRust
   https://github.com/Dhghomon/easy_rust
 

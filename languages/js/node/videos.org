@@ -1,17 +1,22 @@
-- 9h https://www.youtube.com/watch?v=rltfdjcXjmk
-- 1h https://www.youtube.com/watch?v=fBNz5xF-Kx4
-- 10h 4 projects https://www.youtube.com/watch?v=qwfE7fSVaZM
-- 8h learn https://www.youtube.com/watch?v=Oe421EPjeBE
+* 14 | Node.js in 20 Minutes   | Edmond Meinfelder
+https://www.youtube.com/watch?v=mq6uCM4ynpc
+- Node
+  - Async IO
+  - Events
+  - Streams
+  - Has buffer for IO
+  - single threaded
 * 11 | Introduction to Node.js | Ryan Dahl
 https://www.youtube.com/watch?v=jo_B4LTHi3I
 - Node is a set of libraries on top of V8
-- Focus is to do networking correctly
+- *Focus is to do networking correctly*
 - Tries to use the same terminology than browser JS (eg: setTimeout)
 - You cannot "sleep" in node, no mutex, no halting
-  - you can idle, which leaves the process ready for other requests
-- HTTP/1.1 you can reuse the TCP connection to perform multiple requests
-- Transfer-encoding: chunks
-  - A "framing" protocol
+  - *you can idle*, which leaves the process ready for other requests
+- HTTP/1.1
+  - you can reuse the TCP connection to perform multiple requests
+  - Transfer-encoding: chunks
+    - A "framing" protocol
 - Non-blocking style of writing code
 - We can run concurrent things at the same time
   - without changing them to add another.

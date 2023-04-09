@@ -21,6 +21,7 @@
   unset MANPATH # delete if you already modified MANPATH elsewhere in your config
   MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   #+end_src
+- https://github.com/sindresorhus/awesome-nodejs
 * Standard Modules
 - https://www.w3schools.com/nodejs/ref_modules.asp
   Here is a list of the built-in modules of Node.js version 6.10.3:

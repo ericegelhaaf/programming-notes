@@ -6,25 +6,25 @@
 - https://github.com/heroku/erlang-in-anger
 - beam https://github.com/happi/theBeamBook
 - beam http://beam-wisdoms.clau.se/en/latest/
-* TODO Book: Adopting Erlang
+* Book: Adopting Erlang
+https://adoptingerlang.org/
 ** Releases
 - Starting an erlang release is similar to an OS boot sequence
 - =boot file= an Erlang node starts by running instructions found in it
   http://erlang.org/doc/man/script.html
+- .app (Application resource file)
 - .rel (Release resource file)
   - modules to load and the dependencies of each
-- .rel + .app(s) (Application resource file) of each app
-  ->
-  systools
-  ->
-  .script
-  ->
-  systools:script2boot/1
-  -> .boot
+- .rel + .app(s)  of each app
+  -> systools               -> .script
+  -> systools:script2boot/1 -> .boot
 - History of release tools:
-  systools -> reltool (bundled with OTP) -> relx (bundled with rebar3)
-- ~sasl~ application is required by ~rebar3 release~ ONLY IF you need release upgrades or downgrades functionality
-  if working with container images, it's not needed to be included
+  1) systools
+  2) reltool (bundled with OTP)
+  3) relx (bundled with rebar3)
+- ~sasl~ application is required by ~rebar3 release~
+  ONLY IF you need release upgrades or downgrades functionality
+  IF working with container images, it's not needed to be included
 - _build/default/rel/service_discovery/bin/service_discovery console
 - rebar3 release
   rebar3 as prod tar
@@ -46,7 +46,7 @@
     | debug_info     | strip       | save space, used by debugger,xref,cover |
     | sys_config_src | path string |                                         |
     | vm_args_src    | path string |                                         |
-*** TODO Runtime configuration
+*** Runtime configuration
 *** Coming up
 * Book: Learn some erlang for greater good
 - return {setup,...} from suffixed _test_() to lifecycle a test generator
@@ -183,23 +183,23 @@
 - A computer can run up to 50 erlang VMs/Nodes
 - Each node is named
 - They connect to 1 EPMD (nameserver process)
-*** Fallacies of distributed computing:
-  1) The network is reliable: add redundancy, monitor down hosts
-  2) There is no latency: timeout accordingly
-  3) Bandwith is Infinite: send messages about what happened, not what happened
-  4) The Network Is Secure: ssl distribution, or your own communication protocol
-  5) Topology Doesn't Change: there are libraries that let us forget about nodenames
-  6) There is Only One Administrator: NO library can help
-  7) Transport Cost is Zero: time(serialize/deserialize) and money (bandwith usage). Communication between nodes can be changed (?)
-  8) The Network is Homogeneous: related to the Erlang node protocol. Can exists "C nodes". Or BERT-RPC
+*** 8 Fallacies of distributed computing:
+| The *network* is reliable       | add redundancy, monitor down hosts                                                                     |
+| There is NO latency             | timeout accordingly                                                                                    |
+| Bandwith is infinite            | send messages about what happened, not what happened                                                   |
+| The *network* is secure         | ssl distribution, or your own communication protocol                                                   |
+| Topology does NOT change        | there are libraries that let us forget about nodenames                                                 |
+| There is only one administrator | NO library can help                                                                                    |
+| Transport cost is zero          | time(serialize/deserialize) and money (bandwith usage). Communication between nodes can be changed (?) |
+| The *network* is homogeneous    | related to the Erlang node protocol. Can exists "C nodes". Or BERT-RPC                                 |
 - For erlang: Unreachables nodes are dead nodes. Reachable nodes are alive.
 *** CAP.
-  - Consistency: same data across nodes
-  - Availability: get a response for each request
-  - Partition Tolerance: parts of the "whole" can keep working while others can't communicate
- - CP: is about stopping modifications, to keep consistency.
-       While keeping the partitions read-only operational.
-   AP: will allow each partition to update. Resulting on inconsistent data.
+| Consistency         | same data across nodes                                               |
+| Availability        | get a response for each request                                      |
+| Partition Tolerance | parts of the "whole" can keep working while others can't communicate |
+- CP: is about stopping modifications, to keep consistency.
+      While keeping the partitions read-only operational.
+- AP: will allow each partition to update. Resulting on inconsistent data.
 - IRL quorum bases system can decide to modify data based on how many % nodes are alive.
   Trading off only some of the consistency in favor of availability.
 *** Node names need to be UNIQUE
@@ -242,9 +242,9 @@
 - erlang:set_cookie/2
 - created automaticaly if not set, and stored in .erlang.cookie
 *** Creating a remote shell, and connecting to it
-local > ^G
-  > r remote@localhost
-  > j 2
+local  > ^G
+       > r remote@localhost
+       > j 2
 remote >
 *** global:
 - process registry that replicates data, handles node failure
@@ -258,19 +258,18 @@ remote >
     global:random_notify_name/3
     global:notify_all_name/3
 *** rpc:
-- rpc:multicall(Nodes, Mod, Fun, Args)       -- Call
-  rpc:eval_everywhere(Nodes, Mod, Fun, Args) -- Cast
-- rpc:cast(Node, Mod, Fun, Args)
-- Key = rpc:async_call(Node, Module, Function, Args)
-  rpc:yield(Key)
-  rpc:nb_yield(Key, Timeout)
-  rpc:nb_yield(Key)          -- Pooling
-- execute remotely but get the result locally
-  #+begin_src erlang
-    rpc:call/4
-    rpc:call/5 /4 + Timeout
-    rpc:call(Node, Module, Function, Args)
-  #+end_src
+| rpc:call            | (Node,  Mod, Fun, Args)          |                 |
+| rpc:call            | (Node,  Mod, Fun, Args, Timeout) |                 |
+|---------------------+----------------------------------+-----------------|
+| rpc:multicall       | (Nodes, Mod, Fun, Args)          | -- Call         |
+| rpc:eval_everywhere | (Nodes, Mod, Fun, Args)          | -- Cast         |
+| rpc:cast            | (Node,  Mod, Fun, Args)          |                 |
+|---------------------+----------------------------------+-----------------|
+| rpc:async_call      | (Node,  Mod, Fun, Args)          | returns a *Key* |
+| rpc:yield           | (Key)                            |                 |
+| rpc:nb_yield        | (Key, Timeout)                   |                 |
+| rpc:nb_yield        | (Key)                            | -- Pooling      |
+|---------------------+----------------------------------+-----------------|
 ** 27 Distributed OTP Application
 - a single ~application controler~
     over many ~application masters~

@@ -1,3 +1,4 @@
+- https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/
 - https://github.com/type-challenges/type-challenges
 - https://www.youtube.com/watch?v=MbZoQlmQaWQ
 * Article: Setup a Node.js project with Typescript, ESLint, Prettier, Husky

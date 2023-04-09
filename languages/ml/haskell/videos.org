@@ -1,3 +1,6 @@
+- Streamer https://www.youtube.com/c/cvladfp/videos
+- Streamer https://www.youtube.com/@EdwardKmett1/videos
+- Channel https://www.youtube.com/@impurepics/videos
 - Haskell Projects Playlist https://www.youtube.com/watch?v=qbDQdXfcaO8&list=PLyQXlWxYAh8_9_Q-XeyIF4CmQbE9b0Oc0
 - Streamers https://github.com/chiroptical/declarative-programming-streams
 - https://github.com/hzlmn/haskell-must-watch
@@ -6,7 +9,6 @@
   Compose NYC 2019
   Speaker: Donya Quick
   https://www.youtube.com/watch?v=9Fg54XAr044
-- Streamer https://www.youtube.com/c/cvladfp/videos
 - Berlin function programming https://www.youtube.com/channel/UCNp-DVb8cQRIOo32sZhWgNg
 - Talks by kowainik https://www.youtube.com/playlist?list=PL6EBWxwzgPKOHz4OQlyVHeae0EUqL6Prt
 - Functional Parsing - Computerphile https://www.youtube.com/watch?v=dDtZLm7HIJs

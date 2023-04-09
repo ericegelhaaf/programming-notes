@@ -168,14 +168,14 @@ https://golang.org/doc/code
   #+begin_src shell
   $ mkdir hello
   $ cd hello
-    $ go mod init example.com/user/hello
+  $ go mod init example.com/user/hello
   $ cat go.mod
-  module example.com/user/hello
-  go 1.16
-    $ go install example.com/user/hello
-      go install .
-      go install
-    $ go init
+    module example.com/user/hello
+    go 1.16
+  $ go install example.com/user/hello
+    go install .
+    go install
+  $ go init
   #+end_src
 - Adding a new package within the module/repo, does NOT involve *go mod* or *go.mod*
 - For new external packages required by your code

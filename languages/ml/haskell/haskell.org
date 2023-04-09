@@ -25,32 +25,6 @@
 - Project
   https://github.com/reanimate/reanimate
   https://github.com/xmonad/xmonad
-* cabal
-- cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
-| cabal                    | description                                                   |
-|--------------------------+---------------------------------------------------------------|
-| build                    | fetch deps, and builds targerts                               |
-| clean                    | cleans build artifacts                                        |
-| configure                |                                                               |
-| exec -- which EXE        | prints the path of the compiled EXE                           |
-| freeze                   | generate file with packages versions and build flags          |
-| gen-bounds               | generate version bounds for packages                          |
-| init --interactive       |                                                               |
-| init --libandexe         |                                                               |
-| repl --build-depends PKG |                                                               |
-| repl LIB                 | runs repl in our LIB context                                  |
-| run EXE -- ARGS          |                                                               |
-| sdist                    | bundle project in a tarball, which can be uploaded to hackage |
-| update                   | fetch packages metadata from remote repositories              |
-|--------------------------+---------------------------------------------------------------|
-* stack
-| stack             | description                                       |
-|-------------------+---------------------------------------------------|
-| build             | installs ghc, package deps and builds the project |
-| clean             | cleans build artifacts                            |
-| exec -- which EXE |                                                   |
-| exec EXE -- ARGS  | will run the EXE with ARGS                        |
-| ghci LIB          | starts repl in LIB context                        |
 * Language
 ** Types
 |---------------+----------------------------+-------------------+----------------------------------------|
@@ -216,6 +190,32 @@
 | unix             | System.Posix                      | https://hackage.haskell.org/package/unix             |
 | xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml            |
 |------------------+-----------------------------------+------------------------------------------------------|
+* cabal
+- cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
+| cabal                    | description                                                   |
+|--------------------------+---------------------------------------------------------------|
+| build                    | fetch deps, and builds targerts                               |
+| clean                    | cleans build artifacts                                        |
+| configure                |                                                               |
+| exec -- which EXE        | prints the path of the compiled EXE                           |
+| freeze                   | generate file with packages versions and build flags          |
+| gen-bounds               | generate version bounds for packages                          |
+| init --interactive       |                                                               |
+| init --libandexe         |                                                               |
+| repl --build-depends PKG |                                                               |
+| repl LIB                 | runs repl in our LIB context                                  |
+| run EXE -- ARGS          |                                                               |
+| sdist                    | bundle project in a tarball, which can be uploaded to hackage |
+| update                   | fetch packages metadata from remote repositories              |
+|--------------------------+---------------------------------------------------------------|
+* stack
+| stack             | description                                       |
+|-------------------+---------------------------------------------------|
+| build             | installs ghc, package deps and builds the project |
+| clean             | cleans build artifacts                            |
+| exec -- which EXE |                                                   |
+| exec EXE -- ARGS  | will run the EXE with ARGS                        |
+| ghci LIB          | starts repl in LIB context                        |
 * Personalities
 ** Simon Peyton-Jones
 - haskell comitee on design

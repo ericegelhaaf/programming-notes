@@ -1,3 +1,6 @@
+- Course: Design Patterns in the Real World, an Analysis-Based Approach
+  https://archive.org/details/design-patterns-in-the-real-world-an-analysis-based-approach
+- Channel: Programming Codebases Review https://www.youtube.com/@ants_are_everywhere/videos
 - Interviews: https://www.youtube.com/playlist?list=PLUN7koCjqU7D6CT76Vprf_xLmaInshvGV
 - https://grugbrain.dev/
 - CS173 Brown University - Programming Languages

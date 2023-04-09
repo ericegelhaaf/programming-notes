@@ -7,7 +7,9 @@
 - mailing list https://erlang.org/mailman/listinfo
 - doc https://erlang.org/doc/reference_manual/users_guide.html
 - doc https://erlang.org/doc/apps/stdlib/index.html
-* Types
+* Language
+https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
+** Types
 - Destructuring can happen on the function parameter
   - f({athing,{A,B},N}=C) -> C
 |--------+-------------+----------------+----------------------------+--------------------------+---------|
@@ -25,19 +27,102 @@
 - https://www.erlang.org/doc/reference_manual/records.html
 - https://www.erlang.org/doc/reference_manual/expressions.html
 - https://www.erlang.org/doc/reference_manual/typespec.html
+** Standard Library (by Elixir)
+- https://elixir-lang.org/getting-started/erlang-libraries.html
+  - binary
+  - io/io_lib
+  - crypto
+  - digraph
+  - ets/dets
+  - math
+  - queue
+  - rand
+  - zip/zlib
+** Standard Library (Data Structures)
+https://www.erlang.org/faq/libraries.html
+- Linked lists are a fundamental part of Erlang, as are tuples. The other standard data structures are:
+|----------+------------------------------------------------------------------|
+| =module= | =description=                                                    |
+|----------+------------------------------------------------------------------|
+| ets      | hash tables and ordered sets (trees), stored outside the process |
+| dets     | on-disk hash tables                                              |
+| dict     | maps, also called associative arrays                             |
+| gb_sets  | sets, but based on a general balanced data structure             |
+| gb_tree  | a general balanced tree                                          |
+| queue    | double-ended queues                                              |
+| sets     | sets, i.e. a collection of unique elements.                      |
+|----------+------------------------------------------------------------------|
+** Standard Library (things on the lib/ directory)
+asn1
+compiler
+crypto
+diameter
+erl_docgen
+erl_interface
+erts
+jinterface
+kernel
+mnesia
+os_mon
+public_key
+reltool
+runtime_tools
+sasl
+stdlib
+syntax_tools
+tools
+wx
+*** Developer Tool
+common_test
+debugger
+dialyzer
+edoc
+et
+eunit
+observer
+*** File Formats
+parsetools
+xmerl
+*** Protocols
+eldap
+ftp
+inets
+megaco
+snmp
+ssh
+ssl
+tftp
 * Libraries
-| https://github.com/ferd/recon/         | 1.1 | for inspecting prod nodes   |
-| https://github.com/talentdeficit/jsx   | 0.6 | .json                       |
-| https://github.com/elli-lib/elli       | 0.2 | web server                  |
-| https://github.com/tsloughter/grpcbox  | 0.1 | gprc                        |
-| https://github.com/artemeff/eql        | 0.1 | SQL ORM                     |
-| https://github.com/erleans/pgo         | 0.1 | pSQL connection pool        |
-| https://github.com/g-andrade/locus     | 0.1 | ASN                         |
-| https://github.com/eproxus/grapherl    | 0.1 | graph otp system            |
-| https://github.com/dnsimple/dns_erlang | 0.1 | DNS + TSIG + EDNS0 + DNSSEC |
-| https://github.com/savonarola/agent    | 0.0 | otp agent implementation    |
-| https://github.com/aerosol/gen_cycle   | 0.0 | otp recurring task          |
-| https://github.com/zyro/elixir-uuid    | 0.3 | ELIXIR uuid()               |
+- https://github.com/uhub/awesome-erlang (unsorted)
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| lager       | 1.1 | 22 | Logging framework                 | https://github.com/erlang-lager/lager   |
+| recon       | 1.1 |    | for inspecting prod nodes         | https://github.com/ferd/recon           |
+| elixir-uuid |  .3 |    | ELIXIR uuid()                     | https://github.com/zyro/elixir-uuid     |
+| grpcbox     |  .1 |    | gprc                              | https://github.com/tsloughter/grpcbox   |
+| locus       |  .1 |    | ASN                               | https://github.com/g-andrade/locus      |
+| grapherl    |  .1 |    | graph otp system                  | https://github.com/eproxus/grapherl     |
+| dns_erlang  |  .1 |    | DNS + TSIG + EDNS0 + DNSSEC       | https://github.com/dnsimple/dns_erlang  |
+| agent       |  .0 |    | otp agent implementation          | https://github.com/savonarola/agent     |
+| gen_cycle   |  .0 |    | otp recurring task                | https://github.com/aerosol/gen_cycle    |
+| poolboy     | 1.5 | 18 | distributes work in a worker pool | https://github.com/devinus/poolboy      |
+| erlexec     | 0.4 | 23 | exec/control OS processes         | https://github.com/saleyn/erlexec       |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| pgo         |  .1 |    | pSQL connection pool              | https://github.com/erleans/pgo          |
+| eql         |  .1 |    | SQL ORM                           | https://github.com/artemeff/eql         |
+| epgsql      |  .3 | 23 | pSQL client                       | https://github.com/epgsql/epgsql        |
+| eredisk     |  .6 | 19 | redis client                      | https://github.com/wooga/eredisk        |
+| mysql-top   |  .3 | 22 | mysql client                      | https://github.com/mysql-otp/mysql-otp  |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| fast_yaml   |  .0 | 23 | C's libyaml wrapper               | https://github.com/processone/fast_yaml |
+| jerg        |  .0 | 13 | .json scheme to records           | https://github.com/ddossot/jerg         |
+| jsx         |  .6 |    | .json parser                      | https://github.com/talentdeficit/jsx    |
+| feeder      |  .0 | 19 | .rss parser                       | https://github.com/michaelnisi/feeder   |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| cowboy      | 6.9 | 23 | HTTP webserver                    | https://github.com/ninenines/cowboy     |
+| elli        |  .2 | 21 | HTTP webserver                    | https://github.com/elli-lib/elli        |
+| hackney     | 1.3 | 23 | HTTP client                       | https://github.com/benoitc/hackney      |
+| ibrowse     |  .5 | 21 | HTTP client                       | https://github.com/cmullaparthi/ibrowse |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
 * rebar3
 - Docs https://rebar3.org/docs/
 - Dependencies https://hex.pm/
@@ -68,10 +153,14 @@ rebar.config
  config/sys.config
  config/vm.args
 #+end_src
-* Code
-- Gradual type checker https://github.com/josefs/Gradualizer
-- Example: Fly.io https://github.com/baden/flyio-erlang
-- Example: https://github.com/adoptingerlang/service_discovery
+* Editor
 - Formatter https://github.com/whatsapp/erlfmt
 - LSP https://github.com/erlang-ls/erlang_ls
+* CodeBases
+- Chat Bot by Tsoding https://github.com/tsoding/tsoder
+- Fly.io App
+  - https://github.com/baden/flyio-erlang
+  - https://github.com/srijan/phfly
+- Gradual type checker https://github.com/josefs/Gradualizer
+- Example: https://github.com/adoptingerlang/service_discovery
 - DNS authoritative server https://github.com/dnsimple/erldns

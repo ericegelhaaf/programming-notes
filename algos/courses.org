@@ -1,5 +1,6 @@
 - CS170 - Efficient Algorithms and Intractable Problems https://cs170.org/
-* Algorithmic Toolbox (Complete Course) https://www.youtube.com/watch?v=CAfMYNNsVAo
+* 18 | Algorithmic Toolbox               | HackerRank
+https://www.youtube.com/watch?v=CAfMYNNsVAo
 ** Data Structures
    https://www.youtube.com/playlist?list=PLI1t_8YX-Apv-UiRlnZwqqrRT8D1RhriX
    Balanced Parentheses in Expression
@@ -34,9 +35,9 @@
    Bit Manipulation
    Graph Search, DFS and BFS
    Solve 'Lonley Integer' Using Bit Manipulation
-* 15 | MIT 6.046J Design and Analysis of Algorithms
+* 15 | Design and Analysis of Algorithms | MIT 6.046J
 https://www.youtube.com/playlist?list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp
-* 20 | MIT 6.006 Introduction to Algorithms
+* 20 | Introduction to Algorithms        | MIT 6.006
 https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 ** DONE 1. Algorithms and Computation
 - Solve Computational Problems, communicating, correct and efficiently
@@ -183,26 +184,26 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 ** 19. Complexity
 ** 20. Course Review
 ** 21. Algorithms Next Steps
-* 21 | AlgoExpert
-** Data Structures
+* 21 | Data Structures Crash Course      | AlgoExpert
+** 02 - Data Structures
 - Are defined by
   1) their values
   2) their relationships between the values
   3) the operations you can do with their values
-** Complexity Analysis
+** 03 - Complexity Analysis
 - Comes into play to judge which solution is better than the others.
 - Complexity in regards to:
   1) Time Complexity: how fast it is
   2) Space Complexity: how much memory uses
 - Both the /relationships/ and the /operations/ of a data structure have complexity ramifications
-** Memory
+** 04 - Memory
 - Memory can be seen a *bounded* /memory canvas/ of memory slots (aka 2D)
 - One "memory slot" here is "1 byte"
 - Memory stores values (variables/arrays) "back to back"
   (aka in chunks of /memory slots/ without holes belonging to other data)
 - Accessing a memory slot given a memory address is know as the most basic elementary memory operation.
   It is very fast.
-** Big O Notation
+** 05 - Big O Notation
 - Notation to describe complexity
 - We measure the change of speed of the algorithm, with respect of the size of the input
   - =Asymptotic Analysis=: study of the behavior of "f(n)" as the value "n" tends towards infinity
@@ -221,7 +222,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 - If we were to take 2 arrays, n and m, and we did something more complex with m than with n
   We would still NOT DROP the "n".
   O(m^2 + n)
-** Logarithm
+** 06 - Logarithm
 - log(n) => b^? = n
 - log(n) we always assume that the b(ase) is "2", aka the "binary logarithm"
 - log(n) => 2^? = n
@@ -232,14 +233,444 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   "If I double the size of the input, I am only going to do an extra operation?"
 - Example? binary search.
 - Example? traversing a balanced binary tree
-** Array
+** 07 - Arrays
+- =Amortized Analysis= the version of complexity analysis were you take into account, the edge cases.
 - called "lists" on python
 - Types
   - Static
-  - Dynamic
-- accessing an element of an array "a[2]" is constant
-  setting an element of an array "a[2] = 3" is constant
-  initialization an array is linear
-  traversing an array is linear (map/filter/reduce)
-  copying array is linear
-  inserting
+  - Dynamic: the operative system will allocate twice as much memory as it needs to
+    insertion cost = 1 + 2 + 4 + 8 + ... + n
+    insertion cost = n + n/2 + n/4 + n/8 + ... + 1
+    insertion cost = 2n
+- Operations
+ |                      |            | Time  | Space |
+ |----------------------+------------+-------+-------|
+ | accessing            | "a[2]"     | O(1)  | -     |
+ | setting              | "a[2] = 3" | O(1)  | -     |
+ | initialization       |            | O(n)  | -     |
+ | traversing           |            | O(n)  | O(1)  |
+ | copying              |            | O(n)  | -     |
+ | inserting (static)   |            | O(n)  | O(1)  |
+ | inserting (dynamic)  |            | O(1)* |       |
+ | pop (remove last)    |            | O(1)  | -     |
+ | pop (middle) / shift |            | O(n)  |       |
+ |----------------------+------------+-------+-------|
+- traversing like: map/filter/reduce
+  inserting (dynamic): sometimes might be O(n) like inserting at the beginning of the array would cause all the other elements to shift
+- even if we were inserting at the middle of the dynamic array, It would still be O(n) because it would be O(0.5 * n)
+** 08 - Linked Lists
+- Each linked list node consists of:
+  - a value
+  - a pointer to the *next* node
+  - a pointer to the *prev* node (in the case of double linked list)
+- Each node is "back to back"
+  The whole linked list is NOT "back to back"
+- If you want it you can keep track of the *tail* of the linked list, on double linked list is specially useful
+- Operations
+|           | Time  | Space |
+|-----------+-------+-------|
+| accessing | O(i)  | O(1)  |
+| settings  | O(i)  | O(1)  |
+| init      | O(n)  | =     |
+| copy      | O(n)  | =     |
+| traverse  | O(n)  | O(1)  |
+| insertion | O(1)* | O(1)  |
+| deletion  |       |       |
+** 09 - Hash Tables
+- A key/value store
+- Are built on top of arrays
+  1) values are stored on a array of *linked lists*
+  2) you use a *hash function* to transform the /key/ into a /index/ of the array
+  3) each node on the linked list /points back/ to the *key*
+- Operations
+|                | Time | Space |
+|----------------+------+-------|
+| insertion      | O(1) |       |
+| deletion       | O(1) |       |
+| searching      | O(1) |       |
+| initialization | O(n) | O(n)  |
+|----------------+------+-------|
+- The O(1) is on average and depends on how good is the hash function,
+  that is if it is good in avoiding collisions,
+  otherwise it could become an O(n)
+- Hash tables might resize itself larger (to avoid collitions) or smaller (to not waste space)
+** 10 - Stack and Queues
+- Operations
+|                | Time |      |
+|----------------+------+------|
+| insertion      | O(1) | =    |
+| deletion       | O(1) | =    |
+| search         | O(n) | O(1) |
+|----------------+------+------|
+- Space to store O(n), althought they start empty.
+- Both support a *peek()* method for doing a pop/dequeue to see the value without modifying the stack/queue
+- Stack (LIFO)
+  - Is just a dynamic array
+  - Both adding or removing/popping an element from the end is a constant time operation
+  - Alternative:
+    - max-stack: a stack that keeps track of the maximum element
+    - min-stack: a stack that keeps track of the minimum element
+- Queue (FIFO)
+  - Is a linked list, keeping track of both head and tail
+  - Alternatives:
+    - priority queues: keeps track of the elements with higher priority
+** 11 - Strings
+- All operation performed /on a single character/ are going to be constant time operations
+- Stored as an array of characters, which each characters are integers
+- Types: can you alter them after creation?
+  | mutable   | O(1) | c++                              |
+  | immutable | O(n) | python, java, javascript, c#, go |
+- On immutable strings,
+  - is recommended at times to split the string into an actual array of chars
+    where appending is a constant time operation.
+  - Instead of a bunch of O(n).
+    You do 1 O(n) and a bunch of O(1) to append and finally concat in a O(n)
+- Operations
+  |          | Time | Space |
+  |----------+------+-------|
+  | traverse | O(n) | O(1)  |
+  | copy     | O(n) | O(n)  |
+  | get      | O(1) | O(1)  |
+  |----------+------+-------|
+** 12 - Graphs
+- Traversing complexity:
+  - DFS O(v+e)
+  - BFS O(v+e)
+- Space complexity initialization: O(v+e)
+- Definition: A collection of /nodes/ that might or might not be /connected/ to each other.
+  - nodes = vertices
+  - connections = edges
+- Concepts
+  1) Connectivity: connected/disconnected
+  2) Direction: directed/undirected
+  3) Cycles: cyclic/aciclyc
+- Possible representations:
+  - Adjacency list: List of nodes or hash table on each node along with his value.
+- Example: Sometimes when dealing with 2d arrays, and you care about the neightbouring nodes. Is a graph structure.
+- Example: You have strings, and you are swapping elements.
+  - abc (node)
+    - abx (edge)
+    - xbc (edge)
+    - axc (edge)
+** 13 - Trees
+- Definition
+  - A graph structure that is *rooted* (aka the top node)
+  - Are directed (?) downwards
+  - Acyclic
+  - Each node can have 1 parent
+  - Connected
+- You CAN have each node have a pointer to their parent, it might be useful sometimes.
+- Types
+  |                     | every node...                 | example            |
+  |---------------------+-------------------------------+--------------------|
+  | k-ary trees         | has at most *k* child nodes   | binary tree        |
+  | binary search trees | satisfies a /BST property/    | min-heap, max-heap |
+  | tries               | holds a character in a string |                    |
+- Time Complexity (binary tree)
+  | Storing space complexity                  | O(n)     |
+  | Traversing                                | O(n)     |
+  | Traversing (picking one, balanced tree)   | O(log n) |
+  | Traversing (picking one, unbalanced tree) | O(n)     |
+- Vocabulary
+  | Branch        | any path that starts at the root node, and ends at one bottom node                                |
+  | Leaf          | the bottom nodes                                                                                  |
+  | Level         |                                                                                                   |
+  | Depth         | how many levels the tree has                                                                      |
+  | Complete Tree | every level is filled up, but bottom level should be filled from left to right (maybe incomplete) |
+  | Full Tree     | every node in the tree has either, no children or k-children nodes                                |
+  | Perfect Tree  | all leaf have the same depth                                                                      |
+* 21 | Become Algorithms Expert          | AlgoExpert
+** 02 Easy
+*** Two Number Sum
+- Problem:
+  - you are given:
+    1) an array of numbers
+    2) a number that is the /target sum/
+  - you must find 2 numbers on the array that sum the given number 2)
+**** *O(n^2)*     time O(1) space - 2 "for" loops
+**** *O(n)*       time O(n) space - hash table (ME: could be a set)
+- we iterate "for" each number
+  - ask the hashtable if the number we need to reach 10 is in it
+  - if it is, return both
+  - if it is NOT, add current number to the hashtable, and keep iterating
+    - key number
+    - value "true"
+**** *O(n log n)* time O(1) space - sorting first
+- O(n log n) + O(n) = O(n log n)
+- We assume "n log n" from a merge or heap sort
+- Can be applied in "Three num sum" problem
+- We have 2 pointers
+  - one on the *left* side of the array
+  - one on the *right* side of the array
+- We sum them, compare it to our /target number/
+  - if <
+    - moving *right* would give a even smaller number
+    - we move *left* pointer to the right
+  - if >
+    - we move the *right* pointer
+*** Validate Subsequence
+- *Subsequence*: is a sequence that can be derived from other sequence,
+  by deleting some or other element, without changing the order of the elements.
+- *Problem*:
+  - Given sequence [5,1,22,25,6,-1,8,10]
+  - And subsequence [1,6,-1,10]
+  - Return validity (true/false)
+- *O(n)* A solution could be iterate over each element on the subsequence candidate
+  - On each, and iterate over the sequence, starting from the last known
+*** Find Closest Value in BST
+- Problem:
+  - you have to find the closest value in the BST to the given value
+  - you are given
+    1) a BST
+    2) target integer value
+- Operations used insertion/searching/removal
+- Solution: *O(log n)*
+  - variable to keep track of the /current closest value/ on the BST (initial value to infinity or root value or null value)
+  - we start at the root node
+    - compute the *abs(sub(thisnodevalue, target))*
+      - compare it with *abs(sub(current, target))*
+      - update current
+    - compare the value with the /target value/
+      - pick a branch based on it
+      - if == 0, we just return it
+    - until we reach the end of tree
+*** Branch Sums (BST)
+- Problem:
+  - takes a root node of a /binary tree/
+  - returns a list of the branches sum
+    - we have 1 branch sum per path that starts at root node and ends at leaf node
+- *O(n)* time | O(n) worst space
+  Solution Idea:
+  - calling a ~recursive~ function from the root node
+  - keeping track of the running sum, aka from nodes above us
+- Example:
+  - 1
+    - 2
+      - 4
+        - 8
+        - 9
+      - 5
+        - 10
+        - ?
+    - 3
+      - 6
+      - 7
+  - OUTPUT: [15,16,18,10,11]
+*** Node Depths
+- Problem:
+  - You are given a BT
+  - Find the depth of evey node, and sum all depths, and return that value
+    - depth = distance node to the root node (not the height)
+- Example: result 16
+  - 1
+    - 2
+      - 4
+        - 8
+        - 9
+      - 5
+    - 3
+      - 6
+      - 7
+- Solution: recursive looks nicer (as with many BT questions)
+  f(n,d) = d + f(l,d+1) + f(r,d+1)
+  n = node at
+  d = node depth
+  l = left child node
+  r = right child node
+- Solution: iterative
+* 21 | The Last Algorithms Course        | FrontEndMasters
+- https://github.com/ThePrimeagen/kata-machine
+  > npx jest Linear
+** Introduction
+- TS is bad for DS
+  Example: you can't use pure TS to create a map. No way to uniquely identify an object.
+- Books:
+  - The introduction to Algorithms (the
+** Basics
+|------------+---------------------------------------------------------------+-------------------------------|
+| O(n)       | aka loops                                                     | for n in input                |
+| O(n^2)     | aka 2 nested loops                                            | for n in input for m in input |
+| O(n log n) | halve the space, but search the whole space once, scanning (? | quicksort                     |
+| O(log n)   | halve the space, but look one point att                       | binary search trees           |
+| O(sqrt(n)) |                                                               |                               |
+|------------+---------------------------------------------------------------+-------------------------------|
+- Big O, generalized way to describe how your algorithm behave as input *grows*
+  - Sometimes you would pick a worst complexity depending on the expected size of the data.
+    A "worst" algorithm might do better with small data.
+    eg: insertion sort instead of bubble sort
+  - "You can't run the salesman algorithm for 12 cities. It will run for loooong ammount of time."
+- Arrays
+  - definition: *contiguous* memory space
+  - ME: javascript doesn't have an array primitive
+  - node.js has something like an array
+    #+begin_src javascript
+      > const a = new ArrayBuffer(6);
+      > a // ArrayBuffer { [Uint8Contents] <00 00 00 00 00 00>, byteLength: 6 }
+      > const a8 = new Uint8Array(a); // creates a VIEW into the array
+      > a8[0] = 45
+      > a // ArrayBuffer { [Uint8Contents] <2d 00 00 00 00 00>, byteLength: 6 }
+      > a8[2] = 45
+      > a // ArrayBuffer { [Uint8Contents] <2d 00 2d 00 00 00>, byteLength: 6 }
+      > const a16 = new Uint16Array(a)
+      > a16[2] = 0x4545
+      > a // ArrayBuffer { [Uint8Contents] <2d 00 2d 00 45 45>, byteLength: 6 }
+    #+end_src
+** Search (Linear/Binary)
+- .indexOf()
+*** Linear Search - O(n) - for loop
+#+begin_src typescript
+  export default function linear_search(haystack: number[], needle: number): boolean {
+      for (var i = 0; i < haystack.length; i++) {
+          return true; // usually don't return on the middle of a "for loop"
+      }
+      return false;
+  }
+#+end_src
+*** Binary Search - O(log n)
+- On ordered input
+- n/2^k = 1
+      n = 2k
+  log n = k
+- Pseudocode
+  #+begin_src c
+    search(arr, lo, hi, needle) {
+      do {
+        m = floor(lo + (hi-lo)/2)
+        v = arr[m]
+        if (v == n) {
+          return TRUE;
+        } else if (v > m) {
+          lo = m + 1
+        } else {
+          hi = m
+        }
+      } while (lo < hi)
+      return FALSE;
+    }
+  #+end_src
+- Implementation
+  #+begin_src typescript
+    export default function bs_list(haystack: number[], needle: number): boolean {
+        let lo = 0;
+        let hi = haystack.length;
+        do {
+            const m = Math.floor(low + (hi - lo) / 2);
+            const v = haystack[m];
+            if (v === needle) {
+                return true;
+            } else if (v > needle) {
+                hi = m;
+            } else {
+                lo = m + 1; // drop the midpoint
+            }
+        } while (lo < hi)
+        return false;
+    }
+  #+end_src
+*** Example: Two Crystal Balls
+- Problem:
+  Given two crystal balls that will break if dropped from high enough distance,
+  determine the exact spot in which it will break in the most optimized way.
+- We can think of the problem as an array of *booleans*
+  - Where each element, represents if the balls break or not.
+  - Where it starts being all false up to some point where they become true
+  - So, we can think it as an /ordered array/
+  - we jump (by the *sqrt(n)*) instead of halving like in normal binary search (why?)
+- Implementation
+  #+begin_src typescript
+    export default function two_crystal_balls(breaks: boolean[): number {
+        // jump by sqrt(n)
+        const jmpAmount = Math.floor(Math.sqrt(breaks.lenght));
+        let i = jmpAmount;
+        for (; i < breaks.length; i += jmpAmount) {
+            if (breaks[i]) {
+                break;
+            }
+        }
+        // linear walk forward
+        i -= jmpAmount;
+        for (let j = 0; j < jmpAmount && i < breaks.length; j++, i++) {
+            if (breaks[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+  #+end_src
+** Sort (Bubble)
+*** Bubble Sort O(n^2)
+  - Each cycle, compares n[i] with n[i+1] and swaps if needed
+  - Next cycle you won't need to check the last one.
+  - Until you are left with 1 element array to compare.
+  - Comparisons: n, n-1, n-2,...,n-n
+  - Implementation
+    #+begin_src typescript
+      export default function bubble_sort(arr: number[]): void {
+          for (let i = 0; i < arr.length; i++) {
+              for (let j = 0; j < arr.length - 1 - i; j++) {
+                  if (arr[j] > arr[j+1]) {
+                      const tmp = arr[j];
+                      arr[j] = arr[j+1];
+                      arr[j+1] = tmp;
+                  }
+              }
+          }
+      }
+    #+end_src
+*** Linked List
+- Every SLL is technically a tree
+- Heap allocated
+- Implemetation
+  #+begin_src typescript
+    type Node<T> {
+        val: T,
+        next?: Node<T>;
+        prev?: Node<T>;
+    }
+    interface LinkedList<T> {
+        get length(): number;
+        insertAt(item: T, index: number): void;
+        remove(item: T): T | undefined;
+        removeAt(index: number): T | undefined;
+        append(item: T): void;
+        prepend(item: T): void;
+        get(index: number): T | undefined;
+    }
+  #+end_src
+*** Queue
+- FIFO
+- SLL with pointers to head and tail
+- Implementation
+  #+begin_src typescript
+    type QNode<T> = {
+        value: T,
+        next?: QNode<T>,
+    }
+    export default class Queue<T> {
+        public length: number;
+        private head?: QNode<T>; // private head: QNode<T> | undefined;
+        private tail?: QNode<T>;
+        constructor() {
+            this.head = this.tail = undefined;
+            this.length = 0;
+        }
+        enqueue(item: T)n: void {
+        }
+        deque(): T | undefined {
+        }
+        peek(): T | undefined {
+            return this.head?.value;
+        }
+    }
+  #+end_src
+*** Stack
+** Arrays
+** Recursion
+** Quick Sort
+** Double Linked List
+** Trees
+** Tree Search
+** Heap
+** Graphs
+** Maps & LRU
+** Wrapping up

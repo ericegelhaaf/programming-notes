@@ -15,25 +15,7 @@
   | autogenerate accessors | 0.1 | https://github.com/janestreet/ppx_fields_conv |
   | autogenerate accessors | 0.1 | https://github.com/janestreet/fieldslib       |
 ** Types
-|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
-| Type      | Init                   | Access | Modifying | Pattern Matching                | Adding | Appending      |
-|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
-| Unit      | ()                     |        |           |                                 |        |                |
-| bool      | x = true,false         |        |           |                                 | &&,¦¦  |                |
-| Tuples    | (a , b)                |        |           | let (x , y) =                   |        |                |
-| List      | [a ; a]                | L.hd   |           | let (x :: y) =                  | ::     | @, List.append |
-| Option    | Some a                 |        |           |                                 |        |                |
-| String    | "abcd"                 | .[2]   | <-        |                                 |        | ^              |
-| Record    | {a = VAL ; b = VAL}    | .a     |           | let { x = x_pos ; y = y_pos } = |        |                |
-|           | a=VAL; B=VAL; {a ; b}  |        |           | let { x ; y } =                 |        |                |
-|           |                        |        |           | let v1 = v1.x + v2.y            |        |                |
-| Variant   |                        |        |           |                                 |        |                |
-| Array     | [¦ a ; b ¦]            | .(2)   | <-        | let [¦ a ; b ¦] = some_array    |        |                |
-| Big Array |                        | .{2}   | <-        |                                 |        |                |
-| Mutable   |                        |        | <-        |                                 |        |                |
-| Refs      | ref <expr>             | !x     | :=        |                                 |        |                |
-| struct    | struct let foo = 3 end |        |           |                                 |        |                |
-|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
+- ME: see ocaml.org
 - ^ provided by Pervasives module
 - Ref shorthands probided by Base
 - ¦ used in place of |
