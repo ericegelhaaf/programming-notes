@@ -1,0 +1,16 @@
+- "Successors"
+  - 1.9k https://github.com/roc-lang/roc
+    https://www.roc-lang.org/tutorial
+  - (fork) https://gren-lang.org/
+- Article: 2018 https://dev.to/kspeakman/elm-019-broke-us--khn
+- Article: 2023 https://kevinyank.com/posts/on-endings-why-how-we-retired-elm-at-culture-amp/
+  https://news.ycombinator.com/item?id=35495910
+  - “if the only reason an engineer wants to work for you is because
+    of your tech stack, that may be a warning sign. Culture Amp
+    therefore avoids hiring engineers who are purely
+    technology-focused. As a product company, we seek to hire people
+    who are mostly excited about our product and its mission, and who
+    are happy to learn new things when necessary to progress
+    that. When someone tells us in an interview they’re excited about
+    working here because they like functional programming (say), we
+    count that as an indication they might not be a good fit.”
