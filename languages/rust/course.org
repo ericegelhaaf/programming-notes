@@ -1,0 +1,164 @@
+* Video: Rust for TypeScript Devs / ThePrimeagen
+** 1
+- JS vs Rust
+  | specify readonly | specify mutability |
+  | undefined/null   | Option             |
+  | errores thrown   | errors returned    |
+- TS Variables
+  #+begin_src typescript
+    const foo = 5; // sort of a constant
+    let foo = 5; // defnitely NOT a constant
+    const foo = [] as const;
+  #+end_src
+- Rust has shadowing, as long as you use "let" each time
+  #+begin_src rust
+    let foo = get_file(args); // FileHandle
+    let foo = read_file(foo); // String
+    let foo = tokenize_and_stuff(foo); // Vec<String>
+  #+end_src
+- Rust, parentheses on conditionals are optional
+- Rust, use range for loops
+  - 0..10
+  - 0..=10
+- Rust, loop{} for infinite loop
+*** Collections
+- TS, collections
+  #+begin_src typescript
+    for (const [key, value] of Object.entries(obj))
+    for (const value of [1,2,3])
+    for (const idx in [1,2,3])
+  #+end_src
+- RS, collection
+  #+begin_src rust
+    for x in &some_array {}
+    vec![1,2,3]
+        .iter()
+        .map()
+        .collect::<Vec<_>>();
+  #+end_src
+*** TS, you are adviced to NOT do return types
+*** Rust, no implicit return types
+*** Rust       impl STRUCT
+#+begin_src rust
+  struct Foo {
+      properties ...
+      pub properties ...
+  }
+  impl Foo {
+      fn this()      // static
+      pub fn this()  // public static
+      fn this(&self) // instance method
+      fn this(&mut self)
+      pub fn this(self) // takes the self itself
+  }
+  #+end_src
+*** Interfaces impl TRAIT
+- in TS
+  - you can have properties on interfaces
+  - when you define an interface with the same name
+    twice you end up with a combination of both definitions.
+- in RS
+  #+begin_src rust
+    trait Foo { // like an interface
+        fn method(&self) -> retType;
+    }
+    impl Foo for MyStruct {
+    }
+  #+end_src
+*** Rust, numbers
+i<NUMBER> integer
+u<NUMBER> integer unsigned
+f<NUMBER> float
+usize = u<NUMBER> where NUMBER is your system arch
+isize = i<NUMBER> where NUMBER is your system arch
+*** Rust, String and &str
+- String
+  - heap allocated
+  - can be mutable
+  - has: ptr, len and cap
+- &str
+  - points to a sequence of utf-8 characters
+    - aka a slice
+    - it's a view into a String
+  - immutable
+  - analogous to &[u8]
+  - has: ptr and len
+*** unwraps/clones
+- ok-ish when starting
+- there are better ways to do them,
+  and less need for them as you learn more
+*** vectors
+#+NAME: TYPESCRIPT
+#+begin_src typescript
+  const a = [1,2,3,4,5];
+  a.push(6); // returns size
+  a.pop(); // undefined or T
+
+  const a = [1,2,3,4,5] as const;
+  const item = a[2]; // number or undefined
+#+end_src
+#+NAME: RUST
+#+begin_src rust
+  let a = vec![1,2,3,4,5];
+  let mut a = a; // shadowed
+  a.push(6); // does NOT return size
+  a.pop(); // Option<T>
+
+  let a = vec![1,2,3,4,5];
+  let item = a[2]; // panics if outbound
+  let item = a.get(2); // returns Option<T>
+#+end_src
+*** tuples
+#+NAME: TYPESCRIPT
+#+begin_src typescript
+  const a = [5, "hello"]; // unfixed
+#+end_src
+#+NAME: RUST
+#+begin_src rust
+  let a = (5, String::from("hello")); // fixed structure
+  let (my_num, my_str) = a; // pattern match / destructuring
+  fn bar((my_num, my_str): (i32, String)) {
+  }
+  bar(a);
+#+end_src
+*** structure
+Rust, Destructuring
+#+begin_src rust
+  struct MyStruct {
+      x: usize,
+      y: usize,
+      z: usize,
+  }
+  fn bar(MyStruct { y, z, .. }: MyStruct) -> bool {
+      return y * z < 100;
+  }
+  fn main() {
+      let foo = MyStruct {
+          x: 69,
+          y: 420,
+          z: 1337,
+      };
+      let MyStruct { x, .. } = foo;
+      let MyStruct { y, z, .. } = foo;
+      let MyStruct { x, y, z } = foo;
+
+      // if-let?
+      if let MyStruct { x, .. } = foo {
+          println!("things about x {}", x)
+      }
+  }
+#+end_src
+*** todo!()
+- usefeul to leave some parts of the implementation incomplete
+- when you have a use case that is difficult to handle
+*** unreachable!()
+- like a runtime *assert*
+- for things that should never happen
+*** .unwrap()
+- allows you to grab the inner value of either
+  - Option<T>
+  - Result<T>
+- If you .unwrap() and return a None,
+  you program will still explode
+** 2
+

@@ -1,0 +1,4 @@
+- https://aosabook.org/en/500L/a-python-interpreter-written-in-python.html
+- https://karpathy.github.io/2021/06/21/blockchain/
+- https://wyag.thb.lt/
+- https://implement-dns.wizardzines.com/book/intro.html

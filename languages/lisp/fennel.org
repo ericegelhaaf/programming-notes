@@ -1,0 +1,82 @@
+- Getting Started https://fennel-lang.org/tutorial
+- Love2D Template https://gitlab.com/alexjgriffith/min-love2d-fennel
+* Love2D
+- .love file
+  - is just a .zip file renamed
+  - contains only .lua/.fnl source code
+  - main.lua on /
+    config.lua on / (optional)
+  - can be "run" by the "love" command
+- an .AppImage
+  - should contain all .so files
+  - luajit and love binaries
+- Share a shader
+  - https://love2d.org/forums/viewtopic.php?f=4&t=3733
+- Hooks, functions to be overwritten on main.lua
+  - love.load()
+  - love.draw()
+  - love.update(dt)
+  - love.keypressed(key)
+- Tutorials https://love2d.org/wiki/Category:Tutorials
+** Dynamic Libraries
+*** love binary
+#+begin_src
+$ readelf -d /usr/bin/love
+
+Dynamic section at offset 0x2ce8 contains 29 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [liblove-11.3.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libluajit-5.1.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+#+end_src
+*** .so
+#+begin_src
+$ readelf -d /usr/lib64/liblove-11.3.so
+
+Dynamic section at offset 0x55c1b0 contains 41 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libSDL2-2.0.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libfreetype.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libopenal.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libmodplug.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libvorbisfile.so.3]
+ 0x0000000000000001 (NEEDED)             Shared library: [libtheoradec.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libogg.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libmpg123.so.0]
+
+ 0x0000000000000001 (NEEDED)             Shared library: [libluajit-5.1.so.2]
+
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x000000000000000e (SONAME)             Library soname: [liblove-11.3.so]
+ 0x000000000000000c (INIT)               0x148000
+
+#+end_src
+*** libmodplug
+https://github.com/Konstanty/libmodplug
+
+- Plays 22 different mod formats, including:
+    MOD, S3M, XM, IT, 669, AMF (both of them), AMS, DBM, DMF, DSM, FAR,
+    MDL, MED, MTM, OKT, PTM, STM, ULT, UMX, MT2, PSM
+- plays timidity's GUS patch files (*.pat):
+   a multi sample pat file with n samples can be played with a Frere Jacques
+   canon with n voices.
+- plays all types of MIDI files (*.mid):
+   uses the timidity .pat files for samples (when available)
+   recognizes environment variables:
+- plays textfiles written in the ABC music notation (*.abc):
+   uses the timidity .pat files for samples (when available)
+   recognizes environment variables:
+- Slightly better sound quality than Mikmod.  Vastly superior quality
+   over Winamp.
+- All XMMS calls are supported except for the band gains on the
+   equalizer.  The preamp is supported, but MOD music is not anywhere
+   near as cheap to equalize as MP3.  Thus, equalization does is not
+   supported in this version.  However, a variable bass boost option
+   is available in the configuration dialog (see below).
+- Tons of playback options (see below).
+

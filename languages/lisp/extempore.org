@@ -1,0 +1,25 @@
+─── Stack ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[0] from 0x000000000110cb7d in llvm::SmallPtrSetImplBase::Grow(unsigned int)
+[1] from 0x000000000110cd2b in llvm::SmallPtrSetImplBase::insert_imp(void const*)
+[2] from 0x00007fffabb0a6d2 in __static_initialization_and_destruction_0(int, int) [clone .constprop.0]
+[3] from 0x00007ffff7fe1802 in call_init.part
+[4] from 0x00007ffff7fe1911 in _dl_init
+[5] from 0x00007ffff7a80f75 in _dl_catch_exception
+[6] from 0x00007ffff7fe5cb4 in dl_open_worker
+[7] from 0x00007ffff7a80f18 in _dl_catch_exception
+[8] from 0x00007ffff7fe51ce in _dl_open
+[9] from 0x00007ffff7e6239c in dlopen_doit
+
+LD_LIBRARY_PATH
+
+─── Stack ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[0] from 0x000000000110cb7d in llvm::SmallPtrSetImplBase::Grow(unsigned int)
+[1] from 0x000000000110cd2b in llvm::SmallPtrSetImplBase::insert_imp(void const*)
+[2] from 0x00007fffabb0a6d2 in __static_initialization_and_destruction_0(int, int) [clone .constprop.0]
+[3] from 0x00007ffff7fe1802 in call_init.part
+[4] from 0x00007ffff7fe1911 in _dl_init
+[5] from 0x00007ffff7a80f75 in _dl_catch_exception
+[6] from 0x00007ffff7fe5cb4 in dl_open_worker
+[7] from 0x00007ffff7a80f18 in _dl_catch_exception
+[8] from 0x00007ffff7fe51ce in _dl_open
+[9] from 0x00007ffff7e6239c in dlopen_doit
