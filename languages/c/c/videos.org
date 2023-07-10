@@ -1,3 +1,4 @@
+- Channel: https://www.youtube.com/@Mr4thProgramming/videos
 - 15 | Advice for Writing Small Programs in C  https://www.youtube.com/watch?v=eAhWIO1Ra6M
 - tic-tac toe https://www.youtube.com/watch?v=gCVMkKgs3uQ
 * 16 | How I program C                        | Eskil Steenberg

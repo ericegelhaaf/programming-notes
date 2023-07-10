@@ -104,8 +104,9 @@ tftp
 | dns_erlang  |  .1 |    | DNS + TSIG + EDNS0 + DNSSEC       | https://github.com/dnsimple/dns_erlang  |
 | agent       |  .0 |    | otp agent implementation          | https://github.com/savonarola/agent     |
 | gen_cycle   |  .0 |    | otp recurring task                | https://github.com/aerosol/gen_cycle    |
-| poolboy     | 1.5 | 18 | distributes work in a worker pool | https://github.com/devinus/poolboy      |
 | erlexec     | 0.4 | 23 | exec/control OS processes         | https://github.com/saleyn/erlexec       |
+| poolboy     | 1.5 | 18 | distributes work in a worker pool | https://github.com/devinus/poolboy      |
+| pooler      | 0.2 | 23 | process pool                      | https://github.com/epgsql/pooler        |
 |-------------+-----+----+-----------------------------------+-----------------------------------------|
 | pgo         |  .1 |    | pSQL connection pool              | https://github.com/erleans/pgo          |
 | eql         |  .1 |    | SQL ORM                           | https://github.com/artemeff/eql         |

@@ -33,3 +33,24 @@
 | Enums  | Gender | enum Gender {MALE,FEMALE} | enum.MALE |
 |--------+--------+---------------------------+-----------|
 |        |        |                           |           |
+* Native Game
+- JavaFX https://openjfx.io/
+- Gluon:
+  - https://docs.gluonhq.com/
+  - The following platforms are currently supported:
+    - Linux
+    - Mac OS X
+    - Windows
+    - iOS
+    - Android
+    - Embedded
+- Video: Preview "It's How We Play the Game - JavaFX and GraalVM" Gail Anderson
+  https://www.youtube.com/watch?v=AXhOBL2V0yg
+  - source: https://github.com/gailasgteach/MiniGolf
+  - "The edit/compile runcycle for the regular JVM bytecode is really fast.
+     The cycle that create the native image is a lot longer.
+     On testing or designing phase you don't want to be running your native images."
+- Does fxgl supports graalvm native image in windows? https://github.com/AlmasB/FXGL/issues/1275
+  - graalvm version with javafx support https://github.com/gluonhq/graal/releases
+  - maven plugin https://github.com/gluonhq/gluonfx-maven-plugin
+  - examples https://github.com/gluonhq/gluon-samples

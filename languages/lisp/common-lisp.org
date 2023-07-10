@@ -297,6 +297,7 @@ and that doesn't work if the code is provided as a *.a or *.o file
 |                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
 | gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
 |                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
+| unboxable      | support contiguous arrays of structs                           | https://github.com/digikar99/unboxables                              |
 |----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
 * books
 - https://leanpub.com/lovinglisp/read
@@ -767,6 +768,9 @@ https://github.com/cbeo/gtwiwtg
 - https://github.com/Shinmera/flow      - graph
 - https://github.com/Shinmera/flare - value transition
 - https://github.com/lmj/global-vars/
+** CFFI
+- https://github.com/bohonghuang/cffi-ops
+- https://github.com/borodust/cffi-c-ref
 ** Arrays/Matrix
 - Build-in: Row slice, non-copy, :displaced-to & :displaced-index-offset
   https://stackoverflow.com/questions/12327237/common-lisp-how-to-access-a-row-of-a-certain-multi-dimension-array/12327524

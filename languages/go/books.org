@@ -286,6 +286,11 @@ type error interface {
       // ...
     }
   #+end_src
+* 17 | Concurrency in Go                    | Katherine-Cox B.  | OReilly
+** 4 Concurrency Patterns in Go
+- Safe operations on concurrent code
+  - sync.Mutex: for sharing memory
+  - channels: via communicating
 * 18 | Get Programming with Go              | Nathan Youngman   | Manning
 Code: https://github.com/nathany/get-programming-with-go
 ** 5 State and behavior
@@ -403,6 +408,184 @@ Code: https://github.com/nathany/get-programming-with-go
 - RR interface doesn't have methods to get the response IP
 - to get the IP from a RR struct we use *type assertion* to create the data
 - you can "cheat " and let the *flag* package handle/get all the args even the non-optionals as optionals, by then adding a check if not provided
+* 21 | Learn Go With Tests                  | Chris James       |
+source https://github.com/quii/learn-go-with-tests
+** Arrays and Slices
+- Benchmarking: =go test -bench=.=
+  #+begin_src go
+    func BenchmarkRepeat(b *testing.B) {
+        for i := 0; i < b.N; i++ {
+            Repeat("a")
+        }
+    }
+  #+end_src
+- t.Run("used to separate tests", func(t *testing.T){}})
+- =%v= can be used on slices
+- The goal should be to have as much confidence as possible in your code base.
+  Not as much tests as possible.
+  Every test has a cost.
+- =go test -cover=
+  100% coverage should not be your end goal.
+- =reflect.DeepEqual= to test for slice equality in a test
+  note: it's not compile time type safe
+- You can assign function lambdas into variables, using =t.Helper()= inside the lambda
+  #+begin_src go
+    funct TestSumAllTails(t *testing.T) {
+        checkSums := func(t testing.TB, got, want []int) {
+            t.Helper()
+            if !reflect.DeepEqual(got, want) {
+                t.Error("got %v want %v", got, want)
+            }
+        }
+        t.Run("make the sums of tails of", func (t *testing.T) {
+            got := SumAllTails([]int{1,2}, []int{0,9})
+            want := []int{2,9}
+            checkSums(t, got, want)
+        })
+        t.Run("safely sum empty slices", func(t *testing.T){
+            got := SumAllTails([]int{}, []int{3,4,5})
+            want := []int{0,9}
+            checkSums(t, got, want)
+        })
+    }
+  #+end_src
+** Structs, methods & interfaces
+- if we wanted to have a function, that could take different struct/shapes
+  func Area(???) float64
+- in go, we could instead
+  1) functions with the same name on different packages
+  2) define methods on the types
+- To remove some code duplication.
+  To allow us to make functions taht can be used ith different types.
+  #+begin_src go
+    type Shape interface {
+        Area() float64
+    } // ...
+    checkArea := func(t testing.TB, shape Shape, want float64) {
+        t.Helper()
+        got := shape.Area()
+        if got != want {
+            t.Errorf("got %g want %g", got, want)
+        }
+    } // ...
+    checkArea(t, rectangle, 72.0) // ...
+    checkArea(t, circle, 314.15925)
+  #+end_src
+- =table drive tests=, aka []struct{}, aka *anonymous struct*
+  - ofc it can have fields that are struct
+  - be sure that you have a need for the extra noise in the test
+  - great when you want to:
+    1) test various implementations of an interface
+    2) or if the data has a lots of different requirements that need testing
+- sometimes naming the fields of a struct would make it more clear
+- "The test speaks to us more clearly, as if it were an assertion of truth, not a sequence of operations"
+- =%#v= will print out our struct with e values in its field
+** Pointers & errors
+- =%v= can be used to print a pointer address (&w.balance)
+- *struct pointers* (*w) are automatically deferenced
+  - By convention you should keep you r method receiver types the same for consistency.
+- Implementing Stringer interface, defined in the fmt package, used when formatted with %s
+  #+begin_src go
+    type Bitcoin int
+    type Stringer interface {
+        String() string
+    }
+    func (b Bitcoin) String() string {
+        return fmt.Sprintf("%d BTC", b)
+    }
+  #+end_src
+- *error* is an interface, that's why it can be *nil*
+- to compare an error, as a string, use =err.Error()= and =%q= to print them
+  #+begin_src go
+    assertError := func(t testing.TB, got error, want string) {
+        t.Helper()
+        if got == nil {
+            t.Fatal("didn't get an error but wanted one") // stop, do not continue test
+        }
+        if got.Error() != want {
+            t.Errorf("got %q, want %q", got, want)
+        }
+    }
+  #+end_src
+- to compare errors, as a type
+  #+begin_src go
+    var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
+    // func () Foo() error ...
+    return ErrInsufficientFunds
+    // ...
+    return nil
+  #+end_src
+- go install github.com/kisielk/errcheck
+** Maps
+- use =%q= to safely print a string, escaping quotes, instead of =%s=
+- I can define a type for it and define a method on it
+  #+begin_src go
+    type Dictionary map[string]string
+    func (d Dictionary) Search(word string) string {
+        return d[word]
+    }
+  #+end_src
+- You can modify them without passing as an address to it.
+  However they are NOT a "reference type"
+- ="A map value is a pointer to a runtime.hmap structure."=
+- A map itself can be a nil value
+  - it behaves like an empty map when *reading*
+  - but attempts to *write* to a nil map, will cause a ~runtime panic~
+- =You should NEVER initialize an empty map variable=
+ #+begin_src go
+   var m map[string]string // NO
+
+   dictionary := map[string]string{"foo": "bar"} // YES
+   var dictionary = map[string]string{}          // YES
+   var dictionary = make(map[string]string)      // YES
+ #+end_src
+- To make errors a *const* instead of a *var* requires us to create our own
+  DictionaryErr type which implements the error interface.
+  #+begin_src go
+    const (
+        ErrNotFound   = DictionaryErr("could not find the word you were lookig for")
+        ErrWordExists = DictionaryErr("cannot add word because t already exists")
+    )
+    type DictionaryErr string
+    func (e DictionaryErr) Error() string {
+        return string(e)
+    }
+  #+end_src
+- It is often better to have a precise error for when an .Update() fails.
+  Having specific errors gives you more information about what went wrong.
+- delete(MAP, KEY)
+** TODO Dependency Injection
+- About dependency injection
+  1) you don't need a framework
+  2) it does not overcomplicate your design
+  3) it facilitates testing
+  4) it allows you to write great, general-purpose functions
+*** Example: to *inject* we have to pass in the dependency of printing
+#+begin_src go
+  func Greet(name string) {
+      fmt.print("Hello,  %s", name)
+  }
+  #+end_src
+- instead our function does't nee to care where o how the printing appens
+  we should accept an interface rather than a concrete type
+  Writer defined in fmt
+ #+begin_src go
+   type Writer interface {
+       Write(p []byte) (n int, err error)
+   }
+ #+end_src
+- Greet() with interface
+ #+begin_src go
+   func TestGreet(t *testing.T) {
+       buffer := bytes.Buffer{}
+       Greet(&buffer, "Chris")
+       got := buffer.String()
+       want := "Hello, Chris"
+       if got != want {
+           t.Errorf("got %q want %q", got, want)
+       }
+   }
+ #+end_src
 * 21 | Cloud Native Go                      | Matthew A. Titmus | OReilly
   Repo: https://github.com/cloudnativego/
 ** 9 Building Web Application with Go
@@ -1210,31 +1393,51 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
 #+end_src
 ** TODO Chapter 7: Testing
 *** Basic Unit Testing
+#+begin_src go
+  package sample_test
+  import (
+      "testing"
+  )
+  func TestDownload(t *testing.T) {}
+  func TestUpload(t *testing.T) {}
+#+end_src
 - Go defines a unit of code as a *package*, represented as a folder in the source tree
-  The compoiler build a static library from each folder, and then links them all together.
+  The compiler builds a static library from each folder, and then links them all together.
 - Always write tests like production code
-- Unit testing, means testing the code of a single package, usually exported function
-  - one convention, defines a new package for test
-  - t.Fatal, will cause the test funtio nto return
-    t.Error, will allow the test function to continue and report potential more failures within the test
-    t.Log, logs showed when using -v on go test
-  #+begin_src go
-    package sample_test
-    import (
-        "testing"
-    )
-    func TestDownload(t *testing.T) {}
-    func TestUpload(t *testing.T) {}
-  #+end_src
-- Integration tests, will run test across multiple packages
+- *Unit testing*, means testing the code of a single package, usually exported function
+  - one convention is to define a new package for test
+- *Integration tests*, will run test across multiple packages
+- t.Fatal, will cause the test function to return
+  t.Error, will allow the test function to continue and report potential more failures within the test
+  t.Log, logs showed when using -v on go test
 *** Table Unit Test
 - When I have code that can the run through a series of inputs and expected outputs
 - Perfect for *negative path testing*
-- tt := []struct { url string; statusCode int; }{ {"http..",http.StatusOK},{"http...", http.StatusNotFound}}
+#+begin_src go
+  tt := []struct{
+          url        string
+          statusCode int
+  }{
+      {"http://def...", http.StatusOK}, // positive path test
+      {"http://abc...", http.StatusNotFound}, // negative path test, for a bad url
+  }
+#+end_src
 *** Web Call Mocking
 - Mocking is better avoided. Eg: You can hit a docker container.
-- "A mock is only as good as the behavior being simulated."
-- Useful on NPT when it's diffcult to cause real systems to fail on demand.
+- A mock is only as good as the behavior being simulated.
+  If the behavior chanegs in an upgrade of a system, the mock is no longer representative.
+- Can be useful on Negative Path Testing, when it's difficult to cause real systems to fail on demand.
+- stdlib already provides support for mocking http requests
+#+begin_src go
+  func mockServer() *httptest.Server{
+      f := func() {
+          w.WriteHeader(200)
+          w.Header().Set("Content-Type", "application/xml")
+          fmt.Fprintln(w, "<?xml version=...") // elided
+      }
+      return httptest.NewServer(http.HandlerFunc(f))
+  }
+#+end_src
 * 22 | Network Programming with Go Language | Dr Jan Newmarch   | Apress
 ** 15 Websockets
  - HTTP 1.1 with "keep alive" keeping the connection open for a short while,
@@ -1461,3 +1664,476 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
    }
  }
  #+end_src
+* 22 | 100 Go Mistakes and How Avoid Them   | Teiva Harsanyi    | Manning
+source https://github.com/teivah/100-go-mistakes
+** 05 Strings
+- A *string* is an immutable data structure (aka slice) holding
+  1) A ~pointer~ to an immutable byte sequence
+  2) The total ~number of bytes~ in a sequence
+*** Not understanding the concept of a *rune*
+#+begin_src go
+  type rune = int32
+#+end_src
+- charset != encoding
+ | charset  | is a set characters          | Unicode (2^21 characters) |
+ | encoding | is the translation to binary | UTF-8 (1-4bytes)          |
+- In Unicode we use the concept of ~code point~ to refer to an item represented by a single value.
+  U+6C49 in Unicode
+  0xE6 0xB1 0x89 in UTF-8
+- In Go, a ~rune~ is a Unicode ~code point~
+- golang.org/x a repository that provies extensions to the standard library,
+  contains packages to work with UTF-16 and UTF-32
+- len(string) returns the *numbers of bytes* in string
+*** Inaccurate string *iteration*
+- we can use unicode/utf8's =utf8.RuneCountInString(string)= to get the number of runes in string
+- Iterating with a range
+  s[i], prints the utf-8 representation of *the single byte* at index
+  #+begin_src go :imports "fmt"
+    s := "h€llo"
+    for i, r := range s {
+        fmt.Printf("position %d: %c - %c\n", i, s[i], r)
+    }
+    fmt.Println(len(s))
+  #+end_src
+
+  #+RESULTS:
+  : position 0: h - h
+  : position 1: â - €
+  : position 4: l - l
+  : position 5: l - l
+  : position 6: o - o
+  : 7
+- we can convert the string to a slice of rune, the indexes now will be proper positions
+  #+begin_src go :imports "fmt"
+    s := "hełło"
+    runes := []rune(s)
+    for i, r := range runes {
+        fmt.Printf("position %d: %c\n", i, r)
+    }
+  #+end_src
+
+  #+RESULTS:
+  : position 0: h
+  : position 1: e
+  : position 2: ł
+  : position 3: ł
+  : position 4: o
+*** Misusing *Trim* function
+- strings.TrimRight != strings.TrimSuffix
+  strings.TrimLeft  != strings.TrimPrefix
+- TrimRight: removes all the trailing runes contained in a given set
+  #+begin_src go :imports '("fmt" "strings")
+    fmt.Println(strings.TrimRight("123oxo", "xo"))
+  #+end_src
+
+  #+RESULTS:
+  : 123
+
+*** Under-optimized string *concatenation*
+- Given strings are immutable.
+  Modifications don't update, they reallocate a new string memory.
+**** Solution: use strings.Builder() instead of += for concatenating strings, internally uses a slice of bytes
+  - .WriteString(s)
+  - .Write(b)
+  - .WriteRune(r)
+  - .Grow(n)
+   #+begin_src go
+     func concat(values []string) string {
+         sb := strings.Builder()
+         for _, value := range values {
+             _, _ := sb.WriteString(value) // errors can never happen with this usage
+         }
+         return sb.String()
+     }
+  #+end_src
+**** Solution: using .Grow()
+  #+begin_src go
+    func concat(values []string) string {
+        total := 0 // total number of bytes the final string will contain
+        for i := 0; i < len(values); i++ {
+            total += len(values[i])
+        }
+        sb := strings.Builder{}
+        sb.Grow(total) // efficient slice initialization
+        for _, value := range values {
+            _, _ = s.WriteString(value)
+        }
+        return sb.String()
+    }
+  #+end_src
+*** Useless string *conversions*
+- Most I/O is actually done with []byte (eg: io.Reader, io.Writer and io.ReadAll)
+- Example of the problem: casting from/to []byte and string
+  #+begin_src go
+    return []byte(sanitize(string(b))), nil
+  #+end_src
+- Solution: use *bytes* package analogue functions
+  strings.TrimSpace has bytes.TrimSpace
+*** Substrings and ~memory leaks~
+**** substring slicing, would index by bytes NOT runes
+- convert it to *[]rune* first to index by runes, and then back to *string*
+  #+begin_src go :imports "fmt"
+    s1 := "H€llo, World!"
+    fmt.Println(s1[:5])
+    fmt.Println(string([]rune(s1)[:5]))
+  #+end_src
+
+  #+RESULTS:
+  : H€l
+  : H€llo
+**** When slicing a string, the new reference shares the same data behind it.
+  You need to a deep copy of the slice. To not keep in memory the sliced string.
+- Example: Where _log_ could be thousands of bytes long
+  #+begin_src go
+    uuid := log[:36]
+    s.store(uuid)
+  #+end_src
+- Solution: do a deep copy
+  #+begin_src go
+    uuid := string([]byte(log[:36]))
+    s.store(uuid)
+  #+end_src
+- Solution: use *strings.Clone* (>1.18)
+  #+begin_src go
+    uuid := strings.Clone(log[:36])
+  #+end_src
+** 06 Functions and Methods
+*** Not knowing which *type of receiver* to use
+- With a pointer receiver.
+  Go passes the address of an object to the method.
+  Intrinsically, it remains a copy, but we only copy a pointer, not the object itself.
+  Passing by reference doesn't exist in Go
+- Mixing reeiver tyeps should be avoided in general but is not forbidden in 100% of cases.
+*** Never using *named result parameters*
+- Rule: we shouldn't mix naked returns and returns with arguments.
+- When to use them
+  1) on an interface signature, to make it more clear to readers
+     #+begin_src go
+       type locator interface {
+           getCoordinates(address string) (lat, lng float32, err error)
+       }
+     #+end_src
+     - Although we could also create an adhoc struct with meaninful field names
+  2) on regular methods/functions to aid code readers
+     #+begin_src go
+       func (l loc) getCoordinates(address string) {}
+     #+end_src
+- When NOT to use it
+  - when it isn't helpful to readers
+    #+begin_src go
+      func StoreCustomer(customer Customer) (err error) {}
+    #+end_src
+  - when it's handy have the results already initialized
+*** Unintended side effects with *named result parameters*
+- We might use the default value of the NRP incorrectly
+  #+begin_src go
+    func (l loc) getCoordinates(ctx context.Context, address string) (lat, lng float32, err error) {
+        isValid := l.validateAddress(address)
+        if !isValid {
+            return 0, 0, errors.New("invalid address")
+        }
+        if ctx.Err() != nil {
+            return 0, 0, err // HERE, we are returning err initialized with the default value "nil"
+        }
+        // ...get and return coordinate
+    }
+  #+end_src
+*** Returning a *nil receiver*
+- In Go, *nil* can be a valid _pointer receiver_,
+  because in Go methods are just syntactic sugar for functions accepting the receiver as another function parameters
+  #+begin_src go :main no
+    package main
+    import "fmt"
+    type Foo struct{}
+    func (foo *Foo) Bar() string {
+        return "bar"
+    }
+    func main() {
+        var foo *Foo
+        fmt.Println(foo.Bar()) // foo is nil, still it compiles and prints "bar"
+    }
+  #+end_src
+
+  #+RESULTS:
+  : bar
+- In Go, an interface is a dispatch wrapper.
+  The wrappee might be nil. eg: a pointer to struct
+  While the wrapper might not be nil. eg: an interface
+- Example: This code does NOT returns *nil*, but a *nil pointer* (aka <nil>)
+  aka the nil receiver is converted into a non-nil interface
+  #+begin_src go
+    func (c Customer) Validate() error {
+        var m *MultiError
+        if c.Age < 0 {
+            // ...
+        }
+        if c.Name == "" {
+            // ...
+        }
+        return m // returns a nil pointer if not implemented
+    }
+  #+end_src
+- Solution: return "m" only if is not nil
+  #+begin_src go
+    func (c Customer) Validate() error {
+        var m *MultiError
+        if c.Age < 0 {
+            // ...
+        }
+        if c.Name == "" {
+            // ...
+        }
+        if m != nil {
+            return m
+        }
+        return nil
+    }
+  #+end_src
+*** Using a *filename* as a function input
+- It is NOT considered the /best practice/ and can make unit tests harder to write.
+  - Similarly with taking a http.Request as input
+- Solution 1: accept a =*bufio.Scanner=, but is NOT idiomatic
+**** Solution 2: accept a =io.Reader=, aka start from the reader's absraction
+#+begin_src go
+  func countEmptyLines(reader io.Reader) (int, error) {
+      scanner := bufio.NewScanner(reader)
+      for scanner.Scan() {
+      }
+  }
+#+end_src
+- One a unit test we can then pass a =strings.NewReader(``)= to the function
+*** TODO Ignoring how defer arguments and recievers are evaluated
+** 07 Error Managment
+- go doesn't rely on the traditional _try/catch_ mechanism as most programming languages do
+  errors are returned as normal return values
+*** Panicking
+- Once a panic is triggered, it continues up the call stack until either
+  1) the current goroutine has returned
+  2) or panic is caught with recover
+- =recover()= is *only* useful inside a /defer/ function otherwise,
+  the function would return *nil* and have no other effect.
+- /defer/ functions are also executed when the surrounding function panics
+- ~panic~ should be used sparingly
+- ~panic~ is used to signal genuinely exceptional conditions
+  1) such as a programmer error.
+     - an invalid http code
+     - received a nil instead of a pointer to struct (when receiving an interface)
+     - received an already registered sql driver (in a map)
+  2) when our application requires a dependency but fails to initialize it
+     - regexp: Compile and MustCompile
+- main.go
+  #+begin_src go :imports '("fmt")
+    func main() {
+      defer func() {
+         if r := recover(); r != nil {
+           fmt.Println("recover", r)
+         }
+      }()
+      f()
+      fmt.Println("end main")
+    }
+    func f() {
+      fmt.Println("a")
+      panic("foo")
+      fmt.Println("b")
+    }
+  #+end_src
+
+  #+RESULTS:
+  : a
+  : recover foo
+*** Ignoring when to wrap an error
+- Since GO 1.13, "%w" directive allows us to wrap errors conveniently
+- Use cases for error wrapping
+  1) adding additional context to an error
+     - if we get a "permission denied" error during a query, we might want to add the "user"
+  2) marking an error as a specific error
+     - like marking all 40X errors as a *Forbidden* error type
+**** How to wrap an error?
+| options                  | extra content | marking | source error availables |
+|--------------------------+---------------+---------+-------------------------|
+| returning error directly | no            | no      | *yes*                   |
+| custom error type        | possible      | *yes*   | possible                |
+| "%w"                     | *yes*         | no      | *yes*                   |
+| "%v"                     | *yes*         | no      | no                      |
+|--------------------------+---------------+---------+-------------------------|
+- <1.13, =err.Err.Error()= creating a custom error type
+  #+begin_src go
+    type BarError struct {
+        Err error
+    }
+    func (b BarError) Error() string {
+        return "bar failed:" + b.Err.Error()
+    }
+    //...
+    if err != nil {
+        return BarError(Err: err)
+    }
+
+  #+end_src
+- >1.13, =fmt.Errorf= "%w" wraps the source error to add context without having to create another error type (for internal API)
+  #+begin_src go
+    if err != nil {
+        return fmt.Errorf("bar failed: %w", err)
+    }
+  #+end_src
+- all,   =fmt.Errorf= "%v" not wrapped but transformed (for client API)
+  #+begin_src go
+    if err != nil {
+        return fmt.Errorf("bar failed: %v", err)
+    }
+  #+end_src
+*** TODO Checking an *error type*  inaccurately
+*** TODO Checking an *error value* inaccurately
+*** TODO *Handling* an error twice
+*** TODO Not *handling* an error
+*** TODO Not *handling* defer errors
+** 08 Concurrency: Foundation
+*** Mixing concurrency and Parallelism
+*** Thinking concurrency is always faster
+*** Being puzzled about when to use channels or mutexes
+*** Not understanding race problems
+*** Not understanding the concurrency impacts of a workload type
+*** Misunderstanding Go contexts
+** 11 Testing
+*** Not categorizing tests *t.Skip*
+- The testing pyramid, from top to bottom
+  - E2E tests
+  - Integration tests
+  - Unit tests
+- From cheaper to write, fast to execute, and highly deterministic. At the bottom. To less so at the top.
+- How to categorize tests
+  1) Build tags:
+     - for example to give the tag "foo" to a file add "//go:build foo" or "// +build foo"
+     - use a negative flag =//go:build !integration=
+     - go test --tags=integration -v . # integration only
+       go test -v .                    # unit test only
+  2) Environment variables: https://peter.bourgon.org/blog/2021/04/02/dont-use-build-tags-for-integration-tests.html
+     - Using tags, "go test" does NOT show what test were skipped.
+     - os.GetEnv() + =t.Skip(MSG)=, the MSG is printed when running the tests
+       #+begin_src go
+         func TestInsert(t *testing.T) {
+             if os.Getenv("INTEGRATION") != "true" {
+                t.Skip("skipping integration test")
+             }
+             // ...
+         }
+       #+end_src
+  3) Short mode: per test, not per file
+     - =testing.Short()=
+     - categorize by slowness. Some unit-test might be particularily slow.
+     - go test -short -v .
+     #+begin_src go
+       // TestLongRunning ...
+       func TestLongRunning(t *testing.T) {
+           if testing.Short() {
+               t.Skip("skipping long-running test")
+           }
+           // ...
+       }
+     #+end_src
+*** Not enabling the *-race* flag
+- go test -race ./...
+- In Go, the race detector isn't a static analysis tool used during compilation.
+  Instead it's a tool to find data races that occur at runtime.
+- Adds a runtime overhead, by tracking all memory accesses and recording when and how they occur.
+  - Memory usage +5-10x
+  - Execution time +2-20x
+- If a race is detected, Go raises a *warning*
+- TIPS:
+  - ensure that concurrent code is tested throughly against data races
+  - to avoid false negative, put the data racy logic inside a loop, increasing the changes of caching it
+  - //go:build !race
+*** Not using test executables modes *-parallel* and *-shuffle*
+- -parallel
+  - go test -parallel 16 .
+  - to speed up long running tests
+  - executed alongside all the other parallel tests
+    #+begin_src go
+      func TestFoo(t *testing.T) {
+          t.Parallel()
+          // ...
+      }
+    #+end_src
+- -shuffle (>1.17)
+  - go test -shuffle=on -v .
+  - To sus out hidden dependencies on non isolated tests
+  - =on will return a "seed" value that we can use later to repeat the shuffle order
+*** Not using table-driven tests *map[string]struct{}*
+- t.Run("subtest 1") on TestFoo()
+- go test -run=TestFoo/subtext_1 -v
+- we could use a map to struct (code inside a TestFoo())
+  #+begin_src go
+    tests := map[string]struct{
+        input    string
+        expected string
+    }{
+        `empty`: {"", ""},
+        `ending with \r\n`: {"a\r\n", "a"},
+        `ending with \n`: {"a\n", "a"},
+        `ending with multiple \n`: {"a\n\n\n", "a"},
+        `ending without newline`: {"a","a"},
+    }
+    for name, tt := range tests {
+        // tt := tt // if parallel
+        t.Run(name, func(t *testing.T) {
+            // t.Parallel()
+            got := removeNewLineSuffixes(t.input)
+            if got != tt.expected {
+                t.Errorf("got: %s, expected: %s", got, tt.expected)
+            }
+        })
+    }
+  #+end_src
+*** TODO Sleeping in unit tests
+- caling *time.Sleep* can be a signal of flakyness
+  - flaky means, that it can both pass or fail without any code change
+*** TODO Not dealing with the time API efficiently
+*** TODO Not using testing utility packages
+*** TODO Writing innacurate benchmarks
+*** Not exploring all the Go testing features
+**** Code coverage
+- go test -coverprofile=coverage.out ./... # by default coverage only is showed if tested on the same package
+- go test -coverprofile=coverage.out ./... -coverpkg=./...
+- go tool cover -html=coverage.out # opens the web browser and shows the coverage for each line of code
+**** Testing from a different =package_test=
+- aka using a different package on our _test.go
+- One approach to unit tests, is to focus on behaviors instead of internals.
+  We might want to focus on test on what's visible from the outside, not the implementation details.
+  This way, if the implementation changes, the tests will remain the same.
+  Also serves as an example of our API is used.
+**** Utility functions, pass =t= as an argument to those
+- We can simplify error handling, by passing t directly on helper functions instead of returning multiple values
+  #+begin_src go
+    func createCustomer(t *testing.T, someArg string) Customer {
+        // Create customer
+        if err != nil {
+            t.Fatal(err)
+        }
+        return customer
+    }
+  #+end_src
+**** Setup and teardown, =t.Cleanup()=
+- t.Cleanup(fn), registers a function to be executed at the end of the test
+#+begin_src go
+  func createConnection(t *testing.T, dsn string) *sql.DB {
+      db ,err := sql.Open("mysql", dsn)
+      if err != nil {
+          t.FailNow()
+      }
+      t.Cleanup(
+          func() {
+              _ = db.Close()
+          })
+      return db
+  }
+#+end_src
+- To handle setup and teardown per package, we have to use TestMain
+  #+begin_src go
+    func TestMain(m *testing.M) {
+        setupMySQL()
+        ret := m.Run()
+        teardownMySQL()
+        os.Exit(ret)
+    }
+  #+end_src

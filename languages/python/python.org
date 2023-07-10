@@ -28,7 +28,7 @@
 * Language
 - .format() https://pyformat.info/
 - f"string" https://fstring.help/
-** New Changes
+** Versions Changes
 | year | ver  | usage                                            |  PEP | description                                  |
 |------+------+--------------------------------------------------+------+----------------------------------------------|
 | 2015 | [[https://docs.python.org/3/whatsnew/3.5.html][3.5]]  | typing package                                   | 0484 | type hints                                   |
@@ -463,7 +463,9 @@ https://docs.python.org/3/reference/datamodel.html#object.__setitem__
 | __sub__()          | other    |           |           |                                |
 |--------------------+----------+-----------+-----------+--------------------------------|
 * Libraries
-|-----------+----+-----+-----------------------------------+-------------------------------------|
-| psutil    | 23 | 9.1 | process and system monitoring     | https://github.com/giampaolo/psutil |
-| unidecode | 23 | 0.4 | ascii transliterations of unicode | https://github.com/avian2/unidecode |
-|-----------+----+-----+-----------------------------------+-------------------------------------|
+|-----------+----+-----+-----------------------------------+-----------------------------------------------|
+| psutil    | 23 | 9.1 | process and system monitoring     | https://github.com/giampaolo/psutil           |
+| unidecode | 23 | 0.4 | ascii transliterations of unicode | https://github.com/avian2/unidecode           |
+| mido      | 23 | 1.1 | MIDI objects for python           | https://github.com/mido/mido/                 |
+| rtmidi    | 23 | 0.2 | rtmidi bindings                   | https://github.com/SpotlightKid/python-rtmidi |
+|-----------+----+-----+-----------------------------------+-----------------------------------------------|

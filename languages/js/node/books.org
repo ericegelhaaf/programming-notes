@@ -1,4 +1,4 @@
-* 19 | Fullstack Node.js
+* 19 | Fullstack Node.js                | Nate Murray      | Fullstack.IO
 ** Your First Node API
 - Created on 2009, By Ryan Dahl, a Ruby developer
 - Non blocking I/O
@@ -78,6 +78,7 @@
   Some sequentially, and other concurrently.
 - process.argv = ['node', 'file.js']
 *** Callback
+- *Callbacks* are just conventions around how we use functions.
 - 2ms ~= 10.000 math operations
 - fs.readFile(filename, callback)
   fs.readdir()
@@ -91,30 +92,29 @@
   - Array.foreach() would give unordered results
 - Creating a function that takes a callback is how to make sure things happen in the order we want.
 *** Promises
-- Is an object that represents a future action AND his result.
-- While *callbacks* are just conventions around how we use functions.
-- .then(data => console.log(data.length))
-  .catch(err => console.error(err))
-- then/catch order does not matter
-- To be able to perform multiple *async* actions concurrently,
-  we'll need to use Promise.all()
+- A Promise, is:
+  - an object that represents a future action
+  - and his result
+- Use =Promise.all()= to be able to perform multiple *async* actions concurrently
   - Executes an array of promises at the same time
   - It returns an array of results
+- =.then()/.catch()= order does not matter
 **** Example: Promise.all
 #+begin_src javascript
-const fs = require('fs').promises
-fs.readdir('./')
-  .then(fileList =>
-    Promise.all(
-      fileList.map(file => fs.readFile(file)
-                            .then(data => [file, data.length]))
+  const fs = require('fs').promises
+  fs.readdir('./')
+    .then(fileList =>
+      Promise.all(
+        fileList.map(file =>
+          fs.readFile(file)
+            .then(data => [file, data.length]))
+      )
     )
-  )
-  .then(results => {
-    results.forEach(([file,length]) => console.log(`${file}: ${length}`))
-    console.log('done!')
-  })
-  .catch(err => console.error(err))
+    .then(results => {
+      results.forEach(([file, length]) => console.log(`${file}: ${length}`))
+      console.log('done!')
+    })
+    .catch(err => console.error(err))
 #+end_src
 *** Async & Await
 - Allow us to use Promises as they were synchronous.
@@ -126,16 +126,16 @@ fs.readdir('./')
   wrap it with Promise.all()
 **** Example
 #+begin_src javascript
-async function printLength(file) {
-  try {
-    const data = await fs.readFile(file)
-    console.log(`${file}: ${data.length}`)
-  } catch (err) {
-    console.error(err)
+  async function printLength(file) {
+    try {
+      const data = await fs.readFile(file)
+      console.log(`${file}: ${data.length}`)
+    } catch (err) {
+      console.error(err)
+    }
   }
-}
 #+end_src
-* 19 | Scaling Your Node.js Apps
+* 19 | Scaling Your Node.js Apps        | Fernando Doglio  | Apress
 ** 2 Architectural Patterns
 1) Layered Architecture (aka n-tier arch patttern)
    - each layer has a purpose/functionality
@@ -157,7 +157,7 @@ async function printLength(file) {
      3) Event Source(s)
      4) Event Consumer(s)
    - Need to avoid component-to-component communication
-* 19 | Get Programming with Node.js
+* 19 | Get Programming with Node.js     | Jonathan Wexler  | Manning
 - Queries http://mongoosejs.com/docs/queries.html
 - Schema https://mongoosejs.com/docs/schematypes.html
 - Promises https://mongoosejs.com/docs/promises.html
@@ -1106,7 +1106,7 @@ courses: [{type: mongoose.schema.Types.ObjectId,
 #+end_src
 *** TODO populate
     pag 188
-* 21 | Distributed Systems with Node.js
+* 21 | Distributed Systems with Node.js | Thomas Hunter Li | OReilly
 ** 1 Why Distributed
 - Node.js Modules
   1) cluster, instances, https://nodejs.org/api/cluster.html

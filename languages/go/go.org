@@ -44,6 +44,8 @@
   > strip -x
 - TUI Libraries
   https://charm.sh/
+* Versions Changes
+https://go.dev/doc/go1.18
 * Standard Library
 - https://pkg.go.dev/std
   https://pkg.go.dev/strconv
@@ -328,6 +330,51 @@
 | /utf8  | implements functions and constants to support text encoded in UTF-8. |
 
 ** unsafe   - contains operations that step around the type safety of Go programs.
+* Standard Library Extension
+https://pkg.go.dev/golang.org/x
+
+** benchmarks — benchmarks to measure Go as it is developed.
+** build      — build.golang.org's implementation.
+** crypto     — additional cryptography packages.
+** debug      — an experimental debugger for Go.
+** exp        — experimental and deprecated packages (handle with care; may change without warning).
+** image      — additional imaging packages.
+** mobile     — experimental support for Go on mobile platforms.
+** mod        — packages for writing tools that work with Go modules.
+** net        — additional networking packages.
+** oauth2     — a client implementation for the OAuth 2.0 spec
+** perf       — packages and tools for performance measurement, storage, and analysis.
+** pkgsite    — home of the pkg.go.dev website.
+** review     — a tool for working with Gerrit code reviews.
+** sync       — additional concurrency primitives.
+** sys        — packages for making system calls.
+** term       — Go terminal and console support packages.
+** text       — packages for working with text.
+** time       — additional time packages.
+** tools      — godoc, goimports, gorename, and other tools.
+** tour       — tour.golang.org's implementation.
+** vuln       — packages for accessing and analyzing data from the Go Vulnerability Database.
+** website    — home of the go.dev and golang.org websites.
+
+* Libraries
+|-------------+----+----+-------------------------------+--------------------------------------------|
+| =name=      |    |  k | =description=                 | =repo url=                                 |
+|-------------+----+----+-------------------------------+--------------------------------------------|
+| mysql       | 23 | 13 | mysql driver                  | https://github.com/go-sql-driver/mysql     |
+| goquery     | 23 | 12 | jQuery/html parser            | https://github.com/PuerkitoBio/goquery     |
+| go-colorful | 22 |  1 | colors                        | https://github.com/lucasb-eyer/go-colorful |
+| ease        | 17 |  0 | easing functions              | https://github.com/fogleman/ease           |
+|-------------+----+----+-------------------------------+--------------------------------------------|
+| bubbletea   | 23 | 17 | tui framework                 | https://github.com/charmbracelet/bubbletea |
+| lipgloss    | 23 |  5 | terminal style                | https://github.com/charmbracelet/lipgloss  |
+| bubbles     | 23 |  3 | tea tui components            | https://github.com/charmbracelet/bubbles   |
+| glamour     | 23 |  1 | markdown rendering            | https://github.com/charmbracelet/glamour   |
+| harmonica   | 22 |  1 | physics based animation       | https://github.com/charmbracelet/harmonica |
+| termenv     | 23 |  1 | terminal style/colors         | https://github.com/muesli/termenv          |
+| reflow      | 23 |  0 | text reflow ops               | https://github.com/muesli/reflow/          |
+| go-isatty   | 23 |  0 | isatty for golang             | https://github.com/mattn/go-isatty         |
+| go-osc52    | 23 |  0 | clipboard                     | https://github.com/aymanbagabas/go-osc52/  |
+|-------------+----+----+-------------------------------+--------------------------------------------|
 * Personalities
 ** Rob Pike
 https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
@@ -377,293 +424,5 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
    https://github.com/shomali11/go-interview
    https://github.com/hoanhan101/algo
    https://github.com/goquiz/goquiz.github.io
-* TODO Tutorial: Learn go with tests
-  https://github.com/quii/learn-go-with-tests
-** Hello world
-- Rules for "testing" package
-  - files should be {file}_test.go
-  - functions should be prefix TestSOMETHING()
-  - functions only argument should be (t *testing.T)
-- t.Errorf - formated output and fail test
-  t.Run - Subtests
-  t.Helper() - used by helper functions inside TestSOMETHING() to clean stacktrace
-- Named return values are a thing, they create the var
-- functions naming:
-  - public functions start with CAPITAL letter
-  - private functions start with a lowercase letter
-   * TODO Tutorial: Effective Go
-  https://golang.org/doc/effective_go.html
-- "go fmt" uses tabs
-- Unlike C, is OK return the address of a local variable (!
-** Control structures
-- if and switch accept an optional initialization statement like that of for
-- break and continue statements take an optional label to identify what to break or continue
-- for
-  - Go's for has no comma operator
-  - ++ and -- are statements not expressions.
-  - for pos, char := range "ANUTF8STRING"
-    works and steps over each unicode code points
-- switch
-  - do not need to be constants
-  - if no expression, it switches true, so if-else-if-else chain is possible ina switch
-  - cases can be comma separated
-  - case or default
-** Functions
-- named result parameters: get zeroed and if return has not args they are returned
-- defer: runs just before function returns, arguments are evaluated when defer executes not when call executes (immediatly)
-** Data
-*** New(T) allocates a zeroed pointer of type *T, often ready to use.
-    but different than a mere var
-  #+begin_src
-  p := new(SyncedBuffer)  // type *SyncedBuffer
-  var v SyncedBuffer      // type  SyncedBuffer
-  #+end_src
-*** when just New() isn't enough a constructor is provided, which calls New()
-    and initiializes the struct with some values.
-*** Composite Literal
-  - Can be used for arrays, slices and maps.
-    [4]string
-    []string
-    map[int]string
-  #+begin_src go
-  a := [...]string    {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
-  s := []string       {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
-  m := map[int]string {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
-  #+end_src
-  - On a map, for a constructor
-  #+begin_src go
-    f := new(File)
-    f.fd = fd
-    f.name = name
-    f.dirinfo = nil
-    f.nepipe = 0
-    return f
-
-    File{fd, name, nil, 0}
-    return &F
-
-    return &File{fd, name, nil, 0}
-
-    return &File{fd: fd, name: name}
-
-    new(File) .. is the same as .. &File{} .. which is a .. *File
-  #+end_src
-*** make(T,...)
-  - for slices, maps and channels
-  - returns a not zeroed value of type T (not *T)
-*** arrays (building blocks for slices)
-  - arrays are values, you assign the whole thing
-    - or pass to a function a copy the whole thing not a reference
-  - [10]int and [20]int are different datatypes
-*** slices
-  - cap() returns the max length or capacity it might have
-  - Slices hold references to an underlying array,
-      and if you assign one slice to another, both refer to the same array.
-  - If a function takes a slice argument,
-      changes it makes to the elements of the slice will be visible to the caller.
-  - However, the metadata (structure holding the pointer, length and capacity) is passed
-      by value. So we need to return the slice again.
-*** 2d slices...
-*** Maps
-  - Like slices, maps hold references to an underlying data structure.
-     If you pass a map to a function that changes the contents of the map,
-     the changes will be visible in the caller.
-  - An attempt to fetch a map value with a key that is not present in the map
-     will return the zero value for the type of the entries in the map.
-  - Indexing also returns a second boolean value if is or isn't on the map.
-  - delete(Map, Key)
-*** Printing
-  - fmt.Print() fmt.Println() accept multiple args and print default format
-  - fmt.Print(), adds space between each
-  - fmt.Println(), adds space between each IF an arg is not a string, and adds newlin
-  - fmt.FPrint.. functions prints to a buffer (an object that implements the io.Writer interface)
-  - Format
-    -  %d format prints based on the type (uint/int)
-    -  %v prints the default...what fmt.Print() will show
-    - %+v prints with struct field names
-    - %#v prints in full Go syntax
-    -  %q quotes string or []byte
-          creates a rune from integer or rune
-    - %#q backquotes
-    -  %x hexa
-    -  %x spaced hexa
-    -  %T type
-  - to change the default printing define, *T is more effective to use than T for structs
-      func (t *T) String() string
-  - We write ...v after v in the nested call to Sprintln to tell the compiler
-      to treat v as a list of arguments; otherwise it would just pass v
-      as a single slice argument.
-  - There is also ...T for a variadic number of arguments of type T
-*** Append
-  - You can't actually write a function in Go where the type T is determined by the caller.
-** Initialization
-- Constants
-  - Defined at compile time.
-  - Either: numbers, charachters, strings or booleans.
-- init() function on each file, to verify or repair correctness of the program state.
-    packages initialization >
-** Interfaces and other types
-- Interfaces
-  - if something can do this, then it can be used here.
-  - Interfaces with only one or two methods are common in Go code
-  - A type can implement multiple interfaces.
-  - For instance, a collection can be sorted by the routines in package sort if it implements
-    - sort.Interface
-      - Len()
-      - Less(i, j int) bool
-      - Swap(i, j int)
-- Convertions
-  - It's an idiom in Go programs to convert the type of an expression to access a different set of methods. 
-** DONE Blank _ Identifier
-#+begin_src go
-_, err := os.Stat(path) // 1. on multiple assignment
-var _ = fmt.Println // 2. To silence, unused imports
-_ = fd              // 2. To silence, unsused variables
-import _ "net/http/pprof" // 3. To import for his side-effects
-// 4. to check at compile time that a type satisfies an interface
-//    Only when there are no static conversion already present in the code (rare).
-//    Global declaration.
-var _ json.Marshaler = (*RawMessage)(nil)
-#+end_src
-** Embedding
-- Interface embedding:
-  - Only interfaces can be embedded within interfaces
-* DONE Tutorial: Clean Go Code (Lasse Martin Jakobsen)
-https://github.com/Pungyeon/clean-go-article
-- AWS re:Invent 2017: Embracing Change without Breaking the World (DEV319) https://www.youtube.com/watch?v=kJq81Y7OEx4
-  Golang Scopes https://idiallo.com/blog/golang-scopes
-- Ensure readability, estability and maintainability of the codebase
-s topic, as well as a talk:
-- About choosing between a closure or an interface
-  https://dave.cheney.net/2016/11/13/do-not-fear-first-class-functions
-  https://www.youtube.com/watch?v=5buaPyJ0XeQ&t=9s
-  https://www.youtube.com/watch?v=5IKcPMJXkKs
-** Preface: Why Write Clean Code?
-> "We don't read code, we decode it -- Peter Siebel"
-- ...homogenous code id more important than having complete expressive *freedom*
-** Introduction to Clean Code
-- TDD: short dev cycles, invites to question *functionality* and *purpose*
-  1. Write (or execute) a test
-  2. If the test fails, make it pass
-  3. Refactor your code accordingly
-  4. Repeat
-*** Naming conventions
-  - Comments:
-    - goftm, all public variables and functions should be annotated
-    - "tutorial comments" are useless in production code
-    - "Document ~why~, not how -- Venkat Subramaniam (Agile advocate)"
-  - Functions:
-    - "The more specific the function, the more general its name"
-      Start with a very broad and short function name. Run() Parse()
-    - IMO, Part of the OO that is loss, (sometimes) is translated into names (less than in C tho)
-  - Variables:
-    - Opposite to functions: should be named from more to less specific, the deeper we go into nested scopes.
-    - Do NOT name your variables the same as the type
-      "You shouldn't name your variables after their types for the same reason you wouldn't name your pets 'dog' or 'cat' -- Dave Cheney"
-    - Do NOT mix short and long variable names inconsistently
-*** Cleaning Functions
-- Function length
-  "How small should a function be? Smaller than that! -- Robert C. Martin"
-  - Code comprehension > Code deduplication
-  - Avoid *Indentation hell*
-  - TIP: if the *value, err :=* pattern id repeated more than once in a function
-- Function Signatures
-  - IT should contain one or two input parameters. Might be three.
-  - Use and "Options" struct instead
-*** Variable Scope
-- Global variables are problematic and don't belong in clean code
-- Non-Global variables with a large scope can cause problems (too).
-  - Instead of expanding the mutable scope, we can just return a new value.
-  - Variable shadowing can creep when doing ~:=~ inside a block, that (re)declares the variable
-  - OK DUDE
-    "Developers need to take responsibility for their own code rather than blaming these issues on the variable
-     declaration syntax of a particular language like Go."
-*** Variable Declaration
-- Declare the variables as close to their usage as possible
-  - Avoid C-style declaration first
-- Make constructors for channels, that make() and start the consumption
-  - Alternatively
-    - wrap the channel in a struct, making the channel private
-    - make a newNAME()
-    - make a Send()
-** Clean Go
-*** Return Values
-- Returning defined errors
-  - Do NOT rely on the *magic string* provided on errors.New() to compare
-    Make it global (4Head)
-- Return default values.
-  Like a global empty struct of the type needed.
-- Returning Dynamic Errors
-  - When there context details to be returned
-  - Create a new interface:
-    #+begin_src go
-type ErrorDetails interface {
-  Error() string
-  Type()  string
-}
-
-type errDetails struct {
-  errtype error
-  details interface{}
-}
-func NewErrorDetails(err error, details ...interface{}) ErrorDetails {
-  return &errDetails{
-    errtype: er,
-    details: details,
-  }
-}
-func (err *errDetails) Error() string {
-  return fmt.Sprintf("%v: %v", err.errtype, err.details)
-}
-func (err *errDetails) Type() error {
-  return err.errtype
-}
-
-NewErrorDetails(
-  ErrItemNotFound,
-  fmt.Sprintf("could not find item with id: %s", id))
-.Error()
-.Type()
-    #+end_src
-*** Nil Values
-- Try to not return nil values
-- Avoid access to potential unitialized values with getters
-*** Pointers in Go
-- Pointer mutability
-- Scope/Mutability:
-  - When passing pointers as an input parameter of a function,
-     we are expanding the scope of the variable whose data is being pointed to.
-  - Same with returning pointers, we leak scope.
-  - Common Go constructores are still fine
-    They keep the scope the same.
-*** Closures Are Function Pointers
-- We can use closure to partially overcome the lack of generics
-  - Making it easier to add functionality without affecting other parts of the code.
-  - Keeping the arguments of the closure small (1?) helps to decouple later
-- Sometimes there is a choice between using a closure or an interface
-*** Interfaces in Go
-- Java or C#, intefaces are explicit
-- In Go being implicit, it can be difficult to see which intefaces are implemented by a struct (aka ~contract fulfillment~)
-  - Resulting in interfaces with few methods (to make it easy to identify satisfying types)
-  - Or creating constructors that return an interface1, along with code to implement the interface1
-  - Or we can check by asserting that the interface is fullfilled
-    #+begin_src go
-   var _ io.Writer = &NullWriter{}
-    #+end_src
-  - Or interface embedding in a struct field.
-    "An interface method in Go is essentially a function pointer".
-    Embedded interfaces:
-    - are always public.
-    - You can partially overwrite interface methods
-    Some argue that interface embedding is good for mocking (implement just what you need for testing)
-- Struct embedding, helps introduce new functionality quickly (clean code)
-- You should be able to accept and *interface argument* but return a *specific type*
-TODO: NewDocument() is missing a user argument for NewMetadata
-*** The Empty interface{}
-Type reflection or Type Casting
-- An alternative developers use for the lack of *generics*
-  - A way to accept all the types for argument
-    - In print() family of functions
-    - Or in .Decode() (in json package)
-- In general avoid directly dealing with interface{},
-  write wrappers (Get, Put) for the type you want (like when using tinyKV package)
+* Tools
+| errcheck | 23 | 2 | linter for checking for unchecked errors | https://github.com/kisielk/errcheck |

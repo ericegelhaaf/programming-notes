@@ -1,3 +1,5 @@
+- The Haskell Unfolder
+  - Episode 1: unfoldr  https://www.youtube.com/watch?v=S_HSt6jEtWM
 - Streamer https://www.youtube.com/c/cvladfp/videos
 - Streamer https://www.youtube.com/@EdwardKmett1/videos
 - Channel https://www.youtube.com/@impurepics/videos

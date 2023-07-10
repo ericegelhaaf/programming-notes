@@ -10,10 +10,9 @@
 - Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
   - As such the code is NOT compiled.
 - Article: https://rattlin.blog/bbgum.html
+- Article: https://yogthos.net/posts/2023-05-12-nbb-resume.html
 * Example: newspod.clj - sqlite3
 #+begin_src clojure
-  #!/usr/bin/env bb
-
   ;; TODO: gh-actions
   ;; https://stackoverflow.com/questions/24098792/how-to-force-github-pages-build/61706020#61706020
 

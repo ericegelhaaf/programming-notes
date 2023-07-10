@@ -1,3 +1,4 @@
+- https://github.com/ocaml-flambda/ocaml-jst/blob/main/jane/doc/proposals/data-race-freedom.md
 - 2013 https://roscidus.com/blog/blog/2013/06/20/replacing-python-round-2/
 - 2014 https://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/
 - 2019 https://markkarpov.com/post/haskell-vs-ocaml.html
@@ -8,6 +9,10 @@
 - 2022 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
 - 2022 https://justabluddyblog.wordpress.com/2022/05/01/remaking-an-old-game-in-ocaml/
 - 2022 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
+- 2023 https://borretti.me/article/two-years-ocaml
+- 2023 https://gopiandcode.uk/logs/log-writing-activitypub.html
+- https://osa1.net/posts/2023-04-24-ocaml-thoughts.html
+  https://github.com/sidkshatriya/me/blob/master/007-My-Thoughts-on-OCaml-vs-Haskell-Rust-2023.md
 * LWT
 - Lwt in 5 minutes https://ocsigen.org/tuto/latest/manual/lwt
 - 2013 https://mirage.io/docs/tutorial-lwt

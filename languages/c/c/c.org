@@ -101,8 +101,12 @@
 | wctype.h      | C95 | Functions to determine the type contained in wide character data                                        |
 |---------------+-----+---------------------------------------------------------------------------------------------------------|
 * Codebases
-https://github.com/curl/trurl/blob/master/trurl.c
+- https://github.com/curl/trurl/blob/master/trurl.c
+- https://github.com/gsingh93/display-manager
+- https://github.com/lpereira/lwan
 * Libraries
+- 0.9K https://github.com/MrFrenik/gunslinger
+  C99, header-only framework for games and multimedia applications
 - Webserver https://mongoose.ws/
 - (3K) minimal cross-platform standalone C headers
   https://github.com/floooh/sokol

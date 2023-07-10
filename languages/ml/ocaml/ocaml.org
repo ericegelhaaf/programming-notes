@@ -236,3 +236,5 @@ install: release
 - Project: Synth https://github.com/smimram/monadic-synth
 - https://janmidtgaard.dk/quickcheck/index.html
 - RPI https://github.com/dinosaure/gilbraltar
+* Codebase
+- https://soap.coffee/~lthms/news/CFTSpatialShell.html

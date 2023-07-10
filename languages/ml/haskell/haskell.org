@@ -258,3 +258,6 @@
 - parsec: It is defined as a monad transformer that can be stacked on arbitrary monads, and it is also parametric in the input stream type.
 - State of the Haskell ecosystem
   https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
+* Codebases
+- https://github.com/jappeace/cut-the-crap/
+  ffmpeg based, cut video silences

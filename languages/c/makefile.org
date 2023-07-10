@@ -1,3 +1,6 @@
+- Alternative: https://github.com/casey/just
+  - https://github.com/casey/just#what-are-the-idiosyncrasies-of-make-that-just-avoids
+    - Needing to use "$$" to use environment variables (?) in recipes
 - https://swcarpentry.github.io/make-novice/reference.html
 - Template https://github.com/mbcrawfo/GenericMakefile/
 - Practical Makefiles, by example http://nuclear.mutantstargoat.com/articles/make/
@@ -6,6 +9,73 @@
 - GNU Make https://www.gnu.org/software/make/manual/html_node/index.html#Top
   - 10.3 Variables Used by Implicit Rules
     https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+* Example: some anon makefile - DEBUG flag
+- src/program.c
+  #+begin_src c
+    #include <stdio.h>
+    #include <math.h>
+
+    int
+    main (void) {
+      printf("log of 5: %f\n", log(5.0));
+    }
+  #+end_src
+- Makefile
+#+begin_src makefile
+#!/usr/bin/make -f
+
+# Reassign these as needed
+DEBUG    := 0
+STRIP    := strip
+DESTDIR  := /usr/local/bin
+SANITIZE := address,undefined
+
+CFLAGS   := -std=c99 -Wall -Wextra -Wpedantic
+CPPFLAGS := -Iinclude
+LDFLAGS  := -lm
+
+ifeq ($(DEBUG),1)
+  CFLAGS   += -ggdb -Og -fsanitize=$(SANITIZE)
+else
+  CFLAGS   += -O3 -fwhole-program
+  CPPFLAGS += -DNDEBUG
+endif
+
+SRC_DIR := src/
+OBJ_DIR := obj/
+
+VPATH := $(SRC_DIR) $(OBJ_DIR)
+
+PROGRAM_SRC := program.c
+PROGRAM_OBJ := $(addprefix $(OBJ_DIR),$(PROGRAM_SRC:.c=.o))
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
+    $(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+all: program
+
+program: $(PROGRAM_OBJ)
+    $(CC) $(CFLAGS) -o $@ $+ $(LDFLAGS)
+ifneq ($(DEBUG),1)
+    $(STRIP) $@
+endif
+
+install: program
+    mkdir -p $(PREFIX)$(DESTDIR)
+    install -s -m 755 -t $(PREFIX)$(DESTDIR) $+
+
+uninstall:
+    $(RM) $(PREFIX)$(DESTDIR)/program
+
+$(OBJ_DIR):
+    mkdir -p $@
+
+clean:
+    $(RM) program $(PROGRAM_OBJ)
+    $(RM) -d $(OBJ_DIR)
+
+.PHONY: all clean
+#+end_src
 * Tutorial: makefile tutorial
   http://makefiletutorial.com/
 - can be more than 1 *target* separated by space (usually 1)
@@ -122,34 +192,35 @@ clean:
   https://www.youtube.com/watch?v=_Ms1Z4xfqv4
   - we generate a *pipeline*
   - depending on static files
-    % wildcard on the target (and deps)
-    $* matches whatever the "%" was
-    $@ matches the name of the target
-    #+begin_src makefile
-    paper.pdf: paper.tex plot-date.png
-         pdflatex.png
-
-    plot-%.png: %.data plot.py
-        ./plot.py -i $*.dat -o $@
-    #+end_src
-  - script plot.py
-    note how small is the python code for just a small and powerful library...
-    #+begin_src python
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-i', type=argparse.FileType('r'))
-parser.add_argument('-o')
-args = parser.parse_args()
-
-data = np.loadtxt(args.i)
-plt.plot(data[:, 0], data[:, 1])
-plt.savefig(args.o)
-    #+end_src
+    | %  | *wildcard* on the target (and deps) |
+    | $* | matches whatever the "%" was        |
+    | $@ | matches the name of the target      |
   - ~Semantic Versioning~ Major.minor.patch
+** Makefile
+#+begin_src makefile
+  paper.pdf: paper.tex plot-date.png
+       pdflatex.png
+
+  plot-%.png: %.data plot.py
+      ./plot.py -i $*.dat -o $@
+#+end_src
+** plot.py
+note how small is the python code for just a small and powerful library...
+#+begin_src python
+  import matplotlib
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import argparse
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-i', type=argparse.FileType('r'))
+  parser.add_argument('-o')
+  args = parser.parse_args()
+
+  data = np.loadtxt(args.i)
+  plt.plot(data[:, 0], data[:, 1])
+  plt.savefig(args.o)
+#+end_src
 * DONE Video: 2019 - Makefiles: 95% of what you need to know
 https://www.youtube.com/watch?v=DtGrdB8wQ_8
 - -MP -MD, flags to be passed to GCC
@@ -157,12 +228,12 @@ https://www.youtube.com/watch?v=DtGrdB8wQ_8
   #+begin_src makefile
 # generate files that encode make rules for the .h deps
 # generate .d files, includes information for Make
-DEPFLAGS=-MP -MD
-INCDIRS=. ./include/
-CFLAGS=$(foreach D,$(INCDIRS),-I$(D))
-CFILES=$(foreach D$(CODEDIRS),$(wildcard $(D)/*.c))
-OBJECTS=$(patsubst %c,%,o,$(CFILES))
-DEPFILES=$(patsubst %c,%,o,$(CFILES))
+DEPFLAGS = -MP -MD
+INCDIRS  = . ./include/
+CFLAGS   = $(foreach D,$(INCDIRS),-I$(D))
+CFILES   = $(foreach D$(CODEDIRS),$(wildcard $(D)/*.c))
+OBJECTS  = $(patsubst %c,%,o,$(CFILES))
+DEPFILES = $(patsubst %c,%,o,$(CFILES))
   #+end_src
 - $(info something hello world)
 * DONE Video: 2016 - Introduction to Make and GNU Autotools | Barry Smith, Argonne National Laboratory

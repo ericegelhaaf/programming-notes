@@ -1,4 +1,4 @@
-* 2022 | Java Master Class | AmigosCode
+* 2022 | Java Master Class         | AmigosCode
 - Exception tutorial https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html
 - Java keywords https://www.w3schools.com/java/java_ref_keywords.asp
 - Java API specification https://docs.oracle.com/en/java/javase/19/docs/api/index.html
@@ -248,7 +248,7 @@ https://stackoverflow.com/questions/32437550/whats-the-difference-between-instan
   - new Scanner(File) - can throw a FileNotFoundException, checked
   - .hasNext(), can be used on a while loop
   - .nextLine()
-*** use  =try-with-resources= If you have any class which implements, Closeable and Flushable
+*** use =try-with-resources= If you have any class which implements, *Closeable* and *Flushable*
   #+begin_src java
     try(
         FileWriter fileWriter = new File(file, false);
@@ -316,121 +316,133 @@ https://stackoverflow.com/questions/32437550/whats-the-difference-between-instan
     }
   #+end_src
 ** 150 POJO + Java Beans + static
-- POJO: Plain Old Java Object
-  - used to emphasize that a given object has no association with any framework.
-  - doesn't *extend* or *implement* nor has an *annotation*
-  - focus on the ~Business Logic~
-- Java Beans, is a class that has to obey 3 contracts
-  1) must have a *no arg constructor*
+*** =POJO= Plain Old Java Object
+- used to emphasize that a given object has no association with any framework.
+- doesn't *extend* or *implement* nor has an *annotation*
+- focus on the ~Business Logic~
+*** =Java Beans=, is a class that has to obeys 3 contracts
+  1) must have a *constructor with no arguments*
   2) all properties must be *private*
   3) should implement *Serializable* (aka can be written to streams)
-- static is useful, for example
-  1) when writting an utility class (aka when one does not need an instance to use it)
-  2) =Static block initialization=
-     - when you want to perform some code /and then/ have the final static variable
-     - runs *only once*, the first time the class loads into memory
-     #+begin_src java
-       public class Person {
-           public static int count;
-           static {
-               System.out.println("start: static initialization");
-               count = 0;
-               System.out.println("end: static initialization");
-           }
-       }
-     #+end_src
-  3) for performance
-  4) =instance block initializer=
-     - to assign default values
-     - to run common code BEFORE any of the constructors run
-     #+begin_src java
-       class Person {
-           public static int count;
-           private int age;
-           private String name;
-           {
-               count++;
-           }
-           public Person(String name) {
-               this.name = name;
-           }
-           public Person(String name, int age) {
-               this.name = name;
-               this.age = age;
-           }
-       }
-     #+end_src
-  5) =static import=
-     eg: Math.max
-     #+begin_src java
-       import static java.lang.Math.max;
-       import static java.lang.Math.*; // not recommended
-       //...
-       max(10,20)
-     #+end_src
+*** *static* use cases
+ 1) when writting an utility class (aka when one does not need an instance to use it)
+ 2) =Static block initialization=
+    - when you want to perform some code /and then/ have the final static variable
+    - runs *only once*, the first time the class loads into memory
+    #+begin_src java
+      public class Person {
+          public static int count;
+          static {
+              System.out.println("start: static initialization");
+              count = 0;
+              System.out.println("end: static initialization");
+          }
+      }
+    #+end_src
+ 3) for performance
+ 4) =instance block initializer=
+    - to assign default values
+    - to run common code BEFORE any of the constructors run
+    #+begin_src java
+      class Person {
+          public static int count;
+          private int age;
+          private String name;
+          {
+              count++;
+          }
+          public Person(String name) {
+              this.name = name;
+          }
+          public Person(String name, int age) {
+              this.name = name;
+              this.age = age;
+          }
+      }
+    #+end_src
+ 5) =static import=
+    eg: Math.max
+    #+begin_src java
+      import static java.lang.Math.max;
+      import static java.lang.Math.*; // not recommended
+      //...
+      max(10,20)
+    #+end_src
 ** 160 Code Organization
 - Classes that do 1 thing (Single Responsability)
+- TODO? Configuration Class, ?controllers
 *** Packages
-- in java they are folders
-  com/amigoscode/car/Car.java
-  com/amigoscode/cat/Cat.java
-  com/amigoscode/person/Gender.java
-  com/amigoscode/person/Person.java
-  com/amigoscode/Main.java
+- in java packages are folders
+  com / amigoscode / car / Car.java
+  com / amigoscode / cat / Cat.java
+  com / amigoscode / person / Gender.java
+  com / amigoscode / person / Person.java
+  com / amigoscode / Main.java
 *** Domain or Model /classes/
 - Are the POJOs or BEANs classes of your project
-  - NOT hold business logic
+  - do NOT hold business logic
   - and just refer to the *domain* (aka data)
 *** Service         /classes/ (aka Business Logic)
-- within each package with a Domain class, you would have a corresponding service class
-  - Example: com.amigoscode.person.PersonService
-    #+begin_src java
-      package com.amigoscode.person;
-      public class PersonService {
-          public int addPerson(Person person) {
-              if (person.getFirstName().isBlank()) { // business logic
-                  throw new IllegalargumentException("First name cannot b enull or empty");
-              }
-              // store person to db
-              return 1; // in the real world it will be the number of affected rows
+- within each package with a *Domain* class,
+  you would have a corresponding *Service* class
+**** Example: com.amigoscode.person.PersonService
+ME: note that they don't inherit, but they accept a Person class
+#+begin_src java
+  package com.amigoscode.person;
+  public class PersonService {
+      public int addPerson(Person person) {
+          if (person.getFirstName().isBlank()) { // business logic
+              throw new IllegalargumentException("First name cannot be null or empty");
           }
+          // store person to db
+          return 1; // in the real world it will be the number of affected rows
       }
-    #+end_src
-  - Example: com.amigoscode.garage.GarageService
-    #+begin_src java
-      package com.amigoscode.garage;
-      import com.amigoscode.car.Car;
-      public class GarageService {
-          public boolean addCarToGarage(Car car, Garage garage) {
-              if (car == null) {
-                  throw new IllegalArgumentException("Car cannot be null");
-              }
-              int count = 0;
-              for (Car c : garage.getCars()) {
-                  if (c != null) {
-                      count++;
-                  }
-              }
-              if (count >= garage.getCapacity()) {
-                  return false;
-              }
-              // add car to garage
-              return true;
+  }
+#+end_src
+**** Example: com.amigoscode.garage.GarageService
+#+begin_src java
+  package com.amigoscode.garage;
+  import com.amigoscode.car.Car;
+  public class GarageService {
+      public boolean addCarToGarage(Car car, Garage garage) {
+          if (car == null) {
+              throw new IllegalArgumentException("Car cannot be null");
           }
+          int count = 0;
+          for (Car c : garage.getCars()) {
+              if (c != null) {
+                  count++;
+              }
+          }
+          if (count >= garage.getCapacity()) {
+              return false;
+          }
+          // add car to garage
+          return true;
       }
-    #+end_src
-  - Example: com.amigoscode.car.CarService
-    - check car is not null
-    - check if car registration number is valid
-    - check if car registration number is not take
-    - if car price is < 0
-
+  }
+#+end_src
+**** Example: com.amigoscode.car.CarService
+#+begin_src java
+  package com.amigscode.car;
+  public class CarService {
+      public int registerNewCar(Car car) {
+          // check car is not null
+          // check if car registration number is valid
+          // check if car registration number is not taken
+          // check if car price is > 0
+          return 1;
+      }
+  }
+#+end_src
 *** DAO - Data Access Object
+- Responsible for interacting with a database or any storage for your application
+- Business logic should still happen on the *Service* class
 - They would work better with an ~Interface~ instead of a class
 #+begin_src java
   package com.amigoscode.car;
   public class CarDAO {
-      private static Car[] cars;
+      private static Car[] cars; // the "database"
       private static int nextAvailableSlot = 0;
       private static final int CAPACITY = 100;
       static {
@@ -438,43 +450,1519 @@ https://stackoverflow.com/questions/32437550/whats-the-difference-between-instan
       }
       public void saveCar(Car car) {
           if (nextAvailableSlot + 1 >= CAPACITY) {
-              // grow db
+              // grow database/array
           }
           cars[nextAvailableSlot++] = car;
       }
   }
 #+end_src
+*** Using DAO inside the Service classes
+**** 1) store in the Service class (slightly incorrect, due testing, dependency injection)
+#+begin_src java
+  package com.amigoscode.car;
+  class CarService {
+      private CarDAO carDAO = new CarDAO();
+      public int registerNewCar(Car car) {
+          // ... all the service checks go in here
+          carDAO.saveCar(car);
+          return 1;
+      }
+  }
+    #+end_src
+**** 2) store in the Service class (still incorrect)
+#+begin_src java
+  package com.amigoscode.car;
+  class CarService {
+      private CarDAO carDAO;
+      public CarService() {
+          this.carDAO = new CarDAO();
+      }
+      public int registerNewCar(Car car) {
+          // ... all the service checks go in here
+          carDAO.saveCar(car);
+          return 1;
+      }
+      public Car[] getCars() {
+          carDAO.selectAllCars();
+      }
+  }
+#+end_src
+*** N Tier Architecture
+HTTP -> Api Layer -> Business Layer -> DAO Layer -> Database
 *** Utility Classes
-- Connecting DAO with the Service
-  1) store in the Service class (slightly incorrect, due testing, dependency injection)
-    #+begin_src java
-      package com.amigoscode.car;
-      class CarService {
-          private CarDAO carDAO = new CarDAO();
-          public int registerNewCar(Car car) {
-              // ... all the service checks go in here
-              carDAO.saveCar(car);
-              return 1;
+- shared among all classes - eg: com.amigoscode.utils.StringUtils
+- or per class
+- Example thirdparty: org.apache.commons.lang3.StringUtils
+- Using our util class
+#+begin_src java
+  package com.amigoscode.person;
+  import static com.amigoscode.utils.StringUtils.isEmpty; // ME: imports it into the namespace
+  public class PersonService {
+      public int addPerson(Person person) {
+          if (isEmpty(person.getFirstName())) {
+            throw new IllegalArgumentException("first name cannot be null or empty")
+          }
+          // ....
+#+end_src
+*** CLI & Capstone Project
+- "Develop a car booking cli system"
+- First implementation would use *Arrays* for the DAO
+- Prints a Menu
+  1) Book car
+  2) view all user booked cars
+  3) view all bookings
+  4) view available cars
+  5) view available electric cars
+  6) view all users
+  7) exit
+** 170 OOP Principles
+*** Encapsulation
+- Process of binding the object state and behavior into one unit
+- Helps prevent classes from being tighly couples
+- Can make attributes hidden from other classes
+- Example: bundling object state with behavior into 1 single unit
+  TODO: add getters and setters
+ #+begin_src java
+   package com.amigoscode;
+   public class BankAccount {
+       boolean hasOverdraft;
+       String name;
+       BigDecimal balance;
+       public BigDecimal withdraw(BigDecimal amount) {
+           if (balance.subtract(amount).compareTo(ZERO) >= 0) {
+               this.balance = this.balance.subtract(amount);
+               return amount;
+           }
+           return ZERO;
+       }
+   }
+#+end_src
+- Example: internally strings literals changed the internal representation
+  #+begin_src java
+    private final char[] value; // BEFORE
+    private final byte[] value; // NOW
+  #+end_src
+*** Inheritance
+- Allows us to create a new class from an existing class.
+- We can remove duplicate code.
+- Multi-level inheritance: is also possible
+  eg: Person>Employee>Programmer
+- You NEED to have a constructor matching super (todo: add an override)
+  #+begin_src java
+    package com.amigoscode;
+    public class Programmer extends Employee {
+        public Programmer(String name, int age, String address, String experience) {
+            super(name, age, address, experience);
+        }
+        public void writeSomeCode() {
+            super.sayHi(); // Calls it from the Employee class
+            System.out.println("Writing some coed");
+        }
+    }
+  #+end_src
+** 180 abstract & interface
+- "Hello my name is %s".formatted(this.name)
+*** *protected* access modifier
+- with *private* the ONLY thing that can access the element is the class itself
+- with *protected* the class and his subclasses can access the element
+*** Abstraction (*abstract*)
+#+begin_src java
+  abstract public class Animal {
+      private String name;
+      public Animal(String name) {
+          this.name = name;
+      }
+      public abstract void makeSound();
+  }
+#+end_src
+- On Classes
+  - *abstract* makes it so we cannot instantiate a class, only inherit
+- On Methods
+  - makes it so you have to define the method in the inherited class
+  - only possible on abstract classes or interfaces
+- Reminder: A class should be closed for modification, but open for extension.
+**** Example: file grepper
+#+NAME: NumberExtractorReport.java
+#+begin_src java
+  package com.amigoscode;
+  import java.io.File;
+  import java.io.FileNotFoundException;
+  import java.util.Scanner;
+  import java.util.regex.Matcher;
+  import java.util.regex.Pattern;
+  public class NumberExtractorReport {
+      public String parse(String path) throws FileNotFoundException {
+          Pattern pattern = pattern.compile("^[0-9]*$");
+          String out = "";
+          File file = new File(path);
+          Scanner scanner = new Scanner(file);
+          // Skip header
+          if (scanner.hasNext()) {
+            scanner.nextLine();
+          } else {
+            return "Empty file";
+          }
+          while (scanner.hasNext()) {
+              String nextLine = scanner.nextLine();
+              Matcher matcher = pattern.matcher(nextLine);
+              boolean matches = matcher.matches();
+              if (matches) {
+                out += nextLine + "\n";
+              }
+          }
+          return out.isBlank() ? "Empty file" : out;
+      }
+      public void prepareAndSendreport(String path) throws FileNotFoundException {
+          System.out.println("starting report...");
+          String report = parse(path);
+          System.out.println(report);
+          System.out.println("sent report...");
+      }
+  }
+#+end_src
+#+NAME: ExtractorReport - Abstract classs
+#+begin_src java
+  package com.amigoscode;
+  import java.io.File;
+  import java.io.FileNotFoundException;
+  import java.util.Scanner;
+  import java.util.regex.Matcher;
+  import java.util.regex.Pattern;
+  abstract public class NumberExtractorReport {
+      public abstract Pattern getPattern();
+      public abstract String getReportName();
+      private String parse(String path) throws FileNotFoundException {
+          String out = "";
+          File file = new File(path);
+          Scanner scanner = new Scanner(file);
+          // Skip header
+          if (scanner.hasNext()) {
+            scanner.nextLine();
+          } else {
+            return "Empty file";
+          }
+          while (scanner.hasNext()) {
+              String nextLine = scanner.nextLine();
+              Matcher matcher = getPattern().matcher(nextLine);
+              boolean matches = matcher.matches();
+              if (matches) {
+                out += nextLine + "\n";
+              }
+          }
+          return out.isBlank() ? "Empty file" : out;
+      }
+      public void prepareAndSendreport(String path) throws FileNotFoundException {
+          System.out.println("starting report " + getReportName() + "...");
+          String report = parse(path);
+          System.out.println(report);
+          System.out.println("sent report " + getReportName() + "...");
+      }
+  }
+#+end_src
+#+NAME: NumberExtractorReport.java - extending the abstract class
+#+begin_src java
+  public class NumberExtractorReport extends ExtractorReport {
+    private static final Pattern PATTERN = Pattern.compile("^[0-9]*$");
+    @Override
+    public Pattern getPattern() {
+      return PATTERN;
+    }
+    @Override
+    public String getReportName() {
+      return "Phone Numbers";
+    }
+  }
+#+end_src
+#+NAME: EmailExtractorReport.java -extending teh abstract class
+#+begin_src java
+  public class NumberExtractorReport extends ExtractorReport {
+    private static final Pattern PATTERN = Pattern.compile("^@$"); // email regex here....
+    @Override
+    public Pattern getPattern() {
+      return PATTERN;
+    }
+    @Override
+    public String getReportName() {
+      return "Emails";
+    }
+  }
+#+end_src
+*** Interfaces (187-)
+- Enables you to do Polymorphism
+  eg: with the (+) operator or with an array of abstract classes
+- ? Use it instead of an abstract class when the implementation of the methods is going to be completely different between each other.
+- Interfaces allow
+  1) constants
+     - only *public* allowed, which is the default
+     - *static* is also redundant
+  2) abstract methods
+     - the modifier *abstract* is redundant on them
+     - the modifier *public* is redundant too, they are by default, unlike classes
+  3) default methods
+  4) static methods
+#+NAME: Vehicle.java
+#+begin_src java
+  public interface Vehicle {
+      double PURCHASE_RATE = 0.5;
+      void move();
+      void applyBreaks(int amount);
+      int getCurrentSpeed();
+      default double milesToKm(int speed) {
+        return getCurrentSpeed() * 1.609;
+      }
+  }
+#+end_src
+#+NAME: Car.java
+#+begin_src java
+  public class Car implements Vehicle {
+      @Override
+      public void move() {
+          System.out.println("move in Car");
+      }
+      @Override
+      public void applyBreaks(int speed) {
+          System.out.println("breaks on Car");
+      }
+      @Override // changing a default method
+      public double milesToKm() {
+          return Vehicle.super.milestoKm() * 2.0;
+      }
+  }
+#+end_src
+** 190 interface
+*** Interfaces - as with abstract classes we could hava an array of the interface
+#+begin_src java
+  Car car = new Car();
+  Bicycle bicycle = new Bycicle();
+  Vehicle[] vehicles = {car, bibycle};
+  Person person = new Person("John", vehicles);
+#+end_src
+*** Interfaces - dependency injection
+- We used to instantiate *CarDAO* as an attribute of *CarService* which was "bad code", because tightly couples them.
+  To solve this. We take it from inside the class. And _provide the instance on creation._
+  This helps on mock testing.
+  Aka =Depedency Injection=
+- On large projects, it might not be possible pass the same dependency instance at creation.
+  Leading you to create multiple instances of the dependencies.
+  Which might lead to *high memory usage.*
+  Singleton pattern might help. (eg: @Bean and @Inject in Spring, which will instantiate the instance for us)
+#+NAME: CarService.java
+#+begin_src java
+  public class CarService {
+      private CarDAO carDAO;
+      public CarService(CarDAO carDAO) {
+          this.carDAO = carDAO;
+      }
+  }
+#+end_src
+#+NAME: Main.java
+#+begin_src java
+  public class Main {
+      public static void main(String[] args) {
+          CarDAO carDAO = new CarDAO(); // depedency
+          CarService carService = new CarService(carDAO); // injection
+      }
+  }
+#+end_src
+
+** 200 SOLID Principles
+*** SOLID
+- *Single Responsibility*: each class should have _only one sole purpose_, and not have exessive functionality.
+  eg: doing a calculation (AreaCalculator) but also printing it in json/csv (ShapesPrinter)
+- *Open Closed*: open for extension, _closed for modification_ (aka should not have to rewrite an existing class for implementing new features)
+  eg: you should not be modifying AreaCalculator when a new shape is added. Instead create a Shape interface. And have other shapes implement it.
+- *Liskov Substitution*: every subclass/derived should be _substitutable for their base/parent class_. ME: a class implementing an interface should not add new invariants
+  eg: a class should not try to implement an interface partially and throw exception on the rest
+- *Interface Segregation*: Interfaces should not force to implement classes what they can't do. Large interfaces should be divided into small ones.
+  eg: Shape2d and Shape3d should be separate interfaces, the later with volume() method
+- *Dependency Inversion*: components should _depend on abstractions_ not on concretions.
+  eg: ???
+*** NullPointerException - Optional
+- Object>Throwable>Exception>RuntimeException
+- Throw when an application tries to use *null* where an object is required.
+- Solutions
+  1) if (brand == null) else
+  2) try/catch
+  3) Objects.requireNonNull(brancd, "brand cannot be null")
+  4) Optional.ofNullable()
+     .ifPresentOrElse(fn,fn)
+     .get()
+     .isEmpty() .isPresent()
+     .orElse(defaultvalue)
+- TODO: 208
+* 2016 | Advanced Java Development | OReilly
+- Uses Java 8
+- @Test
+  assertNull()
+  assertNotNull()
+** 201 Abstract Classes and Methods
+- Types
+  - Concrete: classes
+  - Abastract: abstract classes and interfaces
+- ~java.time.LocalDate~ (java 8) is a type, a regular date without the time part to it
+  - LocalDate.now() - static method that returns the current LocalDate
+- *static* indicates that a variable is a class level attribute
+- ~this()~ as a method can be used on one *constructor* to reference to another constructor in the same class
+- the *default constructor* (the one with no arguments) in a child class,
+  will invoke the parent *default constructor*.
+** 202 Using Abstract Classes
+- java.text.NumberFormat - an abstract class
+  - .getCurrencyInstance() - static *factory method*
+    .getCurrencyInstance(Locale.FRANCE) // java.util.Locale
+- java.lang.Iterable.forEach(Consumer<? super T>)
+  - Consumer is an interface
+- Using a collection of Employee
+#+begin_src java
+  public class HR {
+      private List<Employee> employees = new ArrayList<>(); // <>() diamond operator
+      public void hire(Employe e) {
+          employees.add(e);
+      }
+      public void layoff(Employee e) {
+          employees.remove(e);
+      }
+      public List<Employee> getEmployees() {
+          return employees;
+      }
+      public void printEverybody() {
+          employees.forEach(System.out::println); // method reference
+      }
+      public void payEverybody() {
+          for (Employee e : employees) {
+              System.out.printf("Paying %s %s%n", e.getName(),
+                                NumberFormat.getCurrencyInstance().format(e.getPay()));
           }
       }
-    #+end_src
-  2) store in the Service class, correct version
-    #+begin_src java
-      package com.amigoscode.car;
-      class CarService {
-          private CarDAO carDAO;
-          public CarService() {
-              this.carDAO = new CarDAO();
+  }
+#+end_src
+** 203 Implementing Interfaces
+- Created in part to get around Java's single inheritance
+- In order to sort List<Task> you need to use =java.util.Collections= class
+  - .sort(tasks) - tasks must implement the =Comparable= interface
+    - .compareTo() returns an *int*
+  - You wouldn't be able to use a ficticious "Comparator" superclass because we can only have 1 parent class
+#+begin_src java
+  public class Task implements Comparable<Task> {
+      this.name = name;
+      @Override
+      public int compareTo(Task task) {
+          return name.compareTo(task.name);
+      }
+  }
+  Collections.sort(tasks)
+#+end_src
+** 204 Static and Default Methods in Interfaces
+- >Java 8: Interfaces support static methods, and default methods
+- <Java 8: Not having static methods on interfaces made it so we needed additional classes just with factory methods
+- =java.util.stream.Stream= interface, static methods allows us to create new streams
+- Between a default method defined on a class and an interface. Class always wins.
+- You can get acccess to the default methods with *.super.*
+*** Example CompanyEmployee.java - class that implements 2 interfaces
+#+begin_src java
+  package interfaces.defaults;
+  public class CompanyEmployee implements Company, Employee {
+      private String first;
+      private String last;
+      @Override
+      public String getName() {
+          return String.format("%s working for %s",
+                               Employee.super.getName(),
+                               Company.super.getName());
+      }
+      @Override
+      public void doWork() {
+          System.out.println("Working...");
+      }
+      @Override
+      public String getFirst() {
+          return first;
+      }
+      @Override
+      public String getLast() {
+          return last;
+      }
+  }
+#+end_src
+*** Example Company.java - interface with default method
+#+begin_src java
+  package interfaces.defaults;
+  public interface Company {
+      default String getName() {
+          return "defaults.Company";
+      }
+  }
+#+end_src
+*** Example Employee.java - interface with default method
+#+begin_src java
+  package interfaces.defaults;
+  public interface Employee {
+      String getFirst();
+      String getLast();
+      void doWork();
+      default String getName() {
+          return String.format("%s %s", getFirst(), getLast());
+      }
+  }
+#+end_src
+** 205 Override .toString(), .equals(), .hashCode()
+- Hibernate - ORM Object-Relational Mapping framework
+  https://en.wikipedia.org/wiki/Hibernate_(framework)
+- .toString()
+  - Let the IDE generate
+  - concatenating "+"
+  - or String.format("",...)
+- .equals()
+  - you might choose to accept (or not) subclasses as .equal parameters
+  - "Effective Java" book came up with the original snipped of how to overwrite .equals() .hashcode()
+  - should take (Object o) as argument, taking (MyObject o) would be an overload NOT a override
+- .hashCode()
+  - is the mechanism of converting an object into an integer
+** 206 Using exceptions effectively
+- Throwable -> Exception -> RuntimeException
+            -> Error
+- ~Error~ are not meant to be catch
+- ~RuntimeException~ are unchecked exceptions, you can catch them
+- Since Java 7, introduced multicatch exception (|)
+- "Java was NOT designed for experts. It was designed for beginners."
+- OSS programs like Spring and Hibernate,
+  tend to catch all *checked exception* and retrow them as *unchecked*.
+  - So you can check them if you want to but you don't have to.
+*** try-with-resources was introduced to solve the try-finally issue with try-catch blocks
+- Should implement the *AutoCloseable* interface for use try-with-resources
+#+NAME: code one would want to write
+#+begin_src java
+  Path dir = Paths.get("src", "main", "java", "exceptions");
+  try {
+      BufferedReader br = files.newBufferedReader(dir.resolve("Arithmetic.java"));
+      System.out.println(br.readLine());
+  } catch (IOException e) {
+      e.printStackTrace();
+  } finally {
+      br.close(); // CANNOT do this due br is a local variale inside the try
+  }
+#+end_src
+#+NAME: code one would need to write before try-with-resources
+#+begin_src java
+  Path dir = Paths.get("src", "main", "java", "exceptions");
+  BufferedReader br = null;
+  try {
+      br = files.newBufferedReader(dir.resolve("Arithmetic.java"));
+      System.out.println(br.readLine());
+  } catch (IOException e) {
+      e.printStackTrace();
+  } finally {
+      if (br != null) try {
+            br.close();
+          } catch (IOException e) {
+            e.printStacTrace();
           }
-          public int registerNewCar(Car car) {
-              // ... all the service checks go in here
-              carDAO.saveCar(car);
-              return 1;
+  }
+#+end_src
+#+NAME: code with try-with-resources
+#+begin_src java
+  try (BufferedReader br = Files.newBufferedReader(dir.resolve("Arithmetic.java"))) {
+      System.out.println(br.readLine());
+
+  }
+  catch (Throwable e) {
+      e.printStackTrace();
+  }
+#+end_src
+*** Create your own exception class
+- If i left empty the new exception class, with no construct, it has no message
+#+begin_src java
+  public class MyException extends Exception {
+      public MyException() { // you can also add a default constructor for a default message
+          this("default message");
+      }
+      public MyException(String message) {
+          super(message); // with this constructor and calling super() will print the exception mesage
+      }
+  }
+
+  throw new MyException("this is my issue");
+#+end_src
+** 301 Generic Types
+- When a java is compiled to bytecode, the types are erased.
+  Everything is of the type Object.
+- Generic appeared on Java 1.5, used on List<> or Set<>
+- In java 8, when you normally see a loop consider converting it to a transformation
+  (aka transform the collection into a new one)
+- You can make your own collection or your own class that is written in terms of generic class
+  #+begin_src java
+    package generics;
+    public class Tuple<T,U> {
+        private T first;
+        private U second;
+        public Tuple(T first, U second) {
+            this.first = first;
+            this.second = second;
+        }
+        public T getFirst() {
+            return first;
+        }
+        public U getSecond() {
+            return second;
+        }
+        @Override
+        public String toString() {
+            return String.format("Tuple(first=%s, second=%s)", first, second);
+        }
+    }
+  #+end_src
+- You can also have a generic method.
+  #+begin_src java
+    public Pair<T> swap() {
+        return new Pair<T>(second, first);
+    }
+    // pair = pair.swap();
+    public static <T> void swap(Pair<T> pair) { // swap that works for any generic type. NOT RECOMMENDED.
+        T temp = pair.first;
+        pair.first = pair.second;
+        pair.second = temp;
+    }
+    // Pair.swap(pair1);
+    // Pair.<Integer>swap(pair1); // Full Syntax
+  #+end_src
+** 302 Type Bounds and Wildcards
+- PECS - produces uses *extends*, consumes uses *super*
+- Given classes: Employee -> Salaried
+*** A function that takes a List<Employee> CANNOT receive a List<Salaried>
+  Instead it should take a List<? extends Employee>
+  It does, however, NOT allow to modify the argument.
+  #+begin_src java
+    // Instead of
+    public static void printEmpNames(List<Employee> employees) {
+        employes.stream()
+            .map(Employee::getName)
+            .forEach(System.out::println);
+    }
+    // We do this
+    public static void printEmpandSubclassNames(List<? extends Employee> employees) {
+        employees.stream()
+            .map(Employee::getName)
+            .forEach(System.out::println);
+    }
+  #+end_src
+*** Same thing example with Predicate, if it took just an Predicate<Employee>, it will only be able to take those
+  #+begin_src java
+    public static void printAllFiltered(List<? extends Employee> employees, Predicate<? super Employee> predicate) {
+        for (Employee e : employees) {
+            if (predicate.test(e)) {
+                System.out.println(e.getName());
+            }
+        }
+    }
+  #+end_src
+*** Generic type bound on the returned type
+#+begin_src java
+  public interface Repairable {
+      default void fix() {
+          System.out.println("fixing" + this.getClass().getName());
+      }
+  }
+  public class Toaster implements Repairable {}
+  public class Blender implements Repairable {}
+  public class Repair Shop {
+      public static <T extends Repairable> void fixAll(List<T> items){
+          items.forEach(T::fix);
+      }
+  }
+#+end_src
+** 401 Path and Paths
+- java.nio.file
+  - .Path a type
+  - .Paths.get() a factory to return a Path
+- File method .toPath()
+  Path method .toFile()
+- Path methods
+  - .resolve(s)
+  - .resolveSibling(s)
+  - .toAbsolutePath()
+  - .toUri()
+  - .normalize() - remove dots
+  - .getParent()
+  - .getFilename()
+  - .getRoot()
+** 402 File Manipulation
+- in Java the *File* class in an abstract concept that refers to both files and directories
+- java.nio.file.Files class consists of static methods that operate on fiels and directories
+  https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html
+** 501 Thread, Runnables, and the ExecutorService
+- Low level primitives
+*** Thread
+They are based on the template method *design pattern*.
+You override the run() method from Thread. But you don't invoke the run() method. Unless you want to run sync.
+You inkove start() which it calls run() for you.
+#+NAME: MyThread.java
+#+begin_src java
+  public class MyThread extends Thread {
+      private int id;
+      public MyThread(int id) {
+          this.id = id;
+      }
+      @Override
+      public void run() {
+          System.out.println("Hello from " + this);
+      }
+      @Override
+      public String toString() {
+          return String.format("MyThread{id=%d}", id);
+      }
+  }
+#+end_src
+#+NAME: UseMyThread.java
+#+begin_src java
+  public clas UseMyThread {
+    public static void main(String[] args) {
+      List<MyThread> threads = Stream.iterate(0, n -> n + 1)
+        .map(MyThread::new)
+        .limit(10)
+        .collect(Collectors.toList());
+
+      threads.forEach(MyThread::start)
+    }
+  }
+#+end_src
+*** Runnable
+- An interface that only has a run() method
+#+begin_src java
+  public class MyRunnable implements Runnable {
+      private int id;
+      private Thread thread = new Thread(this);
+      public MyRunnable(int id) {
+          this.id = id;
+      }
+      @Override
+      public void run() {
+          System.out.println("Hello from " + this);
+      }
+      public void start() { // OPTIONAL: only to make it feel similar to Thread
+          thread.start();
+      }
+      @Override
+      public String toString() {
+          return String.format("MyRunnable{id=%d}", id);
+      }
+  }
+#+end_src
+*** ExecutorService (PREFFERED)
+#+begin_src java
+  public class UseExecutors {
+      public static void main(String[] args) {
+          List<MyRunnable> runnables = Stream.iterate(0, n -> n + 1)
+              .map(MyRunnable::new)
+              .limit(10)
+              .collect(Collectors.toList());
+          ExecutorService service = Executors.newCachedThreadPool(); // !!
+          runnables.forEach(service::execute);
+          service.shutdown();
+      }
+  }
+#+end_src
+** 502 Callbacks and Futures
+- Thread.currentThread().getName()
+- *Callable* interface, like a *Runnable*, but It can return something from it.
+  - .call() returns a V
+- *Executor*
+  - .invokeAll() returns a List<Future<T>>
+- *Future*
+  - .cancel()
+  - .get() it blocks and waits for the value to compute, can an timeout.
+  - isCancelled()
+  - isDone()
+*** Example: Simple Callable
+#+NAME: MyCallable.java
+#+begin_src java
+  public class MyCallable implements Callable<String> {
+      private int id;
+      public MyCallable(int id) {
+          this.id = id;
+      }
+      @Override
+      public String call() throws Exception {
+          return String.format("%s using thread %s", this, Thread.curentThread().getName());
+      }
+      @Override
+      public String toString() {
+          return String.format("MyCallable{id=%id}", id);
+      }
+  }
+#+end_src
+#+NAME: CallablesDemo.java - using an ExecutorService
+#+begin_src java
+  public class CallablesDemo {
+      public static void main(String[] args) {
+          List<Callable<String>> callables = Stream.iterate(0, n -> n + 1)
+              .limit(10)
+              .map(MyCallable::new)
+              .collect(Collectors.toList());
+          ExecutorService service = Executors.newFixedThreadPool(3);
+          try {
+              List<Future<String>> futures = service.invoeAll(callables);
+              for (Future<String> future : futures) {
+                  System.out.println(future.get()); // blocks!!!
+              }
+              // OR we could have written this ugly forEach() instead
+              futures.stream()
+                .map(f -> {
+                      String result = "";
+                      try {
+                          result = f.get();
+                      }
+                      catch (InteruptedException | ExecutionException e) {
+                          e.printStackTrace();
+                      }
+                      return result;
+                    })
+                .forEach(System.out::println);
           }
-          public Car[] getCars() {
-              carDAO.selectAllCars();
+          catch (InterruptedException | ExecutionException e) {
+              e.printStackTrace();
+          }
+          finally {
+              service.shutdow();
           }
       }
-    #+end_src
-*** Configuration Class
-*** ?controllers
+  }
+#+end_src
+*** Example: non-recursive directory file lines counter
+#+begin_src java
+  public class FileLinesCounter {
+      private Path dir = Paths.get("src", "main", "java", "concurrency");
+      public long computeTOtalNumberOfLines() {
+          long total 0;
+          try {
+              total = executeCounters().stream()
+                  .mapToLong(this::extractValueFromFuture)
+                  .sum();
+          } catch (InterruptedException | IOException e) {
+              e.printStackTrace();
+          }
+          return total;
+      }
+      private List<Future<Long>> executeCounters() throws InterruptedException, IOException {
+          ExecutorService service = Executors.newCachedThreadPool();
+          List<Future<Long>> futures = service.invokeAll(getFileLineCounters());
+          service.shutdown();
+      }
+      private List<Callable<Long>> getFileLineCounters() throws IOException {
+          return Files.list(dir)
+              .filter(Files::isRegularFile)
+              .map(this::callableCounter)
+              .collect(Collectors.toList());
+      }
+      // returns a lambda, and as lambda matches the signature for the Callable
+      private Callable<Long> callableCounter(Path p) {
+          return () -> Files.lines(p).count();
+      }
+      private Callable<Long> callcblePrintingCounter(Path p) {
+          return () -> {
+              long count = Files.lines(p).count();
+              System.out.println("%s has %d lines\n", p, count);
+              return count;
+          };
+      }
+      private <T> T extractValueFromFuture(Future<T> future) {
+          T val = null;
+          try {
+              val = future.get();
+          } catch (InterruptedException | ExecutionException e) {
+              e.printStackTrace();
+          }
+          return val;
+      }
+  }
+#+end_src
+** 503 Locks and Latches
+- Threads coordination and synchronization
+*** Example: without locking
+#+NAME: Counter.java
+#+begin_src java
+  public class Counter {
+      private int count;
+      public void increment() {
+          count++;
+      }
+      public int getCount() {
+          return count;
+      }
+  }
+#+end_src
+#+begin_src java
+  public void demoCounter() {
+    ExecutorService service = Executors.newCachedThreadPool();
+    IntStream.range(0, 1000)
+      .forEach(i -> service.submit(counter::increment)); // ExecutorService.submit()
+    service.shutdown();
+    System.out.println("countercount=" + counter.getCount());
+  }
+#+end_src
+*** Example: With locking - synchronized
+#+NAME: SyncCounter.java
+#+begin_src java
+  public class SyncCounter {
+    private int count;
+    public synchronized void increment() {
+      count++;
+    }
+    public synchronized int getCount() {
+      return count;
+    }
+  }
+#+end_src
+*** Example: With locking - synchornized block
+#+begin_src java
+  public class SyncCounter {
+      private int count;
+      public void increment() {
+          synchronized (this) {
+              count++;
+          }
+      }
+      public synchonized int getCount() {
+          return count;
+      }
+  }
+#+end_src
+*** Example: with locking - ReentrantLock
+- .lock()/.tryLock()/.tryLock(timeout,timeoutunit)
+#+begin_src java
+  public class LockedCounter {
+      private int count;
+      private ReentrantLock lock = new ReentrantLock();
+      public void increment() {
+          lock.lock();
+          try {
+              count++;
+          } finally { // ME: is finally really needed here???
+              lock.unlock();
+          }
+      }
+      public int getCount() {
+          lock.lock();
+          try {
+              return count; // ME: if i return, would finally run???
+          } finally {
+              lock.unlock();
+          }
+      }
+  }
+#+end_src
+*** Example: AtomicInteger
+- .increment()/.incrementAndGet()
+#+begin_src java
+  public class AtomicCounter {
+      private AtomicInteger count = new AtomicINteger(0);
+      public void incremnt() {
+          count.incrementAndGet();
+      }
+      public int getCount() {
+          return count.get();
+      }
+  }
+#+end_src
+*** Example: CountDownLatch
+- A great way to coordinate threads, when you need to do something BEFORE a bunch of threads start running.
+  And then make sure all are finished before you move on.
+#+NAME: LatchDemo.java
+#+begin_src java
+  public class LatchDemo {
+    public static void main(String[] args) throws INterruptedException {
+        CountDownLatch startSignal = new CountDownLatch(1);
+        CountDownLatch endSignal = new CountDOwnLatch(5); // hardcoded
+        for (int i = 0; i < 5; i++) {
+            new Thread(new Worker(i, startSignal, endSignal)).start();
+        }
+        System.out.println("work done before starting workers...");
+        startSignal.countDown(); // GO!
+        System.out.println("Doing work while workers are running");
+        endSignal.await();
+        System.out.println("all workers finished");
+    }
+  }
+#+end_src
+#+NAME: Worker.java
+#+begin_src java
+  public class Worker implements Runnable {
+      private int id;
+      private CountDownLatch startSignal; // tells everybody to get started
+      private CountDownLatch endSignal; // to indicate we completed
+      public Worker(int id, CountDownLatch startSignal, CountDownLatch endSignal) {
+          this.id = id;
+          this.startSignal = startSignal;
+          this.endSignal = endSignal;
+      }
+      @Override
+      public void run() {
+          try {
+              System.out.println("%d waiting to start...%n", id);
+              startSignal.await(); // waits until someone calls startSignal.countDown()
+              System.out.println("%d running to completion%n", id);
+              endSignal.countDown();
+          } catch {
+              e.printStackTrace();
+          }
+      }
+  }
+#+end_src
+** 504 The Producer and Consumer Problem
+- BlockingQueue - Both acccesing a shared state
+*** Message
+#+begin_src java
+  public class Message {
+      private final int id;
+      public Message(int id) {
+          this.id = id;
+      }
+      public int getId() {
+          return id;
+      }
+  }
+#+end_src
+*** Producer
+#+begin_src java
+  public class Producer {
+      private int id;
+      private BlockingQueue<Message> queue;
+      public Producer(int id, BlockingQueue<Message> queue) {
+          this.id = id;
+          this.queue = queue;
+      }
+      @Override
+      public void run() {
+          for (int i = 0; i < 100; i++) {
+              Message msg = new Message(i);
+              try {
+                  System.out.println("Producer %d produced %d%n"; id, msg.getId());
+                  queue.put(msg); // blocks?
+                  Thread.sleep((long) (Math.random() * 100));
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+
+          // tellling the queue that I finished by putting a "-1"
+          try {
+              queue.put(new Message(-1));
+          } catch {
+              e.printStackTrace();
+          }
+      }
+  }
+#+end_src
+*** Consumer
+#+begin_src java
+  public class Consumer implements Runnable {
+      private int id;
+      private BlockingQueue<Message> queue;
+      public Consumer(int id, BlockingQueue<Message> queue) {
+          this.id = id;
+          this.queue = queue;
+      }
+      @override
+      public void run() {
+          try {
+              while ((msg = queue.take()).getId() != -1 ) {
+                  System.out.printf("Consumer %d consumed %d%n", id, msg.getId());
+                  Thread.sleep((int) (Math.random() * 100))
+              }
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+      }
+  }
+#+end_src
+*** Main
+- more consumers and/or producers can share the same BlockingQueue
+#+begin_src java
+  public static void main(String[] args) {
+      BlockingQueue<Message> queue = new LinkedBlockingQUeue<>();
+      Producer p1 = new Producer(1, queue);
+      Consumer c1 = new Consumer(1, queue);
+      ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+      service.execute(p1);
+      service.execute(c1);
+      service.shutdown();
+  }
+#+end_src
+** 601 Traditional JDBC classes
+- The "Old" approach
+- You can AutoClose the Connection and the PreparedStatement on a try-with-resources
+- We need to use wrapper classes like *Integer* instead of *int* for attributes for the class,
+  because while using Hibernate *null* values matter.
+- given Person class with "id" and "name" attributes
+- *DriverManager*
+  - .getConnection(url,user,pass) // static
+- *Connection*
+  - .prepareStatement(s)
+- *PreparedStatement*
+  - .executeQuery()
+  - .executeUpdate()
+  - .getGeneratedKeys()
+  - .setInt(?, int)
+  - .setString(?, string)
+- *ResultSet*
+  - .next()
+  - .getInt(n) .getString(n)
+  - .close()
+*** PersonDAO interface
+    #+begin_src java
+    public interface PersonDAO {
+        List<Person> findAll();
+        Person findById(Integer id);
+        Integer save(Person p);
+        void delete(Person p);
+        List<Integer> getIds();
+    }
+  #+end_src
+*** JdbcPersonDAO class
+#+begin_src java
+  public class JdbcPersonDAO implements PersonDAO {
+      private static final String DRIVER = "com.mysql.jdbc.Driver";
+      private static final String URL = "jdbc:mysql://locahlhost:3306/hr";
+      private static final String USER = "jpa";
+      private static final String PASSWORD = "java";
+      public JdbcPersonDAO() {
+          try {
+              Class.forName(DRIVER); // uses reflection to load the driver
+          } catch (ClassNotFoundException e) {
+              e.printStackTrace();
+          }
+      }
+  }
+#+end_src
+#+NAME: findAll()
+#+begin_src java
+  @Override
+  public List<Person> findAll() {
+      List<Person> people = new ArrayList<>();
+      try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+           PreparedStatement pst = conn.prepareStatement("SELECT * FROM hr.PEOPLE")) { // could have used .createStatement() instead as it does not have arguments
+          ResultSet rs = pst.executeQuery();
+          while (rs.next()) {
+              people.add(new Person(rs.getInt(1), rs.getString(2))); // !!
+          }
+          rs.close();
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return people;
+  }
+#+end_src
+#+NAME: findById()
+#+begin_src java
+  @Override
+  public Person findById(Integer id) {
+      Person p = null;
+      try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+           PreparedStatement pst = conn.prepareStatement("SELECT * FROM hr.PEOPLE WHERE id=?")) {
+          pst.setInt(1, id); // !!!
+          ResultSet rs = pst.executeQuery();
+          if (rs.next()) {
+              p = new Person(id, rs.getString("name"));
+          }
+          rs.close();
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return p;
+  }
+#+end_src
+#+NAME: getIds()
+#+begin_src java
+  @Override
+  public List<Integer> getIds() {
+      List<Integer> ids = new ArrayList<>();
+      try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+           PreparedStatement pst = conn.prepareStatement("SELECT * FROM hr.PEOPLE")) {
+          ResultSet rs = pst.executeQuery();
+          while (rs.next()) {
+              ids.add(rs.getInt(1));
+          }
+          rs.close();
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return ids;
+  }
+#+end_src
+#+NAME: save()
+#+begin_src java
+  @Override
+  public Integer save(Person p) {
+      int generatedKey = 0;
+      try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+           PreparedStatemet pst = conn.preparedStatement("INSERT INTO hr.PEOPLE(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS)) {
+          pst.setString(1, p.getName());
+          int uc = pst.executeUpdate(); // !!!
+          if (uc != 1) throw new SQLException("No rows added");
+          try (ResultSet keys = pst.getGeneratedKeys()) {
+              if (keys.next()) {
+                  generatedKey = keys.getInt(1);
+              }
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+      return generatedKey;
+  }
+#+end_src
+#+NAME: delete()
+#+begin_src java
+  @Override
+  public void delete(Person p) { // by id
+    try (Connection conn = DriveManager.getConnection(URL, USER, PASSWORD);
+         PreparedStatement pst = conn.prepareStatement("DELETE FROM hr.PEOPLE WHERE id=?")) {
+      pst.setInt(1, p.getId());
+      int uc = pst.executeUpdate();
+      if (uc != 1) throw new SQLException("No rows removed");
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+  }
+#+end_src
+** 602 The Java Persistence API (JPA)
+- The "New" approach
+- Using Hibernate as a "provider" https://hibernate.org/orm/documentation/6.2/
+- SQL is generated for us
+- Further:
+  - Sprint
+  - Sprint Boot
+  - Grails (ruby?)
+*** Person class
+#+begin_src java
+  @Entity // indicated that the class maps to a database table
+  @Table{name = "People"} // the name of the table is different that the class name
+  public class Person {
+      @Id // required to have one of this field
+      @GeneratedValue{strategy = GenerationType.AUTO} // tell it that this is generated by the database
+      private Integer id;
+      private String name; // could have needed a @Column field if didn't matched
+      public Person{} {}
+      public Person(String name) {
+          this.name = name;
+      }
+      // getters/setters/toString/equals/hashCode
+  }
+#+end_src
+*** PersonDAO interface same as before
+*** JpaPersonDAO class
+- EntityManagerFactory
+  - .createEntityManager(persistence_unit)
+- EntityManager
+  - .persist(object).getId()
+  - .remove(connected_object) // hibernate has the concept of a hibernate session, so the object needs to be "connected"
+  - .find(class, id)
+  - .getTransaction().begin()
+  - .createQuery(s).getResultList() // takes JPQL not SQL
+  - .getTransaction().commit()
+  - .close()
+- Persistence
+  - .createEntityManagerFactory(s) // static
+#+begin_src java
+  public class JpaPersonDAO implements PersonDAO {
+      private EntityManagerFactory emf = Persistence.createEntityManagerFactory("hr"); // reads persistence.xml
+      @Override
+      public List<Person> findAll() {
+          EntityManager em = emf.createEntityManager();
+          em.getTransaction().begin(); // antipattern? in practice, the transaction would happen higher, on the service layer
+          List<Person> people = em.createQuery("SELECT p from Person p", Person.class).getResultList(); // JPQL
+          em.getTransaction().commit();
+          em.close();
+          return people;
+      }
+      @Override
+      public Person findById(Integer id) {
+          EntityManager em = emf.createEntityManager();
+          em.getTransaction().begin();
+          Person person = em.find(person.class, id);
+          em.getTransaction().commit();
+          em.close();
+          return person;
+      }
+      @Override
+      public List<Integer> getIds() {
+          EntityManager em = emf.createEntityManager();
+          em.getTransaction().begin();
+          List<Integer> ids = em.createQuery("SELECT p.id from Person p", Integer.class).getResultList();
+          em.getTransaction().commit();
+          return ids;
+      }
+      @Override
+      public Integer save(Person p) {
+          EntityManager em = emf.createEntityManger();
+          em.getTransaction().begin();
+          em.persist(p);
+          em.getTransaction().commit();
+          em.close();
+          return p.getId();
+      }
+      @Override
+      public void delete(Person p) {
+          EntityManager em = emf.createEntityManager();
+          em.getTransaction().begin();
+          em.remove(em.find(Person.class, p.getId()));
+          em.getTransaction().commit();
+          em.close();
+      }
+  }
+#+end_src
+*** resources/META-INF/persistence.xml
+- Configuration of the data source for the provider
+- transaction-type="RESOURCE_LOCAL" due using JavaSE
+  transaction-type="jta" ? if using a server
+- In a real system using the Spring Framework with JPA, will replace this configuration with their own in java.
+#+begin_src xml
+  <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+               xmlns:xsi="http://www.w2.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                   http://xmlns.jcp.org/xml/ns/persistence/persitence_1_1.xsd"
+               version="2.1">
+    <persistence-unit name="hr" transaction-type="RESOURCE_LOCAL">
+      <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+      <class>database.jpa.Person</class>
+      <properties>
+        <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hr"/>
+        <property name="javax.persistence.jdbc.user" value="jpa"/>
+        <property name="javax.persistence.jdbc.password" value="java"/>
+        <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+        <property name="hibernate.show_sql" value="true"/>
+        <property name="hibernate.format_sql" value="true"/>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+        <property name="hibernate.hbm2ddl.auto" value="validate"/>
+      </properties>
+    </persistence-unit>
+  </persistence>
+#+end_src
+** 701 The Java.Net Package
+- InetAddress - class represents an ip address
+  - .getLocalHost() // static
+- URL - class that represents an Uniform Resource Locator
+  - has many getters for different pars of the url
+  - has many constructors for providing one string or each part of the url
+** 702 Working with URLs and Streams
+- Using a "Google Maps Geocoding API" url
+- *URLEncoder* class
+  - .encode(string s, "UTF-8") // static
+  - .openStream() - opens a connection to the URL and returns and InputStream from readom from that connection
+#+begin_src java
+  public class Geocoder {
+      private static final String BASE = "https://maps.googleapis.com/maps/api/geocode/json?";
+      private Function<String, String> encoder = s -> { // Function<String, String> takes a String and returns a String
+          try {
+              return URLEncoder.encode(s, "UTF-8");
+          } catch (UnsupportedEncodingException e) {
+              e.printStackTrace();
+          }
+          return null;
+      };
+      public String encodeAddress(List<String> address) {
+          return address.stream()
+              .map(encoder)
+              .collect(Collectors.joining(","));
+      }
+      public String getData(List<String> address) {
+          String encoded = encodeAddress(address);
+          String response = "";
+          try {
+              URL url = new URL(String.format("%saddress=%s", BASE, encoded));
+              // InputStream -> Reader -> BufferReader
+              try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                  String line = "";
+                  while ((line = br.readLine()) != null) {
+                      response += "\n" + line;
+                  }
+              }
+          } catch (IOException e) { // parent of MalformedUrlException
+              e.printStackTrace();
+          }
+          return response;
+      }
+  }
+#+end_src
+** 703 Parsing JSON data
+- static imports useful for testing
+  #+begin_src java
+    import static org.hamcrest.CoreMatchers.both;
+    import static org.hamcrest.CoreMatchers.containsString;
+    import static org.hamcrest.CoreMatchers.is;
+    import static org.junit.Assert.*;
+    import static spock.util.matcher.HamcrestMatchers.closeTo;
+  #+end_src
+- Json class
+  - .createReader(InputStream) // static
+- JsonReader
+  - .readObject()
+- JsonObject
+  - .getJsonArray(key)
+  - .getJsonObject(key)
+  - .getJsonNumber(key)
+- Java Enterprise has a package for working with JSON data. It has to be added manually.
+- JSR Java Specification Request
+  - JSR 353: Java API for JSON Processing
+  - javax.json
+*** fillInLatlng() - method for Geocode class
+#+begin_src java
+  public void fillInLatLng(Location location) {
+      String encoded = encodeAddress(Arras.asList(location.getStreet(), location.getCity(), location.getState()));
+      try {
+          URL url = new URL(String.format("%saddress=%s", BASE, encoded));
+          try (InputStream is = url.openStream(); JsonReader jr = Json.createReader(is)) {
+              JsonObject jo = jr.readObject();
+              JsonObject loc = jo.getJsonArray("results")
+                  .getJsonObject(0)
+                  .getJsonObject("geometry")
+                  .getJsonObject("location");
+              location.setLatitude(loc.getJsonNumber("lat").doubleValue());
+              location.setLongitude(loc.getJsonNumber("lng").doubleValue());
+          }
+          catch (IOException e) {
+              e.printStackTrace();
+          }
+      }
+      catch (MalformedURLException e) {
+          e.printStackTrace();
+      }
+
+  }
+#+end_src
+*** Location class - a simple POJO
+#+begin_src java
+  public class Location {
+      private String street;
+      private String city;
+      private String state;
+      private double latitude; // geocoder api will fill these
+      private double longitude;
+      public Location(String street, String city, String state) {
+          this.street = street;
+          this.city = city;
+          this.state = state;
+      }
+      // getters/setters
+  }
+#+end_src
+*** build.gradle
+- while not using JavaEE, besides javax, you need to add also the reference implementation "org.glassfish"
+#+begin_src
+  dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    compile 'javax.json:javax.json-api:1.0'
+    compile 'org.hibernate:hibarnate-entitnymanager:4.3.11.Final'
+    testCompile 'org.spockframework:spicl-core:1-0-groovy-2.4';
+    testCompile 'junit:junit:1.12'
+    runtime 'org.glassfish:javax.json:1.0.4'
+    runtime 'mysql:mysql-connector-java:5.1.38'
+  }
+#+end_src
+** TODO 704 The Socket and ServerSocket Classes
+** 801 The JUnit Annotations
+- TDD, also refered as "Red-Green refactor"
+- JUnit 3 you had to extend a class an respect a common naming convention for the classes. Should start with the word "test"
+- JUnit 4 added annotations https://github.com/junit-team/junit4
+- JUnit 5, not released by the time of the video https://github.com/junit-team/junit5
+  - https://junit.org/junit5/
+  - org.junit.jupiter.api.Test
+  - https://www.youtube.com/watch?v=hqbSjkQxGwU
+  | Assert                   | Assertions                 |                                                    |
+  | @BeforeClass @AfterClass | @BeforeAll and @AfterAll   | code that is run only once, before/after loading   |
+  | @Before @After           | @BeforeEach and @AfterEach | code that is run before/after each individual test |
+  | @Ignore                  | @Disabled                  |                                                    |
+  |                          | @TestFactory               |                                                    |
+- Maven
+  #+begin_src xml
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  #+end_src
+- org.hamcrest.CoreMatchers
+  - .is(?)
+  - .closeTo(?)
+  - .contains(?)
+- org.junit.Assert
+  - .assertEquals(expected, got)
+    .assertEquals(errormsg, expected, got)
+  - .assertThat(got, expected) // supposed to be easier to read
+*** Wiki Example
+- java -cp .:junit-4-xx.jar CalculatorTest.java
+  java -cp .:junit-4-xx.jar:hamcrest-core-1.3.jar org.junit-runner.JUnitCore CAlculatorTest
+#+begin_src java
+  import static org.junit.Assert.assertEquals;
+  import org.junit.Test;
+  public class CalculatorTest {
+      @Test
+      public void evaluatesExpression() {
+          Calculator calculator = new Calculator();
+          int sum = calculator.evaluate("1+2+3");
+          assertEquals(6, sum);
+      }
+  }
+#+end_src
+** 802 Writing Test Cases
+- build.gradle
+  #+begin_src
+    dependencies {
+      compile 'org.codehaus.groovy:groovy-all:2.4.6'
+      testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+      testCompile 'junit:junit:1.12'
+    }
+  #+end_src
+- assertArrayEquals()
+  assertEquals()
+  assertFalse
+  assertNotNull
+  assertNotSame
+  assertSame
+  assertNull
+  assertThat("albumen", both(containsString("a")).and(containsString("b")))
+  - everyItem()
+  - hasItems()
+  - allOf
+  - anyOf
+  - either().or()
+** TODO 803 Testing for Exceptions
+** 901 Static and Anonymous Inner Classes
+- Inner Classes
+  - Is a class inside another class
+  - Why? Because it has access to the private attributes and method of the outer class.
+  - got replaced by Lambdas
+  - Declaring an inner class
+    new Outer().new Inner();
+*** Example: I would need an extra class just to apply a FilenameFilter
+#+begin_src java
+  public class JavaFilter implements FilenameFilter {
+      @Override
+      public boolean accept(File dir, String name) {
+          return name.endsWith(".java");
+      }
+  }
+  // usage elsewhere
+  File dir = new File("src/main/java/innerclasses");
+  for (String name : dir.list(new JavaFilter())) {
+      System.out.println(name);
+  }
+#+end_src
+*** Example: I could instead use an *anonymous inner class*
+#+begin_src java
+  public class FileDemo {
+      public static void main(String[] args) {
+          File dir = new File("src/main/java/innerclasses");
+          for (String name : dir.list(new FilenameFilter() { // Anonymous Inner class
+                  @Override
+                  public boolean accept(File dir, String name) {
+                      return name.endsWith(".txt");
+                  }
+              })) {
+              System.out.println(name);
+          }
+      }
+  }
+#+end_src
+** TODO 902 Single Abstract Method Interfaces and Lambdas
+** 1001 Lambdas
+** 1002 Method References
+** 1003 Streams

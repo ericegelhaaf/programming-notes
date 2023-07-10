@@ -6,21 +6,33 @@
   Gerald Jay Sussman
 ** Video: Lecture 1A: Overview and Introduction to Lisp - https://www.youtube.com/watch?v=-J_xL4IGhJA&list=PLE18841CABEA24090
 *** Part 1
+- Computer science is not about computer in the same way that
+  - physics is not about particle accelerators
+  - or biology is not about petri dishes
+- Computer science, is about
+  - Formalizing intuitions about processes.
+  - How to do things.
+  - How to knowledge.
+- *Declarative knowledge*: "What is true"
+  sqrt(x) is the "Y" such that "pow(Y,2) = x" and "Y>=0"
+- *Imperative knowledge*: "How to" (a process)
+  make a guess, improve the guess by avg g and x/g, keep improving
 - Computer engineer deals with idealized components.
   That means there is no much difference into what I could build and what can I imagine.
   The constrains are not physics, but the constrains of our minds.
 - Techniques to control complexity:
-  1) Black-box abstraction: functions that return values or other functions
-  2) Conventional interfaces: generic operations
-  3) Metalinguistic abstraction: DSL
+  | Black-Box Abstraction      | functions that return values or other functions | functions  |
+  | Conventional Interfaces    | generic operations                              | interfaces |
+  | Metalinguistic Abstraction | DSL                                             | macros     |
 *** Part 2
 - Elements of programming languages:
-  1) Primitive elements:              + 3 17.5 5
-  2) means of combination:           (+ 3 17.5 5) (if) (cond)
-  3) means of abstraction: (define a (+ 3 17.5 5))
-     (define (square x) (* x x)) OR (define square (lambda (x) (* x x)))
+  | Primitive elements   | + 3 17.5 5                           | primitives                         |
+  | means of combination | (+ 3 17.5 5) (if) (cond)             | function application, control flow |
+  | means of abstraction | (define a (+ 3 17.5 5))              | variable                           |
+  |                      | (define (square x) (* x x))          | function                           |
+  |                      | (define square (lambda (x) (* x x))) | lambda                             |
 *** Part 3
-- You don't need any more constructs to loop. If you have recursive definitions.
+- If you have recursive definitions. You don't need any more constructs to loop.
 - Block structure: for defining local sub functions aka flet, labels
   #+begin_src scheme
   (define (sqrt x)

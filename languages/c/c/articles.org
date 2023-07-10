@@ -1,3 +1,4 @@
+- https://www.deusinmachina.net/p/c-strings-and-my-slow-descent-to
 - Few lesser known tricks, quirks and features of C https://blog.joren.ga/less-known-c
 - The “Build Your Own Redis” Book Is Completed https://news.ycombinator.com/item?id=34572263
 - Article: 2016 https://matt.sh/howto-c

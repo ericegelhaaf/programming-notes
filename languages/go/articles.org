@@ -1,9 +1,23 @@
+- 2023 https://totallygamerjet.hashnode.dev/writing-an-os-in-go-the-bootloader
+- maps
+  https://dave.cheney.net/2017/04/30/if-a-map-isnt-a-reference-variable-what-is-it
+  https://go.dev/blog/maps
+- errors
+  https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully
+  https://dave.cheney.net/2016/04/07/constant-errors
+- https://totallygamerjet.hashnode.dev/writing-an-os-in-go-the-bootloader
+- go generate
+  - https://go.dev/blog/generate
+  - https://blog.logrocket.com/using-go-generate-reduce-boilerplate-code/
+  - https://cs.opensource.google/go/x/tools/+/refs/tags/v0.8.0:cmd/stringer/stringer.go
+  - https://eli.thegreenplace.net/2021/a-comprehensive-guide-to-go-generate/
+- regex https://github.com/StefanSchroeder/Golang-Regex-Tutorial/blob/master/01-chapter2.markdown
 - https://benhoyt.com/writings/flyio/
   https://pkg.go.dev/embed
 - https://preslav.me/2023/02/06/golang-do-we-need-struct-pointers-everywhere/
 - https://withinboredom.info/blog/2022/12/29/golang-is-evil-on-shitty-networks/
   https://news.ycombinator.com/item?id=34179426
-* DONE Article: I want off Mr. Golang's Wild Ride
+* DONE I want off Mr. Golang's Wild Ride
 Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - Lack of generics, makes problems impossible to model accurately,
   falling back into ~reflection~
@@ -43,7 +57,7 @@ Source: https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride
 - "It constantly takes *power* away from its users, reserving it for itself."
 - "It constantly lies about how complicated real-world systems are, and optimize for the *90%* case, ignoring correctness."
 - "Everything looks simple on the surface, but nothing is."
-* DONE Article: Shrink your Go binaries with this one weird trick
+* DONE Shrink your Go binaries with this one weird trick
 https://blog.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
 - binwalk: can plot the entropy of a file to know how well it can compress
   -E https://github.com/ReFirmLabs/binwalk/wiki/Usage#-e---entropy
@@ -52,7 +66,7 @@ https://blog.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
   $ upx --brute FILENAME
 - removes the DWARF tables, nothe the annotations for stacktraces
   $ GOOS=linux go build -ldflags="-s -w"
-* DONE Article: Go is not an easy language
+* DONE Go is not an easy language
 https://www.arp242.net/go-easy.html
 Simple syntax.
 Simple semantics.
@@ -60,12 +74,12 @@ Doint useful stull is not always easy.
 Arg1: Some basic slice operations are complex. And some might be unintuite more costly.
       Slice Tricks: https://github.com/golang/go/wiki/SliceTricks
 Arg2: While primitives are there, the patterns that put them together are up to us.
-* DONE Article: Channel Axioms (Dave Cheney)
+* DONE Channel Axioms (Dave Cheney)
 - A send      to a nil channel blocks forever
 - A receive from a nil channel blocks forever
 - A send      to a closed channel panics
 - A receive from a closed channel returns the zero value immediatly
-* DONE Article: Why Discord is switching from Go to Rust (Jesse Howarth?)
+* DONE Why Discord is switching from Go to Rust (Jesse Howarth?)
 - Uses: client video encoding, Elixir NIFs
 - Go Service to be rewritten:
   - Every few minutes large latency/cpu spikes, due
@@ -82,11 +96,11 @@ Arg2: While primitives are there, the patterns that put them together are up to 
 - Implementation: it was a deep dive write performant (to their scale) code in Go
   - Changing ot a BTreeMap instead of a HashMap
   - Swapping to a metrics library that used concurrency
-* DONE Article: Go is Google's language, not ours (2019)
+* DONE Go is Google's language, not ours (2019)
 - Claim: A community made package manager was dropped in favor of one made by the core team.
   - https://peter.bourgon.org/blog/2018/07/27/a-response-about-dep-and-vgo.html
     https://research.swtch.com/vgo
-* DONE Article: Ten Reasons Why I Don't Like Golang
+* DONE Ten Reasons Why I Don't Like Golang
 1) Using letter capitalization for private and public visibility.
    Problem: Compiler can't identify class from variable name.
             Constants are lowercase.
@@ -116,7 +130,7 @@ Arg2: While primitives are there, the patterns that put them together are up to 
     Problem: 3rd party libraries (ab)use of interface{}
 11) append() "might" do an implace replacement, or not
     Problem: compiler used to not warn for not assigning the append()
-* DONE Article: Down the Golang nil Rabbit Hole (2021)
+* DONE Down the Golang nil Rabbit Hole (2021)
 Scenario: doing integration test with https://github.com/houseabsolute/detest
 - Go has multiple "types" of nil. Both typed and untyped nil variables.
 - reflect.ValueOf(nil) returns an invalid nil (untyped nil?)
@@ -128,7 +142,7 @@ Scenario: doing integration test with https://github.com/houseabsolute/detest
 - Other Languages
   + *strict* in Perl
   + *Option<T>* in Rust
-* DONE Article: Golang: Don't be afraid of Makefiles (2017)
+* DONE Golang: Don't be afraid of Makefiles (2017)
 https://sohlich.github.io/post/go_makefile/
 - go commands: build, clean, test, get
 - Makefile commands:
@@ -158,7 +172,7 @@ https://sohlich.github.io/post/go_makefile/
 
   docker-build: ; docker run --rm -it -v "$(GOPATH)":/go -w /go/src/bitbucket.org/rsohlich/makepost golang:latest go build -o "$(BINARY_UNIX)" -v
   #+end_src
-* DONE Article: How to Write Go Code
+* DONE How to Write Go Code
 https://golang.org/doc/code
 >=1.13
 - Package = Directory
@@ -182,17 +196,90 @@ https://golang.org/doc/code
   $ go mod tidy # adds missing module requirements (require statements with his version)
 - Clean all downloades modules
   $ go clean -modcache
-* Article: Linkedin Go https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/go/go-quiz.md
-  - A special type of *type casting* for interfaces only
-    a.(type)
-    Type Casting for primitives
-    int(a)
-  - https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool
-    Add this on the top of the file to build only on windows
-    // + build windows
-  - How to POST
-    https://pkg.go.dev/net/http#Client.Post
-  - Lexical Scopes
-    https://topic.alibabacloud.com/a/go-language-core-technology-volume-one-15-font-colorredscopefont_1_38_30923325.html
-  - json.Unmarshall is case insensitive
-    unsensiti
+* Linkedin Skill Assesment
+https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/go/go-quiz.md
+- len() on a utf8 encoded string returns the number of bytes
+- "global" lowercased variables
+  - can be accessed inside the *package*
+  - cannot be accessed elsewhere in the *module*
+- time.After in select makes the goroutine wait until time passes
+- For this compile, myVal should be an interface
+  #+begin_src go
+  i := myVal.(int)
+  #+end_src
+- Type casting like above, returns 2 values.
+  Second is an "ok" boolean.
+  If no captured, it will just panic on error.
+  https://go.dev/tour/methods/15
+- Goroutines, are a medium for sending values between goroutines
+- To build the file only on Windows add this at the top of the file
+  // +build windows
+  //go:build windows // GO <1.16
+- ~http.Post~ (string,string,io.Reader)
+  io.Reader can be created with strings.NewReader(string)
+- *switch* an each *case* create their own lexical blocks
+- ~json.Unmarshal~ is by default case insensitive
+- Time.Add(time.Duration) time.Time
+- Time.Sub(time.Time) time.Duration
+- ~recover~ is only used inside a *defer* function
+- println() sends output to STDERR (?
+- go strings are in UTF8
+- ~t.Run(string, fn)~ fn runs in a separate goroutine. Used to separate tests inside a TestFn().
+- ~log.Fatal~ Print() + os.Exit(1)
+- getting a value from a closed *int channel* will return 0
+- getting an non existant index of a *map* will return the zero value
+- GOOS=darwin GOARCH=arm64
+- Leaking go routine, make the chan buffered to avoid it (????)
+  #+begin_src go
+    func findUser(ctx context.Context, login string) (*User, error) {
+        ch := make(chan *User)
+        go func() {
+                ch <- findUserInDB(login)
+        }()
+
+        select {
+        case user := <-ch:
+                return user, nil
+        case <-ctx.Done():
+                return nil, fmt.Errorf("timeout")
+        }
+    }
+  #+end_src
+- //go:generate
+- Missing code
+  #+begin_src go
+    package main
+
+    import (
+            "context"
+            "fmt"
+            "net/http"
+    )
+
+    func main() {
+            var cancel context.CancelFunc
+            ctx := context.Background()
+            // #1: <=== What should go here?
+            ctx, cancel = context.WithTimeout(ctx, 3*time.Second)
+            defer cancel()
+
+            req, _ := http.NewRequest(http.MethodGet,
+                    "https://linkedin.com",
+                    nil)
+            // #2: <=== What should go here?
+            req = req.WithContext(ctx)
+
+            client := &http.Client{}
+            res, err := client.Do(req)
+            if err != nil {
+                    fmt.Println("Request failed:", err)
+                    return
+            }
+            fmt.Println("Response received, status code:",
+                    res.StatusCode)
+    }
+  #+end_src
+- var _ JSONConverter = (*Namespace) (nil)
+  this checks that Namespace struct satisfies the JSONConverter interface
+- rune is an alias for int32
+- go tool pprof -http=:8080 cpu.pprof

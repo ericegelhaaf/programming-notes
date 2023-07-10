@@ -1,12 +1,14 @@
 - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
 - Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
 * Channels
-- josevalim https://www.twitch.tv/josevalim/videos
-- zxq9 (erlang) https://www.youtube.com/channel/UCMnRVG50iFEpkgbUu1mZrMA/videos
-- CodeSync https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw
-- EMPEX https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q
-- ErlangSolutions https://www.youtube.com/user/ErlangSolutions
-* 2008 | Erlang In Practice | Kevin Smith
+|-----------------+-----------------------------------------------------------------|
+| CodeSync        | https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw        |
+| EMPEX           | https://www.youtube.com/channel/UCIYiFWyuEytDzyju6uXW40Q        |
+| ErlangSolutions | https://www.youtube.com/user/ErlangSolutions                    |
+| josevalim       | https://www.twitch.tv/josevalim/videos                          |
+| zxq9 (erlang)   | https://www.youtube.com/channel/UCMnRVG50iFEpkgbUu1mZrMA/videos |
+|-----------------+-----------------------------------------------------------------|
+* 2008 | Erlang In Practice                            | Kevin Smith
 ** 1
 - is useful use a "match all" on a *receive*, because a process can receive messages we don't know
   and fill up the process mailbox.
@@ -44,3 +46,45 @@
   #+begin_src
   foo> rpc:call(bar@localhost, erlang, date, [])
   #+end_src
+* 2015 | How to pick a Pool in Erlang without Drowning | Anthony Molinaro
+https://www.youtube.com/watch?v=GO_97_6w5lU
+- Why? For _shared access_ that every request might need access to.
+  - Eg: configuration, cache, large datastructure, persistent connections
+- Alternatives
+  1) recreate from scratch
+  2) ets/dts/mnesia
+  3) external database
+  4) in a process
+- Problems with storing data in a *single process*
+  1) Does not scale across cores
+  2) Concurrency
+     - Process mailbox (mostly) serializes requests
+     - Theorically unlimited lenght
+     - Only basic Erlang support for _back pressure_ through reduction counts (poorly documented)
+- While in other programming languages you would use a _thread pool_ you use a _process pool_
+- List of libraries, that work and are being updated
+  |-----------------+--------------------------|
+  | poolboy         | most popular             |
+  | pooler          | the most OTP             |
+  | gen_server_pool | easy to use              |
+  | dispcount       | stochastic dispatch      |
+  | gproc           | puggable dispatch models |
+  |-----------------+--------------------------|
+- 15:00
+** Examples: access data with a *single process*
+#+begin_src erlang
+  -module(stuff)
+  start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+  get_state() -> gen_server:call(?MODULE, {get_state}).
+  init([]) -> {ok, get_state_from_somewhere()}.
+  %% GET
+  handle_call({get_state}, _From, State) ->
+      {reply, {ok, State}, State}.
+  %% GET while computing
+  handle_call({search, Params}, _From, Tree) ->
+      {reply, {ok, search_in_tree(Params, Tree)}, State}.
+  %% Connection
+  handle_call({get_data, Query}, _From, Connection) ->
+      {reply, query(Query, Connection), Connection}.
+#+end_src
+
