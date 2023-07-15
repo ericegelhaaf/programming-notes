@@ -1,3 +1,10 @@
+- Packaging
+  - 2022 https://usrme.xyz/posts/why-i-moved-away-from-poetry-for-python/
+    https://lobste.rs/s/rllajn/why_i_moved_away_from_poetry_for_python
+  - 2023 https://snarky.ca/in-response-to-the-changelog-526/
+  - 2023 https://www.bitecode.dev/p/relieving-your-python-packaging-pain
+  - 2023 https://www.bitecode.dev/p/why-not-tell-people-to-simply-use
+    https://lobste.rs/s/vtghvu/why_not_tell_people_simply_use_pyenv
 - https://aosabook.org/en/500L/a-python-interpreter-written-in-python.html
 - https://karpathy.github.io/2021/06/21/blockchain/
 - https://wyag.thb.lt/

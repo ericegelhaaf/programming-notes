@@ -15,6 +15,8 @@
 - https://learnxinyminutes.com/docs/lua/
 - https://lua.programmingpedia.net/
 - http://lua-users.org/wiki/VarargTheSecondClassCitizen
+- Pico-8 Tutorial - Shmup
+  https://www.youtube.com/playlist?list=PLea8cjCua_P3Sfq4XJqNVbd1vsWnh7LZd
 * mpv
 - https://mpv.io/manual/master/#lua-scripting
   https://mpv.io/manual/master/#list-of-input-commands
@@ -43,3 +45,233 @@
   "company-lua torch backend addition"
 - https://github.com/Lazzle/ZBS-REAPER-API-Gen/blob/master/zbs-reaper-api-gen.lua
   "extract ZBS doc from reaper api"
+* Course: 2020 - Master Lua Programming and Create Amazing Games with LÖVE!
+- https://www.udemy.com/course/lua-love/
+- source https://github.com/kyleschaub/udemy-love2d
+- Love2D for massive progression (camera) https://github.com/vrld/hump
+- Tiled https://www.mapeditor.org/
+  - Love2D importer https://github.com/karai17/Simple-Tiled-Implementation
+** Love top level functions to override
+|-------------------+--------------------------+-----------------------------------------------------------------|
+| love.load         | run when the game starts | globals, windows size,...                                       |
+| love.update(dt)   | called every frame       | game loop, dt is in seconds passed since the last frame         |
+| love.draw         | called every frame       | for graphics, not for calculations or much variable declaration |
+| love.mousepressed | called on a mouse        | arguments: posx,posy,button,istouch,presses                     |
+| love.keypressed   | called once a key press  | arguments: key                                                  |
+|-------------------+--------------------------+-----------------------------------------------------------------|
+** Lua Variables
+| math.pi |   |
+|         |   |
+** Lua Functions
+| math.sqrt       |                 |                                        |
+| math.random     | MIN,MAX         |                                        |
+| math.randomseed | SomeUniqueValue |                                        |
+| os.time         |                 | returns the current time               |
+| math.ceil       |                 | rounds up                              |
+| math.floor      |                 | rounds down                            |
+| math.atan2      | F,F             |                                        |
+| table.insert    | TABLE,KEY,VAL   |                                        |
+| table.remove    | TABLE,KEY       | it reorganizes the table to avoid gaps |
+** Love Functions
+|-------------------------+---------------------------------+-----------------------------------|
+| love.window.setMode     | WIDTH,HEIGHT                    |                                   |
+| love.graphics.rectangle | MODE,POSX,POSY,WIDTH,HEIGHT     | pos at top left                   |
+| love.graphics.circle    | MODE,POSX,POSY,RADIUS           | pos at center                     |
+| love.graphics.setColor  | R,G,B                           | values from 0 to 1                |
+| love.graphics.newFont   | SIZE                            |                                   |
+| love.graphics.setFont   | FONT                            |                                   |
+| love.graphics.getWidth  | -                               |                                   |
+| love.graphics.getHeight | -                               |                                   |
+| love.graphics.newImage  | PATH                            |                                   |
+| love.graphics.draw      | IMAGE,POSX,POSY,ROT,SX,SY,OX,OY | OX/OY = origin offset             |
+|                         |                                 | SX/SY = scale factor, SX if no SY |
+| love.graphics.print     | STRING                          |                                   |
+| love.graphics.printf    | STRING,POSX,POSY,LIMIT,ALIGN    | limit = wrap after x pixels       |
+|                         |                                 | align = "center"                  |
+| love.mouse.getX         | -                               |                                   |
+| love.mouse.getY         | -                               |                                   |
+| love.mouse.setVisible   | BOOLEAN                         |                                   |
+| love.keyboard.isDown    | STRING_KEY                      | returns a boolean                 |
+|                         |                                 |                                   |
+|-------------------------+---------------------------------+-----------------------------------|
+** Love "Methods"
+sprites.player:getWidth()
+sprites.player:getHeght()
+** windfield Function
+- wf = require 'libraries/windfield/windfield'
+- collider = body + fixture + shape
+| wf.newWorld                  | gravityX,gravityY,SLEEP-P      | returns a world             |
+| world:setQueryDebugDrawing   | BOOLEAN                        |                             |
+| aWorld:queryCircleArea       | posX,posY,radius,CLASSES       | returns the colliders found |
+| aWorld:queryRectangleArea    | posX,posY,width,height,CLASSES | returns the colliders found |
+| aWorld:newRectangleCollider  | posX,posY,width,height,OPTS    | returns a collider          |
+|                              |                                | OPTS={collision_class='?'}  |
+| aWorld:update                | DT                             |                             |
+| aWorld:draw                  | -                              | for debugging purposes      |
+| aWorld:addCollissionClass    | NAME,{ignores={}}              | returns nothing             |
+| aCollider:setType            | 'static'                       |                             |
+| aCollider:setFixedRotation   | BOOLEAN                        |                             |
+| aCollider:applyLinearImpulse | DIR_X,DIR_Y                    |                             |
+| aCollider:getPosition        | -                              | returns x and y values      |
+| aCollider:setPosition        |                                |                             |
+| aCollider:getX               | -                              |                             |
+| aCollider:setX               | X                              |                             |
+| aCollider:enter              | CLASS_NAME                     | returns boolean             |
+| aCollider:destroy            | -                              |                             |
+- Types of a collider
+  1) Dynamic: fall with gravity, collide with any other collider, affected by forces
+  2) Static: collide with another collider
+  3) Kinematic: like dynamic, but can only collide with other dynamic objects
+** kikito/anim8 Functions
+- anim8 = require 'libraries/anim8/anim8'
+| anim8.newGrid      | cellwidth,cellheight,width,height | returns a grid       |
+| anim8.newAnimation | GRID('NSTART-NEND',ROW) , DELAY   | returns an animation |
+| anAnimation:update | DT                                |                      |
+| anAnimation:draw   | IMAGE,posX,posY,rot,scaleX,scaleY |                      |
+** Simple-Tiled-Implementation functions
+- sti = require 'libraries/Simple-Tiled-Implementation/sti'
+| sti            | LUAMAP_PATH |                 |
+| aSti:update    | DT          |                 |
+| aSti:drawLayer | LAYER       |                 |
+|----------------+-------------+-----------------|
+| aSti.layers    | LAYER_NAME  | returns a layer |
+|                |             |                 |
+** 2 Lua Programming
+- There is no "++" operator, to increment a variable by 1(one)
+- == equal to
+  ~= NOT equal to
+- for loops, 3rd parameter is optional, it increases by 1 by default
+- functions can be assigned to variables
+*** Comments
+  #+begin_src lua
+    -- single line
+    --[[
+       block comments
+    --]]
+  #+end_src
+*** Tables
+  - Every table index that doesn't get anything assigned returns =nil= on a lookup.
+  - table.insert(TABLE,VALUE) - stdlib function, aka push
+  - can have strings as index
+  - you can add *properties* to them, aka a variable attached to the table itself
+    which is just syntactic sugar for indexing by a string
+    #+begin_src lua
+      testScores = {95, 87, 98}
+      testScores.subject = "science"
+      testScores["subject"] = "science"
+    #+end_src
+  - iterate over a table
+    #+begin_src lua
+      message = 0
+      testScores = {95, 87, 98}
+      for i,s in ipairs(testScores) do -- i = index , s = value
+         message = message + s
+      end
+    #+end_src
+** 3 Game: Shooting Gallery
+- https://www.w3schools.com/colors/colors_picker.asp
+- To create a timer, you can just subtract *dt* as it is a value in seconds.
+- A common way to handle sprites/images is to kept then in a top-level/global variable table
+*** Example 1
+  #+begin_src lua
+    function love.load()
+       number = 0
+    end
+    function love.update(dt)
+       number = number + 1
+    end
+    function love.draw()
+       love.graphics.print(number)
+    end
+  #+end_src
+*** Example 2
+#+begin_src lua
+  function love.draw()
+     -- MODE,POSX,POSY,WIDTH,HEIGHT
+     love.graphics.rectangle("fill", 0, 0, 200, 100)
+  end
+#+end_src
+** 4 Game: TopDown Shooter
+- to convert degrees to radians, multiply it by math.pi/180
+- you can skip from skipping certain *function parameters* by just providing *nil* for them
+  ME: i assume, this is explicitly handled on the function definition
+- we can use this to get the X and Y direction valus from a RADIANS angle
+  X = cos(RADIANS), Y = sin(RADIAN)
+- when deleting elements of a table on a loop, you should loop from the end,
+  since is safe to remove elements from the end of the array
+  #+begin_src lua
+    bullets = {}
+    for i=#bullets, 1, -1 do
+       if conditionBool(i) then
+          table.remove(bullets, i)
+       end
+    end
+  #+end_src
+*** Example: accounting for *dt* on movement
+#+begin_src lua
+  function love.update(dt)
+     if love.keyboard.isDown("d") then
+        player.x = player.x + (player.speed*dt)
+     end
+     -- w a s ...
+  end
+#+end_src
+** 5 Game: Platformer
+- windfield colliders have their offset set to the center
+- we might need to flip the animation sprite on the fly
+  to render running to the left and to the right
+- flipping an image means, just using the *scale* parameter of draw
+  but with negative values
+  - be careful of explicitly setting the other axis scale to avoid flip
+*** Tiled "60 - Tiled.mp4"
+- New Map
+  - Orientation: Orthogonal
+  - Tile Layout Format: CSV
+  - Tile Render Order: Right Down
+- New Tileset
+  - Enable "Embed in map"
+  - "Use transparent color" if does not have transparency already
+  - width x height
+  - margin and spacing: for gaps in the image
+- Tileset
+  - we can take each individual tile and "paint" with it
+- View/Snapping/Snap To Grid
+- File/Save
+- File/Export/level1.lua - aka it has a lua exporter
+- Properties of an Object
+  - ID
+  - Template
+  - Name
+  - Type
+  - Visible
+  - X/Y
+  - Width/Height
+  - Rotation
+- Type of Layers
+  - Tile
+  - Image
+  - Group
+  - Object
+#+begin_src lua
+  function spawnPlatform(x, y, width, height)
+     if width > 0 and height > 0 then
+        local platform = world:newRectangleCollider(x, y, width, height, {collission_class = "platform"})
+        platform:setType("static")
+        table.insert(platforms, platform)
+     end
+  end
+
+  function loadMap()
+     gameMap = sti("maps/level1.lua")
+     for i, obj in pairs(gameMp.layers["Platforms"].object) do
+        spawnPlatform(obj.x, obj.y, obj.width, obj.height)
+     end
+  end
+#+end_src
+*** Hump - Camera, that follows the player
+- cameraFile = require 'libraries/hump/camera'
+- cam = cameraFile()
+| cameraFile      | -   | returns a camera                                                                  |
+| aCamera:lookAt  | X,Y |                                                                                   |
+| aCamera:attach  | -   | once run, everything draw after will be draw in reference to the camera viewpoint |
+| aCamera:dettach | -   |                                                                                   |

@@ -1,3 +1,4 @@
+- https://castle-engine.io/why_pascal
 - 1983 | http://www.pbm.com/~lindahl/real.programmers.html
   https://en.wikipedia.org/wiki/Real_Programmers_Don%27t_Use_Pascal
 - 1996 | https://marktheunissen.com/posts/tech/2006-06-03-denthor-of-asphyxia-s-graphics-tutorials/files/denthor-asphyxia-grant-smith-vga-trainers.txt

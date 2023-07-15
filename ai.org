@@ -1,5 +1,6 @@
 - https://uvadlc-notebooks.readthedocs.io/en/latest/index.html
 - Course: Neural Networks https://karpathy.ai/zero-to-hero.html
+  - Neural Networks: Zero to Hero  https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ
 - Video:  How to Create a Neural Network (and Train it to Identify Doodles)
   https://www.youtube.com/watch?v=hfMk-kjRv4c
 - MIT 6.S191 Introduction to Deep Learning https://www.youtube.com/playlist?list=PLtBw6njQRU-rwp5__7C0oIVt26ZgjG9NI

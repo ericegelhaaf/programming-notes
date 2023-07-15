@@ -1,3 +1,10 @@
+- To native
+  1) https://github.com/criblio/js2bin
+  2) https://github.com/nexe/nexe
+  3) https://nodejs.org/api/single-executable-applications.html
+     09/22 https://www.youtube.com/watch?v=93cIMtkQaak
+     10/22 https://www.youtube.com/watch?v=Lw3cyjUofI4
+- https://nodeschool.io/
 - Node.js Intro: https://github.com/maxogden/art-of-node
 - https://github.com/sergtitov/NodeJS-Learning#videos
 - x86
