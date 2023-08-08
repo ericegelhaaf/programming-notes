@@ -12,3 +12,5 @@
 - shfmt
   https://github.com/mvdan/sh
   (fork?) https://github.com/patrickvane/shfmt
+- Example: concatenation
+  $ cut -d: -f2 studentlist.txt | xargs printf "%s@example.com"

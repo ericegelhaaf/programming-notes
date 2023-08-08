@@ -1,0 +1,362 @@
+- article 2010 https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
+- article 2015 https://ferd.ca/awk-in-20-minutes.html
+- https://github.com/freznicek/awesome-awk
+- https://en.wikipedia.org/wiki/AWK
+* Language
+#+begin_src awk
+  { print "expression" > "filename" }
+  { print "expression" | "command" }
+  function add_tree (number) {
+      return number + 3
+  }
+  { print add_tree(36) }
+#+end_src
+- Unique at the time due
+  - being a scripting language
+  - having associative arrays
+- wEiRd - removes leading space
+  - awk '{ $1=$1 }1' file.txt
+  - awk '{ $1=$1 }; { print }' file.txt
+  - awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
+** Types (will be automaticaly coerced when needed)
+1) Strings
+2) Numbers
+3) Arrays
+   - 1D
+   - for strings or numbers
+   - no need to be declared
+   - ALWAYS asssociative (aka hashtables)
+   - for (variable in array)
+   - delete array[subscript]
+** Built-in variables:
+| variable | meaning                                     | default |
+|----------+---------------------------------------------+---------|
+| NF       | numer of fields in line                     | -       |
+| NR       | number of records (aka lines) read so far   | -       |
+| FNR      | number of records read so far, in curr file | -       |
+|----------+---------------------------------------------+---------|
+| FS       | *controls* the input field separator        | " "     |
+| RS       | *controls* the input record separator       | "\n"    |
+|----------+---------------------------------------------+---------|
+| OFS      | output field separator                      | " "     |
+| ORS      | output record separator                     | "\n"    |
+| OFMT     | output format for numbers                   | "%.6g"  |
+|----------+---------------------------------------------+---------|
+| ARGC     | number of cli arguments                     | -       |
+| ARGV     | array of cli arguents                       | -       |
+|----------+---------------------------------------------+---------|
+| RLENGTH  | length of string matched by match function  | -       |
+| RSTART   | start of string matched by match function   | -       |
+|----------+---------------------------------------------+---------|
+| FILENAME | name of current input file                  | -       |
+| SUBSEP   | subscript separator                         | "\034"  |
+|----------+---------------------------------------------+---------|
+** Built-in MATH functions
+| atan2(y,x) | arctangent of y/x in -x to x range |
+| cos(x)     | cosine of x, with x in radians     |
+| sin(x)     | sine of x, with x in radians       |
+| exp(x)     |                                    |
+| log(x)     | ntural base e logarithm of x       |
+| sqrt(x)    |                                    |
+|------------+------------------------------------|
+| int(x)     | integer part of x, truncated       |
+|------------+------------------------------------|
+| rand()     | random nuber r, 0 <= r < 1         |
+| srand(x)   | x is new seed for rand()           |
+|------------+------------------------------------|
+** Built-in STRING functions
+|                       | returns                               | does                     |
+|-----------------------+---------------------------------------+--------------------------|
+| gsub(r,s)             | number of subst made                  | substitute s for r in $0 |
+| gsub(r,s,t)           | number of subst made                  | substitute s for r in t  |
+|-----------------------+---------------------------------------+--------------------------|
+| sub(r,s)              | number of subst made                  | substitute s for r in $0 |
+| sub(r,s,t)            | number of subst made                  | substitute s for r in t  |
+|-----------------------+---------------------------------------+--------------------------|
+| substr(s,p)           | suffix of x starting at p             |                          |
+| substr(s,p,n)         | substring of x lenght n starting at p |                          |
+|-----------------------+---------------------------------------+--------------------------|
+| split(s,a)            | number of fields                      |                          |
+| split(s,a,fs)         | number of fields                      |                          |
+|-----------------------+---------------------------------------+--------------------------|
+| index(s,t)            | 0 or n position of t in s             |                          |
+| length(s)             | number of chars in s                  |                          |
+| match(s,r)            | index or 0                            | test if s contains r     |
+| sprintf(fmt,exp-list) | formated string with exp-list         |                          |
+|-----------------------+---------------------------------------+--------------------------|
+** Operators
+| Assigments       | = += -= *= /= %= ^= |
+| Ternary operator | ?:                  |
+| Array membership | in                  |
+| Matching         | ~ !~                |
+** Control Flow
+| exit            | goes immediately to the END action      |
+| exit expression |                                         |
+| next            | start next iteration of main input loop |
+** Output Statement
+| close(filename) | break connection between print and filename |
+| close(command)  | break connection between print and command  |
+| system(command) | execute command                             |
+* Codebases
+- https://github.com/kaworu/adventofcode-2015/
+- https://github.com/ferd/advent-of-code-2021/
+- A collection of rudimentary system logs parsing scripts
+  https://github.com/kaworu/hawk
+* Book: The AWK Programming Language (2nd Edition)
+| AWK Home   | https://www.awk.dev/              |
+| AWK Source | https://github.com/onetrueawk/awk |
+** Preface
+- Implementations: Gawk, Mawk, Busybox Awk, Go Awk, POSIX Awk
+- A scripting language
+- Awk    in 1977, for manipulating text and numbers
+  Perl   in 1987
+  Python in 1991
+- An =Awk= program is a sequence of
+  |          | specify                                |
+  |----------+----------------------------------------|
+  | PATTERNS | what to look for in the input data and |
+  | ACTIONS  | what to do when it's found             |
+  |----------+----------------------------------------|
+- A =pattern= can select lines by combinations of
+  1) regular expressions
+  2) comparison operations
+- The =action= language looks like C but there are no declarations,
+  and strings and numbers are build-in data types.
+- Awk scans text input files and splits each input line into *fields* automatically.
+- Things that are automatic on AWK
+  1) input
+  2) field splitting
+  3) storage management ?
+  4) initialization ?
+- "NEW" stuff, better support for Unicode, and csv
+- $ awk --version
+** 1 An Awk Tutorial
+- $ awk '{ print $1 }'
+  $ awk '{ print $1 }' file1
+  $ awk -f some.awk file1
+- There are only two =types= of data in awk:
+  1) numbers
+  2) strings fo characters
+- The entire line is called $0
+  Each field starts from $1
+- An Awk program is a sequence of one or more pattern-action statements
+  *pattern { action }*
+- The basic operation of Awk is to scan a sequence of input lines, from any number of files,
+  one after another, searching for lines that mare matched by any of the patterns in the program.
+- Either (not both) the pattern or the action can be omitted.
+- Given a TSV (name, salary, work hours)
+- print, default behaviour
+  - A "," in a print gets printed as a single space
+  - ends with a newline character
+  - any expression can go after "$" to denote a field number
+- Most of the time, it's more productive to use existing tools like *sort*
+- Special Patterns
+  | BEGIN | matches before the first line of the first input is read        |
+  | END   | matches after the last lien of the last file has been processes |
+- Both build-in variables and fields retain their value in and END action.
+- Awk numerical variables get initialized with 0(zero)
+  Awk string characters variables get initialized to the null string ""
+*** Example Programs
+|------------------------------------------+---------------------------------------------------------|
+| name and calculates the pay              | $3 > 0 { print $1, $2 * $3 }                            |
+| employees which didnt work               | $3 == 0 { print $1 }                                    |
+| whole line of above                      | $3 == 0                                                 |
+| first field                              | { print $1 }                                            |
+| whole line                               | { print }                                               |
+| whole line                               | { print $0 }                                            |
+| number of fields, first and last         | { print NF, $1, $NF }                                   |
+| when 4 fields, print last field          | NF == 4 { print $NF }                                   |
+| prefix with line number                  | { print NR, $0 }                                        |
+| adding custom text                       | { print "total pay for", $1, "is", $2 * 3 }             |
+|------------------------------------------+---------------------------------------------------------|
+| total pay for every one                  | { printf("total pay for %s is $%.2f\n", $1, $2 * $3) }  |
+| left justified 8-wide                    | { printf("%-8s $%6.2f\n", $1, $2 * $3) }                |
+|------------------------------------------+---------------------------------------------------------|
+| selects, those earn >$20 per hour        | $2 >= 20                                                |
+| selects, those getting paid > 200        | $2 * $3 > 200 { printf("$%.2f for %s\n", $2 * $3, $1) } |
+| selects, first field equality            | $1 == "Susie"                                           |
+| selects, line contains anywhere          | /Susie/                                                 |
+| selects, combinations                    | $2 >= 20 ¦¦ $3 >= 20                                    |
+| (same less readable)                     | !($2 < 20 && $3 < 20)                                   |
+| selects, prints twice                    | $2 >= 20                                                |
+|------------------------------------------+---------------------------------------------------------|
+| last input line                          | END { pritn $0 }                                        |
+|------------------------------------------+---------------------------------------------------------|
+| lenght of each person name               | { print $1, length($1) }                                |
+|------------------------------------------+---------------------------------------------------------|
+|------------------------------------------+---------------------------------------------------------|
+| number of lines                          | END { print NR }                                        |
+| the first 10 lines                       | NR <= 10                                                |
+| 10th line                                | NR == 10                                                |
+| every 10th line                          | NR % 10 == 1                                            |
+| last field of every line                 | { print $NF }                                           |
+| last field of last line                  | END { print $NF }                                       |
+| every line, with more than 4 fields      | NF > 4                                                  |
+| every line, with not exect 4 fields      | NF != 4                                                 |
+| every line, which the last field > 4     | $NF > 4                                                 |
+|------------------------------------------+---------------------------------------------------------|
+| total number of fields                   | { nf += NF }                                            |
+|                                          | END { print nf }                                        |
+|------------------------------------------+---------------------------------------------------------|
+| total number of lines, containing        | /Beth/ { nlines++ }                                     |
+|                                          | END    { print nlines }                                 |
+|------------------------------------------+---------------------------------------------------------|
+| largest field, and line that has it      | $1 > max { max = $1; maxline = $0 }                     |
+|                                          | END      { print max, maxline }                         |
+|------------------------------------------+---------------------------------------------------------|
+| every line non empty line                | NF > 0                                                  |
+| every line longer than 80 chars          | length($0) > 80                                         |
+| number of fields, and whole line         | { print NF, $0 }                                        |
+| first two fields, inversed               | { print $2, $1 }                                        |
+| first two fields, inverse, and rest      | { temp = $1; $1 = $2; $2 = temp; print }                |
+| every line, preceeded by the number      | { print NR, $0 }                                        |
+| every line, first field replaced by lno  | { $1 = NR; print }                                      |
+| every line, remove second field          | { $2 = "", print }                                      |
+|------------------------------------------+---------------------------------------------------------|
+| every line, fields reversed              | {                                                       |
+|                                          | for (i = NF; i > 0; i--) printf("%s", $i)               |
+|                                          | printf("\n")                                            |
+|                                          | }                                                       |
+|------------------------------------------+---------------------------------------------------------|
+| every line, sum of the fields            | {                                                       |
+| ... sum initialization is needed         | sum = 0                                                 |
+| ... otherwise it will remember           | for (i=0; i<NF; i++) sum += $i                          |
+| ... between lines                        | print sum                                               |
+|                                          | }                                                       |
+|------------------------------------------+---------------------------------------------------------|
+| sum all fields, in all lines             | { for (i = 0; i < NF; i++) sum += $i }                  |
+|                                          | END { print sum }                                       |
+|------------------------------------------+---------------------------------------------------------|
+| every line, absolute value of each field | {                                                       |
+|                                          | for (i = 0; i < NF; i++) if ($i < 0) $i = -$i           |
+|                                          | print                                                   |
+|                                          | }                                                       |
+|------------------------------------------+---------------------------------------------------------|
+*** Example: data validation, printing suspect lines
+- If here are no errors there's no output
+#+begin_src awk
+  NF != 3 { print $0, "number of fieds is not equal to 3" }
+  $2 < 15 { print $0, "rate is too low" }
+  $2 > 25 { print $0, "rate exceeds $25 per hour" }
+  $3 < 0  { print $0, "negative hours worked" }
+  $3 > 60 { print $0, " too many hours worked" }
+#+end_src
+*** Example: printing a heading with =BEGIN=
+- the words are separeted by the right number of spaces
+  #+begin_src awk
+    BEGIN { print "NAME RATE HOURS"; print "" } # Adds an empty line to separate the heading
+          { print }
+  #+end_src
+*** Example: use a variable for counting marching lines, and print at =END=
+#+begin_src awk
+  $3 > 15 { emp = emp + 1 } # OR { emp++ }
+  END     { print emp, "employees worked more than 15 hours" }
+#+end_src
+*** Example: use =NR= to calculate an average
+#+begin_src awk
+      { pay = pay + $2 * 3 } # or { pay += $2 * $3 }
+  END { print NR, "employes"
+        print "total pay is", pay
+        print "average pay is", pay/NR
+      }
+#+end_src
+*** Example: use a variable to store text
+#+begin_src awk
+  $2 > maxrate { maxrate = $2; maxemp = $1 }
+  END { print "highest hourly rate:", maxrate, "for", maxemp }
+#+end_src
+*** Example: string concatenation
+- done by writing string values one after other
+- there is no explicit concatenation operator
+  #+begin_src awk
+        { names = names $1 " " } # concatenation happening here
+    END { print names }
+  #+end_src
+*** Example: count lines, word and characters
+#+begin_src awk
+      { nc += length($0) + 1 # add 1, because $0 doesn't include the new line character
+        nw += NF
+      }
+  END { print NR, "lines,", nw, "words,", nc, "characters" }
+#+end_src
+*** Example: using an IF in an action, to defend against division by zero
+#+begin_src awk
+  $2 > 30 { n++, pay += $2 * $3 }
+  END     { if (n > 0) # no brace needed for one statement
+                print n, "high-pay employees, total pay is", pay, # breaking line
+                         " average pay is", pay/n
+            else
+                print "No employees are paid more than $30/hour"
+          }
+#+end_src
+*** Example: using WHILE to calculate the amount of money invested at a interest rate
+- example inputs
+  - 1000 .05 5
+  - 1000 .10 5
+- value = amount (1 + rate)^year
+  #+begin_src awk
+    # interest1 - compute compound interest
+    # input: amount rate years
+    # output: compounded value at the end of each year
+    { i = 1
+      while (i <= $3) {
+          printf("\t%.2f\n", $1 * (1 + $2) ^ i)
+          i++
+      }
+    }
+  #+end_src
+*** Example: using FOR for the same
+#+begin_src awk
+  # interest2 - compute compound interest
+  # input: amount rate years
+  # output: compounded value at the end of each year
+  {  for (i = 1; i <= 3; i++)
+          printf("\t%.2f\n", $1 * (1 + $2) ^ i)
+  }
+#+end_src
+*** Example: fizz-buzz
+#+begin_src awk
+  BEGIN { # all happens at BEGIN, filename arguments are ignored
+      for (i = 1; i <= 100; i++) {
+          if (i%15 == 0) # divisible by both 3 and 5
+              print i, "fizbuzz"
+          else if (i%5 == 0)
+              print i, "buzz"
+          else if (i%3 == 0)
+              print i, "fizz"
+          else
+              print i
+      }
+  }
+#+end_src
+*** Example: reverse lines, using an *array*
+#+begin_src awk
+  # reverse - print input in reverse order by line
+
+  { line [NR] = $0 } # remember each input line
+
+  END { i = NR # prints in reverse order
+        while (i > 0) {
+            print line[i]
+            i--
+        }
+        # or with a for
+        for (i = NR; i > 0; i--)
+            print line[i]
+  }
+#+end_src
+** 2 Awk in Action
+*** 2.1 Personal Computation
+**** BMI
+1kg  = 2.2 pounds
+1ich = 2.54cm
+
+bmi = weight / height^2
+18-25 normal
+25-30 overweight
+>30   obese
+
+#+begin_src awk
+  BEGIN { print "enter pounds inches" }
+        { printf("%.1f\n", ($1/2.2) / ($2 * 2.54/100) ^ 2) }
+#+end_src
