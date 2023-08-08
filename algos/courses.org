@@ -381,7 +381,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   | Perfect Tree  | all leaf have the same depth                                                                      |
 * 21 | Become Algorithms Expert          | AlgoExpert
 ** 02 Easy
-*** Two Number Sum
+*** 01 Two Number Sum
 - Problem:
   - you are given:
     1) an array of numbers
@@ -408,7 +408,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
     - we move *left* pointer to the right
   - if >
     - we move the *right* pointer
-*** Validate Subsequence
+*** 02 Validate Subsequence
 - *Subsequence*: is a sequence that can be derived from other sequence,
   by deleting some or other element, without changing the order of the elements.
 - *Problem*:
@@ -417,7 +417,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   - Return validity (true/false)
 - *O(n)* A solution could be iterate over each element on the subsequence candidate
   - On each, and iterate over the sequence, starting from the last known
-*** Find Closest Value in BST
+*** 03 Find Closest Value in BST
 - Problem:
   - you have to find the closest value in the BST to the given value
   - you are given
@@ -434,7 +434,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
       - pick a branch based on it
       - if == 0, we just return it
     - until we reach the end of tree
-*** Branch Sums (BST)
+*** 04 Branch Sums (BST)
 - Problem:
   - takes a root node of a /binary tree/
   - returns a list of the branches sum
@@ -456,7 +456,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
       - 6
       - 7
   - OUTPUT: [15,16,18,10,11]
-*** Node Depths
+*** 05 Node Depths
 - Problem:
   - You are given a BT
   - Find the depth of evey node, and sum all depths, and return that value
@@ -478,6 +478,12 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   l = left child node
   r = right child node
 - Solution: iterative
+*** 15 Palindrome Check
+- 4 different ways to solve it
+  1) reverse and compare:
+     - O(n^2) due how strings are created, on each reverse iteration
+     - O(n) by using a list
+  2) compare two indices, start and end index:
 * 21 | The Last Algorithms Course        | FrontEndMasters
 - https://github.com/ThePrimeagen/kata-machine
   > npx jest Linear

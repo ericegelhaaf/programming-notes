@@ -15,15 +15,42 @@
 - https://malisper.me/an-algorithm-for-passing-programming-interviews/
 - https://ourmachinery.com/post/data-structures-part-1-bulk-data/
 
-- Sites
-  - https://cses.fi/problemset/
-  - https://codeforces.com/
-  - https://www.codechef.com/
-  - https://www.hackerearth.com/
-  - https://www.codingame.com/
-  - https://www.hackerrank.com/
-  - https://www.codewards.com/
-  - https://projecteuler.net/
+- Web Hacking
+  - https://overthewire.org/wargames/natas/
+  - XSS
+    - google XSS game https://xss-game.appspot.com/
+    - PWN fucntion XSS Labs https://xss.pwnfunction.com/
+    - port swigger XSS https://portswigger.net/web-security/cross-site-scripting
+    - alert to win http://alf.nu/alert1?world=alert&level=alert0
+
+- Admin Troubleshoting
+  - https://sadservers.com/
+
+- Terminal Skills
+  - https://overthewire.org/wargames/bandit/
+
+- Programming
+  - https://hackattic.com/challenges
+  - https://codecrafters.io/
+  - Projects
+    - https://github.com/codecrafters-io/build-your-own-x
+    - https://github.com/practical-tutorials/project-based-learning
+  - Server
+    - https://protohackers.com/
+  - Distributed
+    - https://fly.io/blog/gossip-glomers/
+  - Problems
+    - https://leetcode.com/
+    - https://adventofcode.com/
+    - https://cses.fi/problemset/
+    - https://codeforces.com/
+    - https://www.codechef.com/
+    - https://www.hackerearth.com/
+    - https://www.codingame.com/
+    - https://www.hackerrank.com/
+    - https://www.codewars.com/
+    - https://projecteuler.net/
+
 * Congruencies
 - https://en.wikipedia.org/wiki/Modular_arithmetic
 - problem https://www.codewars.com/kata/554f76dca89983cc400000bb/train/ocaml
@@ -31,3 +58,22 @@
   file:///home/sendai/disk/anybody/Steven%20Halim/Competitive%20Programming%203%20(4427)/Competitive%20Programming%203%20-%20Steven%20Halim.pdf#page=241
   file:///home/sendai/disk/anybody/David%20Esparza%20Alba/Algorithms%20For%20Competitive%20Programming%20(4592)/Algorithms%20For%20Competitive%20Programming%20-%20David%20Esparza%20Alba.pdf#page=311
   file:///home/sendai/disk/anybody/Skiena,%20Steven%20S_/Programming%20Challenges%20(4425)/Programming%20Challenges%20-%20Skiena,%20Steven%20S_.pdf#page=174
+
+* Hackerank Bash
+- Deletes all elements containing a or A
+  ${countries/*[aA]*/}
+- sort --stable
+- readarray -t
+- 2D Array - doesn't need $, can run operaations
+  grid[col,row]='-'
+  grid[col*row]='-'
+- Slicing array
+  ${countries[@]:START:HOWLONG}
+- Concatenate 3 lines at the time ?????????????'''
+  paste -d';' - - -
+  paste -d';;\n'
+- Sed I for insensitive eg: "s/FOO/BAR/gI" matches foo and FOo
+- Sed & returns matched eg: "s/FOO/{&}/g" wraps in braces match
+- forc loop, "rows" is a variable, not needing $
+  for (( row = 0; row < rows; row++))
+- += NEVER adds, always appends

@@ -86,6 +86,11 @@
     (eval-when (:compile-toplevel :load-toplevel :execute)
       (ql:quickload '(:alexandria)))
   #+end_src
+- Build Systems
+  - https://github.com/fukamachi/qlot
+    https://github.com/svetlyak40wt/qlot-without-roswell
+  - https://github.com/ocicl/ocicl
+  - https://github.com/roswell/roswell/
 * Elf Binary Release
 |-----------------+-------------+-------+-----+-----|
 |                 | compression | extra | .so | X11 |
@@ -148,6 +153,8 @@ and that doesn't work if the code is provided as a *.a or *.o file
 - https://github.com/zodmaner/cl-makefile-template
 - https://github.com/phoe-trash/furcadia-post-splitter/
 ** Static Linking
+- https://ecl.common-lisp.dev/static/manual/System-building.html#Compiling-with-ECL
+- https://github.com/sionescu/sbcl-goodies/blob/master/sbcl-customizations.patch
 *** Static Linking
   - collect2 is also another level of indirection between gcc and ld.
   - ld https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html

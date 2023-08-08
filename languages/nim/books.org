@@ -7,9 +7,9 @@
 - Comments:
   - #
   - #[]#
-- const - are defined at compile time, can run nim code
-- var   - mutable, have a implicit default (eg: 0, "")
-- let   - immutable
+| const | are defined at compile time, can run nim code |
+| var   | mutable, have a implicit default (eg: 0, "")  |
+| let   | immutable                                     |
 - in a proc, *result* is declare a var
 - low(T) high(T)
 - =uniform function call= syntax

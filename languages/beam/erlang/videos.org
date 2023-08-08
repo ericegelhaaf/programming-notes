@@ -1,3 +1,5 @@
+- Adopting Erlang, Adapting Rebar - Fred Hebert, Tristan Sloughter | Code BEAM V 2020
+  https://www.youtube.com/watch?v=x_XR8TDhBUI
 - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
 - Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
 * Channels
@@ -39,11 +41,11 @@
   $ erl -sname bar -setcookie somecookie
   #+end_src
 - Ping a remote node
-  #+begin_src
+  #+begin_src erlang
   bar> net_adm:ping(foo@localhost).
   #+end_src
 - Execute a function on a remote node
-  #+begin_src
+  #+begin_src erlang
   foo> rpc:call(bar@localhost, erlang, date, [])
   #+end_src
 * 2015 | How to pick a Pool in Erlang without Drowning | Anthony Molinaro
@@ -87,4 +89,3 @@ https://www.youtube.com/watch?v=GO_97_6w5lU
   handle_call({get_data, Query}, _From, Connection) ->
       {reply, query(Query, Connection), Connection}.
 #+end_src
-

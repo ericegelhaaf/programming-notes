@@ -7,26 +7,56 @@
 - mailing list https://erlang.org/mailman/listinfo
 - doc https://erlang.org/doc/reference_manual/users_guide.html
 - doc https://erlang.org/doc/apps/stdlib/index.html
+- cowboy setup https://gist.github.com/flbuddymooreiv/ce1d7a47b12c27bf1616
+  1) create a new app
+  2) add cowboy on *deps*         in rebar3.config
+  3) add cowboy on *applications* in .app.src
+  4) add cowboy:start_http()      in _app.erl
+  5) create a handler module
 * Language
 https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
 ** Types
 - Destructuring can happen on the function parameter
   - f({athing,{A,B},N}=C) -> C
-|--------+-------------+----------------+----------------------------+--------------------------+---------|
-| type   | creating    | p. matching    | accesing                   | updating                 | spec    |
-|--------+-------------+----------------+----------------------------+--------------------------+---------|
-| map    | #{a => 1}   | #{a := Value}  | maps:get(K,M)              | maps:update(K,V,M)       | map()   |
-|        |             |                |                            | M#{key => 1}             |         |
-|        |             |                |                            | M#{key := 1}             |         |
-| list   | [1,2]       | [A,B!C]        | lists:nth(N,L)             |                          | list()  |
-| tuple  | {a,1}       | {A,B}          | erlang:element(K,T)        | erlang:setelement(K,V,T) | {T1,T2} |
-| record | #name{a=23} | #name{a=Value} | Rec#r1.field               | Rec#name{field = 23}     | #name{} |
-|        |             |                | Record#r1.field1#r2.field2 |                          |         |
-|--------+-------------+----------------+----------------------------+--------------------------+---------|
+- Primitive types
+|-------------+-------------------------------|
+| spec        | create                        |
+|-------------+-------------------------------|
+| any()       |                               |
+| none()      |                               |
+| pid()       | self() or spawn()             |
+| port()      | open_port()                   |
+| reference() | make_ref()                    |
+| binary()    | <<10,20>>                     |
+| bitstring() | <<"ABC">>                     |
+| char()      | $A or $\n                     |
+| number()    | 23 or 3.14                    |
+| integer()   | 23 or 1_337 or 2#101 or 16#1f |
+| float()     | 3.14                          |
+| string()    | "foo"                         |
+| atom()      | foo or 'foo'                  |
+| boolean()   | 'false'                       |
+| 'foo'       | 'foo'                         |
+| nil or []   | []                            |
+|-------------+-------------------------------|
+- Compound types
+|---------------+-------------+----------------+----------------------------+--------------------------+-------------|
+| type          | creating    | p.matching     | accessing                  | updating                 | spec        |
+|---------------+-------------+----------------+----------------------------+--------------------------+-------------|
+| map #{TList}  | #{a => 1}   | #{a := Value}  | maps:get(K,M)              | maps:update(K,V,M)       | map()       |
+|               |             |                |                            | M#{key => 1}             |             |
+|               |             |                |                            | M#{key := 1}             |             |
+| list(TYPE)    | [1,2]       | [A,B!C]        | lists:nth(N,L)             |                          | list()      |
+| tuple(TList?) | {a,1}       | {A,B}          | erlang:element(K,T)        | erlang:setelement(K,V,T) | {T1,T2}     |
+| record        | #name{a=23} | #name{a=Value} | Rec#r1.field               | Rec#name{field = 23}     | #name{}     |
+|               |             |                | Record#r1.field1#r2.field2 |                          |             |
+|---------------+-------------+----------------+----------------------------+--------------------------+-------------|
+- Supports type union with (|)
+  atom() | integer()
+- https://www.erlang.org/doc/reference_manual/typespec.html
 - https://www.erlang.org/doc/reference_manual/data_types.html
 - https://www.erlang.org/doc/reference_manual/records.html
 - https://www.erlang.org/doc/reference_manual/expressions.html
-- https://www.erlang.org/doc/reference_manual/typespec.html
 ** Standard Library (by Elixir)
 - https://elixir-lang.org/getting-started/erlang-libraries.html
   - binary
