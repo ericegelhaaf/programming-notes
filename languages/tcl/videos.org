@@ -1,5 +1,5 @@
 - Channel https://www.youtube.com/@videotcltk
-* Video: 2016 | coroutine is the new main | Nathan Coulter
+* 16 | Nathan Coulter  | coroutine is the new main
 https://www.youtube.com/watch?v=yCC--STRzo4
 - TODO 06:40 https://wiki.tcl-lang.org/page/ycl%20coro%20relay
 - A coroutine is a "possible callstack"
@@ -24,5 +24,14 @@ https://www.youtube.com/watch?v=yCC--STRzo4
         }
     }[namespace current]]
   #+end_src
-* Video: 2021 | Karl Lehenbauer, "TCL: The Tool Command Language - LISP for the Masses"
+* 19 | Brad Harder     | Tcl - An Embeddable Long-lever with a Comfortable Grip, that fits in your Pocket.
+https://www.youtube.com/watch?v=36KqbE48g0E
+- TODO: 7:41
+- 1988 Released
+- Homoiconic (Code is Data)
+  - Everything is representable by a "string"
+  - Commands emit strings, and strings are the things that you run
+- Doesn't have keywords (?
+  - Ships commands, but you don't need to use them
+* 21 | Karl Lehenbauer | TCL: The Tool Command Language - LISP for the Masses
 https://www.youtube.com/watch?v=3YwFHPFL20c

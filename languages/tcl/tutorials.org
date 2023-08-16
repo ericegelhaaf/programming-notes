@@ -1,0 +1,3 @@
+- Tutorial https://en.wikibooks.org/wiki/Tcl_Programming/Introduction
+- Tutorial https://wiki.tcl-lang.org/page/Tcl+Tutorial+Lesson+0
+- Tutorial https://wiki.tcl-lang.org/page/Dodekalogue

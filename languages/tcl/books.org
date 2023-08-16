@@ -1,0 +1,4 @@
+* 04 | antirez     | tclwise - An introduction to the Tcl programming language
+http://invece.org/tclwise/
+* 11 | Hal Abelson | TCL for Web Nerds
+https://philip.greenspun.com/tcl/

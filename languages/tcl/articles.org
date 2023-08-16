@@ -1,5 +1,219 @@
-- Articles https://wiki.tcl-lang.org/page/Articles
-* Article: 2020 | Why I'm TCL-ish
+- https://wiki.tcl-lang.org/page/Articles
+- Style https://wiki.tcl-lang.org/page/Tcl+Style+Guide
+- Style https://wiki.tcl-lang.org/page/Best+Practices
+* Lainchan post
+
+Tcl is the best scripting language for the real but still productive hacker
+(some of the fattest Schemes are not far).
+
+- Extremely small - whole syntax/grammar is described in 12 rules in a single
+  man page (Tcl(n)) of 150 lines and there's no reserved keyword.
+
+- Official man pages! No pydoc or cppreference garbage, here you almost have C
+  degree of exhaustivity.
+
+- Kind of "unfashionable" language meaning basically no poz.
+
+- At least two implementations with *jimtcl* being a very thorough embedded one.
+
+- One of the simplest if not the simplest interaction with C, letting you write
+  C plugins very easily (with *critcl*, *ffidl* and *swig* to help).
+
+- Comparable in speed to cpython, a bit slower than Perl5 and Lua. Has a
+  and a WIP/dead LLVM compiler (tclquadcode) for a big speedup in the far and
+  uncertain future.
+  https://wiki.tcl-lang.org/page/Tcl+Performance for more.
+
+- Cool type system that is superficially "everything is a string" (like sh)
+  but in reality "everything is a tagged union with on-the-fly conversion when
+  needed and a unique string representation".
+  Allows for some very cool things like editing dictionaries as lists
+  or lists as strings and transparent serialization
+  (`puts $mydict $chan` <=> `set mydict [read $chan]`).
+
+- Talking about types, multiprecision arithmetic is transparently handled,
+  allowing you to do =expr {42 *- 1000}= if you just want to.
+
+- Very powerful ~introspection~ through =info= (mainly). Allows for stuff like
+  getting the name/body/arglist of a procedure, get all the registered
+  procedures, know if a variable exist, get information on the stack frames and
+  their content, etc...
+  Together with =trace=, you can write an internal debugger in few lines. See
+  https://wiki.tcl-lang.org/page/Full+program+trace+onwards for an example.
+
+- Procedure ~arguments~ are passed by pointer with a copy-on-write system: don't
+  modify the argument and you don't get any memory copy. To you, it just looks
+  like regular passing by value.
+
+- On the subject of performance and simplicity, no need for an actual garbage
+  collector, reference counting is enough because you cannot make circular
+  references.
+
+- Modifying the procedure arguments is done via =upvar=: in Tcl, a variable
+  reference is just a name (string) with a stack frame number, quite elegant
+  considering the language's concepts.
+
+- If you use at least the builtin extensions (thread, http, tdbc, tcltest,
+  msgcat) and the very basic tcllib/tclX/tclUdp/tklib packages, you're almost
+  set for life. Personally, I also use the very convenient tclreadline, tdom,
+  pipethread and tclcurl.
+  Some more here: https://core.tcl-lang.org/jenglish/gutter/
+
+- Channels is the cleanest I/O implementation I've ever used with some cool
+  features:
+  - Transformations allowing filters like deflate/zlib/gzip or TLS to be put on
+    a channel (see =transchan= for the API).
+  - Reflected aka virtual channels, to make a channel without an actual backing
+    FD. Basically like glibc's unportable *fopencookie*.
+  - Centralize all ioctl/fcntl soykaf and even more (like defining the EOF char).
+  - Integration with the event loop via `chan event` allows for a nice callback
+    oriented approach to sockets and pipes.
+  - Other third-party channel types include pty (expect), random, memory or
+    fifo (memchan).
+
+- Builtin event loop (see `after`, `vwait`, `socket -server` and `chan event`)
+  for powerful and seamless concurrency/command scheduling.
+
+- An elegant thread extension consisting of an interpreter per thread and no
+  raw access to other thread's memory. Comes with both simple (`thread`) and
+  performant (`tsv`) synchronization/communication facilities.
+
+- Finally a sane, light and portable (even more with Tile) GUI toolkit: Tk.
+
+- One of the fastest unicode aware regex implementations, written by Henry
+  Spencer himself. Has its own greater-than-POSIX-ERE syntax called ARE, not as
+  complete as PCRE (lacking lookbehind constraints, most importantly), but
+  still great for an hybrid NFA/DFA engine.
+  cf https://github.com/mariomka/regex-benchmark/pull/44.
+
+- =uplevel= (execute a script in a different stack frame) and =tailcall=
+  (replace the current procedure with another command) let you augment the
+  language by implementing control structures and keywords yourself.
+  Inferior to CL's synergy between unhygienic macros, "naked AST" style
+  homoiconicity, symbols as first-class objects, gensym and quasi-quoting, but
+  still quite powerful.
+
+- Safe interpreters let you do very fun things like config files in Tcl with
+  limited access to the machine and master interpreter.
+
+- Obvious Lisp inspiration:
+  - Homoiconic through strings.
+  - Usual FP goodies like map/filter/apply.
+  - Already mentioned macros.
+  - Proper prefix arithmetic allowing for `- 4 [+ 1 2 3]` instead of
+    `expr {(1 + 2 + 3) - 4}` with sane behaviour for more than two (reduce) or
+    zero (neutral element) arguments.
+  - Multiple more-or-less powerful object systems ([incr Tcl] for C++ style OO,
+    XoTcl for CLOS inspired OO or Snit for something Tk oriented).
+  - All of that with the same advantage of CL: it does not enforce nor preach a
+    particular way of programming, unlike the ML family that comes with the
+    "everything is immutable" ball and chain that often gets in the way instead
+    of helping (because, big surprise, modifying data is often an essential
+    part of efficient and intuitive algorithms while recursing only makes sense
+    when manipulating recursively defined data types).
+  See https://wiki.tcl-lang.org/page/Functional+Programming for more.
+
+- Biggest inconvenient is the near-death state of the language and community
+  (practical consequences: no LSP/SLIME equivalent, bugs accumulating, lack of
+  maintainted libraries) as well as some warts that can't be solved easily.  As
+  someone who knows a bit of CL, the language itself is less powerful
+  (especially on the macro side) but the standard library is miles ahead during
+  the day to day.
+
+Basically, a mix of CL and sh that somehow managed to end up very good and
+getting even better with time.
+
+
+I could continue all day, but you should just try it. Some more talk about it:
+- https://wiki.tcl-lang.org/page/What+is+Tcl
+- https://wiki.tcl-lang.org/page/Tcl+Articles
+- https://colin-macleod.blogspot.com/2020/10/why-im-tcl-ish.html
+- https://yosefk.com/blog/i-cant-believe-im-praising-tcl.html
+- http://antirez.com/articoli/tclmisunderstood.html
+
+Where to begin:
+- man n Tcl (or `man 3tcl Tcl` on retarded distros like Debian)
+- https://wiki.tcl-lang.org/page/TCL+for+beginners
+- https://wiki.tcl-lang.org/page/Tcl+Tutorial+Lesson+0
+- https://wiki.tcl-lang.org/ for everything, this is where the Tcl community lives
+- Rosetta Code for examples/exercises
+
+
+Anon's page: https://wiki.tcl-lang.org/page/q3cpma
+
+* 06 | Tcl the Misunderstood
+http://antirez.com/articoli/tclmisunderstood.html
+- Create procedures for operators
+  #+begin_src tcl
+    set operators [list + - * /]
+    foreach o $operators {
+        proc $o {a b} [list expr "\$a $o \$b"]
+    }
+  #+end_src
+- Create macro for repeat N {}
+  #+begin_src tcl
+    proc repeat {n body} {
+        set res ""
+        while {$n} {
+            incr n -1
+            set res [uplevel $body]
+        }
+        return res
+    }
+    set a 10
+    repeat 5 {incr a};# will return 15
+  #+end_src
+- No types, but strict (string) format checks
+  - You don't need serialization
+  - Example: sending and receiving through a socket
+    #+begin_src tcl
+      puts $socket $mylist ;# on one side
+      set mylist [read $socket] ;# on the other side
+    #+end_src
+- Event drive I/O model
+  Example: concurrent tcp (SELECT based) server
+  #+begin_src tcl
+    socket -server handler 9999
+    proc handler {fd clientaddr clientport} {
+        set t [clock format [clock seconds]]
+        puts $fd "Hello $clientaddr:clientport, currentdate is $t"
+        close $fd
+    }
+    vwait forever
+  #+end_src
+- Multiparadigm
+  Example: functional, calling lmap
+  #+begin_src tcl
+    lmap i {1 2 3 4 5} { expr $i*$i }
+  #+end_src
+- Using introspection and eval/uplevel/upvar. You can redefine the language.
+  Example: memoize the rest of the function
+  #+begin_src tcl
+    proc memoize {} {
+        set cmd [info level -1]
+        if {[info level] > 2 && [lindex [info level -2] 0] eq "memoize"} {
+            return
+        }
+        if {![info exists ::Memo($cmd)]} {
+            set ::Memo($cmd) [eval $cmd]
+        }
+        return -code return $::Memo($cmd)
+    }
+    proc myMemoizedProcedure { ... } {
+        memoize
+        ...
+    }
+  #+end_src
+- You can define a procedure called *unknown* which will be called
+  every time a command not defined is called.
+  Can be used to write our own DSL.
+- Procedures that get an index, support "end-num" notation.
+  Example:
+  #+begin_src tcl
+    lrange $mylist 1 end-1
+  #+end_src
+
+* 20 | Why I'm TCL-ish
 https://colin-macleod.blogspot.com/2020/10/why-im-tcl-ish.html
 https://news.ycombinator.com/item?id=24897326
 - Most programming languages blend syntax and semantics.

@@ -1,119 +1,19 @@
-- Book: TCL for Web Nerds https://philip.greenspun.com/tcl/
-- Tutorial https://wiki.tcl-lang.org/page/Tcl+Tutorial+Lesson+0
-- Rules
-  https://www.tcl.tk/man/tcl/TclCmd/Tcl.html
-  https://wiki.tcl-lang.org/page/Dodekalogue
-- Code eggdrop's twitter https://github.com/horgh/twitter-tcl
-- MEME CHAN Comment
-  - https://wiki.tcl-lang.org/page/Tcl+Performance
-  - tclquadcode - abandonded? llvm compiler
-  - One of the simplest if not the simplest interaction with C, letting you write plugins very easily
-    - with critcl, ffidl and swig to help
-  - everything is a tagged union with on-the-fly conversion when needed
-    and a unique string representation
-  - editing dictionaries as lists or lists as strings and transparent serialization
-    #+begin_src tcl
-      puts $mydict $chan` <=> `set mydict [read $chan]
-    #+end_src
-  - debugging with *info* and *trace* https://wiki.tcl-lang.org/page/Full+program+trace+onwards
-  - Procedure arguments are passed by pointer with a copy-on-write system:
-    don't modify the argument and you don't get any memory copy.
-    To you, it just looks like regular passing by value.
-  - You cannot make circular references (?)
-  - ...more
-    #+begin_src
- * If you use at least the builtin extensions (thread, http, tdbc, tcltest,
- msgcat) and the very basic tcllib/tclX/tclUdp/tklib packages, you're almost
- set for life. Personally, I also use the very convenient tclreadline, tdom,
- pipethread and tclcurl.
- Some more here: https://core.tcl-lang.org/jenglish/gutter/
-
- * Channels is the cleanest I/O implementation I've ever used with some cool
- features:
- * Transformations allowing filters like deflate/zlib/gzip or TLS to be put on
- a channel (see `transchan` for the API).
- * Reflected aka virtual channels, to make a channel without an actual backing
- FD. Basically like glibc's unportable fopencookie.
- * Centralize all ioctl/fcntl soykaf and even more (like defining the EOF char).
- * Integration with the event loop via `chan event` allows for a nice callback
- oriented approach to sockets and pipes.
- * Other third-party channel types include pty (expect), random, memory or
- fifo (memchan).
-
- * Builtin event loop (see `after`, `vwait`, `socket -server` and `chan event`)
- for powerful and seamless concurrency/command scheduling.
-
- * An elegant thread extension consisting of an interpreter per thread and no
- raw access to other thread's memory. Comes with both simple (`thread`) and
- performant (`tsv`) synchronization/communication facilities.
-
- * Finally a sane, light and portable (even more with Tile) GUI toolkit: Tk.
-
- * One of the fastest unicode aware regex implementations, written by Henry
- Spencer himself. Has its own greater-than-POSIX-ERE syntax called ARE, not as
- complete as PCRE (lacking lookbehind constraints, most importantly), but
- still great for an hybrid NFA/DFA engine.
- cf https://github.com/mariomka/regex-benchmark/pull/44.
-
- * `uplevel` (execute a script in a different stack frame) and `tailcall`
- (replace the current procedure with another command) let you augment the
- language by implementing control structures and keywords yourself.
- Inferior to CL's synergy between unhygienic macros, "naked AST" style
- homoiconicity, symbols as first-class objects, gensym and quasi-quoting, but
- still quite powerful.
-
- * Safe interpreters let you do very fun things like config files in Tcl with
- limited access to the machine and master interpreter.
-
- * Obvious Lisp inspiration:
- * Homoiconic through strings.
- * Usual FP goodies like map/filter/apply.
- * Already mentioned macros.
- * Proper prefix arithmetic allowing for `* 4 [+ 1 2 3]` instead of
- `expr {(1 + 2 + 3) * 4}` with sane behaviour for more than two (reduce) or
- zero (neutral element) arguments.
- * Multiple more-or-less powerful object systems ([incr Tcl] for C++ style OO,
- XoTcl for CLOS inspired OO or Snit for something Tk oriented).
- * All of that with the same advantage of CL: it does not enforce nor preach a
- particular way of programming, unlike the ML family that comes with the
-
-       "everything is immutable" ball and chain that often gets in the way instead
- of helping (because, big surprise, modifying data is often an essential
- part of efficient and intuitive algorithms while recursing only makes sense
- when manipulating recursively defined data types).
- See https://wiki.tcl-lang.org/page/Functional+Programming for more.
-
- * Biggest inconvenient is the near-death state of the language and community
- (practical consequences: no LSP/SLIME equivalent, bugs accumulating, lack of
- maintainted libraries) as well as some warts that can't be solved easily. As
- someone who knows a bit of CL, the language itself is less powerful
- (especially on the macro side) but the standard library is miles ahead during
- the day to day.
-
- Basically, a mix of CL and sh that somehow managed to end up very good and
- getting even better with time.
-
- I could continue all day, but you should just try it. Some more talk about it:
- * https://wiki.tcl-lang.org/page/What+is+Tcl
- * https://wiki.tcl-lang.org/page/Tcl+Articles
- * https://colin-macleod.blogspot.com/2020/10/why-im-tcl-ish.html
- * https://yosefk.com/blog/i-cant-believe-im-praising-tcl.html
- * http://antirez.com/articoli/tclmisunderstood.html
-
- Where to begin:
- * man n Tcl (or `man 3tcl Tcl` on retarded distros like Debian)
- * https://wiki.tcl-lang.org/page/TCL+for+beginners
- * https://wiki.tcl-lang.org/page/Tcl+Tutorial+Lesson+0
- * https://wiki.tcl-lang.org/ for everything, this is where the Tcl community lives
- * Rosetta Code for examples/exercises
-
- Anon's page: https://wiki.tcl-lang.org/page/q3cpma
-
-    #+end_src
-* Standard Library
+* Language
+| "foo"                         | grouping                   |
+| {foo}                         | literal grouping           |
+| [print 1]                     | command substitution       |
+| $foo                          | variable substitution      |
+|-------------------------------+----------------------------|
+| [list foo 1]                  | lists, are just strings    |
+| [expr 1+2]                    |                            |
+| [expr 1 + 2]                  |                            |
+| [expr {1 + 2}]                |                            |
+| proc + {a b} { expr {$a+$b} } | procedure, implicit return |
+|-------------------------------+----------------------------|
+** Standard Library
 - https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/toc.md
 - https://www.tcl.tk/software/tcllib/
-| calendar   | date & time operations. In development.                                                                                              |
+ | calendar   | date & time operations. In development.                                                                                              |
 | cmdline    | command line argument processor similar to opt                                                                                       |
 | comm       | socket based 'send'.                                                                                                                 |
 | counter    | Event counters, interval timers, and histogram display                                                                               |
@@ -130,34 +30,58 @@
 | struct     | Tcl implementations of common data structures (tree, graph, queue, matrix, pool, skiplist, priority queue, records, list operations) |
 | stooop     | Pure Tcl OO package                                                                                                                  |
 | textutil   | Text processing utilities, including a macro processor                                                                               |
-** Web
+*** Web
 | uri        | URI parsing module                          |
 | mime       | MIME encoder and decoder                    |
 | html       | HTML generation procedures. This uses ncgi. |
 | htmlparse  | Parsing of HTML strings.                    |
 | javascript | Javascript generation procedures.           |
-** Dev
+*** Dev
 | log      | General logging and tracing facility.   |
 | profiler | function level Tcl source code profiler |
-** Crypto, Hash, Encoding
+*** Crypto, Hash, Encoding
 | base64 | base64, uuencode, yencode encoder and decoder      |
 | crc    | Calculation of various CRC checksums               |
 | des    | Tcl implementation of the Data Encryption Standard |
 | md4    | MD4 hashes                                         |
 | md5    | MD5 hashes                                         |
 | sha1   | Secure Hash Algorithm                              |
-** Protocols
+*** Protocols
 | dns  | Tcl implementations of the DNS protocol |
 | ftp  | FTP client library                      |
 | irc  | Tcl implementation of the IRC protocol. |
 | pop3 | POP3 protocol implementation            |
-** Servers
+*** Servers
 | pop3d | POP3 server implementation and helper packages |
 | ftpd  | FTP server                                     |
 | smtpd | SMTP server implementation                     |
+** Commands
+|-----------+-----------------------------------------------------------------------------|
+| apply     | applies an anonymous function                                               |
+| array     |                                                                             |
+| catch     |                                                                             |
+| coroutine | create and produce values from coroutines                                   |
+| dict      | are lists with an even number of elements, k,v                              |
+| expr      |                                                                             |
+| list      | creates a list with arguments, or an emtpy string                           |
+| namespace | create/access/destroy contexts for commands and variables                   |
+| regexp    | matches                                                                     |
+| regsub    | substitution                                                                |
+| try       |                                                                             |
+| uplevel   | evaluates code in the context of the calling procedure, caller caller or... |
+| upvar     | create s alink to a variable in a different stack frame                     |
+| yield     | ditto                                                                       |
+| yieldto   | ditto                                                                       |
+| zlib      | zlib library                                                                |
+|-----------+-----------------------------------------------------------------------------|
 * Libraries
-https://core.tcl-lang.org/jenglish/gutter/
-* Code: First version of redis
+- GUTTER - Great Unified Tcl/Tk Extension Repository
+  https://core.tcl-lang.org/jenglish/gutter/
+* Codebases
+- examples https://en.wikibooks.org/wiki/Tcl_Programming/Examples
+- eggdrop's twitter https://github.com/horgh/twitter-tcl
+- aoc 2022 https://codeberg.org/NRK/slashtmp/src/branch/master/AoC/2022
+** First version of redis
   https://gist.github.com/antirez/6ca04dd191bdb82aad9fb241013e88a8
 #+begin_src tcl
   # LVDB - LLOOGG Memory DB
@@ -184,6 +108,7 @@ https://core.tcl-lang.org/jenglish/gutter/
   array set ::readbuf {}
   array set ::db {}
   array set ::ttl {}
+
   set ::dirty 0
   set ::lastsaved 0
   set ::listensocket {}
@@ -480,34 +405,18 @@ https://core.tcl-lang.org/jenglish/gutter/
   main
   vwait forever
 #+end_src
-* Commands
-| apply     | applies an anonymous function                             |
-| array     |                                                           |
-| catch     |                                                           |
-| coroutine | create and produce values from coroutines                 |
-| dict      | are lists with an even number of elements, k,v            |
-| expr      |                                                           |
-| list      | creates a list with arguments, or an emtpy string         |
-| namespace | create/access/destroy contexts for commands and variables |
-| regexp    | matches                                                   |
-| regsub    | substitution                                              |
-| try       |                                                           |
-| uplevel   | allows a command to be executed in a different scope      |
-| upvar     | create s alink to a variable in a different stack frame   |
-| yield     | ditto                                                     |
-| yieldto   | ditto                                                     |
-| zlib      | zlib library                                              |
 * https://en.wikipedia.org/wiki/Tcl
 - 1990-2012
 - Scripting Language, embeded in C
 - "Tcl casts everything into the mold of a _command_, even programming constructs".
-- OO + FP + Imperative + Procedural
-- Dynamically typed, everything can be treated as a string
-- Bytecode Compiler
-- Unicode support
-- Regular expressions
-- bignums
-- lambdas
+- Features
+  - Dynamically typed, everything can be treated as a string
+  - Bytecode Compiler
+  - Unicode support
+  - Regular expressions
+  - bignums
+  - OO + FP + Imperative + Procedural
+  - lambdas
 - tailcall/coroutine/yield
 - variables are NOT declared but assigned to
 - Event Driven interfaces to sockets/files
@@ -515,7 +424,7 @@ https://core.tcl-lang.org/jenglish/gutter/
   - expect
   - tk
 - Supports ~line continuation~ by backslash
-- Curly braces and variable substitution
+- Curly braces and Variable Substitution
   #+begin_src tcl
     # with them, VS is performed by expr
     set x 1
@@ -529,17 +438,17 @@ https://core.tcl-lang.org/jenglish/gutter/
 - commands can be variadic, and with default values
 - Substitution, happens from left-to-right. Just once.
 - Types of substitution
-  - Command: the content of a balanced square brackets []
-  - Variable: variables with the dollar sign $
-  - Backslash: a backslash and a letter like \n
-- Values are immutable, not variables.
+  | Command   | [] | the content of a balanced square brackets |
+  | Variable  | $  | variables with the dollar sign            |
+  | Backslash | \n | a backslash and a letter like             |
+- Values are *immutable*, not variables.
 - {*} works as ,@ does on LISP
   causes the word to be splitted appart and passed to the command as separate arguments.
 ** uplevel
-allows a command to be exeucted ina scope other thant the current
-has the net effect of transformint the call stack into a call tree
+- Allows a command to be executed in a scope other than the current.
+- Has the net effect of transforming the call stack into a call tree.
 #+begin_src tcl
-  proc ffor {initCmd testExpr advanceCmd bodyScript} {
+  proc for {initCmd testExpr advanceCmd bodyScript} {
       uplevel 1 $initCmd
       set testCmd [list expr $testExpr]
       while {[uplevel 1 $testCmd]} {
@@ -549,8 +458,8 @@ has the net effect of transformint the call stack into a call tree
   }
 #+end_src
 ** upvar
-arranges for one or more local variables in the current procedure
-to ~refer~ to  variables in an enclosing procedure call or _global variables_
+- Arranges for one or more local variables in the current procedure
+  to ~refer~ to  variables in an enclosing procedure call or _global variables_
 #+begin_src tcl
   proc decr {varName {decrement 1}} {
       upvar 1 $varName var
