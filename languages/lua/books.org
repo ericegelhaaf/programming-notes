@@ -1,0 +1,10 @@
+* Lua WikiBooks
+** https://en.wikibooks.org/wiki/Lua_Programming/Tables
+- Functions: have multiple return values
+- Foreach loop
+  #+begin_src lua
+    local array = {5, 2, 3, 6, 3, 6}
+    for index, value in next, array do end -- preferable?
+    for index, value in pairs(array) do end -- same as above
+    for index, value in ipairs(array) do end -- iters UNTIL the first integer key is absent on the table
+  #+end_src
