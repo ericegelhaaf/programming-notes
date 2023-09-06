@@ -1,0 +1,3 @@
+- article https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
+- article 2010 https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
+- articles https://github.com/freznicek/awesome-awk

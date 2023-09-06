@@ -1,0 +1,96 @@
+- 18 | Using AWK in BRo logs https://www.youtube.com/watch?v=20QeFkwXgCE
+- 20 | An AWK love story -- Cody Mello https://www.youtube.com/watch?v=IfhMUed9RSE&pp=ygUDYXdr
+- 20 | AWK, la navaja suiza de los sistemas *NIX https://www.youtube.com/watch?v=WGNlLOf7Qn0
+- 21 | Introduction to awk for Data Engineering https://www.youtube.com/watch?v=yizvRBqy-mE&t=1s
+- 22 | Debra McCusker | Walking Through Several AWK Scripts https://www.youtube.com/watch?v=cPlBT2c3TuQ
+- 21 | Debra McCusker | Techniques with AWK https://www.youtube.com/watch?v=rzXliWSTQPE
+* 15 | UNIX Special: Profs Kernighan & Brailsford - Computerphile
+  https://www.youtube.com/watch?v=vT_J6xc-Az0
+- Perl was build as a reaction of AWK
+  - Partially because the released version of AWK outside AT&T was inferior to the internal
+- AWK, If you are doing something that is only a couple of lines long, AWK is great.
+  When you get bigger than that, it doesn't scale very well.
+  Because it doesn't have any of the things that prevent you from doing something stupid, or at least finding out when you did.
+- The pattern-action paradigm is great for many thing.
+  But not for some others.
+  1) if you want to do 2 passes on something
+  2) or if you want to remember complicated state
+- ~TIP~:
+  Rather than trying to figure out how to keep track of state from one line to another on the input.
+  Read the whole input into a GIGANT ARRAY and then do indexing computations.
+- TCL/TK
+  Author made it very easy to extend by adding C functions.
+  As a language is bizzarre.
+  Brian use it for a number of years.
+* 16 | ETL with Awk Commands Reviewed
+https://www.youtube.com/watch?v=9d__vUmAO1A
+- Print differently the last column (ME: might be can be with the output FS variable)
+  1) Alternative if else
+    #+begin_src awk
+      {
+          for(i=1; i<=NF; i++)
+              if (i != NF)
+                  printf(" %s |", $i)
+              else
+                  printf(" %s |\n", $i)
+      }
+   #+end_src
+  2) OR
+     #+begin_src awk
+       {
+           for (i = 1; i <= NF; i++) printf " %s |", $1
+           printf "\n"
+       }
+     #+end_src
+- You can use ascii encoding to put single quotes into your printf
+  - each column
+    #+begin_src awk
+      { printf "INSERT INTO netstatTBL VALUES (\x27"$1"\x27,\x27"$NF"\x27);" }
+    #+end_src
+  - for
+    #+begin_src awk
+      {
+          printf "INSERT INTO netstatTBL VALUES(\x27"
+          for (i = 1; i < NF; i++) printf "%s\x27,\x27", $i
+          printf $NF"\x27);"
+      }
+    #+end_src
+* 21 | Unlock the Power of AWK: Learn This Tool in Minutes!
+2023 https://www.youtube.com/watch?v=yJek26lyXZ0
+2021 https://earthly.dev/blog/awk-examples/
+- for (key in array) {}
+- Set the order an already created array would be presented on a forIn
+  PROCINFO["sorted_in"] = "@val_num_asc"
+  PROCINFO["sorted_in"] = "@val_num_desc"
+- #!/usr/bin/env -S gawk -f
+- Can use $() to perform calculation on the fly (?)
+  #+begin_src awk
+    $ awk -F '\t' '{ print $NF "\t" $(NF-2)}' bookreviews.tsv
+  #+end_src
+** HN Comments
+One tip I have to make large-ish awk programs readable is to name the
+columns in the BEGIN section. Then, you'd use $colname instead of $1,
+$2, etc. for instance:
+#+begin_src awk
+BEGIN{ item_type = 1; item_name = 2; price = 3; sale = 4; #etc }
+#+end_src
+Now, in place of $1, you'd say $item_type which significantly improves
+overall readability of the code.
+* 22 | Coffee with Brian Kernighan - Computerphile
+https://www.youtube.com/watch?v=GNyQxXw_oMQ
+- Associative arrays comes from Snowball4. You can build every other datastructure with them. (ME: lua?)
+- The regular expressions supported in _AWK_ are of the "egrep" class
+- Fortran is terrible for text
+  Cobol is great at the record based stuff
+- About AWK
+  "You got to be careful (with AWK) because is essentially a ~pattern matched~ language.
+   What it is done next is not necesarilly a straighforward linear flowthrough that you can trace.
+   You gotta be asking all the time: "ok is this going to ~pattern match~?, ok what do I do now?"
+   My worry is that...the longer the list of *matches* gets the more that I am scare stiffed of getting a premature
+   *match* or a too late *match* because my ability to handle a stack of =regular expression= isn't as good as _AWK's_
+   You gotta be careful."
+- About Cobol
+  "...when I came across COBOL and it finally came to me that a lot of
+   my problem in understanding what it was doing was that it was
+   actually doing arithmetic on what came down to it were character
+   representations, instead of binary."

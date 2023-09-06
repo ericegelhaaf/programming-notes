@@ -1,0 +1,116 @@
+- https://en.wikipedia.org/wiki/AWK
+- style https://github.com/soimort/translate-shell/wiki/AWK-Style-Guide
+  - CamelCase, variables
+  - lowercase, functions
+  - 4 spaces or 4 #### for local variables in a function
+  - case have a *default* branch
+  - use "IF" and not "ELSE IF" if the previous branch uses a "RETURN"
+  - use () before pipes |
+- Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
+- https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
+* Language
+#+begin_src awk
+  { print "expression" > "filename" }
+  { print "expression" | "command" }
+  function add_tree (number) { # local variables can be declared here too, like &aux
+      return number + 3
+  }
+  { print add_tree(36) }
+#+end_src
+- Unique at the time due
+  - being a scripting language
+  - having associative arrays
+- wEiRd - removes leading space
+  - awk '{ $1=$1 }1' file.txt
+  - awk '{ $1=$1 }; { print }' file.txt
+  - awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
+** Types (will be automaticaly coerced when needed)
+1) Strings
+2) Numbers
+3) Arrays
+   - 1D
+   - for strings or numbers
+   - no need to be declared
+   - ALWAYS asssociative (aka hashtables)
+   - for (variable in array)
+   - delete array[subscript]
+** Built-in variables:
+| variable | meaning                                     | default |
+|----------+---------------------------------------------+---------|
+| NF       | numer of fields in line                     | -       |
+| NR       | number of records (aka lines) read so far   | -       |
+| FNR      | number of records read so far, in curr file | -       |
+|----------+---------------------------------------------+---------|
+| FS       | *controls* the input field separator        | " "     |
+| RS       | *controls* the input record separator       | "\n"    |
+|----------+---------------------------------------------+---------|
+| OFS      | output field separator                      | " "     |
+| ORS      | output record separator                     | "\n"    |
+| OFMT     | output format for numbers                   | "%.6g"  |
+|----------+---------------------------------------------+---------|
+| ARGC     | number of cli arguments                     | -       |
+| ARGV     | array of cli arguents                       | -       |
+|----------+---------------------------------------------+---------|
+| RLENGTH  | length of string matched by match function  | -       |
+| RSTART   | start of string matched by match function   | -       |
+|----------+---------------------------------------------+---------|
+| FILENAME | name of current input file                  | -       |
+| SUBSEP   | subscript separator                         | "\034"  |
+|----------+---------------------------------------------+---------|
+** Built-in functions
+https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
+*** MATH
+| atan2(y,x) | arctangent of y/x in -x to x range |
+| cos(x)     | cosine of x, with x in radians     |
+| sin(x)     | sine of x, with x in radians       |
+| exp(x)     |                                    |
+| log(x)     | ntural base e logarithm of x       |
+| sqrt(x)    |                                    |
+|------------+------------------------------------|
+| int(x)     | integer part of x, truncated       |
+|------------+------------------------------------|
+| rand()     | random nuber r, 0 <= r < 1         |
+| srand(x)   | x is new seed for rand()           |
+|------------+------------------------------------|
+*** STRING
+|                       | returns                               | does                         |
+|-----------------------+---------------------------------------+------------------------------|
+| gsub(r,s)             | number of subst made                  | substitute s for r in $0     |
+| gsub(r,s,t)           | number of subst made                  | substitute s for r in t      |
+|-----------------------+---------------------------------------+------------------------------|
+| sub(r,s)              | number of subst made                  | substitute s for r in $0     |
+| sub(r,s,t)            | number of subst made                  | substitute s for r in t      |
+|-----------------------+---------------------------------------+------------------------------|
+| substr(s,p)           | suffix of x starting at p             |                              |
+| substr(s,p,n)         | substring of x lenght n starting at p |                              |
+|-----------------------+---------------------------------------+------------------------------|
+| split(s,a)            | number of fields                      | stores the pieces in array a |
+| split(s,a,fs)         | number of fields                      | stores the pieces in array a |
+|-----------------------+---------------------------------------+------------------------------|
+| index(s,t)            | 0 or n position of t in s             |                              |
+| length()              | number of chars in $0                 |                              |
+| length(s)             | number of chars in s                  |                              |
+| match(s,r)            | index or 0                            | test if s contains r         |
+| sprintf(fmt,exp-list) | formated string with exp-list         |                              |
+|-----------------------+---------------------------------------+------------------------------|
+** Operators
+| Assigments       | = += -= *= /= %= ^= |
+| Ternary operator | ?:                  |
+| Array membership | in                  |
+| Matching         | ~ !~                |
+** Control Flow
+| exit            | goes immediately to the END action |
+| exit expression |                                    |
+| next            | skips to the next line of input    |
+** Output Statement
+| close(filename) | break connection between print and filename |
+| close(command)  | break connection between print and command  |
+| system(command) | execute command                             |
+* Codebases
+| graphics demo       | https://github.com/patsie75/awk-demo         |
+| CHIP-8              | https://github.com/patsie75/awk-chip8        |
+| system logs parsing | https://github.com/kaworu/hawk               |
+| exercises           | https://github.com/exercism/awk              |
+| exercises           | https://github.com/kaworu/adventofcode-2015/ |
+| exercises           | https://github.com/ferd/advent-of-code-2021/ |
+| exercises           | https://github.com/phillbush/aoc             |

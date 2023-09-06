@@ -1,0 +1,262 @@
+- book packt https://github.com/PacktPublishing/Learning-AWK-Programming
+- book https://learnbyexample.github.io/learn_gnuawk/ https://github.com/learnbyexample/learn_gnuawk
+- book https://en.wikibooks.org/wiki/An_Awk_Primer
+- book https://www.grymoire.com/Unix/Awk.html
+* Book: The AWK Programming Language (2nd Edition)
+| AWK Home   | https://www.awk.dev/              |
+| AWK Source | https://github.com/onetrueawk/awk |
+** Preface
+- Implementations: Gawk, Mawk, Busybox Awk, Go Awk, POSIX Awk
+- A scripting language
+- Awk    in 1977, for manipulating text and numbers
+  Perl   in 1987
+  Python in 1991
+- An =Awk= program is a sequence of
+  |          | specify                                |
+  |----------+----------------------------------------|
+  | PATTERNS | what to look for in the input data and |
+  | ACTIONS  | what to do when it's found             |
+  |----------+----------------------------------------|
+- A =pattern= can select lines by combinations of
+  1) regular expressions
+  2) comparison operations
+- The =action= language looks like C but there are no declarations,
+  and strings and numbers are build-in data types.
+- Awk scans text input files and splits each input line into *fields* automatically.
+- Things that are automatic on AWK
+  1) input
+  2) field splitting
+  3) storage management ?
+  4) initialization ?
+- "NEW" stuff, better support for Unicode, and csv
+- $ awk --version
+** 1 An Awk Tutorial
+- $ awk '{ print $1 }'
+  $ awk '{ print $1 }' file1
+  $ awk -f some.awk file1
+- There are only two =types= of data in awk:
+  1) numbers
+  2) strings fo characters
+- The entire line is called $0
+  Each field starts from $1
+- An Awk program is a sequence of one or more pattern-action statements
+  *pattern { action }*
+- The basic operation of Awk is to scan a sequence of input lines, from any number of files,
+  one after another, searching for lines that mare matched by any of the patterns in the program.
+- Either (not both) the pattern or the action can be omitted.
+- Given a TSV (name, salary, work hours)
+- print, default behaviour
+  - A "," in a print gets printed as a single space
+  - ends with a newline character
+  - any expression can go after "$" to denote a field number
+- Most of the time, it's more productive to use existing tools like *sort*
+- Special Patterns
+  | BEGIN | matches before the first line of the first input is read        |
+  | END   | matches after the last lien of the last file has been processes |
+- Both build-in variables and fields retain their value in and END action.
+- Awk numerical variables get initialized with 0(zero)
+  Awk string characters variables get initialized to the null string ""
+*** Example Programs
+|---------------------------------------------------------+------------------------------------------|
+| $3 > 0 { print $1, $2 * $3 }                            | name and calculates the pay              |
+| $3 == 0 { print $1 }                                    | employees which didnt work               |
+| $3 == 0                                                 | whole line of above                      |
+| { print $1 }                                            | first field                              |
+| { print }                                               | whole line                               |
+| { print $0 }                                            | whole line                               |
+| { print NF, $1, $NF }                                   | number of fields, first and last         |
+| NF == 4 { print $NF }                                   | when 4 fields, print last field          |
+| { print NR, $0 }                                        | prefix with line number                  |
+| { print "total pay for", $1, "is", $2 * 3 }             | adding custom text                       |
+|---------------------------------------------------------+------------------------------------------|
+| { printf("total pay for %s is $%.2f\n", $1, $2 * $3) }  | total pay for every one                  |
+| { printf("%-8s $%6.2f\n", $1, $2 * $3) }                | left justified 8-wide                    |
+|---------------------------------------------------------+------------------------------------------|
+| $2 >= 20                                                | selects, those earn >$20 per hour        |
+| $2 * $3 > 200 { printf("$%.2f for %s\n", $2 * $3, $1) } | selects, those getting paid > 200        |
+| $1 == "Susie"                                           | selects, first field equality            |
+| /Susie/                                                 | selects, line contains anywhere          |
+| $2 >= 20 ¦¦ $3 >= 20                                    | selects, combinations                    |
+| !($2 < 20 && $3 < 20)                                   | (same less readable)                     |
+| $2 >= 20                                                | selects, prints twice                    |
+|---------------------------------------------------------+------------------------------------------|
+| END { print $0 }                                        | last input line                          |
+|---------------------------------------------------------+------------------------------------------|
+| { print $1, length($1) }                                | lenght of each person name               |
+|---------------------------------------------------------+------------------------------------------|
+|---------------------------------------------------------+------------------------------------------|
+| END { print NR }                                        | number of lines                          |
+| NR <= 10                                                | the first 10 lines                       |
+| NR == 10                                                | 10th line                                |
+| NR % 10 == 1                                            | every 10th line                          |
+| { print $NF }                                           | last field of every line                 |
+| END { print $NF }                                       | last field of last line                  |
+| NF > 4                                                  | every line, with more than 4 fields      |
+| NF != 4                                                 | every line, with not exect 4 fields      |
+| $NF > 4                                                 | every line, which the last field > 4     |
+|---------------------------------------------------------+------------------------------------------|
+| { nf += NF }                                            | total number of fields                   |
+| END { print nf }                                        |                                          |
+|---------------------------------------------------------+------------------------------------------|
+| /Beth/ { nlines++ }                                     | total number of lines, containing        |
+| END    { print nlines }                                 |                                          |
+|---------------------------------------------------------+------------------------------------------|
+| $1 > max { max = $1; maxline = $0 }                     | largest field, and line that has it      |
+| END      { print max, maxline }                         |                                          |
+|---------------------------------------------------------+------------------------------------------|
+| NF > 0                                                  | every line non empty line                |
+| length($0) > 80                                         | every line longer than 80 chars          |
+| { print NF, $0 }                                        | number of fields, and whole line         |
+| { print $2, $1 }                                        | first two fields, inversed               |
+| { temp = $1; $1 = $2; $2 = temp; print }                | first two fields, inverse, and rest      |
+| { print NR, $0 }                                        | every line, preceeded by the number      |
+| { $1 = NR; print }                                      | every line, first field replaced by lno  |
+| { $2 = "", print }                                      | every line, remove second field          |
+|---------------------------------------------------------+------------------------------------------|
+| {                                                       | every line, fields reversed              |
+| for (i = NF; i > 0; i--) printf("%s", $i)               |                                          |
+| printf("\n")                                            |                                          |
+| }                                                       |                                          |
+|---------------------------------------------------------+------------------------------------------|
+| {                                                       | every line, sum of the fields            |
+| sum = 0                                                 | ... sum initialization is needed         |
+| for (i=0; i<NF; i++) sum += $i                          | ... otherwise it will remember           |
+| print sum                                               | ... between lines                        |
+| }                                                       |                                          |
+|---------------------------------------------------------+------------------------------------------|
+| { for (i = 0; i < NF; i++) sum += $i }                  | sum all fields, in all lines             |
+| END { print sum }                                       |                                          |
+|---------------------------------------------------------+------------------------------------------|
+| {                                                       | every line, absolute value of each field |
+| for (i = 0; i < NF; i++) if ($i < 0) $i = -$i           |                                          |
+| print                                                   |                                          |
+| }                                                       |                                          |
+|---------------------------------------------------------+------------------------------------------|
+*** Example: data validation, printing suspect lines
+- If here are no errors there's no output
+#+begin_src awk
+  NF != 3 { print $0, "number of fieds is not equal to 3" }
+  $2 < 15 { print $0, "rate is too low" }
+  $2 > 25 { print $0, "rate exceeds $25 per hour" }
+  $3 < 0  { print $0, "negative hours worked" }
+  $3 > 60 { print $0, " too many hours worked" }
+#+end_src
+*** Example: printing a heading with =BEGIN=
+- the words are separeted by the right number of spaces
+  #+begin_src awk
+    BEGIN { print "NAME RATE HOURS"; print "" } # Adds an empty line to separate the heading
+          { print }
+  #+end_src
+*** Example: use a variable for counting marching lines, and print at =END=
+#+begin_src awk
+  $3 > 15 { emp = emp + 1 } # OR { emp++ }
+  END     { print emp, "employees worked more than 15 hours" }
+#+end_src
+*** Example: use =NR= to calculate an average
+#+begin_src awk
+      { pay = pay + $2 * 3 } # or { pay += $2 * $3 }
+  END { print NR, "employes"
+        print "total pay is", pay
+        print "average pay is", pay/NR
+      }
+#+end_src
+*** Example: use a variable to store text
+#+begin_src awk
+  $2 > maxrate { maxrate = $2; maxemp = $1 }
+  END { print "highest hourly rate:", maxrate, "for", maxemp }
+#+end_src
+*** Example: string concatenation
+- done by writing string values one after other
+- there is no explicit concatenation operator
+  #+begin_src awk
+        { names = names $1 " " } # concatenation happening here
+    END { print names }
+  #+end_src
+*** Example: count lines, word and characters
+#+begin_src awk
+      { nc += length($0) + 1 # add 1, because $0 doesn't include the new line character
+        nw += NF
+      }
+  END { print NR, "lines,", nw, "words,", nc, "characters" }
+#+end_src
+*** Example: using an IF in an action, to defend against division by zero
+#+begin_src awk
+  $2 > 30 { n++, pay += $2 * $3 }
+  END     { if (n > 0) # no brace needed for one statement
+                print n, "high-pay employees, total pay is", pay, # breaking line
+                         " average pay is", pay/n
+            else
+                print "No employees are paid more than $30/hour"
+          }
+#+end_src
+*** Example: using WHILE to calculate the amount of money invested at a interest rate
+- example inputs
+  - 1000 .05 5
+  - 1000 .10 5
+- value = amount (1 + rate)^year
+  #+begin_src awk
+    # interest1 - compute compound interest
+    # input: amount rate years
+    # output: compounded value at the end of each year
+    { i = 1
+      while (i <= $3) {
+          printf("\t%.2f\n", $1 * (1 + $2) ^ i)
+          i++
+      }
+    }
+  #+end_src
+*** Example: using FOR for the same
+#+begin_src awk
+  # interest2 - compute compound interest
+  # input: amount rate years
+  # output: compounded value at the end of each year
+  {  for (i = 1; i <= 3; i++)
+          printf("\t%.2f\n", $1 * (1 + $2) ^ i)
+  }
+#+end_src
+*** Example: fizz-buzz
+#+begin_src awk
+  BEGIN { # all happens at BEGIN, filename arguments are ignored
+      for (i = 1; i <= 100; i++) {
+          if (i%15 == 0) # divisible by both 3 and 5
+              print i, "fizbuzz"
+          else if (i%5 == 0)
+              print i, "buzz"
+          else if (i%3 == 0)
+              print i, "fizz"
+          else
+              print i
+      }
+  }
+#+end_src
+*** Example: reverse lines, using an *array*
+#+begin_src awk
+  # reverse - print input in reverse order by line
+
+  { line [NR] = $0 } # remember each input line
+
+  END { i = NR # prints in reverse order
+        while (i > 0) {
+            print line[i]
+            i--
+        }
+        # or with a for
+        for (i = NR; i > 0; i--)
+            print line[i]
+  }
+#+end_src
+** 2 Awk in Action
+*** 2.1 Personal Computation
+**** BMI
+1kg  = 2.2 pounds
+1ich = 2.54cm
+
+bmi = weight / height^2
+18-25 normal
+25-30 overweight
+>30   obese
+
+#+begin_src awk
+  BEGIN { print "enter pounds inches" }
+        { printf("%.1f\n", ($1/2.2) / ($2 * 2.54/100) ^ 2) }
+#+end_src

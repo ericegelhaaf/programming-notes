@@ -1,0 +1,14 @@
+- tutorial https://github.com/adrianlarion/simple-awk
+* Tutorial 2015 https://ferd.ca/awk-in-20-minutes.html
+- *Patterns* can be
+  1) regular expressions
+  2) boolean expressions
+  3) special patterns
+- No PCRE on awk, but yes on gawk
+- Cannot capture specific regex groups to be used on action
+- "==" will do a "fuzzy" matching
+  eg: "23" == 23 is true
+- use ~ and !~ to match a string or variable with a regex
+  string ~ /regex/
+- *variables* are all global,
+  whathever you declare on a block, will be visible to the other blocks, for each line
