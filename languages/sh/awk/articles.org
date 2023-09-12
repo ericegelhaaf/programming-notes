@@ -1,3 +1,272 @@
-- article https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
-- article 2010 https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
-- articles https://github.com/freznicek/awesome-awk
+- https://github.com/freznicek/awesome-awk
+- 13 | https://codegolf.stackexchange.com/questions/13014/tips-for-golfing-in-awk
+- 20 | https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
+- 17 | Comments About Shell, Awk, and Make https://www.oilshell.org/blog/2017/10/25.html
+- 16 | Example Code in Shell, Awk, and Make https://www.oilshell.org/blog/2016/11/14.html
+- 16 | Shell, Awk, and Make Should Be Combined https://www.oilshell.org/blog/2016/11/13.html
+- 10 https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
+* 99 | Juergen Kahrs      | Network Administration with AWK
+https://www.linuxjournal.com/article/3132
+https://dl.acm.org/doi/fullHtml/10.5555/327728.327733
+- Ask localhost's *finger* service who is connected to the machine
+  #+begin_src awk
+    BEGIN {
+      NetService = "/inet/tcp/0/localhost/finger"
+      print "" |& NetService # ME: empty means all users
+      while ((NetService |& getline) > 0)
+        print $0
+      close(NetService)
+    }
+  #+end_src
+- Ask remote *finger* service
+  #+begin_src awk
+    BEGIN {
+     NetService = "/inet/tcp/0/cs.wisc.edu/finger"
+     print "coke" |& NetService
+     while ((NetService |& getline) > 0)
+       print $0
+     close(NetService) # would still work without it, done for portability
+    }
+  #+end_src
+- Things not possible with AWK
+  - broadcasting
+  - non-blocking read
+  - timeout
+  - forking server processes
+* 09 | awk one-liners
+https://nixshell.wordpress.com/2009/04/01/awk-one-liners/
+  + The ~next~ command causes awk to continue to the next line
+  + Print field number two ($2) only on lines not matching "some regexp" (fiel separator is ":"):
+    awk  -F":" '!/some regexp/{print $2}' file.txt
+    awk  -F":" '/some regexp/{next;}{print $2}' file.txt
+  + Print the next two (i=2) lines after the line matching regexp:
+    awk '/regexp/{i=2;next;}{if(i){i--; print;}}' file.txt
+  + Print the lines from a file starting at the line matching "start" until the line matching "stop":
+    awk '/start/,/stop/' file.txt
+    Note: make sure that the stop pattern does not match the start line
+          otherwise only that line will be printed.
+* 10 | Composing Music in AWK
+http://kmkeen.com/awk-music/
+https://old.reddit.com/r/linux/comments/dtect/composing_music_in_awk/
+aplay
+sox -v 0.5 -t raw -r 64k -c 1 -e unsigned -b 8 - -d
+cat /dev/urandom | fold -b1 | awk '{for (i=0;i<100;i++) printf($1);}' |aplay
+** Random
+#+begin_src awk
+  BEGIN {
+      srand()
+      while(1) {
+          wl=400*(0.87055^(int(rand()*10)+1))
+          d=(rand()*80000+8000)/wl
+          for (i=0;i<d;i++) {
+              for (j=0;j<wl;j++) printf("a")
+              for (j=0;j<wl;j++) printf("z")
+          }
+      }
+  }
+#+end_src
+** Explaining
+ The third line, wl=400*(0.87055^(int(rand()*10)+1)), takes a bit of
+ explaining. A musical scale is exponential in nature, and this
+ function generates the wavelengths of notes on a musical scale. There
+ is one magic number, 0.87055. This is not a random number or even
+ something found by trial and error. It is the fifth root of 0.5. One
+ half is important because every octave the wavelength doubles or
+ halves. Using the fifth root gives five intervals for each octave, a
+ pentatonic scale. Why five notes? It is really easy to make something
+ that sounds good in the pentatonic scale and really hard for a pair
+ of notes to be dissonant. With a wavelength and a duration for the
+ note, a pair of for loops pumps out a square wave. A and Z make up
+ the low and high values.
+** Final
+#+begin_src awk
+  function wl() { rate=4000; return (rate/160)*(0.87055^(int(rand()*10))) }
+  BEGIN {
+      srand()
+      wla=wl()
+      while(1) {
+          wlb=wla; wla=wl();
+          if (wla==wlb) wla*=2;
+          d=(rand()*10+5)*rate/4;
+          a=0; b=0; c=128;
+          ca=40/wla; cb=20/wlb;
+          de=rate/10; di=0;
+          for (i=0;i<d;i++) {
+              a++; b++; di++; c+=ca; c+=cb;
+              if (a>wla) { a=0; ca*=-1 };
+              if (b>wlb) { b=0; cb*=-1 };
+              if (di>de) { di=0; ca*=0.9; cb*=0.9 };
+              printf("%c",c)
+          };
+          c=int(c);
+          while(c!=128) {
+              c < 128 ? c+=1 : c-=1
+              printf("%c",c)
+          }
+      }
+  }
+#+end_src
+* TODO 11 | Linux Magazine #9 | GNU AWk 4.0 | Arnold Robbins
+* TODO 13 | Linux Magazine #8 | GNU Awk 4.1 | Arnold Robbins
+- 4.1 Defines and API for extensions
+  - Why? awk cannot even change its working directory with a chdir call
+** flags
+| -p | --profile=FILE  | profiling                                                           |
+| -D | --debug=FILE    | for debugging                                                       |
+| -o | --pretty-print= |                                                                     |
+| -M | --bignum        | Arbitrary precision floating point numbers (with MPFR and GMP libs) |
+** variables
+| PREC                    | number, to set floating point precision                            |
+| ROUNDMODE               |                                                                    |
+| SYMTAB                  | array, access to awk level variables                               |
+| FUNCTAB                 | array, names of all user-defined and extension functions           |
+| PROCINFO["identifiers"] | array, all known identifiers and what gawk knows about their types |
+* 15 | AWK one-liner collection
+http://tuxgraphics.org/~guido/scripts/awk-one-liner.html
+  + match() can be used as the PATTERN
+    Print the content of the part of the matching regexp that is enclosed by the round brackets:
+    #+begin_src awk
+    gawk 'match($0, /length:([0-9]+) cm/,arr){ print arr[1] }' file.txt
+    #+end_src
+  + egrep -i
+    Print matching lines and ignore case (egrep -i regexp):
+    awk 'BEGIN {IGNORECASE=1};/regexp/'
+  + This prints all lines except empty ones and lines with only space and tab:
+    awk '/^[ \t]*$/{next}{print}' file.txt
+  + Awk calculator
+    #+begin_src sh
+      # add the awc function to .basrc
+      # use awc like this: awc "3.4+2+8+99.2" (do not forget the quotes)
+      awc(){ awk "BEGIN{ print $* }"; }
+    #+end_src
+  + Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
+  + Web server
+    #+begin_src awk
+      #!/usr/bin/gawk -f
+      BEGIN {
+          if (ARGC < 2) { print "Usage: wwwawk  file.html"; exit 0 }
+          Concnt = 1;
+          while (1) {
+              RS = ORS = "\r\n";
+              HttpService = "/inet/tcp/8080/0/0"; # /tcp/local_port/remote_host/remote_port
+              getline Dat < ARGV[1];
+              Datlen = length(Dat) + length(ORS);
+              while (HttpService |& getline ){
+                  if (ERRNO) { print "Connection error: " ERRNO; exit 1}
+                  print "client: " $0;
+                  if ( length($0) < 1 ) break;
+              }
+              print "HTTP/1.1 200 OK"             |& HttpService;
+              print "Content-Type: text/html"     |& HttpService;
+              print "Server: wwwawk/1.0"          |& HttpService;
+              print "Connection: close"           |& HttpService;
+              print "Content-Length: " Datlen ORS |& HttpService;
+              print Dat                           |& HttpService;
+              close(HttpService);
+              print "OK: served file " ARGV[1] ", count " Concnt;
+              Concnt++;
+          }
+      }
+    #+end_src
+* TODO 19 | Handy One-Line Scripts For AWK
+** Selective Printing
+# print SECTION of file from regular expression to end of file
+awk '/regex/,0'
+awk '/regex/,EOF'
+# print section of file based on line numbers (lines 8-12, inclusive)
+awk 'NR==8,NR==12'
+# print section of file between two regular expressions (inclusive)
+awk '/Iowa/,/Montana/'
+* 23 | Volodymyr Gubarkov | AWK technical notes
+https://maximullaris.com/awk_tech_notes.html
+  - Has no GC
+  - Can't return an array from a function
+  - "The notation for function locals is appalling (all my fault too, which makes it worse)."
+    Brian Kernighan
+  - https://en.wikipedia.org/wiki/Autovivification
+    is the automatic creation of new arrays...as required every time
+    an undefined value is dereferenced. Without need for declaring them
+  - $ is an unary operator
+    #+begin_src awk
+      { second=2; print $second }
+      { print $(1+1) }
+      { i=1; print $++i } # print $2
+    #+end_src
+  - $ is allowed to appear on the left side of (=)
+    #+begin_src awk
+      { $(7-5) = "hello" }
+      { $(length "xx") = "hello" } # $2 = "hello"
+    #+end_src
+  - a space in "f ()"
+    - is not allowed for user defined function
+    - is allowed on built-in functions
+* 23 | Volodymyr Gubarkov | Bytebeating with GAWK
+https://maximullaris.com/bytebeat_gawk.html
+https://github.com/xonixx/bytebeat-gawk/
+- Only GAWK has bitwise built-in function
+- GAWK by default operates on unicode characters, NOT bytes
+  - -b --characters-as-bytes
+- C allows binary operations on negative numbers
+- GAWK dissalows it https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html#index-sidebar-22
+  #+begin_src
+    CAUTION: Beginning with gawk version 4.2, negative operands are
+    not allowed for any of these functions. A negative operand
+    produces a fatal error.
+  #+end_src
+** Using Two Complement, to get a toint() and fromint()
+https://github.com/xonixx/bytebeat-gawk/blob/main/bitint.awk
+#+begin_src awk
+  BEGIN {
+    INTMASK=lshift(1,32)-1
+    SIGNMASK=lshift(1,31)
+  }
+  function toint(v) {
+    if (v >= 0) return and(v, INTMASK)
+    return and(compl(-v), INTMASK)+1
+  }
+
+  function fromint(v) {
+    if (and(SIGNMASK,v)>0)
+      return -(and(compl(v), INTMASK)+1)
+    else
+      return v
+  }
+#+end_src
+** Example 1: Awk from C code
+gawk -b 'BEGIN { for(;;t++)printf"%c",t*and(or(rshift(t,12),rshift(t,8)),63,rshift(t,4)) }' | aplay -f u8
+3) gawk -b 'BEGIN { for(;;t++)printf"%c",and(t,t%255)-and(t*3,rshift(t,13),rshift(t,6)) }' | aplay -f u8
+4) gawk -b 'BEGIN { for(;;t++)printf"%c",or(and(t*5,rshift(t,7)),and(t*3,rshift(t*4,10))) }' | aplay -f u8
+5) gawk -b 'BEGIN { for(;;t++)printf"%c",or(t,or(rshift(t,9),rshift(t,7)))*and(t,or(rshift(t,11),rshift(t,9)))}' | aplay -f u8
+#+begin_src c
+  main(t) {
+  for(t=0;;t++)putchar(
+      t*((t>>12|t>>8)&63&t>>4) // <-- formula that defines the melody
+  );}
+#+end_src
+#+begin_src awk
+  BEGIN {
+      for(;;t++)
+          printf "%c", t*and(or(rshift(t,12),
+                                rshift(t,8)),
+                             63,
+                             rshift(t,4))
+          # 2) Different one
+          # printf "%c", t*and(rshift(t,12),
+          #                    rshift(t,8),
+          #                    63,
+          #                    rshift(t,4))
+          # 3)
+          # printf "%c", and(t,t%255) - and(t*3,
+          #                                 rshift(t,13),
+          #                                 rshift(t,6))
+          # 4)
+          # printf "%c", or(and(t*5, rshift(t,7)),
+          #                 and(t*3, rshift(t*4,10)))
+          # 5)
+          # printf "%c", or(t,
+          #                 or(rshift(t,9),
+          #                    rshift(t,7))) * \
+          #              and(t, or(rshift(t,11),
+          #                        rshift(t,9)))
+  }
+#+end_src

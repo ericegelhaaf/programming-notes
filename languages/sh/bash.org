@@ -1,7 +1,7 @@
-- https://github.com/xwmx/bash-boilerplate
 - "Destructuring" with *read* https://stackoverflow.com/questions/1952404/linux-bash-multiple-variable-assignment
 - Haskell like in cli https://github.com/gelisam/hawk
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
+- https://github.com/xwmx/bash-boilerplate
 - https://github.com/dylanaraps/pure-sh-bible
 - https://github.com/dylanaraps/pure-bash-bible
 - https://github.com/mrzool/bash-sensible
@@ -14,3 +14,64 @@
   (fork?) https://github.com/patrickvane/shfmt
 - Example: concatenation
   $ cut -d: -f2 studentlist.txt | xargs printf "%s@example.com"
+- Common lines between files
+  $ grep -Fxf file1 file2
+  $ grep --fixed-strings --line-regexp --file file1 file2
+- Not common lines
+  $ grep -vFxf file1 file2
+* Tutorial: Style https://google.github.io/styleguide/shellguide.html
+  - Don’t brace-delimit single character shell specials / positional parameters,
+    unless strictly necessary or avoiding deep confusion.
+  - Indentation: Indent 2 spaces. No tabs.
+  - Comment at the header
+    #+begin_src bash
+      #!/bin/bash
+      #
+      # Perform hot backups of Oracle databases.
+    #+end_src
+  - Redirect errors to STDERR
+    #+begin_src bash
+      err() {
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+      }
+    #+end_src
+  - Do not put an extension on executables, only on libraries
+  - Guidelines
+    - When is ok
+      * mostly calling other utilities
+      * relatively little data manipulation
+    - When NOT use
+      * Scripts more than 100 lines long
+      * Using non-straightfoward control flow logic
+      * if performance matters
+* Language
+** Arithmetic Evaluation
+- "Evaluation is done in fixed-width *integers* with no check for
+   overflow, though division by 0 is trapped and flaged as an error."
+- "A shell variable that is null or unset evaluates to 0"
+*** Operators
+From man
+|-----------------------------------+---------------------------------------------|
+| id++ id--                         | variable post-increment and  post-decrement |
+| ++id --id                         | variable pre-increment and pre-decrement    |
+| + -                               | unary minus and plus                        |
+| **                                | exponentiation                              |
+| * / %                             | multiplication, division, remainder         |
+| + -                               | addition, subtraction                       |
+|-----------------------------------+---------------------------------------------|
+| !                                 | logical negation                            |
+| <= >= < >                         | comparison                                  |
+| == !=                             | equality and inequality                     |
+| &&                                | logical AND                                 |
+| ¦¦                                | logical OR                                  |
+|-----------------------------------+---------------------------------------------|
+| expr?expr:expr                    | conditional operator                        |
+| = *= /= %= += -= <<= >>= &= ^= ¦= | assignment                                  |
+| expr1 , expr2                     | comma                                       |
+|-----------------------------------+---------------------------------------------|
+| ~                                 | bitwise negation                            |
+| << >>                             | bitwise left and right shifts               |
+| &                                 | bitwise AND                                 |
+| ^                                 | bitwise exclusive OR                        |
+| ¦                                 | bitwise OR                                  |
+|-----------------------------------+---------------------------------------------|

@@ -1,3 +1,14 @@
+- https://github.com/freznicek/awk-crashcourse
+- https://github.com/mfherbst/awk-course
+- https://pmitev.github.io/to-awk-or-not/
+  https://github.com/pmitev/to-awk-or-not
+  - https://pmitev.github.io/to-awk-or-not/Python_vs_awk/
+    #+begin_src awk
+      /Frequencies/ { for (i=3;i<=NF;i++)    freq[++im]=$i }
+      /Frc consts/  { for (i=NF;i>=4;i--) fc[im-(NF-i)]=$i }
+      /IR Inten/    { for (i=NF;i>=4;i--) ir[im-(NF-i)]=$i }
+      END           { for (i=1;i<=im;i++) print freq[i],fc[i],ir[i] }
+    #+end_src
 - tutorial https://github.com/adrianlarion/simple-awk
 * Tutorial 2015 https://ferd.ca/awk-in-20-minutes.html
 - *Patterns* can be

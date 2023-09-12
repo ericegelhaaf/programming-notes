@@ -1,4 +1,10 @@
 - https://en.wikipedia.org/wiki/AWK
+- https://en.wikibooks.org/wiki/AWK
+- coverage
+  https://benhoyt.com/writings/goawk-coverage/
+- editor
+   https://github.com/Beaglefoot/awk-language-server
+  https://emacs-lsp.github.io/lsp-mode/page/lsp-awk/
 - style https://github.com/soimort/translate-shell/wiki/AWK-Style-Guide
   - CamelCase, variables
   - lowercase, functions
@@ -7,8 +13,22 @@
   - use "IF" and not "ELSE IF" if the previous branch uses a "RETURN"
   - use () before pipes |
 - Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
+
+- Manual network features https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
 - https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
 * Language
+- asort(SRC,DST)  - sort by value
+  asorti(SRC,DST) - sort by index
+- FPAT https://www.gnu.org/software/gawk/manual/html_node/Splitting-By-Content.html
+  For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
+  Instead of using FS to specify what the fields are *not*
+  We use this to specify what are the fields, in the form of a regular expression.
+- @include "join"
+- @include "ord" OR @load "ordchr" https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Ord.html
+  ord(STRING) -> NUMBER
+  chr(NUMBER) -> STRING
+- @include "assert"
+  assert(BOOLEAN, "Reason of failure HERE")
 #+begin_src awk
   { print "expression" > "filename" }
   { print "expression" | "command" }
@@ -21,9 +41,11 @@
   - being a scripting language
   - having associative arrays
 - wEiRd - removes leading space
-  - awk '{ $1=$1 }1' file.txt
-  - awk '{ $1=$1 }; { print }' file.txt
-  - awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
+  #+begin_src awk
+  $ awk '{ $1=$1 }1' file.txt
+  $ awk '{ $1=$1 }; { print }' file.txt
+  $ awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
+  #+end_src
 ** Types (will be automaticaly coerced when needed)
 1) Strings
 2) Numbers
@@ -35,28 +57,28 @@
    - for (variable in array)
    - delete array[subscript]
 ** Built-in variables:
-| variable | meaning                                     | default |
-|----------+---------------------------------------------+---------|
-| NF       | numer of fields in line                     | -       |
-| NR       | number of records (aka lines) read so far   | -       |
-| FNR      | number of records read so far, in curr file | -       |
-|----------+---------------------------------------------+---------|
-| FS       | *controls* the input field separator        | " "     |
-| RS       | *controls* the input record separator       | "\n"    |
-|----------+---------------------------------------------+---------|
-| OFS      | output field separator                      | " "     |
-| ORS      | output record separator                     | "\n"    |
-| OFMT     | output format for numbers                   | "%.6g"  |
-|----------+---------------------------------------------+---------|
-| ARGC     | number of cli arguments                     | -       |
-| ARGV     | array of cli arguents                       | -       |
-|----------+---------------------------------------------+---------|
-| RLENGTH  | length of string matched by match function  | -       |
-| RSTART   | start of string matched by match function   | -       |
-|----------+---------------------------------------------+---------|
-| FILENAME | name of current input file                  | -       |
-| SUBSEP   | subscript separator                         | "\034"  |
-|----------+---------------------------------------------+---------|
+| variable | meaning                                      | default |
+|----------+----------------------------------------------+---------|
+| NF       | numer of fields in line                      | -       |
+| NR       | number of records (aka lines) read so far    | -       |
+| FNR      | number of records read so far, in curr file  | -       |
+|----------+----------------------------------------------+---------|
+| FS       | *controls* the input field separator         | " "     |
+| RS       | *controls* the input record separator        | "\n"    |
+|----------+----------------------------------------------+---------|
+| OFS      | output field separator                       | " "     |
+| ORS      | output record separator                      | "\n"    |
+| OFMT     | output format for numbers                    | "%.6g"  |
+|----------+----------------------------------------------+---------|
+| ARGC     | number of cli arguments                      | -       |
+| ARGV     | array of cli arguents                        | -       |
+|----------+----------------------------------------------+---------|
+| RLENGTH  | length of string matched by *match* function | -       |
+| RSTART   | start of string matched by *match* function  | -       |
+|----------+----------------------------------------------+---------|
+| FILENAME | name of current input file                   | -       |
+| SUBSEP   | subscript separator                          | "\034"  |
+|----------+----------------------------------------------+---------|
 ** Built-in functions
 https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
 *** MATH
@@ -106,10 +128,22 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | close(filename) | break connection between print and filename |
 | close(command)  | break connection between print and command  |
 | system(command) | execute command                             |
+** getline
+|--------------------+-------------------------------------+---------------------|
+| getline            | read next input record              | NF, NR, FNR, RT, $0 |
+| getline var        | read n.i.r. into var                | NR, FNR, RT         |
+| getline < file     | read n.i.r. from file               | NF, RT, $0          |
+| getline var < file | read n.i.r. from file into var      | -                   |
+| cmd ¦ getline      | reads a single line of cmd into awk | NF, RT, $0          |
+| cmd ¦ getline var  | reads a single line of cmd into var | RT                  |
+| cmd ¦& getline     | reads from a two-way pipe           | NF, RT, $0          |
+| cmd ¦& getline var | reads from a two-way pipe into var  | RT                  |
+|--------------------+-------------------------------------+---------------------|
 * Codebases
 | graphics demo       | https://github.com/patsie75/awk-demo         |
-| CHIP-8              | https://github.com/patsie75/awk-chip8        |
 | system logs parsing | https://github.com/kaworu/hawk               |
+| CHIP-8              | https://github.com/patsie75/awk-chip8        |
+| game tetris         | https://github.com/mikkun/AWKTC              |
 | exercises           | https://github.com/exercism/awk              |
 | exercises           | https://github.com/kaworu/adventofcode-2015/ |
 | exercises           | https://github.com/ferd/advent-of-code-2021/ |

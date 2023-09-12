@@ -1,10 +1,11 @@
-- 18 | Using AWK in BRo logs https://www.youtube.com/watch?v=20QeFkwXgCE
-- 20 | An AWK love story -- Cody Mello https://www.youtube.com/watch?v=IfhMUed9RSE&pp=ygUDYXdr
-- 20 | AWK, la navaja suiza de los sistemas *NIX https://www.youtube.com/watch?v=WGNlLOf7Qn0
-- 21 | Introduction to awk for Data Engineering https://www.youtube.com/watch?v=yizvRBqy-mE&t=1s
-- 22 | Debra McCusker | Walking Through Several AWK Scripts https://www.youtube.com/watch?v=cPlBT2c3TuQ
-- 21 | Debra McCusker | Techniques with AWK https://www.youtube.com/watch?v=rzXliWSTQPE
-* 15 | UNIX Special: Profs Kernighan & Brailsford - Computerphile
+- Taller de AWK https://www.youtube.com/watch?v=1_UyBhlTxsQ
+- 23 | Benjamin Porter | Awk: Hack the planet['s text]! (Presentation)
+  https://www.youtube.com/watch?v=E5aQxIdjT0M
+- 20 | Hacklab Almeria | AWK, la navaja suiza de los sistemas *NIX https://www.youtube.com/watch?v=WGNlLOf7Qn0
+- 21 | Arpan Patel     | Introduction to awk for Data Engineering https://www.youtube.com/watch?v=yizvRBqy-mE
+- 21 | Debra McCusker  | Techniques with AWK https://www.youtube.com/watch?v=rzXliWSTQPE
+- 22 | Debra McCusker  | Walking Through Several AWK Scripts https://www.youtube.com/watch?v=cPlBT2c3TuQ
+* 15 | Computerphile   | UNIX Special: Profs Kernighan & Brailsford
   https://www.youtube.com/watch?v=vT_J6xc-Az0
 - Perl was build as a reaction of AWK
   - Partially because the released version of AWK outside AT&T was inferior to the internal
@@ -22,7 +23,7 @@
   Author made it very easy to extend by adding C functions.
   As a language is bizzarre.
   Brian use it for a number of years.
-* 16 | ETL with Awk Commands Reviewed
+* 16 | Glen MacLachlan | ETL with Awk Commands Reviewed
 https://www.youtube.com/watch?v=9d__vUmAO1A
 - Print differently the last column (ME: might be can be with the output FS variable)
   1) Alternative if else
@@ -55,13 +56,165 @@ https://www.youtube.com/watch?v=9d__vUmAO1A
           printf $NF"\x27);"
       }
     #+end_src
-* 21 | Unlock the Power of AWK: Learn This Tool in Minutes!
+* TODO 17 | Mark Krenz      | Using AWK in Bro logs
+https://www.youtube.com/watch?v=20QeFkwXgCE
+- Remember to use escape the dot to match an specific IP ^2\.4\.150\.1$
+  instead of: grep '2.4.150.1' which will match
+  - 22.4.150.15
+  - 204.150.100.10
+  - 2E4150A1
+  - /script.php?id=12948150218
+- 17:46
+* 18 | Cody Mello      | JTD: An Introduction to AWK
+  https://www.youtube.com/watch?v=DsFTmGzC-QA
+  https://github.com/melloc/awk-jtd
+ - New Feature: Added support for POSIX character classes
+   #+begin_src awk
+     [[:upper:]]
+   #+end_src
+ - RT = Record Terminator, informs you what the terminator at the end of the line was
+   #+begin_src sh
+     $ printf "a" | awk '{print length(RT)}'
+     0
+     $ printf "a\n" | awk '{print length(RT)}'
+     1
+   #+end_src
+ - Can use "&" on sub/gsub to return what matched
+   #+begin_src awk
+     BEGIN { a = "h"; sub(/h/, "q&", a); print a; } # outputs "qh" as "&" matches anything matched
+   #+end_src
+ - Can use double backslash to escape "&" or a "\"
+ - =nextfile=, closes the current file being processed and moves on
+ - Introduction of =-safe= flag for the awk command, which will disable things like system() calls
+   #+begin_src awk
+     BEGIN { system("date") }
+   #+end_src
+ - NF = number of fields on the current record
+   Changing this value would also change the number of fields $N available
+ - ($) is actually a =field operator=, "I want to access this field". NOT a variable syntax.
+ - SYMTAB["$zero&null"] holds the value for zero and null, "0" by default (?
+** Example: splitting by character with split()
+#+begin_src awk
+  BEGIN {
+      a = "abcdefghijklmnopqrstvuvwxyz"
+      split(a,alpha,"")
+      print "The 13th letter of the alphabet is", alpha[13]
+  }
+#+end_src
+** Example: split by word with RS and count uppercases
+#+begin_src awk
+  BEGIN { RS = " " } # split by word
+  /\.$/ { sub(/\.$/, "") } # remove dot at the end of words
+  /^[[:upper:]]+$/ { caps[$0] += 1 }
+  END { # return uppercases repeated more than 10 times
+      for (word in caps) {
+          if (caps[word] < 10) continue;
+          printf "%s: %d\n", word, caps[word]
+      }
+  }
+#+end_src
+** Example: Using FNR to tell the number of records/lines processed on each FILENAME
+#+begin_src awk
+  BEGIN    { lastn = ""; lastl = 0 }
+  FNR == 1 { fileinfo(); lastn = FILENAME }
+           { lastl = FNR }
+  END      { fileinfo(); print NR, "total lines" }
+
+  function fileinfo() {
+      if (lastn == "") return;
+      printf "File %s has %d lines\n", lastn, lastl
+  }
+#+end_src
+** Example: Using =next= to skip some things, instead of doing complex guards
+#+begin_src awk
+  BEGIN { RS = " " } # split by word
+
+  { $0 = tolower($0) } # lowercase all words
+
+  length < 5 { next } # skipping short words
+  /about/    { next } # skipping common words...
+  /after/    { next }
+  /because/  { next }
+  /before/   { next }
+  /could/    { next }
+  /which/    { next }
+
+  { words[$0] += 1 } # a "functional" block
+
+  END {
+      for (word in words) {
+          if (words[word] < 150) continue
+          printf "%s: %d\n", word, words[word]
+      }
+  }
+#+end_src
+** Example: Using =length()= on arrays
+#+begin_src awk
+  BEGIN { RS = " " }
+  /\.$/ { sub(/\.$/, "") }
+  { words[tolower($0)] += 1 }
+  END { print "There are", length(words), "unique qords in the text." }
+#+end_src
+** Example: Using =match()= with RSTART and RLENGTH
+match a single link per line
+#+begin_src awk
+  match($0, /https:[^[:space:])\]]+/) {
+      print substr($0, RSTART, RLENGTH)
+  }
+#+end_src
+OR to match multiple links on single line
+#+begin_src awk
+  {
+      while (match($0, /https:[^:space:])\]]+/)) {
+          print substr($0, RSTART, RLENGTH);
+          $0 = substr($0, RSTART+RLENGTH);
+      }
+  }
+#+end_src
+** Example: evaluating strings as regular expression at runtime
+#+begin_src awk
+  BEGIN {
+      if (ARGC != 2) {
+          print "Please provide an argument!" > "/dev/stderr";
+          exit 2;
+      }
+      for (var in ENVIRON) {
+          if (var ~ ARGV[1]) { # using a string given by the user as a regular expression
+              print var "=" ENVIRON[var];
+          }
+      }
+  }
+#+end_src
+* 20 | Cody Mello      | An AWK love story
+https://www.youtube.com/watch?v=IfhMUed9RSE
+  - Concatenation
+    $ cut -d: -f2 students.txt | xargs printf "%s@example.edu"
+    $ awk -F: '{ print $2 "@example.edu" }' students.txt
+  - Instead of looping...
+    #+begin_src sh
+      while IFS=, read user p1 p2 p3 p4; do
+          (( p1 + p2 + p3 + p4 < 70 )) && echo "${user}"
+      done < grades.csv
+    #+end_src
+  - ..awk
+    $ awk -F, '$2 + $3 + $4 + $5 < 70 { print $1 }' grades.csv
+  - Splitting a file/input into multiple files
+    $ fwadm list -p -o uuid,owner_uuid,rule | \
+         awk -F: '$2 != "~" { print >> "rules/"$2 }'
+  - Perl has a "-p" flag which has a BEGIN, END and all other content will run for every line
+* 21 | Earthly         | Unlock the Power of AWK: Learn This Tool in Minutes!
 2023 https://www.youtube.com/watch?v=yJek26lyXZ0
 2021 https://earthly.dev/blog/awk-examples/
 - for (key in array) {}
 - Set the order an already created array would be presented on a forIn
   PROCINFO["sorted_in"] = "@val_num_asc"
   PROCINFO["sorted_in"] = "@val_num_desc"
+  PROCINFO["sorted_in"] = "@val_str_asc"
+  PROCINFO["sorted_in"] = "@val_str_desc"
+  PROCINFO["sorted_in"] = "@ind_num_asc"
+  PROCINFO["sorted_in"] = "@ind_num_desc"
+  PROCINFO["sorted_in"] = "@ind_str_asc"
+  PROCINFO["sorted_in"] = "@ind_str_desc"
 - #!/usr/bin/env -S gawk -f
 - Can use $() to perform calculation on the fly (?)
   #+begin_src awk
@@ -76,7 +229,7 @@ BEGIN{ item_type = 1; item_name = 2; price = 3; sale = 4; #etc }
 #+end_src
 Now, in place of $1, you'd say $item_type which significantly improves
 overall readability of the code.
-* 22 | Coffee with Brian Kernighan - Computerphile
+* 22 | Computerphile   | Coffee with Brian Kernighan
 https://www.youtube.com/watch?v=GNyQxXw_oMQ
 - Associative arrays comes from Snowball4. You can build every other datastructure with them. (ME: lua?)
 - The regular expressions supported in _AWK_ are of the "egrep" class
