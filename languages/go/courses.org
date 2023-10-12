@@ -1,0 +1,8 @@
+- Go Class
+  #+begin_src
+    These videos represent a new version of my Go class, with changes
+    due to recording it vs teaching live. It's my Christmas present to
+    a bunch of golang-nuts at work!
+  #+end_src
+  videos https://www.youtube.com/playlist?list=PLoILbKo9rG3skRCj37Kn5Zj803hhiuRK6
+  pdf slides https://github.com/matt4biz/go-class-slides/blob/trunk/xmas-2020/README.md

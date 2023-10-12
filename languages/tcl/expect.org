@@ -1,0 +1,65 @@
+- https://en.wikipedia.org/wiki/Expect
+* Video: 12 | Hak5 - Automate Everything, Using Expect, Hak5 1023.1
+https://www.youtube.com/watch?v=dlwqyMW5H5I
+- ATTACKER -> ssh -> VICTIM -> scp -> remoteB
+- send
+  - -s sends commands slowly
+  - -h make the characters like they are humanly typed (delay)
+- interact
+  - gives control back to the user
+* Video: 21 | Automate Remote SSH Control of Computers with Expect Scripts [Tutorial]
+  https://www.youtube.com/watch?v=Vt5S12U3F0k
+- Use case: Login into a raspberry pi and shutting it down
+** trigger.sh
+  #+begin_src sh
+    #!/bin/bash
+    echo 'What is the enemy passcode?'
+    read loginpass
+    expect expect.exp $(arp-scan -l | grep Raspberry | awk '{print $1}') root $loginpass
+  #+end_src
+** expect.exp
+#+begin_src tcl
+  #!/usr/bin/expect -f
+  set timeout 20 ;# seconds
+  set ip [lindex $argv 0]
+  set user [lindex $argv 1]
+  set password [lindex $argv 2]
+  spawn ssh "$user\@$ip" "reboot"
+  expect "assword:" ;# either capital "Password" or lowercase "password"
+  send "$password\r"
+  interact
+#+end_src
+* Video: 23 | Shell Scripting for Network Engineers || 22. Enhancing Your Bash Scripts with Expect
+https://www.youtube.com/watch?v=sBcW-LuaQdc
+** Example: simple
+#+begin_src tcl
+  #!/usr/bin/expect --
+
+  spawn ssh -l tpbonfi 192.168.1.254
+
+  expect "tbonfi@192.168.1.254's password:"
+  send "MyFam0u5Pa55wd\r"
+  expect "ecc-asa-fw01>"
+
+  send "enable\r"
+  expect "Password:"
+  send "MyFam0usPa55wd\r"
+  expect "ecc-asa-fw01#"
+
+  send "term pager 0\r"
+  expect "ecc-asa-fw01#"
+  send "show conn all\r"
+
+  interact
+#+end_src
+** Example: simple, different formatting
+#+begin_src tcl
+  #!/usr/bin/expect
+  set timeout 300
+  spawn ssh -l tpbonfi 192.168.1.254
+  expect { "tpbonfi@192.168.1.254's password:"; {send "YourPasswordHere\r"} }
+  expect { "ecc-asa-fw01>"; {send "enable\r"} }
+  expect { "Password:"; {send "JackTheRipper99\r"} }
+  expect { "ecc-asa-fw01#"; {send "term pager 0\r"} }
+  expect { "ecc-asa-fw01#"; {send "show conn all\r"} }
+#+end_src

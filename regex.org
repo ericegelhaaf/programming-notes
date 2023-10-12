@@ -1,0 +1,2 @@
+- https://en.wikibooks.org/wiki/Regular_Expressions/POSIX_Basic_Regular_Expressions
+- debug https://regex101.com/

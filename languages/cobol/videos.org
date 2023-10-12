@@ -1,0 +1,283 @@
+- Channel https://www.youtube.com/@mainframecorner/playlists
+- Channel https://www.youtube.com/@Coboloco052/playlists
+- 20 COBOL Course https://www.youtube.com/watch?v=RdMAEdGvtLA
+- 20 COBOL Tutorial : Learn COBOL in One Video https://www.youtube.com/watch?v=TBs7HXI76yU
+- 23 Using gnuCOBOL to make a video game! https://www.youtube.com/watch?v=8-kazxQBolM
+- 22 Peggy Fisher | Cobol Essential Training https://www.youtube.com/watch?v=_pAX_ogguLI
+- Truttle1
+  - 17 COBOL? https://www.youtube.com/watch?v=4i5yP7FLtXw
+  - 18 Making a Game Using COBOL! https://www.youtube.com/watch?v=qaApxBPKOdw
+  - 19 Brainf**k Compiler Written in COBOL that Compiles to COBOL?  https://www.youtube.com/watch?v=O299XNnXdxM
+  - 20 Making a Simple Tic-Tac-Toe Game in COBOL https://www.youtube.com/watch?v=N-Qj77CjPEA
+* 22 Nerdearla | Aprender COBOL desde cero
+https://www.youtube.com/watch?v=Ksz1PIVB9JM
+- COmmon Business Oriented Language
+- BBVA
+- Agustina Cafiero Y Maira Leon
+- Estructurado, compilado
+- Tipos de programas:
+  - Online(interactivos)
+  - Batch (no-interactivos, procesa grandes volumenes de informacion offline)
+- Estructura de un programa
+  - Programa
+  - Division(4,obligatorias,en orden)
+  - Seccion
+  - Parrafo(contienen instrucciones)
+- WORKING-STORAGE Section (variables)
+ | campos |              |                                              |
+ |--------+--------------+----------------------------------------------|
+ | Nivel  | 01           | 1-48, cuanto mas bajo, mas alta su jerarquia |
+ | Nombre | WSV-VARIABLE |                                              |
+ | Tipo   | PIC X(10)    | X = alfanumerico Z = CEROS 9 = numerico      |
+ | Valor  | VALUE SPACES |                                              |
+ |--------+--------------+----------------------------------------------|
+- No native support for *constants*
+** IDENTIFICATION DIVISION
+    #+begin_src cobol
+      IDENTIFICATION DIVISION.,*> IDENTIFICATION
+      PROGRAM-ID.   PROGREJEM.
+      AUTHOR.       AGUSTINA.
+      DATE-WRITTEN. 31/03/2020.
+
+      ENVIRONMENT DIVISION.   ,*> ENVIRONMENT
+      CONFIGURATION SECTION.  ,*> el entorno, configuracion, ubicacion fisica de archivos
+      SPECIAL-NAMES.
+            DECIMAL-POINT IS COMMA.
+#+end_src
+** DATA           DIVISION
+     #+begin_src cobol
+      DATA DIVISION.          ,*> DATA
+      FILE SECTION.           ,*> parte logica del accesso a archivos
+      FD AGUS-FILE
+          RECORDING MODE IS F
+          LABEL RECORD ARE STANDARD
+          BLOCK CONTAINS 0 RECORDS
+          DATA RECORD IS REG-AGUS.
+          COPY COPY1234.
+      01 WSV-VARIABLE  PIC X(10) VALUE SPACES. ,*> WORKING STORAGE
+      01 WSC-CONSTANTE PIC 9(01) VALUE 1.      ,*> Constantes, no hay.
+      01 WSV-PERSONA.                          ,*> Campos compuestos
+          05 WSV-NOMBRE PIC X(10). ,*> todos tienen que tener el mismo nivel
+          05 WSV-EDAD   PIC 9(02).
+      01 WSS-TIPO-TARJETA PIC X(02). ,*> Flags o Switches (88)...enums?
+          88 DEBITO  VALUE 'DB'.
+          88 CREDITO VALUE 'CR'.
+     #+end_src
+** PROCEDURE      DIVISION
+    #+begin_src cobol
+      PROCEDURE DIVISION.
+      000000-CONTROL.
+          PERFORM 1000000-INICIO
+          PERFORM 200000-PROCESO UNTIL WSS-TIMPUES-EOF
+          PERFORM 3000000-FINAL.
+    #+end_src
+** PERFORM - llama a otros parrafos.
+   PERFORM 1000-ABRIR-ARCHIVOS
+   PERFORM 1000-ABRIR-ARCHIVOS UNTIL condicion
+   PERFORM 1000-ABRIR-ARCHIVOS
+       VARYING contador
+       FROM 1
+       BY 1
+       UNTIL contador = 10
+** DISPLAY - imprime a la pantalla
+   DISPLAY 'una cadena'
+   DISPLAY VALOR-A
+** MOVE VALOR-A TO VALOR-B
+  overrides value, is not a pointer
+** Condicionales - IF and EVALUATE (aka switch)
+- You can also use EVALUATE, as a shorter way to write if/elseif/else
+  by putting a "EVALUATE TRUE"
+| op    | op variation | example       |
+|-------+--------------+---------------|
+| =     | EQUAL        | A = B         |
+| NOT = | NOT EQUAL    | A NOT EQUAL B |
+| >     | GREATER      | A > B         |
+| <     | LESS         | A < B         |
+| NOT > | NOT GREATER  | A NOT > B     |
+| NOT < | NOT LESS     | NOT < B       |
+|-------+--------------+---------------|
+    #+begin_src cobol
+      IF condicion THEN
+             PERFORM instruccionA
+      ELSE
+             PERFORM instruccionB
+      END-IF.
+
+      EVALUATE variableA
+             WHEN valorA
+                 PERFORM instruccionA
+             WHEN valorB
+                 PERFORM instruccionB
+             WHEN OTHER ,*> optional fallthrough case
+                 PERFORM intruccionC
+      END-EVALUATE
+     #+end_src
+** Operadores Aritmeticos
+| ADD      | valorA TO valorB                  |
+| SUBTRACT | valorA FROM valorB                |
+| DIVIDE   | valorA BY 2 GIVING saveTovalorC   |
+| MULTIPLY | 2 BY valorA GIVING saveToValorC   |
+| COMPUTE  | valorA = valorB * valorC / valorD |
+** 28:06 - Hello World
+#+begin_src cobol
+  IDENTIFICATION DIVISION.
+  PROGRAM-ID. HELLO-WORLD.
+  PROCEDURE DIVISION.
+  DISPLAY 'Hello World!'.
+  STOP RUN.
+#+end_src
+** Ejercicio 1
+#+begin_src cobol
+  IDENTIFICATION DIVISION.
+  PROGRAM-ID. EJERCICIO1.
+
+  DATA DIVISION.
+  WORKING-STORAGE SECTION.
+
+      01 WSC-CONSTANTES.
+          05 WSC-EDAD-MINIMA   PIC 99 VALUE 18
+          05 WSC-ESTADO-SECUND PIC X  VALUE 'T'
+          05 WSC-ESTADO-CARRERA-OK.
+              10 WSC-TERMINADO PIC X VALUE 'T'.
+              10 WSC-ENCURSO   PIC X VALUE 'C'.
+
+      01 WSV-VARIABLES.
+          05 WS-POSTULANTES.
+              10 WSV-POSTU1.
+                  15 WSV-NOBRE1      PIC X(5) VALUE 'PEDRO'.
+                  15 WSV-EDAD1       PIC 99   VALUE 15.
+                  15 WSV-SECUNDARIO1 PIC X    VALUE 'N'.
+                  15 WSV-CARRERA1    PIC X    VALUE 'N'.
+              10 WSV-POSTU2.
+                  15 WSV-NOMBRE2     PIC X(5) VALUE 'SOFIA'.
+                  15 WSV-EDAD2       PIC 99   VALUE 25.
+                  15 WSV-SECUNDARIO2 PIC X    VALUE 'T'.
+                  15 WSV-CARRERA2    PIC X    VALUE 'T'.
+              10 WSV-POSTU3.
+                  15 WSV-NOMBRE3     PIC X(5) VALUE 'LALA'.
+                  15 WSV-EDAD3       PIC 99   VALUE 19.
+                  15 WSV-SECUNDARIO3 PIC X    VALUE 'T'.
+                  15 WSV-CARRERA3    PIC X    VALUE 'N'.
+          ,*> our code
+          05 WSV-POSTU-AUX.
+              10 WSV-NOMBRE-AUX     PIC X(5).
+              10 WSV-EDAD-AUX       PIC 99.
+              10 WSV-SECUNDARIO-AUX PIC X.
+              10 WSV-CARRERA-AUX    PIC X.
+  PROCEDURE DIVISION.
+
+  00-CONTROL.
+      DISPLAY 'COBOLEROS 2021 - NERDEARLA BBVA'
+      DISPLAY '----------------------------------------'
+      MOVE WSV-POSTUI1 TO WSV-POSTULANTE-AUX.
+      PERFORM 20-EVALUAR.
+      MOVE WSV-POSTUI2 TO WSV-POSTULANTE-AUX.
+      PERFORM 20-EVALUAR.
+      MOVE WSV-POSTUI3 TO WSV-POSTULANTE-AUX.
+      PERFORM 20-EVALUAR.
+
+  STOP RUN.
+  00-CONTROL-END.
+  EXIT.
+
+  20-EVALUAR.
+      IF (WSV-EDAD-AUX >= WSC-EDAD-MINIMA AND
+          WSV-SEC-AUX EQUAL WSC-ESTADO-SECUND AND
+          (WSV-CARREARA-AUX EQUAL WSC-TERMINADO
+           OR WSV-CARERA-AUX EQUAL WSC-ENCURSO))
+             DISPLAY WSV-NOMBRE-AUX ' CUMPLE CON TODOS LOS REQUISITOS '
+      ELSE
+             DISPLAY WSV-NOMBRE-AUX ' NO CUMPLE CON LOS REQUISITOS '
+      END-IF.
+      INITIALIZE WSV-POSTULANTE-AUX. ,*> fill with 0's or spaces
+  20-EVALUAR-END.
+#+end_src
+** Ejercicio 2
+#+begin_src cobol
+         
+#+end_src
+* 21 Nerdearla | Porque COBOL
+https://www.youtube.com/watch?v=V9A8u_0zBMI
+  - Trabajo
+    - IT Patagonia: cursos trabajo 300k https://it2030.com.ar/programas/cobol/
+    - SMS consultora: cursos
+  - 1959 creado
+  - Diego Alarcon (tech lead parte de tarjetas) y Juan Muhlmann
+  - BBVA Banco Frances
+    - "Al usar metodologias agiles, trabajan codo a codo con la parte de negocio"
+  - "MOVE A TO B"
+* 21 Platzi    | Qué es COBOL y por qué debes aprenderlo en 2022
+https://www.youtube.com/watch?v=hPlK0IA0Lew
+  - tipado estatico
+  - tipado exacto (? con la cantidad de decimales pre-fijada
+  - awk like string concatenation (aka just space)
+  - no soporta recursion
+  - mucho del codigo COBOL se re-escribio en Y2K
+  - puede generar TUI
+** Example: hello world
+    #+begin_src cobol
+      IDENTIFICATION DIVISION.
+      PROGRAM-ID HELLO-WORLD.
+      PROCEDURE DIVISION.
+          DISPLAY 'Hello World!'.
+          STOP RUN.
+   #+end_src
+** Example: declaring variables on "data division"
+    #+begin_src cobol
+      DATA DIVISION.
+        WORKING-STORAGE SECTION.
+        ,*> variable has 3 integer digits, and 2 decimals
+        ,*> S     for signed number (?
+        ,*> 9     for integer (?
+        ,*> A     for alphanumeric
+        ,*> PIC   for picture
+        FIRST-VAR  PIC S9(3)V9(2).
+        SECOND-VAR PIC S9(3)V9(2) VALUE -123.45.
+        THIRD-VAR  PIC A(6)       VALUE 'ABCDEF'.
+        FOURTH-VAR PIC X(5)       VALUE 'A121$'.
+        GROUP-VAR.
+                 SUBVAR-1 PIC 9(3)  VALUE 337.
+                 SUBVAR-2 PIC X(15) VALUE 'LALALALA'.
+                 SUBVAR-3 PIC X(15) VALUE 'LALALA'.
+                 SUBVAR-4 PIC X(15) VALUE 'LALALA'.
+    #+end_src
+** Example: print variables
+    #+begin_src cobol
+      PROCEDURE DIVISION.
+          DISPLAY "1ST VAR:"FIRST-VAR
+          DISPLAY "2ND VAR:"SECOND-VAR
+          DISPLAY "3RD VAR:"THIRD-VAR
+          DISPLAY "4TH VAR:"FOURTH-VAR
+          DISPLAY "GROUP VAR"GROUP-VAR
+          STOP RUN.
+    #+end_src
+** Example: Conditionals
+    #+begin_src cobol
+      IF NUM1 IS LESS THAN NUM2 AND NUM1 IS LESS THAN 100 THEN
+             DISPLAY 'COMBINED CONDITION'
+      ELSE
+             DISPLAY 'NAN'
+      END-IF
+
+      IF NEG-NUM IS POSITIVE OR NEG-NUM IS NEGATIVE THEN
+             DISPLAY 'A NUMBER IS POSITIVE????????'.
+    #+end_src
+** Example: Loops
+      #+begin_src cobol
+        PROCEDURE DIVISION.
+               ,*> run it 3 times
+               PERFORM B-PARA-TIMES 3 TIMES.
+               PERFORM B-PARA-UNTIL WITH TEST AFTER UNTIL WS-CNT>3.
+               ,*> run thru paragram c to e
+               PERFORM C-PARA-THRU THRU E-PARA-THRU.
+               PERFORM B-PARA-ARRAY VARYING WS-A FROM 1 BY 1 UNTIL WS-A=5.
+               DISPLAY 'WS-A after varying'WS-A.
+               STOP RUN.
+
+        B-PARA-TIMES.
+                   DISPLAY 'IN B-PARA-TIMES'.
+
+        B-PARA-UNTIL.
+                   DISPLAY 'WS-CNT: 'WS-CNT
+                   ADD 1 TO WS_CNT.
+      #+end_src

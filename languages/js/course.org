@@ -1,0 +1,83 @@
+* 2022 | A Tour of JavaScript & React Patterns - Lydia Hall
+** 2. JavaScript Patterns
+*** Module Pattern (+encapsulation, +reusability)
+  - Introduced in ES2015
+  - you can *export function* and *import { fName } from "./input.js"*
+  - or on node.js's
+    1) package.json with *type:module*
+    2) or using a .mjs file
+    #+begin_src json
+      {
+        "name": "node-starter",
+        "version": "0.0.0",
+        "type": "module",
+        "scripts": {
+          "test" "echo \"Error: no test specified\" && exit 1"
+        }
+      }
+    #+end_src
+  - or on html
+    1) adding the "type=module" which encapsulates everything
+    2) without it, it will use the default implicit global
+    #+begin_src html
+      <html>
+        <head>
+          <script src="./math.js" type="module"></script>
+          <script src="./index.js"></script>
+        </head>
+      </html>
+    #+end_src
+*** Singleton Pattern
+- +Better memory usage
+  -modules ES2016 are already singletons
+  -dependency hiding
+- A single instance that can be shared through the entire application.
+- Should NOT be modyfiable (in the sense it will always be THAT instance of the class)
+  - no new properties or change them
+- using classes
+  #+begin_src javascript
+    let instance;
+    class Counter {
+      constructor() {
+        if (instance) {
+          throw new Error("You can only create one instance!");
+        }
+        this.counter = counter;
+        instance = this;
+      }
+      getCount() {
+        return this.counter;
+      }
+      increment() {
+        return ++this.counter;
+      }
+      decrement() {
+        return --this.counter;
+      }
+    }
+    const singletonCounter = Objeect.freeze(new Counter());
+    export default singletonCounter();
+  #+end_src
+- using objects
+  #+begin_src javascript
+    let counter = 0;
+    const countereObject = {
+      getCount: () => counter,
+      increment: () => ++counter,
+      decrement: () => --counter,
+    }
+    const singletonCounter = Object.freeze(counterObject);
+    export default singletonCounter;
+
+    // OR even more briefly, export directly
+    let counter = 0;
+    export default Object.freeze({
+      getCount: () => counter,
+      increment: () => ++counter,
+      decrement: () => --counter,
+    })
+  #+end_src
+** 3. React Patterns
+** 4. Performance Patterns
+** 5. Rendering Patterns
+** 6. Wrapping Up

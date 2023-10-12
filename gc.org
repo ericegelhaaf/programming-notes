@@ -1,0 +1,5 @@
+- https://en.wikipedia.org/wiki/Region-based_memory_management
+- SBCL https://github.com/sbcl/sbcl/blob/master/doc/internals-notes/arena-allocation.txt
+- 2018
+  An amusing story about a practical use of the null garbage collector
+  https://devblogs.microsoft.com/oldnewthing/20180228-00/?p=98125
