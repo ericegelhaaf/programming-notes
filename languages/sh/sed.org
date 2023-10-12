@@ -7,6 +7,12 @@
 - https://web.archive.org/web/20230322091010/https://www.grymoire.com/Unix/Sed.html
 - https://tldp.org/LDP/abs/html/x23170.html
 - https://catonmat.net/proof-that-sed-is-turing-complete
+- article https://fideo.info/wiki.lua/blog/sed-circuit-simulator
+  - https://news.ycombinator.com/item?id=30660203
+- article https://github.com/adrianlarion/useful-sed
+  - https://news.ycombinator.com/item?id=29196221
+- code: bach prelude https://github.com/laserbat/bach.sed https://clyp.it/dqgahq1x
+- code: tetris https://github.com/uuner/sedtris
 * TODO Video: AoC 2021 Day 18 using Sed [Binary tree math]
   https://www.youtube.com/watch?v=cbpNdzKLg4c
   - Sed provides *conditional branches* in a single string register called the "holdspace"
@@ -40,6 +46,14 @@
 - Types of Regular expressions
 | BRE | Basic Regular Expresions     |
 | ERE | Enhanced Regular Expressions |
+* Book: sed & awk
+** 4
+- How sed works
+  1) All editing commands in a script, are applied in order to each line of input.
+  2) Commands are applied to all lines (globally),
+     unless ~line addressing~ restricts the lines affected by editing commands
+  3) The original input file is unchanged;
+     the editing commands modify a copy of original input line and the copy is sent to STDOUT
 * Snippets
 ** remove before (#)
   sed -i -n '/#/,$p' file.txt

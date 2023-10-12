@@ -1,3 +1,16 @@
+- 04 | 10 Things I Hate About Tcl
+  http://tleaves.com/2004/10/20/10-things-i-hate-about-tcl/
+- 94 | Why you should not use Tcl | Richard Stallman
+  https://vanderburg.org/old_pages/Tcl/war/0000.html
+  https://vanderburg.org/old_pages/Tcl/war/0021.html
+  https://web.archive.org/web/20040318215452/http://www.python.org/search/hypermail/python-1994q3/0612.html
+- https://www.magicsplat.com/articles/basic_math.html
+- https://www.magicsplat.com/articles/statistics.html
+- https://www.magicsplat.com/articles/queueing.html
+- https://www.magicsplat.com/articles/oo.html
+- https://www.magicsplat.com/articles/tdbc.html
+- 2020 | Building Tcl 8.6 single file applications - a step-by-step guide
+  https://www.magicsplat.com/blog/starpack-example/
 - https://wiki.tcl-lang.org/page/Articles
 - Style https://wiki.tcl-lang.org/page/Tcl+Style+Guide
 - Style https://wiki.tcl-lang.org/page/Best+Practices
@@ -213,6 +226,186 @@ http://antirez.com/articoli/tclmisunderstood.html
     lrange $mylist 1 end-1
   #+end_src
 
+* 19 | Linux Magazine #7
+- Substitutions
+  1) Variable ($)
+  2) Command ([])
+  3) Backslash (\)
+- All substitutions work inside ("")
+- Curly braces that start a block MUST be on the same line as the previous part of the statement
+  #+begin_src tcl
+    # WRONG
+    if { x > 10 }
+    {
+    }
+    else { ;# also WRONG as it would consider else as a separate command
+    }
+  #+end_src
+- Curly braces are a bit like Python's triple quotes
+- WORD can be most any sequence of characters without spaces
+- The first WORD on a line is the COMMAND, and the word that follow are the arguments
+- "IF statement" vs "IF command", difference become apparent when I write "macros".
+  #+begin_src tcl
+    if {[clock format [clock scan $date] -format %A] == "Monday" } {
+        puts "It's Monday"
+    }
+    proc if_monday {date block} {
+        set day [uplevel clock format \[ clock scan $data \] -format "\{%a\}" ]
+        if { $ day == "Monday" } {
+            uplevel $block ;# instead of "eval $block"
+        }
+    }
+    if_monday { $date } {
+        puts "It's Monday"
+    }
+  #+end_src
+- Other examples of if, arguments just need to be something that tcl considers to be a WORD
+  But this ones, will evaluate due not being inside {}
+  #+begin_src tcl
+    if 1 start else stop
+    if [expr 1 == 0] start else stop
+  #+end_src
+- switch is a control command with options
+  #+begin_src tcl
+    set var def
+    switch -glob $var {
+        abs { puts "won't match this one" }
+        d*f { puts "should match this one" }
+    }
+  #+end_src
+- Once a TCL variable expands, it does NOT do any further interpretation of the resulting value. Unlike (ba)sh
+  #+begin_src tcl
+    proc one_arg_func {arg} {
+        puts $arg
+    }
+    set a "1 2"
+    one_arg_func $a ;# prints "1 2"
+  #+end_src
+** Example: Read and write files
+  #+begin_src tcl
+    # READ
+    set fd    [open "infile.txt" "r"]
+    set fdata [read $fd]
+    close $fd
+    # WRITE
+    set fd [open "outfile.txt" "w"]
+    puts -nonewline $fd $fdata
+    close $fd
+  #+end_src
+** Example: Working with strings
+#+begin_src tcl
+  set len [string length $str]
+  set upper [string toupper $str]
+  set lower [string tolower $str]
+  set trimmed [string trim $str]
+
+  # Values in the 1st column are changes to values in the 2nd column
+  set chgs {
+      abc def
+      ghi jkl
+  }
+  set newstr [string map $chgs $oldstr]
+#+end_src
+** Example: Working with regular expresssions
+#+begin_src tcl
+  set text {
+      My name is Bob
+      Hello Bob
+      My name is Mary
+      Hello Mary
+  }
+  # Find all names found in the phrases
+  set matches [regexp -nocase -all -inline {my\s+name\s+is\s+(\w+)} $text]
+  foreach {match submatch} $matches {
+      puts "Name: $submatch" ;# OUTPUT: Name: Bob\nName: Mary
+  }
+  # Change
+  set newstr [regsub -nocase -all {my\s+name\s+is\s+(\w+)} $text {Your name is \1}]
+  puts $newstr
+#+end_src
+** Example: Working with lists
+#+begin_src tcl
+  set alist { 1 2 3 }
+  set one [lindex $alist 0]
+  lappend alist 0          ;# alist = { 1 2 3 0 }
+  set slist [lsort $alist] ;# slist = { 0 1 2 3 }
+#+end_src
+** Example: Execute external commands
+#+begin_src tcl
+  set result [exec grep string file.txt]
+
+  if {[catch {exec grep string file.txt} results options]} {
+      puts "Error execution grep"
+  } else {
+      puts "Grep executed ok: $results"
+  }
+#+end_src
+** TK
+- latest version on 2007, has themable widgets
+- the top-level window/widget is named "." and childs ".childA"
+- *-variable VAR* when selected it sets the variable to the
+  *-value VAL* given
+- Using TK, either
+  1) #!/usr/bin/wish
+  2) package require Tk
+*** Example
+#+begin_src tcl
+  set yesno -1
+
+  wm title . "Which do you like?"
+  wm geometry . 300x90
+
+  radiobutton .rb1 -variable yesno -value 1 -text "I like yes"
+  radiobutton .rb2 -variable yesno -value 0 -text "I like no"
+  button .ok -text "Ok" -command { puts $yesno; exit }
+
+  grid .rb1 -sticky nw ;# -sticky for alignment, nw = north west
+  grid .rb2 -sticky nw
+  grid .ok
+#+end_src
+** TclKit http://tclkits.rkeene.org/fossil/wiki/Downloads
+  - "batteries included" tcl distribution
+  - distributed in a single file
+  - can distribute custom scripts too as a single binary file (?
+*** Example: Hello world
+#+begin_src sh
+  $ ls
+  sdx.kit test.tcl
+  $ cat test.tcl
+  puts "Hello Tcl"
+  $ tclkitsh sdx.kit qwrap test.tcl
+  $ ls
+  sdx.kit test.tcl test.kit
+  $ tclkitsh test.kit
+  $ tclkitsh sdx.kit unwrap test.kit
+  $ ls
+  sdx.kit test.tcl test.kit test.vfs/
+  $ cp ~/bin/tclkitsh tclkitsh-runtime
+  $ tclkitsh sdx.kit wrap test -runtime tclkitsh-runtime
+  $ ./test
+#+end_src
+*** Example: ?
+$ tclkitsh sdx.kit wrap test -runtime tclkitsh-runtime
+$ ./test
+
+#+NAME: test.vfs/lib/app-test/test.tcl
+#+begin_src tcl
+  package provide app-test 1.0
+  package require starkit
+
+  puts "Hello Tcl"
+
+  set fname [file join $starkit::topdir payload.txt]
+  set fd    [open $fname]
+  set fdata [read $fd]
+
+  puts "Contents of $fname:"
+  puts $fdata
+#+end_src
+#+NAME: test.vfs/payload.txt
+#+begin_src
+  Hello Tcl from CFS
+#+end_src
 * 20 | Why I'm TCL-ish
 https://colin-macleod.blogspot.com/2020/10/why-im-tcl-ish.html
 https://news.ycombinator.com/item?id=24897326
@@ -222,3 +415,29 @@ https://news.ycombinator.com/item?id=24897326
 - In contrast TCL
   - only syntactic rule are those which define how to invoke a generic command and pass data to/from it
   - Core has no syntax for arithmetic expressions, this is delegated to *expr*
+
+* TCL Everythin Is a String
+https://wiki.tcl-lang.org/page/everything+is+a+string
+** HN Comments
+https://news.ycombinator.com/item?id=21377517
+- TCL has no "null" value
+- TCL has immutable *proc* arguments.
+  Arguments passed are not modified from the caller perspective.
+  Unless explicitly say so. With upvar/uplevel.
+- "Multivalue assigment"
+  #+begin_src tcl
+    foreach {resultpart1 resultpart2} [procedure arg1 arg2] break
+  #+end_src
+- lassign, returns the remainder of the list IF there more lists than the variables
+  #+begin_src tcl
+  set list [lassign $list foo bar baz]
+  #+end_src
+- Lists in modern Tcl (8.0+, with 8.0 released in 1997) are proper
+  O(1) indexed arrays.  Yes, you can still request from Tcl the
+  'string' representation of the O(1) indexed array, and the result
+  you get is the old (pre 8.0) "space-separate [sic] string with
+  quoting rules" variant that will parse back into the O(1) indexed
+  array later if you want.
+- Dicts are implemented using hash tables and thus slow on pass to
+  procedure that modify them. I had to switch to Python and then C
+  when I encountered quadratic runtime using dicts.

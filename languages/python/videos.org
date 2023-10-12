@@ -13,6 +13,211 @@
     - df.apply(raw=True)
     - df.swifter (runs over dask module)
     - @numba.jit(nopython=True) // when raw=True due it works with numpy not pandas code (atm)
+* 08 | David Baezley | Generator Tricks for Systems Programmers.
+new http://www.dabeaz.com/generators
+old http://www.dabeaz.com/generators2/
+source https://github.com/dabeaz/generators
+* 09 | David Baezley | Curious Course on Coroutines and Concurrency
+http://dabeaz.com/coroutines/index.html
+video https://www.youtube.com/watch?v=Z_OAlIhXziw
+tcl https://github.com/shawnw/curious-coroutines-in-tcl/
+python https://github.com/catcuts/coroutines
+* 14 | David Baezley | Generators: The Final Frontier
+https://www.youtube.com/watch?v=D1twn9kLmYg
+http://dabeaz.com/finalgenerator/
+- Generators feed for loops
+  #+begin_src python
+    def countdown(n):
+        while n > 0:
+            yield n
+            n -= 1
+
+    for x in countdown(10):
+        print('T-minus', x)
+  #+end_src
+- You can stack up generator functions, to do things like data processing
+- You can use *yield* to receive values (coroutine)
+  #+begin_src python
+    def spam():
+        while True:
+            item = yield
+            print("Got:", item)
+    s = spam()
+    next(s)
+    s.send('hello')
+    s.send(42)
+  #+end_src
+* 14 | David Baezley | Python 3 Metaprogramming
+https://www.youtube.com/watch?v=sPiWg5jSoZI
+- Metaprogramming is about manipulating code
+- Solves DRY
+** Previous Knowledge
+- Common examples
+  * decorators
+  * metaclasses (?)
+  * descriptors (?)
+- =keyword-only argument=, a python3 feature
+  #+begin_src python
+    def recv(maxsize, *, block=True):
+    def sum(*args, initial=0):
+    recv(8192, block=False) #OK
+    recv(8192, False)       #ERROR
+  #+end_src
+- Closures, a function that returns a function
+  Can also be considered a ~code generator~
+- =@classmethod= executed on the class
+  =@staticmethod= is basically a function put into a class
+- Special Methods
+  - def __getitem__(self, index)
+    def __setitem__(self, index, value)
+    def __delitem__(self, index)
+    def __contains__(self, index)
+- Python object system is layered heavily on top of dictionaries
+  #+begin_src python
+    class Spam:
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+        def foo(self):
+            pass
+  #+end_src
+  #+begin_src python
+    >>> s = Spam(2,3)
+    >>> s.__dict__
+    {'y': 3, 'x': 2}
+    >>> Spam.__dict__['foo']
+    <function Spam.foo at 0x10069fc20>
+  #+end_src
+** Decorators, about wrapping/rewriting things
+- A decorator is a function that creates a ~wrapper~ around another function
+- The ~wrapper~ is a new function that works exactly like the orignal function,
+  except that some kind of extra procesing is carried out.
+- ME: I guess on CL we have :around/:before/:after methods
+- "foo" -> <class 'string> -> <class 'type>
+*** Example: decorator
+- Problem: adding print() statatement while debugging
+- Solution: using =decorators=
+- debugly.py
+  - Decorators tend to lose a lot of information (eg name, help)
+  #+begin_src python
+    from functools import wraps # OPTIONAL: to not lose information
+    def debug(func):
+        @wraps(func) # OPTIONAL
+        def wrapper(*args, **kwargs):
+            print(func.__name__) # or __qualname__
+            return func(*args, **kwargs)
+        return wrapper
+  #+end_src
+- example.py
+  #+begin_src python
+    from debugly import debug
+    @debug
+    def add(x, y):
+        return x + y
+  #+end_src
+*** Example: decorator with args
+  #+begin_src python
+    def debug(prefix=''):
+        def decorate(func):
+            msg = prefix + func.__qualname__
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                print(msg)
+                return func(*args, **kwargs)
+            return wrapper
+        return decorate
+
+    # or with 1(one) less level
+    def debug(func=None, *, *prefix=''):
+        if func is None:
+            return partial(debug, prefix=prefix)
+        msg = prefix + func.__qualname__
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print(msg)
+            return func(*args, **kwargs)
+        return wrapper
+
+    @debug(prefix='***')
+    def add(x, y):
+        return x+y
+  #+end_src
+*** Example: decorator to debug all class methods
+- this does NOT work with @staticmethod and @classmethod
+#+begin_src python
+  def debugmethods(cls): # given a class
+      for name, val in vars(cls).items(): # class dictionary
+          if callable(val): # is a method?
+              setattr(cls, name, debug(val)) # rewrite it, wrap it
+      return cls
+
+  @debugmethods
+  class Spam:
+      def a(self):
+          pass
+      def b(self):
+          pass
+#+end_src
+*** Example: decorator to debug all class attributes accesses
+#+begin_src python
+  def debugattr(cls):
+      orig_getattrinute = cls.__getattribute__
+
+      def __getattribute__(self, name):
+          print('Get:', name)
+          return orig_getattribute(self, name)
+
+      cls.__getattribute__ = __getattribute__
+
+      return cls
+#+end_src
+*** How a class is created?
+1) The example class
+   #+begin_src python
+     class Spam(Base):
+         def __init__(self, name):
+             self.name = name
+         def bar(self):
+             print("I'm Spam.bar")
+   #+end_src
+2) The body is separated from the rest
+   #+begin_src python
+     body = '''
+         def __init__(self, name):
+             self.name = name
+         def bar(self):
+             print("I'm Spam.bar")
+     '''
+   #+end_src
+3) The class dictionary is created
+   #+begin_src python
+     clsdict = type.__prepare__('Spam', (Base,))
+   #+end_src
+4) The body is executed, clsdict gets populated
+   #+begin_src python
+     exec(body, globals(), clsdict)
+   #+end_src
+5) Throw it to the *type* class, to make a new type
+   #+begin_src python
+     Spam = type('Spam', (Base,), clsdict) # <class '__main__.Spam'>
+     s = Spam('Guido')
+     s.bar()
+   #+end_src
+** Metaclass, about hierarchies
+- You capture things before they are created
+*** Example: metaclass to debug all the classes
+- "type" is the default metaclass, we can provide a different one
+- metaclasses *propagate* down hierarchies, propagates to their children
+#+begin_src python
+  class debugmeta(type):
+      def __new__(cls, clsname, bases, clsdct):
+          clsobj = super().__new__(cls, clsname, bases, clsdict)
+          clsobj = debugmethods(clsobj) # adding a decorator
+          return clsobj
+
+  class Base(metaclass=debugmeta):
+  class Spam(Base):
+#+end_src
 * Anna Nicanorova: Optimizing Life Everyday Problems Solved with Linear Programing in Python
   https://www.youtube.com/watch?v=7yZ5xxdkTb8
   - Uses Pulp

@@ -3629,3 +3629,11 @@ pom.xml
          }
     }
   #+end_src
+* 23 | Learning Java
+** 10 File input and output
+- Most IO in java is based on streams.
+- Conceptually, a ~stream~ represents a flow of data
+  with a *writer* at one end
+  and a *reader* at the other.
+- Streams are oriented around bytes of characters.
+  Channels are oriented around buffers, containing those data types.

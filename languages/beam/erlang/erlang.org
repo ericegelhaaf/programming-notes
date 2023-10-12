@@ -16,9 +16,15 @@
 * Language
 https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
 ** Types
+- https://www.erlang.org/doc/reference_manual/typespec.html
+- https://www.erlang.org/doc/reference_manual/data_types.html
+- https://www.erlang.org/doc/reference_manual/records.html
+- https://www.erlang.org/doc/reference_manual/expressions.html
+- Supports type union with (|)
+  atom() | integer()
 - Destructuring can happen on the function parameter
   - f({athing,{A,B},N}=C) -> C
-- Primitive types
+*** Primitive types
 |-------------+-------------------------------|
 | spec        | create                        |
 |-------------+-------------------------------|
@@ -39,24 +45,21 @@ https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
 | 'foo'       | 'foo'                         |
 | nil or []   | []                            |
 |-------------+-------------------------------|
-- Compound types
-|---------------+-------------+----------------+----------------------------+--------------------------+-------------|
-| type          | creating    | p.matching     | accessing                  | updating                 | spec        |
-|---------------+-------------+----------------+----------------------------+--------------------------+-------------|
-| map #{TList}  | #{a => 1}   | #{a := Value}  | maps:get(K,M)              | maps:update(K,V,M)       | map()       |
-|               |             |                |                            | M#{key => 1}             |             |
-|               |             |                |                            | M#{key := 1}             |             |
-| list(TYPE)    | [1,2]       | [A,B!C]        | lists:nth(N,L)             |                          | list()      |
-| tuple(TList?) | {a,1}       | {A,B}          | erlang:element(K,T)        | erlang:setelement(K,V,T) | {T1,T2}     |
-| record        | #name{a=23} | #name{a=Value} | Rec#r1.field               | Rec#name{field = 23}     | #name{}     |
-|               |             |                | Record#r1.field1#r2.field2 |                          |             |
-|---------------+-------------+----------------+----------------------------+--------------------------+-------------|
-- Supports type union with (|)
-  atom() | integer()
-- https://www.erlang.org/doc/reference_manual/typespec.html
-- https://www.erlang.org/doc/reference_manual/data_types.html
-- https://www.erlang.org/doc/reference_manual/records.html
-- https://www.erlang.org/doc/reference_manual/expressions.html
+*** Compound types
+|---------------+-------------+----------------+----------------------------+--------------------------+---------|
+| type          | creating    | p.matching     | accessing                  | updating                 | spec    |
+|---------------+-------------+----------------+----------------------------+--------------------------+---------|
+| map #{TList}  | #{a => 1}   | #{a := Value}  | maps:get(K,M)              | maps:update(K,V,M)       | map()   |
+|               |             |                |                            | M#{key => 1}             |         |
+|               |             |                |                            | M#{key := 1}             |         |
+| list(TYPE)    | [1,2]       | [A,B¦C]        | lists:nth(N,L)             |                          | list()  |
+| tuple(TList?) | {a,1}       | {A,B}          | erlang:element(K,T)        | erlang:setelement(K,V,T) | {T1,T2} |
+| record        | #name{a=23} | #name{a=Value} | Rec#r1.field               | Rec#name{field = 23}     | #name{} |
+|               |             |                | Record#r1.field1#r2.field2 |                          |         |
+|---------------+-------------+----------------+----------------------------+--------------------------+---------|
+- List ops
+  | [1,2] ++ [1] | append lists | [1,2,1] |
+  | [1,2] -- [1] | remove       | [2]     |
 ** Standard Library (by Elixir)
 - https://elixir-lang.org/getting-started/erlang-libraries.html
   - binary
@@ -122,6 +125,26 @@ snmp
 ssh
 ssl
 tftp
+** io:format
+|----+-----------------------------------------------|
+| ~~ | literal ~                                     |
+| ~c | ASCII character code                          |
+| ~f | scientific notation                           |
+| ~g | float for small numbers, scientific for large |
+| ~s | string                                        |
+| ~w | standard Erlang syntax                        |
+| ~p | pretty-printed Erlang syntax                  |
+| ~W | same as ~w, but takes maximum depth argument  |
+| ~P | same as ~p, but takes maximum depth argument  |
+| ~B | formats integer to given base                 |
+| ~X | like ~B, but takes a prefix argument          |
+| ~# | like ~B, but uses #-separated Erlang prefix   |
+| ~b | like ~B, but prints lowercase                 |
+| ~x | like ~X, but prints lowercase                 |
+| ~+ | like ~#, but prints lowercase                 |
+| ~n | newline                                       |
+| ~i | ignores next term                             |
+|----+-----------------------------------------------|
 * Libraries
 - https://github.com/uhub/awesome-erlang (unsorted)
 |-------------+-----+----+-----------------------------------+-----------------------------------------|
@@ -157,6 +180,7 @@ tftp
 * rebar3
 - Docs https://rebar3.org/docs/
 - Dependencies https://hex.pm/
+- rebar_mix (for elixir in erlang) https://github.com/Supersonido/rebar_mix
 ** new
 rebar.config
 .gitignore

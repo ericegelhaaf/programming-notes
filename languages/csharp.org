@@ -1,3 +1,5 @@
+* Codebases
+- Discord Bot https://gitlab.com/Kwoth/nadekobot
 * Standard Library
 - https://en.wikipedia.org/wiki/Standard_Libraries_(CLI)
 - https://learn.microsoft.com/en-us/dotnet/standard/net-standard?WT.mc_id=dotnet-35129-website&tabs=net-standard-1-0

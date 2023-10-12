@@ -4,7 +4,52 @@
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
 - ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW
 - Fulcro – Part 1: Getting Started https://www.youtube.com/watch?v=wEjNWUMCX78
+* 12 | Rich Hickey | Clojure for Lisp Programmers
+** 1
+https://www.youtube.com/watch?v=cPNkH-7PRTk
+- JVM
+  - Typesystems in the VMS are very dynamic, enforced or created.
+    Though the languages are usually not.
+  - GC is platform, not language facility.
+- Functional
+  - Most "real programs" that people would pay for.
+    Are NOT functions.
+  - A compiler is a big function.
+    Theorem provers are a function.
+- OO
+  - Common Lisp proved that methods outside a class are more flexible
+  - Polymorphism shouldn't be (only) based on types (me: interfaces?)
+- Clojure
+  - dynamically compiled to JVM bytecode
+  - case sensitive
+  - symbols they are NOT places with values in them
+  - #"a*b" <-- regex literal
+  - in CL vectors and hashtables are "destructive", you change something and you trash it, you cant go back, unlike alists
+  - in Clojure vectors and hashtable are NOT "destructive"
+- Standard Lisps define too many fundamental things in terms of concrete types
+  - Limits generability
+  - Limits extensibility
+  - Generic functions are the abstraction in CL, but weren't used a lot in the STDLIB
+* TODO 13 | Rich Hickey | clojure.async
+- Problems
+  1) Function chains make poor machines
+  2) Real-world concurrency is exposed via api's
+- Premise
+  - "Good programs should be made of processes and queues"
+  - There comes a time in all good programs
+    when components or subsystems must stop communicating
+    directly with one another.
+- Why?
+  - Java Util Concurrent Queue
+    - The only way to coordinate is via thread control, aka blocking
+    - A problem is the thread overhead of the stack size
+  - Javascript
+    - No threads (and no queues) in JS
+  - Observables/Rx only mitigate certain cases
+- 11:00 TODO
 * Channel
+- Clojure TV https://www.youtube.com/@ClojureTV
+- Clojure/North https://www.youtube.com/@clojurenorth4011
 - London Clojurians https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw
 - on the code again https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig
 - Sci Cloj https://www.youtube.com/c/SciCloj/videos

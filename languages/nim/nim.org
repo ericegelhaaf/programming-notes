@@ -5,24 +5,24 @@
 - exercises https://github.com/sergiotapia/nimlings
 * Language
 ** Types
-| name       | type              | instance                           |
-|------------+-------------------+------------------------------------|
-| array      | array[N,T]        | ["foo","bar"]                      |
-| bitset     | bitset[T]         | {'a'..'b'}                         |
-| channel    | Channel[T]        |                                    |
-| enums      |                   |                                    |
-| hashset    | HashSet[T]        | toSet([])                          |
-| orderedset | OrderedSet[]      |                                    |
-| object     |                   | Name(a: "foo")                     |
-| ref object |                   | Name(a: "foo")                     |
-| seq(uence) | seq[T]            | @[], newSeq[char](10)              |
-| set        | set[T]            | {1,2,3}                            |
-| tables     |                   | initTable[T,T]() toTable[T,T]({})  |
-|            |                   | initCountTable[T] toCountTable({}) |
-|            |                   | toOrderedTable({})                 |
-| thread     | Thread[T]         | createThread(thread, fn, arg)      |
-| tuple      | tuple[a: T, b: T] | (a: 1, b: 2)                       |
-|------------+-------------------+------------------------------------|
+| name       | instance                           | type                             |
+|------------+------------------------------------+----------------------------------|
+| array      | ["foo","bar"]                      | array[N,T]                       |
+| bitset     | {'a'..'b'}                         | bitset[T]                        |
+| channel    |                                    | Channel[T]                       |
+| enums      | Colors.Red                         | type Colors = enum Red = 0xFF000 |
+| hashset    | toSet([])                          | HashSet[T]                       |
+| orderedset |                                    | OrderedSet[]                     |
+| object     | Name(a: "foo")                     |                                  |
+| ref object | Name(a: "foo")                     |                                  |
+| seq(uence) | @[], newSeq[char](10)              | seq[T]                           |
+| set        | {1,2,3}                            | set[T]                           |
+| tables     | initTable[T,T]() toTable[T,T]({})  |                                  |
+|            | initCountTable[T] toCountTable({}) |                                  |
+|            | toOrderedTable({})                 |                                  |
+| thread     | createThread(thread, fn, arg)      | Thread[T]                        |
+| tuple      | (a: 1, b: 2)                       | tuple[a: T, b: T]                |
+|------------+------------------------------------+----------------------------------|
 ** std(lib) modules
 - https://nim-lang.org/docs/lib.html
 *** Pure Libraries
@@ -283,6 +283,7 @@
 | {. pure .}         | enum   | requires all ambiguos references to be qualified |
 |--------------------+--------+--------------------------------------------------|
 * Codebases
+- https://github.com/greencardamom/awk
 - https://github.com/treeform/shady
 - some random paint https://github.com/mrgaturus/npainter
 - zoom for linux by tsoding https://github.com/tsoding/boomer

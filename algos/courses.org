@@ -380,35 +380,35 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   | Full Tree     | every node in the tree has either, no children or k-children nodes                                |
   | Perfect Tree  | all leaf have the same depth                                                                      |
 * 21 | Become Algorithms Expert          | AlgoExpert
-** 02 Easy
-*** 01 Two Number Sum
+** Easy
+*** 01 | ?     | Two Number Sum
 - Problem:
   - you are given:
     1) an array of numbers
     2) a number that is the /target sum/
   - you must find 2 numbers on the array that sum the given number 2)
-**** *O(n^2)*     time O(1) space - 2 "for" loops
-**** *O(n)*       time O(n) space - hash table (ME: could be a set)
+**** O(n^2)     time O(1) space - 2 "for" loops
+**** O(n)       time O(n) space - hash table (ME: could be a set)
 - we iterate "for" each number
   - ask the hashtable if the number we need to reach 10 is in it
-  - if it is, return both
-  - if it is NOT, add current number to the hashtable, and keep iterating
-    - key number
-    - value "true"
-**** *O(n log n)* time O(1) space - sorting first
+    1) if it is, return both
+    2) if it is NOT, add current number to the hashtable, and keep iterating
+       - key number
+       - value "true"
+**** O(n log n) time O(1) space - sorting first
 - O(n log n) + O(n) = O(n log n)
-- We assume "n log n" from a merge or heap sort
+- We assume "n log n" from a *merge or heap sort*
 - Can be applied in "Three num sum" problem
 - We have 2 pointers
-  - one on the *left* side of the array
+  - one on the *left*  side of the array
   - one on the *right* side of the array
 - We sum them, compare it to our /target number/
   - if <
-    - moving *right* would give a even smaller number
+    - since moving *right* would give a even smaller number
     - we move *left* pointer to the right
   - if >
-    - we move the *right* pointer
-*** 02 Validate Subsequence
+    - we move the *right* pointer (to the left?)
+*** 02 | n     | Validate Subsequence
 - *Subsequence*: is a sequence that can be derived from other sequence,
   by deleting some or other element, without changing the order of the elements.
 - *Problem*:
@@ -417,15 +417,22 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   - Return validity (true/false)
 - *O(n)* A solution could be iterate over each element on the subsequence candidate
   - On each, and iterate over the sequence, starting from the last known
-*** 03 Find Closest Value in BST
+*** 03 | log n | BST - Find Closest Value
 - Problem:
   - you have to find the closest value in the BST to the given value
   - you are given
     1) a BST
     2) target integer value
-- Operations used insertion/searching/removal
-- Solution: *O(log n)*
+- Operations used: insertion/searching/removal
+- Solution:
+  O(log n) time avg, worst O(n)
+  recursively without TCO, O(d) space avg, where d=depth, O(n) worst
+  iteratively O(1) space
   - variable to keep track of the /current closest value/ on the BST (initial value to infinity or root value or null value)
+    - intialized to either:
+      * infinity
+      * null
+      * root node value
   - we start at the root node
     - compute the *abs(sub(thisnodevalue, target))*
       - compare it with *abs(sub(current, target))*
@@ -434,7 +441,7 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
       - pick a branch based on it
       - if == 0, we just return it
     - until we reach the end of tree
-*** 04 Branch Sums (BST)
+*** 04 | n     | BST - Branch Sums
 - Problem:
   - takes a root node of a /binary tree/
   - returns a list of the branches sum
@@ -456,10 +463,11 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
       - 6
       - 7
   - OUTPUT: [15,16,18,10,11]
-*** 05 Node Depths
+*** 05 | n ?   | BST - Node Depths
 - Problem:
   - You are given a BT
-  - Find the depth of evey node, and sum all depths, and return that value
+  - Find the depth of evey node
+  - sum all depths, and return that value
     - depth = distance node to the root node (not the height)
 - Example: result 16
   - 1
@@ -478,12 +486,554 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
   l = left child node
   r = right child node
 - Solution: iterative
-*** 15 Palindrome Check
-- 4 different ways to solve it
-  1) reverse and compare:
-     - O(n^2) due how strings are created, on each reverse iteration
-     - O(n) by using a list
-  2) compare two indices, start and end index:
+*** 06 | n     | DFS - Depth-first Search
+- O(V+E) time
+  O(V) space - storing an array of V length, and worst call-stack case is O(V)
+- What?
+  A tree (not binary tree) like DS, with a name on each node.
+  Traverse it with DFS, put the node names in an array.
+- How?
+  Recursively.
+  Start from the root node.
+  Whether we are at a node, we add it to the final array.
+  And then for every child we call DFS()
+#+begin_src python
+  class Node:
+    def __init__(self, name):
+        self.children = []
+        self.name = name
+
+    def addChild(self, name):
+      self.children.appen(Node(name))
+
+    def depthFirstSearch(self, array):
+      array.append(self.name)
+      for child in self.children:
+        child.depthFirstSearch(array)
+      return array
+#+end_src
+*** TODO 07 ?     | (Double) Linked List Construction
+- Data Structure that consists of nodes
+**** Linked Lists
+- Consists of:
+  1) Value
+  2) Next
+**** Double Linked Lists
+- Consists of:
+  1) Value
+  2) Previous
+  3) Next
+  4) conceptually there is also a *head* and a *tail*
+     head being the first node
+     tail being the last node
+- Coding starts at 35:00
+- Methods
+  1) search(VALUE) -> NODE or FALSE?
+     O(n) T | O(1) S
+  2) remove(NODE)  -> void
+     special consideration if it is the head/tail
+     O(1) T | O(1) S
+  3) removeAll(VALUE)
+     uses search(), keep a tmp of foundnode.next to keep going
+     O(n) T | O(1) S
+  4) insertBefore(NODE, OLD_NODE)
+     - check if on a 1 node linked list,
+       we are trying to insert that same 1 node
+     - check if already on the list (remove it)n
+  5) insertAfter(NODE, OLD_NODE)
+     O(1) T | O(1) S
+  6) setHead(NODE), consider null, otherwise insertBefore()
+     O(1) T | O(1) S
+  7) setTail(NODE), consider null, otherwise insertAfter()
+     O(1) T | O(1) S
+  8) insertAt(NODE, POSITION)
+     - if position is 0 setHead()
+     - if pointing node insertBefore()
+     - or setTail() if over
+*** 08 | n     | Nth Fibonacci
+What? Return the nth fibonacci number
+How?
+1) recursive (naive)
+   O(2^n) time
+   O(n) space - we have to keep an nth depth stack
+  #+begin_src python
+    def fib(n):
+        if n == 2:
+            return 1
+        elif n == 1:
+            return 0
+        else:
+            return fib(n-1) + fib(n-2)
+  #+end_src
+2) recursive, with hash table cache
+   O(n) time
+   O(n) space
+   #+begin_src python
+     def fib(n, memoize = {1: 0, 2: 1}):
+        if n in memoize:
+            return memoize[n]
+        else:
+            memoize[n] = fib(n-1,memoize)+fib(n-2,memoize)
+            return memoize[n]
+   #+end_src
+3) iterative, using a 2 element array (?) which holds the last 2 fibo numbers
+   O(n) time
+   O(1) space
+   #+begin_src python
+     def fib(n):
+         lastTwo = [0,1]
+         counter = 3
+         while counter <= n:
+             nextFib = lastTwo[0] + lastTwo[1]
+             lastTwo[0] = lastTwo[1]
+             lastTwo[1] = nextFib
+             counter += 1
+         return lastTwo[1] if n > 1 else lastTwo[0]
+   #+end_src
+*** 09 | n     | Product Sum
+- Why? Classic *recursion* question
+- What?
+  - Given an array of integers OR arrays,
+  - Find the sum of all elements *times* the depth
+- In Python use "is" to check if it is a list
+  #+begin_src python
+    for el in array:
+        if type(el) is list:
+  #+end_src
+- O(d) space, d is the maximun callstack/aka the deepest array
+- O(n) time
+  - n is the total number of elements, plus each element on each sub arrays
+*** 10 | log n | Binary Search
+- O(log n) space - recursively
+  O(1)     space - iteratively
+- What?
+  Given a *sorted* array.
+  Find a value.
+- How?
+  Cut the pile in 2.
+  Pick the next pile based on the middle value.
+- In code:
+  You have a left pointer and a right pointer.
+  And calculate a middle pointer from them
+  M = L + R / 2
+*** 11 | n     | Find the 3(Three) Largest Numbers
+- What?
+  Given an unsorted array of integers.
+  Find the 3 largest numbers
+- How?
+  Keep track of the 3 largest elements as you go through the array.
+  On a 3 element array. From smaller to larger.
+  We compare the new element from larger to smaller element on the 3array.
+- We don't need to sort the whole array it
+- O(n) time
+  O(1) space
+*** 12 | n^2   | Insertion Sort #1
+- O(1)   space
+- Not the most performant.
+  But simple to understand/implement.
+- How?
+  - we ended up only comparing and swapping ~adjacent~ elements
+  - we divide the array in two parts
+    1) a sorted part
+       - we grow this part 1 on each iteration
+    2) a unsorted part
+  - We grab a number of the 2) part
+    and compare it against the 1) part.
+    - We want to "insert it" into 1)
+    - if the number on 1)
+      * is less, we swap
+      * if greter or equal we stop comparing that number
+*** 13 | n^2   | Bubble Sort    #3
+- O(1)   space
+- Of the "inplace sorting" family of sorting algos.
+- Intuitive, easy to understand and implement.
+- Still inferior to other sorting algorithms:
+  - Merge
+  - Quick
+  - Heap
+- How?
+  - We iterate over the array several times, from beginning to "top"
+    - comparing each value with the immediate next (aka ~adjacent~)
+    - performing a swap if needed
+    - always starting from 0(zero)
+    - at the end of a full iteration
+      - we reset the iteration, if we swapped anything
+      - we lower the "top", used on the iteration, by 1(one)
+*** 14 | n^2   | Selection Sort #2
+- Inplace
+- O(1) space
+- How?
+  - Separate the list into 2 lists a sorted and an unsorted
+    1) starts with the entire list being "unsorted"
+    2) we iterate over all of it to ~find~ the "smallest"
+    3) we ~append~ the smallest to the end of the "sorted list", swap!
+    4) back to 2), but now the sorted array is bigger by 1
+*** 15 | n     | Palindrome Check
+- What?
+  Determine if the given string is a palindrome or not.
+- How?
+  * ~reverse and compare~: by building the new string, appending (+=) a character at the time
+    - O(n^2) time
+    - O(n) space
+  * ~reverse and compare~: by building a new list appending chars, and at the end joining them
+    - O(n) time
+    - O(n) space
+  * ~recursion~: compare first and last, along with a call again with the rest/middle of the string
+    - O(n) time
+    - O(n) space, or O(1) if tail-call optimized
+  * ~iteratively~:
+    do not build a new substring
+    use pointers, start/end
+    compare them and move them
+    - O(n) time
+    - O(1) space
+*** 16 | n     | Caesar Cipher Encryptor
+Why? Tests your understanding of the *module* operator
+Who? Assumes non-empty string and lowercase
+What? Given a string AND the number of letters to shift
+- Solutions:  Iterate over each letter, fill an array, join the array
+  1) convert them to unicode (eg: ord() in python)
+     O(n) time
+     #+begin_src python
+       key = key % 26 # fixes edge case
+       nLC = ord(letter) + key
+       if nLC <= 122:
+           return chr(nLC)
+       else:
+           return chr(96+(nLC%122))
+     #+end_src
+  2) create an array with all letters on the alphabet
+     use the letters as the index
+     O(n) time
+     O(n) space
+     #+begin_src python
+       nlc = ord(letter) + key
+       if nlc <= 25:
+           return al[nlc]
+       else:
+           return al[-1 + nlc % 25]
+     #+end_src
+** Medium
+*** 01 | n^2     | Three Number Sum
+- What?
+  - From an *array* of unique integer values
+  - And a single integer value, the *target sum*
+  - Write a function that returns ALL possible triplets, that sum to the target sum
+- How?
+  * O(n^3) Linear,     3 for loops
+  * ?      Hash Table, 2 for loops
+  * O(n^2) time and O(n) space
+    - Sort, and using 2 loops, one for each number and other using a *left* and *right* pointer.
+      Moving them one side at the time.
+    - There are no early breaks, as we want to try to find all possible triplets.
+      When we find a triplet, we then move both pointers at the same time.
+*** 02 | n log n | Smallest Difference
+- What?
+  From 2 arrays of integers
+  Find the pair of numbers, one of each, with the smallest difference.
+  Aka find the 2 closest numbers from these arrays.
+- How?
+  - O(n^2) naive, generate all the pairs of numbers
+  - O(n log n + m log m) time, O(1) space
+    n = length of array A
+    m = length of array B
+    - sort both arrays
+    - iterate,
+      use a cursor/pointer for each array,
+      keep one static until we can't move any further then move it
+      no going back is allowed on the first one, since we know that they will be farther apart
+      - if equal return them
+      - if fst is less than snd
+        - update diff/pair to return
+        - increase fst OR decrease snd
+*** 03 | n       | Move Element To End (of an array)
+- NOTE: to self
+  I tend to nest 2 for-loops every time I have 2(two) things to keep track of.
+  This results in convoluted for() conditions and early exits hard to keep track.
+  Where in reality, what I need is 1(one) for/while loop.
+  Especially when we have special conditions to modify the variables, not at every iteration.
+- What?
+  - 2 inputs
+    * An array of elements/integers
+    * An element/integer of the array to move to the righ/end
+  - Find all instances of element on array and move them to the end of the array
+  - Has to be inplace
+  - We don't care about order of the other numbers
+- How?
+  1) O(n log n)
+     sort the array and count back from the end, instances of TARGET would be once next to each other
+  2) O(n)
+     use 2 pointers, one at the beginning and one at the end of the array
+*** 04 | n       | Monotonic Array
+- ME: I tend to try to mangle everything on an loop/nested loops
+  When I could instead break down the logic, into separate loops.
+  This could also help me see things in a functional way.
+- A function is monotomic, if it is entirely non-decreasing or non-increasing
+- What?
+  - Given an array of integers
+  - Determine if it is monotonic. If you read them from left to right.
+    - That is either, is decreasing or increasing (aka 2 conditions to check)
+    - Can have adjacent integers that equal to each other
+- How?
+  - O(n) time O(1) space
+    - Determining the direction (asc/desc) and then checking the rest of the array for that direction
+    - A bit verbose/complicated to track the directions.
+      In part due how you have to represent the "direction".
+      Either with an enum or integers.
+  - O(n) time O(1) space
+    - More clear
+    - Iterate once, and have 2 flags initialized with True
+      one for isIncreasing and other for isDecreasing
+      as we iterate we set the flags to false if needed
+      at the end we return OR of the flags
+*** TODO 05 |         | Spiral Traverse
+- Given
+  - a 2D array of integers, rectangular or square shaped
+- What?
+  - return a 1D array of al the values in *spiral order*
+  - SO: starts at the TOP-LEFT of the 2D array
+    and traverse to the RIGHT, DOWN, UP...
+- How?
+  - Keeping track of your direction
+  - Iteratively
+  - Recursively
+*** 06 | n       | Longest Peak
+- What?
+  Given an array of integers.
+  Find the lenght of the logest peak of integers.
+  Peak = At least 3 consecutive integers.
+  Strictly increasing, then peak, followed by strictly decreasing.
+- How?
+  * iterate from left to right, searching for peaks, tracking directions and length
+  * OR divide the task, first find all the peaks and then find the longest
+    - O(n) space, with splitted tasks
+      O(1) space, with unified tasks
+*** 07 | log n   | BST Construction
+- Every node on a BST,
+  1) must be strictly /greater/ of all the values to it's LEFT
+  2) must be /less or equal/ to all the values to it's RIGHT
+- needed supported methods for construction
+  * INSERTION, walk the tree until you find a leaf to place it
+  * SEARCHING, walk the tree if we found a leaf is NOT present
+  * DELETION, first search it, if found
+    - if leaf, just erase it
+    - if is a parent with 1 child, bridge grandparent and child
+    - if is a parent with 2 childs
+      1) grab the smallest value on the right subtree (aka the leftmost)
+      2) erase parent
+      3) replace it with the smallest value
+      4) delete smallest from right (which is just a leaf)
+*** 08 | n       | BST Validate
+- O(d) space recursively, d = depth
+- What?
+  Given a Tree (optionally balanced)
+  Determine if it is a BST
+  Every node
+  - has to have a value greater than all on his left
+  - smaller or equal to all on the right
+- How?
+  We could check on each node.
+  If they are wrapped between their *max* and *min* value
+  given by their ancestor nodes.
+  Initialized to -inf and +inf respectively
+*** 09 | n       | BST Traversal
+- O(n) space recursive, due output array of length n
+  O(d) space recursive, if we weren't returning
+- What?
+  Traverse a BST in 3 different ways, returning a list out of it.
+  1) In-order:
+     result is sorted
+     look at the left node, then current, then right node
+     inordertraverse(left), array.append(curentval), inordertraverse(right)
+     recursively we append current as we unwind the stack
+  2) Pre-order:
+     result is depth first
+     append current, look at left, look at right
+  3) Post-order: ?
+     look left, look right, append curent
+*** 10 | n log n | BST Min Height
+- O(n log n) time, using the insert method provided (aka we run it n times)
+  O(n)       time, by creating a new bst manually
+- O(n) space
+- What?
+  - We are provided
+    - with a sorted array of unique integers (!)
+    - with the Class and an "insert" method on it
+  - write a function to construct a BST
+    while also minimizing the height of the BST
+    this means we want the "most balanced" binary tre possible
+    which means the root is on the middle
+  - NOTE:
+    there are many examples of outputs of BST,
+    but the point is minimize the height
+- How?
+  starting from the middle of the array
+  place each side's half, as childs
+  repeat
+  we can pass around an startIdx and endIdx instead of slice the list
+*** 11 | n       | Invert Binary Tree
+- O(n) space iterative for the stack
+  O(d) space recursive
+- What?
+  aka mirror it
+- How?
+  - ~iterative~, using BFS,
+    with a queue as usual
+    we add the root to the queue,
+    we swap the childrens,
+    we add the childrens to the queue
+  - ~recursive~, swap left and right nodes
+*** TODO 12 | !!! | Max Subset Sum No Adjacent Elements
+- What?
+  given an array of ONLY positive integers
+  find the greatest sum, without adding two adjacent numbers
+- How?
+  - Bruteforce?
+  - Dynamic Programming (solving smaller problems to build our final solution)
+    - build an array of the same length as the input array
+    - with the max sums of all the numbers up to that point,
+      without necesarilly using that number
+    - on each step we could use the previous sum,
+      or use the prev-prev sum and add it itself
+*** TODO 13 | | Number Of Ways To Make Change
+*** TODO 14 | | Min Number Of Coins For Change
+*** TODO 15 | | Levenshtein Distance
+*** 16 | n | Kadanes Algorithm
+- aka maximum subarray problem
+- What?
+  Given an array of (signed) integers.
+  Find the greatest sum, by summing up some arbitrary subarray.
+- How?
+  - ~brute force~
+  - ~dynamic programming~
+    - O(1) space
+    - generate the max sum, for all the subarrays,
+      ending at each index OR just use the current number
+      Example: for the first iteration starting at "3"
+      [3,5,-9,1,...] the sums will be
+      [3,8,-1,1(because 0 will be less)...
+      In other words
+      maxEndingHere = max(maxEndingHere + number, number)
+                    = 19
+      maxSoFar = max(maxSoFar, maxEndingHere)
+*** TODO 17 | | Single Cycle Check
+*** TODO 18 | !!! | Breadth-first Search
+- what?
+  given an tree
+  return an array in BFS order
+  in BFS, we traverse a level entirely, regardless of parent,
+  before moving to the next one
+*** TODO 19 | | River Sizes
+*** TODO 20 | | Youngest Common Ancestor
+*** TODO 21 | | Min Heap Construction
+- Backgroud: What is a *min/max heap*
+  a special type of binary tree
+  has to be
+  - complete: all the levels filled, from left to right, except the last level
+  - min/max heap: every node value has to be smaller/greater or equal to his childs
+  - not necesarilly sorted, but the root is still the min/max
+  - can be represented as a list
+*** TODO 22 | | Remove Nth Node From End (of a SingleLinkedList)
+*** TODO 23 | | Permutations
+*** 24 | n*2^n | Powerset
+- What?
+  - Given an array of elements.
+    Generate the power set of that array.
+    Power set, is the set of all subsets of another set.
+  - Example:
+    given a set of length 3, will return a set of:
+    the same set, all the subsets of length 2, 1 and 0
+  - Take in consideration that these are sets.
+    Doesn't care about order.
+    Aka [1,2] is the same as [2,1].
+- How?
+  - ~iterative~ simpler
+    - we start with the empty set
+      we then iterate over each element, and add themselves to the current sets
+      O(n*2^n) space
+      Example: for [1,2,3]
+      [],
+      [1],
+      [2], [1,2],
+      [3], [1,3], [2,3], [1,2,3]
+  - ~recursive~ TODO
+*** TODO 25 | | Min Max Stack Construction
+*** TODO 25 | | Search In Sorted Matrix
+*** TODO 27 | | Balanced Brackets
+*** TODO 28 | | Longest Palindromic Substring
+*** 29 | | Group Anagrams
+- Anagram = words that are form by the same letters arranged differently.
+- What?
+  Given a list of arbirtrary strings.
+  Return a list of other lists, of groups of anagrams found in the list.
+- How?
+  - ~bruteforce~
+    for each word, reorder all the letters in alphabetical order
+    if they are anagrams, I am going to have 2 equal strings
+    O(W*N) space = W number of words, N length of longest word
+    O(WNlog(N)+Nlog(W)) time
+  - ~with a map~ more optimal, easy
+    iterate over each
+    sort the letters
+    insert the anagram on map if not present, where the value is a list of words
+*** TODO 30 | | Suffix Trie Construction
+** Hard
+*** 01 | Four Number Sum
+*** 02 | Subarray Sort
+*** 03 | Largest Range
+*** 04 | Min Rewards
+*** 05 | Zigzag Traverse
+*** 06 | Same BSTs
+*** 07 | Max Path Sum
+*** 08 | Max Sum Increasing Subsequence
+*** 09 | Longest Common Subsequence
+*** 10 | Min Number Of Jumps
+*** 11 | Water Area
+*** 12 | Knapsack Problem
+*** 13 | Disk Stacking
+*** 14 | Numbers In Pi
+*** 15 | Topological Sort
+*** 16 | Boggle Board
+*** 17 | Continuous Median
+*** 18 | Find Loop
+*** 19 | Reverse Linked List
+*** 20 | Merge Linked Lists
+*** 21 | Shift Linked List
+*** 22 | Lowest Common Manager
+*** 23 | Interweaving Strings
+*** 24 | Shifted Binary Search
+*** 25 | Search For Range
+*** 26 | Quickselect
+*** 27 | Quick Sort
+*** 28 | Heap Sort
+*** 29 | Shorten Path
+*** 30 | Longest Substring Without Duplication
+*** 31 | Underscorify Substring
+*** 32 | Pattern Matcher
+*** 33 | Multi String Search
+** Very Hard
+*** 01 | Apartment Hunting
+*** 02 | Calendar Matching
+*** 03 | Iterative In-order Traversal
+*** 04 | Flatten Binary Tree
+*** 05 | Right Sibling Tree
+*** 06 | All Kinds Of Node Depths
+*** 07 | Max Profit With K Transactions
+*** 08 | Palindrome Partitioning Min Cuts
+*** 09 | Longest String Chain
+*** 10 | Knuth-Morris-Pratt
+*** 11 | Rectangle Mania
+*** 12 | Merge Sorted Arrays
+*** 13 | LRU Cache
+*** 14 | Rearrange Linked List
+*** 15 | Number Of Binary Tree Topologies
+*** 16 | Merge Sort
+*** 17 | Smallest Substring Containing
+** Extremely Hard
+*** 01 | Right Smaller Than
+*** 02 | Longest Increasing Subsequence
+*** 03 | Square Of Zeroes
+*** 04 | Airport Connections
 * 21 | The Last Algorithms Course        | FrontEndMasters
 - https://github.com/ThePrimeagen/kata-machine
   > npx jest Linear
@@ -680,3 +1230,147 @@ https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY
 ** Graphs
 ** Maps & LRU
 ** Wrapping up
+* 23 | Neetcodeio - Easy
+** 070 - DP - Climbing Stairs
+- What?
+  given a staircase that takes N steps to reach the top (not including the floor)
+  we can take 1 step, or 2 steps at once
+  RETURN how many ways can we get exactly to the top?
+- How? using a *decision tree*
+  - ~bruteforce~ using recursion and DFS
+  - ~dynamic programming~
+    the repeated operations done, actually look like inverse fibonacci
+    so we can just compute iteratively and return it
+** TODO 198 - DP - House Robber
+- What?
+  Given an array of integers
+  each representing a house values
+  we need to maximize the money we can get
+  without robbing adjacent houses
+  return maximum ammount of money we can rob
+- How?
+  - ~Bruteforce~
+** 169 - Majority Element
+- What?
+  Given an array N numbers
+  return the number that appears more than N/2 times
+- How?
+  - ~hashmap~ O(n) space
+    keep counters of each value
+    return the max
+  - ~Boyer-Moore~ O(1) space
+    with the guarantee that there is going to be 1 majority element
+    using 1 max variable
+    every time we see a value that is not our *current* max
+    we decrement the *count*
+    once count becomes 0, we set the max to our current
+** 205 - isomorphic strings
+- What?
+  given 2 strings
+  determine if they are isomorphic
+  if all the chars of a string can be *replaced* to get the other string
+  NOTE: not 2 characters may map to the same character
+- How?
+  similar to 0290
+  with 2 dictionaries, for both directions
+  for c1,c2 in zip(s,t):
+** 263 - Ugly Number
+- What?
+  given a number
+  return boolean
+  true if is a positive integer whose prime factors are LIMITED to 2,3 and 5
+- How? check if number is divisible by only using 2,3,5 repeatedly
+  - ~iteratively~ for/while loop combination
+  - ~recursively~ calling the function with new values of n
+** 290 - Word Pattern
+- What?
+  - given a pattern and a string
+    return whether the string follows the pattern defined by each character on patter
+  - eg:
+    pattern="abba"
+    s="dog cat cat dog"
+    returns true
+- How?
+  - for c,w in zip(words, pattern):
+  - with 2 hashtables, char2word and word2char
+  - consider when the length of words is not the same as the length of chars on pattern
+** TODO 543 - Tree - Diameter of Binary Tree
+- What?
+  given a tree
+  compute the diameter of the tree
+  diameter = length of the longest path between 2 (any) nodes
+- How?
+  - ~bruteforce~ O(n^2) time
+    from the top
+    take every node, and consider it the "top node",
+    go as far right and as far left
+    and calculate the length of that path
+  - ~bruteforce~ O(n) time
+    start from the bottom to avoid repetitive work
+    keep track of both diameter and height of each node
+    H = 1 + max(left,right)
+    D = L + R + 1 + 1
+** 441 - Binary Search - Arranging Coins
+- What?
+  Given N coins
+  How many completed stairs of 1,2,3,... coins can be formed?
+- How?
+  - ~brute force~ O(n) time
+    each iteration
+    - increasing the *height* and *npiles* by 1
+    - and consuming/subtracting height coins
+    - until *ncoins* is less than *height*, when we return the number of piles
+  - ~binary search~ O(log(n)) time
+    using "gauss formula", to search
+    - n/2 * (n+1) since it starts at 1(one)
+    - and considering n as the upper bound and 1 as the lower bound
+  - ~gauss~ alone, O(1) time
+    just by resolving the equation, since we know n
+    rounding down
+    r/2 * (r+1) = n
+** 606 - Tree - Construct String from Binary Tree
+- What?
+  given a root of a BT
+  construct a string of parens and integers
+  using pre-order traversal
+  ignore redundant empty parens
+  no parens around the whole thing
+- How? being careful when we have right, but not left to put "()"
+  - recursively, concatenating a string
+  - recursively, appending a array and then joining it
+** 989 - Add to aray-form of integer
+- O(#digits in both inputs) time
+  O(n) time
+- backgroud
+  - how to chop of an integer
+    - floor(x/10)
+- What?
+  - given
+    1) an array of integers
+    2) a number
+  - return
+    the result of adding number 2) to number 1)
+    in array form
+- How?
+  - Inplace
+    - have a pointer to the input array
+      starting at the least significant digit
+    - while dividing getting both the rem() and round() of
+      the input number 2) divided by 10
+    - to avoid resizes which are ~O(n)~ of the output array at the beginning
+      we reverse the input array 1) before working on it
+      and grow it at the end which is an ~O(1)~ op
+    - reverse the output again at the end
+    - when overflow the single digit
+      mod by 10 to get the next position value and add it to input number
+      divide it by 10 for the current position
+** TODO 145 - Binary Tree Postorder Traversal (iterative)
+- What?
+  given a tree
+  return the array of traversing the tree in postorder
+- How? by going through all the left branch, then the right branch and finally add self.
+  - iterative
+    postorder is the hardest to do iteratively
+    using a stack
+  - recursive
+    using the callstack

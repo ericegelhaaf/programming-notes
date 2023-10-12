@@ -33,6 +33,7 @@
   per file/package/system
    https://gitlab.common-lisp.net/asdf/asdf/blob/master/doc/best_practices.md#package_inferred
   https://common-lisp.net/project/asdf/asdf/The-package_002dinferred_002dsystem-extension.html#The-package_002dinferred_002dsystem-extension
+  https://github.com/privet-kitty/wild-package-inferred-system
 - sectorLISP https://www.youtube.com/watch?v=xD14SLU2u2k
 - https://mumble.net/~campbell/scheme/style.txt
 .- https://github.com/hanshuebner/bknr-datastore
@@ -295,15 +296,16 @@ and that doesn't work if the code is provided as a *.a or *.o file
 | conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack                              |
 | fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/                                     |
 | flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/                              |
+| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
+|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
 | ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats                               |
+| lisp-binary    | A library to easily read and write complex binary formats.     | https://github.com/j3pic/lisp-binary                                 |
 | mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap                                     |
 | nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles                                   |
 | static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors                           |
-| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
 | simple-streams | bivalent, varying-width elements support                       | http://www.sbcl.org/manual/#Simple-Streams                           |
 |                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
-| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
-|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
+| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
 | unboxable      | support contiguous arrays of structs                           | https://github.com/digikar99/unboxables                              |
 |----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
 * books

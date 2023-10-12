@@ -179,7 +179,6 @@ Cowboy provides 2(two) types of listeners.
   - format_error: takes an error returned by other operation and returns a formatted human-readable message
 ** Handlers
 *** Handlers
-
 *** Loop handlers
 *** Static files
 ** Request and response
@@ -189,7 +188,6 @@ Cowboy provides 2(two) types of listeners.
 *** Using cookies
 *** Multipart
 ** REST
-
 *** REST principles
 *** Handling REST requests
 *** REST flowcharts

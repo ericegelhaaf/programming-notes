@@ -112,29 +112,30 @@
 - Template Dependencies
 | Name               | Description                                                                  | Home                                                    |
 |--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
-| bulma              | Webjars. Bulma: the modern CSS framework that just works.                    | https://bulma.io/                                       |
-| chesire            | Clojure JSON and JSON SMILE (binary json format) encoding/decoding           | https://github.com/dakrone/cheshire                     |
-| conman             | a helper library for managing database connections                           | https://github.com/luminus-framework/conman             |
+| bulma              | CSS framework                                                                | https://bulma.io/                                       |
+| chesire            | json encoding/decoding                                                       | https://github.com/dakrone/cheshire                     |
+| conman             | managing database connections                                                | https://github.com/luminus-framework/conman             |
 | cprop              | likes properties, environments, configs, profiles..                          | https://github.com/tolitius/cprop                       |
 | expound            | Human-optimized error messages for clojure.spec                              | https://github.com/bhb/expound                          |
-| http-kit           | A simple, high-performance event-driven HTTP client+server for Clojure       | https://github.com/http-kit/http-kit                    |
+| http-kit           | HTTP client+server                                                           | https://github.com/http-kit/http-kit                    |
 | h2                 | H2 is a database distributed as library...                                   | http://www.h2database.com/html/main.html                |
-| java-time          | A Clojure wrapper for Java 8 Date-Time API.                                  | https://github.com/dm3/clojure.java-time                |
-| logback-classic    | Logback is intended as a successor to the popular log4j project...           | http://logback.qos.ch/                                  |
+| java-time          | wrapper for Java 8 Date-Time API.                                            | https://github.com/dm3/clojure.java-time                |
+| logback-classic    | successor to the popular log4j                                               | http://logback.qos.ch/                                  |
 | luminus-http-kit   | HTTP Kit adapter for Luminus                                                 | https://github.com/luminus-framework/luminus-http-kit   |
 | luminus-migrations | For DB migrations. The library is a command line wrapper for Migratus.       | https://github.com/luminus-framework/luminus-migrations |
 | luminus-transit    | transit serialization helpers for Luminus                                    | https://github.com/luminus-framework/luminus-transit    |
 | markdown-clj       | Markdown parser in Clojure                                                   | https://github.com/yogthos/markdown-clj                 |
 | material-icons     | Webjars. A font for the web.                                                 | https://google.github.io/material-design-icons/         |
-| mount              | managing Clojure and ClojureScript app state since (reset)                   | https://github.com/tolitius/mount                       |
+| mount              | managing app state since (reset)                                             | https://github.com/tolitius/mount                       |
 | muuntaja           | Clojure library for fast http api format negotiation, encoding and decoding. | https://github.com/metosin/muuntaja                     |
-| nrepl              | A Clojure network REPL that provides a server and client...                  | https://github.com/nrepl/nrepl                          |
-| reitit             | A fast data-driven router for Clojure/Script                                 | https://github.com/metosin/reitit                       |
-| ring               | Clojure HTTP server abstraction                                              | https://github.com/ring-clojure/ring                    |
+| nrepl              | network REPL                                                                 | https://github.com/nrepl/nrepl                          |
+| reitit             | data-driven router                                                           | https://github.com/metosin/reitit                       |
+| ring               | HTTP server                                                                  | https://github.com/ring-clojure/ring                    |
 | ring-webjars       | Ring middleware to serve static assets from WebJars.                         | https://github.com/weavejester/ring-webjars             |
 | ring-http-response | Handling HTTP Statuses with Clojure(Script)                                  | https://github.com/metosin/ring-http-response           |
-| selmer             | A fast, Django inspired template system in Clojure.                          | https://github.com/yogthos/Selmer                       |
-| struct             | Structural validation library for Clojure(Script)                            | https://github.com/funcool/struct                       |
+| selmer             | Templating system                                                            | https://github.com/yogthos/Selmer                       |
+| struct             | Structural/Scheme validation                                                 | https://github.com/funcool/struct                       |
+|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
 - Default repl namespace is *user* from *env/dev/clj/user.clj*
   - Include functions that we won't want packaged in our application
   - start/stop functions
@@ -173,8 +174,6 @@ VALUES (:name, :message)
 -- :doc selects all available messages
 SELECT * from guestbook
    #+end_src
-*** src/clj/guestbook/db/core.clj
-   (conman/bind-connection *db* "sql/queries.sql")
 *** {dev,test}-config.edn
    - Not supposed to be commited to svn
     :database-url "jdbc:h2:./guestbook_dev.db"
@@ -186,29 +185,31 @@ SELECT * from guestbook
    (save-message! {:name "bob" :message "hello world"})
    (get-messages)
 *** test/clj/guestbook/db/core_test.clj
-   - Update (deftest)
-      #+begin_src clojure
-(deftest test-users
-  (jdbc/with-transaction [t-conn *db* {:rollback-only true}]
-    (is (= 1 (db/save-message!
-              t-conn
-              {:name "bob"
-               :message "hello world"}
-              {:connection t-conn})))
-    (is (= {:name "bob"
-            :message "hello world"}
-           (-> (db/get-messages t-conn {})
-               (first)
-               (select-keys [:name :message]))))))
+- Update (deftest)
+  #+begin_src clojure
+    (deftest test-users
+      (jdbc/with-transaction [t-conn *db* {:rollback-only true}]
+        (is (= 1 (db/save-message!
+                  t-conn
+                  {:name "bob"
+                   :message "hello world"}
+                  {:connection t-conn})))
+        (is (= {:name "bob"
+                :message "hello world"}
+               (-> (db/get-messages t-conn {})
+                   (first)
+                   (select-keys [:name :message]))))))
        #+end_src
-   - lein test
-   - lein test-refresh
+- lein test
+  lein test-refresh
+*** src/clj/guestbook/db/core.clj
+   (conman/bind-connection *db* "sql/queries.sql")
 *** src/clj/guestbook/routes/home.clj
    Where the paths, functions, middleware are put together.
 *** resources/html/home.html
-   - extends base.html and process the :doc through markdown
+ - extends base.html and process the :doc through markdown
 *** resources/html/home.html
-   - Setup to use Bulma CSS
+ - Setup to use Bulma CSS
 * 22 | Clojure: The Essential Reference MEAP v28
 |                         | http://manifesto.softwarecraftsmanship.org/#/es                              |
 |                         | https://cognitect.com/blog/2016/1/28/state-of-clojure-2015-survey-results    |

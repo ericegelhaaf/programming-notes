@@ -13,12 +13,37 @@
   - use "IF" and not "ELSE IF" if the previous branch uses a "RETURN"
   - use () before pipes |
 - Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
-
 - Manual network features https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
 - https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
 * Language
-- asort(SRC,DST)  - sort by value
-  asorti(SRC,DST) - sort by index
+- sometimes not enforcing variables to be local can cause weird issues.
+  early return, should happen as soon as possible
+  otherwise this function will keep looping...
+  If I move the if/return0 to the top it works just fine
+  OR
+  if I make "middle" a local variable
+  #+begin_src awk
+    function binarySearch(target,    left, right) {
+        middle = int((left+right)/2)
+        print "l:", left, "r:", right, "m:", middle, "n[m]="numbers[middle]
+        if (left >= right) {
+            return 0
+        }
+        if (numbers[middle] > target) binarySearch(target, left, middle-1)
+        if (numbers[middle] < target) binarySearch(target, middle+1, right)
+        return numbers[middle] == target
+    }
+  #+end_src
+- RS="^$" reads the whole file as a single record
+- length($0) == 0 { print "this is an empty record==" }
+  END { if (NR == 0) print "means that we didn't process any record" }
+- || and && return booleans. AKA 0 or 1. They do NOT return the truthy value.
+- Can redefine NF=0 at END and then add new $(++NF)=??? to later just *print*
+- falsey: "", 0, undefined variables
+- exit
+  - on a normal rule, still runs END, but not ENDFILE
+  - on BEGIN        , still runs END
+  - on END          , stops
 - FPAT https://www.gnu.org/software/gawk/manual/html_node/Splitting-By-Content.html
   For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
   Instead of using FS to specify what the fields are *not*
@@ -59,6 +84,8 @@
 ** Built-in variables:
 | variable | meaning                                      | default |
 |----------+----------------------------------------------+---------|
+| FPAT     | regex of what each field contains            | -       |
+|----------+----------------------------------------------+---------|
 | NF       | numer of fields in line                      | -       |
 | NR       | number of records (aka lines) read so far    | -       |
 | FNR      | number of records read so far, in curr file  | -       |
@@ -95,26 +122,29 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | srand(x)   | x is new seed for rand()           |
 |------------+------------------------------------|
 *** STRING
-|                       | returns                               | does                         |
-|-----------------------+---------------------------------------+------------------------------|
-| gsub(r,s)             | number of subst made                  | substitute s for r in $0     |
-| gsub(r,s,t)           | number of subst made                  | substitute s for r in t      |
-|-----------------------+---------------------------------------+------------------------------|
-| sub(r,s)              | number of subst made                  | substitute s for r in $0     |
-| sub(r,s,t)            | number of subst made                  | substitute s for r in t      |
-|-----------------------+---------------------------------------+------------------------------|
-| substr(s,p)           | suffix of x starting at p             |                              |
-| substr(s,p,n)         | substring of x lenght n starting at p |                              |
-|-----------------------+---------------------------------------+------------------------------|
-| split(s,a)            | number of fields                      | stores the pieces in array a |
-| split(s,a,fs)         | number of fields                      | stores the pieces in array a |
-|-----------------------+---------------------------------------+------------------------------|
-| index(s,t)            | 0 or n position of t in s             |                              |
-| length()              | number of chars in $0                 |                              |
-| length(s)             | number of chars in s                  |                              |
-| match(s,r)            | index or 0                            | test if s contains r         |
-| sprintf(fmt,exp-list) | formated string with exp-list         |                              |
-|-----------------------+---------------------------------------+------------------------------|
+|                       | does                                             | returns                               |
+|-----------------------+--------------------------------------------------+---------------------------------------|
+| gsub(r,s)             | substitute all s for r in $0                     | number of subst made                  |
+| gsub(r,s,t)           | substitute all s for r in t                      | number of subst made                  |
+|-----------------------+--------------------------------------------------+---------------------------------------|
+| sub(r,s)              | substitute one s for r in $0                     | number of subst made                  |
+| sub(r,s,t)            | substitute one s for r in t                      | number of subst made                  |
+|-----------------------+--------------------------------------------------+---------------------------------------|
+| substr(s,p)           |                                                  | suffix of x starting at p             |
+| substr(s,p,n)         |                                                  | substring of x lenght n starting at p |
+|-----------------------+--------------------------------------------------+---------------------------------------|
+| asort(SRC,DST)        | sort by value, DST has idx=numeric val=old_value | number of elements in SRC             |
+| asorti(SRC,DST)       | sort by index, DST has idx=numeric val=old_index | number of elements in SRC             |
+|-----------------------+--------------------------------------------------+---------------------------------------|
+| split(s,a)            | stores the pieces in array a                     | number of fields                      |
+| split(s,a,fs)         | stores the pieces in array a                     | number of fields                      |
+|-----------------------+--------------------------------------------------+---------------------------------------|
+| index(s,t)            |                                                  | 0 or n position of t in s             |
+| length()              |                                                  | number of chars in $0                 |
+| length(s)             |                                                  | number of chars in s                  |
+| match(s,r)            | test if s contains r                             | index or 0                            |
+| sprintf(fmt,exp-list) |                                                  | formated string with exp-list         |
+|-----------------------+--------------------------------------------------+---------------------------------------|
 ** Operators
 | Assigments       | = += -= *= /= %= ^= |
 | Ternary operator | ?:                  |

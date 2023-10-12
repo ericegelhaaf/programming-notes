@@ -1,4 +1,6 @@
 * 2017 | Modern Object Pascal | Michalis Kamburelis
+https://github.com/michaliskambi/modern-pascal-introduction
+https://castle-engine.io/modern_pascal
 ** 2 Basics
 - ~Exit()~ inside a function
   - can take the value that will /return/
@@ -10,13 +12,16 @@
   - return a boolean
   - or can act as bit-wise operator if both arguments are integers, then return an integer
 *** =case=, at most one branch is executed, no fall-through
-  case
-  0:
-  2:
-  3..10:
-  11, 12, 31:
+#+begin_src pascal
+  case place of
+     0:          Print();
+     2:          Print();
+     3..10:      Print();
+     11, 12, 31: Print();
   else:
-  end
+     Print();
+  end;
+#+end_src
 *** Enumerated types,
   #+begin_src pascal
     type TAnimalKind = (akDuck, akCat, akDog);

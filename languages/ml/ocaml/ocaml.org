@@ -41,7 +41,8 @@
 ** Standard Library
 - https://v2.ocaml.org/manual/stdlib.html
   example module url https://v2.ocaml.org/api/Seq.html
-| module         | description                                                |
+|----------------+------------------------------------------------------------|
+| =Module=       | =Description=                                              |
 |----------------+------------------------------------------------------------|
 | Arg            | parsing of command line arguments                          |
 | Array          | array operations                                           |
@@ -102,26 +103,28 @@
 | Uchar          | Unicode characters                                         |
 | Unit           | unit values                                                |
 | Weak           | arrays of weak pointers                                    |
+|----------------+------------------------------------------------------------|
 ** Types
-|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
-| Type      | Init                   | Access | Modifying | Pattern Matching                | Adding | Appending      |
-|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
-| Unit      | ()                     |        |           |                                 |        |                |
-| bool      | x = true,false         |        |           |                                 | &&,¦¦  |                |
-| Tuples    | (a , b)                |        |           | let (x , y) =                   |        |                |
-| List      | [a ; a]                | L.hd   |           | let (x :: y) =                  | ::     | @, List.append |
-| Option    | Some a                 |        |           |                                 |        |                |
-| String    | "abcd"                 | .[2]   | <-        |                                 |        | ^              |
-| Record    | {a = VAL ; b = VAL}    | .a     |           | let { x = x_pos ; y = y_pos } = |        |                |
-|           | a=VAL; B=VAL; {a ; b}  |        |           | let { x ; y } =                 |        |                |
-|           |                        |        |           | let v1 = v1.x + v2.y            |        |                |
-| Variant   |                        |        |           |                                 |        |                |
-| Array     | [¦ a ; b ¦]            | .(2)   | <-        | let [¦ a ; b ¦] = some_array    |        |                |
-| Big Array |                        | .{2}   | <-        |                                 |        |                |
-| Mutable   |                        |        | <-        |                                 |        |                |
-| Refs      | ref <expr>             | !x     | :=        |                                 |        |                |
-| struct    | struct let foo = 3 end |        |           |                                 |        |                |
-|-----------+------------------------+--------+-----------+---------------------------------+--------+----------------|
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| Type       | Init                   | Access  | Modifying | Pattern Matching                | Adding | Appending      |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| ~Unit~     | ()                     |         |           |                                 |        |                |
+| ~Bool~     | x = true,false         |         |           |                                 | &&,¦¦  |                |
+| ~Option~   | Some a                 |         |           |                                 |        |                |
+| ~String~   | "abcd"                 | .[2]    | <-        |                                 |        | ^              |
+| variant    |                        |         |           |                                 |        |                |
+| mutable    |                        |         | <-        |                                 |        |                |
+| refs       | ref <expr>             | !x      | :=        |                                 |        |                |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| ~Array~    | [¦ a ; b ¦]            | .(2)    | <-        | let [¦ a ; b ¦] = some_array    |        |                |
+| ~Bigarray~ |                        | .{2}    | <-        |                                 |        |                |
+| tuples     | (a , b)                |         |           | let (x , y)  =                  |        |                |
+| ~List~     | [a ; a]                | List.hd |           | let (x :: y) =                  | ::     | @, List.append |
+| record     | {a = VAL ; b = VAL}    | .a      |           | let { x = x_pos ; y = y_pos } = |        |                |
+|            | a=VAL; B=VAL; {a ; b}  |         |           | let { x ; y } =                 |        |                |
+|            |                        |         |           | let v1 = v1.x + v2.y            |        |                |
+| struct     | struct let foo = 3 end |         |           |                                 |        |                |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
 * ocamldebug
 - https://www.youtube.com/watch?v=DGvJk14sfi8
   - let _ = print_string;

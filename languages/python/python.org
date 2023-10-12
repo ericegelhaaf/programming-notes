@@ -28,7 +28,7 @@
 * Language
 - .format() https://pyformat.info/
 - f"string" https://fstring.help/
-** Versions Changes
+v** Versions Changes
 | year | ver  | usage                                            |  PEP | description                                  |
 |------+------+--------------------------------------------------+------+----------------------------------------------|
 | 2015 | [[https://docs.python.org/3/whatsnew/3.5.html][3.5]]  | typing package                                   | 0484 | type hints                                   |

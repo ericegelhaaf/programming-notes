@@ -18,7 +18,7 @@ source: https://github.com/kyclark/command-line-rust
   std::process::abort()
 * 21 | Rust In Action (Manning)
 ** DONE 1 Introducing Rust
-- Not all security bugs can be solved
+- Not all security bugs can be solved with rust
   - Hearthbleed: buffer reutilization bug
   - goto fail: extra goto, variable initialized with success
 - println!() exists as a macro since it does a bunch of type detection

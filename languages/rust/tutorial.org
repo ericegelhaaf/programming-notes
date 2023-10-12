@@ -2,13 +2,13 @@
 * Tutorial: EasyRust
   https://github.com/Dhghomon/easy_rust
 
-|                | UpperCamelCase | snake_case |   |   |
-|----------------+----------------+------------+---+---|
-| Implementation | YES            |            |   |   |
-| Struct         | YES            |            |   |   |
-| Enum           | YES            |            |   |   |
-| Variables      |                | YES        |   |   |
-| Functions      |                | YES        |   |   |
+|                | UpperCamelCase | snake_case |
+|----------------+----------------+------------|
+| Implementation | YES            |            |
+| Struct         | YES            |            |
+| Enum           | YES            |            |
+| Variables      |                | YES        |
+| Functions      |                | YES        |
 ** Comments
 #+begin_src rust
 // Comment
@@ -59,30 +59,31 @@ let d = 1u8;     // uses type u8
 - let mut x = 10; - ~mutability~, when a variable can be changed
 - let x = 2;      - ~shadowing~, if are the same type, although effectively are different variables
   let x = 10;
-** The Stack, Head and Pointers
+** The Stack, Heap and Pointers
 |       | Speed   | Size at compilation |
 |-------+---------+---------------------|
 | Stack | Fastest | yes                 |
 | Heap  | Fast    | no                  |
 |-------+---------+---------------------|
-- let x: isize = 3;
-  let b = &x; // b is a ~reference~ to x
-              // b ~borrows~ x
+#+begin_src rust
+  let x: isize = 3;
+  let b = &x; // b is a REFERENCE to x
+              // b BORROWS x
               // b has type &isize
+#+end_src
 ** More about printing
-- r#""raw"\tlines\n"#
-- b"this string of ASCII bytes"
-- \u{D589} - unicode printing
-- {:p}           - pointer
-  {:b} {:x} {:o} - binary, hexa, and octal
-  {0} {1}        - order of arguments
-  {foo} {bar}    - name of arguments
+| r#""raw"\tlines\n"#           |                         |
+| b"this string of ASCII bytes" |                         |
+| \u{D589}                      | unicode printing        |
+| {:p}                          | pointer                 |
+| {:b} {:x} {:o}                | binary, hexa, and octal |
+| {0} {1}                       | order of arguments      |
+| {foo} {bar}                   | name of arguments       |
 - {variable:padding alignment minimum.maximum}
   - no spaced ({:0^10})
   - can ommit variable name
   - alignment <>^ (left/right/middle)
 ** Strings
-- Types of string
 | type   | initialization                 | ownership | alloc? | speed   |
 |--------+--------------------------------+-----------+--------+---------|
 | &str   | let a = "hello";               | borrowed  | data?  | fastest |
@@ -94,8 +95,8 @@ let d = 1u8;     // uses type u8
 - ~format!()~ -- like print! but returns the value instead
 ** const and static
 #+begin_src rust
-const NUMBER_OF_MONTHS: u32 = 12;
-static SEASONS: [&str; 4] = ["Spr", "Su", "F", "Win"];
+  const NUMBER_OF_MONTHS: u32 = 12;
+  static SEASONS: [&str; 4] = ["Spr", "Su", "F", "Win"];
 #+end_src
 - ~const~ , doesn't change
   ~static~, doesn't change, fixed memory location
@@ -108,17 +109,17 @@ static SEASONS: [&str; 4] = ["Spr", "Su", "F", "Win"];
 - While you own *String*, you can't pass around ownership through &String
 ** Mutable references
 - (*) ~dereferencing~ ("I dont't want the value...I want the value behind")
-- &mut instead of &
-  - defined both on referee and reference
-- many immutable references allowed
-  1    mutable reference allowed
+- you have to use &mut instead of &
+  - when referencing (&) a mutable
+- many   immutable references allowed
+  1(one) mutable reference allowed
 - Cannot interwine mutable and immutable reference usages
 #+begin_src rust
-fn main() {
-    let mut my_number = 8;
-    let num_ref = &mut my_number; // is a mutable reference to an TYPE
-    *num_ref += 10;
-}
+  fn main() {
+      let mut my_number = 8;
+      let num_ref = &mut my_number; // is a mutable reference to an TYPE
+      *num_ref += 10;
+  }
 #+end_src
 *** Shadowing Again
 ** Giving references to functions

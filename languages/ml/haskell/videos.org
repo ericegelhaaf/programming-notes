@@ -61,7 +61,30 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
     https://www.youtube.com/watch?v=JJv74IJUp4E
   - NYC Haskell User's Group
     https://www.youtube.com/channel/UCzNYHE7Kj6pBqq5h8LG9Zcg
-* 13 | Adventure with Types  | Simon Peyton
+* 10 | AwesomePrelude - Liberating Haskell from data types!
+https://vimeo.com/9351844
+TODO 05:00
+** Example: Encoding a simple addition and sum
+#+begin_src haskell
+data Expr where
+  Con :: Int -> Expr
+  Add :: Expr -> Expr -> Expr
+  Mul :: Expr -> Expr -> Expr
+-- To use the operators
+instance Num Expr where
+  fromInteger x = Con (fromIntegral x)
+  x + y         = Add x y
+  x * y         = Mul x y
+-- evaluator
+eval :: Expr -> Int
+eval (Con x)   = x
+eval (Add x y) = eval x + eval y
+eval (Mul x y) = eval x * eval y
+#+end_src
+** Example: Encoding with (==)
+Prelude's (==) returns Bool, which we cannot override
+AwesomePrelude, provides a more generic (==)
+* 13 | Adventure with Types                  | Simon Peyton
   - Simon Peyton Jones Compiling without continuations
     https://www.youtube.com/watch?v=qx5NZmrFnvs
   - https://www.cs.uoregon.edu/research/summerschool/summer13/lectures/FC_in_GHC_July13.pdf
@@ -155,13 +178,13 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
       data Pair a    = P a a
       data AnnPair a = AP String a a
     #+end_src
-* 17 | What is a Monad?      | Computerphile
+* 17 | What is a Monad?                      | Computerphile
 https://www.youtube.com/watch?v=t1e8gqXLbsU
   - Maybe, >>=, do, return
   - A way to handle failure and """unwrap""" a series of Maybe operations
   - "A monad is some kind of type constructor like Maybe or ... together with 2 functions (return, >>=)"
   - Works with other "effects"
-* 18 | HaskellRank           | tsoding
+* 18 | HaskellRank                           | tsoding
   playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
 ** DONE HackerRank in Haskell
 - interact :: (String -> String) -> IO ()
@@ -372,7 +395,7 @@ pp = putStrLn . unlines . map (unwords . map show)
 #+end_src
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
-* 19 | From Haskell to Rust? | Michael Snoyman
+* 19 | From Haskell to Rust?                 | Michael Snoyman
 https://www.youtube.com/watch?v=HKXmEFvsi6M
 - Creator of Yesod/Stack
 - VP at "FP Complete"
@@ -384,3 +407,43 @@ https://www.youtube.com/watch?v=HKXmEFvsi6M
   - Like overload of operators
 - TALK ABOUT MONADS????
 - RESUME 20:00
+* TODO 23 | How to make a Haskell Program 5x Fast | Lexi Lambda
+- ~ghc-core~ is 1(one) of the intermediary represntations,
+  used when compiling a haskell program.
+  explicitly typed
+  written in a intermediate language
+- file: cabal.project.local
+  #+begin_src
+    package dynamical
+      optimization: 1
+      ghc-options:
+        -ddump-to-file # dumps ~ghc-core~ to file
+        -ddump-simp    # simplified output
+        -dsuppress-coercion          # removes stuff showed on ghc-core
+        -dsuppress-module-prefixes   # ditto
+        -dsuppress-type-applications # ditto
+  #+end_src
+- 00:11:30
+* TODO 23 | Delimited Continuations | Lexi Lambda
+- native, first-class, delimited continuations
+- =continuations=: is a concept NOT a language feature
+  #+begin_src
+  (1+2) * (3+4)
+  (1+2) <------- redex
+        * (3+4) <-------- continuation
+  3     * (3+4)
+  #+end_src
+  redex: expression being reduced
+  continuation: aka the evaluation context, can be empty.
+                Where the redex is evaluated.
+                The rest of the program.
+  Some operators, explicitly exist to manipulate the continuation.
+  - exit(), throws the continuation away
+  - throw(exn), discards the inner continuation, while keeping the outer
+    catch{body, handler}
+    <- outer  <-- inner
+    1 + catch{2 * throw(5), (n) -> 3 * n}
+- =first-class=
+  is a continuation reified as a function
+- call_cc, call with current continuation
+- 22:00

@@ -207,6 +207,7 @@ https://www.youtube.com/watch?v=IfhMUed9RSE
 2021 https://earthly.dev/blog/awk-examples/
 - for (key in array) {}
 - Set the order an already created array would be presented on a forIn
+  PROCINFO["sorted_in"] = "afunctionname" like compare(index1, value1, index2, value2) returns a boolean
   PROCINFO["sorted_in"] = "@val_num_asc"
   PROCINFO["sorted_in"] = "@val_num_desc"
   PROCINFO["sorted_in"] = "@val_str_asc"

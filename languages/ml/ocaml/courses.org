@@ -635,9 +635,9 @@ clean:
     = (#bindings in hash) / (#buckets in array)
   - maps keys to integers, at O(1) time
   - mapping accepts collisions
-  - *Bucket* integer output of a hash
-  - *Probing* dealing with the collision by moving somewhere else
-  - *Chaining* storing multiple collision values in a list in the bucket
+  - ~Bucket~ integer output of a hash
+  - ~Probing~ dealing with the collision by moving somewhere else
+  - ~Chaining~ storing multiple collision values in a list in the bucket
 - Steps of a hash function
   1) serialization: string -> bytes (injective)
   2) diffussion: bytes -> int (maybe injective)

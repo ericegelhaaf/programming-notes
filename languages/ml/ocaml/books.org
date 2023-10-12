@@ -979,7 +979,7 @@ type <variant> =
   #+end_src
 - We are NOT sending a tuple, it might look like
   RGB (200,0,200)
-- Multiple Argument Variant ~V.S.~ Variant Containing a Tuple
+- Multiple Argument Variant ~vs~ Variant Containing a Tuple
   Differer in memory allocation. MAV has a single allocation in memory, VCT have heap memory.
   With and Without parens
   #+begin_src ocaml
@@ -1943,10 +1943,10 @@ For smaller examples (like the ones showed here, direct match of Option is gener
   - adding return module type
   - adding type *endpoint* which is defined on the output module signature
   #+begin_src ocaml
-  module Make_interval(Endpoint : Comparable) : Interval_intf = struct
-    type endpoint = Endpoint.t
-    type t = | Interval of Endpoint.t * Endpoint.t
-             | Empty
+    module Make_interval(Endpoint : Comparable) : Interval_intf = struct
+      type endpoint = Endpoint.t
+      type t = | Interval of Endpoint.t * Endpoint.t
+               | Empty
     ...
   #+end_src
 - It is not good enough because *endpoint* is not exposed

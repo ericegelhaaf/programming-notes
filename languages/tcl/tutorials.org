@@ -1,3 +1,8 @@
+- Curious Course on Coroutines and Concurrency
+  http://dabeaz.com/coroutines/index.html
+  tcl https://github.com/shawnw/curious-coroutines-in-tcl/
+  python https://github.com/catcuts/coroutines
+  video https://www.youtube.com/watch?v=Z_OAlIhXziw
 - Tutorial https://en.wikibooks.org/wiki/Tcl_Programming/Introduction
 - Tutorial https://wiki.tcl-lang.org/page/Tcl+Tutorial+Lesson+0
 - Tutorial https://wiki.tcl-lang.org/page/Dodekalogue

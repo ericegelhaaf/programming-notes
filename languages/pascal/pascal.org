@@ -1,4 +1,6 @@
 - https://en.wikipedia.org/wiki/Pascal_(programming_language)
+- https://en.wikipedia.org/wiki/Object_Pascal
+
 - https://github.com/Fr0sT-Brutal/awesome-pascal
 
 - https://wiki.lazarus.freepascal.org/GLScene
@@ -6,11 +8,11 @@
 - raytracer turbo-pascal https://github.com/Postrediori/Pascal-Raytracer
 
 * Compile directives
-{$mode-objfpc}{$H+}{$J-} // use this line in all modern sources//
-{$scopedenums on}        // enums not on global unit//
-{$R+}                    // range checking on - nice for debugging//
-{$apptype CONSOLE}       // both are important distinction for Windows application
-{$apptype GUI}
+| {$mode-objfpc}{$H+}{$J-} | use this line in all modern sources                    |
+| {$scopedenums on}        | enums not on global unit                               |
+| {$R+}                    | range checking on - nice for debugging                 |
+| {$apptype CONSOLE}       | both are important distinction for Windows application |
+| {$apptype GUI}           |                                                        |
 * Types
 - Enumerated types
   #+begin_src opascal

@@ -22,6 +22,359 @@
 - Haskell MOOC University of Helsinki
   https://haskell.mooc.fi/material/
   https://github.com/moocfi/haskell-mooc
+* 11 | Functional Programming       |
+** 01 - Introduction
+- Functional Programming
+  - Allows you to program with mathemathical functions
+  - Not the same as having a "functional style"
+- =Imperative Style=
+  #+begin_src c
+    int total = 0;
+    for (int i = 0; i < N; ++i)
+      total = total+i;
+  #+end_src
+  - the computation method is *variable assigment*
+- =Functional Style=
+  #+begin_src haskell
+    sum [1..10]
+  #+end_src
+  - the computation method is *function application*
+  - separate the generation of the loop from the sumation
+- ski combinators, untyped, functional language
+- Example: quick sort
+  #+begin_src haskell
+    f []     = []
+    f (x:xs) = f ys ++ [x] ++ f zs
+               where
+                 ys = [a | a <- xs, a <= x] -- smaller things than x
+                 zs = [b | b <- xs, b >  x] -- bigger things than x
+  #+end_src
+- TODO: find erik meijer VB quicksort code
+*** History
+- '30 Alonzo Church develops the *Lambda Calculus*
+- '50 John McCarthy develops *Lisp* inspired by LC, but relying on state.
+       Partially due the underlying machines, Von Neumann's
+- '60 Peter Landin, develops *ISWIM*, the first pure functional language.
+       "If you See What I Mean"
+       Based on LC.
+       With no assignments.
+       Wrote "The next 700 languages" a paper about DSL's
+- '70 Robin Milner, and others develop *ML*
+       The first modern functional language.
+       Introduced *type inference* and *polymorphic types* (aka generics)
+- '80 John Backus, develops *FP*, emphasizes on High-Order-Functions.
+       In "point-free style" aka "tacit programming style"
+       Used by LINQ
+       https://en.wikipedia.org/wiki/Tacit_programming
+- '80 David Turner,
+       Develops a number of lazy functional languages.
+       Culminating in *Miranda* system.
+- '87 Start development of *Haskell*
+- '03 Release of stable version of *Haskell 98*
+      https://www.haskell.org/onlinereport/
+** 02 - First Steps
+- https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/tourofprelude.html#init
+- VB used to have a REPL, on VB6
+- *Pattern Matching* is an easier way to do *Dynamic Dispatch*, they try to do the same.
+- The operator that your use most uses the least space
+  In mathemathics (*)
+  In FP (functional application)
+- The (|>) operator on F#, Ocaml, allows you to write code
+  in a more "object oriented way".
+  - In OOP, you write the receiver (the instance of the object) is the most important thing
+    receiver.method(a,b,c)
+  - In FP, there is no single argument that is more important
+    method receiver a b c
+  #+begin_src
+    [1,2,3].drop(3)   --- C#
+    drop 3 [1,2,3]    --- Haskell
+    [1,2,3] |> drop 3 --- OCaml
+  #+end_src
+- In haskell we hardly ever use recursion,
+  we use compositional thinking due his lazyness
+  each argument will be evaluated just enough to get to compute the result
+  #+begin_src haskell
+    factorial n = product [1..n]
+    average ns = sum ns `div` length ns
+  #+end_src
+- Naming
+  - when there is a number you call it "n"
+  - when is a list, you call it with something that ends with "s"
+    eg: "xs" for list or "xss" for list of lists
+  - Functions and arguments start with lowercase:
+    myFun fun1 arg_2 x'
+  - Typenames start with uppercase
+    data List a = ...
+- You can explicitly convey the structure of the code
+  Instead of spaces you can use {fn;fn}
+*** Example: Haskell vs C#
+- Example re-writing a function, with function composition
+  #+begin_src haskell
+    double x = x + x
+
+    quadruple x = double (double x) -- from
+    quadruple   = double . double   -- to
+  #+end_src
+- Example in C#
+  #+begin_src csharp
+    class X
+    {
+        T quadruple<T> (T x)
+            where T: INum<T>
+        {
+            return double(double(x));
+        }
+    }
+  #+end_src
+** 03 - Types and Classes
+- A type is a name for a collection of related values
+- In Haskell *Type Classes* roughly correspond to *Intefaces* in an OO language
+- To connect a type with an expression use (::)
+  e :: t
+- has the same notation for the type and value constructor
+  [1,2,3]      :: [Int]
+  (1,True,'c') :: (Int,Bool,Char)
+- "equivalent" types between c# and Haskell
+ | Func<T>                            | () -> T                      |
+ | Func<S,T>                          | S  -> T                      |
+ | Action<T>                          | T  -> ()                     |
+ | int Length<T>(this List<T> src)    | length :: [a] -> Int         |
+ | IE<R> zip<T,S,R>                   | zip :: [a] -> [b] -> [(a,b)] |
+ | (IE<T> xs, IE<S> ys, Fun<T,S,R> f) |                              |
+- two ways to write the same function
+  #+begin_src haskell
+add (x,y) = x + y
+add       = \(x,y) -> x + y
+-- curried version
+add x y = x + y
+add x   = \y -> x + y
+add     = \x -> \y -> x + y
+  #+end_src
+** 04 - Defining Functions
+- In haskell we separate the type definition from the function definition
+  #+begin_src haskell
+abs :: Int -> Int
+abs n = if n >= 0 then n else -n
+  #+end_src
+- In haskell there is no ~elseif~, you just put another if on else
+  #+begin_src haskell
+signum :: Int -> Int
+signum n = if n < 0 then -1 else
+             if n == 0 then 0 else 1
+  #+end_src
+- In Haskell, instead of using conditional you can use =guarded equations=
+  #+begin_src haskell
+abs n | n >= 0    = n
+      | otherwise = -n
+
+signum n | n < 0     = -1
+         | n == 0    = 0
+         | otherwise = 1
+  #+end_src
+- Perl, Miranda and Ruby, have a similar guarded equations
+  but they push the guards to the end of the line. After.
+- Even more common is using ~Pattern matching~, the analog of "dynamic dispatch"
+  A possible downside of it, being that you "expose" the structure of the types.
+  #+begin_src haskell
+not :: Bool -> Bool
+not False = True
+not True  = False
+  #+end_src
+- =Sectioning= is putting parenthesis besides an operator to use it as a function (&&)
+- Lazyness:
+  In Haskell all types can have value =bottom=, a non-terminating function, that will return the type in question.
+  It doesn't matter the ~evaluation order~ we take, the =expression= value is the same.
+  It doesn't matter if I evaluate the argument first or later.
+  The compiler might decide then, in which order to evaluate things.
+  Unlike in regular programs. Where the ~evaluation order~ is dictated by each statement.
+- RECOMMENDED: Phil Warden - "Theorems for free!"
+  https://archive.org/details/theorems_for_free
+- n+k pattern, used on pattern matching, now remove from haskell
+  allows you to write patterns over integers
+  https://stackoverflow.com/questions/4913588/haskell-n1-in-pattern-matching
+- Examples of *sections* of operators
+  (1+) (1/) (*2) (/2)
+** 05 - List Comprehensions
+- List comprehensions are the basis of LINQ
+- In mathematics, the comprehension notation can be used to construct new sets from old sets.
+  {x^2 | x e {1..5}}
+- Sets are not very convenient DS, because they require equality
+  [x^2 | x <- [1..5]]
+- x <- [1..5] is the =generator= states how to generate values for x
+*** Multiple generators are like =nested loops= with later generators as more deeply nested loops
+  whose variables change value more frequently
+  #+begin_src
+    > [(x,y) | y <- [4,5], x <- [1,2,3]]
+      [(1,4),(2,4),(3,4),(1,5),(2,5),(3,5)]
+    > [(x,y) | x <- [1,2,3], y <- [4,5]]
+      [(1,4),(1,5),(2,4),(2,5),(3,4),(3,5)]
+  #+end_src
+*** ~Dependant Generators~
+  later generators can dependon variables that are introduced by earlier generators
+  #+begin_src
+    > [(x,y) | x <- [1..3], y <- [x..3]]
+      [(1,1),(1,2),(1,3),(2,2),(2,3),(3,3)]
+
+    concat xss = [ x | xs <- xss, x <- xs ]
+  #+end_src
+*** List comprehensions can use =guards=
+#+begin_src haskell
+[x | x <- [1..10], even x]
+-- generatin all te factors of a number
+factors :: Int -> [Int]
+factors n = [x | x <- [1..n], n `mod` x == 0 ]
+-- checking if a number is prime, based on his factors
+prime :: Int -> Bool
+prime n = factors n == [1,n]
+-- generating al prime numbers up to n, not very efficient
+primes :: Int -> [Int]
+primes n = [x | x <- [2..n], prime x]
+#+end_src
+*** Uses of zip
+#+begin_src
+pairs :: [a] -> [(a,a)]
+pairs xs = zip xs (tail xs)
+
+sorted :: Ord a => [a] -> Bool
+sorted xs = and [x <= y | (x,y) <- pairs xs]
+
+positions :: Eq a => a -> [a] -> [Int]
+positions x xs =
+  [i | (x',i) <- zip xs [0..n], x == x']
+  where n = length xs -1
+#+end_src
+** 06 - Recursive Functions
+#+begin_src haskell
+product :: [Int] -> Int
+-- instead of match with [] we could match with 1 elem list
+-- product [x] = x
+product []     = 1
+product (x:xs) = x * product xs
+
+factorial  :: Int -> Int
+factorial n = product [1..n]
+
+-- partial definition of factorial, as it doesn't work with negative numbers
+-- Error: Control stack overflow
+--factorial 0     = 1
+--factorial (n+1) = (n+1) * factorial n -- using the old "n+k pattern"
+
+qsort :: [Int] -> [Int]
+qsort []     = []
+qsort (x:xs) =
+   qsort smaller ++ [x] ++ qsort larger
+   where
+      smaller = [a | a <- xs, b <= x]
+      larger  = [b | b <- xs, b >  x]
+#+end_src
+- 1984 "Why Functional Programming Matters"
+  explains how lazy functional programming matters
+  lazyness allows you to not care about evaluation order
+- recursive functions can be proven by *induction*
+- 16:26
+  "What you usually do there (in C#) you put a *breakpoint* on your code
+  in order to observe the behaviour of a running program. You put a breakpoint.
+  And you look at the state of the program at each *breakpoint*.
+  ...
+  In a *pure language*, you look at your expression and unfolds, it executes and you can expand definitions
+  until you get something that is your final value."
+*** Examples: defining Prelude functions with recursion
+#+begin_src
+length :: [a] -> Int
+length []     = 0
+length (_:xs) = 1 + length xs
+
+reverse :: [a] -> [a]
+reverse []     = []
+reverse (x:xs) = reverse xs ++ [x]
+
+zip :: [a] -> [b] -> [(a,b)]
+zip []      _     = []
+zip _      []     = []
+zip (x:xs) (y:ys) = (x,y) : zip xs ys
+
+drop :: Int -> [a] -> [a]
+drop 0     xs     = xs
+drop (n+1) []     = []
+drop (n+1) (_:xs) = drop n xs
+
+(++) :: [a] -> [a] -> [a]
+[]     ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+#+end_src
+** 07 - High Order Functions
+#+begin_src haskell
+twice :: (a -> a) -> (a -> a)
+twice f x = f (f x)
+-- twice f   = f . f -- or
+#+end_src
+- "To Mock a Mockingbind" a book about combinators
+  https://en.wikipedia.org/wiki/To_Mock_a_Mockingbird
+- A function is called =high-order= if it takes a funtion as
+  an argument OR returns a function as a result.
+- Book: David A Schmidt "Denotational Semantics"
+- A ~predicate~ is a function from a type to Bool
+- You can view haskell as executable denotational semantics
+  You define an interpreter for a language. In a functional language.
+  #+begin_src haskell
+    data Expr
+      = Value Int
+      | Add Expr Expr
+
+    -- the "intepreter"
+    eval :: Expr -> Int
+  #+end_src
+- foldr can also be defined as replacing
+  - "cons" (:) by "f"
+  - and "[]" by "v"
+*** definitions of =length=, recursively and with foldr
+#+begin_src haskell
+  length :: [a] -> Int
+  lenght []     = 0
+  length (_:xs) = 1 + length xs
+
+-- Replace (:) by \_ n -> 1 + n, and [] by 0
+-- length [1,2,3]
+-- length (1:(2:(3:[])))
+-- 1+(1+(1+0))
+-- 3
+length = foldr (\_n -> 1+n) 0
++end_src
+*** definition of =foldr=, recursively
+#+begin_src haskell
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr f v []     = v
+foldr f v (x:xs) = f x (foldr f v xs)
+#+end_src
+*** definitions of sum/product/or/and with =foldr=
+#+begin_src haskell
+sum     = foldr (+) 0
+product = foldr (*) 1
+or      = foldr (||) False
+and     = foldr (&&) True
+#+end_src
+*** definitions of =map/filter= with recursion or comprehension
+#+begin_src haskell
+-- with list comprehension
+map' f xs = [f x | x <- xs] -- more "declarative"
+
+-- induction/recursion
+map f []     = []
+map f (x:xs) = f x : map f xs
+
+filter' p xs = [x | x <- xs, p x]
+
+filter p []    = []
+filter p (x:xs)
+   | p x       = x : filter p xs
+   | otherwise = filter p xs
+#+end_src
+** 08 - Functional Parsers
+** 09 - Interactive Programs
+** 10 - Declaring Types and Classes
+** 11 - Countdown Problem
+** 12 - Lazy Evaluation
+** 13 - Equational Reasoning
 * 16 | Functional Programming in Haskell: Supercharge Your Coding
 Source: https://github.com/wimvanderbauwhede/HaskellMOOC
 ** 1 Haskell First Steps
@@ -880,19 +1233,19 @@ https://wiki.haskell.org/Pointfree
 ** Part #1: syntax, Optional, List
 https://www.youtube.com/watch?v=NzIZzvbplSM
 #+begin_src haskell
-  headOr = foldRight const
-  length = foldRight (const (1 +)) 0
-  map f = foldRight ((:.) . f) Nil
-  filter p = foldRight (\a as -> if p a then a :. as else as) Nil
-  (++) = flip (foldRight (:.))
-  flatten = foldRight (++) Nil
-  flatMap f xs = flatten (map f xs)
-  flatMap f xs = (flatten . map f) xs
-  flatMap f    =  flatten . map f
-  flatMap f    =  flatten . map f
-  flatMap      = (flatten .) . map
-  flattenAgain = flatMap id
-  seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
+headOr = foldRight const
+length = foldRight (const (1 +)) 0
+map f = foldRight ((:.) . f) Nil
+filter p = foldRight (\a as -> if p a then a :. as else as) Nil
+(++) = flip (foldRight (:.))
+flatten = foldRight (++) Nil
+flatMap f xs = flatten (map f xs)
+flatMap f xs = (flatten . map f) xs
+flatMap f    =  flatten . map f
+flatMap f    =  flatten . map f
+flatMap      = (flatten .) . map
+flattenAgain = flatMap id
+seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
 #+end_src
 *** 00:09:11 In haskell all functions take 1 argument.
   Right associative.

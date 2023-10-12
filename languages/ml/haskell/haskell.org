@@ -84,6 +84,96 @@
 |---------------------+--------------------------------------------------|
 ** Standard Library
 - https://packages.ubuntu.com/bionic/amd64/ghc/filelist
+*** Prelude.hs functions
+https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/tourofprelude.html#init
+| fn         | returns     | description                                                 |
+|------------+-------------+-------------------------------------------------------------|
+| all        | Bool        |                                                             |
+| any        | Bool        |                                                             |
+| concatMap  | [a]         | map + concat                                                |
+| dropWhile  | [a]         | drops from head while fn is True                            |
+| filter     | [a]         |                                                             |
+| flip       | b -> a -> c | returns the same function with argumnts flipped             |
+| foldl      | a           | folds left                                                  |
+| foldl1     | a           | folds left over NON EMPTY lists                             |
+| foldr      | a           | folds right                                                 |
+| foldr1     | a           | folds right over NON EMPTY lists                            |
+| iterate    | [a]         | returns the infinity list of applying [fn x, fn (fn x),...] |
+| map        | [b]         |                                                             |
+| span       | ([a],[a])   | split list into 2 tuple, pivot when fn returns False        |
+| break      | ([a],[a])   | split list into 2 tuple, pivot when fn returns True         |
+| takeWhile  | [a]         | returns elems from head, while fn returns True              |
+| until      | [a]         | returns elems from head, until fn returns False             |
+| zipWith    | [c]         | applies a binary function and two list                      |
+|------------+-------------+-------------------------------------------------------------|
+| repeat     | [a]         | repeats an infinite list of the value provided              |
+| replicate  | [a]         | repeats N list of the value provided                        |
+|------------+-------------+-------------------------------------------------------------|
+| concat     | [a]         | flattens a list of lists                                    |
+| head       | a           | first element on a NON EMPTY list                           |
+| tail       | [a]         | aka cdr                                                     |
+| last       | a           | last element on a NON EMPTY list                            |
+| init       | [a]         | aka butlast                                                 |
+| sort       | [a]         | sorts in ascending order                                    |
+| reverse    | [a]         | reverse a list                                              |
+| maximum    | a           | returns max element on a NON EMPTY list                     |
+| minimum    | a           | returns min element on a NON EMPTY list                     |
+| length     | int         |                                                             |
+| null       | Bool        | true if empty list                                          |
+| and        | Bool        | applied to a list of booleans                               |
+| or         | Bool        | applied to a list of booleans                               |
+| product    | int         | aka reduce #'*                                              |
+| sum        | int         | aka reduce #'+                                              |
+|------------+-------------+-------------------------------------------------------------|
+| ++         | [a]         | append 2 lists                                              |
+| zip        | [(a,b)]     | applied to 2 lists, returns a list of pairs                 |
+|------------+-------------+-------------------------------------------------------------|
+| elem       | Bool        | aka exists? on list                                         |
+| notElem    | Bool        | aka NOT exists? on list                                     |
+| !!         | a           | indexing a list                                             |
+| splitAt    | ([a],[a])   | splits at index                                             |
+| take       | a           | aka subseq 0 N                                              |
+| drop       | [a]         | aka nthcdr                                                  |
+|------------+-------------+-------------------------------------------------------------|
+| lines      | [String]    | split String by new line                                    |
+| unlines    | String      | list of strings into string                                 |
+| digitToInt | Int         | char to int                                                 |
+| chr        | Char        | takes an integer                                            |
+| ord        | Int         | ascii code for char                                         |
+| toLower    | Char        |                                                             |
+| toUpper    | Char        |                                                             |
+| compare    | Ordering    |                                                             |
+| error      | a           | takes a string and errors                                   |
+| max        | a           | max between 2 elements                                      |
+| succ       | a           | next value on an Enum, error if last                        |
+| pred       | a           | previous value on an Enum, error if first                   |
+|------------+-------------+-------------------------------------------------------------|
+| fst        | a           | first element on a two element tuple                        |
+| snd        | b           | second element on a two element tuple                       |
+|------------+-------------+-------------------------------------------------------------|
+| print      | IO ()       | prints showable                                             |
+| putStr     | IO ()       | prints string                                               |
+| show       | String      |                                                             |
+|------------+-------------+-------------------------------------------------------------|
+| isSpace    | Bool        |                                                             |
+| isAlpha    | Bool        | if char is alphabetic                                       |
+| isDigit    | Bool        | if char is a number                                         |
+| isLower    | Bool        |                                                             |
+| isUpper    | Bool        |                                                             |
+|------------+-------------+-------------------------------------------------------------|
+| ceiling    |             | smallest integer, not less than argument                    |
+| floor      |             | greatest integer, not greater than argument                 |
+| round      |             | nearest integer                                             |
+| truncate   |             | drops the fractional part                                   |
+|------------+-------------+-------------------------------------------------------------|
+| mod        |             |                                                             |
+| quot       |             |                                                             |
+| rem        |             |                                                             |
+|------------+-------------+-------------------------------------------------------------|
+| **         | Floating    | raises, arguments must be Floating                          |
+| ^          | Num         | raises, Num by Integral                                     |
+| ^^         | Fractional  | raises, Fractional by Integral                              |
+|------------+-------------+-------------------------------------------------------------|
 *** base
 - https://hackage.haskell.org/package/base
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
@@ -262,5 +352,6 @@ https://docs.haskellstack.org/en/stable/dependency_visualization/
 - State of the Haskell ecosystem
   https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
 * Codebases
+- exercises https://github.com/effectfully-ou/haskell-challenges
 - https://github.com/jappeace/cut-the-crap/
   ffmpeg based, cut video silences

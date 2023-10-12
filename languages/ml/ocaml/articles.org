@@ -18,8 +18,123 @@
 - 2013 https://mirage.io/docs/tutorial-lwt
 - https://www.baturin.org/code/lwt-counter-server/
 - Lwt Translations of the Async Code Examples in Real World OCaml https://github.com/dkim/rwo-lwt#readme
-* If Statement and Loops
-https://ocaml.org/docs/if-statements-and-loops
+* Ocaml.org Docs
+** Data Types and Matching https://ocaml.org/docs/data-types
+- Where map and join function can be implemented, with similar behavior,
+  can be called a monad.
+- The (=) operation, tests for ~structural equality~ between two expressions
+  It goes recursively into each expression, checking they're exactly the same at all levels
+- The (as) keyword can be used to name part of an expression.
+  #+begin_src ocaml
+    | Name ("/DeviceGray" | "/DeviceRGB") as n -> n
+    | Node (1, ((k,_) as pair), r) when k = k' -> Some pair
+  #+end_src
+- Data types may be mutually-recursive when declared with *and*
+  #+begin_src ocaml
+    (* generic example *)
+    type t  = A | B of t'
+     and t' = C | D of t
+    (* used to decorate a tree by adding additional information to each node *)
+    type t' = Int of int | Add of t * t
+    (* manipulated by a accompanying MUTUALLY-RECURSIVE FUNCTIONS *)
+    let rec sum_t' = function
+      | Int i -> i
+      | Add (i, i') -> sum_t i + sum_t i'
+      and sum_t {annotation; data} =
+        if annotation <> ""
+        then Printf.printf "Touching %s\n"  annotation;
+             sum_t' data
+    (* effectively are 2 functions *)
+    (* val sum_t' : t' -> int = <fun> *)h 
+  #+end_src
+- =Option.map=
+  #+begin_src ocaml
+    let map f = function
+      | None -> None
+      | Some v -> Some (f v)
+  #+end_src
+- =Option.value=
+  #+begin_src ocaml
+    let value default = function
+      | None -> default
+      | Some v -> v
+  #+end_src
+- =Option.fold=
+  #+begin_src ocaml
+    let fold f default o = o |> map f |> value default
+  #+end_src
+- =Option.join=
+  Takes a single argument of type "'a option option"
+  #+begin_src ocaml
+    let join = function
+    | Some Some v -> Some v
+    | Some None -> None
+    | None -> None
+  #+end_src
+** Functional Programming https://ocaml.org/docs/functional-programming
+- ~closures~ are functions which carry around some of the environment in which they were defined
+  - For example on methods (from LabGtk), receive_fn keeps a reference to chan
+    #+begin_src ocaml
+      class html_skel obj = object (self)
+        method save_to_channel chan =
+          let receiver_fn content =
+            output_string chan content;
+            true
+          in
+          save obj receiver_fn
+      end
+    #+end_src
+- You can also use ~partial application~ of functions like this
+  #+begin_src ocaml
+    let multiply n = List.map (( * ) n)
+    let double = multiply 2
+    double [1;2;3] (* [2;4;6] *)
+
+    let plus = ( * )
+    List.map (plus 2) [1;2;3] (* [3;4;5] *)
+  #+end_src
+  - You can also use it to create your own function aliases
+    #+begin_src ocaml
+      let print_string = output_string stdout
+      (* or while using method calls *)
+      let begin_page cgi title =
+        let out = cgi # output # output_string in (* output is a method of cgi *)
+        out "<html>\n";
+        out "<head>\n";
+    #+end_src
+- having ~pure functions~ allows compilers to make some decisions smarter
+  - Example:
+    C's strlen is known by the gcc compiler to be pure,
+    and if can infer that is not modified it can remove redundant extra calls.
+    Otherwise this will be O(n^2)
+    #+begin_src c
+      for (i = 0; i < strlen(s); ++i) {
+        // Do something that doesn't affect s
+      }
+    #+end_src
+- Using ~lazy~
+  #+begin_src ocaml
+    let giv_me_a_three _ = 3
+    let lazy_expr = lazy (1 / 0) (* val lazy_expr : int lazy_t = <lazy> *)
+    give_me_a_three lazy_expr (* 3 instead of throwing an exception *)
+    Lazy.force lazy_expr (* Exception: Division_by_zero *)
+  #+end_src
+- An object is is ~boxed~ if is has been allocated on the heap
+  using *malloc* in C, *new* in C++ and *Integer* for *int* in Java
+  and/or is referred through a pointer.
+  #+begin_src c
+    #include <stdio.h>
+    void printit(int *ptr) { // takes a boxed integer
+      printf("the number is %d\n", *ptr);
+    }
+    void main(void) {
+      int a = 3; // stack, unboxed
+      int *p = &a;
+      printit(p);
+    }
+
+  #+end_src
+** If Statement, Loops, and Recursions https://ocaml.org/docs/if-statements-and-loops
 - nor *for* or *while* loops have a way to *break* out of it
   - Except throwing an exception
   - Both return *unit*
@@ -29,6 +144,23 @@ https://ocaml.org/docs/if-statements-and-loops
   List.for_all
   List.exist
 - fold_left is more efficient
+** Modules https://ocaml.org/docs/modules
+** Labels
+- Example of a mutually recursive function
+#+begin_src ocaml
+  let rec even n =
+    match n with
+      | 0 -> true
+      | x -> odd (x-1)
+  and odd n =
+    match n with
+      | 0 -> false
+      | x -> even (x-1);;
+#+end_src
+** Pointers https://ocaml.org/docs/pointers
+** Functors https://ocaml.org/docs/functors
+** Objects https://ocaml.org/docs/objects
+
 * 2018 | What I wish I knew when learning OCaml
    https://baturin.org/docs/ocaml-faq/
 - you can also produce Javascript from OCaml Bytecode (js_of_ocaml)

@@ -12,3 +12,4 @@
   https://groups.google.com/forum/#!msg/erlang-programming/Qg4-AU7J5mM/DEM9MWvLdK4J
 - https://spawnedshelter.com/
 - https://github.com/0xAX/erlang-bookmarks/blob/master/ErlangBookmarks.md
+- https://joearms.github.io/#2013-11-21%20My%20favorite%20Erlang%20Program

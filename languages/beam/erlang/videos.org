@@ -2,6 +2,8 @@
   https://www.youtube.com/watch?v=x_XR8TDhBUI
 - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
 - Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
+- UXLearner - Basic Erlang - https://www.youtube.com/playlist?list=PLJr0bQpUAsMjwKxwHQXEunWQaZ9q5ttuH
+- Simon Thompson - Basic Erlang - https://www.youtube.com/playlist?list=PLoFxPv8jwGVVlajiMxaW9zG1IZgHODTuq
 * Channels
 |-----------------+-----------------------------------------------------------------|
 | CodeSync        | https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw        |
@@ -10,7 +12,7 @@
 | josevalim       | https://www.twitch.tv/josevalim/videos                          |
 | zxq9 (erlang)   | https://www.youtube.com/channel/UCMnRVG50iFEpkgbUu1mZrMA/videos |
 |-----------------+-----------------------------------------------------------------|
-* 2008 | Erlang In Practice                            | Kevin Smith
+* 08 | Erlang in Practice                            | Kevin Smith
 ** 1
 - is useful use a "match all" on a *receive*, because a process can receive messages we don't know
   and fill up the process mailbox.
@@ -48,7 +50,355 @@
   #+begin_src erlang
   foo> rpc:call(bar@localhost, erlang, date, [])
   #+end_src
-* 2015 | How to pick a Pool in Erlang without Drowning | Anthony Molinaro
+* 12 | Erlang in Production                          | Bernard Duggan
+https://www.youtube.com/watch?v=G0eBDWigORY
+- gen_fsm - using it for a very simple SIP state machine
+- "I wish I'd known that when I started"
+- from "M5 networks" company, VoIP company
+- (Erlang is) Highly Concurrent
+  - Tens of thousands of procesess ("threads") are no problem
+  - each only costs you 1236 bytes of memory
+  - primitives send/receive
+    #+begin_src erlang
+      NewPid = spawn(?MODULE, f, []),
+      NewPid ! {message, Message},
+      %% ...
+      f() ->
+          receive
+              {message, M} -> io:fwrite("~p", [M])
+          end.
+    #+end_src
+** Dialyzer should be mandatory
+    - The compiler doesn't check types at compile time
+    - Each module is compiler independenly
+** The VM can crash
+- Linked-in Drivers or NIFs
+- Out-of-Memory
+  - Non-tail recursive loops
+    #+begin_src erlang
+      %% Example
+      %% non-tail recursive try/catch, before we had try-of/catch
+      foo(X) ->
+          try
+             case f(X) of
+                 continue -> foo(A);
+                 done     -> ok
+             end
+          catch % try-catch must maintain the stack
+              _ -> doom()
+          end.
+
+      %% Example
+      %% tail-recursive using try-of/catch
+      try f(X) of
+          %% Exceptions throw here are not caught!
+          A -> foo(A);
+          _ -> ok
+      catch
+          _ -> doom()
+      end.
+        #+end_src
+  - Queue overflow
+    #+begin_src erlang
+      %% Example 1: with too many msgs the process won't be able to keep up
+      %% called by a lot of threads...
+      log_msg(Msg) ->
+          logger ! {log, Msg}.
+
+      logger() ->
+          receive
+              {log, Msg} -> format_and_write(Msg);
+              _          -> ok
+          end,
+          logger().
+
+      %% Example 2: "selective receive" mnesia:transaction/1
+      %% Example 3: "selective receive"
+      receiver() ->
+          %% This is O(n):
+          receive
+              particular_message -> do_lots_of_work()
+          end,
+          %% This is O(1):
+          receive
+              OtherStuff -> do_other_work(OtherStuff)
+          end,
+          receiver().
+
+      %% Solution?
+      %% this is also a "selective receive", but only depending to the size of the queue after this point.
+      %% this is due how queue works internally. It infers that you couldn't possible match older things.
+      R = make_ref(),
+      server ! {R, MyRequest},
+      receive
+          {R, Resp} -> process_response(Resp)
+      end
+     #+end_src
+** Message queues "just work"...except when they don't
+** The OTP is invaluable
+- forces you to build process tree
+- Solving problems you might not think about
+  #+begin_src erlang
+    %% simple call to another process
+    server_proc ! {request, ReqData},
+    receive
+        {response, RespData} -> RespData
+    end.
+    %% but...with above we might be receiving an old message
+    %% solution
+    Ref = make_ref(), % !
+    server_proc ! {request, Ref, ReqData},
+    receive
+        {response, Ref, RespData} -> ResData
+    end.
+    %% but...what if server_proc process doesn't exist
+    case whereis(server_proc) of % !
+        undefined -> {error, noproc};
+        Pid ->
+            Ref = make_ref(), % !
+            Pid ! {request, Ref, ReqData},
+            receive
+                {response, Ref, RespData} -> ResData
+            end
+    end.
+    %% but...what if it dies after we send a message
+    case whereis(server_proc) of % !
+        undefined -> {error, noproc};
+        Pid ->
+            Ref = make_ref(),
+            Pid ! {request, Ref, ReqData},
+            receive
+                {response, Ref, RespData} -> ResData,
+            after 5000 -> {error, timeout} % !
+            end
+    end.
+    %% but...what if I don't wat to wait
+    MRef = erlan:monitor(process, server_proc),
+    Ref = make_ref(),
+    server_proc ! {request, Ref, ReqData},
+    receive
+        {respone, Ref, RespData} ->
+            erlangdemonitor(MRef),
+            {ok, RespData};
+        {'DOWN', MRef, _, _} ->
+            {error, no_proc};
+    after 5000 ->
+            erlang:demonitor(MRef),
+            {error, timeout};
+    end
+  #+end_src
+** Integration as a UNIX-style service is lacking
+- systemv/systemd integration
+- erl -noshell -detached -boot myapp.boot
+  - return exit code 0 always
+  - -detach means no console output
+- ~heart~ process manages processes restarts
+- no way to do log rotation
+  no way to catch SIGnals
+- They created ~erld~
+** Hot code loading is...interesting
+- it's really hard
+- it's hard to test
+- there's no good tools to help
+** System monitoring is vital
+- number of processes
+  length(erlang:processes())
+- queue length (esp for busy processes)
+  erlang:process_info(Pid, message_queue_len)
+- total memory use
+  erlang:memory/0,1
+* 14 | Designing a Real Time Game Engine in Erlang   | Mark Allen
+https://www.youtube.com/watch?v=sla-t0ZNlMU
+
+* 14 | The Mess We're in                             | Joe Armstrong
+https://www.youtube.com/watch?v=lKXe3HUG2l4
+- CONCLUSION
+  "How to we reduce the complexity of everything of we have been doing?"
+  "Github is about cloning things. Is making things bigger and bigger."
+  "We need mechanism to make things smaller."
+- 1948, first computer program by Tom Kilburn
+- 1985, start of Erlang
+- Seven deadly sins
+  1) code even you cannot undernstand a week after you wrote it, *no comments*
+  2) code with *no specifications*
+  3) code that is shipped as soon as it runs and before its beautiful
+  4) code with added features
+  5) code that is very very fast very *very obscure* and incorrect
+  6) code that is *not beautiful*
+  7) code that you wrote without understanding the problem
+- aka shifting your mind between
+  - the mode you are in when you write your code
+  - to the mode you need to be when you explain when the code works
+- RESUME: the "state" of a machine given by their memory/RAM
+  is what ultimately determines a program's
+  - reproducibility, the more it is, the easier is to "google" solutions to problems
+  - predictability
+  - failures
+- RESUME: Adding a replica on a different machine, to handle failures, introduces new problems too.
+  - distributing computing
+  - parallel computing
+  - concurrent programming
+- "You shouldn't write systems that violate the laws of physics."
+- "Entropy always increases."
+- https://en.wikipedia.org/wiki/Limits_of_computation
+- Paper: "Ultimate limits Ultimate physical limits to computation"
+  by Seth Llyod
+  2000
+  https://arxiv.org/abs/quant-ph/9908043
+  https://arxiv.org/pdf/quant-ph/9908043.pdf
+- ME: one could argue that he is looking at 2 problems "solved"? today
+  - nixos-ish "how to name things? use hashes"
+    torrent-ish https://en.wikipedia.org/wiki/Kademlia
+    git + bittorrent = git-torrent?
+    chatgpt-ish "how do I reduce/merge my 80k erlang modules that I wrote into 5k modules?"
+    unison? abolish names, "given a piece of code, how do I find a similar piece of code? is it unique?"
+* 14 | Writting Quality Code in Erlang               | Garrett Smith
+- "Software is a human thing, programming has nothing to do with computers"
+  "We Write software for other people."
+- "We are way past when we were worried about memory".
+- You need to *spell out* your code to not be rude but chatty
+  - "Functions are named *case* expressions."
+  - It forces you spell out exactly what you are doing
+  - Functions are good for naming decisions
+  - keep working until is completing obvious
+- Counter: you lose visibility on your flow control
+** Example: rude code
+- demands time to be understood
+#+begin_src erlang
+handle_amqp(#message{name="db.create"}=Msg, State) ->
+    e2_log:info({db_create, stax_service:to_proplist(Msg)}),
+    Name = get_required_attr("name", Msg),
+    verify_db_name(Name),
+    User = get_required_attr("user", Msg),
+    Pwd = get_required_attr("password", Msg),
+    Options =
+        case get_attr("cluster", Msg) of
+          undefined -> [];
+            Cluster -> [{cluster, Cluster}]
+        end,
+    case stax_mysql_controller:create_database(
+          name, User, Pwd, Options) of
+        {ok, HostInfo} ->
+            Attrs = [{"slaves", ""}|host_info_attrs(HostInfo)],
+            {reply, mesage_response(Msg, Attrs), State};
+        {error, Err} ->
+            e2_log:error(),
+            {error, err, State}
+    end.
+#+end_src
+** Example: refactor
+- spelled out
+#+begin_src erlang
+  handle_amqp(#message{name="db.create"}=Msg, State) ->
+      handle_db_create_msg(Msg, State). %% a "dispatch"
+
+  handle_db_create_msg(Msg, State) ->
+      log_info(db_create, Msg),
+      Args = db_create_args(Msg),
+      handle_db_create(db_create(Args), Msg, State).
+#+end_src
+** Example: refactor - the args details
+#+NAME: iter 1
+#+begin_src erlang
+  db_create_args(Msg) ->
+    Name = get_required_attr("name", Msg),
+    verify_db_name(Name),
+    User = get_required_attr("user", Msg),
+    Pwd = get_required_attr("password", Msg),
+    Options =
+        case get_attr("cluster", Msg) of
+          undefined -> [];
+            Cluster -> [{cluster, Cluster}]
+        end,
+    #db_create{ %% the new thing
+       name=Name,
+       user=User,
+       pwd=Pwd,
+       options=Options}.
+#+end_src
+#+NAME: iter 2
+#+begin_src erlang
+  db_create_args(Msg) ->
+      #db_create{ %% decomposing
+         name    = db_create_name_arg(Msg),
+         user    = db_create_user_arg(Msg),
+         pwd     = db_create_pwd_arg(Msg),
+         options = db_create_options_arg(Msg)}.
+
+  db_create_name_arg(Msg) ->
+      verify_db_name(get_required_attr("name", Msg)).
+
+  db_create_user_arg(Msg) ->
+      get_required_attr("user", Msg).
+
+  db_create_pwd_arg(Msg) ->
+      get_required_attr("password", Msg).
+
+  db_create_options_arg(Msg) ->
+      case get_attr("cluster", Msg) of
+          undefined -> [];
+          Cluster   -> [{cluster, Cluster}]
+      end.
+
+  %% take 2
+  %% "Functions are named *case* expressions."
+  db_create_options_arg(Msg) ->
+      cluster_option(get_attr("cluster", Msg)).
+
+  cluster(undefined) -> [];
+  cluster(Cluster)   -> [{cluster, Cluster}].
+#+end_src
+** Example: refactor - the db details
+#+begin_src erlang
+  %% a internal translation
+  db_create(#db_create{name=Name, user=User, pwd=Pwd, options=Opts}) ->
+      stax_mysql_controller:create_database(Name, User, Pwd, Opts).
+
+  %% take 1
+  handle_db_create({ok, HostInfo}, Msg, State) ->
+      Attrs = [{"slaves", ""}|host_info_attrs(HostInfo)],
+      {reply, message_response(Msg, Attrs), State};
+  handle_db_create({error, Err}, _Msg, State) ->
+      e2_log:error({db_craete, Err, erlang:get_stacktrace()}),
+      {error, Err, State}.
+
+  %% take 2 - spell it out - passing things out
+  handle_db_create({ok, HostInfo}, Msg, State) ->
+      handle_db_created(HostInfo, Msg, State);
+  handle_db_create({error, Err}, _msg, State) ->
+      handle_db_create_error(Err, State).
+#+end_src
+** Example: refactor - successful create
+#+begin_src erlang
+  %% take 1
+  handle_db_created(HostInfo, Msg, State) ->
+      Attrs = [{"slaves", ""}|host_info_attrs(HostInfo)], %% for legacy support
+      {reply, message_response(Msg, Attrs), State}.
+
+  %% take 2
+  handle_db_created(HostInfo, Msg, State) ->
+      {reply, db_created_response(HostInfo, Msg), State}.
+
+  db_created_resopnse(HostInfo, msg) ->
+      HostInfo = host_info_attrs(HostInfo),
+      Attrs = apply_db_created_legacy_attrs(HostInfo),
+      message_response(msg, Attrs).
+
+  apply_db_created_legacy_attrs(Attrs) -> [{"slaves", ""}|Attrs].
+#+end_src
+** Example: refactor - failed create
+#+begin_src erlang
+  %% take 1 - error case
+  handle_db_create_error(Err, State) ->
+      e2_log:error({db_create, Err, erlang:get_stacktrace()}),
+      {error, Err, State}.
+
+  %% take 2
+  handle_db_create_error(Err, State) ->
+      log_error(db_create, Err),
+      {error, Err, State}.
+#+end_src
+* 15 | How to pick a Pool in Erlang without Drowning | Anthony Molinaro
 https://www.youtube.com/watch?v=GO_97_6w5lU
 - Why? For _shared access_ that every request might need access to.
   - Eg: configuration, cache, large datastructure, persistent connections
@@ -89,3 +439,78 @@ https://www.youtube.com/watch?v=GO_97_6w5lU
   handle_call({get_data, Query}, _From, Connection) ->
       {reply, query(Query, Connection), Connection}.
 #+end_src
+* 17 | Why We Chose Erlang over Java, Scala, Go, C   | Colin Hemmings
+- about the company "Outlyer" (RIP)
+- Versions of their product
+  * 1st generation
+    - A monolith
+    - Python agent, to collect metrics
+    - NodeJS App
+    - MongoDB
+    - 2 Nodes for HA
+  * 2nd generation
+    - Microservices
+    - Separate state, services, deployment
+    - RabbitMQ
+    - Riak for timeseries data
+  * 3rd generation
+    - redis to buffer nodejs work
+  * 4th generation
+    - Erlang
+  * 5th Generation
+    - Dalmatiner DB, to replace Riak https://gitlab.com/Project-FiFo/DalmatinerDB/dalmatinerdb
+    - ZFS to take care of compression
+* 18 | Scaling Erlang cluster to 10,000 nodes        | Maxim Fedorov
+- about Erlang in WhatsApp
+  - acquired by Facebook in 2014
+- 2013 - 200 million users
+  2018 - 1.5 billion users
+- Speaker
+  - joined in 2016
+  - Network Engineer
+- On the bought, they needed to migrate to smaller servers
+  | From | Erlang R16, FreeBSD, IBM    |
+  | To   | Erlang R21, Linux, Facebook |
+  - "If you want to have a lot of network connections running
+     Linux's epool() is not the best."
+  - They move from 16 to 21,
+    because the new version gives better performance without needing using BSDs.
+- An erlang cluster is a mesh, each server connects to each other.
+- "Every phone when it connects it spawns an erlang process."
+- Distributed Process Registry solutions
+  1) Coordinated:
+     - global https://www.erlang.org/doc/man/global.html
+       - based on a global lock
+     - pg2 https://www.erlang.org/doc/man/global.html
+     - gproc https://github.com/uwiger/gproc
+     - s_groups? https://www.youtube.com/watch?v=dWpsesw_UQU
+  2) Eventual:
+     - Riak PG
+     - cpg
+     - syn
+     - swarm
+     - lasp PG
+- Process registry can be solved, by using 2 registries
+  - a centralized one fast changing things
+  - one distributed for rare changing thing
+- Meta-clustering
+  they avoided unnecesary connections between nodes with applications that will never talk to each other
+- A single *pg2* cluster is capped to ~1K nodes
+- ~wandist~ (internal project, extending erlang distribution)
+  - for ssl support
+  - SOCKS proxy support
+  - delivery confirmation
+  - standby connections
+  - maintain non-transitive pg2 lists (!!)
+  - compatibility (16<->21)
+- Diagnostic Tools
+  - built-in introspection:
+    - process_info/2 https://www.erlang.org/doc/man/erlang#process_info-2
+    - statistics https://www.erlang.org/doc/man/erlang#statistics_active_tasks_all
+    - system_information https://www.erlang.org/doc/man/system_information.html
+  - MSACC - microstate accounting (with extra acc on)
+    https://www.erlang.org/doc/man/msacc
+  - Lock-counting BEAM aka *lcnt* module
+  - BPF/BCC
+  - gdb (with etp-commands)
+  - fprof, valgrind

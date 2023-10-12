@@ -1,3 +1,4 @@
+- https://castle-engine.io/castle_game_engine_for_unity_developers
 - https://castle-engine.io/why_pascal
 - 1983 | http://www.pbm.com/~lindahl/real.programmers.html
   https://en.wikipedia.org/wiki/Real_Programmers_Don%27t_Use_Pascal
@@ -5,6 +6,7 @@
 - 1997 | https://www.cnet.com/tech/services-and-software/borland-sues-microsoft-over-brain-drain/
 - 2021 | https://mdhughes.tech/2021/07/12/freepascal-building/
 - 2022 | https://www.getlazarus.org/guides/intro/
+- 2022 | https://blog.synopse.info/?post/2022/11/26/Modern-Pascal-is-Still-in-the-Race https://news.ycombinator.com/item?id=37844536
 * 2017 | Why I use Object Pascal
   https://dubst3pp4.github.io/post/2017-10-03-why-i-use-object-pascal/
   https://news.ycombinator.com/item?id=15490345

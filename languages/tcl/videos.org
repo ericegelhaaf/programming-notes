@@ -1,4 +1,9 @@
+- 21 | Simple Calculator using TCL/TK  https://www.youtube.com/watch?v=q7Zjy0tATW4
+- https://www.youtube.com/@alexbakeredu
+- Learning TCL https://www.youtube.com/watch?v=jf0PynxBSOg
+  LIVE Programming a Web Crawler w/ Tcl – Programming Polyglot #001
 - Channel https://www.youtube.com/@videotcltk
+- EuroTCL Slides https://ssl.webpack.de/www.eurotcl.eu/pastevents.html
 * 16 | Nathan Coulter  | coroutine is the new main
 https://www.youtube.com/watch?v=yCC--STRzo4
 - TODO 06:40 https://wiki.tcl-lang.org/page/ycl%20coro%20relay
@@ -26,12 +31,36 @@ https://www.youtube.com/watch?v=yCC--STRzo4
   #+end_src
 * 19 | Brad Harder     | Tcl - An Embeddable Long-lever with a Comfortable Grip, that fits in your Pocket.
 https://www.youtube.com/watch?v=36KqbE48g0E
-- TODO: 7:41
+https://archive.fosdem.org/2019/schedule/event/tcllang/
 - 1988 Released
 - Homoiconic (Code is Data)
   - Everything is representable by a "string"
   - Commands emit strings, and strings are the things that you run
 - Doesn't have keywords (?
   - Ships commands, but you don't need to use them
-* 21 | Karl Lehenbauer | TCL: The Tool Command Language - LISP for the Masses
+- Command Session, assuming that src/numberlike.c exist is a TCL module using <tcl.h>
+  #+begin_src tcl
+    $ tclsh
+    % info commands
+    ...
+    % package require numberlike
+    % numberlike::1
+    1
+    % numberlike::1 add 2
+    3
+    % numberlike::1 add [numberlike::2 add 3]
+    6
+  #+end_src
+* 20 | Playing with Strings: An Introduction to the Tcl scripting language.
+  William J Giddings
+  https://www.youtube.com/watch?v=0sHVeNGbKMU
+* 21 | Karl Lehenbauer | TCL - LISP for the Masses
 https://www.youtube.com/watch?v=3YwFHPFL20c
+- Use mpv to watch and be able zoom
+- 18:00 starts the ipython notebooks
+  00:17:41-00:39:08 - JUPYTER      - ZOOM
+  00:39:08-00:54:00 - TALK         - FULLSCREEN
+  00:54:00          - START JUPYTER - ZOOM
+  00:56:40-01:10:08 - START SLIDES  - FULLSCREEN
+  ??????
+  01:16:14 - START PART 3

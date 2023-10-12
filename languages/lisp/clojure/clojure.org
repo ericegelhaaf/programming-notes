@@ -29,15 +29,20 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
 * Language
+- "The use of keyword argument had fallen in and out of fashin in the Clojure comunity over the years"
 ** Types
-| instancing           |            | Implementation     | Types | destructuring |
-|----------------------+------------+--------------------+-------+---------------|
-| '(1 2 3)             | (list)     | singly-linked list | mixed |               |
-| [1 2 3]              | (vector)   | hash-map like      | mixed | [a b]         |
-| #{1 2 3}             | sets       |                    |       |               |
-| {"age" 12}           | (hash-map) |                    | mixed | {age "age"}   |
-| (defrecord rr [age]) | record     |                    |       |               |
-|----------------------+------------+--------------------+-------+---------------|
+- #"a*b" regex literals
+|                      |          | impl.    | grow at | Types | destructuring                                     |
+|----------------------+----------+----------+---------+-------+---------------------------------------------------|
+| '(1 2 3)             | list     | SLL      | front   | mixed | [one two & rest :as all]                          |
+| [1 2 3]              | vector   | hash-map | end     | mixed | "                                                 |
+| #{1 2 3}             | sets     |          |         |       |                                                   |
+| {"age" 12}           | hash-map |          |         | mixed | {age "age" :or {age "Not age provided"} :as all}  |
+|                      |          |          |         |       | {:strs [age]}                                     |
+|                      |          |          |         |       | {:keys [name]}                                    |
+|                      |          |          |         |       | {:syms [last-name]}                               |
+| (defrecord rr [age]) | record   |          |         |       |                                                   |
+|----------------------+----------+----------+---------+-------+---------------------------------------------------|
 ** Standard Library
 - https://clojure.github.io/clojure/
   https://clojuredocs.org/clojure.zip
@@ -69,6 +74,14 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 | .zip          | Functional hierarchical zipper, with navigation, editing, and enumeration.      |
 |---------------+---------------------------------------------------------------------------------|
 * Libraries
+| Async programming     | 1.9 | https://github.com/clojure/core.async        |
+| Logic programming     | 1.4 | https://github.com/clojure/core.logic        |
+| Pattern Matching      | 1.1 | https://github.com/clojure/core.match        |
+| Cache strategies      | 0.4 | https://github.com/clojure/core.cache        |
+| Memoization           | 0.2 | https://github.com/clojure/core.memoize      |
+| RRB-Trees             | 0.1 | https://github.com/clojure/core.rrb-vector   |
+| Contracts programming | 0.1 | https://github.com/clojure/core.contracts    |
+| Type System           | 0.3 | https://github.com/typedclojure/typedclojure |
 - java.time
   https://stackoverflow.com/questions/62969992/clojure-whats-the-way-to-have-current-time-string-with-babashka-with-least-dep
 ** Web
