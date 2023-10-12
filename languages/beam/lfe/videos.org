@@ -1,0 +1,43 @@
+* TODO 2021 - Robert Virding: Lisp Flavoured Erlang
+  https://www.youtube.com/watch?v=CAOrdVJTUow
+  - Atoms, only has a name.
+  - Only 1 namespace (munging is not recommended)
+  - Binaries, just a pack f binary data
+    #+begin_src lfe
+    (binary 1 2 3)
+    (binary (t little-endian (size 16))
+            (u (size 4))
+            (v (size 4))
+            (f float (size 32))
+            (b bitstring))
+    #+end_src
+  - Modules and functions: not packages, not classes
+    - A collection of functions
+    - No interdepencies between them
+      #+begin_src lfe
+      (defmodule airth
+        (export (add 2) (add 3) (sub 2)))
+      (defun add (a b)   (+ a b))
+      (defun add (a b c) (+ a b c))
+      (defun sub (a b)   (- a b))
+      #+end_src
+  - `+` is actually a macro, no variadic functions available
+  - Lisp-1, symbols only have a value cells
+    Lisp-2, symbols have value and function cells
+  - Macros: unhygienic, no gensym, core forms cannot be shadowed
+  59:00
+* Wherefore art thou LFE? - Robert Virding
+  https://www.youtube.com/watch?v=BvCBTpnlqs8
+- Erlang language *became* functional as they were working trying to solve other problems.
+- Data types:
+  - Numbers
+  - Atoms (lisp symbols)
+  - Lists
+  - Tuples (lisp vectors) ??
+  - Maps
+  - Binaries
+  - Opaque types
+- Syntax:
+[[./lfe.png]]
+
+https://www.proyectoelectronico.com/amplificadores-audio/amplificador-lm1875.html

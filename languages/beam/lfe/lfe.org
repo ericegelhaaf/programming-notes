@@ -20,7 +20,19 @@ https://github.com/rvirding/lfe/
 https://lfe.io/books/casting-spels/
 - We can abuse (? defmacro to create complex guards and make it clear.
   Due by design, on guards, we can only have kernel functions.
-* Type Creation
+* Language
+- https://lfex.github.io/hyperpolyglot/
+  - *(when)* exists only when used in guards
+  - there are NOT multiple value returns
+    - you can return a tuple
+    - you can destructure a tuple
+  - structs
+    - automatically creates a function setter on the form
+      (set-RECORD-FIELD R V)
+  - (==) and (=:=) are used instead of (eq) for symbols
+  - 'true and 'false are used, instead of t and nil
+  - some functions are directly translated, with _ instead of -
+** Type Creation
 |                 | ERLANG                      | LFE (short)                  | LFE (long)                                 |
 |-----------------+-----------------------------+------------------------------+--------------------------------------------|
 | list            | [1,2,3,4]                   | '(1 2 3 4)                   | (list 1 2 3 4)                             |
@@ -29,7 +41,8 @@ https://lfe.io/books/casting-spels/
 | map             | #{foo=>1,bar=>2}            | #M(foo 1 bar 2)              | (map 'foo 1 'bar 2)                        |
 | record define   | -record(record_name,{name}) | (defrecord record-name name) |                                            |
 | record instance | #record_name{name=Name}     | #(record-name Name)          | (make-record-name name Name)               |
-* Type Access
+|-----------------+-----------------------------+------------------------------+--------------------------------------------|
+** Type Access
 |          | ERLANG                     | LFE                         |
 |----------+----------------------------+-----------------------------|
 | list     | lists:nth(1,L)             | (lists:nth 1 L)             |
@@ -37,7 +50,8 @@ https://lfe.io/books/casting-spels/
 | proplist | proplist:get_value(key, L) | (proplist:get_value 'key L) |
 | map      | maps:get(field, M)         | (maps:get 'field M)         |
 | record   | X#record_name.field        | (record-name-name Record)   |
-* Type Destructure
+|----------+----------------------------+-----------------------------|
+** Type Destructure
 |          | ERLANG               | LFE              | LFE                           |
 |----------+----------------------+------------------+-------------------------------|
 | list     | [H¦T]                | `(,H . ,T)       | (cons first rest)             |
@@ -45,47 +59,4 @@ https://lfe.io/books/casting-spels/
 | proplist | [{key, Value}]       | `(#(key ,Value)) | (list (tuple 'key value))     |
 | map      | #{key := Value}      |                  |                               |
 | record   | #dns_rr{type = Type} |                  | (match-record-name name Name) |
-
-* TODO Video: 2021 - Robert Virding: Lisp Flavoured Erlang
-  https://www.youtube.com/watch?v=CAOrdVJTUow
-  - Atoms, only has a name.
-  - Only 1 namespace (munging is not recommended)
-  - Binaries, just a pack f binary data
-    #+begin_src lfe
-    (binary 1 2 3)
-    (binary (t little-endian (size 16))
-            (u (size 4))
-            (v (size 4))
-            (f float (size 32))
-            (b bitstring))
-    #+end_src
-  - Modules and functions: not packages, not classes
-    - A collection of functions
-    - No interdepencies between them
-      #+begin_src lfe
-      (defmodule airth
-        (export (add 2) (add 3) (sub 2)))
-      (defun add (a b)   (+ a b))
-      (defun add (a b c) (+ a b c))
-      (defun sub (a b)   (- a b))
-      #+end_src
-  - `+` is actually a macro, no variadic functions available
-  - Lisp-1, symbols only have a value cells
-    Lisp-2, symbols have value and function cells
-  - Macros: unhygienic, no gensym, core forms cannot be shadowed
-  59:00
-* Video: Wherefore art thou LFE? - Robert Virding
-  https://www.youtube.com/watch?v=BvCBTpnlqs8
-- Erlang language *became* functional as they were working trying to solve other problems.
-- Data types:
-  - Numbers
-  - Atoms (lisp symbols)
-  - Lists
-  - Tuples (lisp vectors) ??
-  - Maps
-  - Binaries
-  - Opaque types
-- Syntax:
-[[./lfe.png]]
-
-https://www.proyectoelectronico.com/amplificadores-audio/amplificador-lm1875.html
+|----------+----------------------+------------------+-------------------------------|
