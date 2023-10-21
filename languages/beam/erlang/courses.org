@@ -1,3 +1,4 @@
+- UXLearner - Basic Erlang - https://www.youtube.com/playlist?list=PLJr0bQpUAsMjwKxwHQXEunWQaZ9q5ttuH
 - Course  Simon Thompson on Erlang (all 13 videos)
   https://www.youtube.com/playlist?list=PLoFxPv8jwGVVlajiMxaW9zG1IZgHODTuq
 - erlang español - https://www.youtube.com/playlist?list=PLmoxkf3gS-juT5cDrzP_ARdkqqSFU5X_3

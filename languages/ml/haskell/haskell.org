@@ -26,7 +26,36 @@
   https://github.com/reanimate/reanimate
   https://github.com/xmonad/xmonad
 * Language
-** Types
+** imports
+https://wiki.haskell.org/Import
+|------------+------------------------------------------------+------------------------|
+| import ALL | import Data.List                               | brings everything in   |
+| import     | import Data.List (intercalate)                 | brings specific things |
+| as         | import qualified Data.ByteString as ByteString |                        |
+| hiding     | import Prelude hiding (foldl, foldr)           |                        |
+|------------+------------------------------------------------+------------------------|
+** operators
+|------+---------------------------+--------------------+--------------|
+| ($)  | function application      | map ($ 10) [(+ 1)] |              |
+| (.)  | function composition      | printLn . show     |              |
+| (++) | append lists              | [1,2] ++ [3,4]     |              |
+| (<>) | append strings            | "foo" <> "bar"     |              |
+| (!!) | list indexing             | [1,2] !! 0         |              |
+| (:)  | list consing, preppending | 1 : [2, 3]         | [1,2,3] : [] |
+|------+---------------------------+--------------------+--------------|
+** types primitives
+|---------+-------+--------------------------------------|
+| Bool    |  True | boolean                              |
+| Integer |     2 | signed integer, unbounded            |
+| Int     |     2 | signed integer, 32/64 bit            |
+| Word    |     2 | unsigned integer, 32/64 bit          |
+| Float   |   1.2 | IEEE single-precision floating-point |
+| Double  |   1.2 | IEEE double-precision floating-point |
+| Char    |   'A' | an unicode code point                |
+| String  | "foo" | list characters                      |
+|---------+-------+--------------------------------------|
+** types complex
+| instancing    | possible definition        | name              | description                            |
 |---------------+----------------------------+-------------------+----------------------------------------|
 | [1,2]         | [Int]                      | linked list       |                                        |
 | "foo"         | type A = String            | type alias        |                                        |
@@ -34,7 +63,8 @@
 | A "foo"       | newtype A = A String       | type "safe" alias | can have only 1 type                   |
 |               |                            |                   | no alternatives                        |
 |---------------+----------------------------+-------------------+----------------------------------------|
-| C "foo"       | data A a = C String Int    | data              | can have >1 type per construct         |
+| C "foo"       | data A a                   | data              | can have >1 type per construct         |
+|               | = C String Int             |                   |                                        |
 |               | ¦ D a                      |                   | can have alternatives with ¦           |
 |---------------+----------------------------+-------------------+----------------------------------------|
 | C {foo = 1}   | data A = C { foo :: Int }  | data records      | automatically creates getters          |
@@ -47,28 +77,63 @@
 |---------------+----------------------------+-------------------+----------------------------------------|
 | Left "Hello"  | data Either a b            |                   | useful for modeling errors             |
 | Right 17      | = Left a                   |                   | Right = we got what we wanted          |
-|               | ¦ Right b                  |                   | Left = we got an error                 |
+|               | ¦ Right b                  |                   | Left  = we got an error                |
 |---------------+----------------------------+-------------------+----------------------------------------|
 #+TBLFM: $2=Left a
 ** extensions
-- in repl: *:set -XTypeApplications*
-- in source: *{-# LANGUAGE TypeApplications, QuasiQuotes #-}*
-|----------------------------+-----------------------------------------------------------------------------------------------|
-| RecordWildCards            | RecName {..} automatically captures each field by the name                                    |
-| NamedFieldPuns             | Rec1Name { fieldname1 = Rec2Name { fieldname2 } }                                             |
-|----------------------------+-----------------------------------------------------------------------------------------------|
-| BlockArguments             | use just (do) in places where you would use ($ do)                                            |
-| GeneralizedNewtypeDeriving | to derive typeclass instance based on the underlying type                                     |
-| LambdaCase                 | (\case PAT1 -> RET1)                                                                          |
-| OverloadedStrings          |                                                                                               |
-| PatternSynonyms            |                                                                                               |
-| QuasiQuotes                | alternate form of string literal                                                              |
-| ScopedTypeVariables        | "allows type applications to refer to type variables rather that only the concrete type"      |
-| TemplateHaskell            |                                                                                               |
-| TypeApplications           | (@) to specify a type argument for polymorphic functions                                      |
-| TypeFamilies               |                                                                                               |
-| ViewPatterns               | (f -> PATTERN) applies "f" to value and then matches the result, on function pattern matching |
-|----------------------------+-----------------------------------------------------------------------------------------------|
+https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
+- NOTE: some extensions are better enabled globally or prohibited altogether
+  enabling some extensions on a module-by-module basis
+  can end up causing maintenance burden on the application long term
+  since applciations that use it ned to be careful.
+- in repl: *:set -XTypeApplications* or :seti to enable it only for interactive code
+- in source: using a ~language pragma~
+   *{-# LANGUAGE TypeApplications, QuasiQuotes #-}*
+ |                            |                                                                                               | 21  |
+ |----------------------------+-----------------------------------------------------------------------------------------------+-----|
+ | RecordWildCards            | RecName {..} automatically captures each field by the name, OR creates a new record           | -   |
+ | NamedFieldPuns             | Rec1Name { fieldname1 = Rec2Name { fieldname2 } }                                             | -   |
+ |----------------------------+-----------------------------------------------------------------------------------------------+-----|
+ | BlockArguments             | use just (do) in places where you would use ($ do)                                            |     |
+ | LambdaCase                 | (\case PAT1 -> RET1)                                                                          |     |
+ | PatternSynonyms            |                                                                                               |     |
+ | QuasiQuotes                | alternate form of string literal                                                              |     |
+ | TemplateHaskell            |                                                                                               |     |
+ | ViewPatterns               | (f -> PATTERN) applies "f" to value and then matches the result, on function pattern matching |     |
+ |----------------------------+-----------------------------------------------------------------------------------------------+-----|
+ | AllowAmbiguousTypes        |                                                                                               | -   |
+ | BangPatterns               |                                                                                               | yes |
+ | ConstraintKinds            |                                                                                               | yes |
+ | DataKinds                  |                                                                                               | -   |
+ | DefaultSignatures          |                                                                                               | -   |
+ | DeriveAnyClass             |                                                                                               | -   |
+ | DerivingStrategies         |                                                                                               | -   |
+ | DerivingVia                |                                                                                               | -   |
+ | ExistentialQuantification  |                                                                                               | yes |
+ | ExplicitForAll             |                                                                                               | yes |
+ | FlexibleContexts           |                                                                                               | yes |
+ | FlexibleInstances          |                                                                                               | yes |
+ | FunctionalDepndencies      |                                                                                               | -   |
+ | GADTs                      |                                                                                               | -   |
+ | GeneralizedNewtypeDeriving | to derive typeclass instance based on the underlying type                                     | yes |
+ | KindSignatures             |                                                                                               | yes |
+ | MultiParamTypeClasses      |                                                                                               | yes |
+ | OverloadedStrings          |                                                                                               | -   |
+ | PolyKinds                  |                                                                                               | yes |
+ | QuantifiedConstraints      |                                                                                               | -   |
+ | RankNTypes                 |                                                                                               | yes |
+ | ScopedTypeVariables        | "allows type applications to refer to type variables rather that only the concrete type"      | yes |
+ | TupleSections              |                                                                                               | yes |
+ | TypeApplications           | (@) to specify a type argument for polymorphic functions                                      | yes |
+ | TypeFamilies               |                                                                                               | -   |
+ | TypeOperators              |                                                                                               | yes |
+ | UndecidableInstances       |                                                                                               | -   |
+ | NoStarIsType               |                                                                                               | -   |
+ | PolyKinds                  |                                                                                               | yes |
+ | StandadaloneDeriving       |                                                                                               | yes |
+ |----------------------------+-----------------------------------------------------------------------------------------------+-----|
+- "21?" column stands for GHC2021 and means,
+  if the extension is enabled by default on that version of Haskell (aka GHC 9.4)
 ** ghc-options
 - -I0
   -Iw
@@ -86,94 +151,98 @@
 - https://packages.ubuntu.com/bionic/amd64/ghc/filelist
 *** Prelude.hs functions
 https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/tourofprelude.html#init
-| fn         | returns     | description                                                 |
-|------------+-------------+-------------------------------------------------------------|
-| all        | Bool        |                                                             |
-| any        | Bool        |                                                             |
-| concatMap  | [a]         | map + concat                                                |
-| dropWhile  | [a]         | drops from head while fn is True                            |
-| filter     | [a]         |                                                             |
-| flip       | b -> a -> c | returns the same function with argumnts flipped             |
-| foldl      | a           | folds left                                                  |
-| foldl1     | a           | folds left over NON EMPTY lists                             |
-| foldr      | a           | folds right                                                 |
-| foldr1     | a           | folds right over NON EMPTY lists                            |
-| iterate    | [a]         | returns the infinity list of applying [fn x, fn (fn x),...] |
-| map        | [b]         |                                                             |
-| span       | ([a],[a])   | split list into 2 tuple, pivot when fn returns False        |
-| break      | ([a],[a])   | split list into 2 tuple, pivot when fn returns True         |
-| takeWhile  | [a]         | returns elems from head, while fn returns True              |
-| until      | [a]         | returns elems from head, until fn returns False             |
-| zipWith    | [c]         | applies a binary function and two list                      |
-|------------+-------------+-------------------------------------------------------------|
-| repeat     | [a]         | repeats an infinite list of the value provided              |
-| replicate  | [a]         | repeats N list of the value provided                        |
-|------------+-------------+-------------------------------------------------------------|
-| concat     | [a]         | flattens a list of lists                                    |
-| head       | a           | first element on a NON EMPTY list                           |
-| tail       | [a]         | aka cdr                                                     |
-| last       | a           | last element on a NON EMPTY list                            |
-| init       | [a]         | aka butlast                                                 |
-| sort       | [a]         | sorts in ascending order                                    |
-| reverse    | [a]         | reverse a list                                              |
-| maximum    | a           | returns max element on a NON EMPTY list                     |
-| minimum    | a           | returns min element on a NON EMPTY list                     |
-| length     | int         |                                                             |
-| null       | Bool        | true if empty list                                          |
-| and        | Bool        | applied to a list of booleans                               |
-| or         | Bool        | applied to a list of booleans                               |
-| product    | int         | aka reduce #'*                                              |
-| sum        | int         | aka reduce #'+                                              |
-|------------+-------------+-------------------------------------------------------------|
-| ++         | [a]         | append 2 lists                                              |
-| zip        | [(a,b)]     | applied to 2 lists, returns a list of pairs                 |
-|------------+-------------+-------------------------------------------------------------|
-| elem       | Bool        | aka exists? on list                                         |
-| notElem    | Bool        | aka NOT exists? on list                                     |
-| !!         | a           | indexing a list                                             |
-| splitAt    | ([a],[a])   | splits at index                                             |
-| take       | a           | aka subseq 0 N                                              |
-| drop       | [a]         | aka nthcdr                                                  |
-|------------+-------------+-------------------------------------------------------------|
-| lines      | [String]    | split String by new line                                    |
-| unlines    | String      | list of strings into string                                 |
-| digitToInt | Int         | char to int                                                 |
-| chr        | Char        | takes an integer                                            |
-| ord        | Int         | ascii code for char                                         |
-| toLower    | Char        |                                                             |
-| toUpper    | Char        |                                                             |
-| compare    | Ordering    |                                                             |
-| error      | a           | takes a string and errors                                   |
-| max        | a           | max between 2 elements                                      |
-| succ       | a           | next value on an Enum, error if last                        |
-| pred       | a           | previous value on an Enum, error if first                   |
-|------------+-------------+-------------------------------------------------------------|
-| fst        | a           | first element on a two element tuple                        |
-| snd        | b           | second element on a two element tuple                       |
-|------------+-------------+-------------------------------------------------------------|
-| print      | IO ()       | prints showable                                             |
-| putStr     | IO ()       | prints string                                               |
-| show       | String      |                                                             |
-|------------+-------------+-------------------------------------------------------------|
-| isSpace    | Bool        |                                                             |
-| isAlpha    | Bool        | if char is alphabetic                                       |
-| isDigit    | Bool        | if char is a number                                         |
-| isLower    | Bool        |                                                             |
-| isUpper    | Bool        |                                                             |
-|------------+-------------+-------------------------------------------------------------|
-| ceiling    |             | smallest integer, not less than argument                    |
-| floor      |             | greatest integer, not greater than argument                 |
-| round      |             | nearest integer                                             |
-| truncate   |             | drops the fractional part                                   |
-|------------+-------------+-------------------------------------------------------------|
-| mod        |             |                                                             |
-| quot       |             |                                                             |
-| rem        |             |                                                             |
-|------------+-------------+-------------------------------------------------------------|
-| **         | Floating    | raises, arguments must be Floating                          |
-| ^          | Num         | raises, Num by Integral                                     |
-| ^^         | Fractional  | raises, Fractional by Integral                              |
-|------------+-------------+-------------------------------------------------------------|
+| fn         | returns     | description                                                      |
+|------------+-------------+------------------------------------------------------------------|
+| all        | Bool        |                                                                  |
+| any        | Bool        |                                                                  |
+| concatMap  | [a]         | map + concat                                                     |
+| dropWhile  | [a]         | drops from head while fn is True                                 |
+| filter     | [a]         |                                                                  |
+| uncurry    | (a,b) -> c  | takes a fn that takes 2 args, and returns a fn that takes a pair |
+| curry      | a -> b -> c | takes a fn that takes a pair, and returns a fn that takes 2 args |
+| flip       | b -> a -> c | returns the same function with argumnts flipped                  |
+| foldl      | a           | folds left                                                       |
+| foldl1     | a           | folds left over NON EMPTY lists                                  |
+| foldr      | a           | folds right                                                      |
+| foldr1     | a           | folds right over NON EMPTY lists                                 |
+| iterate    | [a]         | returns the infinity list of applying [fn x, fn (fn x),...]      |
+| map        | [b]         |                                                                  |
+| span       | ([a],[a])   | split list into 2 tuple, pivot when fn returns False             |
+| break      | ([a],[a])   | split list into 2 tuple, pivot when fn returns True              |
+| takeWhile  | [a]         | returns elems from head, while fn returns True                   |
+| until      | [a]         | returns elems from head, until fn returns False                  |
+| zipWith    | [c]         | applies a binary function and two list                           |
+|------------+-------------+------------------------------------------------------------------|
+| repeat     | [a]         | repeats an infinite list of the value provided                   |
+| replicate  | [a]         | repeats N list of the value provided                             |
+|------------+-------------+------------------------------------------------------------------|
+| concat     | [a]         | flattens a list of lists                                         |
+| head       | a           | first element on a NON EMPTY list                                |
+| tail       | [a]         | aka cdr                                                          |
+| last       | a           | last element on a NON EMPTY list                                 |
+| init       | [a]         | aka butlast                                                      |
+| sort       | [a]         | sorts in ascending order                                         |
+| reverse    | [a]         | reverse a list                                                   |
+| maximum    | a           | returns max element on a NON EMPTY list                          |
+| minimum    | a           | returns min element on a NON EMPTY list                          |
+| length     | int         |                                                                  |
+| null       | Bool        | true if empty list                                               |
+| and        | Bool        | applied to a list of booleans                                    |
+| or         | Bool        | applied to a list of booleans                                    |
+| product    | int         | aka reduce #'*                                                   |
+| sum        | int         | aka reduce #'+                                                   |
+|------------+-------------+------------------------------------------------------------------|
+| ++         | [a]         | append 2 lists                                                   |
+| zip        | [(a,b)]     | applied to 2 lists, returns a list of pairs                      |
+|------------+-------------+------------------------------------------------------------------|
+| elem       | Bool        | aka exists? on list                                              |
+| notElem    | Bool        | aka NOT exists? on list                                          |
+| !!         | a           | indexing a list                                                  |
+| splitAt    | ([a],[a])   | splits at index                                                  |
+| take       | a           | aka subseq 0 N                                                   |
+| drop       | [a]         | aka nthcdr                                                       |
+|------------+-------------+------------------------------------------------------------------|
+| lines      | [String]    | split String by new line                                         |
+| unlines    | String      | list of strings into string                                      |
+| words      | [String]    |                                                                  |
+| unwords    | String      |                                                                  |
+| digitToInt | Int         | char to int                                                      |
+| chr        | Char        | takes an integer                                                 |
+| ord        | Int         | ascii code for char                                              |
+| toLower    | Char        |                                                                  |
+| toUpper    | Char        |                                                                  |
+| compare    | Ordering    |                                                                  |
+| error      | a           | takes a string and errors                                        |
+| max        | a           | max between 2 elements                                           |
+| succ       | a           | next value on an Enum, error if last                             |
+| pred       | a           | previous value on an Enum, error if first                        |
+|------------+-------------+------------------------------------------------------------------|
+| fst        | a           | first element on a two element tuple                             |
+| snd        | b           | second element on a two element tuple                            |
+|------------+-------------+------------------------------------------------------------------|
+| print      | IO ()       | prints showable                                                  |
+| putStr     | IO ()       | prints string                                                    |
+| show       | String      |                                                                  |
+|------------+-------------+------------------------------------------------------------------|
+| isSpace    | Bool        |                                                                  |
+| isAlpha    | Bool        | if char is alphabetic                                            |
+| isDigit    | Bool        | if char is a number                                              |
+| isLower    | Bool        |                                                                  |
+| isUpper    | Bool        |                                                                  |
+|------------+-------------+------------------------------------------------------------------|
+| ceiling    |             | smallest integer, not less than argument                         |
+| floor      |             | greatest integer, not greater than argument                      |
+| round      |             | nearest integer                                                  |
+| truncate   |             | drops the fractional part                                        |
+|------------+-------------+------------------------------------------------------------------|
+| mod        |             |                                                                  |
+| quot       |             |                                                                  |
+| rem        |             |                                                                  |
+|------------+-------------+------------------------------------------------------------------|
+| **         | Floating    | raises, arguments must be Floating                               |
+| ^          | Num         | raises, Num by Integral                                          |
+| ^^         | Fractional  | raises, Fractional by Integral                                   |
+|------------+-------------+------------------------------------------------------------------|
 *** base
 - https://hackage.haskell.org/package/base
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
@@ -235,51 +304,59 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | Text.ParserCombinators  |   |
 | Text.(Read/Printf/Show) |   |
 *** non base
-|------------------+-----------------------------------+------------------------------------------------------|
-| array            | Data.Array                        | https://hackage.haskell.org/package/array            |
-| containers       | Data.Graph                        | https://hackage.haskell.org/package/containers       |
+|------------------+-----------------------------------+--------------------------------------------------|
+| array            | Data.Array                        | https://hackage.haskell.org/package/array        |
+| containers       | Data.Graph                        | https://hackage.haskell.org/package/containers   |
 |                  | Data.IntMap                       | https://haskell-containers.readthedocs.io/en/latest/ |
-|                  | Data.IntSet                       |                                                      |
-|                  | Data.Map                          |                                                      |
-|                  | Data.Sequence                     |                                                      |
-|                  | Data.Set                          |                                                      |
-|                  | Data.Tree                         |                                                      |
-| binary           | Data.Binary                       | https://hackage.haskell.org/package/binary           |
-| bytestring       | Data.ByteString                   | https://hackage.haskell.org/package/bytestring       |
-| deepseq          | Control.DeepSeq                   | https://hackage.haskell.org/package/deepseq          |
-| directory        | System.Directory                  | https://hackage.haskell.org/package/directory        |
-| exceptions       | Control.Monad.Catch               |                                                      |
-| filepath         | System.(FilePath/OsPath/OsString) | https://hackage.haskell.org/package/filepath         |
-| haskeline        | System.Console                    | https://hackage.haskell.org/package/haskeline        |
-| *hoopl           | Compiler.Hoopl                    | https://hackage.haskell.org/package/hoopl            |
-| hpc              | Trace.Hpc                         | https://hackage.haskell.org/package/hpc              |
-| integer-gmp      | GHC.Integer.GMP                   |                                                      |
-| libiserv         |                                   |                                                      |
-| mtl              | Control.Monad.Accum               |                                                      |
-|                  | Control.Monad.Cont                |                                                      |
-|                  | Control.Monad.Except              |                                                      |
-|                  | Control.Monad.Identity            |                                                      |
-|                  | Control.Monad.RWS                 |                                                      |
-|                  | Control.Monad.Reader              |                                                      |
-|                  | Control.Monad.Select              |                                                      |
-|                  | Control.Monad.State               |                                                      |
-|                  | Control.Monad.Trans               |                                                      |
-|                  | Control.Monad.Writer              |                                                      |
-| parsec           | Text.Parsec                       |                                                      |
-|                  | Text.ParserCombinators.Parsec     |                                                      |
-| pretty           | Text.PrettyPrint                  | https://hackage.haskell.org/package/pretty           |
-| process          | System.Cmd                        | https://hackage.haskell.org/package/process          |
-|                  | System.Process                    |                                                      |
-| terminfo         | System.Console.Terminfo           | https://hackage.haskell.org/package/terminfo         |
+|                  | Data.IntSet                       |                                                  |
+|                  | Data.Map                          |                                                  |
+|                  | Data.Sequence                     |                                                  |
+|                  | Data.Set                          |                                                  |
+|                  | Data.Tree                         |                                                  |
+| binary           | Data.Binary                       | https://hackage.haskell.org/package/binary       |
+| bytestring       | Data.ByteString                   | https://hackage.haskell.org/package/bytestring   |
+| deepseq          | Control.DeepSeq                   | https://hackage.haskell.org/package/deepseq      |
+| directory        | System.Directory                  | https://hackage.haskell.org/package/directory    |
+| exceptions       | Control.Monad.Catch               |                                                  |
+| filepath         | System.(FilePath/OsPath/OsString) | https://hackage.haskell.org/package/filepath     |
+| haskeline        | System.Console                    | https://hackage.haskell.org/package/haskeline    |
+| *hoopl           | Compiler.Hoopl                    | https://hackage.haskell.org/package/hoopl        |
+| hpc              | Trace.Hpc                         | https://hackage.haskell.org/package/hpc          |
+| integer-gmp      | GHC.Integer.GMP                   |                                                  |
+| libiserv         |                                   |                                                  |
+| mtl              | Control.Monad.Accum               |                                                  |
+|                  | Control.Monad.Cont                |                                                  |
+|                  | Control.Monad.Except              |                                                  |
+|                  | Control.Monad.Identity            |                                                  |
+|                  | Control.Monad.RWS                 |                                                  |
+|                  | Control.Monad.Reader              |                                                  |
+|                  | Control.Monad.Select              |                                                  |
+|                  | Control.Monad.State               |                                                  |
+|                  | Control.Monad.Trans               |                                                  |
+|                  | Control.Monad.Writer              |                                                  |
+| parsec           | Text.Parsec                       |                                                  |
+|                  | Text.ParserCombinators.Parsec     |                                                  |
+| pretty           | Text.PrettyPrint                  | https://hackage.haskell.org/package/pretty       |
+| process          | System.Cmd                        | https://hackage.haskell.org/package/process      |
+|                  | System.Process                    |                                                  |
+| terminfo         | System.Console.Terminfo           | https://hackage.haskell.org/package/terminfo     |
 | template-haskell | Language.Haskell.TH               | https://hackage.haskell.org/package/template-haskell |
-| text             | Data.Text                         |                                                      |
-| time             | Data.Time                         | https://hackage.haskell.org/package/time             |
-| transformers     | Control.Monad.Trans               | https://hackage.haskell.org/package/transformers     |
-| stm              | Control.Concurrent.STM            |                                                      |
-|                  | Control.Monad.STM                 |                                                      |
-| unix             | System.Posix                      | https://hackage.haskell.org/package/unix             |
-| xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml            |
-|------------------+-----------------------------------+------------------------------------------------------|
+| text             | Data.Text                         |                                                  |
+| time             | Data.Time                         | https://hackage.haskell.org/package/time         |
+| transformers     | Control.Monad.Trans               | https://hackage.haskell.org/package/transformers |
+| stm              | Control.Concurrent.STM            |                                                  |
+|                  | Control.Monad.STM                 |                                                  |
+| unix             | System.Posix                      | https://hackage.haskell.org/package/unix         |
+| xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml        |
+|------------------+-----------------------------------+--------------------------------------------------|
+** warnings
+- in command: ghc -Wincomplete-patterns Main.hs
+- in repl:   :set -Wincomplete-patterns
+             :set -Wno-incomplete-patterns
+|---------------------+-------------------------------|
+| all                 |                               |
+| incomplete-patterns | on incomplete pattern matches |
+|---------------------+-------------------------------|
 * cabal
 - cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
 | cabal                    | description                                                   |
@@ -325,6 +402,8 @@ https://docs.haskellstack.org/en/stable/dependency_visualization/
 | parsec               | 23 | 0.7 | Parser lib                         | https://github.com/haskell/parsec                  |
 | network              | 23 | 0.2 | low level network lib              | https://github.com/haskell/network                 |
 | containers           | 23 | 0.3 | data types                         | https://github.com/haskell/containers              |
+| vector               | 23 | 349 | indexed arrays                     | https://github.com/haskell/vector                  |
+| base64-bytestring    | 23 |  45 | base64 de/encoding                 | https://github.com/haskell/base64-bytestring       |
 |----------------------+----+-----+------------------------------------+----------------------------------------------------|
 | validation           | 21 | 0.1 | Like Either but acc Applicative    | https://github.com/system-f/validation             |
 | relude               | 23 | 0.6 | Prelude alternative                | https://github.com/kowainik/relude                 |

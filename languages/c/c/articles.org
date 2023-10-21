@@ -1,3 +1,4 @@
+- sockets https://roscas.github.io/reseau/Linux-Sockets-CheatSheet.html
 - 2010 https://web.archive.org/web/20100715074224/https://www.securecoding.cert.org/confluence/display/seccode/STR05-C.+Use+pointers+to+const+when+referring+to+string+literals
 - https://www.deusinmachina.net/p/c-strings-and-my-slow-descent-to
 - Few lesser known tricks, quirks and features of C https://blog.joren.ga/less-known-c

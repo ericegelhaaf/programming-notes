@@ -1,3 +1,4 @@
+- https://gist.github.com/macintux/6349828
 - https://www.erlang-solutions.com/blog/the-sound-of-erlang-how-to-use-erlang-as-an-instrument.html
 - https://abstractmachines.dev/posts/am012-why-typing-erlang-is-hard.html
 - The Joy of Pattern Matching http://blog.hellkvist.org/category/erlang/

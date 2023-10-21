@@ -1,3 +1,4 @@
+- books https://github.com/aridiosilva/AI_Books/
 - https://uvadlc-notebooks.readthedocs.io/en/latest/index.html
 - Course: Neural Networks https://karpathy.ai/zero-to-hero.html
   - Neural Networks: Zero to Hero  https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ

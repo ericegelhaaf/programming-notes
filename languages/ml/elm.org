@@ -2,6 +2,9 @@
   - 1.9k https://github.com/roc-lang/roc
     https://www.roc-lang.org/tutorial
   - (fork) https://gren-lang.org/
+- Article: 2016 https://reasonablypolymorphic.com/blog/elm-is-wrong/
+  - no typeclasses: instead there are some obscure compiler magic
+  - TODO
 - Article: 2018 https://dev.to/kspeakman/elm-019-broke-us--khn
 - Article: 2023 https://kevinyank.com/posts/on-endings-why-how-we-retired-elm-at-culture-amp/
   https://news.ycombinator.com/item?id=35495910

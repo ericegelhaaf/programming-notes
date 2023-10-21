@@ -1,9 +1,24 @@
+- [Operable Erlang and Elixir](https://www.youtube.com/watch?v=OR2Gc6_Le2U) [00:35:29] by **Fred Hebert** (2019)
+- [Getting to the BEAM, without going through Erlang](https://www.youtube.com/watch?v=BcXQ2qaEzNI) [00:24:32] by **Kofi Gumbs** (2018)
+- [A Peek Inside Erlang's OTP](https://www.youtube.com/watch?v=PkHZPTn1brc) [00:50:19] by **Steve Vinovski** (2016)
+- [Distributed Jamming with Sonic Pi and Erlang](https://www.youtube.com/watch?v=4SUdnOUKGmo) [00:54:16] by **Sam Aaron & Joe Armstrong** (2016)
+- [Pilgrim's Progress to the Promised Land](https://www.youtube.com/watch?v=84UI5mRXU7g) [00:52:24] by **Robert Virding** (2016)
+- [Scaling Distributed Erlang](https://www.youtube.com/watch?v=usEs3GPnZDg) [00:47:23] by **Zandra Norman** (2016)
+- [Erlang: Evolution](https://www.youtube.com/watch?v=od6CfA8xEcM) [00:37:24] by **Robert Virding** (2015)
+- [How To Ship New Code Without Taking Your System Down](https://www.youtube.com/watch?v=NfCLCmRi4_Y) [00:32:47] by **Martin Rehfeld** (2015)
+- [Implementing Languages on the BEAM](https://www.youtube.com/watch?v=qm0mbQbc9Kc) [01:47:47] by **Robert Virding** (2015)
+- [OTP Has Done It](https://www.youtube.com/watch?v=yBReonQlfL4) [00:36:04] by **Nick DeMonner** (2015)
+- [Optimizing Native Code for Erlang](https://www.youtube.com/watch?v=57AkoJfojK8) [00:26:46] by **Steve Vinoski** (2014)
+- [Using Logic Programming Tools to Drive Property-based Testing](https://www.youtube.com/watch?v=fSCIfsUcY4Y) [00:34:45] by **Zachary Kessin** (2014)
+- [Why The Cool Kids Don't Use Erlang](https://www.youtube.com/watch?v=3MvKLOecT1I) [00:51:55] by **Garrett Smith** (2014)
+- [26 years with Erlang or How I got my grey hairs](https://www.youtube.com/watch?v=HCwRGHj5jOE) [01:20:00] by **Joe Armstrong** (2013)
+- [A Few Improvements to Erlang](http://www.erlang-factory.com/conference/ErlangUserConference2012/speakers/joearmstrong) [00:43:30] by **Joe Armstrong** (2013)
+- [Chicago Boss: A Web Framework Built for Comfort (and Speed)](https://www.youtube.com/watch?v=LGGo6bIuj8w) [00:45:59] by **Evan Miller** (2013)
+- [Over a Century of Programming](https://www.youtube.com/watch?v=y5Y_JFIsg6s) [01:00:10] by **Mike Williams, Joe Armstrong & Robert Virding** (2013)
 - Adopting Erlang, Adapting Rebar - Fred Hebert, Tristan Sloughter | Code BEAM V 2020
   https://www.youtube.com/watch?v=x_XR8TDhBUI
 - basic otp on elixir "the abcs of otp" - https://www.youtube.com/watch?v=4SCwubzqsVU
 - Rob Ashton - End-to-end Purescript with Erlang/OTP https://www.youtube.com/watch?v=EF_BrdGXpAw
-- UXLearner - Basic Erlang - https://www.youtube.com/playlist?list=PLJr0bQpUAsMjwKxwHQXEunWQaZ9q5ttuH
-- Simon Thompson - Basic Erlang - https://www.youtube.com/playlist?list=PLoFxPv8jwGVVlajiMxaW9zG1IZgHODTuq
 * Channels
 |-----------------+-----------------------------------------------------------------|
 | CodeSync        | https://www.youtube.com/channel/UC47eUBNO8KBH_V8AfowOWOw        |
@@ -207,9 +222,86 @@ https://www.youtube.com/watch?v=G0eBDWigORY
   erlang:process_info(Pid, message_queue_len)
 - total memory use
   erlang:memory/0,1
-* 14 | Designing a Real Time Game Engine in Erlang   | Mark Allen
-https://www.youtube.com/watch?v=sla-t0ZNlMU
+* 14 | Designing a Real Time Game +Engine+ in Erlang | Mark Allen
+video https://www.youtube.com/watch?v=sla-t0ZNlMU
+code https://github.com/jadeallenx/parque
 
+- Modeling a game in the "actor model"
+- Erlang has
+  - Good at slicing and dicing network protocols (aka binary data)
+  - "for free" SMP scaling
+- "Spill Games" company uses erlang in their backend for ther games
+  https://github.com/spilgames
+- Erlang has a "gradually type system"
+- Processes are the ~unit of computation~ of Erlang
+  - Do not share memory
+  - BUT if we have *binary data* (compile time dependent)
+    erlang would pass around a reference.
+  - https://www.erlang.org/doc/man/binary
+    - "Binary sharing occurs whenever binaries are taken apart.
+       This is the fundamental reason why binaries are fast,
+       decomposition can always be done with O(1) complexity."
+    - "Binary data is shared among processes. If another process
+       still references the larger binary, copying the part this process
+       only consumes more memory and does NOT free up the larger binary
+       for GC."
+** Example: Fizzbuzz
+#+begin_src erlang
+  -module(fizzbuzz).
+  -export([t/0]).
+
+  t() -> fizzbuzz(lists:seq(1, 100)).
+
+  fizzbuzz([H|T]) ->
+      case {H rem 3, H rem 5} of
+          {0,0} -> io:format("fizzbuzz~n");
+          {0,_} -> io:format("fizz~n");
+          {_,0} -> io:format("buzz~n");
+          {_,_} -> io:format("~p~n", [H])
+      end,
+      fizzbuzz(T).
+#+end_src
+** Example: Taipan
+- parque_sup
+  - parque_player_sup > player gen_server
+  - parque_port_sup   > port   gen_server
+- Game has 2 entities
+  1) Ports
+     - manages
+       - a list of traders (arrive, depart)
+       - dictionary of goods (buy, sell)
+       - quantity and price of goods
+  2) Players
+     - manages
+       - position/location
+       - ammount of cash
+       - inventory of goods
+       - capacity
+- Other player actions: buy/3, sell/3
+- Port actions: buy/4, sell/4, get_price/3, list/1, state/1
+- List products of each port: [ parque_port:list(X) || X <- Ports]
+*** move/2
+#+begin_src erlang
+  move(Who, Where) ->
+      case whereis(Where) of
+          undefined _> error_logger:error_msg("There is no port named ~p", [Where]);
+          _Pid      -> gen_server:call(Who, {move, Where})
+      end.
+#+end_src
+*** handle_call/3
+#+begin_src erlang
+  handle_call({move, Where},
+              _From,
+              State = #state{ port = undefined }) ->
+      parque_port:arrive(Where, self()),
+      {reply, ok, State#state{ port = Where }};
+  handle_call({move, Where},
+             _From,
+             State = #state{ port = Port }) ->
+      parque_port:leave(Port, self()),
+      parque_port:arrive(Where, self()),
+      {reply, ok, State#state{ port = Where }};
+#+end_src
 * 14 | The Mess We're in                             | Joe Armstrong
 https://www.youtube.com/watch?v=lKXe3HUG2l4
 - CONCLUSION
@@ -253,6 +345,7 @@ https://www.youtube.com/watch?v=lKXe3HUG2l4
     chatgpt-ish "how do I reduce/merge my 80k erlang modules that I wrote into 5k modules?"
     unison? abolish names, "given a piece of code, how do I find a similar piece of code? is it unique?"
 * 14 | Writting Quality Code in Erlang               | Garrett Smith
+https://www.youtube.com/watch?v=CQyt9Vlkbis
 - "Software is a human thing, programming has nothing to do with computers"
   "We Write software for other people."
 - "We are way past when we were worried about memory".
@@ -439,6 +532,24 @@ https://www.youtube.com/watch?v=GO_97_6w5lU
   handle_call({get_data, Query}, _From, Connection) ->
       {reply, query(Query, Connection), Connection}.
 #+end_src
+* 16 | Erlang and Deep Learning                      | Garrett Smith
+- At the time of "alphago"
+- reinforcemet learning: on it, we reward the computer for doing things we want
+- based on ~perceptrons~
+  - where we take multiple inputs
+  - assign *weights* to them
+  - *transform* them with mat multiplycation
+  - output 1(one) value
+- Example: a 3(three) layer neural network
+  - 3 perceptrons at the input
+  - 4 perceptrons at the middle
+  - 1 perceptron at the output
+- The ~deep~ part refer to the "hidden layers",
+  the layers that are neither inputs or outputs.
+- The evaluation of how close the output is to the desired one,
+  from an initial set of weights. Is done by a
+  ~Cost Loss~ function
+  Michael A. Nielsen, "Neural Networks and Deep Learning"
 * 17 | Why We Chose Erlang over Java, Scala, Go, C   | Colin Hemmings
 - about the company "Outlyer" (RIP)
 - Versions of their product

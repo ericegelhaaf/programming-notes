@@ -2612,3 +2612,707 @@ useful when we want ot do some uneffectul computation that depnds on IO
 ** 08 Writing tests
 ** 09 Generating documentation
 ** 10 Recap
+* 23 | Effective Haskell                         | Rebecca Skinner
+** DONE Introduction
+- 1990 First version of Haskell
+  - 1 year before Python
+  - 5 years before Java
+- Thanks to its ~purity~, Haskel can offer us
+  strict guarantees about immutability
+  across our entire program.
+- Haskell's ~type system~ is more expressive
+  than the type system of any other mainstream
+  programming languange in use these days.
+  - about what *kind* of data a variable holds
+  - where it came from (?)
+  - what can be done with it (implements?)
+  - whether a function could fail (Maybe)
+- Learning Haskell can lead to a "circular knowledge references"
+- GHC 9.5 (Used by the book)
+  GHC 9.4 (GHC2021)
+  GHC 8.10 (Haskel2010)
+- Libraries used
+  - base, bytestring, base64-bytestring, text, containers,vxtor, time, unix, mtl, transformers, process
+** DONE 01 Getting Started
+- "The Haskell motto /avoid success at all costs/
+  is a reminder that programming in Haskell
+  sometimes means trading away
+  immediate familiarity or comfort
+  for power, flexibility, and correctedness."
+- =Purity=
+  - all values are immutable
+  - all functions have to be free of any side effects
+- =Lazyness=
+  - it let us /write programs in ways that feel more natural/
+    but might have significant negative performance cost
+    in a strict language.
+- ~/.ghci
+  #+begin_src
+    set prompt "λ"
+  #+end_src
+- ":{" and "}:" for entering multi-line statement on ghci
+- list =range= with step != 1
+  > [2,4..10]
+  [2,4,6,8,10]
+  > [10,9..0]
+    [10,9,8,7,6,5,4,3,2,1,0]
+- print = putStrLn . show
+- STYLE: 2 spaces for indentation
+- Variables are immutable.
+  two  = 1
+  two  = two + 1 // NEVER ENDS!! recursive lazy definition
+  two' = two + 1
+- =Currying=
+  Thre process of converting a
+  function that takes multiple arguments
+  into a series of single-argument functions.
+- In Haskell all functions are curried by default.
+- =Fully saturated=
+  When a function is called with ALL of its
+  arguments and can return a value
+  that isn't a function.
+- =Eta reduction= removing extra parameters
+  =Eta expansion= adding a parameter and passing it along
+- You can =partially apply=
+  the left or righ-hand operand independently
+  of infix operators.
+- Use backticks to partially apply the 2nd argument
+  or *flip*
+  #+begin_src haskell
+    makeGreeting salutation person =
+      salutation <> " " <> person
+
+    greetGeorge  = (`makeGreeting` "George")
+    greetGeorge' = flip makegreeting "George"
+  #+end_src
+- printStr, printStrLn, show, print, flip
+- =Pointfree programming= aka tacit programming
+  = eta-reduction + function composition
+  #+begin_src haskell
+    makeGreeting salutation person = salutation <> " " <> person
+    makeGreeting salutation = ((salutation <> " ") <>)
+    makeGreeting salutation = (<>) (salutation <> " ")
+    makeGreeting = (<>) . (\salutation -> salutation <> " ")
+    makeGreeting = (<>) . (<> " ")
+  #+end_src
+- Haskell Parsing rules
+  - passing an argument to a *function* always has higher precedence than
+    passsing that argument to an *operator*.
+    aka higher =Binding precedence=
+    #+begin_src haskell
+      "the sum of " <> show 1 <> " and "
+    #+end_src
+  - Associativity
+    - normal functions are =left associative=
+    - infix functions and operators have a bit more flexibility
+- let bindings
+  - order does NOT matter
+    you are free to reference bindings that you define later, in the same let expression
+  - supports =recursive let bindings=
+    items can refer to one another
+  - in genera, for immediate values
+- where binding
+  - same rules than let
+  - anything defined on it, will be available on the *let binding*
+  - in general, used for ancillary and helper functions
+  - visible to ALL branches when using *guards*
+- Exercises: factorial, fibonacci, implement curry and uncurry functions
+*** Example: Hello world!
+#+begin_src haskell
+  module Main where
+  main = print "Hello, World!"
+#+end_src
+$ ghc Main
+$ ./Main
+"Hello, World!"
+$ runhaskell Main.hs
+"Hello, World!"
+$ ghci
+> load Main.hs
+> main
+"Hello, World!"
+*** Operators
+#+begin_src haskell
+  infixl 6 +++
+  module OperatorExample where
+  (+++) a b = a + b -- OR
+  a +++ b   = a + b
+#+end_src
+- must be named using symbols
+  - starting with (:) is reserved for type constructors
+- can create your own ~binary operators~
+- with a possible =fixity declaration= declarations to define his *associativity*
+  where N is the =precedence= level, from 0-9, defaults to 6
+  |-------------+------------------------------------|
+  | infixl N OP | for left  associativity            |
+  | infixr N OP | for right associativity            |
+  | infix  N OP | if the operator is NOT associative |
+  |-------------+------------------------------------|
+- using <> is popular when naming operators
+- an expression might error, due being unable to be solved, without using parens (), either if:
+  1) when no it has to associativity
+     #+begin_src haskell
+       True == True == False -- will ERROR
+     #+end_src
+  2) the associativity is different AND the precedence is the same
+     #+begin_src haskell
+       > a +++ b = a + b; infixr 7 +++
+       > a *** b = a * b; infixl 7 ***
+       > 1 +++ 2 *** 3 -- ERRORS (Precedence parsing error)
+       > (1 +++ 2) *** 3
+        9
+       > 1 +++ (2 *** 3)
+        7
+     #+end_src
+** 02 Working with Lists
+- ? streaming data, generators, infinitely long lists
+- ['h', 'i'] == "hi"
+- VOCABULARY: consing, prepending, push an element onto the head
+- =Partial functions=
+   a function that doesn't work for all its possible inputs,
+   and might raise a runtime exception
+   or cause the program to crash. Eg: head, tail
+- ~shape~ of a function,
+  the essential behavior of a function or datatype,
+  without any extraneous buseness logic or data structure
+*** Example: factors - recursively constructing a list
+- using a "common pattern" where our algorithm requires some
+  initial seed value that we don't want to require the use to pass in.
+#+begin_src haskell
+  factors num =
+    factors' num 2
+    where
+      factors' num fact
+        | num == 1              = []
+        | (num `rem` fact) == 0 = fact : factors' (num `div` fact) fact
+        | otherwise             = factors' num (fact + 1)
+#+end_src
+*** Example: isbalanced - recursively deconstructing lists
+#+begin_src haskell
+  isBalanced s =
+    0 === isBalanced' 0 s
+    where
+      isBalanced' count s
+        | null s        = count
+        | head s == '(' = isBalanced' (count + 1) (tail s)
+        | head s == ')' = isBalanced' (count - 1) (tail s)
+        | otherwise     = isBalanced' count (tail s)
+#+end_src
+*** Example: folds
+- in a LEFT fold
+  - the ~initial value~ is applied first
+    at the left-hand side of the unrolled expression
+  - the accumulator value is the first (left) argument
+- in a RIGHT fold
+  - the ~initial value~ is applied last,
+    at the right-hand side fo the unrolled expression
+  - the accumulator value is the second (right) argument
+#+begin_src haskell
+  foldl func carryValue lst =
+    if null lst
+    then carryValue
+    else foldl func (func carryValue (head lst)) (tail lst)
+
+  foldr func carryValue lst =
+    if null lst
+    then carryValue
+    else func (head lst) $ foldr func carryValue (tail lst)
+
+  foldl (+) 0 [1,2,3] -- (((0 + 1) + 2) + 3)
+  foldr (+) 0 [1,2,3] -- (1 + (2 + (3 + 0)))
+
+  -- associativity comes from fold, NOT operator
+  infixr 9 `divide`
+  divide = (/)
+  foldl (/) 1 [1,2,3,4,5] == foldl divide 1 [1,2,3,4,5]
+#+end_src
+*** Example: map - defined with fold
+- can be used to *apply* a value to a list of functions
+  > map ($ 10) [(+ 1), (* 3), (`div` 5)]
+   [11,30,2]
+#+begin_src haskell
+  doubleElems = foldr doubleElem []
+    where
+      doubleElem num lst = (2 * num) : lst
+
+  doubleElems' = foldr (applyElem (*2)) [] elems
+    where
+      applyElem f elem accumulator = f elem : accumulator
+
+  doubleElems'' = foldr (applyElem f) []
+    where
+      applyElem f elem accumulator = (f elem) : accumulator
+#+end_src
+*** Example: zip - pairwiseSum
+#+begin_src haskell
+  pairwiseSum xs ys = map (uncurry (+)) $ zip xs ys
+#+end_src
+*** =List Comprehensions=
+They start to shine when you have severla lists that you want to work with, and many different filter.s
+Useful when we want ALL the permutations of our lists.
+#+begin_src haskell
+  doubleOdds = [2 * number | number <- [0..10], odd number]
+  -- without
+  pairs as bs =
+    let as' = filter (`elem` bs) as
+        bs' = filter odd bs
+        mkPairs a = map (\b -> (a,b)) bs
+    in concat $ map mkPairs as'
+  -- with
+  pairs as bs =
+    [(a,b)
+    | a <- as
+    , b <- bs
+    , a `elem` bs
+    , odd b]
+#+end_src
+*** =Pattern matching= can be used on functions, case, and let bindings
+- let destructuring
+  #+begin_src haskell
+    fancyNumbers n = (zip fibs primes) !! n
+
+    printFancy n =
+      let (fib, prime) = fancyNumbers n -- destructuring
+          fib'         = show fib
+          prime'       = show prime
+      in "The fibonacci number is: " <> fib' <> " and the prime is: " <> prime'
+
+    modifyPair p@(a,b) -- destructuring
+      | a == "Hello"  = "this is a salutation"
+      | b == "George" = "this is a message for George"
+      | otherwise     = "I don't know what " <> show p <> " means"
+  #+end_src
+- case+guards
+  #+begin_src haskell
+    handleNums l =
+      case l of
+           [] -> "An empty list"
+           [x] | x == 0 -> "a list called: [0]"
+               | x == 1 -> "a singular list of [1]"
+               | even x -> "a singleton list containing an even number"
+               | otherwise -> "the list contains " <> (show x)
+           _list -> "the list has more than 1 element"
+  #+end_src
+*** =stream= or =generator=
+- Haskell uses a form of laziness known as ~call by need~
+  - expressions won't be evaluated until the value is actually needed
+  - ~thunks~: expressions not evaluated yet
+- a type of list that takes advange of lazy evaluatio
+  whose tail is a thunk.
+- Unlike recursion, it don't count down to a base case.
+- Is =corecursive=, dual to recursion.
+- we can only ~foldr~ against it
+  we can't ~foldl~ on an infinite list
+#+begin_src haskell
+  numbersStartingAt n =
+    n : numbersStartingAt (n + 1)
+
+  -- folding right over an infinite list
+  -- to FIND the first to match
+  findFirst predicate =
+    foldr findHelper []
+    where
+      findHelper listElement maybeFound
+        | predicate listElement = [listElement]
+        | otherwise             = maybeFound
+#+end_src
+*** TODO Example: fibonaci
+page 85
+#+NAME: optimized
+#+begin_src haskell
+fibs = 0 : 1 : helper fibs (tail fibs)
+  where
+    helper (a:as) (b:bs) =
+      a + b : helper as bs
+#+end_src
+** DONE 03 Getting Started with Types
+- a type is way of naming a set of values
+- a value /inhabits/ a type
+- a in "a -> a" is a =type variable=
+- putting type annotations on let/where bindings is NOT a common style
+*** =type annotations=
+  - add them to to functions, in let and where bindings
+  - improve readability, in functions eta-reduced or in pointfree style
+    #+begin_src haskell
+      pointful :: [Int] -> Int -> Int
+      pointful xs n = foldr (+) 0 xs * n
+
+      etaReduced :: [Int] -> Int -> Int
+      etaReduced xs = (*) (foldr (+) 0 xs)
+
+      pointfree :: [Int] -> Int -> Int
+      pointfree = (*) . foldr (+) 0
+    #+end_src
+|------------------------+-------------------------------|
+| monomorphic            | value represent a single type |
+| parameric polymorphism |                               |
+| ad hoc polymorphism    | ?                             |
+|------------------------+-------------------------------|
+*** =undefined=
+- can help you making sure your types are right, before working on the implementation
+  thanks to laziness
+- can help us recognize/reuse functions
+*** =Type Holes=
+- give us a way to use Haskell's type inference more interactively
+- useful when working with polymorphic functions in general
+- useful when Haskell reports a type error,
+  but is attributed to the wrong place
+- created by replacing an expression by
+   "\_" or "\_Name" or "\_fname" (without the backslash)
+- compiler will give you an error message that tells you:
+  1) what type should be to fill the type hole
+  2) relevant bindings
+  3) valid holde fits
+** 04 Creating New Types
+
+#+begin_src haskell
+  data Void
+  data Unit = Unit -- "punning" between type and function name
+  data CustomerInfo = CustomerInfo Bool -- 2 inhabitants
+  data CustomerInfo = CustomerInfo Bool Bool -- 4 inhabitants
+  data CustomerInfo = CustomerInfo String String Int Int
+#+end_src
+
+- Resume: You'll learn how to create your own types
+  that accurately represent the structure of your data.
+
+- =Value Constructor=
+  A special function that lets us create a new value
+  of a certain type.
+
+- *pattern matching* out fields of a type
+  - Works well for /small/ types, as you might want to access all or most fields
+    But it becomes cumbersome for /larger/ types
+  - For that you can create getters and setters functions
+    or we can use records
+
+- =Product Types=
+  are those types which increases multiplicatively,
+  based on the number of inhabitants of each parameter to the *value constructor*
+
+- Whenever you find yourself wanting to work with
+  a fixed number of operation, a ~sum type~ is a good
+  first thing to start thinking about.
+
+- Data.List.splitAt
+- Text.Read.readEither
+
+*** Records aka product types
+- are product types with named parameters
+- ~field selectors~ are automatically created
+- try *RecordWildCards*
+- when you have conflicting field names in >1 record
+  - separate them in different modules or
+  - use a naming convetion, prefix the field name, with the record type name
+#+begin_src haskell
+  data CustomerInfo = CustomerInfo
+    { firstName :: String
+    , lastName :: String
+    , widgetCount :: Int
+    , balance :: Int
+    }
+  -- 1) constructing
+  CustomerInfo "George" "Bird" 10 100
+  -- 2) constructing - with named arguments
+  CustomerInfo
+    { balance = 100
+    , lastName = "Bird"
+    , firstName = "George"
+    , widgetCount = 10
+    }
+  -- 3) record update syntax
+  emptyCart :: CustomerInfo -> CustomerInfo
+  emptyCart customer =
+    customer { widgetcount = 0
+             , balance = 0
+             }
+#+end_src
+*** Enums - aka sum types
+#+begin_src haskell
+  data Bool = True | False
+  data Direction = North | South | East | West
+  #+end_src
+- types that represent a choice between two types
+*** sum product
+
+if we will instead used different types
+we won't have issues either with
+1) the constructors
+2) or accepting them as arguments
+returning them is what will be a problem
+
+#+begin_src haskell
+data PreferredContactMethod -- sum of products
+  = Email       String
+  | TextMessage String
+  | Mail String String String Int
+-- it is more common to use CASE rather than FUNCTION level pattern matching
+confirmContact :: PreferredContactMethod -> String
+confirmContact contact =
+  case contact of
+       Email emailAddress ->
+         "Okay, I'll email you at " <> emailAddress
+       TextMessage{} -> -- when we don't care about the fields
+         "Okay, I'lll text you!"
+       Mail street1 street2 citystate zip ->
+         "Okay, I'll send a letter to \n"
+         <> street1 <> "\n"
+         <> street2 <> "\n"
+         <> citystate <> " " <> show zip
+#+end_src
+*** sum product - with records
+- 2(two) records can have same field names
+- ~PITFALL~:
+  if you try to access a field that doesn't exists on a record
+  you get a runtime exception.
+  #+begin_src haskell
+    data Person
+      = Customer
+      { name    :: String
+      , balance :: Int
+      }
+      | Employee
+      { name        :: String
+      , managerName :: String
+      , salary      :: Int
+      }
+  #+end_src
+- That is why is better to just create different records
+  and then sum the types.
+  #+begin_src haskell
+    data CustomerInfo = CustomerInfo
+      { customerName    :: String
+      , customerBalance :: Int
+      }
+    data EmployeeInfo = EmployeeInfo
+      { employeeName        :: String
+      , employeeManagerName :: String
+      , employeeSalary      :: Int
+      }
+
+    data Person
+      = Customer CustomerInfo
+      | Employee EmployeeInfo
+
+    -- to make it easier to get data that exists
+    -- for all diferent potential values in our sum type
+    getPersonName :: Person -> String
+    getPersonName person =
+      case person of
+        Employee employee -> employeeName employee
+        Customer customer -> customerName customer
+  #+end_src
+*** polymorphic types
+#+begin_src haskell
+  -- type VARIABLE "a", is a type PARAMETER
+  -- of the type CONSTRUCTOR "Maybe"
+  -- which we cannot call it plainly "a type"
+  data Maybe a = Nothing | Just a
+
+  -- Left  error
+  -- Right success
+  data Either a b = Left a | Right b
+#+end_src
+- Maybe is frequently used
+  1) signal optional inputs to a functions
+  2) or to make partial functions safe
+**** Example: passing a parameterized type as an argument to another parameterized type.
+you need to use parentheses to group the types
+#+begin_src haskell
+  handleMissingRight :: Either String (Maybe a) -> Either String a
+  handleMissingRight e =
+    case e of
+      Left err         -> Left err
+      Right (Just val) -> Right val
+      Right Nothing    -> Left "Missing value"
+#+end_src
+*** Inductively Defined Data Structures
+- Due *lazyness* most datastructures defined in Haskell
+  are recursive, aka ~inductively defined~
+**** Peano Numbers: a way to represent whole numbers as a recursive numbers
+#+begin_src haskell
+  data Peano
+     = Z       -- zero
+     | S Peano -- successor
+
+  toPeano :: Int -> Peano
+  toPeano 0 = Z
+  toPeano n = S (toPeano $ n - 1)
+
+  fromPeano :: Peano -> Int
+  fromPeano Z     = 0
+  fromPeano (S p) = succ (fromPeano p)
+
+  eqPeano :: Peano -> Peano -> Bool
+  eqPeano p p' =
+    case (p,p') of
+      (Z,Z)       -> True -- base case
+      (S n, S n') -> eqPeano n n'
+      _           -> False
+  -- recursively destructuring 1st parameter
+  -- while adding 1 constructor (layer) to the right one
+  addPeano :: Peano -> Peano -> Peano
+  addPeano Z b     = b
+  addPeano (S a) b = addPeano a (S b)
+  #+end_src
+**** Inductively defined lists
+#+begin_src haskell
+  data List a = Empty | Cons a (List a)
+
+  toList :: [a] -> List a
+  toList []     = Empty
+  toList (x:xs) = Cons x (toList xs)
+
+  fromList :: List a -> [a]
+  fromList Empty       = []
+  fromList (Cons x xs) = x : fromList xs
+
+  -- refactoring the recursion OUT of them
+  -- using higher order functions
+  toList :: [a] -> List a
+  toList = foldr Cons Empty
+
+  -- we need a fold function for our custom List type
+  fromList :: List a -> [a]
+  fromList = listFoldr (:) []
+
+  listFoldr :: (a -> b -> b) -> b -> List a -> [b]
+  listFoldr _ acc Empty       = acc
+  listFoldr f acc (Cons x xs) = f x $ listFoldr f acc xs
+
+  -- TODO:
+  listFoldr   :: (b -> a -> b) -> b -> List a -> b
+  listHead    :: List a -> Maybe a
+  listTail    :: List a -> List a
+  listReverse :: List a -> List a
+  listMap     :: (a -> b) -> List a -> List b
+#+end_src
+*** Example: Calculator
+**** Expr - data structure
+#+begin_src haskell
+data Expr = Lit Int
+    | Sub Expr Expr
+    | Add Expr Expr
+    | Mul Expr Expr
+    | Div Expr Expr
+#+end_src
+**** eval - evaluator
+#+begin_src haskell
+eval :: Expr -> Int
+eval expr =
+  case expr of
+    Lit num -> num
+    Add x y -> (eval x) + (eval y)
+    Sub x y -> (eval x) - (eval y)
+    Mul x y -> (eval x) * (eval y)
+    Div x y -> (eval x) `div` (eval y)
+
+-- reactoring the recursion part into a separate function
+eval :: Expr -> Int
+eval expr =
+  case expr of
+    Lit num -> num
+    Add x y -> eval' (+) x y
+    Sub x y -> eval' (-) x y
+    Mul x y -> eval' (*) x y
+    Div x y -> eval' div x y
+    where
+      eval' :: (Int -> Int -> Int) -> Expr -> Expr -> Int
+      eval' op x y = op (eval x) (eval y)
+#+end_src
+**** parse - parser
+- Steps
+  1) tokenize ourinput string
+  2) parse'
+  3) final error handling
+- parse' returns a tuple of an Expr and [String].
+  - A ~common pattern~, when implementing recursive parsers.
+  - Recursive calls will consume some part of the input,
+    and return the reminder of the input.
+#+begin_src haskell
+parse :: String -> Either String Expr
+parse str =
+  case parse' (words str) of
+    Left err       -> Left err
+    Right (e,[])   -> Right e
+    Right (_,rest) -> Left $ "Found extra tokens: " <> (unwords rest)
+  where
+    parse' :: [String] -> Either String (Expr,[String])
+    parse' []     = Left "unexpected end of expression"
+    parse' (w:ws) =
+      case w of
+        "+" -> parseBinary Add ws
+        "-" -> parseBinary Sub ws
+        "/" -> parseBinary Div ws
+        "*" -> parseBinary Mul ws
+        lit ->
+          case readEither lit of
+            Left err   -> Left err
+            Right lit' -> Right (Lit lit', ws)
+
+    parseBinary ::
+      (Expr -> Expr -> Expr)
+      -> [String]
+      -> Either String (Expr, [String])
+    parseBinary exprConstructor args =
+      case parse' args of
+        Left err -> Left err
+        Right (firstArg,rest') ->
+          case parse' rest' of
+            Left err -> err
+            Right (secondArg,rest'') ->
+              Right $ (exprConstructor firstArg secondArg, rest'')
+
+run :: String -> String
+run expr =
+  case parse expr of
+    Left err    -> "Error: " <> err
+    Right expr' ->
+      let answer = show $ eval expr'
+      in "The answer is: " <> answer
+#+end_src
+*** Functions as values
+
+- A value you might sometimes want to hold
+  inside of a ~data~ type is a function.
+
+#+begin_src haskell
+  data StringParser =
+     StringParser (String -> (String, String))
+#+end_src
+
+
+- more often, they'll be records with field
+  that gives the function some useful name
+
+#+begin_src haskell
+  data StringParser =
+    StringParser { runStringParser :: String -> (String, String) }
+#+end_src
+
+- wrapped inside of a StringParser,
+  will make it somewhat easier to work with (?)
+
+#+begin_src haskell
+  takeCharacters :: Int -> StringParser
+  takeCharacters numCharacters = StringParser $ \inputString ->
+    splitAt numCharacters inputString
+
+  getNextWord :: StringParser
+  getNextWord = StringParser $ \someString ->
+    case break (== ' ') someString of
+      (nextWord, "")   -> (nextWord, "")
+      (nextWord, rest) -> (nextWord, tail rest)
+#+end_src
+
+** 05 Creating And Structuring Haskell Projects
+** 06 Type Classes
+** 07 Understanding =IO=
+** 08 Working with the Local System
+** 09 Introducing =Monads=
+** 10 Mutable Data in Real World
+** 11 Serializing   Heterogenuos Data
+** 12 Deserializing Heterogenuos Data
+** 13 Building Applications with Many =Effects=
+** 14 Building Efficient Programs
+** 15 Programming with Types
