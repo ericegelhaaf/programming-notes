@@ -1,0 +1,63 @@
+- https://www.youtube.com/watch?v=szfUbzsKvtE
+  3:47
+* DONE Exclusion operators - EXPLAINING PostgreSQL
+  https://www.youtube.com/watch?v=M58MR1vqnAk
+  1) RANGE TYPES: allows us to store periods, stored as 2 fields
+     <@ "contains operator"
+  2) GIST INDEX
+  3) Hotel 1 Example: 1 constrain
+     - Avoid overlapping booking
+       - Avoid, concurrently booking the same room
+       - Avoid, once the room is booked, not booking it again
+     #+begin_src sql
+     CREATE EXTENSION btree_gist;
+     CREATE TABLE t_booking (
+         room    int,
+         myrange daterange,
+         EXCLUDE USING gist (
+             room WITH=,
+             myrange WITH && -- must not overlap
+         )
+     );
+     #+end_src
+  4) Hotel 2 Example: 2 constrains
+     - We have a room a speaker and a range
+       - not overlap rooms
+       - not overlap speakers (same speaker on 2 rooms)
+     #+begin_src sql
+     CREATE TABLE t_lesson (
+         room    int,
+         speaker text,
+         period  tsrange,
+         EXCLUDE USING gist (room WITH =, period WITH &&),
+         EXCLUDE USING gist (speaker WITH =, period WITH &&)
+      );
+     #+end_src
+  5) Hotel 3 Example: dynamic
+     - Instead of using ranges, we can create the range on the fly
+       #+begin_src sql
+       CREATE TABLE t_dynamic (
+           room int,
+           start_time timestamptz,
+           end_time   timestamptz,
+           EXCLUDE USING gist (
+               room WITH =,
+               tstzrange(start_time, end_time) WITH &&)
+        );
+       #+end_src
+* Video: 2019 - The Art of PostgreSQL - Dimitri Fontaine - InfoQ Brasil
+  https://www.youtube.com/watch?v=09b-uk9UXbM
+  - wrote pg_auto_failover, "create extension", "event triggers", "pgloader"
+  - Book: Mastering PostgreSQL
+  - A.C.I.D. Compliant
+    Atomic: transactions (ROLLBACK), used on migrations
+    Consistent: schema, data types, constraints (check, not null, pkey, fkey), relations, sql
+    Isolated: transactions, the other side of atomicity, if I would see changes as long as it (query) runs
+    Durable: no data loss
+  - \copy implements the *streaming copy protocol*
+  - If you use money, it should be of type NUMERIC (not float, to avoid losing)
+  - ALTER TABLE can use external programs (awk,sed)
+  - EXPLAIN (analyze, verbose, buffers)
+    - (analyze) Does the actual query
+    - You will need to ROLLBACK if destructive
+  - 31:05

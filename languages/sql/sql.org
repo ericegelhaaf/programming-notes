@@ -1,0 +1,20 @@
+- SQLite backups
+  https://litestream.io/alternatives/cron/
+  https://news.ycombinator.com/item?id=31386330
+- https://devcenter.heroku.com/articles/postgresql-indexes
+- AWS Aurora https://www.youtube.com/watch?v=XKPHbYe-fHQ
+- https://www.cybertec-postgresql.com/en/postgresql-exclude-beyond-unique/
+- DB Standford 2013 https://www.youtube.com/watch?v=D-k-h0GuFmE&list=PLroEs25KGvwzmvIxYHRhoGTz9w8LeXek0
+- High-Performance Programming https://www.youtube.com/c/HighPerformanceProgramming/videos
+
+* Style Guides
+- https://news.ycombinator.com/item?id=18184731
+- https://oracle.readthedocs.io/en/latest/sql/basics/style-guide.html
+- https://www.sqlstyle.guide/
+- https://github.com/mattm/sql-style-guide
+- https://docs.telemetry.mozilla.org/concepts/sql_style.html
+- https://about.gitlab.com/handbook/business-technology/data-team/platform/sql-style-guide/
+  - when joining AS prefix field with table_ to avoid ambiguity
+  - ambiguous field names should be AS prefixed table_
+  - all fields should be AS snake cased
+  - boolean fields, should be AS has_ is_ does_

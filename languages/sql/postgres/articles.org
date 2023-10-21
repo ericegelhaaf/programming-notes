@@ -1,0 +1,90 @@
+- https://philbooth.me/blog/nine-ways-to-shoot-yourself-in-the-foot-with-postgresql
+- triggers https://ctodive.com/hooks-the-secret-feature-powering-the-postgres-ecosystem-f05b3b82e0ba
+- Scheme migrations with views https://fabianlindfors.se/blog/schema-migrations-in-postgres/
+- 21 | https://www.crunchydata.com/blog/postgres-full-text-search-a-search-engine-in-a-database
+- 23 | https://xata.io/blog/postgres-full-text-search-engine
+- 23 | https://xata.io/blog/postgres-full-text-search-postgres-vs-elasticsearch
+- https://supabase.com/blog/postgres-full-text-search-vs-the-rest
+- https://supabase.com/docs/guides/database/full-text-search
+- https://www.postgresql.org/docs/current/textsearch.html
+- 23 | https://www.avestura.dev/blog/explaining-the-postgres-meme
+
+* Article: 15 | postgres full text search is good enough
+
+https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilisearch.com
+
+- Desired features
+  * stemming
+  * ranking / boost
+  * support multiple languages
+  * fuzzy search for mispelling
+  * accent support
+
+- we transform our ~document~, from a string into a tsvector
+
+  #+begin_src sql
+    select pid, p_title
+      from (
+        select post.id as pid,
+               post.title as p_title,
+               to_tsvector(post.title) ||
+                 to_tsvector(post.content) ||
+                 to_tsvector(author.name) ||
+                 to_tsvector(coalesce((string_agg(tag.name, ' ')), '')) as document
+          from post
+          join author on author.id = post.author_id
+          join posts_tags on post_tags.post_id = posts_tags.tag_id
+          join tag on tag.id = posts_tags.tag_id
+         group by post.id, author.id
+      ) p_search
+     where p_search.document @@ to_tsquery('Endangered & Species');
+  #+end_src
+
+- =tsvector=
+  is a sorted list of distinct ~lexemes~ which
+  are words that have been normalized to make
+  diferent variants of the same word look alike.
+- The number, on a tsvector, represents the location of the lexeme in the original string
+
+** querying (@@)
+
+#+begin_src sql
+  select to_tsvector('it''s kind of fun to do the impossible')
+           @@ to_tsquery('fiction | theory');
+#+end_src
+
+- can have a column with the language (simple, english, french)
+  and then cast it to *regconfig* on the to_tsvector() call
+
+- ~simple~ regconfig does not skip stopwords, or stem.
+  Every word is a lexeme.
+
+** (un)accent
+
+- postgres provides an extension that removes all the accents
+
+  #+begin_src sql
+    create extension unaccent;
+    select unaccent('èéêë'); -- eeee
+  #+end_src
+
+- we could manually unaccent()
+
+  #+begin_src sql
+    select to_tsvector(post.language, unaccent(post.title)) -- ...
+  #+end_src
+
+- or even better create a ~text search configuration~
+  which as a side effect, it might not be able to recognize some stopwords
+
+  #+begin_src sql
+    create text search configuration fr ( COPY = french );
+
+    alter text search configuration fr alter mapping
+      for hword, hword_part, word WITH unaccent, french_stem;
+
+    select to_tsvector('fr', 'il était une fois');
+  #+end_src
+
+- custom unaccent configuration for all languages supported
+  https://gist.github.com/rach/9289959
