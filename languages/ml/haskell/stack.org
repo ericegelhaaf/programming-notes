@@ -1,0 +1,13 @@
+|-------------------+---------------------------------------------------|
+|                   | description                                       |
+|-------------------+---------------------------------------------------|
+| build             | installs ghc, package deps and builds the project |
+| clean             | cleans build artifacts                            |
+| exec -- which EXE |                                                   |
+| exec EXE -- ARGS  | will run the EXE with ARGS                        |
+| ghci LIB          | starts repl in LIB context                        |
+|-------------------+---------------------------------------------------|
+
+- dot - get a dependency DOT graph
+  https://stackoverflow.com/questions/69270620/generating-haskell-module-dependency-tree
+  https://docs.haskellstack.org/en/stable/dependency_visualization/

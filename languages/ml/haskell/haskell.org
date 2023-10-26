@@ -1,8 +1,5 @@
 - https://github.com/Gabriella439/post-rfc/blob/main/sotu.md
 - https://lokathor.gitbooks.io/using-haskell/content/opengl/
-- GHC(i) Manual
-  https://downloads.haskell.org/ghc/latest/docs/users_guide/index.html
-  https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html
 - https://evanrelf.com/haskell-libraries-i-love
 - Styleguide
   https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
@@ -21,19 +18,43 @@
 - https://github.com/graninas/software-design-in-haskell
 - https://en.wikipedia.org/wiki/Dependent_type
 - https://en.wikipedia.org/wiki/Generalized_algebraic_data_type
-- https://github.com/omelkonian/AlgoRhythm (music)
-- Project
-  https://github.com/reanimate/reanimate
-  https://github.com/xmonad/xmonad
+
 * Language
+** pragmas
+
+|----------+----------------------------------------------------------------------------------------------------|
+| LANGUAGE | to enable language extensions                                                                      |
+| MINIMAL  | to define the minimal functions that should be defined on a *class*, comma separated, supports (¦) |
+|----------+----------------------------------------------------------------------------------------------------|
+
+** module
+|--------------------------------------+---------------------------------------------|
+| module ModuleName where              | exports all                                 |
+|--------------------------------------+---------------------------------------------|
+| module ModuleName (                  | exports foo                                 |
+| foo                                  |                                             |
+| TypeFoo(TypeFooConst, fieldSelector) |                                             |
+| ) where                              |                                             |
+|--------------------------------------+---------------------------------------------|
+| module ModuleName (                  | exports all constructors and fieldselectors |
+| TypeFoo(..)                          | of TypeFoo                                  |
+| ) where                              |                                             |
+|--------------------------------------+---------------------------------------------|
+| module ModFoo                        | re-exporting ModBar,                        |
+| ( module Baz                         | using the local alias "Baz"                 |
+| )                                    | could have used the full name instead       |
+| where                                |                                             |
+| import Other.ModBar as Baz           |                                             |
+|--------------------------------------+---------------------------------------------|
 ** imports
 https://wiki.haskell.org/Import
-|------------+------------------------------------------------+------------------------|
-| import ALL | import Data.List                               | brings everything in   |
-| import     | import Data.List (intercalate)                 | brings specific things |
-| as         | import qualified Data.ByteString as ByteString |                        |
-| hiding     | import Prelude hiding (foldl, foldr)           |                        |
-|------------+------------------------------------------------+------------------------|
+|------------+----------------------------------------+-----------------------------------|
+| import ALL | import Data.List                       | brings everything in              |
+| import     | import Data.List (intercalate)         | brings ONLY specific things       |
+| as         | import Data.ByteString as BS           | brings everything in AND into BS. |
+| as         | import qualified Data.ByteString as BS | brings into BS.                   |
+| hiding     | import Prelude hiding (foldl, foldr)   | import all except ...             |
+|------------+----------------------------------------+-----------------------------------|
 ** operators
 |------+---------------------------+--------------------+--------------|
 | ($)  | function application      | map ($ 10) [(+ 1)] |              |
@@ -80,12 +101,13 @@ https://wiki.haskell.org/Import
 |               | ¦ Right b                  |                   | Left  = we got an error                |
 |---------------+----------------------------+-------------------+----------------------------------------|
 #+TBLFM: $2=Left a
-** extensions
+** language extensions
 https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
 - NOTE: some extensions are better enabled globally or prohibited altogether
   enabling some extensions on a module-by-module basis
   can end up causing maintenance burden on the application long term
   since applciations that use it ned to be careful.
+- in cabal: by adding it to *default-extensions* enables it across the target
 - in repl: *:set -XTypeApplications* or :seti to enable it only for interactive code
 - in source: using a ~language pragma~
    *{-# LANGUAGE TypeApplications, QuasiQuotes #-}*
@@ -105,7 +127,7 @@ https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
  | BangPatterns               |                                                                                               | yes |
  | ConstraintKinds            |                                                                                               | yes |
  | DataKinds                  |                                                                                               | -   |
- | DefaultSignatures          |                                                                                               | -   |
+ | DefaultSignatures          | allow us to add a *type signature* to the default implementation of function in a type class  | -   |
  | DeriveAnyClass             |                                                                                               | -   |
  | DerivingStrategies         |                                                                                               | -   |
  | DerivingVia                |                                                                                               | -   |
@@ -134,19 +156,6 @@ https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
  |----------------------------+-----------------------------------------------------------------------------------------------+-----|
 - "21?" column stands for GHC2021 and means,
   if the extension is enabled by default on that version of Haskell (aka GHC 9.4)
-** ghc-options
-- -I0
-  -Iw
-  +RTS -I0 -RTS
-  -rtsopts to ghc-options in .cabal
-- in .cabal *library\nghc-options: -fdefer-typed-holes*
-- in repl *:set -fdefer-typed-holes*
-- in source *{-# OPTIONS_GHC -fdefer-typed-hols #-}*
-|---------------------+--------------------------------------------------|
-| -Wall               | enables all warnings                             |
-| -fdefer-typed-holes | allows you to type (_) in place of an expression |
-| -fforce-recomp      |                                                  |
-|---------------------+--------------------------------------------------|
 ** Standard Library
 - https://packages.ubuntu.com/bionic/amd64/ghc/filelist
 *** Prelude.hs functions
@@ -220,6 +229,8 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | fst        | a           | first element on a two element tuple                             |
 | snd        | b           | second element on a two element tuple                            |
 |------------+-------------+------------------------------------------------------------------|
+| maybe      | b           | applied fn to Maybe value, or the default value provided         |
+|------------+-------------+------------------------------------------------------------------|
 | print      | IO ()       | prints showable                                                  |
 | putStr     | IO ()       | prints string                                                    |
 | show       | String      |                                                                  |
@@ -246,151 +257,111 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 *** base
 - https://hackage.haskell.org/package/base
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
-|-------------------------+---|
-| Control.Applicative     |   |
-| Control.Arrow           |   |
-| Control.Category        |   |
-| Control.Concurrent      |   |
-| Control.Exception       |   |
-| Control.Monad           |   |
-| Data.Bifoldable         |   |
-| Data.Bifoldable1        |   |
-| Data.Bifunctor          |   |
-| Data.Bitraversable      |   |
-| Data.Bits               |   |
-| Data.Bool               |   |
-| Data.Char               |   |
-| Data.Coerce             |   |
-| Data.Complex            |   |
-| Data.Data               |   |
-| Data.Dynamic            |   |
-| Data.Either             |   |
-| Data.Eq                 |   |
-| Data.Fixed              |   |
-| Data.Foldable           |   |
-| Data.Foldable1          |   |
-| Data.Function           |   |
-| Data.Functor            |   |
-| Data.IORef              |   |
-| Data.Int                |   |
-| Data.Ix                 |   |
-| Data.Kind               |   |
-| Data.List               |   |
-| Data.Maybe              |   |
-| Data.Monoid             |   |
-| Data.Ord                |   |
-| Data.Proxy              |   |
-| Data.Ratio              |   |
-| Data.STRef              |   |
-| Data.Semigroup          |   |
-| Data.String             |   |
-| Data.Traversable        |   |
-| Data.Tuple              |   |
-| Data.Typeable           |   |
-| Data.Unique             |   |
-| Data.Version            |   |
-| Data.Void               |   |
-| Data.Word               |   |
-| Foreign.*               |   |
-| System.CPUTime          |   |
-| System.Console          |   |
-| System.Environment      |   |
-| System.Exit             |   |
-| System.IO               |   |
-| System.Info             |   |
-| System.Mem              |   |
-| System.Posix            |   |
-| System.Timeout          |   |
-| Text.ParserCombinators  |   |
-| Text.(Read/Printf/Show) |   |
+|-------------------------+--------------|
+| Control.Applicative     |              |
+| Control.Arrow           |              |
+| Control.Category        |              |
+| Control.Concurrent      |              |
+| Control.Exception       |              |
+| Control.Monad           |              |
+| Data.Bifoldable         |              |
+| Data.Bifoldable1        |              |
+| Data.Bifunctor          |              |
+| Data.Bitraversable      |              |
+| Data.Bits               |              |
+| Data.Bool               |              |
+| Data.Char               | isPrint      |
+| Data.Coerce             |              |
+| Data.Complex            |              |
+| Data.Data               |              |
+| Data.Dynamic            |              |
+| Data.Either             |              |
+| Data.Eq                 |              |
+| Data.Fixed              |              |
+| Data.Foldable           |              |
+| Data.Foldable1          |              |
+| Data.Function           |              |
+| Data.Functor            |              |
+| Data.IORef              |              |
+| Data.Int                |              |
+| Data.Ix                 |              |
+| Data.Kind               |              |
+| Data.List               | permutations |
+| Data.Maybe              |              |
+| Data.Monoid             |              |
+| Data.Ord                |              |
+| Data.Proxy              |              |
+| Data.Ratio              |              |
+| Data.STRef              |              |
+| Data.Semigroup          |              |
+| Data.String             |              |
+| Data.Traversable        |              |
+| Data.Tuple              |              |
+| Data.Typeable           |              |
+| Data.Unique             |              |
+| Data.Version            |              |
+| Data.Void               |              |
+| Data.Word               |              |
+| Foreign.*               |              |
+| System.CPUTime          |              |
+| System.Console          |              |
+| System.Environment      |              |
+| System.Exit             |              |
+| System.IO               |              |
+| System.Info             |              |
+| System.Mem              |              |
+| System.Posix            |              |
+| System.Timeout          |              |
+| Text.ParserCombinators  |              |
+| Text.(Read/Printf/Show) |              |
 *** non base
-|------------------+-----------------------------------+--------------------------------------------------|
-| array            | Data.Array                        | https://hackage.haskell.org/package/array        |
-| containers       | Data.Graph                        | https://hackage.haskell.org/package/containers   |
+|------------------+-----------------------------------+------------------------------------------------------|
+| array            | Data.Array                        | https://hackage.haskell.org/package/array            |
+| containers       | Data.Graph                        | https://hackage.haskell.org/package/containers       |
 |                  | Data.IntMap                       | https://haskell-containers.readthedocs.io/en/latest/ |
-|                  | Data.IntSet                       |                                                  |
-|                  | Data.Map                          |                                                  |
-|                  | Data.Sequence                     |                                                  |
-|                  | Data.Set                          |                                                  |
-|                  | Data.Tree                         |                                                  |
-| binary           | Data.Binary                       | https://hackage.haskell.org/package/binary       |
-| bytestring       | Data.ByteString                   | https://hackage.haskell.org/package/bytestring   |
-| deepseq          | Control.DeepSeq                   | https://hackage.haskell.org/package/deepseq      |
-| directory        | System.Directory                  | https://hackage.haskell.org/package/directory    |
-| exceptions       | Control.Monad.Catch               |                                                  |
-| filepath         | System.(FilePath/OsPath/OsString) | https://hackage.haskell.org/package/filepath     |
-| haskeline        | System.Console                    | https://hackage.haskell.org/package/haskeline    |
-| *hoopl           | Compiler.Hoopl                    | https://hackage.haskell.org/package/hoopl        |
-| hpc              | Trace.Hpc                         | https://hackage.haskell.org/package/hpc          |
-| integer-gmp      | GHC.Integer.GMP                   |                                                  |
-| libiserv         |                                   |                                                  |
-| mtl              | Control.Monad.Accum               |                                                  |
-|                  | Control.Monad.Cont                |                                                  |
-|                  | Control.Monad.Except              |                                                  |
-|                  | Control.Monad.Identity            |                                                  |
-|                  | Control.Monad.RWS                 |                                                  |
-|                  | Control.Monad.Reader              |                                                  |
-|                  | Control.Monad.Select              |                                                  |
-|                  | Control.Monad.State               |                                                  |
-|                  | Control.Monad.Trans               |                                                  |
-|                  | Control.Monad.Writer              |                                                  |
-| parsec           | Text.Parsec                       |                                                  |
-|                  | Text.ParserCombinators.Parsec     |                                                  |
-| pretty           | Text.PrettyPrint                  | https://hackage.haskell.org/package/pretty       |
-| process          | System.Cmd                        | https://hackage.haskell.org/package/process      |
-|                  | System.Process                    |                                                  |
-| terminfo         | System.Console.Terminfo           | https://hackage.haskell.org/package/terminfo     |
+|                  | Data.IntSet                       |                                                      |
+|                  | Data.Map                          |                                                      |
+|                  | Data.Sequence                     |                                                      |
+|                  | Data.Set                          |                                                      |
+|                  | Data.Tree                         |                                                      |
+| binary           | Data.Binary                       | https://hackage.haskell.org/package/binary           |
+| bytestring       | Data.ByteString                   | https://hackage.haskell.org/package/bytestring       |
+| deepseq          | Control.DeepSeq                   | https://hackage.haskell.org/package/deepseq          |
+| directory        | System.Directory                  | https://hackage.haskell.org/package/directory        |
+| exceptions       | Control.Monad.Catch               |                                                      |
+| filepath         | System.(FilePath/OsPath/OsString) | https://hackage.haskell.org/package/filepath         |
+| haskeline        | System.Console                    | https://hackage.haskell.org/package/haskeline        |
+| *hoopl           | Compiler.Hoopl                    | https://hackage.haskell.org/package/hoopl            |
+| hpc              | Trace.Hpc                         | https://hackage.haskell.org/package/hpc              |
+| integer-gmp      | GHC.Integer.GMP                   |                                                      |
+| libiserv         |                                   |                                                      |
+| mtl              | Control.Monad.Accum               |                                                      |
+|                  | Control.Monad.Cont                |                                                      |
+|                  | Control.Monad.Except              |                                                      |
+|                  | Control.Monad.Identity            |                                                      |
+|                  | Control.Monad.RWS                 |                                                      |
+|                  | Control.Monad.Reader              |                                                      |
+|                  | Control.Monad.Select              |                                                      |
+|                  | Control.Monad.State               |                                                      |
+|                  | Control.Monad.Trans               |                                                      |
+|                  | Control.Monad.Writer              |                                                      |
+| parsec           | Text.Parsec                       |                                                      |
+|                  | Text.ParserCombinators.Parsec     |                                                      |
+| pretty           | Text.PrettyPrint                  | https://hackage.haskell.org/package/pretty           |
+| process          | System.Cmd                        | https://hackage.haskell.org/package/process          |
+|                  | System.Process                    |                                                      |
+| terminfo         | System.Console.Terminfo           | https://hackage.haskell.org/package/terminfo         |
 | template-haskell | Language.Haskell.TH               | https://hackage.haskell.org/package/template-haskell |
-| text             | Data.Text                         |                                                  |
-| time             | Data.Time                         | https://hackage.haskell.org/package/time         |
-| transformers     | Control.Monad.Trans               | https://hackage.haskell.org/package/transformers |
-| stm              | Control.Concurrent.STM            |                                                  |
-|                  | Control.Monad.STM                 |                                                  |
-| unix             | System.Posix                      | https://hackage.haskell.org/package/unix         |
-| xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml        |
-|------------------+-----------------------------------+--------------------------------------------------|
-** warnings
-- in command: ghc -Wincomplete-patterns Main.hs
-- in repl:   :set -Wincomplete-patterns
-             :set -Wno-incomplete-patterns
-|---------------------+-------------------------------|
-| all                 |                               |
-| incomplete-patterns | on incomplete pattern matches |
-|---------------------+-------------------------------|
-* cabal
-- cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
-| cabal                    | description                                                   |
-|--------------------------+---------------------------------------------------------------|
-| build                    | fetch deps, and builds targerts                               |
-| clean                    | cleans build artifacts                                        |
-| configure                |                                                               |
-| exec -- which EXE        | prints the path of the compiled EXE                           |
-| freeze                   | generate file with packages versions and build flags          |
-| gen-bounds               | generate version bounds for packages                          |
-| init --interactive       |                                                               |
-| init --libandexe         |                                                               |
-| repl --build-depends PKG |                                                               |
-| repl LIB                 | runs repl in our LIB context                                  |
-| run EXE -- ARGS          |                                                               |
-| sdist                    | bundle project in a tarball, which can be uploaded to hackage |
-| update                   | fetch packages metadata from remote repositories              |
-|--------------------------+---------------------------------------------------------------|
-* stack
-| stack             | description                                       |
-|-------------------+---------------------------------------------------|
-| build             | installs ghc, package deps and builds the project |
-| clean             | cleans build artifacts                            |
-| exec -- which EXE |                                                   |
-| exec EXE -- ARGS  | will run the EXE with ARGS                        |
-| ghci LIB          | starts repl in LIB context                        |
-** dot - get a dependency DOT graph
-https://stackoverflow.com/questions/69270620/generating-haskell-module-dependency-tree
-https://docs.haskellstack.org/en/stable/dependency_visualization/
-* Personalities
-** Simon Peyton-Jones
-- haskell comitee on design
-** Philip Wadler
-- haskell comitee on design
+| text             | Data.Text, more efficient unicode |                                                      |
+|                  | Text                              | type                                                 |
+|                  | pack                              | from String to Text                                  |
+| time             | Data.Time                         | https://hackage.haskell.org/package/time             |
+| transformers     | Control.Monad.Trans               | https://hackage.haskell.org/package/transformers     |
+| stm              | Control.Concurrent.STM            |                                                      |
+|                  | Control.Monad.STM                 |                                                      |
+| unix             | System.Posix                      | https://hackage.haskell.org/package/unix             |
+| xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml            |
+|------------------+-----------------------------------+------------------------------------------------------|
 * Emacs Setup
   - https://github.com/haskell/haskell-ide-engine
   - https://github.com/soupi/minimal-haskell-emacs (setup)
@@ -431,6 +402,13 @@ https://docs.haskellstack.org/en/stable/dependency_visualization/
 - State of the Haskell ecosystem
   https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
 * Codebases
+- https://github.com/omelkonian/AlgoRhythm (music)
+- Project
+  https://github.com/reanimate/reanimate
+  https://github.com/xmonad/xmonad
 - exercises https://github.com/effectfully-ou/haskell-challenges
 - https://github.com/jappeace/cut-the-crap/
   ffmpeg based, cut video silences
+* Personalities
+- Simon Peyton-Jones
+- Philip Wadler

@@ -1,0 +1,67 @@
+manual https://haskell-haddock.readthedocs.io/en/latest/
+source https://github.com/haskell/haddock
+
+- by default it generates 1 html file per module
+
+- documentation
+  - for modules at the very top of the file
+  - for top-level definition, just above them
+  - like regular comments but
+    start with "-- |"
+    or "{- | ... -}" for multiline comments
+
+* ">>>" for adding REPL output example
+
+  #+begin_src haskell
+{- |
+A test message that you can use to see how messages are formatted:
+
+>>> testMessage
+"Hello Friend, from: test example"
+-}
+testMessage :: String
+testMessage =
+  formatMessage $ defaultMessage { greetingsFrom = [Name "test example"] }
+  #+end_src
+
+* "@" for code snippets
+  - surrounding something in (") makes it reference to a module
+  - surrounding something in (') makes it reference to a function or type
+
+  #+begin_src haskell
+{- |
+A default greeting message that isn't attributed to anyone:
+@
+'GreetingMessage'
+  { 'greetingSalutation' = 'Salutation' \"Hello\"
+  , 'greetingTo' = 'Name' \"Friend\"
+  , 'greetingFrom' = []
+  }
+@
+-}
+defaultMessage :: GreetingMessage
+  #+end_src
+
+* "^" to comment specific field records
+
+For record fields, could have also been with "-- |" ABOVE
+
+  #+begin_src haskell
+    {- |
+    A GreetingMessage contains all of the information needed to generate a
+    greeting using 'formatMessage'. you can get a default greeting without
+    attribution from 'defaultMessage'. This makes it onvenient to use
+    record update syntax to construct a new greeting:
+
+    >>> formatMessage defaultMessage { greetingFrom = [ Name "A Haskeller"] }
+    "Hello Friend, from: A Haskeller"
+    -}
+    data GreetingMessage = GreetingMessage
+      { greetingSalutation :: Salutation
+        -- ^ A 'Salutation', like \"Hello\"
+      , greetingTo :: Name
+        -- ^ 'Name' of the person that should be greeted
+      , greetingFrom :: [Name]
+        -- ^ 'Name's of the people who are sending the greeting
+      }
+  #+end_src

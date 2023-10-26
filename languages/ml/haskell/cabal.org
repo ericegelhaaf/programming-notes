@@ -1,0 +1,78 @@
+manual https://cabal.readthedocs.io/en/3.4/index.html
+
+** cmd
+
+- cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
+- ~/.cabal/bin
+
+|------------------------------+---------------------------------------------------------------|
+| build                        | fetch deps, and builds all targets                            |
+| build NAME                   | target name                                                   |
+| build exe:NAME               | disambiguation if lib/exe are named the same                  |
+| build lib:NAME               | disambiguation if lib/exe are named the same                  |
+|------------------------------+---------------------------------------------------------------|
+| exec NAME                    | run it                                                        |
+| exec -- which NAME           | prints the path of the compiled NAME                          |
+| run                          | compile it anr run it                                         |
+| run NAME -- ARGS             | compile it and run it                                         |
+|------------------------------+---------------------------------------------------------------|
+| init --interactive           |                                                               |
+| init --libandexe             |                                                               |
+|------------------------------+---------------------------------------------------------------|
+| install BIN                  | downloads, compiles and installs BIN in ~/.cabal/bin          |
+| install --lib LIB            | downloads, compiles and installs LIB in ~/.cabal              |
+|------------------------------+---------------------------------------------------------------|
+| repl --build-depends PKG     |                                                               |
+| repl LIB                     | loads repl, with project loaded                               |
+| repl                         | loads repl, with project loaded                               |
+|------------------------------+---------------------------------------------------------------|
+| clean                        | cleans build artifacts                                        |
+| configure --enable-profiling | download profiling information for all your dependencies      |
+| freeze                       | generate file with packages versions and build flags          |
+| gen-bounds                   | generate version bounds for packages                          |
+| sdist                        | bundle project in a tarball, which can be uploaded to hackage |
+| update                       | updates package cache, ~package list~ from haskell            |
+| haddock                      | generates html documentation of our project                   |
+|------------------------------+---------------------------------------------------------------|
+
+** .cabal
+
+- comments can't trail any other expresion
+
+- base version ~operators~
+  - > < >= <=
+  - &&
+  - carrot operators: limits to packages that should be compatible per PVP guidelines
+    eg: base ^> 4.13.0.0
+
+|--------------------+--------------------+-----------------------------------------|
+| top-level/stanza   | property           | value OR description                    |
+|--------------------+--------------------+-----------------------------------------|
+| name               |                    | REQUIRED                                |
+| version            |                    | REQUIRED                                |
+| cabal-version      |                    |                                         |
+| extra-source-files |                    | Changelog.md                            |
+| data-files         |                    | **/*.txt                                |
+|--------------------+--------------------+-----------------------------------------|
+|                    | hs-source-dirs     |                                         |
+|                    | build-depends      | base                                    |
+|                    | default-language   | Haskell2010                             |
+|                    | default-extensions | entire project *language extensions*    |
+|--------------------+--------------------+-----------------------------------------|
+| library            | -                  | name defaults to the package name       |
+|                    | exposed-modules    | public to all consumers                 |
+|                    | other-modules      | private to the library                  |
+|                    | other-extensions   | on target *language extensions*         |
+|                    | hs-source-dirs     | src                                     |
+|--------------------+--------------------+-----------------------------------------|
+| executable         |                    |                                         |
+|                    | main-is            | name of Main.hs                         |
+|                    | build-depends      | base + library name                     |
+|                    | hs-source-dirs     | app                                     |
+|                    | ghc-options        | -O1 -threaded -rtsopts -with-rtsopts=-N |
+|--------------------+--------------------+-----------------------------------------|
+| test-suite         |                    |                                         |
+|                    | hs-source-dirs     | test                                    |
+|                    | main-is            | MyLibTest.hs                            |
+|                    | type               | exitcode-stdio-1.0                      |
+|--------------------+--------------------+-----------------------------------------|

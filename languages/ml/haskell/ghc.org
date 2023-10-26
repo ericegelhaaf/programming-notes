@@ -1,0 +1,39 @@
+- GHC(i) Manual
+  https://downloads.haskell.org/ghc/latest/docs/users_guide/index.html
+  https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html
+
+- -I0
+  -Iw
+  +RTS -I0 -RTS
+  -rtsopts to ghc-options in .cabal
+
+* usage
+
+|-----------+-------------------------------------------|
+| in .cabal | library\nghc-options: -fdefer-typed-holes |
+| in repl   | :set -fdefer-typed-holes                  |
+| in source | {-# OPTIONS_GHC -fdefer-typed-hols #-}    |
+|-----------+-------------------------------------------|
+
+- in command: ghc -Wincomplete-patterns Main.hs
+- in repl:   :set -Wincomplete-patterns
+             :set -Wno-incomplete-patterns
+
+* flags
+
+- Flag reference
+  https://downloads.haskell.org/ghc/latest/docs/users_guide/flags.html
+- Warnings and sanity-checking
+  https://downloads.haskell.org/~ghc/7.8.3/docs/html/users_guide/options-sanity.html
+
+|----------------------------+----------------------------------------------------------------------|
+| -Wall                      | enables more common warnings                                         |
+| -Weverything               | enables EVERY warning                                                |
+| -Werror                    | turns warning into errors                                            |
+|----------------------------+----------------------------------------------------------------------|
+| -fno-warn-type-defaults    | ommit warning when using numeric constants on polymorphics functions |
+| -fwarn-incomplete-patterns | on incomplete pattern matches                                        |
+| -prof                      | enables profiling information, needs P.I. from each lib              |
+| -fdefer-typed-holes        | allows you to type (_) in place of an expression                     |
+| -fforce-recomp             |                                                                      |
+|----------------------------+----------------------------------------------------------------------|

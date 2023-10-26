@@ -820,8 +820,8 @@ source https://github.com/Apress/practical-haskell
 ** 2 Declaring the Data Model
 *** Characters, Numbers and Lists
 |---------+-------------------------------------------+--------------------+------------------------|
-| Char    | Contains one Unicode character            | 'a', '\97', '\x61' | import Data.Char       |
-| Int     | Have the native width of the architecture |                    |                        |
+| Char    | contains one Unicode character            | 'a', '\97', '\x61' | import Data.Char       |
+| Int     | have the native width of the architecture |                    |                        |
 | Integer | unbounded integral type                   |                    |                        |
 | Ratio   |                                           | 1 % 3              | import Data.Ratio      |
 | [Char]  |                                           | "Hello World!"     |                        |
@@ -837,37 +837,24 @@ source https://github.com/Apress/practical-haskell
 - Lists of lists do not need to be of the same dimension, so they are not equivalent to arrays of multiple dimensions.
   [] and [[]] are NOT equivalent
 *** Creating a New Project (and module)
+
+|-------+----------------------------------+--------------+-------------+----------|
 | name  | goals and features               | installation |             | repo     |
 |-------+----------------------------------+--------------+-------------+----------|
 | cabal |                                  | no           | name.cabal  | Hackage  |
 | stack | reproducible builds + versioning | yes          | +stack.yaml | Stackage |
 |-------+----------------------------------+--------------+-------------+----------|
-- stack new project-name
-  stack setup
-  stack build
-- cabal init --interactive
-  cabal configure
-  cabal build
+
 - .cabal
   - case insensitive property name
   - stanzas begin with a header (eg: library or executable)
-- Changing the Source Directory
-  #+begin_src
-  library
-    hs-source-dirs: src
-  #+end_src
+
 - modules in Haskell
   - similar to packages in Java or namespaces in C#
   - each modulo defined on his own file
   -        Chapter2.Section2.Example goes in path Chapter2/Section2/Example.hs
   - module Chapter2.Section2.Example where
-  - to compile it with cabal include it on some stanza
-    #+begin_src
-      library
-        exposed-modules: Chapter2.Section2.Example
-        -- OR
-        other-modules: Chapter2.Section2.Example
-    #+end_src
+
 *** Defining Simple Functions
 - tuples of different lengths are completely different types
 - src/Chapter2/SimpleFunctions.hs
@@ -909,8 +896,10 @@ source https://github.com/Apress/practical-haskell
 - All *types inside* a "showable" must derive Show too
 - Functions that are not defined over the complete domain of their arguments are called *partial*
 *** Working With Data Types
+
 - Pattern Matching does *NOT backtrack* when something goes wrong in the body of a match
-- You can pattern match on *let* and *where* but with only 1 pattern
+
+- You can pattern match on *let* and *where* BUT with only 1 pattern
   - instead of
     #+begin_src haskell
       let name = case companyName client of
@@ -927,13 +916,15 @@ source https://github.com/Apress/practical-haskell
                       , if x < xs_min then x else xs_min
                       ) where (xs_max, xs_min) = maxmin xs
     #+end_src
-- Is customary in Haskell
-  1) to write the pattern matching on lists using a letter or a small word followed by the same identifier in plural
-     - like "x" and "xs"
-     - or "x:y:zs"
-  2) to use the same identifier, but with (') (pronounced prime) afterward, to refer to a highly related binding
-  3) With guards, using *otherwise* in the last pattern, when using guards is a common convention
-     - Although it does NOT do anything
+
+- Haskell conventions
+  + to write the ~pattern matching~ on lists using a letter or a small word followed by the same identifier in plural
+    - like "x" and "xs"
+    - or "x:y:zs"
+  + to use the same identifier, but with (') (pronounced prime) afterward, to refer to a highly related binding
+  + With ~guards~, using *otherwise* in the last pattern, when using guards is a common convention
+    - Although it does NOT do anything
+
 **** =as pattern=, allows you to *bind* some value in the match, while at the same time allowing you to match on inner components
   #+begin_src haskell
     -- instead of
@@ -972,92 +963,102 @@ source https://github.com/Apress/practical-haskell
     specialClient _                               = False
   #+end_src
 **** =Records=
-  - Regular Pattern matching on big structure may get unwierdly quickly, because:
-    1) it forces to write long matches to retrieve just a single value
-    2) and to re-create entire data structure merely to change just a single field
-  - *Defining* using data declarations, instead of "types" for each parameter you
-    #+begin_src haskell
-      data ClientR = GovOrgR  { clientRName :: String }
-                   | CompanyR { clientRName :: String
-                              , companyId :: Integer
-                              , person :: PersonR
-                              , duty :: String }
-                   | IndividualR { person :: PersonR }
-                   deriving Show
 
-      data PersonR = PersonR { firstName :: String
-                             , lastName :: String
-                             } deriving Show
+- Regular Pattern matching on big structure may get unwierdly quickly, because:
+  1) it forces to write long matches to retrieve just a single value
+  2) and to re-create entire data structure merely to change just a single field
+
+- *Defining* using data declarations
+  #+begin_src haskell
+    data ClientR = GovOrgR  { clientRName :: String }
+                 | CompanyR { clientRName :: String
+                            , companyId :: Integer
+                            , person :: PersonR
+                            , duty :: String }
+                 | IndividualR { person :: PersonR }
+                 deriving Show
+
+    data PersonR = PersonR { firstName :: String
+                           , lastName :: String
+                           } deriving Show
   #+end_src
-  - *Create*, either passing the values directly OR a list of each field name followed by (=) and the value
-    #+begin_src haskell
-      GovOrgR "NATO"
-      IndividualR { person = PersonR { lastName = "Smith", firstName = "John" } }
-    #+end_src
-  - *Access*, special functions are automatically created to access those particular fields
-    #+begin_src haskell
-      > clientRName (GovOrgR "NATO")
-        "NATO"
-      > :t duty
-        duty :: ClientR -> String
-    #+end_src
-  - *Pattern Matching*, do NOT need to write a binding or pattern for *each field* in it.
-    #+begin_src haskell
-      greet :: ClientR -> String
-      greet IndividualR { person = PersonR { firstname = fn } } = "Hi, " ++ fn
-      greet CompanyR    { clientRName = c }                     = "Hi, " ++ c
-      greet GovOrgR     { }                                     = "Welcome"
-    #+end_src
-  - *Pattern Matching* =record puns=, creates a binding for the correspinding field availble *with the same name* in the body of hte match.
-    #+begin_src haskell
-      {-# LANGUAGE NamedFieldPuns #-}
-      greet IndividualR { person = PersonR { firstname } } = "Hi, " ++ firstName
-      greet CompanyR    { clientRName }                    = "Hi, " ++ clientRName
-      greet GovOrgR     {  }                               = "Welcome"
-    #+end_src
-  - *Pattern Matching* automatically create bindings (..), while making some field obey a pattern
-    #+begin_src haskell
-      {-# LANGUAGE RecordWildCards #-}
-      greet IndividualR { person = { PersonR { .. } } = "Hi, " ++ firstName
-      greet CompnayR    { .. }                        = "Hi, " ++ clientRName
-      greet GovOrgR     { }                           = "Welcome"
-    #+end_src
-  - *Updating* a record field
-    #+begin_src haskell
-      import Data.Char (toUpper)
-      nameInCapitals :: PersonR -> PersonR
-      nameInCapitals p@(PersonR { firstName = initial:rest }) =
-        let newName = (toUpper initial):rest
-        in p { firstName = newName } -- UPDATE!!!
-      nameInCapitals p@(PersonR { firstName = "" }) =
-        p
-    #+end_src
-  - Use case: *Default* values for functions calls.
-    Instead of writing a function with a lot of arguments. Use a *record* for the default arguments.
-    Provide this record as *constant* with sensible defaults.
-    Changing defaults would mean just a record *update* as seen before
-    Is better for maintainability, to forbid calling the constructor directly, forcing the use of the constant.
-    #+begin_src haskell
-      data ConnType = TCP | UDP
-      data UseProxy = NoProxy | Proxy String
-      data TimeOut  = NoTimeOut | TimeOut Integer
-      data Connection = ... -- Definition ommited
-      data ConnOptions = ConnOptions { connType      :: ConnType
-                                     , connSpeed     :: Integer
-                                     , connProxy     :: UseProxy
-                                     , connCaching   :: Bool
-                                     , connKeepAlive :: Bool
-                                     , connTimeOut   :: Timeout
-                                     }
 
-      connect' :: String -> ConnOptions -> Connection
-      connect' url options = ...
+- *Create*
+  #+begin_src haskell
+    GovOrgR "NATO" -- passing the values directly OR
+    IndividualR { person = PersonR { lastName = "Smith", firstName = "John" } }
+  #+end_src
 
-      connDefault :: ConnOptions
-      connDefault = ConnOptions TCP 0 NoProxy False False NoTimeout
+- *Access*, special functions are automatically created to access those particular fields
+  #+begin_src haskell
+    >>> clientRName (GovOrgR "NATO")
+      "NATO"
+    >>> :t duty
+      duty :: ClientR -> String
+  #+end_src
 
-      > connect' "https://apress.com" connDefault { connType = UDP }
-    #+end_src
+- *Pattern Matching*, does NOT need a binding or pattern for *each field* in it.
+  #+begin_src haskell
+    greet :: ClientR -> String
+    greet IndividualR { person = PersonR { firstname = fn } } = "Hi, " ++ fn
+    greet CompanyR    { clientRName = c }                     = "Hi, " ++ c
+    greet GovOrgR     { }                                     = "Welcome"
+  #+end_src
+
+- *Pattern Matching* =record puns=, creates a binding for the correspinding field availble *with the same name* in the body of hte match.
+  #+begin_src haskell
+    {-# LANGUAGE NamedFieldPuns #-}
+    greet IndividualR { person = PersonR { firstname } } = "Hi, " ++ firstName
+    greet CompanyR    { clientRName }                    = "Hi, " ++ clientRName
+    greet GovOrgR     {  }                               = "Welcome"
+  #+end_src
+
+- *Pattern Matching* automatically create bindings (..), while making some field obey a pattern
+  #+begin_src haskell
+    {-# LANGUAGE RecordWildCards #-}
+    greet IndividualR { person = { PersonR { .. } } = "Hi, " ++ firstName
+    greet CompnayR    { .. }                        = "Hi, " ++ clientRName
+    greet GovOrgR     { }                           = "Welcome"
+  #+end_src
+
+- *Updating* a record field
+  #+begin_src haskell
+    import Data.Char (toUpper)
+    nameInCapitals :: PersonR -> PersonR
+    nameInCapitals p@(PersonR { firstName = initial:rest }) =
+      let newName = (toUpper initial):rest
+      in p { firstName = newName } -- UPDATE!!!
+    nameInCapitals p@(PersonR { firstName = "" }) =
+      p
+  #+end_src
+
+- Use case: *Default* values for functions calls.
+  Instead of writing a function with a lot of arguments. Use a *record* for the default arguments.
+  Provide this record as *constant* with sensible defaults.
+  Changing defaults would mean just a record *update* as seen before
+  Is better for maintainability, to forbid calling the constructor directly, forcing the use of the constant.
+  #+begin_src haskell
+    data ConnType = TCP | UDP
+    data UseProxy = NoProxy | Proxy String
+    data TimeOut  = NoTimeOut | TimeOut Integer
+    data Connection = ... -- Definition ommited
+    data ConnOptions = ConnOptions { connType      :: ConnType
+                                   , connSpeed     :: Integer
+                                   , connProxy     :: UseProxy
+                                   , connCaching   :: Bool
+                                   , connKeepAlive :: Bool
+                                   , connTimeOut   :: Timeout
+                                   }
+
+    connect' :: String -> ConnOptions -> Connection
+    connect' url options = ...
+
+    connDefault :: ConnOptions
+    connDefault = ConnOptions TCP 0 NoProxy False False NoTimeout
+
+    >>> connect' "https://apress.com" connDefault { connType = UDP }
+  #+end_src
+
 **** Exercise on Guards: Binomial Coeficient
 - of n and k
 - This coefficient gives the *number of ways* in  which you can get =k= balls from a bag of =n= without repetition
@@ -1087,30 +1088,33 @@ source https://github.com/Apress/practical-haskell
                    deriving Show
 #+end_src
 **** Exercise 2-5: The perfect match for your machines
-  - Write a function that return the number of clients of each gender
-    #+begin_src haskell
-      data Result = Result Int Int Int
-        deriving Show
-      gender2Result :: Gender -> Result
-      gender2Result Male    = Result 1 0 0
-      gender2Result Female  = Result 0 1 0
-      gender2Result Unknown = Result 0 0 1
+- Write a function that return the number of clients of each gender
+  #+begin_src haskell
+    data Result = Result Int Int Int
+      deriving Show
 
-      addResult :: Result -> Result -> Result
-      (Result m1 f1 u1) (Result m2 f2 u2) = Result (m1+m2) (f1+f2) (u1+u2)
+    gender2Result :: Gender -> Result
+    gender2Result Male    = Result 1 0 0
+    gender2Result Female  = Result 0 1 0
+    gender2Result Unknown = Result 0 0 1
 
-      clientsPerGender :: [Client] -> Result
-      clientsPerGender []                                       = Result 0 0 0
-      clientsPerGender (GovOrg _) : xs                          = clientsPerGender xs
-      clientsPerGender (Company _ _ (Person _ _ gender) _) : xs = addResult (clientsPerGender xs) $ gender2Result gender
-      clientsPerGender (Individual (Person _ _ gender) _)  : xs = addResult (clientsPerGender xs) $ gender2Result gender
-    #+end_src
-  - sale-off price of timemachines
-    #+begin_src haskell
-      saleOffPrice :: [TimeMachine] -> Float
-      saleOffPrice []                                 = 0.0
-      saleOffPrice (TimeMachine _ _ _ _ _ price) : xs = (price * 0.9) + saleOffPrice
-    #+end_src
+    addResult :: Result -> Result -> Result
+    addResult (Result m1 f1 u1) (Result m2 f2 u2) =
+       Result (m1+m2) (f1+f2) (u1+u2)
+
+    clientsPerGender :: [Client] -> Result
+    clientsPerGender []                                       = Result 0 0 0
+    clientsPerGender (GovOrg _) : xs                          = clientsPerGender xs
+    clientsPerGender (Company _ _ (Person _ _ gender) _) : xs = addResult (clientsPerGender xs) $ gender2Result gender
+    clientsPerGender (Individual (Person _ _ gender) _)  : xs = addResult (clientsPerGender xs) $ gender2Result gender
+  #+end_src
+
+- sale-off price of timemachines
+  #+begin_src haskell
+    saleOffPrice :: [TimeMachine] -> Float
+    saleOffPrice []                                 = 0.0
+    saleOffPrice (TimeMachine _ _ _ _ _ price) : xs = (price * 0.9) + saleOffPrice
+  #+end_src
 **** Exercise 2-6: More Matches and Guards
 #+begin_src haskell
   ackerman :: Int -> Int -> Int
@@ -1140,16 +1144,21 @@ source https://github.com/Apress/practical-haskell
 #+end_src
 ** 3 Increasing Code Reuse
 *** Parametric Polymorphism
+
 - Etymology
   multiple = poly
   types    = morphé is Ancient Greek for "shape"
-- OTH, =Ad-Hoc Polymorphism= allows for functions to be applicable for just a subset of all types
-- Polymorphis is also available in data types
+
+- =Ad-Hoc Polymorphism= allows for functions to be applicable for just a subset of all types
+
+- Polymorphism is also available in data types
+
   - Example: in tuples, you have multiple type variables
     #+begin_src haskell
       data Triple a b c = Triple a b c
       data SamePair a = SamePair a a
     #+end_src
+
   - Example: where the "clientId" can take many shapes
     #+begin_src haskell
       data Client i = GovOrg  { clientId :: i, clientName :: String }
@@ -1162,11 +1171,14 @@ source https://github.com/Apress/practical-haskell
                   deriving (Show, Eq, Ord)
     #+end_src
 *** Funtions As Parameters (HoF)
-- map, succ, filter, even
-- Ommit warning when using numeric constants on polymorphics functions
-  gci -fno-warn-type-defaults
-- ($) both sides of this operator will be evaluated before f is applied to a. Therefore, you can omit a lot parentheses.
-  f $ a = f a
+
+- ($) both sides of this operator will be evaluated before f is applied to a.
+  Therefore, you can omit a lot parentheses.
+
+  #+begin_src haskell
+    f $ a = f a
+  #+end_src
+
 - =Anonymous functions= are sometimes called "lambda abstractions" or simply "abstractions"
   - Recursion is forbidden
   - only 1(one) pattern can be matched (like on let/where?)
@@ -1288,7 +1300,9 @@ source https://github.com/Apress/practical-haskell
       where isCompany (Company {}) = True
             isCompany _            = False
   #+end_src
+
 - The *initial* value on foldr, is also called *neutral* or *identity element* of the operation.
+
 - Example: maximum, we define:
   1) a new polymorphic type to support infinity
   2) an initial value, considering the max of an empty list (the MinusInfinity), and the it shouldn't change the value of binary operation
@@ -1309,8 +1323,12 @@ source https://github.com/Apress/practical-haskell
     foldr infMax                        MinusInfinity $ map Number [1,2,3]
     foldr (\x y -> infMax (Number x) y) MinusInfinity [1,2,3]
   #+end_src
+
 - ranges
-  withPositions list = zip [1 .. length someList] list
+  #+begin_src haskell
+    withPositions list = zip [1 .. length someList] list
+  #+end_src
+
 **** foldr1 or foldl1
   - they do NOT take an intial value, but they take it from the first/last element of the list
     - used then handling an empty list is guarenteed not to happen
@@ -1474,33 +1492,40 @@ source https://github.com/Apress/practical-haskell
 *** Summary
 ** 4 Using Containers and Type Classes
 *** Using Packages
-- A package is the *distribution unit of code* understood by Cabal and Stack
+
+- A ~package~ is the *distribution unit of code* understood by Cabal and Stack
   - It includes a set of modules
+
 - Stackage provides *snapshots* of Hackage (called *resolvers*) in which all pacakges are know to work well together.
   - Provides reproducibility
   - At the expense of not always containing the bleeding-edge version of the packages
+
 - Add packages to =build-depends= property on your .cabal file
-  - Can add it to both the "library" or in "executable" stanzas
+  - Can add it to both the "library" or in "executable" *stanzas*
+
 - =Rule of Thumb=
   - add constraint requiring the MINIMUM version where you know that your package compiles and runs.
   - and another constraint to limit future versions to the next MAJOR one
   #+begin_src
     containers >= 0.6.0.1 && 0.7
   #+end_src
+
 - Package Versioning Policy
   1) If any Function/DataType/TypeClass/Instance has been changed or its type or behavior removed,
      the major version (a.b) must be increased.
   2) Otherwise, for additions you can just increase the remaining components (x.x.c.d).
      Except in the case of a likely conflict with a module in another package
+
 **** Cabal
+
 - Cabal mutability landscape changed with the introduction of =sandboxes=
   - Packages were installed globally
   - Used to be an opt-in feature
   - IF you use the cabal commands starting with ~new-~ you use sandboxes
     They must run in a folder in which a .cabal file exists
-- Cabal keeps a Hackage indes locally
-  $ cabal update
-  $ cabal build
+
+- Cabal keeps a Hackage indexes locally
+
 - How to: Develop several packages at the same time, one depending of the other.
   - Avoids "global mutation" of packages
   - Put all the packages in a common folder
@@ -1509,6 +1534,7 @@ source https://github.com/Apress/practical-haskell
   - Build 1(one) package:
     $ cabal new-build chapter4
     $ cabal new-build wonderful
+
 **** Stack
 - stack.yaml
   extra-deps: is for packages not in Stackage, but in Hackage. Needs name and version.
@@ -1543,6 +1569,7 @@ source https://github.com/Apress/practical-haskell
   #+end_src
 - Haskell has no special syntax for maps (like for lists with [], or [1,2])
   or for exporting any of its data constructors.
+|----------------------+-------------------------------------------------------------|
 | M.assocs             | get an assoc list from a map                                |
 | M.empty              | constructor                                                 |
 | M.singleton          | constructor, eg: M.singleton "hello" 3                      |
@@ -1569,6 +1596,7 @@ source https://github.com/Apress/practical-haskell
 | M.find(Min/Max)      |                                                             |
 | M.delete(Min/Max)    |                                                             |
 | M.update(Min/Max)    |                                                             |
+|----------------------+-------------------------------------------------------------|
 **** Data.Set
 - Like lists but do not allow duplicates
 - Sorts in ascending order
@@ -1781,7 +1809,7 @@ source https://github.com/Apress/practical-haskell
 #+end_src
 **** Step 2 - Polymorphic Binary Trees
 - While it is possible encode the restriction of the class elements that the binary tree may hold directly in the data declaration.
-  It's not recommended.
+  It's NOT recommended.
   The best way is to encode the restriction in each of the operation that work on the structure.
   In order to impose this restriction, you must hide the Node2 and Leaf2 constructors from public consuption.
 #+begin_src haskell
@@ -2118,7 +2146,7 @@ After Step 2
     ghc-options:        -Wall -fdefer-typed-holes
     build-depends:      sockets-and-pipes ^>=0.3
     exposed-modules:    Book
-    #+end_src
+#+end_src
 *** Book.hs
 #+begin_src haskell
 module Book where
@@ -2613,6 +2641,10 @@ useful when we want ot do some uneffectul computation that depnds on IO
 ** 09 Generating documentation
 ** 10 Recap
 * 23 | Effective Haskell                         | Rebecca Skinner
+ERRATA:
+192
+"You can export field constructors just..." should be
+"You can export field selectors just..."
 ** DONE Introduction
 - 1990 First version of Haskell
   - 1 year before Python
@@ -2963,7 +2995,7 @@ fibs = 0 : 1 : helper fibs (tail fibs)
   1) what type should be to fill the type hole
   2) relevant bindings
   3) valid holde fits
-** 04 Creating New Types
+** DONE 04 Creating New Types
 
 #+begin_src haskell
   data Void
@@ -3275,7 +3307,6 @@ run expr =
 
 - A value you might sometimes want to hold
   inside of a ~data~ type is a function.
-
 #+begin_src haskell
   data StringParser =
      StringParser (String -> (String, String))
@@ -3284,15 +3315,12 @@ run expr =
 
 - more often, they'll be records with field
   that gives the function some useful name
-
 #+begin_src haskell
   data StringParser =
     StringParser { runStringParser :: String -> (String, String) }
 #+end_src
 
-- wrapped inside of a StringParser,
-  will make it somewhat easier to work with (?)
-
+- wrapped inside of a StringParser, will make it somewhat easier to work with (?)
 #+begin_src haskell
   takeCharacters :: Int -> StringParser
   takeCharacters numCharacters = StringParser $ \inputString ->
@@ -3305,8 +3333,512 @@ run expr =
       (nextWord, rest) -> (nextWord, tail rest)
 #+end_src
 
-** 05 Creating And Structuring Haskell Projects
+- for example, we can have a function that combines 2(two) StringParsers
+  #+begin_src haskell
+    combineParsers :: StringParser -> StringParser -> StringParser
+    combineParsers firstParser secondParser = StringParser $ \someString ->
+      let (_firstPart, firstResult) = runStringParser firstParser someString -- runStringParser is a record field
+      in runStringParser secondParser firstResult
+  #+end_src
+
+- this lets us re-use existing functions that we've already written
+  #+begin_src haskell
+    getNextWordAfterTenLetters :: StringParser
+    getNextWordAfterTenLetters =
+      combineParser (takeCharacters 10) getNextWord
+
+    tenLettersAfterTheFirstWord :: StringParser
+    tenLettersAfterTheFirstWord =
+      combineParsers getNextWord (takeCharacters 10)
+  #+end_src
+
+- we define a function to get the first value of the tuple
+  #+begin_src haskell
+    parseString :: StringParser -> String -> String
+    parseString parser inputString =
+      fst $ runStringParser parser inputString  -- runStringParser is a record field
+  #+end_src
+
+- calling it
+  > parseString (takeCharacters 5) "Hello, world!"
+   "Hello"
+  > parseString getWord "Haskell is fun"
+   "Haskell"
+  > parseString tenLettersAfterTheFirstWord "AveryLongWord 0123456789abcdf"
+   "0123456789"
+  > parseString getNextWordAfterTenLetters "123456 hello world"
+   "lo"
+
+- The StringParser datatypes has made our code a bit easier to work with.
+  1) We no longer have to keep track of may layers of high-order functions directly.
+  2) Or pass around a lot of parameters.
+*** Creating Type Aliases
+
+- Why?
+  - to improve readibility
+    - if it's an api, an user might look just at type signatures
+  - avoid overhead of new types
+
+#+begin_src haskell
+  type String = [Char]
+#+end_src
+
+- When?
+  - when the aliased type really does have the same meaning as the type it's aliasing
+  - not for doing things like
+    #+begin_src haskell
+      type Seconds = Int
+      type Meters = Int
+    #+end_src
+
+- _Type aliases with type parameters_
+  we use them to fix some type parameters
+  aka give a name to some /partially applied/ type
+  #+begin_src haskell
+    data AppError = AppError
+      { errormessage :: String
+      , errorContext :: [String]
+      , errorWrapped :: Maybe AppError
+      }
+
+    type AppValue a = Either AppError a -- we fixed AppError to Either
+    type AppValue = Either AppError -- eta-reduced
+
+    parseUserOrder :: String -> AppValue Order
+    generateInvoice :: Order -> AppValue Invoice
+    updateInventory :: [Order] -> [(Widget, Int)] -> AppValue [(Widget, Int)]
+  #+end_src
+
+** DONE 05 Creating And Structuring Haskell Projects
+
+*** cabal
+  - package manager
+  - dependency manager
+  - builder
+  - runner
+
+- Cabal follows the Haskell PVP (Package Versioning Policy)
+  - a four-part numbering system: generation.major.minor.patch
+    | generation | large, philosophical, api changes              |
+    | major      | backwards-incompatible changes                 |
+    | minor      | backards-compatble changes, features, bugfixes |
+    | patch      | only bugfixes                                  |
+
+- When writting an executable is common use the ~Library and Executable~ option
+  having a small /executable/ code
+  and most of the code on the /library/
+  makes testing easier
+
+- =App.hs= is also a common name for the main module of an executable
+
+- mostopen source Haskell code uses =BSD-3= license
+- uses SPDX license indentifiers
+
+- Directory path convention
+  setup.hs
+  /app/Main.hs
+  /src/MyLib.hs
+  /test/MyLibTest.hs
+
+- .cabal file is divided in
+  * some top-level package propertiers
+  * some buils target ~stanzas~ (eg: stanza-type name)
+    - and target level fields
+
+*** imports/modules
+
+- you can assign the same import alias to different modules
+  #+begin_src haskell
+    import Data.Text as T
+    import Date.Text.Encoding as T
+
+    countNonPrintableCharactersInText :: Text -> Int
+    countNonPrintableCharactersInText =
+      T.length . T.filter (not . isPrint) . T.decodeUtf8 . T.encodeUtf8
+  #+end_src
+
+- it is a common pattern, when we want to bring a type/s from a module, do it in 2 steps
+  1) include it
+  2) and also include the qualified version with and alias
+  #+begin_src haskell
+    import Data.Text (Text) -- the type
+    import qualified Data.Text as T
+    countNonPrintableCharactersInText :: Text -> Int
+  #+end_src
+
+- otherwise, the type will need to used as T.Text
+  #+begin_src haskell
+    import qualified Data.Text as T (Text, length, filter, path)
+    countNonPrintableCharactersInText :: T.Text -> Int -- !!
+  #+end_src
+
+- Import list might help compile times.
+  Since GHC attempts to only recompile code that has changed,
+  using an *import list* may allow you to avoid some extra work.
+
+- ~modules~ are the basic unit of organization in Haskell
+  - each file contains a module
+  - each module is defined by a single file
+  - names follow the directory hierachy name, relative to the source directory
+    src/Examples/ExampleOne.hs -> Examples.ExampleOne
+  - by default is exported
+    - everything defined at top-level
+    - types
+
+- ~Language extensions~ are NOT enabled through imports
+
+- on ghci> :load
+  everything is imported, regardless if it was exported or not
+
+- =smart constructors=
+  an ordinary function that lets you construct a value
+  can include some aditional logic over a regular constructor
+
+*** Example: exporting ~smart constructors~
+
+And NOT exporting bare type constructors.
+
+In this case, is to make sure the list ALWAYS has at least 1(one) element.
+
+#+begin_src haskell
+  module HaskellBook.Examples.SortedList
+    ( SortedList (getSorted)
+    , makeSortedList -- the smart constructor
+    , minimum
+    ) where
+
+  import Data.List (sort)
+  import Prelude hiding (minimum)
+
+  data SortedList = SortedList { getSorted :: [Int] }
+
+  makeSortedList :: [Int] -> Maybe SortedList
+  makeSortedList []      = Nothing
+  makeSortedList numbers = Just $ SortedList (sort numbers)
+
+  minimum :: SortedList -> Int
+  minimum (SortedList numbers) = head numbers
+#+end_src
+
+*** Example: using ~phantom types~
+
+- Phantom types:
+
+  Are types that don't have any corresponding value.
+  But help us track status at the =type level=.
+
+#+name: module / import
+#+begin_src haskell
+  {-# LANGUAGE RecordWildCards #-}
+  module HaskellBook.Examples.UserInfo
+    ( User
+    , lookupUser
+    , getUsername
+    , getUserScore
+    , getUserEmailAddress
+    ) where
+
+  import Data.List (find)
+#+end_src
+#+name: types = record + phantom types
+#+begin_src haskell
+  -- the PHANTOM TYPES
+  -- just to track state at the TYPE LEVEL
+  -- we do not need value CONSTRUCTORS for our type
+  -- we do not EXPORT them
+  data Authenticated
+  data Unauthenticated
+
+  data User isAuthenticated = User
+    { userName :: String
+    , userInternetPoints :: Int
+    , userPassword :: String
+    , userEmailAddress :: String
+    }
+#+end_src
+#+name: users examples
+#+begin_src haskell
+  users :: [User a]
+  users = [george, porter]
+    where
+      george = User
+        { userName = "george"
+        , userInternetPoints = 1000
+        , userPassword = "secret"
+        , userEmailAddress = "gbird2015@example.com"
+        }
+      porter = User
+        { userName = "porter"
+        , userInternetPoints = 500
+        , userPassword = "hunter2"
+        , userEmailAddress = "woofwoof@example.com2
+        }
+#+end_src
+#+name: api
+#+begin_src haskell
+lookupUser :: String -> Maybe (User Unauthenticated) -- we want it to be unauth
+lookupUser name =
+  find (\user -> userName user == name) users
+
+-- we DO NOT care about auth status in this cases
+getUserName :: User isAuthenticated -> String
+getUserName = userName
+getUserScore :: User isAuthenticated -> Int
+getUserScore = userInternetPoints
+
+-- we DO care about the auth status to read emails
+getUserEmailAddress :: User Authenticated -> String
+getUserEmailAddress = userEmailAddress
+
+authenticate :: User Unauthenticated -> String -> Maybe (User Authenticated)
+authenticate User{..} password =
+  | userPassword == password = Just User{..} -- returns an authenticated user, ME: notice that is handled at type level without casting
+  | otherwise                = Nothing
+#+end_src
+
+*** Re-exporting code from other modules
+
+- A _common pattern_ in haskell codebases is that
+  you'll have several small independent *modules*
+  along with a parent module that re-exports all or most relevant parts
+
+#+name: src/HaskellBook/Examples.hs
+#+begin_src haskell
+  module HaskellBook.Examples
+    ( module HaskellBook.Examples.UserInfo
+    , module CreatingModules -- using the local alias
+    , SortedList.SortedList(..)
+    , SortedList.makeSortedList
+    , SortedList.minimum
+    )
+  where
+
+  import HaskellBook.Examples.UserInfo
+  import HaskellBook.Examples.Introduction.CreatingModules
+    as CreatingModules hiding (testMessage)
+  import qualified HaskellBook.Examples.SortedList
+    as SortedList -- qualified (due minimum) + local alias
+#+end_src
+
+*** Example: using the chapter code in a main.hs
+
+#+begin_src haskell
+  module ModuleDemo where
+  import qualified HaskellBook.Examples as Examples
+
+  georgesEmail :: Maybe String
+  georgesEmail =
+    case Examples.lookupUser "george" of
+         Nothing -> Nothing
+         Just unauthenticatedGeorge ->
+           case Examples.authenticate unauthenticatedGeorge "secret" of
+                Nothing -> Nothing
+                Just george -> Just $ Examples.getUserEmailAddress george
+
+  friendlyEmail :: String -> String
+  friendlyEmail emailAddress =
+    Examples.formatMessage Examples.GreetingMessage
+    { Examples.greetingSalutation = Examples.Salutation "Hello"
+    , Examples.greetingTo         = Examples.Name emailAddress
+    , Examples.greetingFrom       = [Examples.Name "mailer daemon"]
+    }
+
+  demo :: String
+  demo =
+    maybe "unknown user" friendlyEmail georgesEmailAddress
+#+end_src
+
 ** 06 Type Classes
+
+- =parametric polymorphism=
+  - allows you to write a function that works with differen types
+  - when you are concerned about the ~shape~ of your data,
+  - but DO NOT need to inspect directly the values
+
+- =ad-hoc polymorphism=
+  - to provide different implementation of functions depending on their type
+  - in OO: inheritance, interfaces
+  - in Haskell: type classes
+
+- For Example:
+  1) a function that could remove duplicates on a list,
+     we'll need the elements to be comparable OR a comparator function
+  2) a function that calculate the sum, of all the elements on a list
+     we'll need a comparator function and a sum function
+
+- As the number of functions passed down by argument increase it becomes les feasible
+
+*** with =Type Classes= you can give a name to a group of related functions
+
+  - allows to provide different implementations for different types
+
+  - you could think it analogous as if you were defining a ~record~,
+    where every field on the record is a function to do something
+
+  #+name: class definition
+  #+begin_src haskell
+    module NaturalClass where
+
+    class Natural n where
+      equal                  :: n -> n -> Bool
+      add                    :: n -> n -> n
+      multiply               :: n -> n -> n
+      additiveIdentity       :: n
+      multiplicativeIdentive :: n
+      displayAsString        :: n -> String
+  #+end_src
+  #+name: instance definition for Int
+  #+begin_src haskell
+    instance Natural Int where
+      equal                  = (==)
+      add                    = (+)
+      multiply               = (*)
+      additiveIdentity       = 0
+      multiplicativeIdentity = 1
+      displayAsString        = show
+  #+end_src
+
+*** composing =Type Classes=
+
+- If you want to use (==) from Eq in the *default implementations* of functions,
+  compose them like this.
+
+#+begin_src haskell
+  class Eq a where -- given Eq
+    (==) :: a -> a -> Bool
+
+  class Eq n => Natural n where -- we use Eq to define equality and add extra functionality
+    add :: n -> n -> n
+     -- ...
+#+end_src
+
+- It is advisable to keep the instances of *Show* simple,
+  - by default deriving creates something parseable by *read*.
+  - If you need something else, create your custom classes for it.
+
+- Adding Show constraint
+
+  #+begin_src haskell
+    class (Show n, Eq n) => Natural n where
+      add :: n -> n -> n
+      -- ...
+  #+end_src
+
+- implementing/instancing *Natural* for ~Peano~, for all required typeclasses
+  unlike *Int*, we also need to implement *Eq* and *Show* separately
+
+  #+begin_src haskell
+    -- data Peano = Z | S Peano
+    instance Eq Peano where
+      (==) Z Z         = True
+      (==) (S a) (S b) = a == b
+      (==) _ _         = False
+
+    instance Show Peano where
+      show Z     = "Z"
+      show (S a) = "(S " <> show a <> ")"
+
+    instance Natural Peano where
+      add a Z                = a
+      add a (S b)            = add (S a) b
+      multiply Z _           = Z
+      multiply (S a) b       = add b (multiply a b)
+      additiveIdentity       = Z
+      multiplicativeIdentity = S Z
+  #+end_src
+
+*** creating ~default implementations~
+
+- Example: implementing Ord and Ordering
+
+  #+begin_src haskell
+    module OrdExample where
+    import Prelude hiding (Ord(..), Ordering(..)) -- hide Prelude implementations
+
+    data Ordering = LT | EQ | GT
+
+    instance Show Ordering where
+      show LT = "LT"
+      show EQ = "EQ"
+      show GT = "GT"
+
+    class Eq a => Ord a where
+      compare :: a -> a -> Ordering
+      (<)     :: a -> a -> Bool
+      a < b = -- <----- default implementation
+        case compare a b of
+          LT -> True
+          _  -> False
+      (<=)    :: a -> a -> Bool -- all below have similar default implementations based on COMPARE, elided
+      (>)     :: a -> a -> Bool
+      (>=)    :: a -> a -> Bool
+      max     :: a -> a -> a
+      min     :: a -> a -> a
+  #+end_src
+
+- now an instance of Ord would ONLY REQUIRE, a *compare* definition
+  #+begin_src haskell
+    instance Ord Word8 where
+      compare a b
+        | a == b = EQ
+        | a == 0 = LT
+        | b == 0 = GT
+        | otherwise = compare (a - 1) (b - 1)
+      max a b = a -- we could still override a default
+  #+end_src
+
+- {-# MINIMAL #-}
+
+   - We could have provided a default *compare*, using (<=) on its implementation,
+     leaving us to instanciate either of those.
+
+   - BUT, if we don't want to end up on a infinite recursion we should use *MINIMAL*
+
+   #+begin_src haskell
+     class Eq a => Ord a where
+       compare :: a -> a -> Ordering
+       -- ...a compare and a (<=) default definitions are declared, each defined in terms of the other
+     {-# MINIMAL compare | (<=) #-}
+   #+end_src
+
+*** DefaultSignatures
+
+- Example: we have a logging library, were we want to redact some information from logs
+
+- We start by implementing a *type class*, without a default.
+
+  #+begin_src haskell
+    module DefaultSignaturesDemo where
+
+    class Redacted a where
+      redacted :: a -> String
+  #+end_src
+
+- We create a type *UserName*, we want it to implement both
+  - Show for repl testing
+  - Redacted for production
+
+  #+begin_src haskell
+    instance Show Username where
+      show (UserName name) = name
+
+    instance Redacted Username where
+      redacted (Username name) = name
+  #+end_src
+
+  #+begin_src haskell
+    class Show a => Redacted a where -- something that can be redacted
+      redacted :: a -> String
+      redacted = show -- default implementation
+
+    data UserName = UserName String
+
+    instance Show UserName where -- we define show for it
+     show (UserName userName) = userName
+
+    instance Redacted UserName -- uses show
+  #+end_src
+
 ** 07 Understanding =IO=
 ** 08 Working with the Local System
 ** 09 Introducing =Monads=
