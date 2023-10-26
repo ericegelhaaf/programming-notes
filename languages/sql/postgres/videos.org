@@ -1,51 +1,25 @@
+- channel https://www.youtube.com/@PostgresTV/videos
+- playlist explaining postgres by CYBERTEK
+  https://www.youtube.com/playlist?list=PLt4uYyc72acezctc3GlylPy3x7v44RHEt
 - https://www.youtube.com/watch?v=szfUbzsKvtE
   3:47
-* DONE Exclusion operators - EXPLAINING PostgreSQL
-  https://www.youtube.com/watch?v=M58MR1vqnAk
-  1) RANGE TYPES: allows us to store periods, stored as 2 fields
-     <@ "contains operator"
-  2) GIST INDEX
-  3) Hotel 1 Example: 1 constrain
-     - Avoid overlapping booking
-       - Avoid, concurrently booking the same room
-       - Avoid, once the room is booked, not booking it again
-     #+begin_src sql
-     CREATE EXTENSION btree_gist;
-     CREATE TABLE t_booking (
-         room    int,
-         myrange daterange,
-         EXCLUDE USING gist (
-             room WITH=,
-             myrange WITH && -- must not overlap
-         )
-     );
-     #+end_src
-  4) Hotel 2 Example: 2 constrains
-     - We have a room a speaker and a range
-       - not overlap rooms
-       - not overlap speakers (same speaker on 2 rooms)
-     #+begin_src sql
-     CREATE TABLE t_lesson (
-         room    int,
-         speaker text,
-         period  tsrange,
-         EXCLUDE USING gist (room WITH =, period WITH &&),
-         EXCLUDE USING gist (speaker WITH =, period WITH &&)
-      );
-     #+end_src
-  5) Hotel 3 Example: dynamic
-     - Instead of using ranges, we can create the range on the fly
-       #+begin_src sql
-       CREATE TABLE t_dynamic (
-           room int,
-           start_time timestamptz,
-           end_time   timestamptz,
-           EXCLUDE USING gist (
-               room WITH =,
-               tstzrange(start_time, end_time) WITH &&)
-        );
-       #+end_src
-* Video: 2019 - The Art of PostgreSQL - Dimitri Fontaine - InfoQ Brasil
+* TODO 12 | PostgreSQL when its not your job | Christophe Pettus
+videos https://www.youtube.com/watch?v=JqMduJimzFQ
+slides https://thebuild.com/presentations/not-your-job.pdf
+
+- logging
+- memory
+- checkpoints
+- planner
+
+* TODO 14 | Postgres Performance for Humans  | Craig Kerstiens
+video https://www.youtube.com/watch?v=MpH8W5hce9I
+
+- works at heroku
+- Database Workflows
+  - OLTP: aka webapps <---- the talk
+  - OLAP: aka BI, reports
+* TODO 19 | The Art of PostgreSQL            | Dimitri Fontaine - InfoQ Brasil
   https://www.youtube.com/watch?v=09b-uk9UXbM
   - wrote pg_auto_failover, "create extension", "event triggers", "pgloader"
   - Book: Mastering PostgreSQL
@@ -61,3 +35,299 @@
     - (analyze) Does the actual query
     - You will need to ROLLBACK if destructive
   - 31:05
+* TODO 21 | GROUP BY CUBE                    | Cybertec
+https://www.youtube.com/watch?v=iq8sUHYilPk
+
+- To run more >1 aggregation at the time
+  Read data once. Use it multiple times.
+
+- simple group by: one line for group
+
+  #+begin_src sql
+    select region,
+           avg(production),
+           count(*)
+      from t_oil
+     group by 1
+     order by 1;
+  #+end_src
+
+- group by rollup(1)
+  useful to see the "bottom line" aka the whole added as a new column
+
+  #+begin_src sql
+    select region,
+           avg(production),
+           count(*)
+      from t_oil
+     group by rollup(1) -- !!!
+     order by 1;
+  #+end_src
+
+- group by rollup(1,2)
+
+  #+begin_src sql
+    select region,
+           avg(production),
+           count(*)
+      from t_oil
+     group by rollup(1, 2) -- !!! region, country
+     order by 1;
+  #+end_src
+
+* 21 | WITHIN GROUP                     | Cybertec
+https://www.youtube.com/watch?v=iq8sUHYilPk
+
+- for some aggregations, count, avg, sum, etc..
+  order does NOT matter
+
+- for those that order matter
+  are called ~ordered sets~
+
+- Simple group within group
+
+  #+begin_src sql
+    select country,
+           avg(production),
+           percentile_dist(0.5) -- !!
+             within group (ordered by production) as median
+      from t_oil
+     where country in ('Iran', 'Iraq', 'USA')
+     group by 1;
+  #+end_src
+
+- hypothetical aggregates
+
+  #+begin_src sql
+    select count(*),
+           rank(3.7)
+             within group (order by x) as hypo
+      from generate_series(1, 6) as x;
+  #+end_src
+
+* 21 | speeding up CREATE INDEX         | Cybertec
+https://www.youtube.com/watch?v=iq8sUHYilPk
+
+- this is about *btree* indexes
+- example data table t_demo is 21GB size
+
+#+begin_src sql
+  show max_parallel_maintenance_workers; -- 2 default
+
+  set max_parallel_maintenance_workers to 0; -- 0 for single code
+  create index idx1 on t_demo(data); -- 17 min
+
+  set max_parallel_maintenance_workers to 2;
+  create index idx1 on t_demo(data); -- 11 min, not a linear increase
+
+  alter table t_demo set (parallel_workers = 4); -- more workers?
+  set max_parallel_maintenance_workers to 4;
+  create index idx1 on t_demo(data); -- 9 min
+
+  set maintenance_work_mem to '4 GB'; -- default is too low
+  create index idx1 on t_demo(data); -- 7.5 min
+#+end_src
+
+- tweaking I/O
+
+  #+begin_src sql
+    checkpoint_timeout = 120min -- increase disk checkpoint time
+    max_wal_size = 50GB
+    min_wal_size = 80MB
+  #+end_src
+
+- reload
+
+  #+begin_src sql
+    select pg_reload_conf();
+  #+end_src
+
+- add disks
+  1) one to handle the final index
+  2) one to handle the sort process
+
+  #+begin_src sql
+    create tablespace indexspace location '/ssd1/tabspace1';
+    create tablespace sortspace location '/ssd2/tabspace2';
+    set temp_tablespaces to sortspace;
+    create index idx6 on t_demo (data) tablespace indexspace; -- 6m 50s
+  #+end_src
+
+* 21 | citex - case insensitive text    | Cybertec
+https://www.youtube.com/watch?v=iq8sUHYilPk
+
+- SQL is case sensitive
+
+- common workaround is to lower() or upper() both sides of the equality
+
+  #+begin_src sql
+    select lower('support') = lower('Support'); -- t
+  #+end_src
+
+- PROBLEM: upper(field_name) does NOT use the *index*, if any
+
+- SOLUTION: use ~citext~ extension, which provides a type called citext
+
+  #+begin_src sql
+    select 'support'::citext = 'Support'::citext; -- t
+  #+end_src
+
+* 21 | Using FILTER on SQL              | Cybertec
+https://www.youtube.com/watch?v=5tQiYwEBNZw
+
+- FILTER is like a WHERE clause for aggregates
+  - WHERE filters the entire data set
+  - FILTER filters the data feed to a specific aggregate
+
+  #+begin_src sql
+    select count(*),
+           count(*) filter (where year <  1990) as old,
+           count(*) filter (where year >= 1990) as new
+      from t_oil;
+  #+end_src
+
+- The *old way* of doing it is with CASE THEN ELSE
+
+  #+begin_src sql
+    select count(*),
+           count(*) filter (where year < 1990) as old,
+           count(case when year >= 1990 else null end) as new
+      from t_oil;
+  #+end_src
+
+- FILTER is more efficient than CASE
+
+- =ROLLUP= add a *bottom line*
+
+  #+begin_src sql
+    select country,
+           avg(production) as avg,
+           avg(production) filter (where year < 1990) as pre1990,
+           avg(production) filter (where year >= 1990) as post1990
+      from t_oil
+     where country in ('USA', 'Iran', 'Iraq')
+     group by rollup (1)
+     order by 1;
+  #+end_src
+* 21 | Understanding LEFT JOINs         | Cybertec
+
+- create data
+
+  #+begin_src sql
+    create table a as select * from generate_series(1,3) as aid;
+    create table b as select * from generate_series(2,4) as bid;
+  #+end_src
+
+- =INNER JOINS=: the intersection
+
+  #+begin_src sql
+    select *
+      from a,b -- in this case no difference to "FROM a JOIN b ON"
+     where aid = bid;
+  #+end_src
+
+- =LEFT JOINS=:
+  everything on the *left*,
+  and whatever matches =ON= on the *right* side
+
+  #+begin_src sql
+    select *
+      from a
+           left join b
+               on (aid = bid)
+     where aid = bid; -- might filter too much, if so a bug
+  #+end_src
+
+- ON does /not/ reduce the number of rows
+
+  #+begin_src sql
+    select *
+      from a
+ left join b
+        on (aid = bid AND aid = 2); -- BUG: we get all from "a", and bid=2 from "b"
+        on (aid = bid AND aid = 5); -- BUG: we get all from "a", and nothing from "b"
+  #+end_src
+
+- These *bugs* might be reported as performance problems
+  if we fetch a large amount on the LEFT part.
+
+- =FULL JOIN=:
+  you get *everything* from both sides
+
+  #+begin_src sql
+    select *
+      from
+        full join b
+            on (aid = bid);
+            on (aid = bid AND bid = 10) -- BUG: we still have everything from both sides, BUT nothing aligns with each other
+  #+end_src
+
+- The difference between these, is on NULL values
+  - count(*)
+  - count(column_name)
+
+* 21 | Exclusion operators              | Cybertec
+https://www.youtube.com/watch?v=M58MR1vqnAk
+
+1) RANGE TYPES:
+   special data type,
+   allows us to store periods,
+   traditionally stored as 2 fields (start/end)
+
+   #+begin_src sql
+     select daterange('2021-05-22'::date, -- included limit
+                      '2021-05-28'::date);-- excluded limit
+   #+end_src
+
+2) Operator (<@), contains operator
+
+   #+begin_src sql
+     select '2021-05-24'::date
+              <@ daterange('2021-05-22'::date,
+                           '2021-05-28'::date);
+   #+end_src
+
+3) Hotel 1 Example: 1 constrain
+   - Avoid overlapping booking
+     - Avoid, concurrently booking the same room
+     - Avoid, once the room is booked, not booking it again
+
+  #+begin_src sql
+    CREATE EXTENSION btree_gist;
+    CREATE TABLE t_booking (
+        room    int,
+        myrange daterange,
+        EXCLUDE USING gist ( -- GIST indexing
+            room    WITH =, -- IF the room is identical
+            myrange WITH && -- the range must NOT overlap
+        )
+    );
+   #+end_src
+
+4) Hotel 2 Example: 2 constrains
+   - We have a room a speaker and a range
+     - not overlap rooms
+     - not overlap speakers (same speaker on 2 rooms)
+   #+begin_src sql
+   CREATE TABLE t_lesson (
+       room    int,
+       speaker text,
+       period  tsrange,
+       EXCLUDE USING gist (room    WITH =, period WITH &&),
+       EXCLUDE USING gist (speaker WITH =, period WITH &&)
+    );
+   #+end_src
+
+5) Hotel 3 Example: dynamic
+   - Instead of using ranges field,
+     we can create the range on the fly using 2 field
+     #+begin_src sql
+     CREATE TABLE t_dynamic (
+         room int,
+         start_time timestamptz,
+         end_time   timestamptz,
+         EXCLUDE USING gist (
+             room WITH =,
+             tstzrange(start_time, end_time) WITH &&)
+      );
+     #+end_src

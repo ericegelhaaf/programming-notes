@@ -8,6 +8,7 @@
 - https://supabase.com/docs/guides/database/full-text-search
 - https://www.postgresql.org/docs/current/textsearch.html
 - 23 | https://www.avestura.dev/blog/explaining-the-postgres-meme
+- https://thoughtbot.com/blog/implementing-multi-table-full-text-search-with-postgres
 
 * Article: 15 | postgres full text search is good enough
 
@@ -88,3 +89,142 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
 
 - custom unaccent configuration for all languages supported
   https://gist.github.com/rach/9289959
+
+** ranking
+
+- the ordering of the results *by relevance*
+
+- https://www.postgresql.org/docs/9.3/textsearch-controls.html#TEXTSEARCH-RANKING
+  based on
+  - lexical
+  - proximity
+  - structural information (how ofter the query appears)
+
+- we can assign different weights to different fields with *setweight()*
+
+#+begin_src sql
+  select
+    post.id as pid,
+    post.title as p_title,
+    setweight(to_tsvector(post.language::regconfig, post.title), 'A') || -- !!!!
+      setweight(to_tsvector(post.language::regconfig, post.content), 'B') ||
+      setweight(to_tsvector('simple', author.name), 'C') ||
+      setweight(to_tsvector('simple', coalesce(string_agg(tag.name, ' '))), 'B') as document
+    -- ...
+   where p_search.document @@ to_tsquery('english', 'Endangered & Species')
+   order by ts_rank(p_search.document,                                   -- !!!!
+                    to_tsquery('english', 'Endangered & Species'))
+            desc;
+#+end_src
+
+- we can combine the result of ts_rank with other values
+  like divide it by the age of the document (plus 1, to avoid division by zero)
+  to promote newer posts
+
+** optimizing & indexing
+
+- using a =function based index=
+  creating a GIN index around the tsvector()
+
+#+begin_src sql
+  create index idx_fts_post on post
+    using gin((setweight(to_tsvector(language::regconfig, title), 'A') ||
+               setweight(to_tsvector(language::regconfig, content), 'B')));
+
+  -- see page for workaround for "immutable error"
+#+end_src
+
+- https://www.postgresql.org/docs/9.1/textsearch-indexes.html
+  GIN indexes are best for static data, fast lookups
+  GiST indexes are best for dynamic data, faster to update (< 100k lexemes)
+
+- for better performance, if you have the document/data across different tables with different weight
+  * denormalize the data via
+    - triggers or
+    - materialized views
+
+- adding a materialized view, at the cost of delay before new documents can be found
+
+  #+begin_src sql
+ create materialized view search_index as
+   select post.id,
+          post.title,
+          setweight(to_tsvector(post.language::regconfig, post.title), 'A') ||
+          setweight(to_tsvector(post.language::regconfig, post.content), 'B') ||
+          setweight(to_tsvector('simple', author.name), 'C') ||
+          setweight(to_tsvector('simple', coalesce(string_agg(tag.name, ' '))), 'A') as document
+     from post
+          join author on author.id = post.author_id
+          join posts_tags on posts_tags.post_id = post_tags.tag_id
+          join tag on tag.id = posts_tags.tag_id
+    group by post.id, author.id;
+  #+end_src
+
+- then to reindex the search engine will consist on
+
+  #+begin_src sql
+    create index idx_fts_search on search_index using gin(document);
+  #+end_src
+
+- while querying will be simpler
+
+  #+begin_src sql
+    select id as post_id, title
+      from search_index
+     where document @@ to_tsquery('english', 'Endangered & Species')
+     order by ts_rank(p_search.document, to_tsquery('english', 'Endangered & Species'))
+              desc;
+  #+end_src
+
+** misspelling
+
+- https://www.postgresql.org/docs/9.3/pgtrgm.html
+  provides trigram support, n-gram with N=3
+  allow us to find similar characters
+  aka misspelling of a word
+
+  #+begin_src sql
+    create extension pg_trgm;
+  #+end_src
+
+- we create a materialized view
+  with one column "word"
+  from all the unique elexemesof our documents.
+
+  #+begin_src sql
+    create materialized view unique_lexeme as
+      select word
+      from ts_stat('select to_ts_vector('simple', post.title) ||
+             to_tsvector('simple', post.content) ||
+             to_tsvector('simple', author.name) ||
+             to_tsvector('simple', coalesce(string_agg(tag.name, ' ')))
+      from post
+           join author on author.id = post.author_id
+           join post_tags on post_tags.post_id = posts_tags.tag_id
+           join tag on tag.id = posts_tags.tag_id
+     group by post.id, author.id');
+  #+end_src
+
+- add an index to make it faster
+
+  #+begin_src sql
+    create index words_idx on search_words using gin(word gin_trgm_ops);
+  #+end_src
+
+- refresh the materialized view, probably not very often
+
+  #+begin_src sql
+    refresh materialized view unique_lexeme;
+  #+end_src
+
+- querying closest match, 0.5 is a good cutoff value
+
+  #+begin_src sql
+    select word
+     where similarity(word, 'samething') > 0.5
+     order by word <-> 'samething' -- distance OPERATOR
+     limit 1;
+  #+end_src
+
+- might prefer look for misspellings when no results are found
+- or always enable it, if the data is likely to have misspellings (like a social network)

@@ -1,17 +1,40 @@
-* Functions
+* functions
 https://www.postgresql.org/docs/9.6/functions-datetime.html
-|----------------------------------+-----------------------------------------------------------|
-| format()                         | like printf                                               |
-| extract()                        | gets a number                                             |
-| to_char()                        | gets a string                                             |
-| coalesce()                       | returns teh first argument that is NOT null               |
-| cast(..as..)                     | specifies how to perform a conversion                     |
-| generate_series(start,stop,step) | a set returning function, returns a set of timestamps     |
-| string_agg()                     |                                                           |
-| to_tsvector(LANG?, STR)          | optional LANG, will ignore stopwords                      |
-| to_tsquery(LANG?, STR)           | optional LANG, supports boolean operators, startwith (:*) |
-|----------------------------------+-----------------------------------------------------------|
-* list extensions/plugins (\dx)
+|----------------------------------+-----------------------------------------------------------------|
+| format()                         | like printf                                                     |
+| extract()                        | gets a number                                                   |
+| to_char()                        | gets a string                                                   |
+| coalesce()                       | returns teh first argument that is NOT null                     |
+| cast(..as..)                     | specifies how to perform a conversion                           |
+| generate_series(start,stop,step) | a set returning function, returns a set of timestamps           |
+| string_agg()                     |                                                                 |
+| generate_series(from, to)        |                                                                 |
+| count()                          |                                                                 |
+| avg()                            |                                                                 |
+| rollup(NRCOL)                    | group by rollup()                                               |
+| sum(COL)                         |                                                                 |
+| percentile_dist(NUM)             | percentile number 0-1, returns int                              |
+| percentile_cont(NUM)             | percentile number 0-1, returns float                            |
+| rank(NUM)                        | suppose there was a NUM in it, which rank/index will it be?     |
+|----------------------------------+-----------------------------------------------------------------|
+| to_tsvector(LANG?, STR)          | optional LANG, will ignore stopwords                            |
+| to_tsquery(LANG?, STR)           | optional LANG, supports boolean operators, startwith (:*)       |
+| ts_rank(TSV,TSQ)                 | returns a number representing the relevancey of the document    |
+| setweight()                      | sets a weight to a tsvector, A B C or D                         |
+| tsvector_update_trigger()        | to easily denormalize data from the same table                  |
+| tsvector_update_trigger_column() | to easily denormalize data from the same table                  |
+|----------------------------------+-----------------------------------------------------------------|
+| similarity(S1,S2)                | E: pg_trgm, returns a 0-1 number of how similars the string are |
+| unaccent(S)                      | E: unaccent                                                     |
+|----------------------------------+-----------------------------------------------------------------|
+* extensions
+|------------+----------------------------------------------|
+| pg_trgm    | support for trigram, aka misspelling support |
+| unaccent   | removes accents from string                  |
+| btree_gist | provides operators                           |
+| citext     | case insensitive text                        |
+|------------+----------------------------------------------|
+* list enabled extensions/plugins (\dx)
 on supabase
 #+begin_src
  ~> \dx
