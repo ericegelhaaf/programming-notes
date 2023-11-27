@@ -1,8 +1,19 @@
+- https://en.wikipedia.org/wiki/Reason_(programming_language)
+  "Reason offers a syntax familiar to JavaScript programmers,
+   and compiles to native code using OCaml's compiler toolchain."
+
+- https://reasonml.github.io/
+  https://github.com/reasonml/reason
+
 - https://rescript-lang.org/
+  "Reason code may also be compiled to JavaScript using the ReScript compiler."
+  "In 2020, BuckleScript was rebranded to ReScript,
+   essentially creating a separate language that
+   had different syntax from Reason and only compiled to JavaScript."
+
 - https://github.com/vramana/awesome-reasonml
 - Article: ReasonML https://medium.com/hackernoon/rs256-in-ocaml-reasonml-9ae579b9420a
-- ReasonML Framework (mirageOS)
-  https://github.com/dysinger/restack
+- ReasonML Framework (mirageOS) https://github.com/dysinger/restack
 - Channel: Reason Vienna
   https://www.youtube.com/channel/UCVVeX_-gN0sV51VAfayIrKA/videos?view=0&sort=dd&shelf_id=0
 - Heroku WebApp https://github.com/jchavarri/ocaml_webapp

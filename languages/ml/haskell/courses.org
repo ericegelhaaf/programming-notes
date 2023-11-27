@@ -1,3 +1,4 @@
+- http://learn.hfm.io/
 - Haskell via Sokoban - Tutorial - https://haskell-via-sokoban.nomeata.de/
 - https://github.com/kowainik/learn4haskell
 - Course for webservices https://github.com/qfpl/applied-fp-course
@@ -22,6 +23,7 @@
 - Haskell MOOC University of Helsinki
   https://haskell.mooc.fi/material/
   https://github.com/moocfi/haskell-mooc
+- Haskel for imperative programmers https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
 * 11 | Functional Programming       |
 ** 01 - Introduction
 - Functional Programming
@@ -697,64 +699,65 @@ instance MonadPlus Maybe where
   https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/
   https://chrisdone.com/posts/monads-are-burritos/
 * 16 | Learning Haskell Programming | Packt
-- stack new words
-  stack ghci
-  stack build
-  stack exec words-exe
-  stack test
-  stack ghc -- -dynamic test.hs
+
 - Testing
   #+begin_src haskell
-import Test.Hspec
-main :: IO ()
-main = hspec $ do
-  describe "how to write a test" $ do
-    it "should be able to run tests" $ do
-      someFunc `Shouldbe` "someFunc"
+    import Test.Hspec
+    main :: IO ()
+    main = hspec $ do
+      describe "how to write a test" $ do
+        it "should be able to run tests" $ do
+          someFunc `Shouldbe` "someFunc"
   #+end_src
-- ~/.stack/config.yml
-- words.cabal
-  - ghc-options
-  - executable name
-  - build-depends
+
 - Functions that take 2 arguments, of the same type, can be used as operators with ``
+
 - Function definition, Point-free style
   #+begin_src haskell
-add a b = a + b
-add a b = (+) a b
-add a   = (+) a
-add     = (+)
-#+end_src
+    add a b = a + b
+    add a b = (+) a b
+    add a   = (+) a
+    add     = (+)
+  #+end_src
+
 - List monad
   #+begin_src haskell
-import Control.Monad (guard)
-mapped = do
-  i <- [0..9]
-  return (i * 2)
-filtered = do
-  i <- [0..]
-  guard (div2 i)
-coords2 = do
-  row <- [0..7]
-  return $ do
-    col <- [0..7]
-    return (row,col)
+    import Control.Monad (guard)
+
+    mapped = do
+      i <- [0..9]
+      return (i * 2)
+
+    filtered = do
+      i <- [0..]
+      guard (div2 i)
+
+    coords2 = do
+      row <- [0..7]
+      return $ do
+        col <- [0..7]
+        return (row,col)
 #+end_src
+
 - List comprehension
   #+begin_src haskell
-coords3 = [ [ (row,col)| col <- [0..7] ] | row <- [0..7] ]
-#+end_src
+    coords3 = [[ (row,col) | col <- [0..7]]
+              | row <- [0..7]]
+  #+end_src
+
 - zipWith
   #+begin_src haskell
-cols = repeat [0..]
-rows = map repeat [0..]
-repeat8 = take 8 . repeat
-cols8 = repeat8 [0..7]
-rows8 = map repeat8 [0..7]
-coords4 = zipWith zip rows8 cols8
-      #+end_src
+    cols = repeat [0..]
+    rows = map repeat [0..]
+    repeat8 = take 8 . repeat
+    cols8 = repeat8 [0..7]
+    rows8 = map repeat8 [0..7]
+    coords4 = zipWith zip rows8 cols8
+  #+end_src
+
 - (map . map)
 - (zipWith . zipWith)
+
 * 16 | Category Theory I            | Bartosz Milewski
   https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
   https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/
@@ -1001,11 +1004,13 @@ safeSqrt sx =
 ** DONE 4-2 => Functors
 - ~Induction~ in mathematics, recursive proofs
   ~Structural Induction~ when there is some kind of ordering, partial or not, example in list
+
 - A ~Functor~ is sorta like a container of a's
   - (data) Has a shape
   - Has contents, values or can be a function
   - (type constructor) It has to be polimorphic on his type
   - (map) There has to be a way to modify uniformly the content of it
+
 - A functor is a class of types
   #+begin_src haskell
     -- Functor is the "class name"
@@ -1014,11 +1019,13 @@ safeSqrt sx =
     class Functor f where
       fmod :: (a -> b) -> f a -> f b
   #+end_src
+
 - Axioms
   1) Needs to be proven on each case for the container:
      fmap id = id
   2) It follows that: "Fusion Law"
      fmap g . fmap f = fmap (g . f)
+
 *** Example: Binary tree definition
   #+begin_src haskell
 data Tree a = Empty | Node (Tree a) a (Tree a)

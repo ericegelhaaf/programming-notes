@@ -1,0 +1,36 @@
+* Setup a Node.js project with Typescript, ESLint, Prettier, Husky
+https://gist.github.com/silver-xu/1dcceaa14c4f0253d9637d4811948437
+yarn add --dev typescript eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser prettier
+** tsconfig.json
+#+begin_src json
+{
+  "compilerOptions":
+    {
+      "target": "es2018",
+      "module": "commonjs",
+      "outDir": "dist",
+      "sourceMap": true,
+    },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
+}
+#+end_src
+** .eslintrc
+#+begin_src json
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": ["plugin:@typescript-eslint/recommended"],
+  "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
+  "rules": {}
+}
+#+end_src
+** .prettierrc
+#+begin_src json
+{
+    "semi": true,
+    "trailingComma": "all",
+    "singleQuote": true,
+    "printWidth": 120,
+    "tabWidth": 2
+}
+#+end_src

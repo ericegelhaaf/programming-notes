@@ -1,0 +1,310 @@
+|--------------+---------------------------------------------------------|
+| wiki         | https://en.wikipedia.org/wiki/Jq_(programming_language) |
+| source       | https://github.com/jqlang/jq/                           |
+| basic manual | https://jqlang.github.io/jq/manual/                     |
+| home         | https://jqlang.github.io/jq/                            |
+| repl online  | https://jqplay.org/                                     |
+|--------------+---------------------------------------------------------|
+
+- JQ Cookbook Examples by Noah Sussman
+  https://github.com/textarcana/jq-cookbook/blob/master/recipes.sh
+  https://gist.github.com/textarcana/bdadb1fc830aed4e55a6a669e940ac35
+- [JQ CookBook] jq CookBook #linux #jq #json #parser #101 #cookbook
+  https://gist.github.com/vpnwall-services/ece867608e00fe1ee77ed4780ff5298f
+- article https://github.com/jqlang/jq/wiki/jq-Language-Description
+- article https://github.com/jqlang/jq/wiki/Cookbook
+- article https://github.com/jqlang/jq/wiki/Advanced-Topics
+- article https://github.com/jqlang/jq/wiki/How-to:-Avoid-Pitfalls
+- article https://mosermichael.github.io/jq-illustrated/dir/content.html
+- article https://codefaster.substack.com/p/mastering-jq-part-1-59c
+- article https://about.gitlab.com/blog/2021/04/21/devops-workflows-json-format-jq-ci-cd-lint/
+- code https://github.com/odnoletkov/advent-of-code-jq https://news.ycombinator.com/item?id=33963383
+
+* language
+
+- #!/usr/bin/jq -f
+- jq sources ~/.jq automatically
+- First written in Haskell, but early rewritten in C for performance (?)
+- Created by Stephen Dolan in 2012
+- has TCO
+- jq binary is of 33k
+- \n \t \r \f \b \u123f
+
+** regular expressions
+
+- https://jqlang.github.io/jq/manual/v1.7/#regular-expressions
+- compatible with Perl v5.8 regexes
+- uses oniguruma implementation
+  https://github.com/kkos/oniguruma/blob/6fa38f4084b448592888ed9ee43c6e90a46b5f5c/doc/RE
+- as strings the backslash for classes needs to be escaped
+  "\\d" for characters
+
+- flags
+  - g: global search, find all matches
+  - i: case insensitive search
+  - m: multiline mode
+  - s: single line mode
+  - p: both "s" and "m" are enabled
+  - n: ignore empty matches
+  - l: find largest possible match
+  - x: extend regex format, ignores whitespaces and comments (#)
+
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+| "Hello World!"   | test("W")                                      | true                                               | to know if a substring matches the pattern |
+| "Goodbye Mars"   | test("W")                                      | false                                              |                                            |
+|                  | test(REGEX;FLAGS)                              |                                                    |                                            |
+|                  | test([REGEX,FLAGS])                            |                                                    |                                            |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+| "Hello World!"   | match("([aeiou])\\1")                          | empty                                              | to extract the substring that matched      |
+|                  | match([REGEX,FLAGS])                           |                                                    |                                            |
+| "Goodbye Mars"   | match("([aeiou])\\1")                          | {"offset": 1, "length": 2, "string": "oo"          |                                            |
+|                  |                                                | ,"captures": [                                     |                                            |
+|                  |                                                | {"offset": 1                                       |                                            |
+|                  |                                                | ,"length": 1                                       |                                            |
+|                  |                                                | ,"string": "o"                                     |                                            |
+|                  |                                                | ,"name": null }]}                                  |                                            |
+| "Goodbye Mars"   | match("[aeiou]";"g")                           | {"offset":1,"length":1,"string":"o","captures":[]} |                                            |
+|                  |                                                | {"offset":2,"length":1,"string":"o","captures":[]} |                                            |
+|                  |                                                | {"offset":6,"length":1,"string":"e","captures":[]} |                                            |
+|                  |                                                | {"offset":9,"length":1,"string":"a","captures":[]} |                                            |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+| "JIRAISSUE-1234" | capture("(?<project>\\w+)-(?<issue_num>\\d+)") | {"project":"JIRAISSUE","issue_num":"1234"}         | object of named captures                   |
+|                  | capture(REGEX)                                 |                                                    |                                            |
+|                  | capture(REGEX;FLAGS)                           |                                                    |                                            |
+|                  | capture([REGEX,FLAGS])                         |                                                    |                                            |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+| "Goodbye Mars"   | scan("[aeiou]")                                | "o", "o", "e", "a"                                 | only substrings, like match(RE,"g")        |
+| "Goodbye Mars"   | [scan("[aeiou]")]                              | ["o", "o", "e", "a"]                               |                                            |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+| "first second"   | split("\\s+"; "")                              | ["first","second"]                                 |                                            |
+|                  | split(REGEX; FLAGS)                            |                                                    |                                            |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+|                  | sub(REGEX; REPLACEMENT)                        |                                                    |                                            |
+|                  | sub(REGEX; REPLACEMENT; FLAGS)                 |                                                    |                                            |
+|                  | gsub(REGEX; REPLACEMENT)                       |                                                    |                                            |
+|                  | gsub(REGEX; REPLACEMENT; FLAGS)                |                                                    |                                            |
+| "this: gnu, csv" | gsub("\\b(?<tla>[[:alpha:]]{3})\\b")               | "this: GNU, CSV"                                   |                                            |
+|                  | ;    "\(.tla ¦ ascii_upcase)")                 |                                                    |                                            |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+
+** types
+
+- booleans
+  - falsy values: null, false
+
+- empty, it's own type
+
+|---------+------------------------------|
+| type    | example                      |
+|---------+------------------------------|
+| number  | 42, 3.14, 1e6, nan, infinite |
+| string  | "hello"                      |
+| boolean | true, false                  |
+| array   | [1, "2", {"foo": "bar"}]     |
+| object  | {"foo": 2}                   |
+| null    | null                         |
+|---------+------------------------------|
+
+** modules
+
+import modname as modname
+
+/MODNAME/MODNAME.jq
+/MODNAME.jq
+/main.jq
+
+MODNAME::FUNCTION;
+
+** operators
+
+|----------+-----------------------------------------------|
+| ¦        | pipe operator                                 |
+| ,        | operator to join multiple streams             |
+| ()       | to group subexpressions                       |
+| []       | constructor                                   |
+| {foo: .} | constructor                                   |
+| +        | string concatenation                          |
+| +        | arrays append                                 |
+| +        | objects merge                                 |
+| /        | operator version of the split/1 function      |
+| A // B   | if A then A else B end (alternative operator) |
+|----------+-----------------------------------------------|
+
+** general functions
+
+|-------------------+--------------------------------------|
+| debug             | like (.) but it prints to stderr too |
+| range(TO)         |                                      |
+| range(FROM;TO;BY) | produces a stream of numbers         |
+|-------------------+--------------------------------------|
+
+**   array functions
+|-------------------------+---------------+---------------|
+|           <c>           |      <c>      |      <c>      |
+|           in            |    filter     |      out      |
+|-------------------------+---------------+---------------|
+|        [2,4,6,8]        |    length     |       4       |
+|        [2,4,6,8]        |  indices(8)   |      [3]      |
+|        [2,4,6,8]        | contains([2]) |     true      |
+|        [2,4,6,8]        |    reverse    |   [8,6,4,2]   |
+|        [2,4,6,8]        |      min      |       2       |
+|        [2,4,6,8]        |      max      |       8       |
+|      ["foo","bar"]      |      add      |   "foobar"    |
+| [72,101,108,108,111,33] |    implode    |   "Hello!"    |
+|        [2,4,6,8]        |     first     |       2       |
+|        [2,4,6,8]        |     last      |       8       |
+|        [2,4,6,8]        |    nth(2)     |       6       |
+|        [2,4,6,8]        |  map(. * 10)  | [20,40,60,80] |
+|                         |   join(",")   |               |
+|        [1,2,3,4]        |  any(. >= 4)  |     true      |
+|        [1,2,3,4]        |  all(. >= 4)  |     false     |
+|-------------------------+---------------+---------------|
+
+**  string functions
+
+being "Hello!" the INPUT
+
+|-----------------+-------------------------+----------------------------|
+| filter          | out                     |                            |
+|-----------------+-------------------------+----------------------------|
+| split("l")      | ["He","","o"]           |                            |
+| test("He.*")    | true                    |                            |
+| length          | 6                       |                            |
+| contains("!")   | true                    |                            |
+| startswith("!") | false                   |                            |
+| endswith("!")   | true                    |                            |
+| ascii_downcase  | "hello!"                |                            |
+| ascii_upcase    | "HELLO!"                |                            |
+| explode         | [72,101,108,108,111,33] | splits into codepoints     |
+| index("el")     | 1                       | position, otherwise *null* |
+|-----------------+-------------------------+----------------------------|
+
+**    math functions
+
+https://jqlang.github.io/jq/manual/v1.7/#math
+
+- 1-input C math functions:
+  - acos acosh asin asinh atan atanh cbrt ceil cos cosh erf erfc exp exp10 exp2 expm1 fabs floor gamma j0 j1 lgamma log log10 log1p log2 logb nearbyint pow10 rint round significand sin sinh sqrt tan tanh tgamma trunc y0 y1
+  - pipe the input to the function
+  - 1 | atan
+
+- 2-input C math functions:
+  - atan2 copysign drem fdim fmax fmin fmod frexp hypot jn ldexp modf nextafter nexttoward pow remainder scalb scalbln yn
+  - they ignore input
+  - uses (;) to separate parameters
+  - pow(2;10)
+
+- 3-input C math functions:
+  - fma
+
+**  object functions
+
+|----------------------------+--------------------------------------------------+-----------------------------|
+|                            | filter                                           | out                         |
+|----------------------------+--------------------------------------------------+-----------------------------|
+| [{"a": 1, "b": 2, "c": 3}] | .[]                                              | [1,2,3]                     |
+| {"a": 1, "b": 2, "c": 3}   | flatten                                          | [1,2,3]                     |
+| {"a": 1, "b": 2, "c": 3}   | keys                                             | ["a","b","c"]               |
+| {"a": 1, "b": 2, "c": 3}   | keys_unsorted                                    | ["a","c","b"]               |
+| {"a": 1, "b": 2, "c": 3}   | has("a")                                         | true                        |
+| "a"                        | in({...})                                        | true                        |
+| {"a": 1, "b": 2, "c": 3}   | add                                              | 6                           |
+| {"a": 1, "b": 2, "c": 3}   | del(.a)                                          | {"b":2, "c":3}              |
+| {"a": 1, "b": 2, "c": 3}   | to_entries                                       | [{"key":"a","value":1},...] |
+| [{"key":"a","value":1}]    | from_entries                                     | {"a":1}                     |
+| {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42","Jane"}               |
+| {"first": "jane"}          | map_values(ascii_upcase)                         | {first: "JANE"}             |
+| [{"a":1},{"b":2}]          | add                                              | {a:1,b:2}                   |
+|----------------------------+--------------------------------------------------+-----------------------------|
+
+- with_entries(filter), is equivalent to:
+  to_entries | map(filter) | from_entries
+
+** string escape
+
+|---------+------------------------------------|
+| @text   | just calls tostring                |
+| @json   | serializes input as JSON           |
+| @html   | applies HTML/XML escaping          |
+| @uri    | applies percent encoding           |
+| @csv    | rendered as CSV with double quotes |
+| @tsv    | rendered as TSV                    |
+| @sh     | escaped suitable for POSIX shell   |
+| @base64 | as specified by RFC 4648           |
+|---------+------------------------------------|
+
+
+* command
+
+|------+-----------------+------------------------------------------------|
+|      |                 | description                                    |
+|------+-----------------+------------------------------------------------|
+| -n   | --null-input    | allows you to generate JSON data without input |
+| -c   | --compat-output | minimizes output                               |
+| -f F | --from-file F   | read .jq program from F(ile)                   |
+|------+-----------------+------------------------------------------------|
+
+
+* snippets filters/expressions
+
+|-------------------------------------------------------+---------------------------------------------------|
+| filter                                                | description                                       |
+|-------------------------------------------------------+---------------------------------------------------|
+| .foo?                                                 |                                                   |
+| .[] ¦ {msg: .commit.msg, name: .commit.commiter.name} | builds a new json                                 |
+| .parse.categories[].name                              | the contents of each field "name"                 |
+| .["parse"] ¦ .["categories"] ¦ .[] ¦ .["name"]        | equivalent code, using pipelines                  |
+| path(..) ¦ map(tostring) ¦ join("/")                  | instant schema                                    |
+|-------------------------------------------------------+---------------------------------------------------|
+
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| input             | filter                    | output               | description                         |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| 42                | .                         | 42                   | "identity"                          |
+| 99                | 42                        | 42                   | "constant"                          |
+| {}                | .color                    | null                 | "projection", dot notation          |
+| {color: "red"}    | .color                    | "red"                |                                     |
+| {color: "red"}    | .["color"]                |                      |                                     |
+| {color: "red"}    | "woah"                    | "woah"               |                                     |
+| {color: "red"}    | .color = "pink"           | {color: "pink"}      |                                     |
+| "color"           | {(.): "red"}              | {color: "red"}       |                                     |
+| [86, 99, 13]      | .[1]                      | 99                   |                                     |
+| [86, 99, 13]      | .[1+1]                    | 13                   |                                     |
+| [86, 99, 13]      | .[1:2]                    | [99]                 | slice, 1 = inclusive, 2 = exclusive |
+| {"k":1,"v":[8,9]} | .v[1]                     | 9                    |                                     |
+| {"k":1,"v":[8,9]} | .v[ .["k"] ]              | 9                    |                                     |
+| [86, 99, 13]      | .[] + 1                   | 87, 100, 14          |                                     |
+| [86, 99, 13]      | .[] ¦ . + 1               | 87, 100, 14          |                                     |
+| [86, 99, 13]      | [ . + 1 ]                 | [87, 100, 14]        |                                     |
+| 86, 99, 13        | . + 1                     | 87, 100, 14          |                                     |
+| 86, 99, 13        | [ . + 1 ]                 | [87], [100], [14]    |                                     |
+| 5                 | . * 2, . + 3, . / 5       | 10, 8, 1             |                                     |
+| [range(10)]       | map(select(. % 2 == 0))   | [0,2,4,6,8]          |                                     |
+| [range(10) ¦      | select(. % 2 == 0) ]      | [0,2,4,6,8]          |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| [86, 99, 13]      | .[]                       | 86, 99, 13           |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| {"name":"john"    | .[]                       | "john", "kaos"       |                                     |
+| ,"org":"kaos"}    |                           |                      |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| [86, 99, 13]      | length as $count          | 66                   | declaring variables with *as*       |
+|                   | ¦ add / $count            |                      |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| [86, 99, 13]      | . as [$a,$b,$c] ¦ $c + 3  | 16                   | as array destructuring              |
+| {"name": "john"}  | . as {name: $n} ¦ $n      | "john"               | as object destructuring             |
+| {"name": "john"}  | . as {$name}    ¦ $name   | "john"               | as object destructuring short       |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| {"agent":86       | .org = "CONTROL"          | {"agent":86          | add + update                        |
+| ,"name":"max"}    | ¦ .name ¦= ascii_upcase   | ,"name":"MAX"        |                                     |
+|                   |                           | ,"org":"CONTROL"}    |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| {"size": 34.6     | if ((.size¦floor)%2) == 0 | "even"               | 1.6 - must have an ELSE             |
+| ,"weight": 24.1}  | then "even"               |                      | 1.7 - ELSE defaults to .            |
+|                   | else "odd"                |                      |                                     |
+|                   | end                       |                      |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| {"name":"John"    | "\(.name), Agent \(.nr)"  | "John, Agent 86"     | string interpolation                |
+| ,"nr":"86"}       |                           |                      |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|
+| {"name":"john"}   | + {"age": 18}             | {name:"john",age:18} |                                     |
+|-------------------+---------------------------+----------------------+-------------------------------------|

@@ -1,38 +1,26 @@
-* Course: Elixir Sips
+* Elixir Sips
 - Book author https://github.com/knewter
-|         |    |                       | str |                                             |
-|---------+----+-----------------------+-----+---------------------------------------------|
-| httpc   |    | http client (erlang)  |     | https://www.erlang.org/doc/man/httpc.html   |
-| ibrowse |    | http client (erlang)  | 0.5 | https://github.com/cmullaparthi/ibrowse/    |
-| hackney |    | http client (erlang)  | 1.3 | https://github.com/benoitc/hackney          |
-| dynamo  | 14 | web framework         | 1.1 | https://github.com/dynamo/dynamo            |
-| plug    |    | web framework         | 2.6 | https://github.com/elixir-plug/plug         |
-| weber   | 16 | web framework(elixir) | 0.3 | https://github.com/elixir-web/weber         |
-| ecto    |    | ORM?                  | 5.6 | https://github.com/elixir-ecto/ecto         |
-| amnesia | 19 | in memory db          | 0.6 | https://github.com/meh/amnesia              |
-| xmerl   |    | build-in (erlang)     |     | https://www.erlang.org/doc/man/xmerl.html   |
-| gen_tcp |    | build-in (erlang)     |     | https://www.erlang.org/doc/man/gen_tcp.html |
-| exactor |    | GenServer generation  | 0.6 | https://github.com/sasa1977/exactor         |
-| riak    |    | decentralized db      | 3.8 | https://github.com/basho/riak               |
-| elixiak | 13 | riak wrapper          | 0.1 | https://github.com/drewkerrigan/elixiak     |
-|---------+----+-----------------------+-----+---------------------------------------------|
 ** Language Fundamentals
 *** 003   Pattern matching
+
 Function Call:  print_name.(:josh)
+
 1) =match operator=
    - (=) is just the equal sign
    - Is more like an assertion than assigment
    - if unbound binds
-   - if you do _not_ want to rebound, you need to signal it to the compiler
-     different from Erlang
+   - ~if you do _not_ want to rebound, you need to signal it to the compiler~
+     *different from Erlang*
      a = 3
      [^a,2] = [4,2]
+
 2) =Function definitions= (ocaml like)
    #+begin_src elixir
      print_name_egostistically = fn
        :josh -> "your name is josh!"
        _     -> "i don't care!"
    #+end_src
+
 3) =Case Statements=
   #+begin_src elixir
     case {1,2,3} do
@@ -41,34 +29,26 @@ Function Call:  print_name.(:josh)
       {_,2,3} -> "thiw would match, but since it's below another match it isn't hit"
     end
   #+end_src
-*** 004   Functions
+
+*** 004   Functions (and string interpolation)
+
 - (.) invoking a funtion immediatly
   #+begin_src elixir
     (fn -> "foo" end).()
   #+end_src
+
 - string intepolation
   #+begin_src elixir
     polite_greeter = fn
       name -> "Hello, #{name}, nice to meet you!"
     end
   #+end_src
+
 *** 005   Modules
+
 - Modules are the primary unit of code organization in Elixir
   - private and public functions
-- mix
-  | mix new project_name |                        |
-  | mix deps.get         | install dependencies   |
-  | mix docs             | generate documentation |
-- iex lib/modules_example.ex
-  h(ModuleExample)
-- elixirc lib/modules/example.ex (creates a .bin file)
-  iex
-- mix.exs
-  | def       | public function                                        |
-  | defp      | private function                                       |
-  | use       |                                                        |
-  | defmodule |                                                        |
-  | deps.()   | to add depedencies, like :ex_doc to generate html docs |
+
 - modules are and documentation are first class constructs, can be returned or binded like other values
   #+begin_src elixir
     output = defmodule Foo do
@@ -84,8 +64,9 @@ Function Call:  print_name.(:josh)
     end
     # {:module, Foo, BINARY_BYTECODE, {:bar, 0}};
   #+end_src
+
 *** 006   Unit Testing
-- mix test
+
 - test/schizo_test.exs
   #+begin_src elixir
     defmodule SchizoTest do
@@ -102,41 +83,39 @@ Function Call:  print_name.(:josh)
       end
     end
 #+end_src
+
 - lib/schizo.ex
   #+begin_src elixir
     defmodule Schizo do
       def uppercase(string) do
         words = String.split(string)
         words_with_index = Stream.with_index(words)
-        transformed_words = Enum.map(words_with_index, &uppercase_every_otherword/1)
+        transformed_words = Enum.map(words_with_index, &uppercase_every_otherword/1)o
         Enum.join(transformed_words, " ")
       end
+
       def uppercase_every_other_word({word, index}) do
         cond do
           rem(index, 2) == 0 -> word
           rem(index, 2) == 1 -> String.upcase(word)
+        end
       end
     end
   #+end_src
-- functions with empty body return "nil"
-- Regular expressions
-  %r([0-9])
+
+- functions with empty body return ~nil~
+
 - to pass functions to other functions, you need to pass it with reference (&) and arity (/1)
   &uppercase_every_other_word/1
+
 - .vimrc
   map <leader>t :!mix test<CR>
+
 - test/assert/refute are macros
+
 - an exunit test case, is just a module that uses exunit.case
   - runs all functions that start with "test", with arity 1
-**** functions used
-  Regex.replace/3
-  Stream.with_index/1
-  String.split/1
-  String.upcase/1
-  String.replace/3
-  Enum.join/2
-  Enum.to_list/1
-  Enum.map/2
+
 **** doctest
 - In the test
   #+begin_src elixir
@@ -865,3 +844,341 @@ Function Call:  print_name.(:josh)
       end
     end
   #+end_src
+
+
+* Elixir and Phoenix or Beginners
+- LISP2 http://www.nhplace.com/kent/Papers/Technical-Issues.html
+** 04,05 Thinking about concurrency, Concurrency in sequential languages
+
+- Most programming languages, were designed for the ground up for ~sequential~ tasks
+  - aka sequential programming languages
+  - Were NOT designed with concurrency in mind
+  - java, c#, python, ruby, js
+  - concurrency is still possible through threads and locks, or lock-free queues
+
+- While databases are a solution,
+  - they are slow (network/disk access),
+  - which causes idle threads
+
+- "Software follows Hardware"
+
+- "Shared memory is the root of all evil" Joe Armstrong
+** 15 Strings
+
+#+begin_src elixir
+  # Byte size = 5
+  "James" == <<74,97,109,101,115>> # true
+#+end_src
+
+- *String* in elixir are a collection of *bytes* encoded in UTF-8
+- *Binary* if the series of bits is evenly divisible by 8
+- *BitString* is a series of bits
+
+- To pass a string to erlang, you need to use a *CharList*
+  Using single quotes (')
+** 22 Immutable data
+
+- Google docs are like ~immutable~ data, because you change a document
+  you are making a *copy* of a document and changing that one.
+
+- Data in =Prolog= is immutable
+
+- Immutability helps with some, but not ALL problems of concurrency
+** 23 Variables
+
+- naming
+  - can end with "?" or "!"
+  - all lowercase letters
+  - can use "_" to separate words (snakecase)
+
+- you can rebind variables
+
+- elixir is dynamically, strongly typed language
+** 24 Pattern Matching
+
+- The (=) represents a match operator
+- The left side of the (=) gets binded
+** 35 Anonymous Functions
+
+- functions != methods
+  + methods
+    - act on their own data
+    - may not return a value
+  + functions
+    - act on input data
+    - return a value based on the input
+
+- =Data and Code= (that modifies the data)
+  - In OO, are combined together in classes/objects
+  - In FP, we don't like to mix them
+** 36 named functions
+#+begin_src elixir
+  defmodule Voter do       # CamelCase
+    def add(arg1, arg2) do # snake_case
+      arg1 + arg2 # returns the last value
+    end
+    def eligibility(age) when is_binary(age) do
+      eligibility(Integer.parse(age))
+    end
+    def eligibility({age,_}) do
+      eligibility(age)
+    end
+    def eligibility(age) when is_integer(age) and age < 18 do
+      "You cannot vote"
+    end
+    def eligibility(age) when is_integer(age) and age < 25 do
+      "You can vote"
+    end
+    def eligibility(:error) do
+      "invalid number!"
+    end
+    def eligibility(_age) do
+      "You can be run as a candidate"
+    end
+  end
+#+end_src
+** 48 pure vs impure functions
+
+- in order to be pure
+  1) take arguments
+  2) return a value based on the arguments
+  3) do NOT do anything else
+
+- there could be functions that are neither pure or impure
+
+- pure functions
+  1) easier to understand
+  2) better for function composition
+  3) reusable
+  4) easy to test
+  5) cacheable
+  6) parallelism
+
+- Side effects: ??
+- Side causes: eg, get the current time from Time.utc_now
+** 56 Composition with ¦>
+#+begin_src elixir
+  district_canidate_votes = [
+    %{district:1, candidate:1, votes:1050},
+    %{district:1, candidate:2, votes:1200},
+    %{district:1, candidate:3, votes:1050},
+    %{district:2, candidate:2, votes:900}
+  ]
+
+  candidate_totals =
+    district_candidate_votes
+    |> Enum.filter(&(&1.district in [1,2]))
+    |> Enum.map(&Map.take(&1, [:candidate, :votes]))
+    |> Enum.group_by(&(&1.candidate), &(&1.votes))
+    |> Enum.map(fn {k,v} -> {k,Enum.sum(v)} end)
+    |> Enum.into(%{})
+#+end_src
+
+** 57 Streams
+
+- Enumerables
+  - are ~eager~, meaning they immediately generate data
+  - And becomes a problem when processing large ammounts of data
+  - resulting in large memory usage
+
+- Functions on =Stream= module are ~lazy~
+  - Composed of a stream struct
+    #+begin_src
+    #Stream<[enum: 1..10,
+             funs: [#Function<49.123124/1 in Stream.map/2>]]>
+    #+end_src
+  - They take 1 element of the enumerable at the time,
+    and sends it to the functions on our pipeline.
+  - Example:
+    #+begin_src elixir
+      def lazy(nums) do
+        nums
+        |> Stream.map(&(&1 * 2))
+        |> Stream.filter(&is_even/1)
+        |> Enum.sum()
+      end
+    #+end_src
+
+** 58 List Comprehension
+
+- They shine when dealing with mapping&filtering&reduce
+  over more than 1 list.
+
+  #+begin_src elixir
+    for x <- [1,2,3], do: x * 2
+    for x <- [1,2,3], y <- [10,20,30], do: x * y
+    for x <- [1,2,3], y <- [10,20,30], is_even(x), is_even(y), do: x * y
+  #+end_src
+
+- More complex example
+  #+begin_src elixir
+    state = "CA"
+    ballot_type = [20,30]
+    polling_props =
+      for prop   = %{state: ^state} <- propositions,
+        location = %{state: ^state} <- locations,
+        location.ballot_type in ballot_type do
+          %{
+            prop_id:          prop.id,
+            state:            state,
+            prop_description: prop.description,
+            location_id:      location.id,
+            address:          location.address
+          }
+      end
+  #+end_src
+
+** 59 Protocols
+
+- Protocols
+  - allows *extensible* ~polymorphism~
+  - implementations might require you to implement all functions or just a few
+
+#+begin_src elixir
+  # Protocol
+  defprotocol Calculatetable do
+    def sum(data)
+  end
+
+  # Implementation
+  defimpl Calculatetable, for: List do
+    def sum(list), do: do_sum(list, 0)
+    defp do_sum([], total), do: total
+    defp do_sum([head | tail], total), do: do_sum(tail, head + total)
+  end
+
+  # Usage
+  defmodule Calculate do
+    def sum(data), do: Calculatetable.sum()
+  end
+#+end_src
+
+** 60 Macros
+
+- Build-in macros: def, defmodule, defstruct, if, unless, fn
+
+- macros are NOT loaded after IEX loading, either
+  - =import=  it, which will import all the macros and functions
+  - =require= it, which will import all the macros
+
+#+begin_src elixir
+  defmodule Util do
+    defmacro reverse({:+, context, [a,b]}) do
+      # {:-, context, [a,b]}
+      quote do
+        unquote(a) - unquote(b)
+      end
+    end
+  end
+#+end_src
+
+*** Example: AST of 1+1 and 1+1*2
+
+- will be called with the AST of "1 + 1" and NOT "2"
+
+- AST of "1+1" being: {function, context, arguments}
+  #+begin_src elixir
+    {:+, [line: 3], [1,1]}
+  #+end_src
+
+- AST of "1+1*2"
+  #+begin_src elixir
+    {:+, context,
+     [1,
+      {:*, context, [1,2]}
+     ]
+    }
+  #+end_src
+
+*** Example: outout of =quote=, is an AST
+
+#+begin_src elixir
+  iex > quote do: 1 + 1
+  {:+, [context: Elixir, import: Kernel], [1,1]}
+  iex > quote do: 1 + 1 * 2 - 1
+  {:-, [context: Elixir, import: Kernel],
+       [{:+,
+         [context: Elixir, import: Kernel],
+         [1,{:*,
+             [context: Elixir, import: Kernel],
+             [1,2]}]}, 1]}
+#+end_src
+
+*** Example: "vote" macro on new _Proposition_ module
+
+#+begin_src elixir
+  defmodule Proposition do
+
+    defstruct [:description, yes: 0, no: 0]
+
+    def new(description) do
+      %Proposition{description: description}
+    end
+
+    defmacro vote({:+, _, [prop,qty]}) do
+      cast(prop, :yes, qty)
+    end
+    defmacro vote({:-, _, [prop,qty]}) do
+      cast(prop, :no, qty)
+    end
+
+    defp cast(prop, vote, qty) do
+      quote do
+        Map.update!(unquote(prop), unquote(vote), &(&1 + unquote(qty)))
+      end
+    end
+
+  end
+#+end_src
+
+*** Example: Macro.expand
+
+#+begin_src elixir
+  (quote do: vote gas_tax + 2)
+  |> Macro.expand(__ENV__)
+  |> Macro.to_string()
+  # "Map.update!(gas_tax, :yes, &(&1 + 2)"
+#+end_src
+
+*** Example: extending a module with code from another module
+#+begin_src elixir
+  defmodule Html do
+    defmacro __using__(_opts) do
+      quote do
+        import Html # code here is "injected" into another module
+      end
+    end
+    def div(content), do: tag("div", content)
+    def p(content), do: tag("p", content)
+    def span(content), do: tag("span", content)
+    defp tag(name, content) do
+      "<#{name}>#{content}</#{name}>"
+    end
+  end
+
+  defmodule Page do
+    use Html
+    def view(content) do
+      content |> span() |> p() |> div()
+    end
+  end
+  # >>> Page.view("Some content")
+  # <div><p><span>Some content</span></p></div>
+#+end_src
+
+** 76 Testing
+
+- Steps to test
+
+  1) arrange: setting up, creating values to use for the test
+  2)     act: invoking the function to test, using 1) values
+  3)  assert: verifying the value returned is what you were expecting
+
+** 79 What's a Process
+
+|----------------+-----------|
+|                | memory kb |
+|----------------+-----------|
+| elixir process |         2 |
+| threads        | 1000-3000 |
+|----------------+-----------|

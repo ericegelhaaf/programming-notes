@@ -1,32 +1,473 @@
-- https://github.com/bitwalker/libcluster
-  https://github.com/derekkraan/horde
 - https://elixir-lang.org/getting-started/mix-otp/config-and-releases.html#releases
-- https://github.com/lucasvegi/Elixir-Code-Smells
-- https://github.com/Zensavona/domainatrex
-  A library for parsing TLDs from urls in Elixir
-https://elixirschool.com/en/
-https://github.com/elixirkoans/elixir-koans
-https://github.com/exercism/elixir
+
+- Style
+  - https://github.com/lucasvegi/Elixir-Code-Smells
+  - https://github.com/christopheradams/elixir_style_guide
+
+- https://elixirschool.com/en/
+- https://github.com/elixirkoans/elixir-koans
+- https://github.com/exercism/elixir
+
+- elixir  - run .exs source
+- elixirc - .ex source into bytecode
+
 * Language
-** Types
+
+#+begin_src elixir
+  defmodule Voter do       # CamelCase
+    @moduledoc """
+    module to do voting stuff
+    """  # module ATTRIBUTE for documentation
+
+    @zaraza %{ # ATTRIBUTE handled at compile time
+      democratic: "donkey",
+      replublican: "elephant"
+    }
+    @foobar Map.keys(@zaraza)
+
+    def logo(party, size \\ :normal) # default arguments, we cannot give it a body
+    def logo(party, size) when party in @foobar do
+      do_logo(mascot(party), size)
+    end
+    def logo(_party, size), do: do-logo("other", size) # ONELINER function
+
+    @doc """
+      Describes a thing for thing
+
+    ## Parameters
+
+      - arg1: Integer or something
+
+    Returns `String`.
+
+    ## Examples
+
+        iex> Voter.silly_compare(231,312)
+        "ok, i guess"
+    """ # ATTRIBUTE for function docs, supports markdown
+    def silly_compare(arg1, arg2) when arg1 > arg2 do # snake_case
+      "wacky wick" # returns the last value
+    end
+    def silly_compare(_,_) do # all must have the same ARITY
+      "ok, i guess" <> (secret_potagi())
+    end
+    defp secret_potagi() do
+      "wooowzer"
+    end
+  end
+  "example of #{varname} interpolation"
+  Enum.map(words_with_index, &uppercase_every_otherword/1) # HoF
+  Integer.parse "1231" # one argument function call without parens
+  Module.function(data, fun, opts) # typical function signature
+
+  @type word() :: String.t()
+  @spec long_word?(word()) :: boolean()
+#+end_src
+
+- .ex  - files to be compiled into bytecode
+- .exs - script NOT meant to meant to be compiled: config, compile, testing code
+- variables and functions occupy different namespaces
+- functions
+  - named functions cannot be used as closures
+  - name ending with "!" means they can throw an error
+  - when we do we use "dot" in a function call,
+    we are asking for the variable namespace
+    add.(2,3)
+  - can be polimorhic on his arity
+  - from LISP2 languages
+    - others are: Ruby, Perl
+    - http://www.nhplace.com/kent/Papers/Technical-Issues.html
+  - closures capture the variables value at the time of creation
+- modules
+  - all literals, even inside functions, are stored in a special memory area, as constants
+
+** lambdas
+#+begin_src elixir
+  (fn -> "foo" end).() # immediately calling it, like when using it with |>
+  log_file = fn
+    (:democrat)   -> "donkey.png"
+    (:republican) -> "elephant.png"
+  end
+  add = fn(arg1, arg2) -> arg1 + arg2 end
+  add.(2,3) # only way to call an anonymous function
+  Enum.map(&Map.take(&1, [:candidate, :votes])) # capture Map.take
+  Enum.group_by(alist, &
+  &(&1.candidate == 3) # using the capture operator, &1 is the first argument
+  &{&1, &2}.(:name, "James") # lambda that returns a tuple
+  &[&1, &2, &3].(:name :gender :age) # lambda that returns a list
+  &+/2
+#+end_src
+** list comprehesion
+#+begin_src elixir
+  lc x inlist [1,2,3,4], do: x*2              # [2,4,6,8]
+  lc x inlist [1,2,3,4], do: [x, x*2]         # [[1,2], [2,4], [3,6], [4,8]]
+  lc x inlist [1,2,3,4], rem(x,2) == 0, do: x # [2,4]
+  lc x inlist [1,2,3], y inlist [4,5,6], do: x*y # [4,5,6,8,10,12,12,15,18]
+  lc x inlist [1,2,3], y inlist [4,5,6], do: {x,y} # [{1,4}, {1,5}, {1,6}, {2,4}, {2,5}...
+#+end_src
+** import
+https://hexdocs.pm/elixir/1.16/alias-require-and-import.html
+|---------------------------------+-----------------------------------------------------------------|
+| import Enum                     | ALL from Enum into current module                               |
+| import Enum, only: [reverse: 1] | only "reverse/1" into current module                            |
+| require Enum                    | only macros                                                     |
+| alias Foo.Bar, as: Bar          |                                                                 |
+| use FooBar                      | ~extension point~ allows FooBar to inject code into this module |
+|---------------------------------+-----------------------------------------------------------------|
+** control flow
+
+- if/else, unless/else (ME: like in CL)
+  #+begin_src elixir
+    if age < 18 do
+      "You can't vote"
+    else
+      "You can vote"
+    end
+  #+end_src
+  - oneliner
+    #+begin_src elixir
+      if age < 18, do: "you can't vote", else: "You can vote!"
+      if(age < 18, do: "you can't vote", else: "You can vote!")
+    #+end_src
+- case
+  #+begin_src elixir
+    message =
+      case Integer.parse(age) do
+        {age, _} when age < 18 -> "You can't vote yet"
+        {age, _} when age < 25 -> "You can vote"
+        {_  , _}               -> "You can run for office"
+        :error                 -> "Invalid number!"
+      end
+  #+end_src
+- there is no *elseif*, use *cond*, it takes boolean expression on each branch
+    #+begin_src elixir
+   cond do
+     age <  18 -> "You can't vote yet!"
+     age >= 18 -> "You can vote!"
+     #true -> "Default value..." # use if none evaluates to true
+   end
+  #+end_src
+
+** types primitive
 - Records vs Structs https://groups.google.com/g/elixir-lang-talk/c/6kn7J2XnFg8/m/I5poTNCEHwAJ
-| instantiation     | match     | access             | update                      | name         | description                                   |
-|-------------------+-----------+--------------------+-----------------------------+--------------+-----------------------------------------------|
-| :atom             |           |                    |                             | Atoms        | start with ":"                                |
-| true/false/nil    |           |                    |                             |              | syntactic sugar for atoms of the same name    |
-| ~D[]              |           |                    |                             | date,        |                                               |
-| ~T[]              |           |                    |                             | timestamp    |                                               |
-| ~N[]              |           |                    |                             | native date  |                                               |
-| %r/[0-9]/         |           |                    |                             | regex        |                                               |
-|-------------------+-----------+--------------------+-----------------------------+--------------+-----------------------------------------------|
-| []                | [x,_]     | Enum.at(l,N)       |                             | lists        |                                               |
-| {}                | {x,_}     |                    |                             | tuples       |                                               |
-| [a: 1, b: 2]      |           | Keyword.get(kw, K) |                             | keyword list |                                               |
-| %Abc{a: a, b: b}  |           |                    | %Abc{astruct ¦ name: "BOB"} | structs      | declared with *defstruct*                     |
-| A.new a: a        | A[a: a]   |                    |                             | records      | declared with *defrecord*, compile-time based |
-| %{name: "bob"}    | %{foo: a} | amap[:name]        | %{amap ¦ name: "BOB" }      | maps         | run-time based                                |
-| %{:name => "bob"} |           | amap.name          |                             |              |                                               |
-|-------------------+-----------+--------------------+-----------------------------+--------------+-----------------------------------------------|
+|-----------------+-------------+-------------------+----------------------------------------------------------------|
+| instantiation   | match       | name              | description                                                    |
+|-----------------+-------------+-------------------+----------------------------------------------------------------|
+| 42              |             | Integer           | have no fixed size limit                                       |
+| 3.14            |             | Float             | 64-bit double precision                                        |
+| :ok             |             | Atom              | kept in memory ONCE, regardless how many times is used, not GC'd |
+| true/false/nil  |             | Atom              | "syntactic sugar" for atoms of the same name                   |
+| 'foo'           |             | (Char)List        | a list of integers, used for Erlang calls                      |
+|-----------------+-------------+-------------------+----------------------------------------------------------------|
+| "fo:1"          | "fo:" <> id | BitString         | strings in elixir, for elixir, binary encoded in UTF8          |
+| < <102, 111> >  |             | Binary            |                                                                |
+|                 |             | String            |                                                                |
+|-----------------+-------------+-------------------+----------------------------------------------------------------|
+
+** types complex
+
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| instantiation     | name         | match         | access             | "update"                    | description                                     |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| {1,"foo"}         | tuples       | {x , _}       | Kernel.elem(t,N)   | Kernel.put_elem(t,i,v)      |                                                 |
+| {:ok, false}      | tagged tuple |               |                    |                             | first element is an atom                        |
+| {:key, "value"}   | kv tuple     |               |                    |                             |                                                 |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| [1,:foo,"abc"]    | lists        | [x , _]       | Enum.at(l,N)       | [1¦alist] , alist ++ [3]    |                                                 |
+|                   |              | [x ¦ _]       |                    |                             |                                                 |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| [a: 1, b: 2]      | keyword list |               | Keyword.get(kw, K) |                             |                                                 |
+| [{:a,1}, {:b,2}]  |              |               |                    |                             |                                                 |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| A.new a: a        | records      | A[a: a]       |                    |                             | declared with *defrecord*, compile-time based   |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| %{name: "bob"}    | maps         | %{name: n}    | amap[:name]        | %{amap ¦ name: "BOB" }      | run-time based                                  |
+| %{:name => "bob"} |              | %{:name => n} | amap.name          | %{amap ¦ :name => "BOB" }   |                                                 |
+| %{1 => 0}         |              |               | amap[1]            | %{amap ¦ 1 => 2 }           |                                                 |
+|                   |              |               |                    | Map.put(m, k, v)            |                                                 |
+|                   |              |               |                    | Map.merge/3                 |                                                 |
+|                   |              |               |                    | Map.update(m, k, fn)        |                                                 |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| %A{a: a, b: b}    | structs      | %A{a: va}     |                    | %Abc{astruct ¦ name: "BOB"} | declared with *defstruct*, inside a *defrecord* |
+|                   |              | %{a va}       |                    | Map.*                       |                                                 |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+| 1..1_000          | ranges       |               |                    |                             | not lists                                       |
+|-------------------+--------------+---------------+--------------------+-----------------------------+-------------------------------------------------|
+
+- *structs*
+  - helps us guarantee that we have the fields we need/want
+  - uninitialized fields are =nil=
+  - internally, they are a *map* with a key "__struct__"
+    whose value is just the name of the module where is defined
+  - all functions on =Map.= can be used with structs
+  - need to be defined in a module
+    #+begin_src elixir
+      defmodule Candidate do # defmodule is a macro
+        defstruct [:name, :age, :party]
+        defstruct [name: "", age: 0, party: :none] # or with defaults
+        defstruct  name: "", age: 0, party: :none  # can also drop the [] on keyword lists
+      end
+    #+end_src
+- *maps* indexed by atoms, can still "leak" atoms
+- *tuples*
+  - fixed size
+  - contiguous in memory
+  - used when we want to return more than 1(one) value from a function
+- *lists*
+  - can have mixed types
+  - are singly linked lists
+  - not memory contiguous
+  - can be "improper lists" if bad constructed with (++) and a non-list
+- *keyword lists*
+  - can have dups keys
+  - are used to create some sort of =optional parameters= on a function
+  - can ignore the square brackets [] if it is the last argument of a function
+    #+begin_src elixir
+      IO.inspect(person, [{:label, "Step1"},{:width, 0}])
+      IO.inspect(person,   [label: "Step1",   width: 0])
+      IO.inspect(person,    label: "Step1",   width: 0)
+    #+end_src
+
+** types sigils
+
+- start with an "~" a letter and a pair of:
+  - /, <, {, [, |, ", '
+
+- Kernel.sigil_?/2
+  - are all functions that corresponds to each of the sigils below
+
+- define a NEW sigil
+  #+begin_src elixir
+    defmodule MySigils do
+      def sigil_u(string, _modifiers), do: String.upcase(string)
+    end
+    # > import MySigils
+    # > ~u/this will be in caps/
+  #+end_src
+
+|-----------------+--------------------|
+|                 | returns...         |
+|-----------------+--------------------|
+| ~w/foo bar/     | list of words      |
+| ~w/foo bar/a    | list of atoms      |
+| ~W/foo bar/     | raw list of words  |
+|-----------------+--------------------|
+| ~c/Hello World/ | char list          |
+| ~C/Hello world/ | raw char list      |
+|-----------------+--------------------|
+| %r/[0-9]/flags  | regex              |
+| %R/[0-9]/flags  | raw regex          |
+|-----------------+--------------------|
+| ~s/foo bar/     | string quoting     |
+| ~S/foo bar/     | raw string quoting |
+|-----------------+--------------------|
+| ~D/2021-01-13/  | date               |
+| ~T/13:00:07/    | timestamp          |
+| ~N//            | native date        |
+|-----------------+--------------------|
+
+** modules/functions
+
+- Each module is actually prefixed with Elixir
+  Elixir.String == String # true
+
+|---------------------+---------------------------------------------------------|
+| String              |                                                         |
+| .split/1            |                                                         |
+| .upcase/1           |                                                         |
+| .replace/3          |                                                         |
+|---------------------+---------------------------------------------------------|
+| Stream              |                                                         |
+| .map/2              |                                                         |
+| .filter/2           |                                                         |
+| .take/2             |                                                         |
+|---------------------+---------------------------------------------------------|
+| Enum                |                                                         |
+| .join/2             |                                                         |
+| .to_list/1          |                                                         |
+| .map/2              |                                                         |
+| .filter/2           |                                                         |
+| .into/2             | inserts enumerable into collectable                     |
+| .sort/2             |                                                         |
+|---------------------+---------------------------------------------------------|
+| Tuple               |                                                         |
+| .append/2           |                                                         |
+| .delete_at/2        |                                                         |
+| .duplicate/2        |                                                         |
+| .insert_at/3        |                                                         |
+| .to_list/1          |                                                         |
+|---------------------+---------------------------------------------------------|
+| Map                 |                                                         |
+| .take/2             | returns a new map with only keys provided               |
+| .fetch/2            |                                                         |
+| .get/3              |                                                         |
+| .put/3              |                                                         |
+| .update/4           |                                                         |
+|---------------------+---------------------------------------------------------|
+| IO                  |                                                         |
+| .inspect/1          | pretty prints argument                                  |
+| .puts/1             |                                                         |
+| .gets/1             | collects input, with given prompt                       |
+| .write/1            | can receive "IO Lists", which can be list of lists of strings, |
+|                     | but prints them plainly, as we were (++) appending them |
+|---------------------+---------------------------------------------------------|
+| IO.ANSI             | functions that return ansi escape sequences             |
+| .clear/0            |                                                         |
+| .cursor/2           | row, column                                             |
+|---------------------+---------------------------------------------------------|
+| Time                |                                                         |
+| .add/2              |                                                         |
+| .utc_now            |                                                         |
+|---------------------+---------------------------------------------------------|
+| Process             |                                                         |
+| .info/2             |                                                         |
+|---------------------+---------------------------------------------------------|
+| Integer             |                                                         |
+| Float               |                                                         |
+| Atom                |                                                         |
+| List                |                                                         |
+| Regex.replace/3     |                                                         |
+| Stream.with_index/1 |                                                         |
+| :binary             |                                                         |
+| Kernel              |                                                         |
+|---------------------+---------------------------------------------------------|
+
+** protocols
+
+- Protocols allows *extensible* ~polymorphism~
+
+#+begin_src elixir
+  # Protocol
+  defprotocol Calculatetable do
+    def sum(data)
+  end
+
+  # Implementation
+  defimpl Calculatetable, for: List do
+    def sum(list), do: do_sum(list, 0)
+    defp do_sum([], total), do: total
+    defp do_sum([head | tail], total), do: do_sum(tail, head + total)
+  end
+
+  # Usage
+  defmodule Calculate do
+    def sum(data), do: Calculatetable.sum()
+  end
+#+end_src
+
+|-----------+----------+---------+------------+--------------+-------------+------------|
+|           | Iex.Info | Inspect | List.Chars | String.Chars | Collectable | Enumerable |
+|-----------+----------+---------+------------+--------------+-------------+------------|
+| struct    | x        | x       |            |              |             |            |
+| maps      | x        | x       | x          | x            | x           | x          |
+| list      | x        | x       | x          | x            | x           | x          |
+| tuples    | x        | x       |            |              |             |            |
+| BitString | x        | x       | x          | x            | x           |            |
+| Range     | x        | x       |            |              |             | x          |
+|-----------+----------+---------+------------+--------------+-------------+------------|
+
+** macros
+
+- you need to explicitly import or require the macro module
+  this is because macros are process at compile time
+  so the macro needs to be compiled before the code that uses it
+
+#+begin_src elixir
+  defmodule Util do
+    defmacro reverse({:+, context, [a,b]}) do
+      # {:-, context, [a,b]}
+      quote do
+        unquote(a) - unquote(b)
+      end
+    end
+  end
+#+end_src
+
+*** Macro.expand
+
+#+begin_src elixir
+  (quote do: vote gas_tax + 2)
+  |> Macro.expand(__ENV__) # __ENV__ is context
+  |> Macro.to_string()
+  # "Map.update!(gas_tax, :yes, &(&1 + 2)"
+#+end_src
+
+*** =use= and __using__ to reduce boilerplate
+
+#+begin_src elixir
+  defmodule Html do
+    defmacro __using__(_opts) do
+      quote do
+        import Html # code here is "injected" into another module
+      end
+    end
+    def div(content), do: tag("div", content)
+    def p(content), do: tag("p", content)
+    def span(content), do: tag("span", content)
+    defp tag(name, content) do
+      "<#{name}>#{content}</#{name}>"
+    end
+  end
+
+  defmodule Page do
+    use Html
+    def view(content) do
+      content |> span() |> p() |> div()
+    end
+  end
+#+end_src
+
+** operators
+
+- allows comparisons between different types
+  number < atom < reference < function < port < pid < tuple < map < list < bitstring
+
+|-------+---------------------------------------------------------------------------|
+| op    |                                                                           |
+|-------+---------------------------------------------------------------------------|
+| (==)  | equal                                                                     |
+| (!=)  | not equal                                                                 |
+| (===) | equal integer/float, compares both the value AND the type                 |
+| (!==) | not equal integer/float, compares both the value AND the type             |
+| and   | strict, expects a boolean value, except on the last operand               |
+| (&&)  | allows any type of operands                                               |
+| or    | strict                                                                    |
+| (¦¦)  | allows any type of operands                                               |
+| not   | strict, works only boolean values                                         |
+| (!)   | allows any type, only nil and false would evaluate to *true*              |
+| (<>)  | string concat operator                                                    |
+| (++)  | list append                                                               |
+| (--)  | removes first instance of element(s) from the list                        |
+| (=)   | mach operator, binding, while claiming equality                           |
+| (&)   | capture operator, converts an named function, into an anonymous one, &f/1 |
+| (¦>)  | pipe operator, chains function calls                                      |
+|-------+---------------------------------------------------------------------------|
+
+
 * Editor
 - 323 gradual type-checker https://github.com/esl/gradient
 - 4.5K code analysis/linter https://github.com/rrrene/credo
+
+
+* Libraries
+- https://github.com/bitwalker/libcluster
+  https://github.com/derekkraan/horde
+- https://github.com/Zensavona/domainatrex
+  A library for parsing TLDs from urls in Elixir
+|---------+----+-----------------------+-----+---------------------------------------------|
+|         |    |                       | str |                                             |
+|---------+----+-----------------------+-----+---------------------------------------------|
+| httpc   |    | http client (erlang)  |     | https://www.erlang.org/doc/man/httpc.html   |
+| ibrowse |    | http client (erlang)  | 0.5 | https://github.com/cmullaparthi/ibrowse/    |
+| hackney |    | http client (erlang)  | 1.3 | https://github.com/benoitc/hackney          |
+| dynamo  | 14 | web framework         | 1.1 | https://github.com/dynamo/dynamo            |
+| plug    |    | web framework         | 2.6 | https://github.com/elixir-plug/plug         |
+| weber   | 16 | web framework(elixir) | 0.3 | https://github.com/elixir-web/weber         |
+| ecto    |    | ORM?                  | 5.6 | https://github.com/elixir-ecto/ecto         |
+| amnesia | 19 | in memory db          | 0.6 | https://github.com/meh/amnesia              |
+| xmerl   |    | build-in (erlang)     |     | https://www.erlang.org/doc/man/xmerl.html   |
+| gen_tcp |    | build-in (erlang)     |     | https://www.erlang.org/doc/man/gen_tcp.html |
+| exactor |    | GenServer generation  | 0.6 | https://github.com/sasa1977/exactor         |
+| riak    |    | decentralized db      | 3.8 | https://github.com/basho/riak               |
+| elixiak | 13 | riak wrapper          | 0.1 | https://github.com/drewkerrigan/elixiak     |
+|---------+----+-----------------------+-----+---------------------------------------------|

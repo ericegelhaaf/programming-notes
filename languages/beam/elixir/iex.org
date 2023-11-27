@@ -1,0 +1,12 @@
+- iex - interactive elixir
+  https://hexdocs.pm/iex/1.12/IEx.html
+
+|-------------+---------------------------------------------------|
+| -S mix      |                                                   |
+| C-g q       | exit                                              |
+| i(?)        | introspection                                     |
+| h(fn?¦mod?) | help                                              |
+| r(modname)  | recompile module                                  |
+| #iex:break  | special break trigger to get out of an expression |
+| file.exs    | compile, load, and run "file.exs"                 |
+|-------------+---------------------------------------------------|

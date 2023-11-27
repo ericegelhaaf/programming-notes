@@ -1,0 +1,6 @@
+- https://guide.elm-lang.org/
+  https://github.com/evancz/elm-architecture-tutorial
+- https://elmprogramming.com/
+- https://blog.noredink.com/post/129641182738/building-a-live-validated-signup-form-in-elm
+- https://en.wikibooks.org/wiki/Elm_programming_language
+- https://learnyouanelm.github.io/

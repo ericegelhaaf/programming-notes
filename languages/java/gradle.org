@@ -1,0 +1,9 @@
+- build.gradle
+- settings.gradle: configuration variable and setup for multiproject build
+* gradle
+|-------+---|
+| clean |   |
+| build |   |
+| test  |   |
+| run   |   |
+|-------+---|

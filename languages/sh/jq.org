@@ -1,1 +1,0 @@
-- First written in Haskell, but early rewritten in C for performance (?)

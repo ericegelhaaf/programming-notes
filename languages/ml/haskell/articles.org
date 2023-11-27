@@ -1,4 +1,12 @@
-- https://www.haskellforall.com/2018/05/how-i-evaluate-haskell-packages.html
+- project https://wiki.haskell.org/Roll_your_own_IRC_bot
+- project https://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/
+- project https://crypto.stanford.edu/~blynn/haskell/brain.html
+- 23 https://journal.infinitenegativeutility.com/leaving-haskell-behind
+- 20 https://web.archive.org/web/20210109115443/https://blog.shitiomatic.tech/post/haskell-is-a-bad-programming-language/
+- 17 https://metarabbit.wordpress.com/2017/05/02/i-tried-haskell-for-5-years-and-heres-how-it-was/
+- 15 https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/
+- 16 https://baatz.io/2016/haskell-in-a-startup/
+- 18 https://www.haskellforall.com/2018/05/how-i-evaluate-haskell-packages.html
 - https://github.com/bitemyapp/fp-course
 - https://github.com/hmemcpy/milewski-ctfp-pdf
 - https://threadreaderapp.com/thread/1277615394560360449.html
@@ -15,8 +23,8 @@
 - https://github.com/soupi/haskell-study-plan
 - https://github.com/alpacaaa/zero-bullshit-haskell
 - https://github.com/tssm/up-to-date-real-world-haskell
-- https://github.com/graninas/software-design-in-haskell
 - https://github.com/bitemyapp/learnhaskell
+- https://github.com/graninas/software-design-in-haskell
 * Monad Tutorials
 - https://www.lambdacat.com/the-midnight-monad-a-journey-to-enlightenment/
 - https://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
@@ -32,3 +40,21 @@
 - https://kowainik.github.io/posts/haskell-mini-patterns
 - https://serokell.io/blog/haskell-in-production-noredink
 - https://www.cis.upenn.edu/~cis1940/fall16/lectures/05-real-world-haskell.html
+* TODO 2018 | Deriving Via
+
+- "or how to turn hand-written instances into an anti-pattern"
+
+- enable programmers to compose instances from named programming patterns,
+  turning deriving into a high-level DSL for defining instances
+
+- in "base" we have the following definitions, which they have completely *identical /instance/ bodies*
+
+  #+begin_src haskell
+    instance Monoid a => Monoid (IO a) where -- same
+      mempty = pure mempty
+      mappend = liftA2 mappend
+
+    instance Monoid a => Monoid (ST s a) where -- same
+      mempty = pure mempty
+      mappend = liftA2 mappend
+  #+end_src

@@ -1,0 +1,5 @@
+* Awk Essentials Training
+
+- $ awk '{ print $2 }'
+  one two three
+  two

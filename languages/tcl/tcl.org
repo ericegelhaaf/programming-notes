@@ -1,4 +1,5 @@
 - yasnippets https://github.com/yangwen0228/unimacs/tree/bbeb3195000d8c1fd8ba436b47aa65d868769206/utils/snippets/tcl-mode
+
 * Language
 |-------------------------------+----------------------------|
 | "foo"                         | grouping                   |
@@ -81,9 +82,11 @@
 | zlib      | zlib library                                                                |
 |-----------+-----------------------------------------------------------------------------|
 * Libraries
+- web - uses noVNC to run x11 on browser https://wiki.tcl-lang.org/page/CloudTk
 - GUTTER - Great Unified Tcl/Tk Extension Repository
   https://core.tcl-lang.org/jenglish/gutter/
 * Codebases
+- https://wiki.tcl-lang.org/page/Showcase
 - https://www.androwish.org/index.html/home
   https://www.androwish.org/index.html/wiki?name=undroidwish
 - official git gui

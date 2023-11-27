@@ -4,6 +4,18 @@
 - Clojure Study Group - https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv
 - ClojuRU 2019 - https://www.youtube.com/playlist?list=PLvf-wiCQYkAVvrZr53Upxti9Hr3t7V4bW
 - Fulcro – Part 1: Getting Started https://www.youtube.com/watch?v=wEjNWUMCX78
+* Channel
+|-------------------+----------------------------------------------------------|
+| andrey fadeev     | https://www.youtube.com/@andrey.fadeev                   |
+| on the code again | https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig |
+| calva tv          | https://www.youtube.com/@CalvaTV/videos                  |
+| juxt              | https://www.youtube.com/@juxt4112/videos                 |
+| re:clojure        | https://www.youtube.com/c/reclojure/videos               |
+| Sci Cloj          | https://www.youtube.com/c/SciCloj/videos                 |
+| London Clojurians | https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw |
+| Clojure/north     | https://www.youtube.com/@clojurenorth4011                |
+| ClojureTV         | https://www.youtube.com/@ClojureTV                       |
+|-------------------+----------------------------------------------------------|
 * 12 | Rich Hickey | Clojure for Lisp Programmers
 ** 1
 https://www.youtube.com/watch?v=cPNkH-7PRTk
@@ -47,10 +59,3 @@ https://www.youtube.com/watch?v=cPNkH-7PRTk
     - No threads (and no queues) in JS
   - Observables/Rx only mitigate certain cases
 - 11:00 TODO
-* Channel
-- Clojure TV https://www.youtube.com/@ClojureTV
-- Clojure/North https://www.youtube.com/@clojurenorth4011
-- London Clojurians https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw
-- on the code again https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig
-- Sci Cloj https://www.youtube.com/c/SciCloj/videos
-- re:clojure https://www.youtube.com/c/reclojure/videos

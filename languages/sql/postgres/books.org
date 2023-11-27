@@ -1,4 +1,56 @@
-* Book: The Art of PostgreSQL by Dimitri Fontaine
+* 17 | PostgreSQL Up & Running
+** 5 Data types
+*** Full Text Search
+
+- a search happens between 2 vectors
+  - a vectorized searched text
+  - a vectorized search term
+
+- could equate on
+  * related words (ex: love, romance, infatuation, lust)
+  * common stem (ex: love, loving, loved)
+  * principle parts of a verb (ex: eat, eats, ate, eaten)
+  * synonims
+
+- prunning stop words
+
+- tsvector:
+  - is a type
+  - is a lexeme
+  - has at least one "position"
+
+- trigger example to keep tsvector column named "fts", upto date on changes (does NOT support weighting)
+
+  #+begin_src sql
+    create trigger trig_tsv_film_iu
+      before insert or update of title, desription
+      on film
+      for each row
+        execute procedure tsvector_update_trigger(fts, 'pg_catalog.english', title, description);
+  #+end_src
+
+- ranking search results
+
+  #+begin_src sql
+    select title, left(description,50) as description,
+           ts_rank(fts,ts)::numeric(10,3) as r
+      from flim, to_tsquery('english', 'love & (wait | indian | mad)') as ts
+     where fts @@ ts and title > ''
+     order by r desc;
+  #+end_src
+
+- ranking with weights
+
+  #+begin_src sql
+    select left(title,40) as title,
+           ts_rank('{0,0,0,1}'::numeric[],fts,ts)::numeric(10,3) as r,
+           ts_rank_cd('{0,0,0,1}'::numeric[],fts,ts)::numeric(10,3) as rcd
+      from film, to_tsquery('english', 'love & (wait | indian | mad )') as ts
+     where fts @@ ts and title > ''
+     order by r desc;
+  #+end_src
+
+* 19 | The Art of PostgreSQL by Dimitri Fontaine
 |-----------------------+----------------------------------------------------------------------|
 | Authors Blog          | https://tapoueh.org/                                                 |
 | Markus Winand         | https://use-the-index-luke.com/                                      |
@@ -503,11 +555,14 @@
   #+end_src
 
 *** 11 Structured Query Language
+
 - For some developers, not being in charge of every detail
   of the query plan is a source of *frustation*, and they
   prefer hiding SQL under another layer of technology that
   makes them feel like they are still in control.
+
 *** 12 Queries, DML, DDL, TCL, DCL
+
 - SQL is composed of several areas
   1) DML Data Manipulation Language
      - insert
@@ -530,20 +585,22 @@
   5) Other:
      - vacuum, analyze, cluster
      - prepare, execute, explain, listen, notify, lock, set
+
 *** 13 Select, From, Where
 **** Projection (output) aka SELECT
-- Is usually frowned upon to use either "SELECT *"
-  or the classic "I don't know what I'm doing" behavior
-  of some (ORMs) object relational mappers when they
-  insist of fully *hydrating* the application objects, just in case
+
+- Is usually frowned upon to use "SELECT *" aka the classic /I don't know what I'm doing/
+- It can give worst/unclear error messages in case of schema changes
+- Behavior of some ORMs (Object Relational Mappers) when they
+  insist of fully /hydrating/ the application objects, just in case
   (?)
   #+begin_src sql
-  select * from races limit 1;
-  select * from races fetch first 1 rows only;
-  table rages limit 1;
+    select * from races limit 1;
+    select * from races fetch first 1 rows only; -- part of the "sql standard"
+    table rages limit 1; -- part of the "sql standard"
   #+end_src
 
-- Using a .java file
+- Using postgres with Java
   $ javac Select.java
   $ java -cp .:path/to/postgresql-42.1.1.jar Select
 
@@ -551,26 +608,55 @@
   - Hides the intention
   - Is not efficient to retrieve fields you don't need
     - postgresql can't return rows longer than 8k without doing some external table pointers
-    - TOAST mechanism, makes some bytes expensive to retrieve
-      (T)he
-      (O)versized
-      (A)ttribute
-      (S)torage
-      (T)emplate
-      https://www.youtube.com/watch?v=_UUFMAZswhU
+      - TOAST mechanism, makes some bytes expensive to retrieve
+        (T)he
+        (O)versized
+        (A)ttribute
+        (S)torage
+        (T)emplate
+        https://www.youtube.com/watch?v=_UUFMAZswhU
 
 **** Data Sources: FROM
-- FROM, types of JOIN
-  https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-FROM
-- FROM t1
-  LEFT JOIN t2
-    ON t1.id=t2.id
-   AND t1.field = 1
+
+- FROM introduces data sources, and how they relate to each other
+
+- Example: top 3 drivers
+  #+begin_src sql
+      select code, forename, surname,
+             count(*) as wins
+        from      drivers
+             join results using(driverid) -- inner join
+       where pos = 1
+    group by driverid
+    order by wins desc
+       limit 3;
+  #+end_src
+
+
+- FROM, types of JOIN https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-FROM
+  |--------------------+----------------------------------------------------------|
+  | CROSS JOIN         | N*M for every possible combination of rows               |
+  | FROM t1,t2         | "                                                        |
+  | (INNER) JOIN t2 ON | N*M, that satisfies ON condition                         |
+  | (OUTER) LEFT  JOIN | inner join + t1 rows that didn't satisfy ON condition    |
+  | (OUTER) RIGHT JOIN | inner join + t2 rows that didn't satisfy ON condition    |
+  | (OUTER) FULL  JOIN | inner join + t1,t2 rows that didn't satisfy ON condition |
+  |--------------------+----------------------------------------------------------|
+
 **** Restrictions: WHERE
-- WE usually try to keep the WHERE clauses as simple,
-  in order to be able to use our indexes.
-- OR operator is more complex to optimize, in respect to indexes
-- Careful with NOT IN and NULL
+
+- WE usually try to keep the *WHERE* clauses as simple,
+  in order to be able to use our ~indexes~.
+
+- *OR* operator is more complex to optimize, in respect to ~indexes~
+
+- Careful with *NOT IN* and NULL
+  Example: this returns no rows
+  #+begin_src sql
+    select x
+      from generate_series(1,100) as t(x)
+     where x not in (1,2,3,null);
+  #+end_src
 
 - We can use sub-queries on WHERE, to implement the
   "anti-join" pattern using the NOT EXISTS and SELECT 1
@@ -583,6 +669,7 @@
     from drivers
    where date >=
   #+end_src
+
 ** Part V    Data Types
 ** Part VI   Data Modeling
 ** Part VII  Data Manipulation and Concurrency Control

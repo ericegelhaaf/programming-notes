@@ -5,23 +5,26 @@
 - exercises https://github.com/sergiotapia/nimlings
 * Language
 ** Types
+|------------+------------------------------------+----------------------------------|
 | name       | instance                           | type                             |
 |------------+------------------------------------+----------------------------------|
+| tuple      | (a: 1, b: 2)                       | tuple[a: T, b: T]                |
+| set        | {1,2,3}                            | set[T]                           |
 | array      | ["foo","bar"]                      | array[N,T]                       |
 | bitset     | {'a'..'b'}                         | bitset[T]                        |
-| channel    |                                    | Channel[T]                       |
-| enums      | Colors.Red                         | type Colors = enum Red = 0xFF000 |
-| hashset    | toSet([])                          | HashSet[T]                       |
-| orderedset |                                    | OrderedSet[]                     |
-| object     | Name(a: "foo")                     |                                  |
-| ref object | Name(a: "foo")                     |                                  |
 | seq(uence) | @[], newSeq[char](10)              | seq[T]                           |
-| set        | {1,2,3}                            | set[T]                           |
-| tables     | initTable[T,T]() toTable[T,T]({})  |                                  |
+|------------+------------------------------------+----------------------------------|
+| table      | initTable[T,T]() toTable[T,T]({})  |                                  |
 |            | initCountTable[T] toCountTable({}) |                                  |
 |            | toOrderedTable({})                 |                                  |
+|------------+------------------------------------+----------------------------------|
+| hashset    | toSet([])                          | HashSet[T]                       |
+| orderedset |                                    | OrderedSet[]                     |
+| channel    |                                    | Channel[T]                       |
+| enum       | Colors.Red                         | type Colors = enum Red = 0xFF000 |
+| object     | Name(a: "foo")                     |                                  |
+| ref object | Name(a: "foo")                     |                                  |
 | thread     | createThread(thread, fn, arg)      | Thread[T]                        |
-| tuple      | (a: 1, b: 2)                       | tuple[a: T, b: T]                |
 |------------+------------------------------------+----------------------------------|
 ** std(lib) modules
 - https://nim-lang.org/docs/lib.html

@@ -743,12 +743,12 @@ type ColoredPoint = { x: number, y: number, color: string } // SUBtype
 *** Installing
 - npm install -g typescript
 - tsconfig.json
-  #+begin_src js
+  #+begin_src json
   {
     "compilerOptions": {
       "target": "ES2020",
       "strict": true,
-      "soureMap": true
+      "sourceMap": true
     },
     "filesGlob": [
       "*.ts"

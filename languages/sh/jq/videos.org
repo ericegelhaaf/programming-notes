@@ -1,0 +1,251 @@
+* DONE 17 | Serious Programming with jq?!          | Charles Chamberlain
+ohttps://www.youtube.com/watch?v=PS_9pyIASvQ
+
+#+begin_src jq
+  def select(f): if f then . else empty end;
+#+end_src
+
+Is mostly PURE programming languages, except
+- debug - function like "." it prints to stderr
+
+** modules
+
+$ jq -n -f main.jq # outputs ["Snow", "snow", "snow"]
+
+#+NAME: winter.jq or winter/winter.jq
+#+begin_src jq
+  def wonderland:
+    split(", ");
+#+end_src
+
+#+NAME: main.jq
+#+begin_src jq
+  import "winter" as winter;
+
+  def main:
+    "Snow, snow, snow" | winter::wonderland;
+
+  main
+#+end_src
+
+* DONE 17 | JSON: Like a Boss                      | Bob Tiernay
+
+video https://www.youtube.com/watch?v=_ZTibHotSew
+slides https://www.slideshare.net/btiernay/jq-json-like-a-boss
+
+|------------+------|
+| jq         | json |
+| xmlstarlet | xml  |
+| pup        | html |
+| yq         | yaml |
+|------------+------|
+
+- jq sources ~/.jq automatically
+
+- jsonl = json lines = https://jsonlines.org/
+  aka new line delimited json
+
+- use cases
+  - exploring json APIs
+  - exploring jsonl dumps
+
+- modes
+  - line by line (default)
+  - slurp (-s) reads the whole file as a single array
+
+- variables
+  #+begin_src jq
+    expression as $x
+  #+end_src
+  - usually not needed
+  - can help cut down noise
+  - must start with a $
+  - scoped over the expression that defines them
+
+- destructuring
+  #+begin_src jq
+    as {a: $x, b: [$y, $z]}
+  #+end_src
+
+- functions
+  - (.) is an implicit argument
+  #+begin_src jq
+    def name[(args)]: body;
+    def increment: . + 1;
+    def map(f): [.[] | f];
+  #+end_src
+
+- select(boolean_expression)
+  paths(node_filter)
+  recurse(f,condition) aka (..)
+  group_by(path_expression)
+
+#+begin_src jq
+  .data.hits[] |
+    [.case_id, .submitter_id]
+      , (.samples[]? | [.sample_id, .submitter_id])
+      , (.samples[]?.portions[]?.analytes[]?.aliquots[]
+          | [.aliquot_id, .submitter_id]) | @tsv
+#+end_src
+
+* DONE 18 | jq Scripting Language Tutorial Webinar |
+https://www.youtube.com/watch?v=FrT6R75M3BE
+
+- when using the (,) operator, all the filters work in parallel, and each one sees the input
+- ME: bunch of examples copied into jq.org/snippets
+
+#+begin_src jq
+  20 as $max_hops
+    | if .type == "trace" and .spec.hops > $max_hops
+      then "Traces must be \($max_hops) hops or fewer"
+      else true end
+#+end_src
+
+* TODO 19 | Non-trivial jq                         | David Hand
+
+https://www.youtube.com/watch?v=MvI6Z85EgVo
+
+- TODO: 3/4
+
+- jq has not integer, only 64bit floating point numbers
+
+- in jq the inputs, of each function are all the same within a pipe
+  #+begin_src jq
+    #!/usr/bin/jq -f
+    sum / length # the same array passed to both functions
+  #+end_src
+
+- "hello"
+  - is (kinda) a function that ignores his inputs and returns "hello"
+  - ME: might be an "expression" would be more accurate
+
+- the pipe operator (|)
+  - is the most important concept on jq
+  - is how we do function call on functions that take 1 argument
+  - functions that take more arguments use parentheses fn(arg1,arg2)
+  - ME: like (|>) on ML
+
+- (|=) update operator
+  - accepts the input
+  - evaluates the right
+  - sends back the WHOLE object with the change
+  - (.) on the right side means the "identity", so ".+1" would update/add to the element
+
+- (//) alternative operator
+  - like perl's (||) operator
+  - checks truthi-ness
+  - does NOT check defined-ness
+
+- not function
+  - "not" is not a prefix operator or as a function
+
+- select function
+  - assigns input locally to (.)
+  - returns input unchanged, if argument evaluates to true
+  - otherwise, returns empty
+    - if you have ANY object value that is empty, you output empty
+    - it's an infectious type, all of these return empty
+      - 1 + empty
+      - empty + empty
+      - empty == empty
+
+- booleans
+  - falsy values: null, false
+
+- empty
+  - it's own type
+  - there is a function with that name, it returns empty, is like returning nothing
+  - is NOT true
+  - is NOT false
+  - "not empty" == empty
+
+- map function
+  - map(replacement)
+
+- jq processes lists of json, and outputs lists of json
+  #+begin_src jq
+    #!/usr/bin/jq -f
+    # input: dimension object
+    # output: {
+    #   "table_name": [ "column_name", ... ],
+    # }
+    # where table_name.column_name doesn't exist
+    #                                (i.e. a bad alias)
+
+    def bad_aliases:
+      . as $table
+      | .["col_alias"]
+      | keys
+      | map(select($table.structure[.] | not))
+    ;
+
+    with_entries(
+        .value |= bad_aliases
+        | select(.value | length > 0)
+      )
+  #+end_src
+
+* DONE 22 | Manually Parse Bloodhound Data with JQ | IppSec
+... to Create Lists of Potentially Vulnerable Users and Computers
+
+https://www.youtube.com/watch?v=o3W4H0UfDmQ
+
+|------------------------------------------------+---------------------------------|
+| .data                                          |                                 |
+| .data[].Properties ¦ .name                     | show all account names          |
+|------------------------------------------------+---------------------------------|
+| .data[].Properties                             | shows all enabled account names |
+| ¦ select(.enabled == true)                     |                                 |
+| ¦ .name                                        |                                 |
+|------------------------------------------------+---------------------------------|
+| .data[].Properties                             | shows all enabled account names |
+| ¦ select(.enabled == true)                     | with descriptions               |
+| ¦ .name + " " + .description                   |                                 |
+|------------------------------------------------+---------------------------------|
+| .data[].Properties                             | shows all enabled account names |
+| ¦ select(.enabled == true)                     | with descriptions not null      |
+| ¦ select(.description != null)                 |                                 |
+| ¦ .name + " " + .description                   |                                 |
+|------------------------------------------------+---------------------------------|
+| .data[].Properties                             | shows all enabled account names |
+| ¦ select(.enabled == true)                     | with a password reset           |
+| ¦ select(.pwdlastset > .lastlogontimestamp)    | and no login from the user      |
+| ¦ .name + " " + (.lastlogontimestamp¦tostring) |                                 |
+|------------------------------------------------+---------------------------------|
+| .data[].Properties                             | shows all account names         |
+| ¦ select(.serviceprincipalnames != [])         | of those with a                 |
+| ¦ .name                                        | serviceprincipalnames set       |
+|------------------------------------------------+---------------------------------|
+
+* TODO 23 | Using jq for Suricata Log Parsing      | Corey Thomas
+https://www.youtube.com/watch?v=qBDD6Xq3OTE
+TODO: 20:50
+|---------------------------------------------+----------------|
+| select(.alert)                              | picking events |
+|---------------------------------------------+----------------|
+| select(.event_type == "tls"                 |                |
+| .      and .tls.subject == .tls.issuerdn)   |                |
+|---------------------------------------------+----------------|
+| select(.event_type == "tls"                 |                |
+| .      and .tls.version == TLSv1")          |                |
+|---------------------------------------------+----------------|
+| select(.event_type=="flow"                  |                |
+| .      and .flow.state == "established      |                |
+| .      and .flow.age > 1800                 |                |
+| .      and .app_proto == "smb")             |                |
+|---------------------------------------------+----------------|
+| select(.event_type=="flow"                  |                |
+| .      and .flow.state == "established      |                |
+| .      and .flow.age > 1800                 |                |
+| .      and .app_proto == "smb"              |                |
+| .      and .timestamp > "2019-04-29T14:38") |                |
+|---------------------------------------------+----------------|
+| if .alert.signature                         |                |
+| then .alert.signature                       |                |
+| elif .metadata.flowbits > 0                 |                |
+| then .metadata.flowbits[]                   |                |
+| else .proto                                 |                |
+| end                                         |                |
+|---------------------------------------------+----------------|
+
+$ grep "event_type" eve.json | jq .flow_id

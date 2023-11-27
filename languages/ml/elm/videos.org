@@ -1,0 +1,102 @@
+- Channels
+  https://www.youtube.com/@ElmEurope
+  https://www.youtube.com/@elmonlinemeetup
+  https://www.youtube.com/@elmtownpodcast
+  https://www.youtube.com/@ElmForReactDevs
+  https://www.youtube.com/@elmconf
+
+- 16 | Live Coding an Instagram Clone Using Elm https://www.youtube.com/watch?v=C4LU4_heFrs
+- 18 | Elm Crash Course https://www.youtube.com/watch?v=kEitFAY7Gc8
+- 22 | Elm - Buidling a Simple Calculator https://www.youtube.com/watch?v=_dt5_37lO5w
+- 23 | Elm - Functional Language for the Frontend https://www.youtube.com/watch?v=SAAJlqu2sos
+- 23 | Is Elm dead? https://www.youtube.com/watch?v=PNgAmr4gPYQ
+* 17 | The Life of a File                      | Evan Czaplicki
+
+- code https://github.com/dwyl/learn-elm/blob/dd99bc7925328726b61d76c0e773066faa7276b8/examples/checkboxes.elm#L19
+
+- ~Split WHEN you discover better DATASTRUCTURES~
+
+- Types vs Stringly Types
+- In elm the probability of a sneaky mutation is %0
+- Refactoring is cheap and reliable
+
+- JS truths
+  - +prefer shorter files+
+  - +get the architecture right from the start+
+
+- Reduced API
+  - IF implementation is hidden AND if the public API works => the code works everywhere
+  - easier testing
+  - easier refactoring
+  - maintains invariants
+
+- ~get/set is a BAD sign~
+  - modules hide details
+  - setters expose details
+  - just use a records
+
+- do NOT over do it
+  - wait until you have a problem in practice
+  - ask WHY you are separating in modules
+  - ask if you are dealing with similar or same situations
+  - not interesting types? just grow your records
+
+* 23 | Functional Programming in Vite with Elm | Lindsay Wardell
+
+video https://www.youtube.com/watch?v=ZPVGK2OSTog
+
+- Install in vite:
+  $ npm install vite-plugin-elm
+  $ npm install -g elm
+  $ elm init
+
+- Elm comes with a "time travel debuggers" as part of the vite-elm-plugin
+
+- 15:00 integration with VUE
+
+** vite.config.ts
+
+#+begin_src typescript
+  import { defineConfig } from "vite";
+  import { plugin as elm } from "vite-plugin-elm";
+
+  export default defineConfig({
+    plugins: [ elm() ],
+  });
+#+end_src
+
+** Main.elm
+
+#+begin_src haskell
+  module Main exposing (..)
+  import Browser
+  import Html exposing (Html, button, div, text)
+  import Html.Events exposing (onClick)
+
+  init = 0 -- initial value of the model
+
+  type Msg = Increment | Decrement
+
+  update : Msg -> Model -> Model
+  update msg model =
+    case msg of
+      Increment -> model + 1
+      Decrement -> model - 1
+
+  view model =
+    div [] -- 1st argument is for attributes, 2nd for childrens
+      [ button [ onClick Decrement ] [ text "-" ]
+      , button [ onClick Increment ] [ text "+" ]
+      , div [] [ text (String.fromInt model) ]
+      ]
+
+  main = Browser.sandbox { init = init, update = update, view = view } -- .sandbox means it can't communicate with JS
+#+end_src
+
+** main.ts
+#+begin_src typescript
+  import { Elm } from './Main.elm';
+  const app = Elm.Main.init({
+    node: document.querySelector("#app"),
+  });
+#+end_src

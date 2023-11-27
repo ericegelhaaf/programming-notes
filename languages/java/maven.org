@@ -1,0 +1,31 @@
+* mvn
+|---------+--------------------------------------------------------------|
+| clean   |                                                              |
+| compile | into /target/ folder                                         |
+| test    |                                                              |
+| package | into .jar, resolves properties, copies metadata              |
+| exec    | plugin https://www.mojohaus.org/exec-maven-plugin/usage.html |
+| verify  | ?                                                            |
+|---------+--------------------------------------------------------------|
+* pom.xml elements
+|-----------------------------------+-------------------------------------------|
+| project                           | top-level element                         |
+| project>groupId                   | uniq identifier of the organization       |
+| project>artifactId                | unique name for the artifact              |
+| project>packaging                 | eg: jar, war, ear, etc.. (default is jar) |
+| project>version                   | eg: 1.0-SNAPSHOT                          |
+| project>modelVersion              | ????                                      |
+| project>properties>[]             | optional                                  |
+|-----------------------------------+-------------------------------------------|
+| project>dependencies>[dependency] |                                           |
+| project>build>plugins>[plugin]    | misc conf eg: plugins and resources       |
+|-----------------------------------+-------------------------------------------|
+* directory structure
+|-------------------------------------------------+---------------------------------|
+| pom.xml                                         |                                 |
+| src/main/java                                   |                                 |
+| src/main/resources                              | extra resources, eg: text files |
+| src/main/resources/META-INF/metadata.properties |                                 |
+| src/test/java                                   |                                 |
+| src/test/resources                              | extra resources, eg: text files |
+|-------------------------------------------------+---------------------------------|

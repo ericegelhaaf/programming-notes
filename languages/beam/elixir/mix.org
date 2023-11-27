@@ -1,0 +1,83 @@
+mix - build tool for elixir https://hexdocs.pm/mix/1.12/Mix.html
+iex -S mix
+
+|------------------+------------------------|
+| mix              | description            |
+|------------------+------------------------|
+| new project_name | creating a project     |
+| test             | running tests          |
+| deps.get         | install dependencies   |
+| docs             | generate documentation |
+| help             | list options           |
+| format           |                        |
+|------------------+------------------------|
+
+- =ExUnit= isn't really mean to work outside of an Mix project
+  - ~setup_all~, runs all for all tests
+  - ~setup~, runs before caling each test
+    #+begin_src elixir
+      setup do
+        %{election: %Election{}}
+      end
+    #+end_src
+  - ~assert~
+    #+begin_src elixir
+      command = "name Will Ferrell"
+      election = Election.update(ctx.election, command) # ctx comes from setup
+      assert election == %Election{name: "Wil Ferrell"}
+    #+end_src
+
+* =./lib/= - where our code will be, intended to be compiled (.ex)
+  ./lib/my_project.ex
+  #+begin_src elixir
+    defmodule MyProject do
+      @moduledoc """
+      Documentation for MyProject.
+      """
+
+      @doc """
+      Hello world.
+
+      ## Examples
+
+          iex> MyProject.hello()
+          :world
+
+      """
+      def hello do
+        :world
+      end
+    end
+  #+end_src
+
+* =./test/= - "mix test" runs all the "*_test.exs" files
+
+./test/test_helper.exs
+#+begin_src elixir
+  ExUnit.start()
+#+end_src
+
+./test/my_project_test.exs
+#+begin_src elixir
+  defmodule MyProjectTest do
+    use ExUnit.Case # injects the test/doctest macros
+    doctest MyProject # runs test defined on the documentation
+    test "greets the world" do
+      assert MyProject.hello() == :world
+    end
+  end
+#+end_src
+
+* =./mix.exs= - configuration file, just an Elixir module
+  - "use Mix.Project"
+  - 2 public functions:
+    - ~project/0~ - keywords list
+      * app
+      * version
+      * elixir
+      * start_permanent: how the beam should response to certain fails
+      * deps
+    - ~application/0~
+      - extra_applications: used when you compile the project
+  - 1 private function: ~deps/0~
+    - empty list on a brand new project

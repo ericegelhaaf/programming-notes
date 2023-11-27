@@ -1,3 +1,5 @@
+- Haskell Adventures - A Calculator
+  https://www.youtube.com/playlist?list=PL_xuff3BkASMOzBr0hKVKLuSnU4UIinKx
 - The Haskell Unfolder
   - Episode 1: unfoldr  https://www.youtube.com/watch?v=S_HSt6jEtWM
 - Streamer https://www.youtube.com/c/cvladfp/videos
@@ -61,6 +63,179 @@ https://github.com/tsoding/tsoken/blob/master/src/Main.hs
     https://www.youtube.com/watch?v=JJv74IJUp4E
   - NYC Haskell User's Group
     https://www.youtube.com/channel/UCzNYHE7Kj6pBqq5h8LG9Zcg
+* @rae's Thoughts on Haskell on tweag
+https://www.youtube.com/playlist?list=PLyzwHTVJlRc9QcF_tdqc9RdxJED8Mvyh1
+** Jun 21 | Avoid boilerplate instances with DerivingVia
+
+- Example: given an enum of levels of alert
+  #+begin_src haskell
+    data DangerLevel =
+      = AllOk
+      | NotGreat
+      | UhOh
+      | RealProblemHere
+      | Catastrophe
+      deriving (Eq, Ord)
+  #+end_src
+
+- I want to *combine* them so I could get the highest level of alert from the given
+  For that i will need to implement Monoid and Semigroup
+  #+begin_src haskell
+    instance Semigroup DangerLevel where
+      (<>) = max
+    instance Monoid DangerLevel where
+      mempty = AllOk
+  #+end_src
+
+- If I have the same problem repeated, eg: I have an enum of "MovieRating".
+
+- I could use DerivingVia.
+  First by defining a ~newtype~, as a *simple wrapper* over some type "a"
+  That implements/instances both Semigroup and Monoid
+
+  #+begin_src haskell
+    newtype Supremum a = MkS a
+      deriving (Eq, Ord, Bounded)
+
+    instance Ord a => Semigroup (Supremum a) where
+      (<>) = max
+    instance (Ord a, Bounded a) => Monoid (Supremum a) where
+      mempty = minBound
+  #+end_src
+
+- We could then use ~DeriveVia~ with the newtype to automatically write the instances for us.
+
+  #+begin_src haskell
+    {-# LANGUAGE DerivingStrategies #-}
+    {-# LANGUAGE DerivingVia #-}
+    -- <--- Supremum newtype and instances go here
+    data DangerLevel =
+      = AllOk
+      | NotGreat
+      | UhOh
+      | RealProblemHere
+      | Catastrophe
+      deriving (Eq, Ord, Bounded)
+      deriving (Semigroup, Monoid) via (Supremum DangerLevel)
+  #+end_src
+
+- Since the relationship between "Supreme DangerLevel" and "DangerLevel" is just a *newtype*
+  We can coerce from one type to another.
+  It's like we were writting this code.
+  #+begin_src haskell
+    import Data.Coerce
+    instance Semigroup DangerLevel where
+      (<>) = coerce ((<>) @(Supremum DangerLevel))
+  #+end_src
+
+- We could also use it to get a inverse order, right on the *via*
+  ~Down~ is a *type wrapper* that flips the orientation of Ord and Bounded instances.
+
+  #+begin_src haskell
+    {-# LANGUAGE DerivingStrategies #-}
+    {-# LANGUAGE DerivingVia #-}
+    {-# LANGUAGE GeneralisedNewtypeDeriving #-}
+    import Data.Ord -- for Down
+    newtype FloodLevel = MkFL Int
+      deriving stock Show
+      deriving newtype (Ord, Eq, Bounded)
+      deriving (Semigroup, Monoid) via (Supremum (Down FloodLevel))
+  #+end_src
+
+- ~newtype~ deriving is a specialization of doing DV
+
+  #+begin_src haskell
+      deriving newtype (Ord, Eq, Bounded) -- would have been the same that doing the next line
+      deriving (Ord, Eq, Bounded) via Int
+  #+end_src
+
+** Nov 21 | All about `deriving` in GHC
+
+- basic usage
+  #+begin_src haskell
+    module Deriving where
+    data T = MkT Int Bool
+      deriving (Show, Eq) -- instance Show T where show = ...
+  #+end_src
+
+- using a *newtype* Age,
+  we would want to "derive" other typeclasses like Num,
+  in order to use arithmethic operation from that class
+
+- =GeneralizedNewtypeDeriving=
+  "if we are deriving an instance for a class,
+   that is NOT one of the built in one,
+   and we are doing it for a newtype
+   just copy all the definition from the representation type"
+  #+begin_src haskell
+    {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+    newtype Age = MkAge Int
+      deriving (Show, Eq, Num) -- this would ERROR due Num without GeneralizedNewtypeDeriving
+  #+end_src
+
+- =DeriveAnyClass= to derive from an empty typeclass aka with NO METHODS
+  #+begin_src haskell
+    {-# LANGUAGE DeriveAnyClass #-}
+    class C a
+    data T = MkT Int Bool
+      deriving (Show, Eq, C) -- instance C T
+  #+end_src
+
+- =DerivingStrategies= to disambiguate deriving
+  =DeriveGeneric=
+  #+begin_src haskell
+    {-# LANGUAGE DerivingStrategies #-}
+    {-# LANGUAGE DeriveGeneric #-}
+    import Data.Aeson
+    import GHC.Generics -- for FromJSON to work
+    newtype Age = MkAge Int
+      deriving stock (Show, Eq, Generic) -- altenative way of derive with
+      deriving newtype Num
+      deriving anyclass FromJSON
+  #+end_src
+
+- there's a difference whether you derive ~Show~ with stock or newtype
+  - stock - will show "constructor value"
+  - newtype - will show "value"
+
+- =DerivingVia=
+  a direct generalization of DerivingNewtype
+  DN copies all the implementations
+  DV, for any type that his representation is the same, I can do the copying
+
+  #+begin_src haskell
+    import Data.Ord -- for Down
+    newtype Age = MkAge Int
+      deriving Ord via (Down Int) -- take the instance of "Down Int" and copy all the methodsover to work Ord for Age
+      deriving newtype (Show, Num) -- this
+      deriving (Show, Num) via Int -- is the same of this
+  #+end_src
+
+**        | Not all bangs in patterns are BangPatterns
+#+begin_src haskell
+  {-# LANGUAGE BangPatterns #-}
+#+end_src
+
+- /case,let and where/ are lazy by default
+
+#+begin_src haskell
+z = case undefined of  x -> 'y' -- y
+z = case ()        of !x -> 'y' -- y
+z = case undefined of !x -> 'y' -- ERROR
+z = let  y = undefined in () -- ()
+z = let !y = 5 in ()         -- ()
+z = let !y = undefined in () -- ERROR - is NOT a BangPattern
+#+end_src
+
+- It makes the binding strict, but it is NOT a BangPattern
+
+#+begin_src haskell
+  z = let False = True in () -- ()
+  z = let !False = True in () -- runtime ERROR
+  z = !(Just x) = Just undefined in () -- ()
+  z = !(Just !x) = Just undefined in () -- runtime ERROR, !x it IS a BangPattern
+#+end_src
+
 * 10 | AwesomePrelude - Liberating Haskell from data types!
 https://vimeo.com/9351844
 TODO 05:00
@@ -187,12 +362,12 @@ https://www.youtube.com/watch?v=t1e8gqXLbsU
 * 18 | HaskellRank                           | tsoding
   playlist: https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DqjF6qsysxTnx
 ** DONE HackerRank in Haskell
-- interact :: (String -> String) -> IO ()
 - We go from an expression that we can use on the repl to a function. By replacing ($) with (.)
 - Functions: ($) (.) interact words read map sum show tail
 #+begin_src haskell
-main = interact $ show . sum . map read . words
-main = interact $ show . sum . map read . tail . words
+  interact :: (String -> String) -> IO ()
+  main = interact $ show . sum . map read . words
+  main = interact $ show . sum . map read . tail . words
 #+end_src
 ** DONE Grading Students
 - (``) , guards, where, unlines
@@ -223,10 +398,13 @@ map (+ 3)         [0,1,2] -- => [3,4,5]
 - even :: Integral a => a -> Bool
 - odd  :: Integral a => a -> Bool
 ** DONE Between Two Sets
+
 - foldl1, gcd, lcm, takeWhile
 - [1 .. 4]
   [1 ..]
+
 - Imperatively writing in Haskell
+
 #+begin_src haskell
 solve :: [Int] -> [Int] -> Int
 solve = undefined
@@ -234,6 +412,7 @@ solve = undefined
 readIntList :: IO [Int]
 readIntList = do line <- getLine
                  return $ map read $ words line
+
 main = do [n, m] <- readIntList
           as     <- readIntList
           bs     <- readIntList
@@ -243,14 +422,14 @@ main = do [n, m] <- readIntList
 ** DONE Fold
 - "Neutral element" on fold
 #+begin_src haskell
-Import Prelude hiding (foldl) -- Hide!!!
+import Prelude hiding (foldl) -- Hide!!!
 
 foldl :: (a -> b -> a) -> a -> [b] -> a
 foldl f base []     = base
 foldl f base (x:xs) = foldl f (f base x) xs
 
 foldl1 :: (a -> a -> a) -> [a] -> a
-foldl1 f []     = error "basaodka"
+foldl1 f []     = error "basaodka" -- errors on an empty list !!!
 foldl1 f (x:xs) = foldl f x xs
 #+end_src
 ** DONE Playing Basketball with Kangaroo

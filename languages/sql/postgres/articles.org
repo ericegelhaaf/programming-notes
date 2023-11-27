@@ -127,7 +127,8 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
   creating a GIN index around the tsvector()
 
 #+begin_src sql
-  create index idx_fts_post on post
+  create index idx_fts_post
+    on post
     using gin((setweight(to_tsvector(language::regconfig, title), 'A') ||
                setweight(to_tsvector(language::regconfig, content), 'B')));
 

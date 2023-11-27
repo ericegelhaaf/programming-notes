@@ -1,0 +1,223 @@
+- https://en.wikipedia.org/wiki/Elm_(programming_language)
+  - no higher kind polymorphism
+    - no generic map, there is List.map and Set.map
+  - no typeclass support
+  - high boilerplate code
+
+- "Successors"
+  - 1.9k https://github.com/roc-lang/roc
+    https://www.roc-lang.org/tutorial
+  - (fork) https://gren-lang.org/
+
+- https://github.com/sporto/awesome-elm
+- https://github.com/rofrol/awesome-elm-gamedev
+
+* language
+
+#+begin_src
+  subscription -(Msg)-> update --(Model)-> view
+         ^              ^    ¦              ¦
+         ¦              ¦    ¦              ¦
+      (Model)        (Msg)  (Cmd Msg)   (Html Msg)
+         ¦              ¦    ¦              ¦
+         ¦              ¦    v              v
+  ============================================
+                    RUNTIME
+#+end_src
+
+
+https://package.elm-lang.org/packages/elm/browser/latest/Browser
+#+begin_src elm
+
+main          : Program () Model Msg             -- 1st param for JS interop
+
+-- Browser.sandbox - cannot communicate with the outside world
+init          : model
+view          : model -> Html msg
+update        : msg -> model -> model
+
+-- Browser.element - manages an HTML element managed by Elm
+init          : flags -> (model, Cmd msg) -- !
+view          : model -> Html msg
+update        : msg -> model -> (model, Cmd msg) -- !
+subscriptions : model -> Sub msg
+
+-- Browser.document - body/script var app = Elm.Main.init()
+-- type alias Document msg =
+--   { title : String
+--   , body  : List (Html msg)
+--   }
+init          : flags -> (model, Cmd msg)
+view          : model -> Document msg
+update        : msg -> model -> (model, Cmd msg)
+subscriptions : model -> Sub msg
+
+-- Browser.application - manages url changes, avoid new HTMl when url changes
+-- type UrlRequest =
+--   = Internal Url.Url
+--   | External String
+init          : flags -> Url -> Key -> (model, Cmd msg) -- Url = current url in browser
+view          : model -> Document msg
+update        : msg -> model -> (model, Cmd msg)
+subscriptions : model -> Sub msg
+onUrlRequest  : UrlRequest -> msg -- intercepts <a> clicks, msg goes to update
+onUrlChange   : Url -> msg -- when the Url changes, msg goes to update
+
+#+end_src
+
+** functions https://package.elm-lang.org/packages/elm/core/latest/
+-- if decoding succeds, use fn to build the result
+| Json.Decode                |                                                 |
+|----------------------------+-------------------------------------------------|
+| .succeed                   | (? -> a) -> Decoder a                           |
+| .required                  | String -> Decoder a -> Decoder b                |
+| .optional                  | String -> Decoder a -> a -> Decoder b           |
+| .nullable                  | Decoder a -> a -> Maybe a                       |
+| .int                       | Decoder Int                                     |
+| .string                    | Decoder String                                  |
+| .bool                      | Decoder Bool                                    |
+| .Timestamp.iso8601Decoder  |                                                 |
+| .decodeString              | Decoder a -> String -> a                        |
+| .list                      | Decoder a -> Decoder (List a)                   |
+| .field                     | String -> Decoder a -> Decoder a                |
+|----------------------------+-------------------------------------------------|
+| List.head                  | List a -> Maybe a                               |
+| List.reverse               |                                                 |
+| List.singleton             | a -> List a                                     |
+| List.map                   |                                                 |
+| List.member                |                                                 |
+| List.filter                |                                                 |
+|----------------------------+-------------------------------------------------|
+| String.fromInt             |                                                 |
+| String.toUpper             |                                                 |
+| String.length              |                                                 |
+| String.toInt               | String -> Maybe Int                             |
+| String.concat              | List String -> String                           |
+| String.lines               | String -> List String                           |
+|----------------------------+-------------------------------------------------|
+| Http.getString             | String -> Request String                        |
+| Http.send                  | (Result Error a -> msg) -> Request a -> Cmd msg |
+| Http.CompletedLoadFeed     | Result Error String                             |
+| Http.get                   | Decoder a -> String -> a                        |
+| Http.post                  | String -> Body -> Decoder a -> Request a        |
+| Http.emptyBody             | Body                                            |
+|----------------------------+-------------------------------------------------|
+| Time.Posix                 |                                                 |
+| Random.generate            |                                                 |
+| Debug.todo                 | String -> undefined?                            |
+| Browser.Navigation.load    | loads all new HTMl, drops model                 |
+| Browser.Navigation.pushUrl | changes url, but does NOT load a new HTMl       |
+|----------------------------+-------------------------------------------------|
+** operators
+| op   | signature                              | describes...                                               |
+|------+----------------------------------------+------------------------------------------------------------|
+| (¦>) | a -> (a -> b) -> b                     | the _flow of data_, main advantage over nested parentheses |
+| (<¦) | (a -> b) -> a -> b                     | second argument INTO the first                             |
+| (>>) | (b -> c) -> (a -> b) -> (a -> c)       | _function compositions_, indepedent of the data flow       |
+| (<<) | (a -> b) -> (b -> c) -> (a -> c)       |                                                            |
+| (++) | appendable -> appendable -> appendable |                                                            |
+|------+----------------------------------------+------------------------------------------------------------|
+** attributes/events (1st argument)
+
+https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes
+https://package.elm-lang.org/packages/elm/html/latest/Html-Events
+
+|-----------------------------+---------------------------------------------|
+| Html.Events.on              | String -> Decoder msg -> Html.Attribute msg |
+| Html.Events.onClick         | msg -> Attribute msg                        |
+| Html.Events.onInput         | (String -> msg) -> Attribute msg            |
+|-----------------------------+---------------------------------------------|
+| Html.Attributes.placeholder | String -> Attribute msg                     |
+| Html.Attributes.value       | String -> Attribute msg                     |
+| Html.Attributes.class       | String -> Attribute msg                     |
+|-----------------------------+---------------------------------------------|
+| Browser.Events.onMouseMove  | Decoder msg -> Sub msg                      |
+|-----------------------------+---------------------------------------------|
+
+** module / import
+
+#+begin_src elm
+module Page.Register exposing (Msg, init, subscription)
+
+-- on *module* exposing a type could only be either
+-- - Cred(..) -- all of it
+-- - Cred     -- nothing of it
+
+import Time -- ONLY makes the namespace available
+import Article.Slug exposing (Slug) -- get things into scope
+import Page.NotFound as NotFond -- alias
+import Html exposing (..) -- imports into scope ALL on Html
+#+end_src
+
+** types
+
+Cmd a
+Cmd.none
+
+
+#+begin_src elm
+  type Maybe a = Just a | Nothing
+  type Result a b = Ok a | Err b
+  type Never = OneMore Never -- even in the module where is defined, you cannot make one
+#+end_src
+
+Int, Bool
+
+** types complex
+
+|------------------+-------------------+----------+------------------------+---------------|
+| instantiate      | type              | access   | update                 | destructuring |
+|------------------+-------------------+----------+------------------------+---------------|
+| [1,2,3]          | List Int          |          |                        |               |
+| { name = "foo" } | { name : String } | rec.name | { rec ¦ name = "bar" } | { foo, bar }  |
+| (1, "foo")       | ( Int, String )   |          |                        | ( foo, bar )  |
+|------------------+-------------------+----------+------------------------+---------------|
+
+- Tuples
+  - have a 3 elements MAXIMUM
+
+* dependencies
+- downloaded globally at =$HOME=, NOT per project
+- elm.json
+  |--------------------+-------------|
+  | source-directories | ["src"]     |
+  | type               | application |
+  | elm-version        | 0.19.0      |
+  | dependencies       |             |
+  | test-dependencies  |             |
+  |--------------------+-------------|
+* executable
+|-------------------------------+----------------------------------------------------------|
+| init                          |                                                          |
+| install elm/browser           |                                                          |
+| make Main.elm                 | outputs a .html                                 |
+| make Main.elm --output elm.js | compile, point it at entrypoint file optional --optimize |
+| repl                          |                                                          |
+|-------------------------------+----------------------------------------------------------|
+* coding/editors
+|-------------+----------------------------------------------------|
+| lsp         | https://github.com/elm-tooling/elm-language-server |
+| emacs test  | https://github.com/juanedi/elm-test-runner         |
+| formatter   | https://github.com/avh4/elm-format                 |
+| review      | https://github.com/jfmengels/elm-review            |
+| live reload | https://github.com/wking-io/elm-live               |
+|-------------+----------------------------------------------------|
+* codebases
+- main site written on it https://github.com/elm/elm-lang.org/
+- Example spa https://github.com/rtfeldman/elm-spa-example/
+- todoapp https://github.com/evancz/elm-todomvc/blob/master/src/Main.elm
+- https://elm-lang.org/examples
+  https://github.com/dwyl/learn-elm/
+* libraries
+|---------+-------------------------------------------------------+----|
+| testing | https://github.com/elm-explorations/test              | 23 |
+|---------+-------------------------------------------------------+----|
+| webgl   | https://github.com/elm-explorations/webgl             | 21 |
+| json    | https://github.com/NoRedInk/elm-json-decode-pipeline/ | 21 |
+| plots   | https://github.com/terezka/elm-charts                 | 21 |
+| html    | https://github.com/tesk9/accessible-html              | 23 |
+|---------+-------------------------------------------------------+----|
+| ui      | https://github.com/mdgriffith/elm-ui                  | 21 |
+| ui      | https://github.com/NoRedInk/noredink-ui               | 23 |
+| css     | https://github.com/rtfeldman/elm-css                  | 22 |
+|---------+-------------------------------------------------------+----|

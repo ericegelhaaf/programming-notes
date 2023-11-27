@@ -4291,31 +4291,30 @@
    #+end_src
  - tsconfig.json (jsx: "react-jsx" OR jsx: "react-jsxdev")
    #+begin_src json
-   {
-     "extends": "./tsconfig.paths.json",
-     "compilerOptions": {
-       "allowJs": true,
-       "allowSyntheticDefaultImports": true,
-       "baseUrl": ".",
-       "esModuleInterop": true,
-       "forceConsistentCasingInFileNames": true,
-       "isolatedModules": true,
-       "jsx": "react-jsx",
-       "lib": [ "DOM", "DOM.Iterable", "ESNext",
-       "module": "esnext",
-       "moduleResolution": "node",
-       "noEmit": true,
-       "noFallthroughCasesInSwitch": true,
-       "resolveJsonModule": true,
-       "skipLibCheck": true,
-       "strict": true,
-       "target": "es5",
-       ],
-     },
-     "include": [
-       "src"
-     ]
-   }
+     {
+       "extends": "./tsconfig.paths.json",
+       "compilerOptions": {
+         "allowJs": true,
+         "allowSyntheticDefaultImports": true,
+         "baseUrl": ".",
+         "esModuleInterop": true,
+         "forceConsistentCasingInFileNames": true,
+         "isolatedModules": true,
+         "jsx": "react-jsx",
+         "lib": [ "DOM", "DOM.Iterable", "ESNext"],
+         "module": "esnext",
+         "moduleResolution": "node",
+         "noEmit": true,
+         "noFallthroughCasesInSwitch": true,
+         "resolveJsonModule": true,
+         "skipLibCheck": true,
+         "strict": true,
+         "target": "es5",
+       },
+       "include": [
+         "src"
+       ]
+     }
    #+end_src
 *** Cypress & Testing Library
  - Part of the contrived config is due Jest has colliding methods (such as expect)

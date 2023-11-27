@@ -1,44 +1,4 @@
-* functions
-https://www.postgresql.org/docs/9.6/functions-datetime.html
-|----------------------------------+-----------------------------------------------------------------|
-| format()                         | like printf                                                     |
-| extract()                        | gets a number                                                   |
-| to_char()                        | gets a string                                                   |
-| coalesce()                       | returns teh first argument that is NOT null                     |
-| cast(..as..)                     | specifies how to perform a conversion                           |
-| generate_series(start,stop,step) | a set returning function, returns a set of timestamps           |
-| string_agg()                     |                                                                 |
-| generate_series(from, to)        |                                                                 |
-| count()                          |                                                                 |
-| avg()                            |                                                                 |
-| rollup(NRCOL)                    | group by rollup()                                               |
-| sum(COL)                         |                                                                 |
-| percentile_dist(NUM)             | percentile number 0-1, returns int                              |
-| percentile_cont(NUM)             | percentile number 0-1, returns float                            |
-| rank(NUM)                        | suppose there was a NUM in it, which rank/index will it be?     |
-|----------------------------------+-----------------------------------------------------------------|
-| to_tsvector(LANG?, STR)          | optional LANG, will ignore stopwords                            |
-| to_tsquery(LANG?, STR)           | optional LANG, supports boolean operators, startwith (:*)       |
-| ts_rank(TSV,TSQ)                 | returns a number representing the relevancey of the document    |
-| setweight()                      | sets a weight to a tsvector, A B C or D                         |
-| tsvector_update_trigger()        | to easily denormalize data from the same table                  |
-| tsvector_update_trigger_column() | to easily denormalize data from the same table                  |
-|----------------------------------+-----------------------------------------------------------------|
-| similarity(S1,S2)                | E: pg_trgm, returns a 0-1 number of how similars the string are |
-| unaccent(S)                      | E: unaccent                                                     |
-|----------------------------------+-----------------------------------------------------------------|
-* extensions
-|------------+----------------------------------------------|
-| pg_trgm    | support for trigram, aka misspelling support |
-| unaccent   | removes accents from string                  |
-| btree_gist | provides operators                           |
-| citext     | case insensitive text                        |
-|------------+----------------------------------------------|
-* list enabled extensions/plugins (\dx)
-on supabase
 #+begin_src
- ~> \dx
-                                            List of installed extensions
         Name        │ Version │   Schema   │                              Description
 ════════════════════╪═════════╪════════════╪════════════════════════════════════════════════════════════════════════
  pg_graphql         │ 1.2.3   │ graphql    │ pg_graphql: GraphQL support
@@ -51,26 +11,84 @@ on supabase
  uuid-ossp          │ 1.1     │ extensions │ generate universally unique identifiers (UUIDs)
 (8 rows)
 #+end_src
-* list sequences
-https://soft-builder.com/how-to-list-sequences-in-postgresql-database/
-#+begin_src sql
-# select sequence_schema, sequence_name from information_schema.sequences order by sequence_name;
- sequence_schema │   sequence_name
-═════════════════╪════════════════════
- public          │ dns_data_id_seq
- public          │ dns_error_id_seq
- public          │ domains_id_seq
- public          │ nameservers_id_seq
-#+end_src
-* add COLUMN into table
-https://www.commandprompt.com/education/how-to-add-columns-to-a-table-in-postgresql/
-#+begin_src sql
-  ALTER TABLE nameservers ADD COLUMN is_alive boolean DEFAULT true;
-  ALTER TABLE nameservers DROP COLUMN is_alive;
 
-  ALTER TABLE nameservers ADD COLUMN timeouts integer DEFAULT 0;
-  ALTER TABLE nameservers ADD COLUMN enabled boolean DEFAULT true;
-#+end_src
+* functions
+https://www.postgresql.org/docs/9.6/functions-datetime.html
+|-------------------------------------+-------------------------------------------------------------------------------------------------|
+| format()                            | like printf                                                                                     |
+| coalesce()                          | returns teh first argument that is NOT null                                                     |
+| cast(..as..)                        | specifies how to perform a conversion                                                           |
+| string_agg()                        |                                                                                                 |
+| count()                             |                                                                                                 |
+| avg()                               |                                                                                                 |
+| rollup(NRCOL)                       | group by rollup()                                                                               |
+| sum(COL)                            |                                                                                                 |
+| percentile_dist(NUM)                | percentile number 0-1, returns int                                                              |
+| percentile_cont(NUM)                | percentile number 0-1, returns float                                                            |
+| rank(NUM)                           | suppose there was a NUM in it, which rank/index will it be?                                     |
+| left(STR,N)                         | extracts the first N characters from STR                                                        |
+| format(FMTSTR,...)                  | aka printf                                                                                      |
+|-------------------------------------+-------------------------------------------------------------------------------------------------|
+| generate_series(date,date,interval) | F: a set returning function, returns a set of timestamps                                        |
+| generate_series(date,date)          |                                                                                                 |
+| extract(FMT from date)              | S: gets a number, from a date                                                                   |
+| to_char(DATE,FMT)                   | S: gets a string, from a date                                                                   |
+|-------------------------------------+-------------------------------------------------------------------------------------------------|
+| to_tsvector(LANG?, STR)             | optional LANG, will ignore stopwords                                                            |
+| to_tsquery(LANG?, STR)              | optional LANG, supports boolean operators, startwith (:*)                                       |
+| plainto_tsquery(LANG?, STR)         | optional LANG, automomatically adds an "&" operator between words                               |
+| phraseto_tsquery(LANG?, STR)        | optional LANG, inserts "distances" between the words, so they should appear in the given order  |
+| plainto_tsquery                     | returns a number representing the relevancey of the document                                    |
+| setweight()                         | sets a weight to a tsvector, A B C or D                                                         |
+| tsvector_update_trigger()           | to easily keep a tsvector column upto date with the rest of the table, does not support weights |
+| tsvector_update_trigger_column()    | to easily keep a tsvector column upto date with the rest of the table, does not support weights |
+| ts_rank(weight[]?, tsV, tsQ)        | considers the frequency of terms and weights (0.1/0.2/0.4/1 respectively for D/C/B/A)           |
+| ts_rank_cd(weight[]?, tsV, tsQ)     | "_cd" for "coverage distance", also considers the position                                      |
+| ¦¦                                  | concatenation operator, works on tsvectors                                                      |
+| &&, ¦¦                              | and/or operators, works with tsqueries                                                          |
+| <tsvector> @@ <tsquery>             | returns a boolean                                                                               |
+| strip(tsV)                          | removes positions from tsvectors, faster & light                                                |
+|-------------------------------------+-------------------------------------------------------------------------------------------------|
+| similarity(S1,S2)                   | E: pg_trgm, returns a 0-1 number of how similars the string are                                 |
+| unaccent(S)                         | E: unaccent                                                                                     |
+|-------------------------------------+-------------------------------------------------------------------------------------------------|
+* extensions
+|------------+----------------------------------------------|
+| pg_trgm    | support for trigram, aka misspelling support |
+| unaccent   | removes accents from string                  |
+| btree_gist | provides operators                           |
+| citext     | case insensitive text                        |
+|------------+----------------------------------------------|
+* queries
+
+|----------------------------+------------------------------------------------------------------------------------------------|
+| list FTS configurations    | SELECT cfgname FROM pg_ts_config                                                               |
+| default FTS configuration  | SHOW default_text_search_config                                                                |
+| set FTS configuration      | ALTER DATABASE dbname SET default_text_search_config = 'pg_catalog.english'                    |
+| describe FTS configuration | \dF+ spanish                                                                                   |
+|----------------------------+------------------------------------------------------------------------------------------------|
+| list enabled extension     | \dx                                                                                            |
+| list sequences             | SELECT sequence_schema, sequence_name FROM information_schema.sequences ORDER BY sequence_name |
+| add column                 | ALTER TABLE tbname ADD COLUMN colname BOOLEAN DEFAULT true;                                    |
+| delete column              | ALTER TABLE tbame DROP COLUMN colname                                                          |
+|----------------------------+------------------------------------------------------------------------------------------------|
+| newuser                    | CREATE USER user_name WITH ENCRYPTED PASSWORD 'mypassword'                                     |
+|                            | GRANT ALL PRIVILEGES ON DATABASE sample_db TO user_name;                                       |
+|                            | GRANT INSERT,SELECT ON some_table TO user_name;                                                |
+|----------------------------+------------------------------------------------------------------------------------------------|
+
+- new user https://ubiq.co/database-blog/create-user-postgresql/
+- add columnt https://www.commandprompt.com/education/how-to-add-columns-to-a-table-in-postgresql/
+- list sequences https://soft-builder.com/how-to-list-sequences-in-postgresql-database/
+- fts
+  - doc https://www.postgresql.org/docs/current/functions-textsearch.html
+  - doc https://www.postgresql.org/docs/current/textsearch-dictionaries.html
+  - doc https://www.postgresql.org/docs/current/textsearch-configuration.html
+  - importing a dictionary
+    - .affix and .dict on share/tsearch_data
+    - .sql and .control on share/extension
+    - CREATE EXTENSION hunspell_en_us SCHEMA pg_catalog;
+
 * non default port, Selinux
 - Listen on non default port (5433)
 #+begin_src
@@ -92,11 +110,3 @@ semodule -i mypol.pp
   --port 5432
   --unit=postgresql@recon
   --initdb
-* new user
-  https://ubiq.co/database-blog/create-user-postgresql/
-#+begin_src sql
-CREATE USER user_name WITH ENCRYPTED PASSWORD 'mypassword';
-GRANT ALL PRIVILEGES ON DATABASE sample_db TO user_name;
-GRANT INSERT,SELECT ON some_table TO user_name;
-#+end_src
-

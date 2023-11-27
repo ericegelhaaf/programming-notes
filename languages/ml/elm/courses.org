@@ -1,0 +1,945 @@
+* 18 | Introduction to Elm v2 | Richard Feldman
+|----------------------+----------------------------------------------------------------------|
+| same webapp,         | https://github.com/gothinkster/realworld                             |
+| build with different | https://www.realworld.how/                                           |
+| backend/frontends    | https://github.com/jeko2000/tiny-routes-realworld-example-app        |
+|----------------------+----------------------------------------------------------------------|
+| css in elm           | https://github.com/rtfeldman/elm-css                                 |
+|----------------------+----------------------------------------------------------------------|
+| example spa codebase | https://github.com/rtfeldman/elm-spa-example/                        |
+|----------------------+----------------------------------------------------------------------|
+| onInput              | https://www.w3schools.com/jsref/event_oninput.asp                    |
+|----------------------+----------------------------------------------------------------------|
+| unsound typescript   | https://www.typescriptlang.org/docs/handbook/type-compatibility.html |
+|----------------------+----------------------------------------------------------------------|
+| some JS library      | https://github.com/localForage/localForage                           |
+|----------------------+----------------------------------------------------------------------|
+** 01 Course Introduction
+
+- Elm compiles to JS
+- Elm does the same thing that Babel/TS does
+
+- Costs
+  - fewer web APIs have first-class support, there is a period of lag
+
+- Benefits
+  - small bundle size
+  - less exceptions, "no runtime exceptions", not zero
+  - cohesive ecosystem solution, provides a good integration of these things needed for a webapp
+    |-----------+--------------------------------------------------------------+----------------|
+    |           | example technologies                                         | in elm         |
+    |-----------+--------------------------------------------------------------+----------------|
+    | dialect   | js, ts, babel, flow                                          | elm            |
+    | ui        | angular, react, vue, ember.js                                | view function  |
+    | state     | redux, mobx, relay, observables?                             | model          |
+    | async     | redux sagas, redux thunks, redux promises, redux observables | update         |
+    | utilities | lodash, jquery, immutable.js, rambda                         | core libraries |
+    | packages  | npm, yarn, dependable types, flow types, es6 modules         | elm install    |
+    |-----------+--------------------------------------------------------------+----------------|
+
+- Workshop based on https://github.com/gothinkster/realworld
+- Most of benefits come with applications that are big and serious and have to be maintained for a long time.
+- Main.elm -> elm.js
+
+- You can do CSS in elm https://github.com/rtfeldman/elm-css
+
+- import into index.html for incremental adoption
+  #+begin_src html
+    <head>
+      <link rel="stylesheet" href="main.css" />
+      <script src="elm.js"></script>
+      <script>
+        Elm.Main.init({
+        node: document.getElementById("app")
+        });
+      </script>
+    </head>
+  #+end_src
+
+** 02 Elm Introduction
+
+- UI Example: a "leaf" search. The text should say
+  - "Your search returned 2 leaves" OR
+  - "Your search returned 1 leaf"
+
+- in js
+  #+begin_src javascript
+    let pluralize =
+        (singular, plural, quantity) => {
+          if (quantity === 1) {
+            return singular;
+          } else {
+            return plural;
+          }
+        };
+
+    console.log(pluralize("leaf", "leaves", 1));
+  #+end_src
+
+- problem with this is that OLD browsers don't know about *let* or *arrow functions*
+  so babel will compile it to
+  #+begin_src javascript
+    var pluralize =
+        function pluralize(singular, plural, quantity) {
+          if (quantity === 1) {
+            return singular;
+          } else {
+            return plural;
+          };
+        };
+  #+end_src
+
+- in elm
+  #+begin_src haskell
+    pluralize singular plural quantity =
+      if quantity == 1
+      then singular
+      else plural -- required else
+
+    main =
+      text (pluralize "leaf" "leaves" 1) -- instead of console.log()
+  #+end_src
+
+- in plain JS if you make a typo and do "return" of an undefined variable on an if,
+  it will be a ~runtime exception~
+
+- Elm uses a VirtualDOM (DOM = Document Object Model)
+
+- The DOM has a concept of a *text* node https://developer.mozilla.org/en-US/docs/Web/API/Text
+  which represents the inner text/content of a html tag
+
+- In Elm, we could represent a DOM, with functions, where their
+  1st argument is their attributes
+  2nd argument is their children
+
+- In Elm code, it looks like a DSL
+
+  #+begin_src elm
+    ul [ class "languages" ]
+        [ li [] [ text "Elm" ]
+        , li [] [ text "JS" ]
+        ]
+  #+end_src
+
+** 03 Manipulating Values
+
+- let, String.fromInt, (++), List.map, String.toUpper
+
+#+begin_src haskell
+List.map (\s -> String.toUpper str ++ "!") [ "pow", "zap" ]
+List.map (pluralize "leaf" "leaves") [ 0, 1, 2 ] -- partially applied
+#+end_src
+
+- Elm lists compile to an immutable linked list, not a JS Array.
+
+- Elm mostly targets/compiles mostly to ES3
+
+- you can move code into a ./src/ directory
+
+** 04 Interaction
+
+- records
+  - no prototypes
+  - no *this*
+  - no mutating
+
+|---------+-------------+---------------|
+|         | iteration   | mixed entries |
+|---------+-------------+---------------|
+| lists   | =supported= | unsupported   |
+| records | unsupported | =supported=   |
+|---------+-------------+---------------|
+
+- Model is the application state, it's a record
+
+- To send a Msg, specify it on a onClick handler on view
+
+  #+begin_src elm
+    view model =
+        button
+            [
+             onClick -- just another attribute, like "class"
+                 { description = "ClickedTag"
+                 , data = "elm"
+                 } -- it will send this Msg to update
+            ]
+            [ text "elm" ]
+  #+end_src
+
+*** Exercise: Main.elm
+
+- $ elm install elm/browser
+
+#+begin_src elm
+module Main exposing (main)
+
+import Article
+import Browser
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
+
+init =
+    { tags = Article.tags
+    , selectedTag = "elm"
+    , allArticles = Article.feed
+    }
+
+update msg model =
+  if msg.description == "ClickedTag"
+  then { model | selectedTag = msg.data }
+  else model
+
+main =
+  Browser.sandbox { init = init, view = view, update = update }
+#+end_src
+
+#+name: view
+#+begin_src elm
+view model =
+  let
+    articles =
+      List.filter (\article -> List.member model.selectedTag article.tags)
+        model.allArticles
+    feed =
+      List.map viewArticle articles
+  in
+  div [ class "home-page" ]
+      [ viewBanner
+      , div [ class "container page" ]
+            [ div [ class "row" ]
+                  [ div [ class "col-md-9" ] feed
+                  , div [ class "col-md-3" ]
+                        [ div [class "sidebar" ]
+                              [ p [] [ text "Popular Tags" ]
+                              , viewTags model
+                              ]
+                        ]
+                  ]
+            ]
+      ]
+
+viewArticle article =
+  div [ class "article-preview" ]
+      [ h1   [] [ text article.title ]
+      , p    [] [ text article.description ]
+      , span [] [ text "Read more..." ]
+      ]
+
+viewbanner =
+  div [ class "banner" ]
+      [ div [ class "container" ]
+            [ h1 [ class "logo-font" ] [ text "conduit" ]
+            , p [] [ text "A place to share your knowledge" ]
+            ]
+      ]
+
+viewTag selectedTagName tagName =
+  let
+    otherClass =
+      if tagName == selectedTagName
+      then "tag-selected"
+      else "tag-default"
+  in
+  button
+    [ class ("tag-pill " ++ otherClass)
+    , onClick { description = "ClickedTag", data = tagName }
+    ]
+    [ text tagName ]
+
+viewTags model =
+  div [] (List.map (viewTag model.selectedTag) model)
+#+end_src
+
+
+*** Article.elm
+
+#+begin_src elm
+module Article exposing (feed, tags)
+
+tags =
+     [ "elm"
+     , "fun"
+     , "programming"
+     , "dragons"
+     ]
+
+feed =
+     [ { title = "Elm is fun!", description = "Elm", body = "I've really" }
+     , { title = "Who says undefined isn't a function anyway", description = "", body = "" }
+     , { title = "This compiler is pretty neat", description = "Elm", body = "" }
+     , { title = "Are dragons real?", description = "dragons", body = "" }
+     ]
+#+end_src
+
+** 05 Type Annotations      | (:)
+
+- Annotations are done, like Haskell, but with (:) instead of (::)
+
+ #+begin_src elm
+username : String
+username = "Adam"
+
+names : List String -- "List" is a parametrized type
+names = ["Sam", "Casey", "Pat"]
+
+String.length : String -> Int -- function
+searchResult : { name : String, stars : Int } -- record
+  #+end_src
+
+- Alias
+  #+begin_src elm
+    type alias Article =
+      { title : String
+      , tags : List String
+      , body : String
+      }
+    type alias Model =
+      { selectedTag : String
+      , articles : List Article
+      }
+    type alias Msg =
+        { description : String
+        , data : String
+        }
+  #+end_src
+
+- If you see on a function signature 2 types that are the same
+  it might be a signal that is something that you might get confused to:
+  * pass instead 1 record
+
+** 06 Custom Types          | type
+
+- =Redux= is based on the Elm architecture
+- =React= attribute *onChange* is called like that due devs didn't like the name *onInput*
+
+- enumeration aka sum types, union types, ADTs, descriminated unions
+
+  #+begin_src elm
+    type Tab = -- a brand new type
+      YourFeed | GlobalFed | TagFeed -- variants
+      -- no deriving, but they can be compared
+  #+end_src
+
+- containers, aka type constructors
+
+  #+begin_src elm
+    type Tab
+        = YourFeed
+        | GlobalFeed
+        | TagFeed String
+  #+end_src
+
+- It is more common to use an union type instead of a record for *Msg*
+
+  #+begin_src elm
+    type Msg
+        = ClickedTag String
+        | ClickedPage Int
+  #+end_src
+
+** 07 Maybe                 | (|>)
+
+- Pipeline style
+
+#+begin_src elm
+[ 2, 4, 6 ]
+  |> List.filter (< 5)
+  |> List.reverse
+  |> List.map negate
+  |> List.head
+#+end_src
+
+** 08 Decoding JSON         | Decode
+
+- Records
+
+  - when creating a *type alias* of a record
+    it creates a Nth argument ~constructor~ function
+    for each Nth field
+
+- Decoding
+
+  - decodeString : ? -> String -> Result ?
+    decodeString Json.Decode.int "3"
+
+  - to decode actual jsons you need to declare a =Decoder=
+    that specifies the schema
+    #+begin_src elm
+      type alias User =
+          { id : Int
+          , name : Maybe String
+          , email : String
+          }
+
+      user : Decoder User
+      user =
+          Json.Decode.succeed User
+              |> required "user_id" int
+              |> required "name" (nullable string)
+              |> optional "email" string "me@foo.com"
+    #+end_src
+
+- You might prefer, to have an intermediate record type alias
+  that will be "pessimistic" in considering all fields "nullable"
+  and then solve those.
+
+- in =Typescript=
+  https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+  #+begin_src
+    TypeScript’s type system allows certain operations that can’t be
+    known at compile-time to be safe.
+
+    When a type system has this property, it is said to not be
+    “sound”.
+  #+end_src
+
+** 09 Talking to Servers    | Cmd, Http
+
+Tuples
+ - have a 3 elements MAXIMUM
+
+*** Commands & Randomness
+
+ - Introduce a new capability to ~update~
+   A second thing that the *Elm Runtime* can say to ~update~
+   A "Cmd Msg" send from ~update~ to ER.
+   For which ~update~ will return a tuple (Cmd,Model)+
+   A description of something you want done. Not a side effect.
+ - Example
+   #+begin_src elm
+     pickGreeting : List String -> Cmd Msg -- Command
+   #+end_src
+
+*** Elm functions
+
+  - are pure
+  - have no side-effects
+  - have ~managed effects~, any side-effect has to be done through commands
+
+*** HTTP
+
+- Type
+  #+begin_src elm
+    type Msg
+        = SubmittedForm
+        | EnteredEmail String
+        | EnteredUsername String
+        | EnteredPassword String
+        | CompletedRegister (Result Http.Error Viewer)
+        | GotSession Session
+  #+end_src
+
+- GET - we need to get a Request and then convert it to a Cmd
+
+  #+begin_src elm
+    Http.getString "/feed?tag=happiness"
+         |> Http.send CompletedLoadFeed
+  #+end_src
+
+- POST
+  #+begin_src elm
+    let
+        requestBody : Http.Body
+        requestBody =
+            encodeJsonBody model.form
+
+        responseDecoder : Decoder Viewer
+        responseDecoder =
+            Decode.field "user" Viewer.decoder
+
+        request : Http.Request Viewer
+        request =
+            Http.post "/api/users" requestBody responseDecoder
+
+        cmd : Cmd Msg
+        cmd =
+            Http.send CompletedRegister request
+    in
+        ({ model | problems = [] }, cmd)
+  #+end_src
+
+** 10 Talking to Javascript | Sub, on, port
+
+- ~on~ is the general, more flexible version of onClick/onInput/...
+  the decoder argument, decodes an event object from JS
+  you can use the same JSON decoder interface
+  #+begin_src elm
+    div [ on "mousemove" mousePointDecoder ] []
+  #+end_src
+
+- Subscriptions:
+  - are another way to send messages from the *Elm Runtime* to *update*
+  - are essentially event listeners, that are global.
+    Eg: mouse move, based on a timer, or on a websocket.
+  - It allows us to not flood *update* with Msg's we don't care about
+    Sub.none
+  - Example
+    #+begin_src elm
+      -- Sub stands for "subscription"
+      Browser.onMouseMove : Decoder msg -> Sub msg
+    #+end_src
+
+- Guarantees
+  - we keep our guarantees of purity and no side-effects
+    while communicating with JS
+    by using a client/server communication model, like with Cmd/Sub
+
+- [] is an "List a", with an ~unbound~ type variable
+
+#+begin_src elm
+div [ onClick Toggle ] [] : Html Msg
+
+-- doesn' do event handling
+-- doesn't produce anything o user input
+img [ src "logo.png" ] [] : Html msg
+#+end_src
+
+- Sending data to JS - "fire and forget"
+  - *port* they keyword to talk to javascript
+    Written before *module* and before any function signature we want Elm to generate for us.
+    We don't write the definition of the function defined with it.
+    Elm will write it for us.
+    We only write the signature.
+    #+begin_src elm
+      -- Maybe because JS can receive a null
+      port storeSession : Maybe String -> Cmd msg
+    #+end_src
+
+- Receiving data from JS
+  Elm also writes the implementation for us.
+  We get a String from Javascript, that we are going to convert to *msg*
+  #+begin_src elm
+    port onSessionChange : (String -> msg) -> Sub msg
+  #+end_src
+
+- It is really important design our app to have only
+  1 *source of truth* for the data (aka 1 owner of the state)
+
+*** Example: using JS library localForage
+
+- source https://github.com/localForage/localForage
+
+- general usage
+  #+begin_src javascript
+    localForage.getItem("key", function(val) {/*...*/});
+    localForage.setItem("key", "val", function() {/*...*/});
+  #+end_src
+
+- index.html more detailed
+  #+begin_src javascript
+    localforage.getItem("session", function(err, session) {
+      var app = Elm.Main.init({flags: session}); // initial session value
+      app.ports.storedSession.subscribe(function(newSession) { // storedSession = name on Elm
+        localforage.setItem("session", newSessin, function() {
+          app.ports.onSessionChange.send(newSession); // onSessionChange = name on Elm
+        });
+      });
+    });
+  #+end_src
+
+#+begin_src elm
+port storeSession : Maybe String -> Cmd msg
+
+sendSessionToJavascript : Maybe String -> Cmd msg
+sendSessionToJavascript maybeAuthenticationToken =
+    storeSession maybeAuthenticationToken
+#+end_src
+
+#+begin_src elm
+port onSessionChange : (Value -> msg) Sub msg
+-- value is a JSON value, a JS object
+receiveSessionFromJavascript : (Value -> msg) -> Sub msg
+receiveSessionFromJavascript toMsg =
+    onSessionChange toMsg
+#+end_src
+
+** 11 Wrapping Up
+* 18 | Advanced Elm           | Richard Feldman
+
+|------------------------------+----------------------------------------------------------------|
+| opaque data types            | https://en.wikipedia.org/wiki/Opaque_data_type                 |
+| extensible custom types      | https://allanderek.prose.sh/extensible-custom-types            |
+| extensible custom types WASM | https://dev.to/briancarroll/elm-in-wasm-custom-types-and-extensible-records-15m0 |
+| mars climate orbiter bug     | https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Cause_of_failure |
+| library                      | https://github.com/tesk9/accessible-html                       |
+| talk                         | https://www.youtube.com/watch?v=XpDsk374LDE                    |
+|------------------------------+----------------------------------------------------------------|
+
+** 01 Overview
+
+- Goals
+  * manage ~external data~
+  * ~reuse~ parts of an UI
+  * rule out problems at ~compile time~
+  * ~organize~ and scale Elm applications
+
+** 02 Opaque Types (module exposing)
+
+- Module Boundaries
+  - use encapsulation to enforce *invariants*
+  - NOT *exposing/exporting* constructors of variants
+
+- =Opaque Types=: means that other modules cannot see what's inside the types by themselves.
+  - we can resort to defining a type, even when it doesn't have any data.
+  - just to enforce the invariant
+  - Even something as boring as this:
+    #+begin_src elm
+      type Email = Email
+    #+end_src
+
+- it is common to just return
+  text ""
+  when we don't want to return anything on a case
+
+*** Validated data
+  - Or this that the only way to *submitForm* is with a *Valid* type
+    Which the only way to get it is with a call to *validate*
+    Make the *invariant* enforceable by the types and the compiler
+    #+begin_src elm
+module Validate exposing (Validator, Valid,...)
+type Valid a = Valid a
+fromValid
+    : Valid a
+    -> a
+submitForm
+    : Valid Form
+    -> Http.Request User
+validate
+    : Validator error subject
+    -> subject
+    -> Result (List error) (Valid subject)
+    #+end_src
+
+  - Example: Credentials
+    - if you have a *Cred* that means you are logged in.
+    - Since is the only way to expose a way to get those values.
+    #+begin_src elm
+module Credentials exposing (Cred, login)
+type Cred = ...
+login    : LoginInfo -> http.Request Cred
+follow   :         Bool -> Author -> Html Msg -- without Cred, it wouldn't make sense to follow someone without being logged in
+follow   : Cred -> Bool -> Author -> Html Msg -- Bool, could bring confusion later
+follow   : Cred         -> Author -> Html Msg -- broke down into separate functions
+unfollow : Cred         -> Author -> Html Msg
+    #+end_src
+
+*** When NOT to go Opaque
+  Example:
+  - when I am rendering an author, there are 3 possible states
+  - The only way to render a follow button is to handle 3 states.
+  #+begin_src elm
+module Author exposing
+    ( Author(..) -- non-opaque, exposing all variants
+    , FollowedAuthor -- opaque, the only way to get one of them is by using follow/unfollow/requestFollow/requestUnfollow
+    , UnfollowedAuthor -- opaque, the only way to get one of them is by using follow/unfollow/requestFollow/requestUnfollow
+    )
+type Author
+    = IsFollowing FollowedAuthor
+    | IsNotFollowing UnfollowedAuthor
+    | IsViewer Cred Profile -- currently logged user
+
+type FollowedAuthor
+    = FollowedAuthor Username Profile
+
+type UnfollowedAuthor
+    = UnfollowedAuthor Username Profile
+
+follow : UnfollowedAuthor -> FollowedAuthor
+follow (UnfollowedAuthor uname prof) = FollowedAuthor uname prof
+
+unfollow : FollowedAuthor -> UnfollowedAuthor
+unfolow (FollowedAuthor uname prof) = UnfollowedAuthor uname prof
+
+requestFollow : UnfollowedAuthor -> Cred -> Http.Request Author
+requestFollow (UnfollowedAuthor uname _) cred =
+    requestHelp HttpBuilder.post uname cred
+
+requestUnfollow : FollowedAuthor -> Cred -> http.Request Author
+requestUnfollow (FollowedAuthor uname _) cred =
+    requestHelp HttpBuilder.delete uname cred
+  #+end_src
+*** Exercise
+
+#+begin_src elm
+  -- from
+  type alias Cred =
+        { username : Username
+        , token : String
+        }
+  -- to, we make it opaque, could have kept the record
+  type Cred = Cred Username String
+#+end_src
+
+** 03 Extensible Data
+
+*** Constraint Unification:
+
+  - the process that the compiler uses to type check everything
+  - the process of
+    known facts
+    -> inferred facts
+    -> find (contradictory facts)/(type missmatch)
+  - Elm special constraint type variables, that have special constraints. Must begin with:
+    1) number
+    2) appendable
+    3) comparable
+
+*** Open and Closed =Record= (related to CU)
+
+ |--------+---------------------------------|
+ | closed | type alias Model = { ... }      |
+ | open   | type alias Model r = { r ¦ ...} |
+ |--------+---------------------------------|
+
+- You CANNOT create an open record
+- The only way to get a type that has an open record is
+  1) a .function
+     #+begin_src elm
+       rec.username -- { r | username : a } -> a
+     #+end_src
+  2) modify a record
+     #+begin_src elm
+        (\record -> { record | name = "Li" })
+       -- { r | name : String } -> { r | name : String }
+     #+end_src
+
+*** Why Open =Recods= exists?
+
+1) type inference
+   #+begin_src elm
+     getName : { a | name : String } -> String
+     getname record = record.name
+   #+end_src
+
+2) to write functions that take an ~open record~
+   which means it take ANY record that has:
+   email, firstName, and lastName
+
+     #+begin_src elm
+validate : { r | email : String, firstName : String, lastName : String } -> Blah
+validate { email, firstName, lastName } = -- ...
+     #+end_src
+
+  3) to model data
+     Example: a record representing an Article, that can take different shapes
+     it could have a body, like when reading it
+     or a don't have a body, on the homepage listing of articles
+
+     #+begin_src elm
+-- with open records
+type alias Article a =
+    { a | title : String
+    , tags : List String
+    }
+-- can later add instantiate the missing field,
+-- but is less recommended than in function inputs
+type alias Point a = { a | x : Int, y : Int }
+type alias Point3D = Point { z : Int }
+-- with a type parameter
+type alias Article a =
+    { title : String
+    , tags : List String
+    , extraInfo : a -- !!
+    }
+     #+end_src
+
+*** Extensible =Custom Types=
+
+- There were talks of removing *Open Records*
+  due their issues while compiling to WASM
+
+- Using it as a Custom Type
+
+  #+begin_src elm
+type Preview = Preview -- no extraInfo
+type Full = Full Body
+type Article extraInfo =
+    Article
+        { title : String
+        , tags  : List String
+        }
+        extraInfo
+
+-- still can write function that access it
+title : Article a -> String
+body : Article Full -> Body -- or restrict it to Full
+
+-- examples used on type signatures
+Decoder (Article Preview)
+Decoder (Article Full)
+  #+end_src
+
+** 04 Creating Constraints (phantom types, Never)
+
+*** Units of Measure
+
+Say we have units of measure
+#+begin_src elm
+  type Cm = Cm type In = In
+
+  cm     : Float -> Length Cm
+  inches : Float -> Length In
+#+end_src
+
+- Phantom Type:
+  - we have a type variable, but we don't use it on the variant
+  - we use it as a constraint on the type annotations
+  - otherwise there is no constraint by default
+  - trade-off on flexibility and performance
+
+- We could define an add operation, without a phantom type
+  #+begin_src elm
+    type Length units
+        = Length Float units
+
+    add : Length units -> Length units -> Length units
+    add (Length num1 units) (Length num2 units2) =
+        Length (num1 + num2) units1
+  #+end_src
+
+- we could define an add operation, with a =phantom type=
+  #+begin_src elm
+    type Length units
+        = Length Float
+
+    add : Length units -> Length units -> Length units
+    add (Length num1) (Length num2) =
+        Length (num1 + num2)
+  #+end_src
+
+*** Type Parameter Design
+
+- 3 different forms, to take a list of attributes
+
+|------------------------+------------------------------------------|
+| List (Attribute msg)   | accept any attribute                     |
+| List (Attribute Msg)   | accept only Msg                          |
+| List (Attribute Never) | accept only a list of unbound attributes |
+|------------------------+------------------------------------------|
+
+*** Accessible HTML
+
+- =accessible-html= https://github.com/tesk9/accessible-html
+
+- drop-in replacement library of native Html module
+
+- provides more restricture function signatures,
+  aiming to dissallow non-semantically correct code
+  #+begin_src elm
+-- Html
+p : List (Attribute msg)   -> List (Html msg) -> Html msg
+{- accessible-html, a concrete type that isn't Msg -}
+p : List (Attribute Never) -> List (Html msg) -> Html msg
+   #+end_src
+
+- in order to avoid, code like this which uses Onclick
+  #+begin_src elm
+    -- Html Msg
+    p [ onClick Something ] -- msg -> Attribute msg -- BOUND to the msg attribute it receives
+      [ text "Hi" ]         -- Html msg
+  #+end_src
+
+- while still allowing this, due class returns UNBOUND attributes
+  #+begin_src elm
+    p [ class "neato" ] -- String -> Attribute msg -- msg is an UNBOUND type
+      [ text "Hi" ]
+  #+end_src
+
+*** The =Never= Type
+
+- Used when you want say "please provide me with something that is STILL unbound"
+
+#+begin_src elm
+  type Never = OneMore Never -- even in the module where is defined, you cannot make one
+#+end_src
+
+- Example:
+
+  - tasks in Elm are the idea of chainable commands
+  - perform some sort of effect
+  - Task like Result have a /success type/ and a /fail type/
+  #+begin_src elm
+    Task.perform
+        : (a -> msg)
+        -> Task Never a -- a task not capable of producing errors
+        -> Cmd msg
+  #+end_src
+
+- Example: getViewport
+
+  - gets the current dimensions
+  - it can never fail
+  - but it can return different values, so is a Task
+  #+begin_src elm
+-- getViewPort : Task x Viewport -- error type unbound
+type Msg = ViewportChanged Viewport
+Task.perform ViewportChanged getViewport
+  #+end_src
+
+** 05 Scaling
+
+- order of function arguments
+  - think on how ~partial application~ would affect it
+  - the most important argument first,
+  - aka the less likely to change
+
+- What fits in our heads
+
+  - Split into modules
+
+- Narrowing types, help on debugging
+
+  - You focus your attention on functions that touch/modify the thing you have BUG with
+  - If it is a an issue with the *Model*
+    - can rule out view functions, if it an isue with data
+  - If it is a particular part of the *Model*
+    - can rule out functions that deal with unreleated part of it
+
+- Enforcement arguments, adding arguments to show business dependencies logic
+
+  #+begin_src elm
+     type Author
+         = IsFollowing FollowedAuthor
+         | IsNotFollowing UnfollowedAuthor
+         | IsViewer Cred Profile -- Cred is the enforcement
+
+    followButton :
+        (Cred -> UnfollowedAuthor -> msg)
+        -> Cred
+        -> UnfollowedAuthor
+        -> Html msg
+  #+end_src
+
+- Using modules for modularity
+
+  - The primary purpose of a module is to hide things, hide implementation details
+
+  - Nobody else should be messing with the Model of a page,
+    you should not be exposing it
+
+  - dividing into smaler files without a clear objective
+    leads to over-exposing things, just to have the other module to have access
+
+** 06 Reuse
+
+- Helper functions
+  - when things are quite similar with just a minor thing differing
+  - example, updating a form on a model
+    #+begin_src elm
+      -- Enteredemail email ->
+      --     updateform (\form -> {form | email = email}) model
+      updateForm : (Form -> Form) -> Model -> (Model, Cmd Msg)
+      updateForm transform model =
+          ({model | form = transform model.form}
+          , Cmd.none)
+    #+end_src
+
+- Similar vs the same
+- Html msg
+- Html.map
+- Cmd.map
+
+** 07 Sources of Truth
+** 08 Decoding
+** 09 SPAs

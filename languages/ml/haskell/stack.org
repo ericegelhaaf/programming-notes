@@ -1,12 +1,19 @@
-|-------------------+---------------------------------------------------|
-|                   | description                                       |
-|-------------------+---------------------------------------------------|
-| build             | installs ghc, package deps and builds the project |
-| clean             | cleans build artifacts                            |
-| exec -- which EXE |                                                   |
-| exec EXE -- ARGS  | will run the EXE with ARGS                        |
-| ghci LIB          | starts repl in LIB context                        |
-|-------------------+---------------------------------------------------|
+|-------------------------+---------------------------------------------------|
+|                         | description                                       |
+|-------------------------+---------------------------------------------------|
+| build                   | installs ghc, package deps and builds the project |
+| clean                   | cleans build artifacts                            |
+| exec EXENAME            |                                                   |
+| exec -- which EXE       |                                                   |
+| exec EXE -- ARGS        | will run the EXE with ARGS                        |
+| ghc -- -dynamic test.hs |                                                   |
+| ghci LIB                | starts repl in LIB context                        |
+| setup                   |                                                   |
+| new NAME                |                                                   |
+| test                    |                                                   |
+|-------------------------+---------------------------------------------------|
+
+- ~/.stack/config.yml
 
 - dot - get a dependency DOT graph
   https://stackoverflow.com/questions/69270620/generating-haskell-module-dependency-tree

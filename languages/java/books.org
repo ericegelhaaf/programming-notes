@@ -1267,7 +1267,7 @@ args[0] is "-g"
 *** 13) Proxy objects dynamically implement arbitrary interfaces, routing all methods invocations to a handler
 ** 5 Exceptions, Assertions and Logging
 assert() a way of expressing internal assumptions
-*** 1) When you throw an =exception=, control is transferred to a nearest handler of the exception
+*** 1) When you =throw= an ~exception~, control is transferred to a nearest handler of the exception
 #+begin_src java
   public static int randInt(int low, int hight) {
       if (low > high)
@@ -1305,7 +1305,7 @@ assert() a way of expressing internal assumptions
      - indicate logic errors caused by the programmer
      - should spend time on catching them
      - eg: NullPointerException
-*** 2) In java, =checked exceptions= are tracked by the compiler
+*** 2) In java, checked ~exceptions~ are tracked by the compiler
 - ="throw early, catch late"=
 - checked exceptions must be declaared in the method header with *throws*
 - you sometimes can combine exceptions into a common superclass and just throw a superclass
@@ -1318,7 +1318,7 @@ assert() a way of expressing internal assumptions
 - Documentation:
   @throws NullPointerException if filename is null
   @throws FileNotFoundException if there is no file with anem filename
-*** 3) Use the *try/catch* construct to handle =exceptions=
+*** 3) Use the =try/catch= construct to handle ~exceptions~
 - catch() are matched from top to bottom, the most specific classes must come first
 #+begin_src java
   try {
@@ -1327,7 +1327,7 @@ assert() a way of expressing internal assumptions
       // handler
   }
 #+end_src
-*** 4) The *try (with-resources)* statement automatically closes resources after normal excecution or when an =exception= occurred
+*** 4) The =try (with-resources)= statement automatically closes resources after normal excecution or when an ~exception~ occurred
 #+begin_src java
   ArrayList<String> lines = ...;
   try (PrintWriter out = new PrintWriter("output.txt")) {
@@ -1346,7 +1346,7 @@ assert() a way of expressing internal assumptions
   - .close() is run at the end of the *try*
   - if an exception is throw on the .close(), is *suppresed* automatically
     - retrievable by ex.getSuppressed() method
-*** 5) Use the *try/finally* construct to deal with other actions that muct occur whether or not execution proceeded normally
+*** 5) Use the =try/finally= construct to deal with other actions that muct occur whether or not execution proceeded normally
 #+begin_src java
   try {
       // do work
@@ -1359,7 +1359,7 @@ assert() a way of expressing internal assumptions
 - RULE: avoid throwing an exception on *finally*, as it would mask (not supress) the one in *try*
 - RULE: finally should NOT have a *return* statement
 - eg: acquire/release lock, increment/decrement a counter, push something on a stack and pop it off when done.
-*** 6) You can *catch* and *rethrow* an =exception=, or *chain* it to another exception
+*** 6) You can =catch= and =rethrow= an ~exception~, or =chain= it to another exception
 **** rethrow
 eg: you can rethrow when you want to log the exception but you don't knot how to handle it
 #+begin_src java
@@ -1410,7 +1410,7 @@ chaining it from the original to a higher-level one
 - uncaught exceptions terminates the thread in which it occurred
 - to save the uncaught stacktrace to afile
   #+begin_src java
-    THread.setDefaultUncaughtExceptionHandler((thread, ext) -> {
+    Thread.setDefaultUncaughtExceptionHandler((thread, ext) -> {
             // record the exception
         });
   #+end_src
@@ -1423,7 +1423,7 @@ chaining it from the original to a higher-level one
   this.position = Objects.requireNonNull(position)
   this.position = Objects.requireNonNull(position, "position is null")
   this.position = Objects.requireNonNullElse(position, "North")
-  this.position = Objects.requrieNonNullElseGet(position, () -> System.getProperty("com.horstmann.direction.default"))
+  this.position = Objects.requireNonNullElseGet(position, () -> System.getProperty("com.horstmann.direction.default"))
   #+end_src
 *** 8) An =assertion= checks a condition and throws an error if the condition is not fullfilled
 #+begin_src java
@@ -2231,6 +2231,13 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
   - JaCoco https://www.jacoco.org/jacoco/
   - emma https://emma.sourceforge.net/
   - cobertura https://cobertura.github.io/cobertura/
+
+- (SRP) Single Responsibility Principle
+- (OCP)           Open/Closed Principle
+- (LSP)   Liskov Substitution Principle
+- (ISP) Interface Segregation Principle
+- (DIP)  Dependency Inversion Principle
+
 ** 1 Starting the Journey
 - =Practices and principles over technology=
 - Book Themes
@@ -2241,50 +2248,54 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
      - design patterns: notification pattern, builder pattern, repository pattern
      - event-driven and hexagonal architectures
      - functional programming
-  3) SOLID
-     - (SRP) Single Responsibility Principle
-     - (OCP) Open/Closed Principle
-     - (LSP) Liskov Substitution Principle
-     - (ISP) Interface Segregation Principle
-     - (DIP) Dependency Inversion Principle
-  4) Testing: TDD, test doubles, mocks and stubs
+  3) Testing: TDD, test doubles, mocks and stubs
 ** 2 (S) The Bank Statements Analyzer
+
 - A program that will automate the processing of bank statements
+
 - Implementation 1: single class
   - problems with coping for _changing requirements_
   - problems with _maintenance_ of the project
-- Input bank transactions: 30-01-2017,-100,Deliveroo
+
+- Input: bank transactions: 30-01-2017,-100,Deliveroo
 - Outputs:
   1) sum
   2) positive or negative?
   3) how many in month M?
   4) top 10
   5) category of most losses
+
 - the use of ~final~ does NOT guarantee immutability of the object in question
-  - you can have a final field that refers to an _object with mutable state_
+  - you can have a ~final~ field that refers to an _object with mutable state_
   - less drawbacks when used on _method parameters_
   - on _abstract methods_ is pointless
-  - _diminished utility_ with the ~var~ keyword of java 10
+  - diminished utility with the ~var~ keyword of java 10
+
 - =code maintainability=
   - easy to locate code of a _feature_
   - simpe to add or remove _features_
   - simple to _understand_ what it does
   - good ~encapsulation~ (implementation hidden from users of the code)
+
 - =anti-patterns= from copy-pasting code
   - hard to understand because you have a giant =god class=
   - brittle code due ~code duplication~
+
 - ~Principle of Least Surprise~ (aka POLA Principle of least astonishment)
   https://en.wikipedia.org/wiki/Principle_of_least_astonishment
   "components of a system should behave in a way that most users will expect it to behave"
-  1) use self-documenting method names
-  2) do not change the state of parameters
+  1) use self-documenting _method names_
+  2) do NOT change the state of _parameters_
+
 *** KISS
 **** Code: sum
+
 - Gotchas:
   - file empty
   - parsing error
     - aka on corrupt data
     - missing data
+
 #+begin_src java
   public class BankTransactionAnalyzerSimple {
       private static final String RESOURCES = "src/main/resources/";
@@ -2301,9 +2312,12 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       }
   }
 #+end_src
+
 **** Code: per month
+
 - basically copying the other code and adding the data parsing
   - DateTimeFormatter.orPattern()
+
 #+begin_src java
   final Path path = Paths.get(RESOURCES + args[0]);
   final LIst<String> lines = Files.readAllLines(path);
@@ -2311,7 +2325,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
   final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.orPattern("dd-MM-yyy");
   for (final String line : lines) {
       final String[] colums = line.split(",");
-      final LocalData date = LocalDate.parse(columns[0], DATA_PATTERN);
+      final LocalData date = LocalDate.parse(columns[0], DATE_PATTERN);
       if (date.getMonth() == Month.JANUARY) {
           final double amount = Double.parseDouble(columns[1]);
           total += amount;
@@ -2319,16 +2333,22 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
   }
   System.out.println("The total for all transactions in January is " + total);
 #+end_src
+
 *** (SRP) =Single Responsibility Principle=
+
 - You need to balance between DRY and KISS
   - DRY  - Don't Repeat Yourself
   - KISS - Keep It Simple Idiot
+
 - To complementary ways to think about *SRP*
   1) A class has responsability over a single functionality
   2) There is only one single reason for a class to change
+
 - a ~domain class~, matches the business problem (ie the domain at hand)
   - useful so different parts of our application share the same common understanding
+
 **** Code - extracting parsing logic in a separate class
+
 #+begin_src java
   public class BankStatementCSVParser {
 
@@ -2352,6 +2372,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       }
   }
 #+end_src
+
 **** Code - a domain class for a BankTransaction
 #+begin_src java
   public class BankTransaction {
@@ -2428,6 +2449,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       return bankTransactionsInMonth;
    }
 #+end_src
+
 *** =Cohesion=
 - Aim to high cohesion
 - Cohesion, Is concerned with /how strongly related/ things are.
@@ -2525,6 +2547,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       }
   }
 #+end_src
+
 *** =Coupling=
 - aim for _low coupling_
 - about how ~dependant~ you are on *other* classes
@@ -2568,6 +2591,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       }
   }
 #+end_src
+
 *** Testing
 - "On an average day, a professional developer will often run 100(hundreds) or 1000(thousands of automated tests."
 - Using JUnit https://junit.org/junit5/docs/current/user-guide/
@@ -2627,13 +2651,16 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       Assert.assertEquals(expected.getDescription(), result.getDescription());
   }
 #+end_src
+
 ** 3 (O) Extensing the Bank Statements Analyzer
+
 - New features
-  - searching for different kind of transactions
-    - return all on a date-range
-    - or a specific category
-  - multiple formats
-  - exporting to different formats (html)
+  1) searching for different kind of transactions
+     - return all on a date-range
+     - or a specific category
+  2) output multiple formats
+  3) exporting to different formats (html)
+
 *** =Open/Closed Principle=, for flexibility
 - ME: aparrently is *Open* for extension but *Closed* to modification
 - If you try to get values based on a criteria, you will find yourself writing the same code each time
@@ -3092,21 +3119,6 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
 **** Maven
 - 2004
 - Declaration of the build process is done in XML
-- Project structure
-  | pom.xml            |                                 |
-  | src/main/java      |                                 |
-  | src/main/resources | extra resources, eg: text files |
-  | src/test/java      |                                 |
-  | src/test/resources | extra resources, eg: text files |
-- pom.xml elements
-  | project      | top-level element                         |
-  | groupId      | uniq identifier of the organization       |
-  | artifactId   | unique name for the artifact              |
-  | packaging    | eg: jar, war, ear, etc.. (default is jar) |
-  | version      |                                           |
-  | build        | misc conf eg: plugins and resources       |
-  | dependencies |                                           |
-  | modelVersion | ????                                      |
 - pom.xml example
   #+begin_src html
     <?xml version="1.0" encoding="UTF-8"?>
@@ -3143,21 +3155,14 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
       </dependencies>
     </project>
   #+end_src
-- mvn
-  - clean
-  - compile: into /target/ folder
-  - test
-  - package: into .jar
-  - exec: plugin https://www.mojohaus.org/exec-maven-plugin/usage.html
+
 **** Gradle
 - Maven deficiencies
   - xml
     sometimes is necessary to provide system commands, such as cp and mv files around
     they don't come natural in XML syntax
-- Uses groovy or kotlin programming languages to specify the build process.
+- Uses *groovy* or *kotlin* programming languages to specify the build process.
 - features: cache, incremental compilation, faster build time
-- buid.gradle
-  settings.gradle: configuration variable and setup for multiproject build
 - build.gradle
   #+begin_src
     apply plugin: 'java'
@@ -3179,11 +3184,7 @@ mvn exec https://www.mojohaus.org/exec-maven-plugin/usage.html
         testImplementation group: 'junit', name: 'junit', version: '4.12'
     }
   #+end_src
-- gradle
-  - clean
-  - build
-  - test
-  - run
+
 ** 4 (L) The Document Management System
 - Example: Manage dentist patient's documents.
 - ~Liskov Substitution Principle~
@@ -3434,10 +3435,7 @@ pom.xml
 - In this example 2 output files, a jar manifest and a java properties file
 **** Maven
 - mvn package
-  resolves the captured properties,
-  copies the metadata properties file with resolved values into target/classes directory where it will be addes to the final JAR
-  and injects the metadat into the JAR's manifest
-- mvn verify
+  mvn verify
   jar tvf target/example-1.0.0-SNAPSHOT.jar
 - template src/main/resources/META-INF/metadata.properties
   #+begin_src
@@ -3564,7 +3562,9 @@ pom.xml
 * 22 | Java 17 Recipes                  | Josh Juneau
 ** 12 Working with Databases
 *** Connecting to a Database
+
 - you need to download the JAR that contains the JDBC driver you need
+
 #+begin_src java
   import java.sql.Connection;
   import java.sql.DriveManager;
@@ -3589,6 +3589,7 @@ pom.xml
       }
   }
 #+end_src
+
 *** Handling Connection and SQL Exceptions
 - connections and statements need to be closed for memory allocation cleanup
 - ~java.sql.SQLException~ - is a *checked* exception

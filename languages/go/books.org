@@ -1440,8 +1440,7 @@ func (s *grpcServer) ConsumeStream(req *api.ConsumeRequest, stream api.Log_Consu
 #+end_src
 * 22 | Network Programming with Go Language | Dr Jan Newmarch   | Apress
 ** 15 Websockets
- - HTTP 1.1 with "keep alive" keeping the connection open for a short while,
-   helped mostly for images
+ - HTTP 1.1 added "keep alive" keeping the connection open for a short while, helped mostly for images
  - AJAX (Asynchronous Javascript and XML) too helped interaction.
  - ws://, still user-agent initiated, but where is possible a server-to-browser communication
  - RFC https://datatracker.ietf.org/doc/html/rfc6455

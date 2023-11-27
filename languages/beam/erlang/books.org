@@ -9,6 +9,7 @@
 * Cowboy User Guide (2.6)
 https://ninenines.eu/docs/en/cowboy/2.6/guide/
 ** Rationale
+
 *** The modern Web
 + HTTP/2:
   - RFC 7540
@@ -47,6 +48,7 @@ https://ninenines.eu/docs/en/cowboy/2.6/guide/
 - "Erlang developers...can focus on handling only the errors that should give
   some feedback to the user and let the system take care of the rest."
 ** Introduction
+
 *** Introduction
 - header names
   - by spec, are case insensitive
@@ -108,6 +110,7 @@ init(Req0, State) ->
 - Cowboy generates one *Date* header value every second,
   shared to all other processes.
 ** Configuration
+
 *** Listeners
 Cowboy provides 2(two) types of listeners.
 **** 1) Clear TCP Listener
@@ -178,24 +181,139 @@ Cowboy provides 2(two) types of listeners.
   - reverse: it takes a converted value and changes it back to what the user input would have been
   - format_error: takes an error returned by other operation and returns a formatted human-readable message
 ** Handlers
+
 *** Handlers
 *** Loop handlers
 *** Static files
 ** Request and response
+
 *** Request details
 *** Reading the request body
 *** Sending a response
 *** Using cookies
 *** Multipart
 ** REST
-*** REST principles
-*** Handling REST requests
-*** REST flowcharts
-*** Designing a resource handler
 
+*** REST principles
+
+components = client, server, proxies, intermediaries
+resources = any information that can be named, anything that can be a target of a hypertext link
+entity = to what a resource maps to, could be a one-to-one or one-to-many relationship
+messages = self descriptive, with its own *media-type*
+uri = uniform resource identifier
+iri = internationalized resouce identifier
+
+- Arquitecture
+ + _client-server_ separation of concerns allows indepdendent evolution
+ + _stateless_ communication always conains all the infromation needed to perform the request. No *session state* on the server.
+ + _cacheable_ both sides and intermediaries can cache requests/responses
+ + _uniform interface_ between components
+ + _layered system_ individual components can't see beyond the immediate layer
+ + _code on demand_ optional (?)
+
+metadata = in REST come on the HTTP Headers
+representation metadata = gives infomaton about the representation (eg: media type, last modification, checksum)
+resource metadata = related resources or information about aditional representations of the resoure
+control data = allows paremetrization of the request/response (eg: if we want it is more recent than data, cache policy, modified)
+
+*** REST handlers
+
+- REST is handled in =cowbow= as a *sub protocol*
+- The request is handled as a state machine, with many optional callbacks.
+
+- init/2 on handler must return: {cowboy_req, Req, State}
+- terminate/3 will run if defined
+
+- callbacks
+
+  - all are optional, depending on other callbacks being defined
+  - all take 2 arguments, (Req, State)
+  - all return a tuple,
+    * {Value, Req, State}
+    * {stop, Req, State} - to stop the current request
+
+  |------------------------+----------------------------------------------+-----|
+  | allow_missing_post     | true                                         |     |
+  | content_types_accepted | *none*                                       |     |
+  | delete_completed       | true                                         |     |
+  | delete_resource        | false                                        |     |
+  | is_conflict            | false                                        |     |
+  |------------------------+----------------------------------------------+-----|
+  | service_available      | true                                         | 503 |
+  | known_methods          | get, head, post, put, patch, delete, options | 501 |
+  | uri_too_long           | false                                        | 414 |
+  | allowed_methods        | get, head, options (as a list of bitstrings) | 405 |
+  | malformed_request      | false                                        | 400 |
+  | is_authorized          | true                                         | 401 |
+  | forbidden              | false                                        | 403 |
+  | valid_content_headers  | true                                         | 501 |
+  | valid_entity_length    | true                                         | 413 |
+  | rate_limited           | false                                        | 429 |
+  |------------------------+----------------------------------------------+-----|
+  | content_types_provided | [{{<<"text">>,<<"html">>,'*'}, to_html}]     | 406 |
+  | languages_provided     | *skip*                                       |   " |
+  | charsets_provided      | *skip*                                       |   " |
+  | variances              | []                                           |   " |
+  |------------------------+----------------------------------------------+-----|
+  | resource_exists        | true                                         |     |
+  |------------------------+----------------------------------------------+-----|
+  | previously_existed     | false                                        |     |
+  | moved_permanently      | false                                        |     |
+  | moved_temporarily      | false                                        |     |
+  |------------------------+----------------------------------------------+-----|
+  | generate_etag          | undefined                                    |     |
+  | last_modified          | undefined                                    |     |
+  | expires                | undefined                                    |     |
+  | multiple_choices       | false                                        |     |
+  |------------------------+----------------------------------------------+-----|
+  | options                | ok                                           |     |
+  |------------------------+----------------------------------------------+-----|
+
+- metadata of the Req, used to set a proper body
+
+  - media_type, the content-type negotiated
+  - language
+  - charset
+
+
+- Response Headers: set automatically by =cowboy=
+  |------------------+-----------------------------------------------------------------------|
+  | content-language | used in body                                                          |
+  | content-type     | media type or charset in body                                         |
+  | etag             | of _resource_                                                         |
+  | expires          | of _resource_                                                         |
+  | last-modified    | of _resource_                                                         |
+  | location         | relative or absolute URI to _resource_                                |
+  | vary             | list of headers that might change the represetation of the _resource_ |
+  |------------------+-----------------------------------------------------------------------|
+
+*** REST flowcharts
+
+- four main paths a request might follow
+  |------------------+-------------+-------------|
+  |                  | content     | conditional |
+  |                  | negotiation | requests    |
+  |------------------+-------------+-------------|
+  | options          |             | ?           |
+  | get, head        | x           | ?           |
+  | put, post, patch | x           | ?           |
+  | delete           | x           | ?           |
+  |------------------+-------------+-------------|
+
+*** Designing a resource handler
 ** Websocket
 
 *** The Websocket protocol
+
+- an extension of HTTP
+- emulates plain TCP connections
+- created before HTTP/2, for different goals
+- fully asynchronous, unlike:
+  - HTTP/1.1, synchronous
+  - HTTP/2, asynchronous, but the server can only initiate streams in response to requests
+
+- in =cowboy= implemented as a protocol upgrade
+
 *** Websocket handlers
 
 ** Advanced
@@ -873,6 +991,56 @@ remote >
 - Mnesia tables
   - Have no built-in type constrains
   - Are global to all nodes in the cluster (add a prefix)
+** 30 Type Specifications and Dialyzer
+
+- PLT = Persistent Lookup Table
+  - a compilation of all the details Dyalizer can identify about applications
+
+- Build the PLT
+  $ dializer --build_plt --apps erts kernel stdlib crypto mensia sasl common_test eunit
+  $ dializer --add_to_plt --apps ssl reltool
+
+- Analyze .beam files $ dialyzer -r somedir/
+- Analyze .erl files  $ dializer -r somedir/ --src
+
+- Dialyzer
+  - is NOT about proving that programs are error-free
+  - is only about finding as many errors as possible,
+    without ever contradicting what happens in the real world
+  - is "optimistic"
+  - might get lost in our type definition when analyzing our code
+
+*** Example: queue implemetation
+
+- A ~queue~ can be implemented using 2 *stacks*
+  - one to push new elements
+  - one to pop elments
+  - when the "pop stack" is empty,
+    we reverse the "push stack" and make it the new "pop stack"
+
+#+begin_src erlang
+-module(fifo_types).
+-export([new/0, push/2, pop/1, empty/1]).
+
+-spec new() -> {fifo, [], []}.
+new() -> {fifo, [], []}.
+
+-spec push({fifo, In::List(), Out::list()}, term()) -> {fifo, list(), list()}.
+push({fifo, In, Out}, X) -> {fifo, [X|In], Out}.
+
+-spec pop({fifo, In::list(), Out::list()}) -> {term(), {fifo, list(), list()}}.
+pop({fifo, [], []})    -> erlang:error('empty fifo');  % the none() type is always assumed to be there
+pop({fifo, In, []})    -> pop({fifo, [], lists:reverse(In)});
+pop({fifo, In, [H|T]}) -> {H, {fifo, In, T}}.
+
+-spec empty({fifo, [], []}) -> true;
+           ({fifo, nonempty_list(), nonempty_list()}) -> false. % or
+-spec empty({fifo, [], []}) -> true;
+           ({fifo, [any(), ...], [any(), ...]}) -> false.
+empty({fifo, [], []}) -> true;
+empty({fifo, _, _})   -> false.
+#+end_src
+
 * Erlang and OTP in Action | Martin Logan
 - include/ .hrl files part of your public API, private ones should be kept on src/
 ** 6 Implementing a Cache System

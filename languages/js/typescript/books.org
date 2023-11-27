@@ -1,51 +1,11 @@
-- https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/
-- https://github.com/type-challenges/type-challenges
-- https://www.youtube.com/watch?v=MbZoQlmQaWQ
-- Tutorial: https://github.com/gibbok/typescript-book
-* Article: Setup a Node.js project with Typescript, ESLint, Prettier, Husky
-https://gist.github.com/silver-xu/1dcceaa14c4f0253d9637d4811948437
-yarn add --dev typescript eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser prettier
-** tsconfig.json
-#+begin_src json
-{
-  "compilerOptions":
-    {
-      "target": "es2018",
-      "module": "commonjs",
-      "outDir": "dist",
-      "sourceMap": true,
-    },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
-}
-#+end_src
-** .eslintrc
-#+begin_src json
-{
-  "parser": "@typescript-eslint/parser",
-  "extends": ["plugin:@typescript-eslint/recommended"],
-  "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
-  "rules": {}
-}
-#+end_src
-** .prettierrc
-#+begin_src json
-{
-    "semi": true,
-    "trailingComma": "all",
-    "singleQuote": true,
-    "printWidth": 120,
-    "tabWidth": 2
-}
-#+end_src
-* Book: Programmign with Types
+* Programmign with Types
   Source https://github.com/vladris/programming-with-types/
 1) 1-4 chapters cover fundamentls
 2) 5,6 function types
 3) 7,8 subtyping
 4) 9,10,11 generic programming
 ** 1 Introduction to typing
-* Book: 2019 | Programming Typescript | Boris Cherry
+* 2019 | Programming Typescript | Boris Cherry
 solutions https://github.com/bcherny/programming-typescript-answers
 ts-node https://github.com/TypeStrong/ts-node
 ts template https://github.com/Microsoft/TypeScript-Node-Starter
@@ -54,107 +14,112 @@ immutable-js https://github.com/immutable-js/immutable-js https://www.youtube.co
 #+ATTR_ORG: :width 800
 [[./typescript-types.png]]
 ** Types (From Chapter 3)
-| any       | the default type given by the *compiler* (everything needs a type)   |                                                |
-| unknown   | when *YOU* don't know the type ahead of type                         | === && ! ? ==                                  |
-| boolean   | true/false                                                           | === && ! ? ==                                  |
-| number    | integers, floats, positives, negatives, Infinity, NaN                | + - % <                                        |
-| bigint    | ended with "n" like "100n", can be bigger than >2^53                 | + - * / <                                      |
-| string    | between simple comma (')                                             | + .slice                                       |
-| symbol    | unique and NOT equal to other instance                               | Symbol('a')                                    |
-|           | const f: unique symbol = Symbol('f') // type of f                    |                                                |
-| object    | not much more narrow than *any*, mutable fields even when *const*    |                                                |
-|           | let a: {readonly b: number; c?: string; [key: number]: boolean }     |                                                |
-| Arrays    | can be heterogeneous, implicitly typed                               | let c: string[] = ['a']                        |
-|           | no-mutable/readonly/Readonly<>/ReadonlyArray<>                       | let bs: readonly number[] = c.concat(5)        |
-|           | mutable                                                              | .push                                          |
-| Tuples    | fixed length, known type at each index, explicitly typed             | let b: [string, string, n] =                   |
-|           | optional field supported                                             | let fares: [number, number?][] =               |
-|           | reset elements support                                               | let list: [number, boolea, ...string[]] =      |
-| null      | represent the absent of something, absence of a value                |                                                |
-| undefined | represent the absent of something, something hasn't been defined yet |                                                |
-| void      | return type of a function that retuns nothing                        |                                                |
-| never     | return type of a function that never returns, bottom-type            |                                                |
-| enum      | stay away from them....enum to numbers, splittable                   | enum Language { English, Spanish }             |
-|           | to strings                                                           | enum Color { Red = '#c10000', Pink = 0xc10050} |
-|           | access by dot(.) or bracket [], const enforces (.) only              | const enum Language { English, Spanish }       |
-| Function  | catch-all type for functions, you don't want to use it               |                                                |
+| any       |                                                | the default type given by the *compiler* (everything needs a type)   |
+| unknown   | === && ! ? ==                                  | when *YOU* don't know the type ahead of type                         |
+| boolean   | === && ! ? ==                                  | true/false                                                           |
+| number    | + - % <                                        | integers, floats, positives, negatives, Infinity, NaN                |
+| bigint    | + - * / <                                      | ended with "n" like "100n", can be bigger than >2^53                 |
+| string    | + .slice                                       | between simple comma (')                                             |
+| symbol    | Symbol('a')                                    | unique and NOT equal to other instance                               |
+|           |                                                | const f: unique symbol = Symbol('f') // type of f                    |
+| object    |                                                | not much more narrow than *any*, mutable fields even when *const*    |
+|           |                                                | let a: {readonly b: number; c?: string; [key: number]: boolean }     |
+| Arrays    | let c: string[] = ['a']                        | can be heterogeneous, implicitly typed                               |
+|           | let bs: readonly number[] = c.concat(5)        | no-mutable/readonly/Readonly<>/ReadonlyArray<>                       |
+|           | .push                                          | mutable                                                              |
+| Tuples    | let b: [string, string, n] =                   | fixed length, known type at each index, explicitly typed             |
+|           | let fares: [number, number?][] =               | optional field supported                                             |
+|           | let list: [number, boolea, ...string[]] =      | reset elements support                                               |
+| null      |                                                | represent the absent of something, absence of a value                |
+| undefined |                                                | represent the absent of something, something hasn't been defined yet |
+| void      |                                                | return type of a function that retuns nothing                        |
+| never     |                                                | return type of a function that never returns, bottom-type            |
+| enum      | enum Language { English, Spanish }             | stay away from them....enum to numbers, splittable                   |
+|           | enum Color { Red = '#c10000', Pink = 0xc10050} | to strings                                                           |
+|           | const enum Language { English, Spanish }       | access by dot(.) or bracket [], const enforces (.) only              |
+| Function  |                                                | catch-all type for functions, you don't want to use it               |
 ** Preface
 - Keep your DS immutable with spreads (...) most of the time
 - Use Polymorphism
 ** 01 Introduction
 1) =Type safety= using types to prevent programs from doing invalid things.
 ** 02 Typescript: A 10_000 Foot View
+
+|------------+-----------------------------------------------------|
 | Program    |                                                     |
 |------------+-----------------------------------------------------|
 | Compiler   | Source -> AST -> bytecode                           |
 | Runtime    | evaluates the bytecode                              |
 | Typecheker | that verifies that your code is safe (from the AST) |
 |------------+-----------------------------------------------------|
-- Javascript compiler and runtime tend to be smushed into a single program called *engine*
+
+- Javascript _compiler & runtime_ tend to be smushed into a single program called *engine*
+
 - tsc: typescript compiler
-  TS: source -> AST -> typechecked -> JS
-  JS: source -> AST -> bytecode    -> evaluated
-- ~when TSC compiles your code from TS to JS, it won't look at your types~
-  ~will never affect your program generated output, *ONLY* used for typechecking~
+  .ts source -> AST -> typechecked -> .js code
+  .js source -> AST -> bytecode    -> evaluated
+
+- when TSC compiles your code from .ts to .js
+  - it won't look at your types
+  - will never affect your program generated output, *ONLY* used for typechecking
+
 - =Type System= a set of rules that a typechecker uses to assign types to your program
   - TS's one is mixed, require some explicit types and infer and check the rest at compile time
+
 - =Type Annotations= to signal TS what your types are, *value: type*
+
 - =Type Bound=
-  - Dynamic type binding in JS means that types are NOT known until runtime
-  - TS is a *Gradually Typed* language
-- Things don't caught by TS, and fail at runtime
-  - Stack overflows
-  - Broken network connections
+  - *Dynamic type* binding in _JS_ means that types are NOT known until runtime https://en.wikipedia.org/wiki/Late_binding
+  - _TS_ is a *Gradually Typed* language https://en.wikipedia.org/wiki/Gradual_typing
+
+- Things that don't caught by TS, and fail at runtime
+  - stack overflows
+  - broken network connections
   - malformed user inputs
+
 - =Self-hosting compilers= compilers that compile themselves, like tsc
-*** tsconfig.json
-tsc --init # creates a tsconfig.json
- | include | where to find the source files | ["src"]                 |
- |---------+--------------------------------+-------------------------|
- | lib     | which APIs use                 | ["es2015"]              |
- | module  | which module systems use       | "commonjs"              |
- | outDir  | output dir for generated JS    | "dist"                  |
- | strict  | check for invalid code         | true/false              |
- | target  | which JS version use           | "es3,es5,es2015,es2016" |
+
 *** tslint.json
-tslint --init # creates a tslint.json
-  #+begin_src json
-    {
-      "defaultSeverity": "error",
-      "extends": [
-        "tslint:recommended"
-      ],
-      "rules": {
-        "invalid-this": true, // disable this outside objects
-        "semicolon": false,
-        "trailing-comma": false
-      }
+
+$ tslint --init # creates a tslint.json
+
+#+begin_src json
+  {
+    "defaultSeverity": "error",
+    "extends": [
+      "tslint:recommended"
+    ],
+    "rules": {
+      "invalid-this": true, // disable this outside objects
+      "semicolon": false,
+      "trailing-comma": false
     }
-  #+end_src
+  }
+#+end_src
+
 *** index.ts
+
+$ tsc index.ts
+$ node ./dist/index.js
+
 #+begin_src typescript
   console.log('Hello Typescript!')
 #+end_src
-- tsc
-  node ./dist/index.js
+
 ** 03 All About Types
 #+begin_src
  unknown -> any -> null
                 -> void -> undefined
 #+end_src
+
 - =Type= a set of values and the things you can do with them
+
 - a function parameter is *constrained* by their annotation
   we say a value is *assignable* (aka compatible with) to pass it to a function
+
 - a function parameter *upper bound* is defined by the type on their annotation
   you cannot pass any type above it
-- tsconfig.json
- | preserveConstEnums           | enable runtime code generation for cons enums, due *inline* of them can cause issues if they change |
- | downlevelIteration           | to enable custom iterators pre es2015                                                               |
- | noImplicitAny                | *already enabled with strict* to get TS to complain about implicit anys                             |
- | strictBindCallApply          | *already enabled with strict*                                                                       |
- | noImplicitThis               | *already enabled with strict*                                                                       |
- | strictNUllChecks             | *already enabled with strict*                                                                       |
- | strictPropertyInitialization | *already enabled with strict*                                                                       |
+
 *** ABC of types
 - =Type Literals= A type that represents a single value and nothing else. Values can be used as types.
 - =Object Literal= const example = { hello: "world" }
@@ -219,63 +184,77 @@ tslint --init # creates a tslint.json
     }
   #+end_src
 *** Union (|) and Intersection (&) types
+
 - Union type isn't necesarrily 1(one) specific member of the union
   in fact, it can be both members at once!
+
 #+begin_src typescript
   type Cat = {name: string, purrs: boolean}
   type Dog = {name: string, barks: boolean, wags: boolean}
   type CatOrDogOrBoth = Cat | Dog // It can be both members at the same time
-  type CatAndDog = Cat & Dog      // Both
+  type CatAndDog      = Cat & Dog // Both
 #+end_src
+
 ** 04 Functions
-|--------------------------+---------------------------------------------------------|
-| (?)  optional parameters | function log(message: string, userId?: string)          |
-| (=)  default  parameters | function log(message: string, userId = 'Not signed in') |
-| ([]) rest     parameters | function sum(numbers: number[]): number                 |
-|--------------------------+---------------------------------------------------------|
-- Terminology
- | parameter | data needed for a function to run, declared as part of the function, aka *formal parameter* |
- | argument  | data passed to a function, aka *actual parameter*                                           |
+
+- =parameter= - data _needed for_ a function to run, declared as part of the function, aka *formal parameter*
+- =argument=  - data _passed to_ a function, aka *actual parameter*
+
 - in JS functions are first-class objects
+
 - TS type inference
   - parameters: in most cases won't infer. Except on contextual typing.
   - return type: can be infered
   - types through the body of the function can be infered
+
 - Function syntaxes
-  | Named function                      | function greet(name: string) {}                             |
-  | Function Expression                 | let greet2 = function(name: string) {}                      |
-  | Arrow Function Expression           | let greet3 = (name: string) => {}                           |
-  | Shorthand arrow function expression | let greet4 = (name: string) =>                              |
-  | *Function Constructor               | let greet5 = new Function('name', 'return "hello " + name') |
-*** =Optional Parameters= explicitly typed
+
+|-------------------------------------+-------------------------------------------------------------|
+| Named function                      | function greet(name: string) {}                             |
+| Function Expression                 | let greet2 = function(name: string) {}                      |
+| Arrow Function Expression           | let greet3 = (name: string) => {}                           |
+| Shorthand arrow function expression | let greet4 = (name: string) =>                              |
+| *Function Constructor               | let greet5 = new Function('name', 'return "hello " + name') |
+|-------------------------------------+-------------------------------------------------------------|
+
+*** =Optional= parameters explicitly typed
+
 #+begin_src typescript
   type Context = {
     appId?: string
     userId?: string
   }
+
   function log(message: string, context: Context = {}) {
     let time = new Date.toISOString();
     console.log(time, message, context.userId);
   }
 #+end_src
-*** =Variadic=: unsafe, using ~arguments~ magic object
+
+*** =Variadic= - unsafe, using ~arguments~ magic object
+
 - JS runtime automatically defines *arguments* it for you in functions
   TOTALLY TYPE UNSAFE!
-  #+begin_src typescript
-    function sumVariadic(): number {
-      return Array
-        .from(arguments)
-        .reduce((total, n) => total + n, 0);
-    }
-    sumVariadic(1,2,3,4)
-  #+end_src
-*** =Variadic=: safe alternative
-  #+begin_src typescript
-    function sumVariadicSafe(...numbers: number[]): number {
-      return.numbers.reduce((total, n) => total + n, 0)
-    }
-  #+end_src
+
+#+begin_src typescript
+  function sumVariadic(): number {
+    return Array
+      .from(arguments)
+      .reduce((total, n) => total + n, 0);
+  }
+  sumVariadic(1,2,3,4)
+#+end_src
+
+*** =Variadic= - safe alternative
+
+#+begin_src typescript
+  function sumVariadicSafe(...numbers: number[]): number {
+    return.numbers.reduce((total, n) => total + n, 0)
+  }
+#+end_src
+
 *** (), call, apply, bind:
+
 - 1st arg is to bind it to a value inside the function
 #+begin_src typescript
   add(10,20);
@@ -283,6 +262,7 @@ tslint --init # creates a tslint.json
   add.call(null, 10, 20);
   add.bind(null, 10, 20)();
 #+end_src
+
 *** =Generators=: function* ~yield~ lazy, can generate infinite lists
   #+begin_src typescript
     function* createFibonacciGenerator() {
@@ -334,6 +314,7 @@ Manually defining an Iterator
   #+end_src
 *** =Contextual Typing= when Typescript is able to infer from context the types
 *** =Overloaded function= a function with multiple call signatures
+
 - 1(one) signature
   #+begin_src typescript
     type Reserve = {
@@ -341,6 +322,7 @@ Manually defining an Iterator
     }
     let reserve: Reserve = (from, to , destination) => {}
   #+end_src
+
 - 2(two) signaures, are resolved in the order they are declared
   #+begin_src typescript
     type Reserve = {
@@ -357,6 +339,7 @@ Manually defining an Iterator
       }
     }
   #+end_src
+
 **** Example: Overloading createElement DOM API
 #+begin_src typescript
   type CreateElement = {

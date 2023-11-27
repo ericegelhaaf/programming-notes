@@ -1,3 +1,10 @@
 https://www.purescript.org/
 https://book.purescript.org/
-https://github.com/purescript/documentation
+
+- Getting started https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md
+
+- https://en.wikipedia.org/wiki/PureScript
+  - strict language (not lazy)
+  - transpiles to JavaScript, C++11, Erlang, and Go
+  - has "row polymorphism"
+  - has "extensible records"

@@ -1,3 +1,4 @@
+- project https://aosabook.org/en/500L/an-archaeology-inspired-database.html
 - https://blog.exupero.org/htmx-versus-clojurescript/
 - https://code.thheller.com/blog/shadow-cljs/2023/07/13/the-lost-arts-of-cljs-frontend.html
 - https://code.thheller.com/blog/shadow-cljs/2023/07/16/applying-the-art-of-cljs-frontend.html

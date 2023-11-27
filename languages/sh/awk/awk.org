@@ -1,10 +1,16 @@
-- https://en.wikipedia.org/wiki/AWK
-- https://en.wikibooks.org/wiki/AWK
+| AWK Home   | https://www.awk.dev/              |
+| AWK Source | https://github.com/onetrueawk/awk |
+| wiki       | https://en.wikipedia.org/wiki/AWK |
+| wiki       | https://en.wikibooks.org/wiki/AWK |
+| web repl   | https://awk.js.org/               |
+
 - coverage
   https://benhoyt.com/writings/goawk-coverage/
+
 - editor
    https://github.com/Beaglefoot/awk-language-server
   https://emacs-lsp.github.io/lsp-mode/page/lsp-awk/
+
 - style https://github.com/soimort/translate-shell/wiki/AWK-Style-Guide
   - CamelCase, variables
   - lowercase, functions
@@ -15,7 +21,12 @@
 - Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
 - Manual network features https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
 - https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
-* Language
+
+- 2023
+  - --csv, supports fields surrounded by double quotes
+
+* language
+
 - sometimes not enforcing variables to be local can cause weird issues.
   early return, should happen as soon as possible
   otherwise this function will keep looping...
@@ -40,20 +51,6 @@
 - || and && return booleans. AKA 0 or 1. They do NOT return the truthy value.
 - Can redefine NF=0 at END and then add new $(++NF)=??? to later just *print*
 - falsey: "", 0, undefined variables
-- exit
-  - on a normal rule, still runs END, but not ENDFILE
-  - on BEGIN        , still runs END
-  - on END          , stops
-- FPAT https://www.gnu.org/software/gawk/manual/html_node/Splitting-By-Content.html
-  For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
-  Instead of using FS to specify what the fields are *not*
-  We use this to specify what are the fields, in the form of a regular expression.
-- @include "join"
-- @include "ord" OR @load "ordchr" https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Ord.html
-  ord(STRING) -> NUMBER
-  chr(NUMBER) -> STRING
-- @include "assert"
-  assert(BOOLEAN, "Reason of failure HERE")
 #+begin_src awk
   { print "expression" > "filename" }
   { print "expression" | "command" }
@@ -65,13 +62,8 @@
 - Unique at the time due
   - being a scripting language
   - having associative arrays
-- wEiRd - removes leading space
-  #+begin_src awk
-  $ awk '{ $1=$1 }1' file.txt
-  $ awk '{ $1=$1 }; { print }' file.txt
-  $ awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
-  #+end_src
 ** Types (will be automaticaly coerced when needed)
+
 1) Strings
 2) Numbers
 3) Arrays
@@ -81,34 +73,54 @@
    - ALWAYS asssociative (aka hashtables)
    - for (variable in array)
    - delete array[subscript]
-** Built-in variables:
-| variable | meaning                                      | default |
-|----------+----------------------------------------------+---------|
-| FPAT     | regex of what each field contains            | -       |
-|----------+----------------------------------------------+---------|
-| NF       | numer of fields in line                      | -       |
-| NR       | number of records (aka lines) read so far    | -       |
-| FNR      | number of records read so far, in curr file  | -       |
-|----------+----------------------------------------------+---------|
-| FS       | *controls* the input field separator         | " "     |
-| RS       | *controls* the input record separator        | "\n"    |
-|----------+----------------------------------------------+---------|
-| OFS      | output field separator                       | " "     |
-| ORS      | output record separator                      | "\n"    |
-| OFMT     | output format for numbers                    | "%.6g"  |
-|----------+----------------------------------------------+---------|
-| ARGC     | number of cli arguments                      | -       |
-| ARGV     | array of cli arguents                        | -       |
-|----------+----------------------------------------------+---------|
-| RLENGTH  | length of string matched by *match* function | -       |
-| RSTART   | start of string matched by *match* function  | -       |
-|----------+----------------------------------------------+---------|
-| FILENAME | name of current input file                   | -       |
-| SUBSEP   | subscript separator                          | "\034"  |
-|----------+----------------------------------------------+---------|
-** Built-in functions
+
+- Set the order an already created array would be presented on a forIn
+  PROCINFO["sorted_in"] = "afunctionname" like compare(index1, value1, index2, value2) returns a boolean
+  PROCINFO["sorted_in"] = "@val_num_asc"
+  PROCINFO["sorted_in"] = "@val_num_desc"
+  PROCINFO["sorted_in"] = "@val_str_asc"
+  PROCINFO["sorted_in"] = "@val_str_desc"
+  PROCINFO["sorted_in"] = "@ind_num_asc"
+  PROCINFO["sorted_in"] = "@ind_num_desc"
+  PROCINFO["sorted_in"] = "@ind_str_asc"
+  PROCINFO["sorted_in"] = "@ind_str_desc"
+
+** built-in variables
+
+- FPAT https://www.gnu.org/software/gawk/manual/html_node/Splitting-By-Content.html
+  For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
+  Instead of using FS to specify what the fields are *not*
+  We use this to specify what are the fields, in the form of a regular expression.
+
+|----------+----------------------------------------------+-----------|
+|          | =meaning=                                    | =default= |
+|----------+----------------------------------------------+-----------|
+| FPAT     | regex of what each field contains            | -         |
+|----------+----------------------------------------------+-----------|
+| NF       | numer of fields in line                      | -         |
+| NR       | number of records (aka lines) read so far    | -         |
+| FNR      | number of records read so far, in curr file  | -         |
+|----------+----------------------------------------------+-----------|
+| FS       | *controls* the input field separator         | " "       |
+| RS       | *controls* the input record separator        | "\n"      |
+|----------+----------------------------------------------+-----------|
+| OFS      | output field separator                       | " "       |
+| ORS      | output record separator                      | "\n"      |
+| OFMT     | output format for numbers                    | "%.6g"    |
+|----------+----------------------------------------------+-----------|
+| ARGC     | number of cli arguments                      | -         |
+| ARGV     | array of cli arguents                        | -         |
+|----------+----------------------------------------------+-----------|
+| RLENGTH  | length of string matched by *match* function | -         |
+| RSTART   | start of string matched by *match* function  | -         |
+|----------+----------------------------------------------+-----------|
+| FILENAME | name of current input file                   | -         |
+| SUBSEP   | subscript separator                          | "\034"    |
+|----------+----------------------------------------------+-----------|
+** built-in functions
 https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
 *** MATH
+|------------+------------------------------------|
 | atan2(y,x) | arctangent of y/x in -x to x range |
 | cos(x)     | cosine of x, with x in radians     |
 | sin(x)     | sine of x, with x in radians       |
@@ -122,59 +134,113 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | srand(x)   | x is new seed for rand()           |
 |------------+------------------------------------|
 *** STRING
-|                       | does                                             | returns                               |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-| gsub(r,s)             | substitute all s for r in $0                     | number of subst made                  |
-| gsub(r,s,t)           | substitute all s for r in t                      | number of subst made                  |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-| sub(r,s)              | substitute one s for r in $0                     | number of subst made                  |
-| sub(r,s,t)            | substitute one s for r in t                      | number of subst made                  |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-| substr(s,p)           |                                                  | suffix of x starting at p             |
-| substr(s,p,n)         |                                                  | substring of x lenght n starting at p |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-| asort(SRC,DST)        | sort by value, DST has idx=numeric val=old_value | number of elements in SRC             |
-| asorti(SRC,DST)       | sort by index, DST has idx=numeric val=old_index | number of elements in SRC             |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-| split(s,a)            | stores the pieces in array a                     | number of fields                      |
-| split(s,a,fs)         | stores the pieces in array a                     | number of fields                      |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-| index(s,t)            |                                                  | 0 or n position of t in s             |
-| length()              |                                                  | number of chars in $0                 |
-| length(s)             |                                                  | number of chars in s                  |
-| match(s,r)            | test if s contains r                             | index or 0                            |
-| sprintf(fmt,exp-list) |                                                  | formated string with exp-list         |
-|-----------------------+--------------------------------------------------+---------------------------------------|
-** Operators
+|---------------------+--------------------------------------------------+---------------------------|
+|                     | does                                             | returns                   |
+|---------------------+--------------------------------------------------+---------------------------|
+| gsub(r,s)           | substitute all r for s in $0                     | number of subst made      |
+| gsub(r,s,t)         | substitute all r for s in t                      | number of subst made      |
+|---------------------+--------------------------------------------------+---------------------------|
+| sub(r,s)            | substitute one r for s in $0                     | number of subst made      |
+| sub(r,s,t)          | substitute one r for s in t                      | number of subst made      |
+|---------------------+--------------------------------------------------+---------------------------|
+| substr(s,start)     |                                                  | substring of s            |
+| substr(s,start,len) |                                                  | substring of s            |
+|---------------------+--------------------------------------------------+---------------------------|
+| asort(SRC,DST)      | sort by value, DST has idx=numeric val=old_value | number of elements in SRC |
+| asorti(SRC,DST)     | sort by index, DST has idx=numeric val=old_index | number of elements in SRC |
+|---------------------+--------------------------------------------------+---------------------------|
+| split(s,a)          | stores the pieces in array a                     | number of fields          |
+| split(s,a,fs)       | stores the pieces in array a                     | number of fields          |
+|---------------------+--------------------------------------------------+---------------------------|
+| index(s,t)          |                                                  | 0 or n position of t in s |
+| length()            |                                                  | number of chars in $0     |
+| length(s)           |                                                  | number of chars in s      |
+| match(s,r)          | test if s contains r                             | index or 0                |
+| sprintf(fmt, ...)   |                                                  | formated string           |
+|---------------------+--------------------------------------------------+---------------------------|
+*** operators
+|------------------+---------------------|
 | Assigments       | = += -= *= /= %= ^= |
 | Ternary operator | ?:                  |
 | Array membership | in                  |
 | Matching         | ~ !~                |
-** Control Flow
+|------------------+---------------------|
+*** control flow
+
+- exit
+  - on a normal rule, still runs END, but not ENDFILE
+  - on BEGIN        , still runs END
+  - on END          , stops
+
+|-----------------+------------------------------------|
 | exit            | goes immediately to the END action |
 | exit expression |                                    |
 | next            | skips to the next line of input    |
-** Output Statement
+|-----------------+------------------------------------|
+
+*** output statement
+|-----------------+---------------------------------------------|
 | close(filename) | break connection between print and filename |
 | close(command)  | break connection between print and command  |
 | system(command) | execute command                             |
-** getline
-|--------------------+-------------------------------------+---------------------|
-| getline            | read next input record              | NF, NR, FNR, RT, $0 |
-| getline var        | read n.i.r. into var                | NR, FNR, RT         |
-| getline < file     | read n.i.r. from file               | NF, RT, $0          |
-| getline var < file | read n.i.r. from file into var      | -                   |
-| cmd ¦ getline      | reads a single line of cmd into awk | NF, RT, $0          |
-| cmd ¦ getline var  | reads a single line of cmd into var | RT                  |
-| cmd ¦& getline     | reads from a two-way pipe           | NF, RT, $0          |
-| cmd ¦& getline var | reads from a two-way pipe into var  | RT                  |
-|--------------------+-------------------------------------+---------------------|
-* Codebases
+|-----------------+---------------------------------------------|
+*** getline
+|----------------------+-------------------------------------+---------------------|
+| getline              | reads next input record             | NF, NR, FNR, RT, $0 |
+| getline var          | reads n.i.r. into var               | NR, FNR, RT         |
+| getline < file       | reads n.i.r. from file              | NF, RT, $0          |
+| getline var < file   | reads n.i.r. from file into var     | -                   |
+| "cmd" ¦  getline     | reads a single line of cmd into awk | NF, RT, $0          |
+| "cmd" ¦  getline var | reads a single line of cmd into var | RT                  |
+| "cmd" ¦& getline     | reads from a two-way pipe           | NF, RT, $0          |
+| "cmd" ¦& getline var | reads from a two-way pipe into var  | RT                  |
+|----------------------+-------------------------------------+---------------------|
+** format strings
+https://www.gnu.org/software/gawk/manual/html_node/Control-Letters.html
+https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
+
+- %+-width.prec(?)
+
+|--------+------------------------------|
+| %a, %A | hexa float                   |
+| %c     | numbers as character         |
+| %d, %i | decimal integer              |
+| %e, %E | scientific notation          |
+| %f, %F | float                        |
+| %g, %G | float or scientific notation |
+| %o     | unsigned octal               |
+| %s     | string                       |
+| %u     | unsigned decimal integer     |
+| %x, %X | unsigned hexadecimal integer |
+| %%     | literal "%"                  |
+|--------+------------------------------|
+** extensions
+
+- @include "join"
+
+- @include "assert"
+  assert(BOOLEAN, "Reason of failure HERE")
+
+- @include "ord" OR @load "ordchr" https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Ord.html
+  ord(STRING) -> NUMBER
+  chr(NUMBER) -> STRING
+
+* codebases
+|---------------------+----------------------------------------------|
 | graphics demo       | https://github.com/patsie75/awk-demo         |
 | system logs parsing | https://github.com/kaworu/hawk               |
 | CHIP-8              | https://github.com/patsie75/awk-chip8        |
 | game tetris         | https://github.com/mikkun/AWKTC              |
+|---------------------+----------------------------------------------|
 | exercises           | https://github.com/exercism/awk              |
 | exercises           | https://github.com/kaworu/adventofcode-2015/ |
 | exercises           | https://github.com/ferd/advent-of-code-2021/ |
 | exercises           | https://github.com/phillbush/aoc             |
+|---------------------+----------------------------------------------|
+* snippets
+- wEiRd - removes leading space
+  #+begin_src awk
+  $ awk '{ $1=$1 }1' file.txt
+  $ awk '{ $1=$1 }; { print }' file.txt
+  $ awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
+  #+end_src

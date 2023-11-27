@@ -2645,6 +2645,10 @@ ERRATA:
 192
 "You can export field constructors just..." should be
 "You can export field selectors just..."
+228
+ghc error refers to "Show Password" a type that was never declared before
+259
+typo: on type constructor for "AdminUser" is "Adminuser" instead
 ** DONE Introduction
 - 1990 First version of Haskell
   - 1 year before Python
@@ -3648,7 +3652,7 @@ authenticate User{..} password =
     maybe "unknown user" friendlyEmail georgesEmailAddress
 #+end_src
 
-** 06 Type Classes
+** DONE 06 Type Classes
 
 - =parametric polymorphism=
   - allows you to write a function that works with differen types
@@ -3668,6 +3672,25 @@ authenticate User{..} password =
 
 - As the number of functions passed down by argument increase it becomes les feasible
 
+- Typeclasses should be:
+  1) narrowly focused on a specific feature,
+  2) generally only define a small handful of functions.
+     - It's common to only introduce a single new function
+     - while *Natural* is on the upper limit of how big they should be
+
+- When to (maybe) use Typeclasses
+  - if you are modeling something that exists outside your program
+    - real world object
+    - mathematical object
+    - business process with well defined operations
+
+- When (maybe) NOT use a typeclass
+  - if your type class would only be used on 1 or 2 places, consider passing a function instead
+  - if you would only have 1 instance, wait until you'll need at least 1 more instance
+  - if you find that most of your instances are *newtype* wrapers around some underlying type
+    consider using a *record* that holds functions instead
+
+- ~Rule of threes~ consider abstracting the behavior into a typeclass after the third time you rewrite your code
 *** with =Type Classes= you can give a name to a group of related functions
 
   - allows to provide different implementations for different types
@@ -3747,7 +3770,7 @@ authenticate User{..} password =
       multiplicativeIdentity = S Z
   #+end_src
 
-*** creating ~default implementations~
+*** creating _default implementations_ and defining a =MINIMAL=
 
 - Example: implementing Ord and Ordering
 
@@ -3801,7 +3824,7 @@ authenticate User{..} password =
      {-# MINIMAL compare | (<=) #-}
    #+end_src
 
-*** DefaultSignatures
+*** ~DefaultSignatures~ (default)
 
 - Example: we have a logging library, were we want to redact some information from logs
 
@@ -3815,8 +3838,8 @@ authenticate User{..} password =
   #+end_src
 
 - We create a type *UserName*, we want it to implement both
-  - Show for repl testing
-  - Redacted for production
+  - *Show* for repl testing
+  - *Redacted* for production
 
   #+begin_src haskell
     instance Show Username where
@@ -3826,8 +3849,11 @@ authenticate User{..} password =
       redacted (Username name) = name
   #+end_src
 
+- given that both have the same implementation,
+  you could add *Show* as ~constraint~ to *Restricted*
+
   #+begin_src haskell
-    class Show a => Redacted a where -- something that can be redacted
+    class Show a => Redacted a where
       redacted :: a -> String
       redacted = show -- default implementation
 
@@ -3839,7 +3865,732 @@ authenticate User{..} password =
     instance Redacted UserName -- uses show
   #+end_src
 
+- however there might be data, were we don't want to defined a *show*
+  to not risk mistakenly printing a user's password in plaintext.
+
+- ~DefaultSignature~ we add a *signature* to the default implementation
+  where we also add a Show constraint.
+  Which we don't have to respect if we override it.
+
+  #+begin_src haskell
+    {-# LANGUAGE DefaultSignatures #-}
+    class Redacted a where                      -- we dropped the Show constraint
+      redacted :: a -> String                   -- this should be ALWAYS respected
+      default redacted :: Show a => a -> String -- this is a signature ONLY for the default
+      redacted = show                           -- the default
+  #+end_src
+
+- as a result, a *Redacted* instance needs either
+  - be an instance of "Show"
+  - or define their own "redacted"
+  #+begin_src haskell
+    data Password = Password String
+
+    instance Redacted Password where
+      redacted _ = "<redacted>"
+  #+end_src
+
+*** ~TypeApplications~ (@_) extension to specify Type Class instances
+
+- with this we can pass a /type name/ to a function, effectively changing how it gets run
+  #+begin_src haskell
+    >>> read @Integer "1"
+      1
+    >>> read @Float "1"
+      1.0
+  #+end_src
+
+- You can also *partially apply* it
+  #+begin_src haskell
+    readInt   = read @Int   -- String -> Int
+    readFloat = read @Float -- String -> Float
+  #+end_src
+
+- and also use it on functions with more than 1 type variable
+
+  #+begin_src haskell
+    showLeftRight :: (Read a, Read b) => String -> Either a b
+    showLeftRight s
+      | length s > 5 = Left  (read s)
+      | otherwise    = Right (read s)
+
+    >>> showLeftRight @Float @Int "3.1415" -- Left 3.1415
+    >>> showLeftRight @Float @Int "321"    -- Right 321
+    >>> showLeftRight @Float "3.14.15"     -- Left 3.1415 -- We only use "a" so we could just pass one type application
+    >>> showLeftRight @_     @Int "123"    -- Right 123   -- We used @_ as a placeholder, to skip non-relevant type application
+  #+end_src
+
+*** ~ScopedTypeVariables~ (forall)
+
+- some code is imposible to write without this extension
+  this won't compile
+
+  #+begin_src haskell
+    adheresToReadShowContract val =
+      let a = show . read . show $ val
+          b = show val
+      in a == b
+  #+end_src
+
+- Even (read "10") will fail since we don't know what type we want out of it
+  (read "10" :: Int) will work
+
+- Using this extension.
+
+  We use the explicit ~universal quantification~ "forall a."
+  More often called "explicit forall". Because without it the "forall" would be implicit.
+  That will have the only effect of bring the type variable "a" into the scope on the body of the function..
+  Effectively given context to the "read" for GHC to compile the program
+
+  #+begin_src haskell
+    adheresToreadShowContract :: forall a. (Read a, Show a) => a -> String
+    adheresToReadShowContract val =
+      let a = show . read @a . show $ val -- type annotation
+          b = show val
+      in a == b
+  #+end_src
+
+*** =print-explicit-foralls=
+
+- needs >= GHC 9
+
+- >>> :set -fprint-explicit-foralls
+  >>> :t convertViaInt
+
+- GHC tracks 2 different types of =type variables=
+  1) specified types: when we manually write the type variables, aka on the function signature
+  2) inferred types: when we have polymorphic type variales, which we never references, eg: in GHCI
+
+- If we type annotate the function, we have a specified type variables
+
+  #+begin_src haskell
+    convertViaInt :: (Integral w, Num b) => w -> b
+    convertViaInt a = fromIntegral $ fromIntegral @_ @Int a
+    -- >>> :t convertViaInt
+    -- convertViaInt :: forall w b. (Integral w, Num b) => w -> b
+  #+end_src
+
+- If a type variable is {surrounded} it means it was inferred
+
+  #+begin_src haskell
+  convertViaInt a = fromIntegral $ fromIntegral @_ @Int a
+  -- >>> :t convertViaInt
+  -- convertViaInt :: forall {w} {b}. (Integral w, Num b) => w -> b
+  #+end_src
+
+- We can control it with simple type annotation
+  #+begin_src haskell
+    >>> convertViaInt @Integer @Double 5
+      error
+    >>> (convertViaInt :: Integer -> Double) 5
+      5.0
+  #+end_src
+
+- or mark a type variable to be explicit
+  #+begin_src haskell
+    convertViaInt :: forall {a} b. (Integral a, Num b) => a -> b
+    convertViaInt input =
+      fromIntegral $ fromIntegral @_ @Int input
+  #+end_src
+
+- where it will work the type application
+  #+begin_src haskell
+    >>> convertViaInt @Double 100
+      100.0
+    >>> convertViaInt @Int 100
+      100
+  #+end_src
+*** Wrapping Types with =newtype= (Monoid/Semigroup)
+
+- newtype
+  - is simply a way to wrap an existing type
+  - they are zero(0) cost abstractions
+  - must have exactly 1(one) constructor
+  - constructor must have 1(one) field
+
+#+begin_src haskell
+  newtype MyEither a b = MyEither (Either a b)
+  newtype MyEither a b = MyEither { getEither :: Either a b } -- alternative record syntax
+#+end_src
+
+- There are 2 reasons, why you would want to add a type class to a newtype
+  1) to avoid ~orphan instances~
+  2) to support multiple type class instances for the underlying type
+
+**** Orphan Instances
+
+- is an instance of a typeclass, defined in a *module* where either of these are not defined on that *module*
+  1) the typeclass
+  2) the underlying type you are creating an instance of
+
+- They trigger a warning.
+- They are bad style.
+- Are a risk to long term maintainability
+  - because the module that defined either the typeclass or the underlying type
+    might add an instance
+    and given that in haskell you can only have 1 instance per type
+    it will BREAK your code
+
+**** Multiple type class instances
+
+#+begin_src haskell
+-- what
+class Semigroup where
+  (<>) :: a -> a
+  GHC.Base.sconcat :: GHC.Base.NonEmpty a -> a
+  GHC.Base.stimes :: Integral b => b -> a -> a
+  {-# MINIMAL (<>) #-}
+
+-- builds a SemiGroup by adding mempty, aka the initial or empty value
+class Semigroup a => Monoid a where
+  mempty :: a
+  mappend :: a -> a -> a
+  mconcat :: [a] -> a
+  {-# MINIMAL mempty #-}
+#+end_src
+
+- We can see the behaviour of values and functions defined over typeclasses
+
+  #+begin_src haskell
+    >>> mempty @[Int]
+      []
+    >>> mempty @String
+      ""
+    >>> mempty @(Maybe [Int])
+      Nothing
+  #+end_src
+
+- =mempty= is NOT a value particular to a type.
+  - Is a value related to an *operation*
+  - For Int we have >1 choice of how we would combine value: multiplication, addition...
+  - Each of those choices give us different values for mempty
+
+- (<>) defines an operation for a type
+  mempty is the identity of that operation
+
+- We then add a ~newtype~ for each new operation,
+  and instances of Semigroup and Monoid for each newtype
+
+  #+begin_src haskell
+    newtype Product = Product { getProduct :: Int }
+    newtype Sum = sum { getSum :: Int }
+
+    instance Semigroup Product where
+      (Product a) <> (Product b) = Product (a * b)
+
+    instance Monoid Product where
+      mempty = Product 1
+  #+end_src
+*** Understanding =Higher Kinded Types= and Polymorphism
+
+- ~higher kinded types~ are types that accept type parameters
+
+- a ~kind~ is a type of a type
+
+- types with kind "*" are called ~fully saturated types~
+
+- non-fully saturated types are called ~type constructors~
+
+|----------------+-------------|
+| type           | kind        |
+|----------------+-------------|
+| Int            | *           |
+| Int -> String  | *           |
+| Maybe Int      | *           |
+| Maybe          | * -> *      |
+| Either         | * -> * -> * |
+| Either Int     | * -> *      |
+| Either Int Int | *           |
+|----------------+-------------|
+
+- =Data.Kind.Type= is an alias for "*", it will allow us to make kind signatures look nicer (?)
+
+- the type signature of fold,
+  - shows a type constraint on "t"
+  - and that "a" is being applied to "t"
+  - "t" is a higher kind type (* -> *)
+  #+begin_src haskell
+    foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+    foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
+  #+end_src
+
+- In haskell we have the ability to be *polymorphic over paremetrized types*
+
+- Example: We could convert this function that only works with lists to work with Data.List.NonEmpty lists
+
+  #+begin_src haskell
+    toCSV :: Show a => [a] -> String
+    toCSV =
+      let
+        addField :: Show a => String -> a -> String
+        addField s a = s <> ", " <> show a
+
+        dropLeadingComma :: String -> String
+        dropLeadingComma s =
+          case s of
+            ',':s' -> s'
+            _      -> s
+      in dropLeadingComma . foldl addField ""
+  #+end_src
+
+- To
+
+  #+begin_src haskell
+    {-# LANGUAGE KindSignatures #-}
+    {-# LANGUAGE ExplicitForAll #-}
+    module HKTDemo where
+    import Data.Kind
+    import qualified Data.List.NonEmpty as NonEmpty
+
+    toCSV ::
+      forall (t :: Type -> Type) (a :: Type) -- kinds, to be extra explicit, not necessary?
+      . (Foldable t, Show a) -- constraint of "things that can be folded"
+      => t a -> String -- "t" comes from Traversable, "f" is reserved for Functor
+    toCSV = -- exact same code as before
+      let
+        addField :: Show a => String -> a -> String
+        addField s a = s <> ", " <> show a
+
+        dropLeadingComma :: String -> String
+        dropLeadingComma s =
+          case s of
+            ',':s' -> s'
+            _      -> s
+      in dropLeadingComma . foldl addField ""
+  #+end_src
+
+- which means that you can call it with a lot of new things
+  #+begin_src haskell
+    toCSV Nothing   -- ""
+    toCSV (Just 1)  -- "1"
+    toCSV (Right 3) -- "3"
+    toCSV (Left 4)  -- ""
+  #+end_src
+
+- You can use ~Higher Kinded Types~ with your own types and classes
+
+- Example:
+  like Foldable, Select will work with HKT,
+  allowing us to create a typeclass that will work for any parametrized type class
+
+  #+begin_src haskell
+    {-# LANGUAGE KindSignatures #-}
+    module Selector where
+    import Data.Kind
+
+    class Select (f :: Type -> Type) where
+      empty :: f a
+      pick :: f a -> f a -> f a
+  #+end_src
+
+- Example: instancing
+  - instances use HKT, rather than fully saturated types like "Maybe a" or "[a]"
+  - the typeclass and its instances expect to be implemented in terms of the shape of the data
+
+  #+begin_src haskell
+    instance Select Maybe where
+      empty          = Nothing
+      pick Nothing a = a
+      pick a _       = a
+
+    instance Select [] where
+      empty = []
+      pick  = (<>)
+  #+end_src
+*** Deriving Instances
+
+- type classes allow you to create abstractions in your programs
+
+#+begin_src haskell
+  data Customer =
+    Customer { name  :: String
+             , mail  :: String
+             , email :: String
+             } deriving (Eq, Show, Ord)
+#+end_src
+
+- when *deriving* a record,
+  all the types within the record must also have instances of the typeclass you are trying to derive
+
+  #+begin_src haskell
+    newtype Name = Name String
+      deriving (Eq, Show, Ord)
+
+    data Customer = Customer
+                    { name :: Name
+                    , mail :: String
+                    }
+                  deriving (Eq, Show, Ord)
+  #+end_src
+
+*** ~GeneralizedNewtypeDeriving~
+
+- allows newtype wrappers to derive any type class *instances*
+  that are implemented by the type they are wrapping.
+
+- Applying the algorithm:
+  1) unwrap the type
+  2) apply the type class function
+  3) rewrap the result
+
+- So we go FROM code like this
+
+  #+begin_src haskell
+    newype USD = USD { getMillis :: Integer } deriving (Eq,Ord,Show)
+
+    instance Num USD where
+      (USD a) + (USD b) = USD (a + b)
+      (USD a) * (USD b) = USD (a * b)
+      abs (USD a)       = USD (abs a)
+      signum (USD a)    = USD (signum a)
+      fromInteger       = USD
+      negate (USD a)    = USD (negate a)
+
+    instance Real USD where
+      toRational (USD a) = toRational a
+
+    instance Enum USD where
+      toEnum a         = USD (toEnum a)
+      fromEnum (USD a) = fromEnum a
+
+    instance Integral USD where
+      quotRem (USD a) (USD b) =
+        let (a',b') = quotRem a b
+        in (USD a', USD b'
+      toInteger (USD a) = a
+
+  #+end_src
+
+- TO code like this
+
+  #+begin_src haskell
+    {-# LANGUAGE GeneralisedNewtypeDeriving #-}
+    newtype USD = USD { getMillis :: Integer }
+      deriving (Eq, Ord, Show, Enum, Num, Real, Integral)
+  #+end_src
+
+*** ~DerivingVia~ a compatible type
+
+- with it, you can use *newtypes* as a /template/ for how to define a *type class* for other types.
+  reduces code, by allowing you to derive once and then re-use it in several ways
+
+- Background:
+  in "base" *Maybe* has an instance of *Monoid*, that allows you to combine the /underlying/ values
+  #+begin_src haskell
+    >>> (Just [1]) <> (Just [2]) <> Nothing <> (Just [3])
+      Just [1,2,3]
+  #+end_src
+
+- Problem:
+  it could be also useful if *Maybe* had another instance of *Monoid* that allowed
+  to return the first available value.
+  Eg: given several methods of contact, in the form of "Maybe String", it will return the first not-empty
+
+- We could write our own *newtype* wrapper
+  Since we can't add a new instance to an existing type, we'll use a typeclass called *MyMaybe* for which we can add an instance.
+  #+begin_src haskell
+    newtype MyMaybe a = MyMaybe (Maybe a)
+      deriving Show
+
+    instance Semigroup (MyMaybe a) where
+      (MyMaybe Nothing) <> b = b
+      a                 <> _ = a
+
+    instance Monoid (MyMaybe a) where
+      mempty = MyMaybe Nothing
+  #+end_src
+
+- Earlier, in this book, we wrote a class that implemented something similar to this.
+  #+begin_src haskell
+    class Select (f :: Type -> Type) where
+      empty :: f a
+      pick  :: f a -> f a -> a
+
+    instance Select Maybe where
+      empty          = Nothing
+      pick Nothing a = a
+      pick a _       = a
+  #+end_src
+
+- We could rewrite our *MyMaybe* instances to use *Select*
+  The result is
+  - nothing specific to MyMaybe or Maybe itself
+  - instances are just doing unwrapping/wrapping, and using the underlying *Select* instance we have already defined for *Maybe*
+  #+begin_src haskell
+    instance Semigroup (MyMaybe f a) where
+      (MyMaybe a) <> (MyMaybe b) = MyMaybe (pick a b)
+
+    instance Monoid (MyMaybe f a) where
+      mempty = MyMaybe empty
+  #+end_src
+
+- ~DerivingVia~
+  1) You'll need to create a type with one or more instances, that will act as a template
+  2) you can use *deriving via* to reuse the instances definitions for other types
+
+- Example:
+  - *Sel*, gets his name because it wraps the previously defined class ~Select~ and it has his same signature
+  - *Sel*, is used as a template for how to derive the instances for *Semigroup* and *Monoid*
+  - It will create an instance that converts our "MyMaybe" value into "Sel Maybe"
+  - Then calls the appropiate type class functions, and converts the result back to "MyMaybe" value.
+
+  #+begin_src haskell
+    {-# LANGUAGE DerivingVia #-}
+    newtype Sel (f :: Type -> Type) (a :: Type)
+      = Sel (f a)
+
+    instance (Select f) => Semigroup (Sel f a) where
+      (Sel a) <> (Sel b) = Sel (pick a b)
+
+    instance (Select f) => Monoid (Sel f a) where
+      mempty = Sel empty
+
+    newtype MyMaybe a = MyMaybe (Maybe a)
+      deriving Show
+      deriving (Semigroup, Monoid) via (Sel Maybe a) -- via
+  #+end_src
+
+- You are NOT limited to *deriving via* with types that already have an instance of the type class.
+  Example: you can add Semigroup and Monoid to Int. By borrowing by the Data.Semigroup.Sum and .Product
+
+  #+begin_src haskell
+    {-# LANGUAGE DerivingVia #-}
+    module MyNumericMonoids where
+    import Data.Semigroup
+
+    newtype MySum = MySum { getMySum :: Int }
+      deriving (Eq, Show)
+      deriving (Semigroup, Monoid) via (Sum Int)
+
+    newtype MyProduct a = MyProduct { getMyProduct :: a }
+      deriving (Eq, Show)
+      deriving (Semigroup, Monoid) via (Product a)
+
+    -- >>> mconcat $ map MySum [1..10]
+    --   MySum {getMySum = 55}
+    -- >>> mconcat $ map Product [1..10]
+    --   Product {getProduct = 3628800}
+  #+end_src
+
+*** ~StandaloneDeriving~ to make it easier for us o see the vaule while we're testing things out
+  #+begin_src haskell
+    >>> :set -XStandaloneDeriving
+    >>> deriving instance (Show (f a)) => Show (Sel f a)
+    >>> a = Sel (Just 1)
+    >>> b = Sel (Nothing)
+    >>> a <> b
+       Sel (Just 1)
+    >>> b <> a
+       Sel (Just 1)
+    >>> (Sel [1,2]) <> (Sel [3,4,5])
+       Sel [1,2,3,4,5]
+  #+end_src
+*** ~DeriveAnyClass~ + default definitions
+
+- ~DeriveAnyClass~ with it we can *derive* any class, and GHC will add an empty instance declaration for us
+ #+begin_src haskell
+   {-# LANGUAGE DefaultSignatures #-}
+   {-# LANGUAGE DeriveAnyClass #-}
+   module AnyClassDemo where
+
+   class Redacted a where
+     redacted :: a -> String
+     default redacted :: Show a => a -> String
+     redacted = show
+  #+end_src
+
+- define the UserName newtype
+  #+begin_src haskell
+    newtype UserName = UserName String
+      deriving (Show, Redacted)
+  #+end_src
+
+- Testing
+  #+begin_src haskell
+    >>> UserName "george"
+      UserName "george"
+    >>> redacted $ UserName "george"
+      "UserName \"george\""
+  #+end_src
+
+- However if we try to DeriveAny *Redacted* without *Show* on a new *Password* type
+  It will FAIL to compile.
+
+  #+begin_src haskell
+    newtype Password = Password String
+      deriving (Redacted) -- ERROR
+  #+end_src
+
+*** ~DerivingStrategies~
+
+- To solve interactions between different types of derives extensions
+
+- By default GHC wil pick AnyClass over NewClass when deriving
+
+#+begin_src haskell
+  newtype UserName = UserName String
+    deriving how
+  instance Redacted UserName where
+    redacted (UserName user) = "UserName: " <> user
+
+  newtype AdminUser = AdminUser
+    deriving stock Show       -- stock strategy
+    deriving newtype Redacted -- newtype strategy
+#+end_src
+
+- stock, newtype, anyclass, via
+
 ** 07 Understanding =IO=
+
+- general IO vs IO actions vs IO type
+
+- Haskell does "pure lazy IO".
+  - Current approach exists since Haskell98
+  - The =IO Type= is how we keep track of the state of the real world.
+  - Being pure means that we can't just change the value of things,
+    and that includes changing the external environment. Aka *side-effects*
+  - Instead of changing an external value, we need to keep track
+    of all the changes we want to make.
+  - We call =IO actions= to things like "IO String",
+    and use "IO a" to refer to any type of it
+  - Since the performed /order/ of =IO actions= is really important *lazyness* becomes a problem.
+    We can overcome it by ensuring each "IO" returned is used.
+    We need a way to combine/sequence IO actions.
+    Letting us represent them as a single larger IO action.
+
+*** (>>=)
+
+- This "sequencing" is directly represented by the type system.
+  That is the type of the hole.
+  #+begin_src haskell
+    copyFile :: FilePath -> FilePath -> IO ()
+    copyFile src dst =
+      (readFile src) `_` (writeFile dst)
+
+    -- if we replace the _ hole with "andThen"
+    -- the ouput value "b" depends on evaluating "a"
+    andThen :: IO a -> (a -> IO b) -> IO b
+    andThen = (>>=) -- aka "bind"
+  #+end_src
+
+- to get a newIO, for example to return a "IO String" when something failed
+  #+begin_src haskell
+    noPassword :: FilePath -> IO String
+    noPassword path =
+      case path of
+        "/etc/passwd" -> newIO "hey, that's a secret!"
+        fname -> readFile fname
+
+    showFile path = noPassword path `andThen` putStrLn
+
+    newIO :: a -> IO a
+    newIO = return
+  #+end_src
+
+- we can write functions that will take a pure value and turn into impure IO action
+  and then combine it with bind (>>=)
+  #+begin_src haskell
+    ioRead :: String -> IO Int
+    ioRead sumString = return $ read sumString
+
+    ioShow :: Int -> IO String
+    ioShow = return . show
+
+    ioSucc :: Int -> IO Int
+    ioSucc = return . succ
+  #+end_src
+
+- Using some functions from System.IO and >>=
+  #+begin_src haskell
+    doSomeFileStuff =
+      openFile "/tmp/foo.txt" ReadMode
+      >>= \handle -> hgetContents handle
+      >>= \contents -> putStrLn contents
+      >>= \_ -> hClose handle
+  #+end_src
+*** (>>)
+
+- This still leaves unsolved, what if we only care about sequencing and do NOT care about the returned values?
+ #+begin_src haskell
+   -- will ERROR, because >>= wants something like "a -> IO b"
+   putStrLn "hello world" >>= putStrLn "nice to meet you"
+   -- we could avoid it with a lambda
+   putStrLn "hello world" >>= \_ -> putStrLn "nice to meet you"
+  #+end_src
+
+- For that we can write a function like *thenCall*
+  #+begin_src haskell
+    thenCall :: IO a -> IO b -> IO b
+    thenCall a b = a >>= \_ -> b
+    --thenCall = (>>)
+  #+end_src
+
+*** fmap (<$>)
+
+- the answer to,
+  what to do when you have a function that doesn't know or care about IO?
+
+- Whenever we see a ~return~ used with (>>=) it's a sign that you might want to refactor your code
+
+  #+begin_src haskell
+    main :: IO ()
+    main =
+      getArgs >>= return . sumArgs >>= print
+  #+end_src
+
+- ~fmap~ comes from the *Functor* type class and it helps us solve this problem
+  giving us a way to apply pure functions to values inside an =IO action=
+  without having to use (>>=).
+
+- Works just like *map*, but for all instances of *Functor*
+  #+begin_src haskell
+    fmap :: Functor f => (a -> b) -> f a -> f b
+    -- >>> fmap (+1) (return 1 :: IO Int) -- 2
+    -- >>> fmap show (return 1 :: IO Int) -- "1"
+  #+end_src
+
+- We could make our previous main more clear
+  #+begin_src haskell
+    main :: IO ()
+    main =
+      fmap sumArgs getArgs >>= print -- or
+      sumArgs <$> getArgs >>= print
+  #+end_src
+
+- We can also use ~fmap~ to handle *Maybe* and avoid if/else or pattern matching
+  #+begin_src haskell
+    import Text.Read (readMaybe)
+    sumArgs :: [String] -> Maybe Int
+    sumArgs strArgs =
+      let intArgs = mapM readMaybe strArgs
+      in fmap sum intArgs
+  #+end_src
+
+- where ~mapM~ is a function that converts
+  | [Maybe a] | Maybe [a] |
+  | [IO a]    | IO [a]    |
+
+*** TODO Running IO in real applications
+
+- TOPIC: =IO actions= impact on performance and stability
+
+- In the same way that lazyness allowed this code to compile and run, returning "12"
+  #+begin_src haskell
+    ignoreUnevaluated :: Int
+    ignoreUnevaluated =
+      let infinity = sum [1..]
+      in 12
+  #+end_src
+
+- this code will also compile and run, returning (), but NOT printing anything
+  as the IO of putStrLn wil never become part of the history of the real world we are returning
+  #+begin_src haskell
+    ignoreUnevaluatedIO :: IO ()
+    ignoreUnevaluatedIO =
+      let screamIntoTheVoid = putStrLn "quack" -- will not print anything
+      in return ()
+  #+end_src
+
 ** 08 Working with the Local System
 ** 09 Introducing =Monads=
 ** 10 Mutable Data in Real World

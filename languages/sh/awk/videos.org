@@ -7,42 +7,52 @@
 - 22 | Debra McCusker  | Walking Through Several AWK Scripts https://www.youtube.com/watch?v=cPlBT2c3TuQ
 * 15 | Computerphile   | UNIX Special: Profs Kernighan & Brailsford
   https://www.youtube.com/watch?v=vT_J6xc-Az0
-- Perl was build as a reaction of AWK
+
+- =Perl= was build as a reaction of AWK
   - Partially because the released version of AWK outside AT&T was inferior to the internal
-- AWK, If you are doing something that is only a couple of lines long, AWK is great.
+
+- If you are doing something that is only a couple of lines long, AWK is great.
   When you get bigger than that, it doesn't scale very well.
   Because it doesn't have any of the things that prevent you from doing something stupid, or at least finding out when you did.
+
 - The pattern-action paradigm is great for many thing.
   But not for some others.
   1) if you want to do 2 passes on something
   2) or if you want to remember complicated state
+
 - ~TIP~:
   Rather than trying to figure out how to keep track of state from one line to another on the input.
   Read the whole input into a GIGANT ARRAY and then do indexing computations.
+
 - TCL/TK
   Author made it very easy to extend by adding C functions.
   As a language is bizzarre.
   Brian use it for a number of years.
+
 * 16 | Glen MacLachlan | ETL with Awk Commands Reviewed
+
 https://www.youtube.com/watch?v=9d__vUmAO1A
+
 - Print differently the last column (ME: might be can be with the output FS variable)
   1) Alternative if else
     #+begin_src awk
       {
           for(i=1; i<=NF; i++)
               if (i != NF)
-                  printf(" %s |", $i)
+                   printf(" %s |", $i)
               else
-                  printf(" %s |\n", $i)
+                   printf(" %s |\n", $i)
       }
    #+end_src
   2) OR
      #+begin_src awk
        {
-           for (i = 1; i <= NF; i++) printf " %s |", $1
+           for (i = 1; i <= NF; i++)
+               printf " %s |", $1
            printf "\n"
        }
      #+end_src
+
 - You can use ascii encoding to put single quotes into your printf
   - each column
     #+begin_src awk
@@ -56,6 +66,7 @@ https://www.youtube.com/watch?v=9d__vUmAO1A
           printf $NF"\x27);"
       }
     #+end_src
+
 * TODO 17 | Mark Krenz      | Using AWK in Bro logs
 https://www.youtube.com/watch?v=20QeFkwXgCE
 - Remember to use escape the dot to match an specific IP ^2\.4\.150\.1$
@@ -206,16 +217,6 @@ https://www.youtube.com/watch?v=IfhMUed9RSE
 2023 https://www.youtube.com/watch?v=yJek26lyXZ0
 2021 https://earthly.dev/blog/awk-examples/
 - for (key in array) {}
-- Set the order an already created array would be presented on a forIn
-  PROCINFO["sorted_in"] = "afunctionname" like compare(index1, value1, index2, value2) returns a boolean
-  PROCINFO["sorted_in"] = "@val_num_asc"
-  PROCINFO["sorted_in"] = "@val_num_desc"
-  PROCINFO["sorted_in"] = "@val_str_asc"
-  PROCINFO["sorted_in"] = "@val_str_desc"
-  PROCINFO["sorted_in"] = "@ind_num_asc"
-  PROCINFO["sorted_in"] = "@ind_num_desc"
-  PROCINFO["sorted_in"] = "@ind_str_asc"
-  PROCINFO["sorted_in"] = "@ind_str_desc"
 - #!/usr/bin/env -S gawk -f
 - Can use $() to perform calculation on the fly (?)
   #+begin_src awk

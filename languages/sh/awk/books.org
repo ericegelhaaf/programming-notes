@@ -2,7 +2,7 @@
 - book https://learnbyexample.github.io/learn_gnuawk/ https://github.com/learnbyexample/learn_gnuawk
 - book https://en.wikibooks.org/wiki/An_Awk_Primer
 - book https://www.grymoire.com/Unix/Awk.html
-* Book: The AWK Programming Language (2nd Edition)
+* 23 | The AWK Programming Language (2nd Edition)
 | AWK Home   | https://www.awk.dev/              |
 | AWK Source | https://github.com/onetrueawk/awk |
 ** Preface
@@ -31,6 +31,7 @@
 - "NEW" stuff, better support for Unicode, and csv
 - $ awk --version
 ** 1 An Awk Tutorial
+
 - $ awk '{ print $1 }'
   $ awk '{ print $1 }' file1
   $ awk -f some.awk file1
@@ -44,7 +45,6 @@
 - The basic operation of Awk is to scan a sequence of input lines, from any number of files,
   one after another, searching for lines that mare matched by any of the patterns in the program.
 - Either (not both) the pattern or the action can be omitted.
-- Given a TSV (name, salary, work hours)
 - print, default behaviour
   - A "," in a print gets printed as a single space
   - ends with a newline character
@@ -56,7 +56,9 @@
 - Both build-in variables and fields retain their value in and END action.
 - Awk numerical variables get initialized with 0(zero)
   Awk string characters variables get initialized to the null string ""
-*** Example Programs
+
+*** Example one-liners
+- Given a TSV (name, salary, work hours)
 |---------------------------------------------------------+------------------------------------------|
 | $3 > 0 { print $1, $2 * $3 }                            | name and calculates the pay              |
 | $3 == 0 { print $1 }                                    | employees which didnt work               |
@@ -87,6 +89,7 @@
 |---------------------------------------------------------+------------------------------------------|
 | END { print NR }                                        | number of lines                          |
 | NR <= 10                                                | the first 10 lines                       |
+| { print }; NR == 11 { exit }                            | the first 10 lines, constant time        |
 | NR == 10                                                | 10th line                                |
 | NR % 10 == 1                                            | every 10th line                          |
 | { print $NF }                                           | last field of every line                 |
@@ -112,6 +115,7 @@
 | { print NR, $0 }                                        | every line, preceeded by the number      |
 | { $1 = NR; print }                                      | every line, first field replaced by lno  |
 | { $2 = "", print }                                      | every line, remove second field          |
+| { lines[NR]=$0 } END{ for(i=NR;i>0;) print lines[i--]}  | every line, reversed                     |
 |---------------------------------------------------------+------------------------------------------|
 | {                                                       | every line, fields reversed              |
 | for (i = NF; i > 0; i--) printf("%s", $i)               |                                          |
@@ -133,6 +137,7 @@
 | }                                                       |                                          |
 |---------------------------------------------------------+------------------------------------------|
 *** Example: data validation, printing suspect lines
+
 - If here are no errors there's no output
 #+begin_src awk
   NF != 3 { print $0, "number of fieds is not equal to 3" }
@@ -141,18 +146,25 @@
   $3 < 0  { print $0, "negative hours worked" }
   $3 > 60 { print $0, " too many hours worked" }
 #+end_src
+
 *** Example: printing a heading with =BEGIN=
-- the words are separeted by the right number of spaces
-  #+begin_src awk
-    BEGIN { print "NAME RATE HOURS"; print "" } # Adds an empty line to separate the heading
-          { print }
-  #+end_src
+
+- the words are separated by the right number of spaces
+
+#+begin_src awk
+  BEGIN { print "NAME RATE HOURS"; print "" } # Adds an empty line to separate the heading
+        { print }
+#+end_src
+
 *** Example: use a variable for counting marching lines, and print at =END=
+
 #+begin_src awk
   $3 > 15 { emp = emp + 1 } # OR { emp++ }
   END     { print emp, "employees worked more than 15 hours" }
 #+end_src
+
 *** Example: use =NR= to calculate an average
+
 #+begin_src awk
       { pay = pay + $2 * 3 } # or { pay += $2 * $3 }
   END { print NR, "employes"
@@ -160,26 +172,34 @@
         print "average pay is", pay/NR
       }
 #+end_src
+
 *** Example: use a variable to store text
+
 #+begin_src awk
   $2 > maxrate { maxrate = $2; maxemp = $1 }
   END { print "highest hourly rate:", maxrate, "for", maxemp }
 #+end_src
+
 *** Example: string concatenation
+
 - done by writing string values one after other
 - there is no explicit concatenation operator
   #+begin_src awk
         { names = names $1 " " } # concatenation happening here
     END { print names }
   #+end_src
+
 *** Example: count lines, word and characters
+
 #+begin_src awk
       { nc += length($0) + 1 # add 1, because $0 doesn't include the new line character
         nw += NF
       }
   END { print NR, "lines,", nw, "words,", nc, "characters" }
 #+end_src
+
 *** Example: using an IF in an action, to defend against division by zero
+
 #+begin_src awk
   $2 > 30 { n++, pay += $2 * $3 }
   END     { if (n > 0) # no brace needed for one statement
@@ -189,7 +209,9 @@
                 print "No employees are paid more than $30/hour"
           }
 #+end_src
+
 *** Example: using WHILE to calculate the amount of money invested at a interest rate
+
 - example inputs
   - 1000 .05 5
   - 1000 .10 5
@@ -205,7 +227,9 @@
       }
     }
   #+end_src
+
 *** Example: using FOR for the same
+
 #+begin_src awk
   # interest2 - compute compound interest
   # input: amount rate years
@@ -214,7 +238,9 @@
           printf("\t%.2f\n", $1 * (1 + $2) ^ i)
   }
 #+end_src
+
 *** Example: fizz-buzz
+
 #+begin_src awk
   BEGIN { # all happens at BEGIN, filename arguments are ignored
       for (i = 1; i <= 100; i++) {
@@ -229,7 +255,9 @@
       }
   }
 #+end_src
+
 *** Example: reverse lines, using an *array*
+
 #+begin_src awk
   # reverse - print input in reverse order by line
 
@@ -245,18 +273,157 @@
             print line[i]
   }
 #+end_src
-** 2 Awk in Action
-*** 2.1 Personal Computation
-**** BMI
-1kg  = 2.2 pounds
-1ich = 2.54cm
 
-bmi = weight / height^2
-18-25 normal
-25-30 overweight
->30   obese
+** 2 Awk in Action
+- BMI
+  - 1kg  = 2.2 pounds
+  - 1ich = 2.54cm
+  - bmi = weight / height^2
+  - 18-25 normal
+  - 25-30 overweight
+
+- cf - units conversions
+  - given just a number produces common length/temperature/weight conversions
+    - F/C
+    - in/cm
+    - lb/kg
+
+- mc: streaming version of multi-column printing
+  - sprintf("%s%-10.10s  ", out, $0) # truncate + justify
+
+- addup - add up values in each field separately
+  - for(i=1;i<=NF;i++) field[i] += $i
+
+**** Example: plot numbers distribution
+
+...of steps walked
 
 #+begin_src awk
-  BEGIN { print "enter pounds inches" }
-        { printf("%.1f\n", ($1/2.2) / ($2 * 2.54/100) ^ 2) }
+  { s += $2; x[NR] = $2; dist[int($2/2000)]++ }
+  END {
+      for (i = NR-6  ; i <= NR; i++)  w += x[i]
+      for (i = NR-30 ; i <= NR; i++)  m += x[i]
+      for (i = NR-90 ; i <= NR; i++)  q += x[i]
+      for (i = NR-365; i <= NR; i++) yr += x[i]
+      printf("  7: %.0f  30: %.0f  90: %.0f  1yr: $.0f  %.1fyr: %.0f\n",
+             w/7, m/30, q/90, yr/365, NR/365, s/NR)
+
+      # Plotting
+      scale = 0.05
+      for (i = 1; i <= 10; i++) {
+          printf("%5d:  ", i*2000)
+          for (j = 1; j < scale * dist[i]; j++)
+              printf("*")
+          printf("\n")
+      }
+  }
+  #  2000:  ****
+  #  4000:  ************************
+  #  6000:  *******************************************
+  #  8000:  ************************************************
+  # 10000:  ***************************************************
+  # 12000:  ***********************************************
+  # 14000:  ***************************************
+  # 16000:  ***********************
+  # 18000:  ********
+  # 20000:  *
+  #+end_src
+
+**** Example: html parser
+
+... of stocks value
+
+#+begin_src awk
+  /<td class="symb-col"/ {
+      sub(/.*<td class="symb-col">/, "")
+      sub(/<.*/, "")
+      symb = $0
+      next
+  }
+  /<td class="last-col"/ {
+      sub(/.*<td class="last-col">/, "")
+      sub(/<.*/, "")
+      price = $0
+      gsub(/,/, "", price)
+      printf("%6s  %s\n", symb, price)
+  }
 #+end_src
+
+**** Example: isplit - make an indexed array from a str
+
+#+begin_src awk
+  function isplit(str, arr,    n, i, temp) {
+      n = split(str, temp)
+      for (i = 1; i <= n; i++)
+          arr[temp[i]] = 1
+      return n
+  }
+  # isplit("Jan Feb Mar Apr may Jun Jul Aug Sep Oct Nov Dec", m)
+  # m["Jan"] = 1
+  # m["Dec"] = 12
+#+end_src
+
+** 3 Exploratory Data Analysis
+
+- EDA - term first used by the pioneering statiscian John Tukey
+
+- https://en.wikipedia.org/wiki/John_Tukey
+  - 1915 - 2000
+  - FFT creator
+  - also terms like "bit" and "software"
+  - boxplot visualization
+  - inspired S programming language, that lead to R
+
+- The essence of exploratory _data analysis_ is to play with the data
+  before making hypotheses or drawing conclusions.
+
+- "Finding the question is often more important than finding the answer.
+   Exploratory _data analysis_ is an attitude, a flexibility, and a reliance on display,
+   NOT a budle of techniques."
+
+- Usually Involves
+  * counting things
+  * computing simple statistics
+  * arranging data in different ways
+  * looking for patterns
+  * commoalities
+  * outliers
+  * oddities
+  * drawing basic graphs
+
+- check fields that do not have the expected number of fields or consistent fields
+  $ awk 'NF != 5 || $3 != $4 + $5' file
+
+- confirm a file has the same number of fields
+  $ awk '{print NF}' file | sort | uniq -c | sort -nr
+
+- field to_csv
+  #+begin_src awk
+    function to_csv(s) {
+        gsub(/"/, "\"\"", s)
+        return "\"" s "\""
+    }
+    function rec_to_csv(    s, i) {
+        for (i = 1; i < NF; i++)
+            s = s to_csv($i) ","
+        s = s to_csv($NF)
+        return s
+    }
+    function arr_to_csv(arr,    s, i, n) {
+        n = length(arr)
+        for (i = 1; i < n; i++)
+            s = s to_csv(arr[i]) ","
+        return substr(s, 1, length(s)-1) # remove trailing comma
+    }
+  #+end_src
+
+- =wc= counts bytes, assumes input is in ascii
+- =awk= counts unicode utf-8 characters
+
+- Umlaut https://en.wikipedia.org/wiki/Umlaut_(diacritic)
+  the 2 dots above a letter
+
+- grab a sample (0.1%) and (gnu)plot it
+  $ awk -F'\t' 'NR%1000 == 500 { print $2, $5}' rev.tsv > temp
+  $ gnuplot
+  plot 'temp'

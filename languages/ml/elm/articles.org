@@ -1,0 +1,62 @@
+, - https://github.com/elm/browser/blob/1.0.0/notes/navigation-in-elements.md
+- https://github.com/jinjor/elm-break-dom
+- Rust errors https://blog.rust-lang.org/2016/08/10/Shape-of-errors-to-come.html
+- Article: 2016 https://reasonablypolymorphic.com/blog/elm-is-wrong/
+  - no typeclasses: instead there are some obscure compiler magic
+  - TODO
+- 18 https://dev.to/kspeakman/elm-019-broke-us--khn
+* 18 | A Short Guide to Function Operators in Elm (|>, <|, >>, <<)
+  https://harfangk.github.io/2018/01/27/elm-function-operators.html
+
+| op   | signature                        | describes...                                               |
+|------+----------------------------------+------------------------------------------------------------|
+| (¦>) | a -> (a -> b) -> b               | the _flow of data_, main advantage over nested parentheses |
+| (<¦) | (a -> b) -> a -> b               | second argument INTO the first                             |
+| (>>) | (b -> c) -> (a -> b) -> (a -> c) | _function compositions_, indepedent of the data flow       |
+| (<<) | (a -> b) -> (b -> c) -> (a -> c) |                                                            |
+|------+----------------------------------+------------------------------------------------------------|
+
+- Pipe Operators (¦> <¦)
+
+  #+begin_src elm
+  -- with <|
+  test : Test.Test
+  test "substraction should have identity property" <| -- !!!!!!!!!
+      \_ >
+          let
+              a = negate (2 ^ 50 + 32)
+              b = 0
+          in
+              Expect.equal (a - b) a
+
+  -- with (parentheses)
+  test : Test.Test
+  test "substraction should have identity property" --- !!!
+      (\_ ->
+           let
+               a = negate (2 ^ 50 + 32)
+           b = 0
+           in
+               Expect.equal (a - b) a)
+#+end_src
+
+- composition
+  #+begin_src elm
+getFirstDigits : List Int -> List Int
+getFirstDigits list =
+    list
+    |> List.map toString
+    |> String.left 1
+    |> List.map (String.toint >> Result.withDefault 0)
+  #+end_src
+* 23 https://kevinyank.com/posts/on-endings-why-how-we-retired-elm-at-culture-amp/
+  https://news.ycombinator.com/item?id=35495910
+  - “if the only reason an engineer wants to work for you is because
+    of your tech stack, that may be a warning sign. Culture Amp
+    therefore avoids hiring engineers who are purely
+    technology-focused. As a product company, we seek to hire people
+    who are mostly excited about our product and its mission, and who
+    are happy to learn new things when necessary to progress
+    that. When someone tells us in an interview they’re excited about
+    working here because they like functional programming (say), we
+    count that as an indication they might not be a good fit.”
