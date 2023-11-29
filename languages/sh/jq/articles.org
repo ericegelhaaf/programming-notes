@@ -1,0 +1,17 @@
+- JQ Cookbook Examples by Noah Sussman
+  https://github.com/textarcana/jq-cookbook/blob/master/recipes.sh
+  https://gist.github.com/textarcana/bdadb1fc830aed4e55a6a669e940ac35
+- [JQ CookBook] jq CookBook #linux #jq #json #parser #101 #cookbook
+  https://gist.github.com/vpnwall-services/ece867608e00fe1ee77ed4780ff5298f
+- 23 The Ultimate Interactive JQ Guide https://ishan.page/blog/2023-11-06-jq-by-example/
+- article https://github.com/jqlang/jq/wiki/jq-Language-Description
+- article https://github.com/jqlang/jq/wiki/Cookbook
+- article https://github.com/jqlang/jq/wiki/Advanced-Topics
+- article https://github.com/jqlang/jq/wiki/How-to:-Avoid-Pitfalls
+- article https://mosermichael.github.io/jq-illustrated/dir/content.html
+- article https://codefaster.substack.com/p/mastering-jq-part-1-59c
+- article https://about.gitlab.com/blog/2021/04/21/devops-workflows-json-format-jq-ci-cd-lint/
+- 20 Parsing JSON at the CLI: A Practical Introduction to `jq` (and more!) https://sequoia.makes.software/parsing-json-at-the-cli-a-practical-introduction-to-jq-and-more/
+- jq cheat sheet https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/
+- 23 Displaying My Washing Machine's Remaining Time With curl, jq, and pizauth
+  https://tratt.net/laurie/blog/2023/displaying_my_washing_machines_remaining_time_with_curl_jq_pizauth.html

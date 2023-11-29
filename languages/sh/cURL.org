@@ -1,0 +1,34 @@
+|--------+------------------------------------|
+| home   | https://curl.se/                   |
+| man    | https://curl.se/docs/manpage.html  |
+| source | https://github.com/curl/curl       |
+| wiki   | https://en.wikipedia.org/wiki/CURL |
+|--------+------------------------------------|
+
+- book https://everything.curl.dev/
+- released in 1996 (former httpget, urlget)
+- developed by ~Daniel Stenberg~
+- stands for "client for URL"
+
+* command
+
+|----+--------------+----------------------------+---------------------------|
+| -A | --user-agent | Wget/1.0                   | user agent                |
+| -H | --header     | "Content-Type: text/plain" | header                    |
+| -X | --request    | POST                       | http method               |
+| -d | --data       | foo=bar                    |                           |
+| -L | --location   | -                          | folows redirections       |
+| -k | --insecure   | -                          | skip cert verification    |
+| -o | --output     | index.html                 | output file               |
+|----+--------------+----------------------------+---------------------------|
+| -w | --write-out  | '%{http_code}\n'           | print format              |
+| -i | --include    | -                          | print response headers    |
+| -s | --silent     | -                          | do NOT print progress bar |
+|----+--------------+----------------------------+---------------------------|
+
+
+* video: 23 | Mastering the curl command line | Daniel Stenberg
+
+https://www.youtube.com/watch?v=V5vZWHP-RqU
+
+23:00

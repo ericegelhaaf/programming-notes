@@ -4,22 +4,13 @@
 | basic manual | https://jqlang.github.io/jq/manual/                     |
 | home         | https://jqlang.github.io/jq/                            |
 | repl online  | https://jqplay.org/                                     |
+| repl         | https://github.com/gpanders/ijq                         |
+| awesome      | https://github.com/fiatjaf/awesome-jq                   |
 |--------------+---------------------------------------------------------|
 
-- JQ Cookbook Examples by Noah Sussman
-  https://github.com/textarcana/jq-cookbook/blob/master/recipes.sh
-  https://gist.github.com/textarcana/bdadb1fc830aed4e55a6a669e940ac35
-- [JQ CookBook] jq CookBook #linux #jq #json #parser #101 #cookbook
-  https://gist.github.com/vpnwall-services/ece867608e00fe1ee77ed4780ff5298f
-- article https://github.com/jqlang/jq/wiki/jq-Language-Description
-- article https://github.com/jqlang/jq/wiki/Cookbook
-- article https://github.com/jqlang/jq/wiki/Advanced-Topics
-- article https://github.com/jqlang/jq/wiki/How-to:-Avoid-Pitfalls
-- article https://mosermichael.github.io/jq-illustrated/dir/content.html
-- article https://codefaster.substack.com/p/mastering-jq-part-1-59c
-- article https://about.gitlab.com/blog/2021/04/21/devops-workflows-json-format-jq-ci-cd-lint/
-- tool https://github.com/gpanders/ijq
-- code https://github.com/odnoletkov/advent-of-code-jq https://news.ycombinator.com/item?id=33963383
+- code
+  https://github.com/odnoletkov/advent-of-code-jq
+  https://news.ycombinator.com/item?id=33963383
 
 * language
 
@@ -115,8 +106,8 @@
 |                  | test(REGEX;FLAGS)                              |                                                    |                                            |
 |                  | test([REGEX,FLAGS])                            |                                                    |                                            |
 |------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
-| "Hello World!"   | match("([aeiou])\\1")                          | empty                                              | to extract the substring that matched      |
 |                  | match([REGEX,FLAGS])                           |                                                    |                                            |
+| "Hello World!"   | match("([aeiou])\\1")                          | empty                                              | to extract the substring that matched      |
 | "Goodbye Mars"   | match("([aeiou])\\1")                          | {"offset": 1, "length": 2, "string": "oo"          |                                            |
 |                  |                                                | ,"captures": [                                     |                                            |
 |                  |                                                | {"offset": 1                                       |                                            |
@@ -221,6 +212,7 @@ MODNAME::FUNCTION;
 |                         |            join(",")            |                   |
 |        [1,2,3,4]        |           any(. >= 4)           |       true        |
 |        [1,2,3,4]        |           all(. >= 4)           |       false       |
+|           [1]           |           to_entries            | [{key:0,value:1}] |
 |                         | reduce stream as $var (init;fn) |                   |
 |      [10,20,30,40]      |  reduce .[] as $n (0; . + $n)   |        100        |
 |    ["A","B","C","D"]    | reduce .[] as $e ([]; [$e] + .) | ["D","C","B","A"] |

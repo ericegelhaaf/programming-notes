@@ -139,7 +139,6 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 |---------------------+--------------------------------------------------+---------------------------|
 | gsub(r,s)           | substitute all r for s in $0                     | number of subst made      |
 | gsub(r,s,t)         | substitute all r for s in t                      | number of subst made      |
-|---------------------+--------------------------------------------------+---------------------------|
 | sub(r,s)            | substitute one r for s in $0                     | number of subst made      |
 | sub(r,s,t)          | substitute one r for s in t                      | number of subst made      |
 |---------------------+--------------------------------------------------+---------------------------|

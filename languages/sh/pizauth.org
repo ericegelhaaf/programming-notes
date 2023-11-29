@@ -1,0 +1,3 @@
+- pizauth: an OAuth2 token requester daemon
+source https://tratt.net/laurie/src/pizauth/
+source https://github.com/ltratt/pizauth
