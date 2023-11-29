@@ -18,6 +18,7 @@
 - article https://mosermichael.github.io/jq-illustrated/dir/content.html
 - article https://codefaster.substack.com/p/mastering-jq-part-1-59c
 - article https://about.gitlab.com/blog/2021/04/21/devops-workflows-json-format-jq-ci-cd-lint/
+- tool https://github.com/gpanders/ijq
 - code https://github.com/odnoletkov/advent-of-code-jq https://news.ycombinator.com/item?id=33963383
 
 * language
@@ -26,10 +27,67 @@
 - jq sources ~/.jq automatically
 - First written in Haskell, but early rewritten in C for performance (?)
 - Created by Stephen Dolan in 2012
-- has TCO
 - jq binary is of 33k
-- \n \t \r \f \b \u123f
+- jq-mode
+  - bug: wrong string interpolation can have (") inside (")
+  - bug: wrong identation constructing objects
 
+** functions
+
+- the body consists of a SINGLE expression
+- single pass compiler (define a function before use it)
+- arity function overloading
+- has TCO for /0 arity functions ONLY
+
+#+begin_src jq
+  def funcname: expression;
+  def funcname(args) expression;
+  def A:
+    def B(n): n + 1; # nested function definition
+    B(10)
+  ;
+#+end_src
+
+*** function arguments are ~filters~ (not values)
+
+ - they act like what in other languages are ~callbacks~
+ - the filter expression gets passed into the function body as is
+
+  #+begin_src jq
+    def add_mul(adder;multiplier):
+      (. + adder) * multiplier;
+
+    add_mul(. + 5; . - 2); # => 200
+    # (. + . + 5) * . - 2
+    #  25         * 8
+  #+end_src
+
+*** function arguments as values (syntatic sugar)
+
+  #+begin_src jq
+    def my_func(arg):
+      arg as $arg
+      | #...
+    ;
+
+    def my_func($arg):
+      #....
+    ;
+  #+end_src
+
+*** recursion
+#+begin_src jq
+  def count_occurrences(x):
+    if   length == 0 then # base
+      0
+    elif first  == x then # recursive
+      (1 + (.[1:] | count_occurrences(x)))
+    else # recursive
+      (.[1:] | count_occurrences(x))
+    end;
+
+    [11,22,33,22,44] | count_occurrences(22) # => 22
+#+end_src
 ** regular expressions
 
 - https://jqlang.github.io/jq/manual/v1.7/#regular-expressions
@@ -38,6 +96,8 @@
   https://github.com/kkos/oniguruma/blob/6fa38f4084b448592888ed9ee43c6e90a46b5f5c/doc/RE
 - as strings the backslash for classes needs to be escaped
   "\\d" for characters
+
+- \n \t \r \f \b \u123f
 
 - flags
   - g: global search, find all matches
@@ -139,26 +199,36 @@ MODNAME::FUNCTION;
 |-------------------+--------------------------------------|
 
 **   array functions
-|-------------------------+---------------+---------------|
-|           <c>           |      <c>      |      <c>      |
-|           in            |    filter     |      out      |
-|-------------------------+---------------+---------------|
-|        [2,4,6,8]        |    length     |       4       |
-|        [2,4,6,8]        |  indices(8)   |      [3]      |
-|        [2,4,6,8]        | contains([2]) |     true      |
-|        [2,4,6,8]        |    reverse    |   [8,6,4,2]   |
-|        [2,4,6,8]        |      min      |       2       |
-|        [2,4,6,8]        |      max      |       8       |
-|      ["foo","bar"]      |      add      |   "foobar"    |
-| [72,101,108,108,111,33] |    implode    |   "Hello!"    |
-|        [2,4,6,8]        |     first     |       2       |
-|        [2,4,6,8]        |     last      |       8       |
-|        [2,4,6,8]        |    nth(2)     |       6       |
-|        [2,4,6,8]        |  map(. * 10)  | [20,40,60,80] |
-|                         |   join(",")   |               |
-|        [1,2,3,4]        |  any(. >= 4)  |     true      |
-|        [1,2,3,4]        |  all(. >= 4)  |     false     |
-|-------------------------+---------------+---------------|
+|-------------------------+---------------------------------+-------------------|
+|           <c>           |               <c>               |        <c>        |
+|           in            |             filter              |        out        |
+|-------------------------+---------------------------------+-------------------|
+|        [2,4,6,8]        |             length              |         4         |
+|        [2,4,6,8]        |           indices(8)            |        [3]        |
+|        [2,4,6,8]        |          contains([2])          |       true        |
+|        [2,4,6,8]        |             reverse             |     [8,6,4,2]     |
+|        [8,4,6,2]        |              sort               |     [2,4,6,8]     |
+|        [2,4,6,8]        |               min               |         2         |
+|        [2,4,6,8]        |               max               |         8         |
+|        [2,4,6,8]        |               add               |        20         |
+|      ["foo","bar"]      |               add               |     "foobar"      |
+|   [{foo: 1, bar: 2}]    |               add               | {foo: 1, bar: 2}  |
+| [72,101,108,108,111,33] |             implode             |     "Hello!"      |
+|        [2,4,6,8]        |              first              |         2         |
+|        [2,4,6,8]        |              last               |         8         |
+|        [2,4,6,8]        |             nth(2)              |         6         |
+|        [2,4,6,8]        |           map(. * 10)           |   [20,40,60,80]   |
+|                         |            join(",")            |                   |
+|        [1,2,3,4]        |           any(. >= 4)           |       true        |
+|        [1,2,3,4]        |           all(. >= 4)           |       false       |
+|                         | reduce stream as $var (init;fn) |                   |
+|      [10,20,30,40]      |  reduce .[] as $n (0; . + $n)   |        100        |
+|    ["A","B","C","D"]    | reduce .[] as $e ([]; [$e] + .) | ["D","C","B","A"] |
+|-------------------------+---------------------------------+-------------------|
+
+- in the reduce fn
+  - (.) is the accumulator
+  - if you need to reduce the input, store it in a variable
 
 **  string functions
 
@@ -209,12 +279,12 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | {"a": 1, "b": 2, "c": 3}   | has("a")                                         | true                        |
 | "a"                        | in({...})                                        | true                        |
 | {"a": 1, "b": 2, "c": 3}   | add                                              | 6                           |
+|----------------------------+--------------------------------------------------+-----------------------------|
 | {"a": 1, "b": 2, "c": 3}   | del(.a)                                          | {"b":2, "c":3}              |
 | {"a": 1, "b": 2, "c": 3}   | to_entries                                       | [{"key":"a","value":1},...] |
 | [{"key":"a","value":1}]    | from_entries                                     | {"a":1}                     |
 | {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42","Jane"}               |
 | {"first": "jane"}          | map_values(ascii_upcase)                         | {first: "JANE"}             |
-| [{"a":1},{"b":2}]          | add                                              | {a:1,b:2}                   |
 |----------------------------+--------------------------------------------------+-----------------------------|
 
 - with_entries(filter), is equivalent to:
