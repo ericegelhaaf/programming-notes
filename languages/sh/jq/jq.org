@@ -79,7 +79,60 @@
 
     [11,22,33,22,44] | count_occurrences(22) # => 22
 #+end_src
-** regular expressions
+
+** types
+
+- booleans
+  - falsy values: null, false
+
+- empty, it's own type
+
+|---------+------------------------------|
+| type    | example                      |
+|---------+------------------------------|
+| number  | 42, 3.14, 1e6, nan, infinite |
+| string  | "hello"                      |
+| boolean | true, false                  |
+| array   | [1, "2", {"foo": "bar"}]     |
+| object  | {"foo": 2}                   |
+| null    | null                         |
+|---------+------------------------------|
+
+** modules
+
+import modname as modname
+
+/MODNAME/MODNAME.jq
+/MODNAME.jq
+/main.jq
+
+MODNAME::FUNCTION;
+
+** operators
+
+|----------+----------------------------------------------------------|
+| ¦        | pipe operator                                            |
+| ,        | operator to join multiple streams                        |
+| ()       | to group subexpressions                                  |
+| []       | constructor                                              |
+| {foo: .} | constructor                                              |
+| +        | string concatenation                                     |
+| +        | arrays append                                            |
+| +        | objects merge                                            |
+| /        | operator version of the split/1 function                 |
+| A // B   | if A then A else B end (alternative operator)            |
+| ?        | error suppresion, optional operator, shorthand for *try* |
+|----------+----------------------------------------------------------|
+
+** generators?
+
+|---+-------------------------------------------------+--------------+--------------------------------------|
+| 1 | while(.<30; .*2)                                | [1,2,4,8,16] |                                      |
+| 1 | repeat(.*2; error)?                             | [2]          | repeats filter until error is raised |
+| 4 | [.,1]¦until(.[0] < 1; [.[0]-1, .[1]*.[0]])¦.[1] | 24           |                                      |
+|---+-------------------------------------------------+--------------+--------------------------------------|
+
+**   regex functions
 
 - https://jqlang.github.io/jq/manual/v1.7/#regular-expressions
 - compatible with Perl v5.8 regexes
@@ -138,49 +191,6 @@
 |                  | ;    "\(.tla ¦ ascii_upcase)")                 |                                                    |                                            |
 |------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
 
-** types
-
-- booleans
-  - falsy values: null, false
-
-- empty, it's own type
-
-|---------+------------------------------|
-| type    | example                      |
-|---------+------------------------------|
-| number  | 42, 3.14, 1e6, nan, infinite |
-| string  | "hello"                      |
-| boolean | true, false                  |
-| array   | [1, "2", {"foo": "bar"}]     |
-| object  | {"foo": 2}                   |
-| null    | null                         |
-|---------+------------------------------|
-
-** modules
-
-import modname as modname
-
-/MODNAME/MODNAME.jq
-/MODNAME.jq
-/main.jq
-
-MODNAME::FUNCTION;
-
-** operators
-
-|----------+-----------------------------------------------|
-| ¦        | pipe operator                                 |
-| ,        | operator to join multiple streams             |
-| ()       | to group subexpressions                       |
-| []       | constructor                                   |
-| {foo: .} | constructor                                   |
-| +        | string concatenation                          |
-| +        | arrays append                                 |
-| +        | objects merge                                 |
-| /        | operator version of the split/1 function      |
-| A // B   | if A then A else B end (alternative operator) |
-|----------+-----------------------------------------------|
-
 ** general functions
 
 |-------------------+--------------------------------------|
@@ -213,6 +223,8 @@ MODNAME::FUNCTION;
 |        [1,2,3,4]        |           any(. >= 4)           |       true        |
 |        [1,2,3,4]        |           all(. >= 4)           |       false       |
 |           [1]           |           to_entries            | [{key:0,value:1}] |
+|      [10,20,30,40]      |              keys               |     [0,1,2,3]     |
+|-------------------------+---------------------------------+-------------------|
 |                         | reduce stream as $var (init;fn) |                   |
 |      [10,20,30,40]      |  reduce .[] as $n (0; . + $n)   |        100        |
 |    ["A","B","C","D"]    | reduce .[] as $e ([]; [$e] + .) | ["D","C","B","A"] |
@@ -237,8 +249,9 @@ being "Hello!" the INPUT
 | endswith("!")   | true                    |                            |
 | ascii_downcase  | "hello!"                |                            |
 | ascii_upcase    | "HELLO!"                |                            |
-| explode         | [72,101,108,108,111,33] | splits into codepoints     |
 | index("el")     | 1                       | position, otherwise *null* |
+| explode         | [72,101,108,108,111,33] | splits into codepoints     |
+| implode         |                         |                            |
 |-----------------+-------------------------+----------------------------|
 
 **    math functions
@@ -277,6 +290,7 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | [{"key":"a","value":1}]    | from_entries                                     | {"a":1}                     |
 | {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42","Jane"}               |
 | {"first": "jane"}          | map_values(ascii_upcase)                         | {first: "JANE"}             |
+| [{foo:1},{foo:2}]          | group_by(.foo)                                   | [[{foo:1}],[{foo:2}]]       |
 |----------------------------+--------------------------------------------------+-----------------------------|
 
 - with_entries(filter), is equivalent to:
@@ -319,54 +333,56 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | path(..) ¦ map(tostring) ¦ join("/")                  | instant schema                                    |
 |-------------------------------------------------------+---------------------------------------------------|
 
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| input             | filter                    | output               | description                         |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| 42                | .                         | 42                   | "identity"                          |
-| 99                | 42                        | 42                   | "constant"                          |
-| {}                | .color                    | null                 | "projection", dot notation          |
-| {color: "red"}    | .color                    | "red"                |                                     |
-| {color: "red"}    | .["color"]                |                      |                                     |
-| {color: "red"}    | "woah"                    | "woah"               |                                     |
-| {color: "red"}    | .color = "pink"           | {color: "pink"}      |                                     |
-| "color"           | {(.): "red"}              | {color: "red"}       |                                     |
-| [86, 99, 13]      | .[1]                      | 99                   |                                     |
-| [86, 99, 13]      | .[1+1]                    | 13                   |                                     |
-| [86, 99, 13]      | .[1:2]                    | [99]                 | slice, 1 = inclusive, 2 = exclusive |
-| {"k":1,"v":[8,9]} | .v[1]                     | 9                    |                                     |
-| {"k":1,"v":[8,9]} | .v[ .["k"] ]              | 9                    |                                     |
-| [86, 99, 13]      | .[] + 1                   | 87, 100, 14          |                                     |
-| [86, 99, 13]      | .[] ¦ . + 1               | 87, 100, 14          |                                     |
-| [86, 99, 13]      | [ . + 1 ]                 | [87, 100, 14]        |                                     |
-| 86, 99, 13        | . + 1                     | 87, 100, 14          |                                     |
-| 86, 99, 13        | [ . + 1 ]                 | [87], [100], [14]    |                                     |
-| 5                 | . * 2, . + 3, . / 5       | 10, 8, 1             |                                     |
-| [range(10)]       | map(select(. % 2 == 0))   | [0,2,4,6,8]          |                                     |
-| [range(10) ¦      | select(. % 2 == 0) ]      | [0,2,4,6,8]          |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| [86, 99, 13]      | .[]                       | 86, 99, 13           |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| {"name":"john"    | .[]                       | "john", "kaos"       |                                     |
-| ,"org":"kaos"}    |                           |                      |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| [86, 99, 13]      | length as $count          | 66                   | declaring variables with *as*       |
-|                   | ¦ add / $count            |                      |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| [86, 99, 13]      | . as [$a,$b,$c] ¦ $c + 3  | 16                   | as array destructuring              |
-| {"name": "john"}  | . as {name: $n} ¦ $n      | "john"               | as object destructuring             |
-| {"name": "john"}  | . as {$name}    ¦ $name   | "john"               | as object destructuring short       |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| {"agent":86       | .org = "CONTROL"          | {"agent":86          | add + update                        |
-| ,"name":"max"}    | ¦ .name ¦= ascii_upcase   | ,"name":"MAX"        |                                     |
-|                   |                           | ,"org":"CONTROL"}    |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| {"size": 34.6     | if ((.size¦floor)%2) == 0 | "even"               | 1.6 - must have an ELSE             |
-| ,"weight": 24.1}  | then "even"               |                      | 1.7 - ELSE defaults to .            |
-|                   | else "odd"                |                      |                                     |
-|                   | end                       |                      |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| {"name":"John"    | "\(.name), Agent \(.nr)"  | "John, Agent 86"     | string interpolation                |
-| ,"nr":"86"}       |                           |                      |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
-| {"name":"john"}   | + {"age": 18}             | {name:"john",age:18} |                                     |
-|-------------------+---------------------------+----------------------+-------------------------------------|
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| input               | filter                    | output               | description                         |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| 42                  | .                         | 42                   | "identity"                          |
+| 99                  | 42                        | 42                   | "constant"                          |
+| {}                  | .color                    | null                 | "projection", dot notation          |
+| {color: "red"}      | .color                    | "red"                |                                     |
+| {color: "red"}      | .["color"]                |                      |                                     |
+| {color: "red"}      | "woah"                    | "woah"               |                                     |
+| {color: "red"}      | .color = "pink"           | {color: "pink"}      |                                     |
+| "color"             | {(.): "red"}              | {color: "red"}       |                                     |
+| [86, 99, 13]        | .[1]                      | 99                   |                                     |
+| [86, 99, 13]        | .[1+1]                    | 13                   |                                     |
+| [86, 99, 13]        | .[1:2]                    | [99]                 | slice, 1 = inclusive, 2 = exclusive |
+| {"k":1,"v":[8,9]}   | .v[1]                     | 9                    |                                     |
+| {"k":1,"v":[8,9]}   | .v[ .["k"] ]              | 9                    |                                     |
+| [86, 99, 13]        | .[] + 1                   | 87, 100, 14          |                                     |
+| [86, 99, 13]        | .[] ¦ . + 1               | 87, 100, 14          |                                     |
+| [86, 99, 13]        | [ . + 1 ]                 | [87, 100, 14]        |                                     |
+| 86, 99, 13          | . + 1                     | 87, 100, 14          |                                     |
+| 86, 99, 13          | [ . + 1 ]                 | [87], [100], [14]    |                                     |
+| 5                   | . * 2, . + 3, . / 5       | 10, 8, 1             |                                     |
+| [range(10)]         | map(select(. % 2 == 0))   | [0,2,4,6,8]          |                                     |
+| [range(10) ¦        | select(. % 2 == 0) ]      | [0,2,4,6,8]          |                                     |
+| [{}, true, {"a":1}] | .[] ¦ .a?                 | null, 1              | optional operator                   |
+| ["1","invalid",4]   | .[] ¦ tonumber?           | 1, 4                 |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| [86, 99, 13]        | .[]                       | 86, 99, 13           |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| {"name":"john"      | .[]                       | "john", "kaos"       |                                     |
+| ,"org":"kaos"}      |                           |                      |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| [86, 99, 13]        | length as $count          | 66                   | declaring variables with *as*       |
+|                     | ¦ add / $count            |                      |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| [86, 99, 13]        | . as [$a,$b,$c] ¦ $c + 3  | 16                   | as array destructuring              |
+| {"name": "john"}    | . as {name: $n} ¦ $n      | "john"               | as object destructuring             |
+| {"name": "john"}    | . as {$name}    ¦ $name   | "john"               | as object destructuring short       |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| {"agent":86         | .org = "CONTROL"          | {"agent":86          | add + update                        |
+| ,"name":"max"}      | ¦ .name ¦= ascii_upcase   | ,"name":"MAX"        |                                     |
+|                     |                           | ,"org":"CONTROL"}    |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| {"size": 34.6       | if ((.size¦floor)%2) == 0 | "even"               | 1.6 - must have an ELSE             |
+| ,"weight": 24.1}    | then "even"               |                      | 1.7 - ELSE defaults to .            |
+|                     | else "odd"                |                      |                                     |
+|                     | end                       |                      |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| {"name":"John"      | "\(.name), Agent \(.nr)"  | "John, Agent 86"     | string interpolation                |
+| ,"nr":"86"}         |                           |                      |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|
+| {"name":"john"}     | + {"age": 18}             | {name:"john",age:18} |                                     |
+|---------------------+---------------------------+----------------------+-------------------------------------|

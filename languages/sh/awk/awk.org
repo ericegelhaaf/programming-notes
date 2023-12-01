@@ -1,8 +1,10 @@
+|------------+-----------------------------------|
 | AWK Home   | https://www.awk.dev/              |
 | AWK Source | https://github.com/onetrueawk/awk |
 | wiki       | https://en.wikipedia.org/wiki/AWK |
 | wiki       | https://en.wikibooks.org/wiki/AWK |
 | web repl   | https://awk.js.org/               |
+|------------+-----------------------------------|
 
 - coverage
   https://benhoyt.com/writings/goawk-coverage/
@@ -119,6 +121,30 @@
 |----------+----------------------------------------------+-----------|
 ** built-in functions
 https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
+*** BITWISE
+
+https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
+
+|--------------------+-------------------------------------|
+| and(v1,v2,...)     |                                     |
+| xor(v1,v2,...)     |                                     |
+| or(v1,v2,...)      |                                     |
+|--------------------+-------------------------------------|
+| compl(val)         | complement                          |
+|--------------------+-------------------------------------|
+| lshift(val, count) | *val* left shifted by *count* bits  |
+| rshift(val, count) | *val* right shifter by *count* bits |
+|--------------------+-------------------------------------|
+
+*** ARRAY
+
+|-----------------+---------------------------+--------------------------------------------------|
+|             <r> | returns                   | does                                             |
+|-----------------+---------------------------+--------------------------------------------------|
+|  asort(SRC,DST) | number of elements in SRC | sort by value, DST has idx=numeric val=old_value |
+| asorti(SRC,DST) | number of elements in SRC | sort by index, DST has idx=numeric val=old_index |
+|-----------------+---------------------------+--------------------------------------------------|
+
 *** MATH
 |------------+------------------------------------|
 | atan2(y,x) | arctangent of y/x in -x to x range |
@@ -134,36 +160,34 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | srand(x)   | x is new seed for rand()           |
 |------------+------------------------------------|
 *** STRING
-|---------------------+--------------------------------------------------+---------------------------|
-|                     | does                                             | returns                   |
-|---------------------+--------------------------------------------------+---------------------------|
-| gsub(r,s)           | substitute all r for s in $0                     | number of subst made      |
-| gsub(r,s,t)         | substitute all r for s in t                      | number of subst made      |
-| sub(r,s)            | substitute one r for s in $0                     | number of subst made      |
-| sub(r,s,t)          | substitute one r for s in t                      | number of subst made      |
-|---------------------+--------------------------------------------------+---------------------------|
-| substr(s,start)     |                                                  | substring of s            |
-| substr(s,start,len) |                                                  | substring of s            |
-|---------------------+--------------------------------------------------+---------------------------|
-| asort(SRC,DST)      | sort by value, DST has idx=numeric val=old_value | number of elements in SRC |
-| asorti(SRC,DST)     | sort by index, DST has idx=numeric val=old_index | number of elements in SRC |
-|---------------------+--------------------------------------------------+---------------------------|
-| split(s,a)          | stores the pieces in array a                     | number of fields          |
-| split(s,a,fs)       | stores the pieces in array a                     | number of fields          |
-|---------------------+--------------------------------------------------+---------------------------|
-| index(s,t)          |                                                  | 0 or n position of t in s |
-| length()            |                                                  | number of chars in $0     |
-| length(s)           |                                                  | number of chars in s      |
-| match(s,r)          | test if s contains r                             | index or 0                |
-| sprintf(fmt, ...)   |                                                  | formated string           |
-|---------------------+--------------------------------------------------+---------------------------|
+|---------------------+---------------------------+------------------------------|
+|                     | returns                   | does                         |
+|---------------------+---------------------------+------------------------------|
+| sub(r,s)            | number of subst made      | substitute one r for s in $0 |
+| sub(r,s,t)          | number of subst made      | substitute one r for s in t  |
+| gsub(r,s)           | number of subst made      | substitute all r for s in $0 |
+| gsub(r,s,t)         | number of subst made      | substitute all r for s in t  |
+|---------------------+---------------------------+------------------------------|
+| substr(s,start)     | substring of s            |                              |
+| substr(s,start,len) | substring of s            |                              |
+|---------------------+---------------------------+------------------------------|
+| split(s,a)          | number of fields          | stores the pieces in array a |
+| split(s,a,fs)       | number of fields          | stores the pieces in array a |
+|---------------------+---------------------------+------------------------------|
+| length()            | number of chars in $0     |                              |
+| length(s)           | number of chars in s      |                              |
+|---------------------+---------------------------+------------------------------|
+| index(s,t)          | 0 or n position of t in s |                              |
+| match(s,r)          | index or 0                | test if s contains r         |
+| sprintf(fmt, ...)   | formated string           |                              |
+|---------------------+---------------------------+------------------------------|
 *** operators
-|------------------+---------------------|
-| Assigments       | = += -= *= /= %= ^= |
-| Ternary operator | ?:                  |
-| Array membership | in                  |
-| Matching         | ~ !~                |
-|------------------+---------------------|
+|---------------------+------------------|
+| = += -= *= /= %= ^= | Assigments       |
+| ?:                  | Ternary operator |
+| in                  | Array membership |
+| ~ !~                | Matching         |
+|---------------------+------------------|
 *** control flow
 
 - exit
@@ -213,6 +237,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 | %x, %X | unsigned hexadecimal integer |
 | %%     | literal "%"                  |
 |--------+------------------------------|
+
 ** extensions
 
 - @include "join"
@@ -223,6 +248,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 - @include "ord" OR @load "ordchr" https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Ord.html
   ord(STRING) -> NUMBER
   chr(NUMBER) -> STRING
+
 
 * codebases
 |---------------------+----------------------------------------------|
@@ -236,6 +262,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 | exercises           | https://github.com/ferd/advent-of-code-2021/ |
 | exercises           | https://github.com/phillbush/aoc             |
 |---------------------+----------------------------------------------|
+
+
 * snippets
 - wEiRd - removes leading space
   #+begin_src awk
