@@ -1,0 +1,3 @@
+https://graphviz.org/docs/layouts/
+https://graphviz.org/Gallery/undirected/root.html
+http://www.yifanhu.net/GALLERY/GRAPHS/

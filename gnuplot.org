@@ -1,0 +1,9 @@
+|---------------+--------------------------------------------|
+| home          | http://gnuplot.info/                       |
+| documentation | http://gnuplot.info/docs_5.5/gnuplot5.html |
+|---------------+--------------------------------------------|
+
+- Article: 15 Plotting tools for Linux: gnuplot https://lwn.net/Articles/628537/
+- Article: 17 What's new in gnuplot 5.2 https://lwn.net/Articles/723818/
+- Article: 20 New features in gnuplot 5.4 https://lwn.net/Articles/826456/
+- Article: 20 Voxel plotting with gnuplot 5.4 https://lwn.net/Articles/828761/

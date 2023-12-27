@@ -1,0 +1,9 @@
+- Article: 18 An introduction to the Julia language, part 1 https://lwn.net/Articles/763626/
+- Article: 18 An introduction to the Julia language, part 2 https://lwn.net/Articles/764001/
+- Article: 20 The accelerating adoption of Julia https://lwn.net/Articles/834571/
+- Article: 20 An introduction to Pluto https://lwn.net/Articles/835930/
+- Article: 21 Julia 1.6 addresses latency issues https://lwn.net/Articles/856819/
+- Article: 21 New features coming in Julia 1.7 https://lwn.net/Articles/871486/
+- Article: 21 Digging into Julia's package system https://lwn.net/Articles/871490/
+- Article: 21 Concurrency in Julia https://lwn.net/Articles/875367/
+- Article: 23 Julia 1.9 brings more speed and convenience https://lwn.net/Articles/933019/
