@@ -353,6 +353,7 @@ module Main (main) where
 | list  | [T]   | head/tail |                   |   |
 * 20 | Finding Success and Failure               | Julie Moronuki
 ** Preface
+
 - Most programming languages have, in some form or other, a way of dealing with failure.
   A way to *combine* multiple smaller programs /that might fail/
   into a larger program /that might fail/
@@ -365,13 +366,14 @@ module Main (main) where
   - how they are similiar
   - how they differ
   - and how to use types to rethink our solutions to problems
+
 ** 1 Case Expression in Practice
+
 - *case* expression,
   - serve similiar branching role as *if/then/else* but with much more generality.
   - allow behavior to branch on values other than booleans
 - ~polymorphic~ has a type variable, it can take many types.
   ~monomorphic~ has NO type variables.
-- Bool has only 2 values, also called *constructors*, True and False
 - ~partial functions~ functions that do NOT handle all their /constructors/
 - ~total functions~ functions that handle all /constructors/
 - order of the *case/of* expression matter only when patterns are *overlapping*
@@ -379,158 +381,192 @@ module Main (main) where
   (aka: disjuntion, disjoint union, tagged union)
 - Bool type, a ~concrete type~
   #+begin_src haskell
-    data Bool = True | False
+    data Bool = True | False -- 2 constructors
   #+end_src
 - Maybe type, a ~parametrized type~ aka *type constructor*
   #+begin_src haskell
     data Maybe a = Nothing | Just a
   #+end_src
+
 ** 2 Case Expression Practice
+
 - Example: checks two strings inputs to determine whether they are anagrams of one another.
 - we use the idiom (xy, ys) to indicate variables that are lists or strings
-*** Example: pattern matching on Bool values to return Maybe values
-  #+begin_src haskell
-isWord :: String -> Maybe String
-isWord word =
-  case null word of
-    True -> Nothing
-    False ->
-      case (all isAlpha word) of
-        False -> Nothing
-        True -> Just word
 
-checkAnagram :: String -> String -> String
-checkAnagram word1 word2 =
-  case (isWord word1) of
-    Nothing -> "The first word is invalid"
-    Just word1 ->
-      case (isWord word2) of
-        Nothing -> "The second word is invalid"
-        Just word2 ->
-          case (isAnagram word1 word2) of
-            False -> "These words are not anagrams."
-            True -> "These words are anagrams."
+*** Example: pattern matching on ~Bool~ to return ~Maybe~
+
+  #+begin_src haskell
+    isWord :: String -> Maybe String
+    isWord word =
+      case null word of
+        True  -> Nothing
+        False ->
+          case (all isAlpha word) of
+            False -> Nothing
+            True  -> Just word
+
+    checkAnagram :: String -> String -> String
+    checkAnagram word1 word2 =
+      case (isWord word1) of
+        Nothing    -> "The first word is invalid"
+        Just word1 ->
+          case (isWord word2) of
+            Nothing    -> "The second word is invalid"
+            Just word2 ->
+              case (isAnagram word1 word2) of
+                False -> "These words are not anagrams."
+                True  -> "These words are anagrams."
   #+end_src
+
 ** 3 Validating Functions
-- New Stack project: where *simple* is the most minimal of the templates that stack provides
-  $ stack new validation-book simple
-- Project aware REPL that give us their dependencies:
-  $ stack repl
+
 - The module name is *Main* because an /executable/ must always be named *Main*
+
 ** 4 The =Maybe= Monad
+
 - Solution in this capter
   - will use the bind operator (>>=)
-  - won't tell you which of the validtion rule failed
+  - it won't tell you which of the validation rules failed
+
 - INTERNET: https://stackoverflow.com/questions/62018158/string-concatenation-via-or
   - when concatenating strings you can use (++) or (<>)
-  - but (<>) is preferable because it works with Text types other than *Prelude.String*
+  - but (<>) is preferable because it works with ~Text~ types other than ~Prelude.String~
   - but it might become ambiguos due polymorphism and when using *-XOverloadedStrings*
+
 - ~infix operators~
   - the reader has to know the /associativity/ of the operator.
   - associativity matters also when thinking on performance
+
 - the (.) operator might help to only work with 1(one) list
   #+begin_src haskell
-f  x = drop 2 (map toUpper (reverse x))
-f' x = (drop 2 . map toUpper . reverse) x
+    f  x = drop 2 (map toUpper (reverse x))
+    f' x = (drop 2 . map toUpper . reverse) x
   #+end_src
+
 *** Enter the monad
+
 - The bind operator
   #+begin_src haskell
-(>>=) :: Monad m => m a -> (a -> m b) -> m b
+    (>>=) :: Monad m => m a -> (a -> m b) -> m b
   #+end_src
+
 - validatePassword without using case/of
   #+begin_src haskell
-validatePassword' :: String -> Maybe String
-validatePassword' password =
-  cleanWhitespace password
-    >>= requireAlphaNum
-    >>= checkPasswordLength''
+    validatePassword' :: String -> Maybe String
+    validatePassword' password =
+      cleanWhitespace password
+        >>= requireAlphaNum
+        >>= checkPasswordLength''
   #+end_src
+
 *** Classes and instances
+
 - Monad is a *typeclass*
-- A *typeclass* defines a set of /generic functions/ that work
-  with a set of types.
-- A =class= declaration gives only the type signatures in their
-  most polymorphic forms.
+- A *typeclass* defines a set of /generic functions/ that work with a set of types.
+- A =class= declaration gives only the type signatures in their most polymorphic forms.
 - An =instance= declaration gives a /concrete implementation/
   of the generic function of that class for a given
   concrete type.
 - TIP: thinking about types as instances of a certain typeclass
   allows you to focus on the similarities between the types.
+
 *** TypeApplications (language extension)
-#+begin_src haskell
-*Main> :type (>>=) @Maybe
-(>>=) @Maybe
-  :: Maybe a -> (a -> Maybe b) -> Maybe b
 
-*Main> :type (>>=) @Maybe @String
-(>>=) @Maybe @String
-  :: Maybe String -> (String -> Maybe b) -> Maybe b
-
-*Main> :type (>>=) @Maybe @String @String
-(>>=) @Maybe @String @String
-  :: Maybe String -> (String -> Maybe String) -> Maybe String
-#+end_src
 - Allows you to specify
   - what type you will apply a polymorphic function to
   - and see the resulting type.
+
 - aka querying the type signature
+
+#+begin_src haskell
+  >>> :set -XTypeApplications
+
+  >>> :type (>>=) @Maybe
+  (>>=) @Maybe
+    :: Maybe a -> (a -> Maybe b) -> Maybe b
+
+  ,*Main> :type (>>=) @Maybe @String
+  (>>=) @Maybe @String
+    :: Maybe String -> (String -> Maybe b) -> Maybe b
+
+  ,*Main> :type (>>=) @Maybe @String @String
+  (>>=) @Maybe @String @String
+    :: Maybe String -> (String -> Maybe String) -> Maybe String
+#+end_src
+
 *** Case and binds
-- A type can have /at most/ one instnace of a typeclass
+
+- A type can have /at most/ ONE instance of a typeclass
+
 - Using ~bind(>>=)~ and ~Maybe~ here means we lost the ability to
   tell which *Nothing* we returned and,
   thus, what our error is.
-- Haskell *do* syntax is intended to allow something like
+
+- Haskell's =do= syntax is intended to allow something like
   imperative-style programming that ignores the monadic
   underpinnings.
-- main rewritten from *do* to using bind
+
+- main from do to bind
   #+begin_src haskell
-main :: IO ()
-main =
-  getLine >>= \password ->
-  print (cleanWhitespace password)
+    main :: IO ()
+      main = getLine >>= \password ->
+                           print (cleanWhitespace password)
   #+end_src
-- main rewritten from *do* to bind, without explicit argument passing
+
+- main from do to bind, without explicit argument passing
   #+begin_src haskell
-main :: IO ()
-main = getLine >>= (print . cleanWhitespace)
+    main :: IO ()
+    main = getLine >>= (print . cleanWhitespace)
   #+end_src
+
 ** 5 Refactoring with =Either=
 *** Adding error messages
-- we can have *validatePassword* return a *String* with an error message if it fails.
+
+- We can have ~validatePassword~ return a =String= with an error message if it fails.
   It becomes again a sequence of case/of
-  validatePassword :: String -> String
+  #+begin_src haskell
+    validatePassword :: String -> String
+  #+end_src
+
 - =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
   Removed during compilation.
   #+begin_src haskell
     "Your password cannot be \
     \longer than 20 characters."
   #+end_src
+
 *** Introducing =Either=
+
 #+begin_src haskell
-data Either a b = Left a | Right b
+  data Either a b = Left a | Right b
 #+end_src
-- Where *Right b* is similar to *Just a* from Maybe
-  Where *Left a* can carry data unlike *Nothing* form Maybe
+
+- Where ~Right b~ is similar to ~Just a~ from =Maybe=
+  Where ~Left a~ can carry data unlike ~Nothing~ from =Maybe=
+
 *** The =Either= Monad
+
 #+begin_src haskell
   instance Monad Maybe
     where
-      Nothing >>= _   = Nothing
-      Just x  >>= f   = f x
+      Nothing >>= _ = Nothing
+      Just x  >>= f = f x
 
   instance Monad (Either e) -- leftmost type parameter is fixed, whatever type it is, it cannot be transformed
     where
-      Left  l >>= _   = Left l
-      Right r >>= f   = f r
+      Left  l >>= _ = Left l
+      Right r >>= f = f r
 #+end_src
+
 - In Haskell, a ~Monad~ must be a unary *type constructor*.
   So in order to use bind(>>=) you need to partially apply ~Either~ to its leftmost parameter.
+
 - Showing it with TypeApplications, with String or _
-#+begin_src
+
+#+begin_src haskell
   > :type (>>=) @(Either String)
   (>>=) @(Either String) ::
-      Either String a -> (a -> EIther String b) ->
+      Either String a -> (a -> Either String b) ->
       Either String b
 
   > :type (>>=) @(Either_)
@@ -538,245 +574,330 @@ data Either a b = Left a | Right b
       Either w a -> (a -> Either w b) ->
       Either w b
 #+end_src
+
 *** Using =Either=
-- the final *validatePassword* function using /Either/ will be
-  the exact same as the one using /Maybe/
+
+- the final ~validatePassword~ function using =Either= will be
+  the exact same as the one using =Maybe=
+
 *** Kinds
-- In haskell, we use a notation called ~kinds~ to talk about the /arity/ of a type constructor.
+
+- In haskell, we use a notation called ~kinds~ to talk about the /arity of a type constructor/.
   Kinds are sometimes also defined as "the types of types"
-| :kind Bool         | Bool :: *         |                           |
-| :kind Maybe        | Maybe :: * -> *   | all monads have this kind |
-| :kind Maybe String | Maybe String :: * |                           |
+ |--------------------+-------------------+---------------------------|
+ | :kind Bool         | Bool :: *         |                           |
+ | :kind Maybe        | Maybe :: * -> *   | all monads have this kind |
+ | :kind Maybe String | Maybe String :: * |                           |
+ |--------------------+-------------------+---------------------------|
+
 - Kinds of different types
+ |------------------------+-------------+--------------------|
  | String                 | *           |                    |
  | []                     | * -> *      | *could* be a monad |
  | (,)                    | * -> * -> * |                    |
  | (,) Int                | * -> *      | *could* be a monad |
  | data Pair a = Pair a a | * -> *      | *could* be a monad |
+ |------------------------+-------------+--------------------|
+
 ** 6 Working with =newtype=
 *** Introducing
-- ~type aliases~ do not offer *safety*, it only gives you another name for the same type
-  we can accidentally provide a /Password/ to a function that expects a /Username/
+
+- ~type aliases~ do NOT offer *safety*, it only gives you another name for the same type
+  we can accidentally provide a =Password= to a function that expects a =Username=
   #+begin_src haskell
     type Password = String
     type Username = String
   #+end_src
-- ~newtype~
-  it has a *data constructor* that is named differently from the underlying type's constructor.
+
+- ~newtype~ has a *data constructor* that is named differently from the underlying typed constructor
   #+begin_src haskell
     newtype Password = Password String
       deriving Show
   #+end_src
+
 - differences of *newtype* with *data*
-  1) /newtype/ may only have single unary constructor
-  2) /newtype/ optimizations due 1)
-  3) /newtype/ offers a cheap coercion, between newtype and the underlying type,
-     /data/ does not
-  4) GeneralizedNewtypeDeriving language extension
+  1) /newtype/ may only have a single unary constructor
+  2) /newtype/ has optimizations due 1)
+  3) /newtype/ offers a cheap coercion, between the /newtype/ and the underlying type,
+     /data/ does NOT
+  4) ~GeneralizedNewtypeDeriving~ language extension (?)
   5) /newtype/ and /data/ have different behavior on non-strictness
+
 *** Declaring
-  #+begin_src haskell
-newtype Password = Password String
-  deriving (Show)
 
-newtype Error = Error String
-  deriving (Show)
-
-newtype Username = Username String
-  deriving (Show)
-#+end_src
-*** Using
 #+begin_src haskell
-checkPasswordLength :: String -> Either Error Password
-checkPasswordLength password =
-  case (length password > 20) of
-    True -> Left (Error "Password is too long.")
-    False -> Right (Password password)
+  newtype Password = Password String
+    deriving (Show)
 
-checkUsernameLength :: String -> Either Error Username
-checkUsernameLength name =
-  case (length name > 20) of
-    True -> Left (Error "Password is too long.")
-    False -> Right (Username name)
+  newtype Error = Error String
+    deriving (Show)
 
-requireAlphaNum :: String -> Either Error String
-requireAlphaNum xs =
-  case (all isAlphaNum xs) of
-    False -> Left (Error "Invalid password")
-    True -> Right xs
-
-cleanWhitespace :: String -> Either Error String
-cleanWhitespace "" = Left (Error "String is empty")
-cleanWhitespace (x : xs) =
-  case (isSpace x) of
-    True -> cleanWhitespace xs
-    False -> Right (x : xs)
-
-validatePassword :: Password -> Either Error Password
-validatePassword (Password password) =
-  cleanWhitespace password
-    >>= requireAlphaNum
-    >>= checkPasswordLength
+  newtype Username = Username String
+    deriving (Show)
 #+end_src
+
+*** Using
+
+#+begin_src haskell
+  requireAlphaNum :: String -> Either Error String
+  requireAlphaNum xs =
+    case (all isAlphaNum xs) of
+      False -> Left (Error "Invalid password")
+      True  -> Right xs
+
+  checkPasswordLength :: String -> Either Error Password
+  checkPasswordLength password =
+    case (length password > 20) of
+      True  -> Left (Error "Password is too long.")
+      False -> Right (Password password)
+
+  validatePassword :: Password -> Either Error Password
+  validatePassword (Password password) =
+    cleanWhitespace password
+      >>= requireAlphaNum
+      >>= checkPasswordLength
+  --------------------------------
+  checkUsernameLength :: String -> Either Error Username
+  checkUsernameLength name =
+    case (length name > 20) of
+      True  -> Left (Error "Password is too long.")
+      False -> Right (Username name)
+
+  cleanWhitespace :: String -> Either Error String
+  cleanWhitespace "" = Left (Error "String is empty")
+  cleanWhitespace (x : xs) =
+    case (isSpace x) of
+      True  -> cleanWhitespace xs
+      False -> Right (x : xs)
+#+end_src
+
 *** Revising main
+
 - naive, introducing a new let
   #+begin_src haskell
-main :: IO ()
-main =
-  do
-    putStr "Please enter a password\n> "
-    password <- getLine
-    let password' = Password password
-    print (validatePassword password')
-#+end_src
+    main :: IO ()
+    main =
+      do
+        putStr "Please enter a password\n> "
+        password <- getLine
+        let password' = Password password
+        print (validatePassword password')
+  #+end_src
+
 - naive, without let
   #+begin_src haskell
-main :: IO ()
-main =
-  do
-    putStr "Please enter a password\n> "
-    password <- getLine
-    print (validatePassword (Password password))
-#+end_src
-- fmap(<$>)
-  will apply the Password constructor *inside* the IO (changing from an IO String to an IO Password)
-  #+begin_src haskell
-main :: IO ()
-main =
-  do
-    putStr "Please enter a password\n> "
-    password <- Password <$> getLine
-    print (validatePassword password)
+    main :: IO ()
+    main =
+      do
+        putStr "Please enter a password\n> "
+        password <- getLine
+        print (validatePassword (Password password))
   #+end_src
+
+- fmap(<$>)
+  will apply the =Password= constructor *inside* the IO, changing from an ~IO String~ to an ~IO Password~
+  #+begin_src haskell
+    main :: IO ()
+    main =
+      do
+        putStr "Please enter a password\n> "
+        password <- Password <$> getLine
+        print (validatePassword password)
+  #+end_src
+
 *** Exercises
-(>>=) @IO :: IO a -> (a -> IO b) -> IO b
-(>>)  @IO :: IO a ->       IO b  -> IO b
+
+#+begin_src haskell
+  (>>=) @IO :: IO a -> (a -> IO b) -> IO b
+  (>>)  @IO :: IO a ->       IO b  -> IO b
+#+end_src
+
 - from using *do*
   #+begin_src haskell
-main =
-  do
-    putStr "Please enter a password\n> "
-    password <- Password <$> getLine
-    print (validatePassword password)
+    main =
+      do
+        putStr "Please enter a password\n> "
+        password <- Password <$> getLine
+        print (validatePassword password)
   #+end_src
-- to using >>=
+
+- to using (>>=)
   #+begin_src haskell
-main =
-  putStr "Please enter a password\n> "
-    >> (Password <$> getLine)
-    >>= (print . validatePassword)
+    main =
+      putStr "Please enter a password\n> "
+        >> (Password <$> getLine)
+        >>= (print . validatePassword)
   #+end_src
+
 *** Notes on monadic style
-- When to use >>= or do
-  1) *Too many lambdas*, if it seems like you're writing way too many lambdas, use *do*
-  2) *Too many variables*, that get introduced one line, only to get used on the next, use >>=
-  3) Or both
+
+- When to use (>>=) and when use do?
+  1) if it seems like you're writing way *Too Many Lambdas* use ~do~
+  2) *Too many variables* that get introduced on one line, only to get used on the next, use (>>=)
+  3) Or use both
      #+begin_src haskell
        do
          x1 <- a1 >>= f1 >>= f2
          x2 <- a2 >>= f3 >>= f4
          f5 x1 x2
      #+end_src
+
 ** 7 Introducing =Applicative=
-- A ~product type~, the conjuction (and) of two or more types
-  - *tuples* are the canonical product types, sometimes called *anonymous products*
+
+- A ~product type~ is the conjuction (aka "and") of two or more types.
+  - ~tuples~ are the canonical product types, sometimes called /anonymous products/
   #+begin_src haskell
     data User = User Username Password
       deriving (Show)
   #+end_src
-- we introduce a =makeUser= function that unlike =User= introduces a possibility of failure
-  #+begin_src haskell
-makeUser :: Username -> Password -> Either Error User
-    User :: Username -> Password -> User
-  #+end_src
-- Applicative typeclass operator (<*>), aka ~tie-fighter~ or ~apply~ or ~app~
-  Allows us for function application in the presence of some outer type structure (aka context)
+
+- =Applicative= typeclass operator (<*>), aka ~tie-fighter~ or ~apply~ or ~app~
+  Allows for /function application/ in the presence of some outer type structure (aka context)
   Unlike "bind" there is nothing that would force us to "short-circuit" on an error value.
   #+begin_src haskell
     (<*>) :: Applicative f => f (a -> b) -> f a -> f b
   #+end_src
+
 *** Constructors are functions
+
 - We are constructing a functions *inside* and applicative type ~Either~
   #+begin_src haskell
+    validateUsername :: Username -> Either Error Username
+    validateUsername (Username username) =
+      cleanWhitespace username
+      >>= requireAlphanum
+      >>= checkUsernameLength
+
     > :type (validateUsername (Username "name"))
       :: Either Error Username
     > :type (User <$> (validateUsername (Username "name")))
       :: Either Error (Password -> User)
+         -- Right is the function that we needs to be passed to <*>
+         -- We're constructing a function inside an applicative type (Either)
   #+end_src
+
 *** Using Applicative
+
+- we introduce a =makeUser= function that unlike =User= introduces a possibility of failure
+  #+begin_src haskell
+    -- User  :: Username -> Password -> User
+    makeUser :: Username -> Password -> Either Error User
+    makeUser name password =
+      User <$> validateUsername name
+           <*> validatePassword password
+  #+end_src
+
+*** Example: Using Applicative with checkAnagram
+
 #+begin_src haskell
-makeUser :: Username -> Password -> Either Error User
-makeUser name password =
-  User <$> validateUsername name
-    <*> validatePassword password
+  checkAnagram :: String -> String -> String
+
+  promptWord1 :: IO String
+  promptWord1 =
+    do
+      putStr "Please enter a word.\n> "
+      getLine
+
+  promptWord2 :: IO String
+  promptWord2 =
+    do
+      putStr "Please enter a second word.\n> "
+      getLine
+
+  main :: IO ()
+  main =
+    do
+      result <- checkAnagram <$> promptWord1 <*> promptWord2
+      print result
 #+end_src
-*** Using Applicative with checkAnagram
-#+begin_src haskell
-checkAnagram :: String -> String -> String
 
-promptWord1 :: IO String
-promptWord1 =
-  do
-    putStr "Please enter a word.\n> "
-    getLine
-
-promptWord2 :: IO String
-promptWord2 =
-  do
-    putStr "Please enter a second word.\n> "
-    getLine
-
-main :: IO ()
-main =
-  do
-    result <- checkAnagram <$> promptWord1 <*> promptWord2
-    print result
-#+end_src
 ** 8 Refactorign with =Validation=
+
 - refactor from =Either= to =Validation=
   - from the package https://github.com/system-f/validation
   - both types are ~isomorphic~, we can convert back and forth between them
-  - their Applicative instance is different, we an accumulate errores on the Left1
+  - their =Applicative= instances are different, we can accumulate errores on the Left1
   - uses the typeclass =Semigruop=
   - depends on *lens* library
+
 *** Introducing validation
+
 > stack repl --package validation
 > cabal repl --build-depends validation
+
 - Has one module, =Data.Validation=
   #+begin_src haskell
-    data Validation err a = Failure err | Success a
+    data Validation err a
+       = Failure err
+       | Success a
   #+end_src
-- Validation is NOT a ~Monad~,
+
+- Validation is NOT a =Monad=,
   - if it were a monad, it would have to "short circuit" and lose the accumulation on the left values.
+  - reminder: Monads are Applicatives
+
 - Since functions chained together with *applicative* (<*>) can be evaluated independently:
-  - we can /accumulate/ the errors from several function applications.
-  - /concatenate/ them using the underlying *semigroup*
-  - and /return/ as many errors as there are.
-- err needs a semigroup constraint
+  1) we can /accumulate/ the errors from several function applications.
+  2) /concatenate/ them using the underlying =Semigroup=
+  3) and /return/ as many errors as there are.
+
+- err type parameter NEEDS a =Semigroup= constraint
   #+begin_src haskell
     instance Semigroup err => Applicative (Validation err)
   #+end_src
-- We will still use ~Error~ we created before,
-  - while it is a *newtype* from String, and String is a semigrup
+
+- We will still use =Error= we created before,
+  - while it is a *newtype* from =String=, and =String= is a =Semigroup=
   - we don't inherit the instances of the underlying type by default
-*** Adding a dependency
-- add a executable stanza, into .cabal
-  #+begin_src yaml
-    execultable validation
-      hs-source-dirs:   src
-      main-is:          Main.hs
-      default-language: Haskell2010
-      build-depends:    base >= 4.7 && < 5
-                      , validation
-  #+end_src
+
+*** Add .cabal dependency
+
+#+begin_src yaml
+  executable validation
+    hs-source-dirs:   src
+    main-is:          Main.hs
+    default-language: Haskell2010
+    build-depends:    base >= 4.7 && < 5
+                    , validation
+#+end_src
+
 *** Nominal refactoring
-- Change the ~Error~ type
+
+- Change the =~Error= type
   #+begin_src haskell
     newtype Error = Error [String]
       deriving (Show)
   #+end_src
+
 *** Interpreting the errors
+
+- After our new definition of =Error=, our code will need 2 changes due:
+
+  1) "No instance for Monad (Validation Error) arising from a use >>="
+     - we knew since, Validation is NOT an instance of Monad
+
+  2) "No instance for (Semigroup Error) arising from a use of <*>"
+     - =Error= must have a =Semigroup= instance, in order to know how to accumulate errors
+     - while =Error= is /representationally equivalent/ to [String], it is NOT the same (new)type.
+
 *** An Error semigroup
+
+- fixes error 2)
+
+  #+begin_src haskell
+    instance Semigroup Error where
+      Error xs <> Error ys = Error (xs ++ ys) -- we could have used <> instead of ++
+  #+end_src
+
+- alternatively using ~GeneralizedNewTypeDeriving~ language extension
+  we could have just "derived" Semigroup
+
+  #+begin_src haskell
+    {-# LANGUAGE GeneralisedNewtypeDeriving #-}
+    newtype Error = Error [String]
+      deriving (Semigroup, Show)
+  #+end_src
+
 *** Using Applicative
 * 22 | Practical Haskell                         | Alejandro Serrano Mena
 source https://github.com/Apress/practical-haskell
@@ -3624,7 +3745,7 @@ authenticate User{..} password =
     as SortedList -- qualified (due minimum) + local alias
 #+end_src
 
-*** Example: using the chapter code in a main.hs
+*** Example: using the chapter code in a Main.hs
 
 #+begin_src haskell
   module ModuleDemo where

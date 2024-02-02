@@ -39,6 +39,8 @@ manual https://cabal.readthedocs.io/en/3.4/index.html
 
 - comments can't trail any other expresion
 
+- package names are case sensitive (!!!)
+
 - base version ~operators~
   - > < >= <=
   - &&

@@ -21,6 +21,7 @@
 - https://en.wikipedia.org/wiki/Generalized_algebraic_data_type
 
 * Language
+
 ** deriving - types that can be derived
 |---------+---------------------------------------|
 |         | for types that...                     |
@@ -67,14 +68,28 @@ https://wiki.haskell.org/Import
 | hiding     | import Prelude hiding (foldl, foldr)   | import all except ...             |
 |------------+----------------------------------------+-----------------------------------|
 ** operators
-|------+---------------------------+--------------------+--------------|
-| ($)  | function application      | map ($ 10) [(+ 1)] |              |
-| (.)  | function composition      | printLn . show     |              |
-| (++) | append lists              | [1,2] ++ [3,4]     |              |
-| (<>) | append strings            | "foo" <> "bar"     |              |
-| (!!) | list indexing             | [1,2] !! 0         |              |
-| (:)  | list consing, preppending | 1 : [2, 3]         | [1,2,3] : [] |
-|------+---------------------------+--------------------+--------------|
+|------+---------------------------+--------------------+--------------+-------------------|
+| ($)  | function application      | map ($ 10) [(+ 1)] |              |                   |
+| (.)  | function composition      | printLn . show     |              |                   |
+| (++) | append lists              | [1,2] ++ [3,4]     |              | [a] -> [a] -> [a] |
+| (<>) | append strings (mappend)  | "foo" <> "bar"     |              | m   -> m   -> m   |
+| (!!) | list indexing             | [1,2] !! 0         |              |                   |
+| (:)  | list consing, preppending | 1 : [2, 3]         | [1,2,3] : [] |                   |
+|------+---------------------------+--------------------+--------------+-------------------|
+
+#+begin_src haskell
+  class Semigroup a where
+    (<>) :: a -> a -- sufficient for a "minimal complete definition"
+#+end_src
+
+|-----+-------+---------------+--------------------------|
+|     |       |               |                      <r> |
+|-----+-------+---------------+--------------------------|
+| <$> | fmap  | Functor f     |   (a -> b) -> f a -> f b |
+| <*> | apply | Applicative f | f (a -> b) -> f a -> f b |
+| >>= | bind  | Monad m       | m a -> (a -> m b) -> m b |
+| >>  | then  | Monad m       | m a ->       m b  -> m b |
+|-----+-------+---------------+--------------------------|
 ** types primitives
 |---------+-------+--------------------------------------|
 | Bool    |  True | boolean                              |
@@ -378,45 +393,14 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | unix             | System.Posix                      | https://hackage.haskell.org/package/unix             |
 | xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml            |
 |------------------+-----------------------------------+------------------------------------------------------|
+
 * Emacs Setup
   - https://github.com/haskell/haskell-ide-engine
   - https://github.com/soupi/minimal-haskell-emacs (setup)
   - https://github.com/ndmitchell/ghcid "flymake"
   - https://github.com/ndmitchell/hlint "flycheck"
   - https://github.com/chrisdone/hindent "gofmt"
-* Libraries
-|----------------------+----+-----+------------------------------------+----------------------------------------------------|
-| parsec               | 23 | 0.7 | Parser lib                         | https://github.com/haskell/parsec                  |
-| network              | 23 | 0.2 | low level network lib              | https://github.com/haskell/network                 |
-| containers           | 23 | 0.3 | data types                         | https://github.com/haskell/containers              |
-| vector               | 23 | 349 | indexed arrays                     | https://github.com/haskell/vector                  |
-| base64-bytestring    | 23 |  45 | base64 de/encoding                 | https://github.com/haskell/base64-bytestring       |
-|----------------------+----+-----+------------------------------------+----------------------------------------------------|
-| validation           | 21 | 0.1 | Like Either but acc Applicative    | https://github.com/system-f/validation             |
-| relude               | 23 | 0.6 | Prelude alternative                | https://github.com/kowainik/relude                 |
-| rio                  | 23 | 0.8 | Prelude alternative                | https://github.com/commercialhaskell/rio           |
-| optparse-applicative | 22 | 0.8 | parses CLI options                 | https://github.com/pcapriotti/optparse-applicative |
-| conduit              | 22 | 0.8 | Streaming data lib                 | https://github.com/snoyberg/conduit                |
-| resourcet            |  * |   * | alloc and free of scarce resources | *                                                  |
-| lens                 | 23 | 1.9 | Lenses, Folds and Traversals       | https://github.com/ekmett/lens/                    |
-| yesod                | 23 | 2.5 | Webframework                       | https://github.com/yesodweb/yesod                  |
-|----------------------+----+-----+------------------------------------+----------------------------------------------------|
-- rio https://www.fpcomplete.com/haskell/library/rio/
-- terminfo https://github.com/tanakh/cless/blob/master/src/Main.hs
-- euterpea
-  - example http://donyaquick.com/interesting-music-in-four-lines-of-code/
-  - quickstart https://github.com/madjestic/nu/blob/02eb3957f9ba5d0f0fbac7cd260f7142227a7008/Projects/blogs/turtlesturtlesturtles/posts/2018-11-29-a-quick-start-with-Euterpea.md
-  - Interactive-Haskell with Literate-Haskell https://github.com/lfborjas/distractions/blob/a6b6bcd09270fa73233b05f3afb1800b977da9c3/haskell_school_of_music/README.md
-- A fast, light-weight web server for WAI applications.
-  https://hackage.haskell.org/package/warp
-  https://hackage.haskell.org/package/wai
-- REST - A family of combinators for defining webservices APIs and serving them
-  https://hackage.haskell.org/package/servant
-- https://hackage.haskell.org/package/turtle-1.5.21/docs/Turtle-Tutorial.html
-- conduit: is a framework for dealing with streaming data, such as reading raw bytes from a file, parsing a CSV response body from an HTTP request, or performing an action on all files in a directory tree. 
-- parsec: It is defined as a monad transformer that can be stacked on arbitrary monads, and it is also parametric in the input stream type.
-- State of the Haskell ecosystem
-  https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
+
 * Codebases
 - https://github.com/omelkonian/AlgoRhythm (music)
 - Project

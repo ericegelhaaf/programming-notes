@@ -1,3 +1,9 @@
+- aeson https://web.archive.org/web/20201121162141mp_/https://artyom.me/aeson
+- optparse https://github.com/pcapriotti/optparse-applicative/blob/master/README.md
+- generics https://markkarpov.com/tutorial/generics
+- exceptions https://markkarpov.com/tutorial/exceptions
+- template haskell https://markkarpov.com/tutorial/th.html
+- megaparsec https://markkarpov.com/tutorial/megaparsec
 - project https://wiki.haskell.org/Roll_your_own_IRC_bot
 - project https://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/
 - project https://crypto.stanford.edu/~blynn/haskell/brain.html
