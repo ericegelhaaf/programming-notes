@@ -1,6 +1,8 @@
 - Code: 2022 htmx hiccup server example https://github.com/babashka/babashka/blob/master/examples/htmx_todoapp.clj
+- differences https://github.com/babashka/babashka#differences-with-clojure
 - Libraries
   https://babashka.org/toolbox/
+  https://github.com/babashka/babashka/blob/master/doc/projects.md#libraries
 - Pods
   https://github.com/babashka/pod-registry
   https://book.babashka.org/#pods
@@ -12,6 +14,7 @@
   - As such the code is NOT compiled.
 - Article: https://rattlin.blog/bbgum.html
 - Article: https://yogthos.net/posts/2023-05-12-nbb-resume.html
+- Article: https://faster-than-light-memes.xyz/binaural-beats-using-scittle.html
 * Example: newspod.clj - sqlite3
 #+begin_src clojure
   ;; TODO: gh-actions

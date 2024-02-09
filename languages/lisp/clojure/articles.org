@@ -1,4 +1,12 @@
+- deps
+  https://blog.michielborkent.nl/new-clojure-project-quickstart.html
+  https://github.com/babashka/neil
+
+- https://ericnormand.me/guide/clojure-web-tutorial
+- https://www.braveclojure.com/writing-macros/
+- https://aphyr.com/posts/305-clojure-from-the-ground-up-macros
+- context-free grammars https://clojure-doc.org/articles/cookbooks/strings/
 - project https://aosabook.org/en/500L/an-archaeology-inspired-database.html
-- https://blog.exupero.org/htmx-versus-clojurescript/
-- https://code.thheller.com/blog/shadow-cljs/2023/07/13/the-lost-arts-of-cljs-frontend.html
-- https://code.thheller.com/blog/shadow-cljs/2023/07/16/applying-the-art-of-cljs-frontend.html
+- Article:
+  https://jmglov.net/blog/2024-01-17-clickr.html
+  https://jmglov.net/blog/2024-01-22-clickr-goes-fe.html

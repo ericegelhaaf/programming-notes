@@ -1,0 +1,305 @@
+* Plotting
+|--------------+-------------------------+-----------------------------------------------------------|
+| eazy-gnuplot | gnuplot raw-ish         | https://guicho271828.github.io/eazy-gnuplot/              |
+| clgplot      | gnuplot abstraction-ish | https://github.com/masatoi/clgplot/                       |
+| sketch       | sdl graphics            | https://github.com/vydd/sketch                            |
+| donuts       | graphviz                | https://github.com/tkych/donuts/blob/master/doc/index.org |
+|--------------+-------------------------+-----------------------------------------------------------|
+* CFFI
+- https://github.com/bohonghuang/cffi-ops
+- https://github.com/borodust/cffi-c-ref
+* CLOS
+|--------------------+-------------------------------------+-------------------------------------------------|
+| cells              | reactive programming                | https://github.com/kennytilton/cells/wiki       |
+| defclass-std       | shorthand declaration               | https://github.com/EuAndreh/defclass-std        |
+| filtered-functions | filter function before method calls | https://github.com/pcostanza/filtered-functions |
+| quid-pro-quo       | contract programming                | https://github.com/sellout/quid-pro-quo         |
+| sanity-clause      | class type checking                 | https://github.com/fisxoj/sanity-clause         |
+|--------------------+-------------------------------------+-------------------------------------------------|
+** Libraries
+- Efficiently represent several finite sets or small integers as a single non-negative integer.
+  https://github.com/marcoheisig/bitfield
+- Naive generators for Common Lisp
+  https://github.com/cbeo/gtwiwtg
+* Data Structures
+|----------------+------------------+---------------------------------------------|
+| fset           | immutables       | https://fset.common-lisp.dev/Site/FSet-Tutorial.html |
+| pileup         | binary heap      | https://nikodemus.github.io/pileup/         |
+| jpl-queues     | queues           | https://cliki.net/jpl-queues                |
+| select         | array slices     | https://lisp-stat.github.io/select/         |
+| aops           | array operations | https://github.com/bendudson/array-operations |
+| numcl          | numpy            | https://github.com/numcl/numcl              |
+| cl-competitive | algorithms       | https://github.com/privet-kitty/cl-competitive/ |
+|----------------+------------------+---------------------------------------------|
+- fset
+  https://www.youtube.com/watch?v=wx9BN2ppESY
+  https://www.youtube.com/watch?v=AfcjnBkWbfw
+* Pattern Matching/Destructuring
+|-----------------+------------------------+---------------------+------------------------------------------------|
+| optima          | pattern matching (old) |                     | https://github.com/m2ym/optima                 |
+| trivia          | pattern matching       | defun-match*, ppcre | https://github.com/guicho271828/trivia         |
+| fare-quasiquote | extensions for trivia  |                     | https://github.com/fare/fare-quasiquote        |
+| let-plus        | destructuring          | defun+, let+        | https://github.com/tpapp/let-plus              |
+| metabang-bind   | destructuring          | bind                | https://common-lisp.net/project/metabang-bind/ |
+| serapeum        |                        | mvlet               |                                                |
+|-----------------+------------------------+---------------------+------------------------------------------------|
+- https://common-lisp.net/project/metabang-bind/user-guide.html
+* Binary/Stream Parsing
+|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel                                    |
+| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio                                     |
+| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher                            |
+| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack                              |
+| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/                                     |
+| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/                              |
+| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
+|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
+| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats                               |
+| lisp-binary    | A library to easily read and write complex binary formats.     | https://github.com/j3pic/lisp-binary                                 |
+| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap                                     |
+| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles                                   |
+| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors                           |
+| simple-streams | bivalent, varying-width elements support                       | http://www.sbcl.org/manual/#Simple-Streams                           |
+|                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
+| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
+| unboxable      | support contiguous arrays of structs                           | https://github.com/digikar99/unboxables                              |
+|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
+* Looping
+|------------------------------+----------------------------------------------------------|
+| for                          | https://github.com/Shinmera/for                          |
+| iterate                      | https://github.com/lisp-mirror/iterate                   |
+| trivial-do                   | https://github.com/yitzchak/trivial-do/                  |
+| do+                          | https://github.com/alessiostalla/doplus                  |
+| trivial-extensible-sequences | https://github.com/Shinmera/trivial-extensible-sequences |
+|------------------------------+----------------------------------------------------------|
+** for
+ manual https://shinmera.github.io/for/
+** SERIES
+- Note taken on [2022-12-17 Sat 05:39]
+#+CAPTION: All methods exported
+#+NAME:   fig:SED-HR4049
+  [[./series.png]]
+
+  https://cliki.net/SERIES
+  http://series.sourceforge.net/
+  https://github.com/tokenrove/series
+  Ref https://quickref.common-lisp.net/series.html
+  Manual https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
+  Example https://github.com/tokenrove/series/blob/master/s-test.lisp
+  Example https://github.com/BusFactor1/mcl/blob/master/examples/series/stest.lisp
+  Example https://github.com/rabuf/advent-of-code
+  Extension https://github.com/mikelevins/taps
+  Video: Intro to SERIES   https://www.youtube.com/watch?v=uRLgZCV4bOM
+  Video: SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
+  Article https://fourier.github.io/lisp/2017/12/17/series.html
+  http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
+  http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
+
+|---------------+-----------------------------------------+------------------------------------|
+| scan-hash     | ((k v) (scan-hash HASH))                |                                    |
+| scan-file     | (line (scan-file PATH #'read-line))     |                                    |
+| scan          | (scan LIST)                             |                                    |
+| scan-range    | (scan-range :below 2)                   |                                    |
+| scan/chunk    | (chunk 2 1 (scan LIST))                 | loop for                           |
+|               | (((x y) (chunk 2 1 (scan '(1 2 3 4))))) | loop for (x y) on L when (and x y) |
+| scan-alist    | ((x y) (scan-alist '((1 . a) (2 . b)))) | like loop for (x y) in             |
+| scan-plist    | (scan-plist '(p1 1 p2 2))               | creates 2 series                   |
+| scan-sublists | (scan-sublists '(1 2 3))                | like loop for i on                 |
+|---------------+-----------------------------------------+------------------------------------|
+*** Part 1
+**** Intro
+#+begin_src lisp
+  (collect-sum (choose-if #'plusp (scan '(1 -2 3 -4))))
+  ;; => 4
+  (let ((x (subseries (scan-range :from 0 :by 2) 0 5)))
+    (values (collect x) (collect-sum x)))
+  ;; => (0 2 4 6 8), 20
+
+  ;; Scanners
+  (series 'a) ;; => #Z(a a a a a ...)
+  (scan '(a b c))
+  (scan 'vector #(a b c))
+  (scan-range :from 1 :upto 3)
+  (scan-plist '(a 1 b 2))
+
+  ;; Transducers
+  (positions #Z(a nil b c nil nil))       ;; => #Z(0 2 3)
+  (choose    #Z(nil t t nil) #Z(1 2 3 4)) ;; => #Z(2 3)
+
+  ;; Collectors
+
+#+end_src
+**** Generators and Gatherers
+***** Generators
+- by using =(next-in)= we get the next element on the series
+  with side-effect (like streams, unlike series)
+- Any Series can be converted in a Generator
+- (next-in GENERATOR &body ACTION-LIST)
+  (next-in x (return T))
+  (next-in x (return nil))
+  executes action-list when it runs out of elements
+  or errors
+- (generator SERIES)
+***** Gatherers
+- inverse of a generator, like and output stream
+- one at the time
+- Any one-input/one-output collector can be converted into a gatherer
+- (next-out GATHERER ITEM), writes ITEM into gatherer
+- (result-of GATHERER), gets the net result of a gatherer
+- (gatherer COLLECTOR)
+  arg must be a one input collector function
+  #+begin_src lisp
+(let ((x (gatherer #'collect))
+     ((y (gatherer #'(lambda (x) (collect-sum
+                             (choose-if #'oddp x))))))
+  (dotimes (i 4)
+    (next-out x i)
+    (next-out y i)
+    (if (evenp i) (next-out x (* i 10))))
+  (values (result-of x) (result-of y))))
+;; => (0 0 1 2 20 3), 4
+  #+end_src
+- (gathering VAR-COLLECTOR-PAIR-LIST &body body)
+  Returns N values, each value is the (result-of) each gatherer.
+  #+begin_src lisp
+(gathering ((x collect)
+            (y collect-sum))
+  (dotimes (i 3)
+    (next-out y i)
+    (if (evenp i) (next-out x (* i 10)))))
+;; => (0 20), 3
+  #+end_src
+- Optimization:
+  - "1st eversion", vars on stack if closure are near
+  - know at compile time *what* closure is involved and *which* scope
+**** TODO Defining New Off-line Series Functions
+- (producing OUTPUT-LIST INPUT-LIST &body BODY)
+
+** serapeum
+https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md#iter
+- do-hash-table
+- do-each, iterates over a sequence (like dolist)
+- like lret
+  - summing, sum
+  - collecting, collect
+    with-collector
+    with-collectors
+- nlet, goto wrapper for tail recursion
+** iterate https://github.com/lisp-mirror/iterate
+- examples https://github.com/earl-ducaine/loop-facility-clhs-examples
+- addons https://github.com/ruricolist/cloture/blob/623c15c8d2e5e91eb87f46e3ecb3975880109948/iterate-drivers.lisp
+- addons https://github.com/sjl/cl-losh/blob/master/src/iterate.lisp
+- https://common-lisp.net/project/iterate/doc/index.html#Top
+- https://common-lisp.net/project/iterate/
+- https://common-lisp-libraries.readthedocs.io/iterate/
+- https://web.archive.org/web/20170713105315/https://items.sjbach.com/280/extending-the-iterate-macro
+- https://sites.google.com/site/sabraonthehill/loop-v-iter
+- https://etc.ruricolist.com/2019/12/16/the-iterate-clause-trick/
+*** Article: Comparing LOOP and ITERATE
+    https://web.archive.org/web/20170713081006/https://items.sjbach.com/211/comparing-loop-and-iterate
+- Accumulation:
+  |-------------+----------------+-----------------------------|
+  | collect     |                |                             |
+  | appending   |                |                             |
+  | nconcing    |                |                             |
+  | *adjoining  | collect+unique |                             |
+  | *unioning   | append +unique |                             |
+  | *nunioning  |                |                             |
+  | *accumulate | *generic*      | (accumulate lst by #'union) |
+  |-------------+----------------+-----------------------------|
+- Reduction:
+  |-----------+-----------+-------------------------------------|
+  | sum       | #'+       |                                     |
+  | *multiply | #'*       |                                     |
+  | counting  | #'count   |                                     |
+  | maximize  | #'max     |                                     |
+  | minimize  | #'min     |                                     |
+  | *reducing | *generic* | (reducing d by #'/ initial-value 0) |
+  |-----------+-----------+-------------------------------------|
+  - reducing: a reduccion builder, ex:
+     #+begin_src lisp
+  (defmacro dividing (num &keys (initial-value 0))
+    `(reducing , num by #'/ initial-value ,initial-value))
+  (iterate (for i in '(10 5 2))
+    (dividing i :initial-value 100)
+     #+end_src
+- Boolean aggregation: (same in loop and interation)
+  |--------+----------|
+  | always | #'every  |
+  | never  | #'notany |
+  | theris | #'some   |
+  |--------+----------|
+- Finding
+  #+begin_src lisp
+  (iterate (for lst in '((a) (b c d) (e f)))
+    (finding lst maximizing (length lst)))
+  #+end_src
+- Control Flow:
+  - (next-iteration) like continue or next on other languages
+  - (if-first-time then else)
+  - (first-iteration-p)
+- Destructuring:
+  - Can destructure values easily
+** trival-do https://github.com/yitzchak/trivial-do
+
+ - doalist
+ - dohash
+ - dolist*, with index tracking variable
+ - doplist
+ - doseq
+ - doseq*, with index tracking variable
+
+** do+ https://github.com/alessiostalla/doplus
+
+manual https://github.com/alessiostalla/doplus/blob/master/MANUAL.md
+
+** trivial-extensible-sequences https://github.com/Shinmera/trivial-extensible-sequences
+  manual  https://shinmera.github.io/trivial-extensible-sequences/
+* Utils
+|------------+--------------+---------------------------------------------------------------------|
+| alexandria |              | https://common-lisp.net/project/alexandria/draft/alexandria.html    |
+| serapeum   |              | https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md     |
+| rutils     |              | https://github.com/vseloved/rutils/blob/master/docs/tutorial.md     |
+| fare-utils | defun-inline | https://github.com/fare/fare-utils                                  |
+| listopia   |              | https://github.com/Dimercel/listopia                                |
+| cl-oju     |              | https://github.com/eigenhombre/cl-oju                               |
+| cl-losh    |              | https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown   |
+|            |              | https://lisp-journey.gitlab.io/blog/snippets-functional-style-more/ |
+|------------+--------------+---------------------------------------------------------------------|
+** serapeum
+|--------------+-----------------------------------+--------------------------------+---|
+| eqs          | creates a single arg function     |                                |   |
+| eqls         |                                   |                                |   |
+| equals       |                                   |                                |   |
+| trampoline   | ??????                            |                                |   |
+| define-train | defun + define-compiler-macro     |                                |   |
+| flip         | flips function arguments          |                                |   |
+| nth-arg      | returns NTH argument              |                                |   |
+| juxt         | "takes things apart"              | (juxt #'filter #'remove-if)    |   |
+| fork         | ..(f g h) y <->   (f y) g   (h y) | (fork #'/ #'sum #'length)      |   |
+| fork2        | x (f g h) y <-> (x f y) g (x h y) | (fork #'list #'+ #'-)          |   |
+| hook         | f(y,g(y))                         | (funcall (hook #'= #'floor) 2) | T |
+|--------------+-----------------------------------+--------------------------------+---|
+** cl-oju
+|---------------+-----------------------------------------------------+----------------------------------+-------------------------------------|
+| neg?          | pos?                                                |                                  |                                     |
+| spit          | slurp                                               |                                  |                                     |
+| rand-int      | rand-nth                                            |                                  |                                     |
+| juxt          |                                                     |                                  |                                     |
+| sort-by       |                                                     |                                  |                                     |
+| partition-by  | (partition-by #'length '("foo" "bar" "bazasz" "a")) | (("foo" "bar") ("bazasz") ("a")) |                                     |
+| partition-all | (partition-all 2 3 (range 10))                      | ((0 1) (3 4) (6 7) (9))          |                                     |
+| partition-n   | (partition-n 2 3 (range 10))                        | ((0 1) (3 4) (6 7))              | "partition" in clojure              |
+| partial       |                                                     |                                  |                                     |
+| take-while    | (take-while (partial #'> 5) (range 10))             | (0 1 2 3 4)                      |                                     |
+| take          | (take 2 '(1 2 3 4))                                 | (1 2)                            |                                     |
+| drop          | (drop 2 '(1 2 3 4))                                 | (3 4)                            |                                     |
+| repeatedly    | (repeatedly 10 (lambda () (rand-int 10)))           |                                  | for repeating fns with side-effects |
+| range         | (range 5)                                           | (0 1 2 3 4)                      |                                     |
+|               | (range 5 10)                                        | (5 6 7 8 9)                      |                                     |
+| frequencies   | (frequencies '(1 2 3 4 2))                          | ((1 1) (2 2) (3 1) (4 1))        |                                     |
+| group-by      | (group-by #'evenp (range 4))                        | ((T (2 0)) (NIL (3 1)))          |                                     |
+| interpose     | (interpose 1 '(3 5 4))                              | (3 1 5 1 4)                      |                                     |
+| interleave    | (interleave '(1 2) '(3 4))                          | (1 3 2 4)                        |                                     |
+| comp          | (funcall (comp #'evenp #'length) '(1 2 3))          | NIL                              |                                     |
+|---------------+-----------------------------------------------------+----------------------------------+-------------------------------------|

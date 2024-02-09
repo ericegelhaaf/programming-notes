@@ -1,0 +1,16 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/sendai/texts/tech/programming/languages/lisp/common-lisp/libraries.org
+
+
+* Plotting
+:PROPERTIES:
+:ARCHIVE_TIME: 2023-12-26 Tue 15:15
+:ARCHIVE_FILE: ~/texts/tech/programming/languages/lisp/common-lisp/libraries.org
+:ARCHIVE_CATEGORY: libraries
+:END:
+|--------------+-------------------------+----------------------------------------------|
+| eazy-gnuplot | gnuplot raw-ish         | https://guicho271828.github.io/eazy-gnuplot/ |
+| clgplot      | gnuplot abstraction-ish | https://github.com/masatoi/clgplot/          |
+|--------------+-------------------------+----------------------------------------------|

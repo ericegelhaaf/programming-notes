@@ -1,40 +1,3 @@
-* 17 | Reactive with ClojureScript Recipies
-** 2 - ClojureScript
-*** Elements
-|               | Javascript              | Clojure                       |
-|---------------+-------------------------+-------------------------------|
-| new*          | document.createElement  |                               |
-|               | document.createTextNode |                               |
-|               | node.cloneNode          |                               |
-|---------------+-------------------------+-------------------------------|
-| remove        |                         | (.removeChild parent child)   |
-|---------------+-------------------------+-------------------------------|
-| attach        | node.appendChild        |                               |
-|               | node.insertBefore       |                               |
-|               | node.replaceChild       |                               |
-|---------------+-------------------------+-------------------------------|
-| get           | getElementById          | (.getElementById js/document) |
-|               | getElementsByTagName    |                               |
-|               | getElementsByClassName  |                               |
-|---------------+-------------------------+-------------------------------|
-| get attribute |                         | (aget) (.-)                   |
-| set attribute |                         | (aset)                        |
-- new nodes still need to get attached to the DOM tree on a separate step
-- *innerHTML* is a property on all nodes that take a string of the childrens
-*** Events
-- Input events: blur, change, focus, submit reset, keypress
-- Mouse events: click, dbclick, mousedown, mousemove, mouseover
-- (.addEventListener element eventtype function boolean)
-*** Window Object
-- "Link" between the DOM and JS.
-  - Each tab, each frame has a Window Object
-  - alert, confirm, prompt, setTimeout, setInterval uses it
-  - access it with *js/window*
-- (.addEventListener
-   (.getElementById js/document "neko.gif")
-   "mouseover"
-   #(.alert js/window "mouse detected")
-   false)
 * 16 | Etudes for Clojurescript
 *** 1
 - (in 'formulas.core)
@@ -91,6 +54,43 @@
     It doesn't care abou the types but the structure and constraints of the types
 *** Polymorphism using multimethods
 *** Summary
+* 17 | Reactive with ClojureScript Recipies
+** 2 - ClojureScript
+*** Elements
+|               | Javascript              | Clojure                       |
+|---------------+-------------------------+-------------------------------|
+| new*          | document.createElement  |                               |
+|               | document.createTextNode |                               |
+|               | node.cloneNode          |                               |
+|---------------+-------------------------+-------------------------------|
+| remove        |                         | (.removeChild parent child)   |
+|---------------+-------------------------+-------------------------------|
+| attach        | node.appendChild        |                               |
+|               | node.insertBefore       |                               |
+|               | node.replaceChild       |                               |
+|---------------+-------------------------+-------------------------------|
+| get           | getElementById          | (.getElementById js/document) |
+|               | getElementsByTagName    |                               |
+|               | getElementsByClassName  |                               |
+|---------------+-------------------------+-------------------------------|
+| get attribute |                         | (aget) (.-)                   |
+| set attribute |                         | (aset)                        |
+- new nodes still need to get attached to the DOM tree on a separate step
+- *innerHTML* is a property on all nodes that take a string of the childrens
+*** Events
+- Input events: blur, change, focus, submit reset, keypress
+- Mouse events: click, dbclick, mousedown, mousemove, mouseover
+- (.addEventListener element eventtype function boolean)
+*** Window Object
+- "Link" between the DOM and JS.
+  - Each tab, each frame has a Window Object
+  - alert, confirm, prompt, setTimeout, setInterval uses it
+  - access it with *js/window*
+- (.addEventListener
+   (.getElementById js/document "neko.gif")
+   "mouseover"
+   #(.alert js/window "mouse detected")
+   false)
 * 22 | Web development with Clojure - 2nd Edition
 ** Introduction
 - Focus on the *Luminous* stack
@@ -109,33 +109,6 @@
   > lein new luminus guestbook --template-version 3.91 -- +h2 +http-kit
 - hardcode a version by adding in ~/.lein/profiles.clj
   {:user {:plugins [[luminus/lein-template "2.9.9.2"]]}}
-- Template Dependencies
-| Name               | Description                                                                  | Home                                                    |
-|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
-| bulma              | CSS framework                                                                | https://bulma.io/                                       |
-| chesire            | json encoding/decoding                                                       | https://github.com/dakrone/cheshire                     |
-| conman             | managing database connections                                                | https://github.com/luminus-framework/conman             |
-| cprop              | likes properties, environments, configs, profiles..                          | https://github.com/tolitius/cprop                       |
-| expound            | Human-optimized error messages for clojure.spec                              | https://github.com/bhb/expound                          |
-| http-kit           | HTTP client+server                                                           | https://github.com/http-kit/http-kit                    |
-| h2                 | H2 is a database distributed as library...                                   | http://www.h2database.com/html/main.html                |
-| java-time          | wrapper for Java 8 Date-Time API.                                            | https://github.com/dm3/clojure.java-time                |
-| logback-classic    | successor to the popular log4j                                               | http://logback.qos.ch/                                  |
-| luminus-http-kit   | HTTP Kit adapter for Luminus                                                 | https://github.com/luminus-framework/luminus-http-kit   |
-| luminus-migrations | For DB migrations. The library is a command line wrapper for Migratus.       | https://github.com/luminus-framework/luminus-migrations |
-| luminus-transit    | transit serialization helpers for Luminus                                    | https://github.com/luminus-framework/luminus-transit    |
-| markdown-clj       | Markdown parser in Clojure                                                   | https://github.com/yogthos/markdown-clj                 |
-| material-icons     | Webjars. A font for the web.                                                 | https://google.github.io/material-design-icons/         |
-| mount              | managing app state since (reset)                                             | https://github.com/tolitius/mount                       |
-| muuntaja           | Clojure library for fast http api format negotiation, encoding and decoding. | https://github.com/metosin/muuntaja                     |
-| nrepl              | network REPL                                                                 | https://github.com/nrepl/nrepl                          |
-| reitit             | data-driven router                                                           | https://github.com/metosin/reitit                       |
-| ring               | HTTP server                                                                  | https://github.com/ring-clojure/ring                    |
-| ring-webjars       | Ring middleware to serve static assets from WebJars.                         | https://github.com/weavejester/ring-webjars             |
-| ring-http-response | Handling HTTP Statuses with Clojure(Script)                                  | https://github.com/metosin/ring-http-response           |
-| selmer             | Templating system                                                            | https://github.com/yogthos/Selmer                       |
-| struct             | Structural/Scheme validation                                                 | https://github.com/funcool/struct                       |
-|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
 - Default repl namespace is *user* from *env/dev/clj/user.clj*
   - Include functions that we won't want packaged in our application
   - start/stop functions
@@ -211,13 +184,15 @@ SELECT * from guestbook
 *** resources/html/home.html
  - Setup to use Bulma CSS
 * 22 | Clojure: The Essential Reference MEAP v28
-|                         | http://manifesto.softwarecraftsmanship.org/#/es                              |
-|                         | https://cognitect.com/blog/2016/1/28/state-of-clojure-2015-survey-results    |
-| NET runtime             | https://github.com/clojure/clojure-clr                                       |
-| JS runtime              | https://clojurescript.org/                                                   |
+|-------------------------+------------------------------------------------------------------|
+|                         | http://manifesto.softwarecraftsmanship.org/#/es                  |
+|                         | https://cognitect.com/blog/2016/1/28/state-of-clojure-2015-survey-results |
+| NET runtime             | https://github.com/clojure/clojure-clr                           |
+| JS runtime              | https://clojurescript.org/                                       |
 | CLR history             | https://soundcloud.com/defn-771544745/48-david-miller-and-clojure-on-the-clr |
-| STM support is built-in | https://en.wikipedia.org/wiki/Software_transactional_memory#Clojure          |
-| STM support is built-in | https://clojure.org/reference/refs                                           |
+| STM support is built-in | https://en.wikipedia.org/wiki/Software_transactional_memory#Clojure |
+| STM support is built-in | https://clojure.org/reference/refs                               |
+|-------------------------+------------------------------------------------------------------|
 ** 1
 - 2007 CLR removed
   - https://soundcloud.com/defn-771544745/48-david-miller-and-clojure-on-the-clr
@@ -235,31 +210,3 @@ SELECT * from guestbook
   - Low-level networking
   - HTTP
   - 2D Graphics
-- All other non-core namespaces
-  1) Core Support
-     - clojure.template
-     - clojure.string
-     - clojure.pprint
-     - clojure.set
-     - clojure.stacktrace
-  2) REPL
-     - clojure.main
-     - clojure.repl
-     - clojure.core.server
-  3) General Support
-     - clojure.walk
-     - clojure.zip
-     - clojure.sh
-     - clojure.xml
-     - clojure.test
-     - clojure.core.reducers
-  4) Data Serialization
-     - clojure.edn
-     - clojure.instant
-     - clojure.data
-  5) Java
-     - clojure.java.javadoc
-     - clojure.java.browse
-     - clojure.inspector
-     - clojure.reflect
-     - clojure.java.io

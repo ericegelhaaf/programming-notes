@@ -1,0 +1,23 @@
+- stylewarning
+  https://www.youtube.com/playlist?list=PLjHa38CO26-PWcJXE1G8XYlwmV4zdjbr9
+  https://www.youtube.com/playlist?list=PLjHa38CO26-PS4GeZyayEwe7wLBZChZeE
+  https://www.youtube.com/playlist?list=PLjHa38CO26-PIi_vO2-T7QVHAT-y_38hg
+  https://www.youtube.com/playlist?list=PLjHa38CO26-P2zKH-2lKy786caSQAtlFZ
+  https://www.youtube.com/playlist?list=PLjHa38CO26-PBV_8BgJazsZmc3qL-mYsN
+
+- 12 Robert Smith - Excursions In Mathematics Using Lisp
+  https://www.youtube.com/watch?v=nTI_d-jS6dI
+
+* 23 | How Lisp is Designing Nano-technology
+
+- CLASP
+
+- "List is very good to represent graphs and trees"
+
+- "CL is not that different to Python,
+   is just that it compiles to native code."
+- "You can't run loops in Python and expect them to run quickly"
+
+- "And I'm nwo running things on alarge clusters,
+   distributed computing across large clusters
+   that would take years of time to run on a single CPU"

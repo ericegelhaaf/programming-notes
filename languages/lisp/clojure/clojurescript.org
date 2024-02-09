@@ -1,0 +1,14 @@
+- https://tonsky.me/blog/clojurescript-2/
+  - ShadowCLJS, ignores hand-written externs by default. Because they
+    are supposed to be “automatically deduced”. And it works. Until it
+    doesn’t.
+  - upgrading your ClojureScript version ... it updates
+    Google Closure, too, and the extern-deducing algorithm might
+    change unpredictably between versions.
+  - After 10 years, I’d say that ClojureScript is best suited for
+    web apps, not pages. The minimal bundle size, the
+    performance—you won’t really put stuff like that on your landing
+    page.
+- article https://blog.exupero.org/htmx-versus-clojurescript/
+- article https://code.thheller.com/blog/shadow-cljs/2023/07/13/the-lost-arts-of-cljs-frontend.html
+- article https://code.thheller.com/blog/shadow-cljs/2023/07/16/applying-the-art-of-cljs-frontend.html

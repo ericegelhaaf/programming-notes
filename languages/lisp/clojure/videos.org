@@ -15,6 +15,7 @@
 | London Clojurians | https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw |
 | Clojure/north     | https://www.youtube.com/@clojurenorth4011                |
 | ClojureTV         | https://www.youtube.com/@ClojureTV                       |
+| practically       | https://www.youtube.com/@Practicalli                     |
 |-------------------+----------------------------------------------------------|
 * 12 | Rich Hickey | Clojure for Lisp Programmers
 ** 1

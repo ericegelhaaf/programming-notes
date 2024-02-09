@@ -28,52 +28,242 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Live Notebooks https://clerk.vision/
 - (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
-* Language
+
+* language
+
 - "The use of keyword argument had fallen in and out of fashin in the Clojure comunity over the years"
+- One-pass compiler https://gist.github.com/reborg/dc8b0c96c397a56668905e2767fd697f#why-clojure-compiler-is-single-pass-arent-many-possible-optimizations-lost-this-way
+- code organized in ~namespaces~
+- on if, else is optional
+- cond/:else
+- an int is a 32bit integer
+- a float is a 64bit floating-point number
+- EDN = Extensible Data Notation
+
+** require/import
+| (:require)                      |   |
+|---------------------------------+---|
+| [clojure.string :as str]        |   |
+| [clojure.string :refer [split]] |   |
+|---------------------------------+---|
+** Control Flow
+
+- (do)
+- (if) (when) (cond) (dotimes)
+- (case)  - aka "switch", cases must be compile time literals
+- (doseq) - can iterate over >1 sequence at the time, like nested for loops
+- (for) aka "list comprehensions"
+- (recur) does not consume stack, must be on tail position
+
+- (loop) (recur)
+  #+begin_src clojure
+    (loop [i 0]
+      (if (< i 10)
+        (recur (inc i))
+        i))
+  #+end_src
+
+- (defn) (recur)
+  #+begin_src clojure
+    (defn increase [i]
+      (if (< i 10)
+        (recur (inc i))
+        i))
+  #+end_src
+
+- try/catch/finally
+  #+begin_src clojure
+    (try
+      (/ 2 1)
+      (catch ArithmeticException e
+        "divide by zero")
+      (finally
+        (println "cleanup")))
+  #+end_src
+
+- throw Java data
+  #+begin_src clojure
+    (try
+     (throw (Exception. "something went wrong"))
+     (catch Exception e (.getMessage e)))
+  #+end_src
+
+- try/ex-info/ex-data
+  #+begin_src clojure
+    (try
+      (throw (ex-info "There was a problem" {:detail 42}))
+      (catch Exception e
+        (prn (:detail (ex-data e)))))
+  #+end_src
+
+** Operators
+- (not=)
+  (==) to compare irrespective of the exact type
+  (=)
 ** Types
-- #"a*b" regex literals
-|                      |          | impl.    | grow at | Types | destructuring                                     |
-|----------------------+----------+----------+---------+-------+---------------------------------------------------|
-| '(1 2 3)             | list     | SLL      | front   | mixed | [one two & rest :as all]                          |
-| [1 2 3]              | vector   | hash-map | end     | mixed | "                                                 |
-| #{1 2 3}             | sets     |          |         |       |                                                   |
-| {"age" 12}           | hash-map |          |         | mixed | {age "age" :or {age "Not age provided"} :as all}  |
-|                      |          |          |         |       | {:strs [age]}                                     |
-|                      |          |          |         |       | {:keys [name]}                                    |
-|                      |          |          |         |       | {:syms [last-name]}                               |
-| (defrecord rr [age]) | record   |          |         |       |                                                   |
-|----------------------+----------+----------+---------+-------+---------------------------------------------------|
+*** Primitive / Literals
+
+|------------+-----------------------------------|
+| "foo"      | java.lang.String                  |
+| #"a*b"     | java.util.regex.Pattern           |
+| true/false |                                   |
+| nil        |                                   |
+|------------+-----------------------------------|
+| ##Inf      | symbolic values                   |
+| ##-Inf     |                                   |
+| ##NaN      |                                   |
+|------------+-----------------------------------|
+| \f         | java.lang.Character               |
+| \newline   |                                   |
+| \uNNNN     | unicode                           |
+| \oNNN      | octal                             |
+|------------+-----------------------------------|
+| 3.14       | doubles (~15-17 digits precision) |
+| 3.14M      | big decimal (arbitrary precision) |
+|------------+-----------------------------------|
+| 42         | integer                           |
+| 42N        | big integer                       |
+| 052        | (octal)                           |
+| 2r0101110  |                                   |
+| 8r52       |                                   |
+| 0x2a       |                                   |
+|------------+-----------------------------------|
+
+- char https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html
+  - Character/isLetter
+  - .isLetter https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html#isLetter(char)
+  - .isISOControl https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isISOControl-char-
+
+- strings https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html
+  * can destructure like lists
+  * are UTF-16
+  * count empty? str subs seq keyword includes?
+    bigint bigdec parse-long parse-double
+    (binding [*read-eval* false] (read-string "#\"[abc]\""))
+    (with-out-str)
+  * format https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html
+  * edn/read-string
+  * pp/cl-format
+  * str/blank? str/join str/index-of str/last-index-of
+    str/escape
+    str/lower-case str/upper-case str/capitalize
+    str/split str/split-lines
+    str/trim str/triml str/trimr
+  * .indexOf .lastIndexOf .getBytes
+    Integer/parseInt Float/parseFloat Long/parseLong Double/parseDouble
+
+- regex https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html
+  - re-find   , simple matching
+  - re-matches, returns the first *groups* that satisfies the match
+  - re-seq    , returns seq of all matching *groups*
+  - str/replace
+
+*** Complex
+
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+|          | constructing         | access     | update              | add         | remove      | destructuring                                    |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+| list     | '(1 2 3)             | first/rest |                     | (conj l 2)  |             | [one _ & tail :as all]                           |
+|          | '(~foo 2)            | peek/pop   |                     |             |             |                                                  |
+|          | (quote 1 2 3)        |            |                     |             |             |                                                  |
+|          | (list 1 2 3)         |            |                     |             |             |                                                  |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+| vector   | [1 2 3]              | (get v 0)  | (assoc v 2 9)       | (conj v 2)  |             | sequential destructuring                         |
+|          | (vector 1 2 3)       |            |                     |             |             | associative destructuring                        |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+| hash-map | {"age" 12}           |            |                     |             |             | {age "age" :or {age "Not age provided"} :as all} |
+|          |                      |            |                     |             |             | {age :age}                                       |
+|          |                      |            |                     |             |             | {age 0}                                          |
+|          |                      |            |                     |             |             | {:keys [age name]}                               |
+|          |                      |            |                     |             |             | {:strs [age]}                                    |
+|          |                      |            |                     |             |             | {:syms [last-name]}                              |
+|          |                      |            |                     |             |             | [val & {:keys [debug verbose]                    |
+|          |                      |            |                     |             |             | ________:or {debug false, verbose false}]        |
+|          |                      |            |                     |             |             | {:keys [hobby/hobbies] :person/keys [name age]}  |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+| record   | (defrecord rr [age]) |            |                     |             |             | "                                                |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+| sets     | #{1 2 3}             | (get s :a) |                     | (conj s :a) | (disj s :a) |                                                  |
+|          | (hash-set 1 2 3)     | (s :a)     |                     |             |             |                                                  |
+|          | (sorted-set 1 2 3)   |            |                     |             |             |                                                  |
+|          | (set [1 2 3])        |            |                     |             |             |                                                  |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+| atoms    | (atom ())            | (deref)    | (swap! foo conj :x) |             |             |                                                  |
+|          |                      | @foo       | (reset! foo ())     |             |             |                                                  |
+|          |                      |            | (compare-and-set!)  |             |             |                                                  |
+|----------+----------------------+------------+---------------------+-------------+-------------+--------------------------------------------------|
+
+- sets
+  - union/difference/intersection
+  - select/index/rename/join
+- atoms
+  - shared, synchronous, independent state
+  - they are a reference
+  - swap!, internally uses compare-and-set!
+  - set-validator! get-validator
+  - add-watch      remove-watch
+  - swap-vals!     reset-vals!
+- list
+  - grow at front
+  - implemented as SLL
+  - contains mixed types
+- vector
+  - grow at end
+  - implemented as maphash
+  - contains mixed types
+- hash-map
+  - contains mixed types
+
 ** Standard Library
+
 - https://clojure.github.io/clojure/
   https://clojuredocs.org/clojure.zip
   https://clojure.github.io/clojure/clojure.zip-api.html
-| clojure       |                                                                                 |
-|---------------+---------------------------------------------------------------------------------|
-| .core         | Fundamental library of the Clojure language                                     |
-| .data         | Non-core data functions.                                                        |
-| .datafy       | Functions to turn objects into data. Alpha, subject to change                   |
-| .edn          |                                                                                 |
-| .inspector    | Graphical object inspector for Clojure data structures.                         |
-| .instant      |                                                                                 |
-| .java.browse  | Start a web browser from Clojure                                                |
-| .java.io      | This file defines polymorphic I/O utility functions for Clojure.                |
-| .java.javadoc | A *REPL* helper to quickly open javadocs.                                       |
+
+|---------------+------------------------------------------------------------------|
+| clojure       |                                                                  |
+|---------------+------------------------------------------------------------------|
+| .core         | Fundamental library of the Clojure language                      |
+| .datafy       | Functions to turn objects into data. Alpha, subject to change    |
+| .math         | Clojure wrapper functions for java.lang.Math static methods.     |
+|---------------+------------------------------------------------------------------|
+| .walk         |                                                                  |
+| .zip          | Functional hierarchical zipper, with navigation, editing, and enumeration. |
+| .sh           |                                                                  |
+| .xml          | XML reading/writing.                                             |
+| .test         | A unit testing framework.                                        |
+|---------------+------------------------------------------------------------------|
+| .template     | Macros that expand to repeated copies of a template expression.  |
+| .string       | Clojure String utilities                                         |
+| .pprint       | A Pretty Printer for Clojure                                     |
+| .set          | Set operations such as union/intersection.                       |
+| .stacktrace   | Print stack traces oriented towards Clojure, not Java.           |
+|---------------+------------------------------------------------------------------|
+| .main         | Top-level main function for Clojure *REPL* and scripts.          |
+| .repl         | Utilities meant to be used interactively at the *REPL*           |
+| .core.server  |                                                                  |
+|---------------+------------------------------------------------------------------|
+| .data         | Non-core data functions.                                         |
+| .edn          |                                                                  |
+| .instant      |                                                                  |
+|---------------+------------------------------------------------------------------|
+| .java.javadoc | A *REPL* helper to quickly open javadocs.                        |
+| .java.browse  | Start a web browser from Clojure                                 |
 | .java.shell   | Conveniently launch a sub-process providing its stdin and collecting its stdout |
-| .main         | Top-level main function for Clojure *REPL* and scripts.                         |
-| .math         | Clojure wrapper functions for java.lang.Math static methods.                    |
-| .pprint       | A Pretty Printer for Clojure                                                    |
-| .reflect      |                                                                                 |
-| .repl         | Utilities meant to be used interactively at the *REPL*                          |
-| .set          | Set operations such as union/intersection.                                      |
-| .stacktrace   | Print stack traces oriented towards Clojure, not Java.                          |
-| .string       | Clojure String utilities                                                        |
-| .template     | Macros that expand to repeated copies of a template expression.                 |
-| .test         | A unit testing framework.                                                       |
-| .walk         |                                                                                 |
-| .xml          | XML reading/writing.                                                            |
-| .zip          | Functional hierarchical zipper, with navigation, editing, and enumeration.      |
-|---------------+---------------------------------------------------------------------------------|
-* Libraries
+| .java.io      | This file defines polymorphic I/O utility functions for Clojure. |
+| .inspector    | Graphical object inspector for Clojure data structures.          |
+| .reflect      |                                                                  |
+|---------------+------------------------------------------------------------------|
+
+* libraries
+
+clojure https://clojure.org/community/libraries
+clojure https://clojars.org/
+clojurescript https://clojurescript.org/community/libraries
+
+- popular way to compile clojurescript https://github.com/thheller/shadow-cljs
+
+|-----------------------+-----+----------------------------------------------|
 | Async programming     | 1.9 | https://github.com/clojure/core.async        |
 | Logic programming     | 1.4 | https://github.com/clojure/core.logic        |
 | Pattern Matching      | 1.1 | https://github.com/clojure/core.match        |
@@ -82,14 +272,88 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 | RRB-Trees             | 0.1 | https://github.com/clojure/core.rrb-vector   |
 | Contracts programming | 0.1 | https://github.com/clojure/core.contracts    |
 | Type System           | 0.3 | https://github.com/typedclojure/typedclojure |
+|-----------------------+-----+----------------------------------------------|
+
 - java.time
   https://stackoverflow.com/questions/62969992/clojure-whats-the-way-to-have-current-time-string-with-babashka-with-least-dep
+** :deps (clojure >= 1.11)
+
+ https://clojure.org/guides/deps_and_cli
+ https://clojure.org/reference/clojure_cli
+ https://clojure.org/reference/deps_edn
+
+- list depedencies, and in a tree
+  $ clj -X:deps list
+  $ clj -X:deps tree
+
+- list versions of clojure.java-time
+  $ clj -X:deps find-versions :lib clojure.java-time/clojure.java-time
+
+- execute "run" function defined at src/hello.clj
+  $ clj -X hello/run
+
+*** maven
+
+- add 3rd party to deps.edn
+  #+begin_src clojure
+    {:deps
+     {clojure.java-time/clojure.java-time {:mvn/version "1.1.0"}}}
+  #+end_src
+
+*** local
+
+- add local dependency in parent directory ../time-lib to deps.edn
+  #+begin_src clojure
+    {:deps
+      {time-lib/time-lib {:local-root "../time-lib"}}}
+  #+end_src
+
+*** git 
+- get sha locally
+  $ git rev-parse --short v0.0.1^{commit}
+
+- get sha remotelly
+  $ git ls-remote https://github.com/yourname/time-lib.git v0.0.1
+
+- add git dependency, needs a tag and sha?
+  #+begin_src clojure
+    {:deps
+     {io.github.yourname/time-lib {:git/tag "v0.0.1" :git/sha "4c4a34d"}}}
+  #+end_src
+
 ** Web
 - https://www.youtube.com/watch?v=wEjNWUMCX78&list=PLVi9lDx-4C_T7jkihlQflyqGqU4xVtsfi
 *** hiccup
 - https://clojurebridgelondon.github.io/community-docs/docs/web-applications/hiccup/
 - https://github.com/yokolet/hiccup-samples/blob/master/src/hiccup_templating/views/contents.clj
 - https://github.com/weavejester/hiccup/blob/master/src/hiccup/element.clj
+*** luminus template dependencies
+| Name               | Description                                                                  | Home                                                    |
+|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
+| bulma              | CSS framework                                                                | https://bulma.io/                                       |
+| chesire            | json encoding/decoding                                                       | https://github.com/dakrone/cheshire                     |
+| conman             | managing database connections                                                | https://github.com/luminus-framework/conman             |
+| cprop              | likes properties, environments, configs, profiles..                          | https://github.com/tolitius/cprop                       |
+| expound            | Human-optimized error messages for clojure.spec                              | https://github.com/bhb/expound                          |
+| http-kit           | HTTP client+server                                                           | https://github.com/http-kit/http-kit                    |
+| h2                 | H2 is a database distributed as library...                                   | http://www.h2database.com/html/main.html                |
+| java-time          | wrapper for Java 8 Date-Time API.                                            | https://github.com/dm3/clojure.java-time                |
+| logback-classic    | successor to the popular log4j                                               | http://logback.qos.ch/                                  |
+| luminus-http-kit   | HTTP Kit adapter for Luminus                                                 | https://github.com/luminus-framework/luminus-http-kit   |
+| luminus-migrations | For DB migrations. The library is a command line wrapper for Migratus.       | https://github.com/luminus-framework/luminus-migrations |
+| luminus-transit    | transit serialization helpers for Luminus                                    | https://github.com/luminus-framework/luminus-transit    |
+| markdown-clj       | Markdown parser in Clojure                                                   | https://github.com/yogthos/markdown-clj                 |
+| material-icons     | Webjars. A font for the web.                                                 | https://google.github.io/material-design-icons/         |
+| mount              | managing app state since (reset)                                             | https://github.com/tolitius/mount                       |
+| muuntaja           | Clojure library for fast http api format negotiation, encoding and decoding. | https://github.com/metosin/muuntaja                     |
+| nrepl              | network REPL                                                                 | https://github.com/nrepl/nrepl                          |
+| reitit             | data-driven router                                                           | https://github.com/metosin/reitit                       |
+| ring               | HTTP server                                                                  | https://github.com/ring-clojure/ring                    |
+| ring-webjars       | Ring middleware to serve static assets from WebJars.                         | https://github.com/weavejester/ring-webjars             |
+| ring-http-response | Handling HTTP Statuses with Clojure(Script)                                  | https://github.com/metosin/ring-http-response           |
+| selmer             | Templating system                                                            | https://github.com/yogthos/Selmer                       |
+| struct             | Structural/Scheme validation                                                 | https://github.com/funcool/struct                       |
+|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
 *** threeagent
 - https://martin.varela.fi/2019/11/01/webgl-react-and-no-javascript/
   https://www.youtube.com/watch?v=myigRnZHhTw
@@ -106,9 +370,13 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/  
 *** Overtone
 - https://github.com/pjagielski/disclojure
-* Tools
+
+* tools
+
+- https://github.com/babashka/neil
 - nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
   https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
+
 ** GraalVM
 - native-image on deps.edn https://github.com/taylorwood/clj.native-image
   - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
@@ -119,7 +387,34 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://www.graalvm.org/reference-manual/native-image/StaticImages/
 - https://www.innoq.com/en/blog/native-clojure-and-graalvm/
 - https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
-* Personalities
+
+
+* snippets
+** memoize
+https://clojure.org/reference/atoms
+#+begin_src clojure
+(defn memoize
+  [f]
+  (let [mem (atom {})]
+    (fn [& args]
+      (if-let [e (find @mem args)]
+        (val e)
+        (let [ret (apply f args)]
+          (swap! mem assoc args ret)
+          ret)))))
+#+end_src
+
+** open a file
+#+begin_src clojure
+  (with-open [f (clojure.java.io/writer "/tmp/new")]
+    (.write f "some text"))
+#+end_src
+
+* codebases
+- https://shaunlebron.github.io/t3tr0s-slides/#0
+
+* personalities
 ** Rich Hickey
 - Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr
 - https://github.com/tallesl/Rich-Hickey-fanclub
+

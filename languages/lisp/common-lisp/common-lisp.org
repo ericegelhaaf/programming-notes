@@ -1,3 +1,4 @@
+- (format) https://en.wikipedia.org/wiki/Format_(Common_Lisp)
 - https://github.com/marcoheisig/common-lisp-tweaks
 - incudine project
   https://github.com/ormf/cl-ats
@@ -288,26 +289,6 @@ and that doesn't work if the code is provided as a *.a or *.o file
   (ldb (byte  4   4) #b1100)     ->     #b1100 ; next 4 bits
   (ldb (byte  8   0) #b11000111) -> #b11000111 ; lowest  bits
   #+end_src
-** Libraries
-|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
-| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel                                    |
-| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio                                     |
-| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher                            |
-| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack                              |
-| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/                                     |
-| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/                              |
-| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
-|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
-| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats                               |
-| lisp-binary    | A library to easily read and write complex binary formats.     | https://github.com/j3pic/lisp-binary                                 |
-| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap                                     |
-| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles                                   |
-| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors                           |
-| simple-streams | bivalent, varying-width elements support                       | http://www.sbcl.org/manual/#Simple-Streams                           |
-|                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
-| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
-| unboxable      | support contiguous arrays of structs                           | https://github.com/digikar99/unboxables                              |
-|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
 * books
 - https://leanpub.com/lovinglisp/read
 - https://leanpub.com/readevalprintlove001/read
@@ -398,24 +379,6 @@ and that doesn't work if the code is provided as a *.a or *.o file
  – After methods perform side-effects and cleanup
  - Most specific :around first
  - on primary method, using (call-next-method) is all the :before :after :around methods
-** Libraries
-- Efficiently represent several finite sets or small integers as a single non-negative integer.
-  https://github.com/marcoheisig/bitfield
-- Naive generators for Common Lisp
-  https://github.com/cbeo/gtwiwtg
-- https://github.com/EuAndreh/defclass-std
-  shorthand
-- https://github.com/pcostanza/filtered-functions
-  "wrapper around eql for defmethod arguments, adding a filter function before method call"
-- https://github.com/fisxoj/sanity-clause
-  "validates proper initialization data types"
-- https://github.com/kennytilton/cells
-  https://github.com/kennytilton/cells/wiki
-  "reactive, creates virtual slots that are really a call to slot or global"
-- https://github.com/sellout/quid-pro-quo
-  "contract programming, "requirements" before execute and "guarantees" after,
-   as well as "invariants" for the whole class.
-   Beyond type checking is a check of state local or global"
 * Design Patterns
 ** Peter Norvig - in Dynamic Programming
    First-class types     : Abstract-Factory, Flyweight, Factory-Method, State, Proxy, Chain-Of-Responsibility
@@ -593,177 +556,15 @@ and that doesn't work if the code is provided as a *.a or *.o file
   - to name it, give an extra argument to most non-det created functions
   - there is no way to reverse contrainsts once added
 * Looping
-- https://github.com/Shinmera/trivial-extensible-sequences
-  https://shinmera.github.io/trivial-extensible-sequences/
 - 'User-extensible sequences in Common Lisp' by Christophe Rhodes[1]
   https://web.archive.org/web/20150918224411/http://www.doc.gold.ac.uk/\~mas01cr/papers/ilc2007/sequences-20070301.pdf
-- https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md#iter
-  - do-hash-table
-  - do-each, iterates over a sequence
-  - collecting, collect
-    with-collector
-    with-collectors
-  - summing, sum
-  - nlet, goto wrapper for tail recursion
-- https://github.com/yitzchak/trivial-do/
-  do like iterators for different structs
-  - doalist
-  - dohash
-  - dolist*, with index tracking variable
-  - doplist
-  - doseq
-  - doseq*, with index tracking variable
-- https://github.com/alessiostalla/doplus
   like iterate
 ** loop
   https://web.archive.org/web/20171127083905/http://www.method-combination.net/blog/archives/2010/04/06/looping-issues.html
   https://lispcookbook.github.io/cl-cookbook/iteration.html
   https://gigamonkeys.com/book/loop-for-black-belts.html
-** iterate
-- Source https://github.com/lisp-mirror/iterate
-- examples https://github.com/earl-ducaine/loop-facility-clhs-examples
-- addons https://github.com/ruricolist/cloture/blob/623c15c8d2e5e91eb87f46e3ecb3975880109948/iterate-drivers.lisp
-- addons https://github.com/sjl/cl-losh/blob/master/src/iterate.lisp
-- https://common-lisp.net/project/iterate/doc/index.html#Top
-- https://common-lisp.net/project/iterate/
-- https://common-lisp-libraries.readthedocs.io/iterate/
-- https://web.archive.org/web/20170713105315/https://items.sjbach.com/280/extending-the-iterate-macro
-- https://sites.google.com/site/sabraonthehill/loop-v-iter
-- https://etc.ruricolist.com/2019/12/16/the-iterate-clause-trick/
-*** Article: Comparing LOOP and ITERATE
-    https://web.archive.org/web/20170713081006/https://items.sjbach.com/211/comparing-loop-and-iterate
-- Accumulation:
-  |-------------+----------------+-----------------------------|
-  | collect     |                |                             |
-  | appending   |                |                             |
-  | nconcing    |                |                             |
-  | *adjoining  | collect+unique |                             |
-  | *unioning   | append +unique |                             |
-  | *nunioning  |                |                             |
-  | *accumulate | *generic*      | (accumulate lst by #'union) |
-  |-------------+----------------+-----------------------------|
-- Reduction:
-  |-----------+-----------+-------------------------------------|
-  | sum       | #'+       |                                     |
-  | *multiply | #'*       |                                     |
-  | counting  | #'count   |                                     |
-  | maximize  | #'max     |                                     |
-  | minimize  | #'min     |                                     |
-  | *reducing | *generic* | (reducing d by #'/ initial-value 0) |
-  |-----------+-----------+-------------------------------------|
-  - reducing: a reduccion builder, ex:
-     #+begin_src lisp
-  (defmacro dividing (num &keys (initial-value 0))
-    `(reducing , num by #'/ initial-value ,initial-value))
-  (iterate (for i in '(10 5 2))
-    (dividing i :initial-value 100)
-     #+end_src
-- Boolean aggregation: (same in loop and interation)
-  |--------+----------|
-  | always | #'every  |
-  | never  | #'notany |
-  | theris | #'some   |
-  |--------+----------|
-- Finding
-  #+begin_src lisp
-  (iterate (for lst in '((a) (b c d) (e f)))
-    (finding lst maximizing (length lst)))
-  #+end_src
-- Control Flow:
-  - (next-iteration) like continue or next on other languages
-  - (if-first-time then else)
-  - (first-iteration-p)
-- Destructuring:
-  - Can destructure values easily
 ** gtwiwtg "naive generators"
 https://github.com/cbeo/gtwiwtg
-** SERIES
-- Note taken on [2022-12-17 Sat 05:39]
-#+CAPTION: All methods exported
-#+NAME:   fig:SED-HR4049
-  [[./series.png]]
-
-  https://cliki.net/SERIES
-  http://series.sourceforge.net/
-  https://github.com/tokenrove/series
-  Ref https://quickref.common-lisp.net/series.html
-  Manual https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node347.html
-  Example https://github.com/tokenrove/series/blob/master/s-test.lisp
-  Example https://github.com/BusFactor1/mcl/blob/master/examples/series/stest.lisp
-  Example https://github.com/rabuf/advent-of-code
-  Extension https://github.com/mikelevins/taps
-  Video: Intro to SERIES   https://www.youtube.com/watch?v=uRLgZCV4bOM
-  Video: SERIES vs gtwiwtg https://www.youtube.com/watch?v=5ClUB2kLaZ0
-  Article https://fourier.github.io/lisp/2017/12/17/series.html
-  http://www.dtic.mil/dtic/tr/fulltext/u2/a219961.pdf
-  http://www.dtic.mil/dtic/tr/fulltext/u2/a218220.pdf
-*** Part 1
-**** Intro
-#+begin_src lisp
-  (collect-sum (choose-if #'plusp (scan '(1 -2 3 -4))))
-  ;; => 4
-  (let ((x (subseries (scan-range :from 0 :by 2) 0 5)))
-    (values (collect x) (collect-sum x)))
-  ;; => (0 2 4 6 8), 20
-
-  ;; Scanners
-  (series 'a) ;; => #Z(a a a a a ...)
-  (scan '(a b c))
-  (scan 'vector #(a b c))
-  (scan-range :from 1 :upto 3)
-  (scan-plist '(a 1 b 2))
-
-  ;; Transducers
-  (positions #Z(a nil b c nil nil));; =>#Z(0 2 3)
-  (choose #Z(nil t t nil) #Z(1 2 3 4));; => #Z(2 3))
-
-  ;; Collectors
-#+end_src
-**** Generators and Gatherers
-***** Generators
-- by using (next-in) we get the next element on the series
-  with side-effect (like streams, unlike series)
-- Any Series can be converted in a Generator
-- (next-in GENERATOR &body ACTION-LIST)
-  (next-in x (return T))
-  (next-in x (return nil))
-  executes action-list when it runs out of elements
-  or errors
-- (generator SERIES)
-***** Gatherers
-- inverse of a generator, like and output stream
-- one at the time
-- Any one-input/one-output collector can be converted into a gatherer
-- (next-out GATHERER ITEM), writes ITEM into gatherer
-- (result-of GATHERER), gets the net result of a gatherer
-- (gatherer COLLECTOR)
-  arg must be a one input collector function
-  #+begin_src lisp
-(let ((x (gatherer #'collect))
-     ((y (gatherer #'(lambda (x) (collect-sum
-                             (choose-if #'oddp x))))))
-  (dotimes (i 4)
-    (next-out x i)
-    (next-out y i)
-    (if (evenp i) (next-out x (* i 10))))
-  (values (result-of x) (result-of y))))
-;; => (0 0 1 2 20 3), 4
-  #+end_src
-- (gathering VAR-COLLECTOR-PAIR-LIST &body body)
-  Returns N values, each value is the (result-of) each gatherer.
-  #+begin_src lisp
-(gathering ((x collect)
-            (y collect-sum))
-  (dotimes (i 3)
-    (next-out y i)
-    (if (evenp i) (next-out x (* i 10)))))
-;; => (0 20), 3
-  #+end_src
-- Optimization:
-  - "1st eversion", vars on stack if closure are near
-  - know at compile time *what* closure is involved and *which* scope
-**** TODO Defining New Off-line Series Functions
-- (producing OUTPUT-LIST INPUT-LIST &body BODY)
 * LIBRARIES
 - http://edicl.github.io/cl-fad/        - directory file, clossplatform
 - readtable for string interpolation https://github.com/edicl/cl-interpol
@@ -777,9 +578,6 @@ https://github.com/cbeo/gtwiwtg
 - https://github.com/Shinmera/flow      - graph
 - https://github.com/Shinmera/flare - value transition
 - https://github.com/lmj/global-vars/
-** CFFI
-- https://github.com/bohonghuang/cffi-ops
-- https://github.com/borodust/cffi-c-ref
 ** Arrays/Matrix
 - Build-in: Row slice, non-copy, :displaced-to & :displaced-index-offset
   https://stackoverflow.com/questions/12327237/common-lisp-how-to-access-a-row-of-a-certain-multi-dimension-array/12327524
@@ -803,20 +601,8 @@ https://github.com/cbeo/gtwiwtg
     (56 57 58 59 60 61 62 63))
   >
   #+end_src
-- AOP: https://github.com/bendudson/array-operations
-- NUMCL: https://github.com/numcl/numcl
-- SELECT: slices for arrays/matrix
-  https://github.com/Lisp-Stat/select
-  https://lisp-stat.github.io/select/
 ** Data Structures
-- bounded, lossy, unbounded queue https://cliki.net/jpl-queues
 - https://github.com/cbaggers/draw-cons-tree
-- Pileup provides a portable, performant, and thread-safe binary heap
-  https://github.com/nikodemus/pileup
-  https://nikodemus.github.io/pileup/
-- fset
-  https://www.youtube.com/watch?v=wx9BN2ppESY
-  https://www.youtube.com/watch?v=AfcjnBkWbfw
 ** Documentation
 - https://github.com/Shinmera/staple
 ** GUI
@@ -855,16 +641,6 @@ https://github.com/cbeo/gtwiwtg
 - https://github.com/eschulte/memoize
   Thread safe memoized defuns, using a synchronized type of hash table
   See: https://groups.google.com/forum/#!topic/sbcl-help-archive/NtG3r0oGaC0
-** Pattern Matching/Destructuring
-|-----------------+------------------------+---------------------+------------------------------------------------|
-| optima          | pattern matching (old) |                     | https://github.com/m2ym/optima                 |
-| trivia          | pattern matching       | defun-match*, ppcre | https://github.com/guicho271828/trivia         |
-| fare-quasiquote | extensions for trivia  |                     | https://github.com/fare/fare-quasiquote        |
-| let-plus        | destructuring          | defun+              | https://github.com/tpapp/let-plus              |
-| metabang-bind   | destructuring          | bind                | https://common-lisp.net/project/metabang-bind/ |
-| serapeum        |                        | mvlet               |                                                |
-|-----------------+------------------------+---------------------+------------------------------------------------|
-- https://common-lisp.net/project/metabang-bind/user-guide.html
 ** String Manipulation/Parsing
 - https://github.com/mrossini-ethz/parseq
   https://www.cliki.net/parseq
@@ -920,48 +696,9 @@ https://lisp-lang.org/learn/continuous-integration
 * Utils
 - bundle :use of alexandria+serapeum+closer-mop+iterate+fset+split-sequence+cl-ppcre+named-readtables
   https://github.com/GrammaTech/cl-utils
-- RUTILS docs https://github.com/vseloved/rutils/blob/master/docs/tutorial.md
-- Alexandria docs https://common-lisp.net/project/alexandria/draft/alexandria.html
-- Serapeum docs https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md
-  |----------------+-----------------------------------+-----------------------------|
-  | (eqs)          | creates a single arg function     |                             |
-  | (eqls)         |                                   |                             |
-  | (equals)       |                                   |                             |
-  | (trampoline)   | ??????                            |                             |
-  | (define-train) | defun + define-compiler-macro     |                             |
-  | (flip)         | flips function arguments          |                             |
-  | (nth-arg)      | returns NTH argument              |                             |
-  | (juxt)         |                                   | (juxt #'filter #'remove-if) |
-  | (fork)         | ..(f g h) y <->   (f y) g   (h y) | (fork #'/ #'sum #'length)   |
-  | (fork2)        | x (f g h) y <-> (x f y) g (x h y) | (fork #'list #'+ #'-)       |
-  | (hook)         | f(y,g(y))                         | (hook #'= #'floor)          |
-  |----------------+-----------------------------------+-----------------------------|
-- CL-LOSH docs https://github.com/sjl/cl-losh/blob/master/DOCUMENTATION.markdown
-  https://lisp-journey.gitlab.io/blog/snippets-functional-style-more/
-  (nullary)
-  (gathering)
-- fare-utils https://github.com/fare/fare-utils
-  (defun-inline)
-- haskell
-  https://github.com/Dimercel/listopia  Data.List functions
 - clojure
   https://github.com/ruricolist/cloture complete reimplementation
   https://github.com/joinr/clclojure    complete reimplementation
-  https://github.com/eigenhombre/cl-oju just some functions
-  +---------------+-------------+
-  | take          | drop        |
-  | spit          | slurp       |
-  | neg?          | pos?        |
-  | partition-all | partition-n |
-  | interleave    | interpose*  |
-  | rand-int      | rand-nth    |
-  | frequencies   | group-by    |
-  | juxt          | partial     |
-  | range         |             |
-  | repeatedly    |             |
-  | sort-by       |             |
-  +---------------+-------------+
-  * interperse
 * Tutorial: koans
 - Things that are T (everything that is NOT NIL)
   1. empty list
