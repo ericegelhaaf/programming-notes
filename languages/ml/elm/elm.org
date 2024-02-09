@@ -1,3 +1,4 @@
+- keyboard https://github.com/elm/browser/blob/1.0.0/notes/keyboard.md
 - https://en.wikipedia.org/wiki/Elm_(programming_language)
   - no higher kind polymorphism
     - no generic map, there is List.map and Set.map
@@ -12,7 +13,29 @@
 - https://github.com/sporto/awesome-elm
 - https://github.com/rofrol/awesome-elm-gamedev
 
+- identation https://elmprogramming.com/indentation.html
+- each file in Elm is a *module* and MUST a module statement
+- Style https://elm-lang.org/docs/style-guide
+  - naming
+    - modules   CamelCase
+    - functions camelCase
+    - variables camelCase
+
+
 * language
+
+- to be consistent with stdlib, make the datastructure the last argument of your functions
+  then you will be able to |> pipe freely
+
+- comparing (==) 2 functions would throw a ~runtime exception~
+
+- comments
+  - --
+  - {- -}
+
+- a "blank" html is "text """
+
+** model/view/update
 
 #+begin_src
   subscription -(Msg)-> update --(Model)-> view
@@ -25,7 +48,7 @@
                     RUNTIME
 #+end_src
 
-
+*** Browser
 https://package.elm-lang.org/packages/elm/browser/latest/Browser
 #+begin_src elm
 
@@ -65,49 +88,126 @@ onUrlChange   : Url -> msg -- when the Url changes, msg goes to update
 
 #+end_src
 
+** module / import
+
+#+begin_src elm
+  module Page.Register exposing (Msg, init, subscription)
+
+  -- on *module* exposing a type could only be either
+  -- - Cred(..) -- all of it
+  -- - Cred     -- nothing of it
+
+  import Time                          -- qualified, ONLY makes the namespace available
+  import Page.NotFound as NotFond      -- qualified, alias
+  import Article.Slug  exposing (Slug) -- open import, get Slug in scope
+  import Html          exposing (..)   -- open import, gets ALL on Html in scope
+  import SeasonMod     exposing (Season(..)) -- open import, imports all type constructors in type Season
+  import SeasonMod     exposing (Season)     -- qualified, imports Season
+#+end_src
+
 ** functions https://package.elm-lang.org/packages/elm/core/latest/
+
+  /home/sendai/.elm/0.19.1/packages/elm/core/1.0.5/src
+   Array.elm
+   Basics.elm
+   Bitwise.elm
+   Char.elm
+   Debug.elm
+   Dict.elm
+   Elm
+   List.elm
+   Maybe.elm
+   Platform
+   Platform.elm
+   Process.elm
+   Result.elm
+   Set.elm
+   String.elm
+   Task.elm
+   Tuple.elm
+
+  /home/sendai/.elm/0.19.1/packages/elm
+   bytes/
+   core/
+   html/
+   json/
+   parser/
+   random/
+   regex/
+   time/
+   virtual-dom/
+
+
 -- if decoding succeds, use fn to build the result
-| Json.Decode                |                                                 |
-|----------------------------+-------------------------------------------------|
-| .succeed                   | (? -> a) -> Decoder a                           |
-| .required                  | String -> Decoder a -> Decoder b                |
-| .optional                  | String -> Decoder a -> a -> Decoder b           |
-| .nullable                  | Decoder a -> a -> Maybe a                       |
-| .int                       | Decoder Int                                     |
-| .string                    | Decoder String                                  |
-| .bool                      | Decoder Bool                                    |
-| .Timestamp.iso8601Decoder  |                                                 |
-| .decodeString              | Decoder a -> String -> a                        |
-| .list                      | Decoder a -> Decoder (List a)                   |
-| .field                     | String -> Decoder a -> Decoder a                |
-|----------------------------+-------------------------------------------------|
-| List.head                  | List a -> Maybe a                               |
-| List.reverse               |                                                 |
-| List.singleton             | a -> List a                                     |
-| List.map                   |                                                 |
-| List.member                |                                                 |
-| List.filter                |                                                 |
-|----------------------------+-------------------------------------------------|
-| String.fromInt             |                                                 |
-| String.toUpper             |                                                 |
-| String.length              |                                                 |
-| String.toInt               | String -> Maybe Int                             |
-| String.concat              | List String -> String                           |
-| String.lines               | String -> List String                           |
-|----------------------------+-------------------------------------------------|
-| Http.getString             | String -> Request String                        |
-| Http.send                  | (Result Error a -> msg) -> Request a -> Cmd msg |
-| Http.CompletedLoadFeed     | Result Error String                             |
-| Http.get                   | Decoder a -> String -> a                        |
-| Http.post                  | String -> Body -> Decoder a -> Request a        |
-| Http.emptyBody             | Body                                            |
-|----------------------------+-------------------------------------------------|
-| Time.Posix                 |                                                 |
-| Random.generate            |                                                 |
-| Debug.todo                 | String -> undefined?                            |
-| Browser.Navigation.load    | loads all new HTMl, drops model                 |
-| Browser.Navigation.pushUrl | changes url, but does NOT load a new HTMl       |
-|----------------------------+-------------------------------------------------|
+| Json.Decode                |                                                   |
+|----------------------------+---------------------------------------------------|
+| .succeed                   | a -> Decoder a                                    |
+| .required                  | String -> Decoder a -> Decoder b                  |
+| .optional                  | String -> Decoder a -> a -> Decoder b             |
+| .nullable                  | Decoder a -> a -> Maybe a                         |
+| .int                       | Decoder Int                                       |
+| .string                    | Decoder String                                    |
+| .bool                      | Decoder Bool                                      |
+| .Timestamp.iso8601Decoder  |                                                   |
+| .list                      | Decoder a -> Decoder (List a)                     |
+| .field                     | String -> Decoder a -> Decoder a                  |
+| .decodeString              | Decoder a -> String -> a                          |
+| .at                        | List String -> Decoder a -> Decoder a             |
+| .map3                      | (a->b->c->val) -> Decoder a -> Decoder b -> Decoder c -> Decoder val |
+|----------------------------+---------------------------------------------------|
+| List.head                  | List a -> Maybe a                                 |
+| List.reverse               |                                                   |
+| List.singleton             | a -> List a                                       |
+| List.map                   |                                                   |
+| List.member                |                                                   |
+| List.filter                |                                                   |
+|----------------------------+---------------------------------------------------|
+| Maybe                      |                                                   |
+| .withDefault               |                                                   |
+| .map                       |                                                   |
+|----------------------------+---------------------------------------------------|
+| Http                       |                                                   |
+| .get                       | String -> Decoder a -> Request a                  |
+| .getString                 | String -> Request String                          |
+| .send                      | (Result Error a -> msg) -> Request a -> Cmd msg   |
+| .CompletedLoadFeed         | Result Error String                               |
+| .post                      | String -> Body -> Decoder a -> Request a          |
+| .emptyBody                 | Body                                              |
+| .stringBody                | String -> String -> Body                          |
+| .request                   | {method,header,url,body,expect,timeout,withCredentials} -> Request a |
+|----------------------------+---------------------------------------------------|
+| Random                     |                                                   |
+| .generate                  | creates a generator, from the provided description |
+| .initialSeed               | creates a seed from a given integer               |
+| .step                      | produces a new random value and a new seed, from a generator and a seed |
+| .constant                  | generator                                         |
+| .uniform                   | generator, from a list                            |
+| .weighted                  | generator, from a weighted list                   |
+| .map                       | generator, take an fn maps inside the random      |
+| .andThen                   | generator                                         |
+| .int                       | generator                                         |
+| .float                     | generator                                         |
+| .list                      | generator helper, take an N and a generator       |
+| .pair                      | generator helper, takes 2 generatos               |
+| .lazy                      | generator, to create self-referencing generators, helps compiler |
+|----------------------------+---------------------------------------------------|
+| WebSocket                  |                                                   |
+| .listen                    | String -> (String -> msg) -> Sub msg              |
+| .send                      | String -> String -> Cmd msg                       |
+|----------------------------+---------------------------------------------------|
+| Navigation                 |                                                   |
+| .newUrl                    | String -> Cmd msg                                 |
+| .program                   |                                                   |
+| .programWithFlags          |                                                   |
+|----------------------------+---------------------------------------------------|
+| Sub                        |                                                   |
+| .batch                     |                                                   |
+|----------------------------+---------------------------------------------------|
+| Time.Posix                 |                                                   |
+| Debug.todo                 | String -> undefined?                              |
+| Browser.Navigation.load    | loads all new HTMl, drops model                   |
+| Browser.Navigation.pushUrl | changes url, but does NOT load a new HTMl         |
+|----------------------------+---------------------------------------------------|
 ** operators
 | op   | signature                              | describes...                                               |
 |------+----------------------------------------+------------------------------------------------------------|
@@ -134,21 +234,6 @@ https://package.elm-lang.org/packages/elm/html/latest/Html-Events
 | Browser.Events.onMouseMove  | Decoder msg -> Sub msg                      |
 |-----------------------------+---------------------------------------------|
 
-** module / import
-
-#+begin_src elm
-module Page.Register exposing (Msg, init, subscription)
-
--- on *module* exposing a type could only be either
--- - Cred(..) -- all of it
--- - Cred     -- nothing of it
-
-import Time -- ONLY makes the namespace available
-import Article.Slug exposing (Slug) -- get things into scope
-import Page.NotFound as NotFond -- alias
-import Html exposing (..) -- imports into scope ALL on Html
-#+end_src
-
 ** types
 
 Cmd a
@@ -161,20 +246,55 @@ Cmd.none
   type Never = OneMore Never -- even in the module where is defined, you cannot make one
 #+end_src
 
-Int, Bool
+|--------+-------+------------+--------------------------------------------------------------------------------------------|
+| String | "foo" | MANIPULATE | revert repeat  replace  append     concat    split, join, words, lines, cons, uncons, (++) |
+|        |       | SUBSTRING  | slice  left    right    dropLeft   dropRight                                               |
+|        |       | CHECK      | length isEmpty contains startsWith indexes                                                 |
+|        |       | CONVERT    | toInt  fromInt toFloat  fromFloat  toList    fromList, fromChar                            |
+|        |       | HIGH-ORDER | map    filter  foldl    foldr      any       all                                           |
+|--------+-------+------------+--------------------------------------------------------------------------------------------|
+| Char   | 'i'   | PREDICATE  | isUpper, isLower, isAlpha, isAlphaNum,                                                     |
+|        |       |            | toUpper, toLower, toLocaleUpper, toLocaleLower                                             |
+|        |       |            | toCode, fromCode                                                                           |
+|--------+-------+------------+--------------------------------------------------------------------------------------------|
+| Int    |       |            | toFloat                                                                                    |
+|--------+-------+------------+--------------------------------------------------------------------------------------------|
+| Float  |       |            | round, floor, ceiling, truncate                                                            |
+|--------+-------+------------+--------------------------------------------------------------------------------------------|
+| Bool   |       |            | &&, ¦¦, not                                                                                |
+|--------+-------+------------+--------------------------------------------------------------------------------------------|
 
 ** types complex
 
-|------------------+-------------------+----------+------------------------+---------------|
-| instantiate      | type              | access   | update                 | destructuring |
-|------------------+-------------------+----------+------------------------+---------------|
-| [1,2,3]          | List Int          |          |                        |               |
-| { name = "foo" } | { name : String } | rec.name | { rec ¦ name = "bar" } | { foo, bar }  |
-| (1, "foo")       | ( Int, String )   |          |                        | ( foo, bar )  |
-|------------------+-------------------+----------+------------------------+---------------|
+|------------------+-------------------+-----------+------------------------+----------------------|
+| instantiate      | type              | access    | update                 | destructuring        |
+|------------------+-------------------+-----------+------------------------+----------------------|
+| [1,2,3]          | List Int          |           |                        | x :: xs              |
+| (1, "foo")       | ( Int, String )   |           |                        | ( foo, bar )         |
+| Array.fromList   | Array Int         | Array.get | Array.set              |                      |
+|------------------+-------------------+-----------+------------------------+----------------------|
+| { name = "foo" } | { name : String } | rec.name  | { rec ¦ name = "bar" } | { foo, bar }         |
+|                  |                   |           |                        | ({ name } as person) |
+|------------------+-------------------+-----------+------------------------+----------------------|
 
-- Tuples
-  - have a 3 elements MAXIMUM
+- =Array=, immutable
+  - defining : empty fromList repeat initialize
+  - get/set  : get set push
+  - props    : length
+- =Tuples= have a 3 elements MAXIMUM
+- =Records=
+  - have a N element constructor, when defined as a type alias, the same name as the type
+  - have a ".fieldname" function defined for each of the fields
+  - can use ~extensible~ for function signature to receive any records with the specified field names
+    #+begin_src elm
+point2d = { x = 1, y = 2 }
+point3d = { x = 3, y = 4, z = 5 }
+-- .x point2d => 1
+-- .x point3d => 3
+length : { a | x : Float, y : Float } -> Float
+length vector =
+    sqrt (vector.x * vector.x + vector.y * vector.y)
+    #+end_src
 
 * dependencies
 - downloaded globally at =$HOME=, NOT per project
@@ -186,6 +306,8 @@ Int, Bool
   | dependencies       |             |
   | test-dependencies  |             |
   |--------------------+-------------|
+
+
 * executable
 |-------------------------------+----------------------------------------------------------|
 | init                          |                                                          |
@@ -194,30 +316,61 @@ Int, Bool
 | make Main.elm --output elm.js | compile, point it at entrypoint file optional --optimize |
 | repl                          |                                                          |
 |-------------------------------+----------------------------------------------------------|
-* coding/editors
-|-------------+----------------------------------------------------|
-| lsp         | https://github.com/elm-tooling/elm-language-server |
-| emacs test  | https://github.com/juanedi/elm-test-runner         |
-| formatter   | https://github.com/avh4/elm-format                 |
-| review      | https://github.com/jfmengels/elm-review            |
-| live reload | https://github.com/wking-io/elm-live               |
-|-------------+----------------------------------------------------|
 * codebases
+
+- web framework
+  https://github.com/dillonkearns/elm-pages
+  https://elm-pages.com/
+- survey site (now closed) https://github.com/MartinSStewart/state-of-elm
+- games https://github.com/rofrol/elm-games
 - main site written on it https://github.com/elm/elm-lang.org/
 - Example spa https://github.com/rtfeldman/elm-spa-example/
 - todoapp https://github.com/evancz/elm-todomvc/blob/master/src/Main.elm
 - https://elm-lang.org/examples
   https://github.com/dwyl/learn-elm/
-* libraries
-|---------+-------------------------------------------------------+----|
-| testing | https://github.com/elm-explorations/test              | 23 |
-|---------+-------------------------------------------------------+----|
-| webgl   | https://github.com/elm-explorations/webgl             | 21 |
-| json    | https://github.com/NoRedInk/elm-json-decode-pipeline/ | 21 |
-| plots   | https://github.com/terezka/elm-charts                 | 21 |
-| html    | https://github.com/tesk9/accessible-html              | 23 |
-|---------+-------------------------------------------------------+----|
-| ui      | https://github.com/mdgriffith/elm-ui                  | 21 |
-| ui      | https://github.com/NoRedInk/noredink-ui               | 23 |
-| css     | https://github.com/rtfeldman/elm-css                  | 22 |
-|---------+-------------------------------------------------------+----|
+- interview challenge https://github.com/scrive/elm-challenge
+- fetch rss https://github.com/cmoog/nytrss/blob/master/Main.hs
+- different personal tools of "some guy"
+  https://github.com/amkhlv/usr/tree/master/share/Haskell
+
+* snippets
+
+#+begin_src elm
+  -- sort by length
+  List.sortBy String.length ["Hi","mum","hello"]
+  -- sort by length and alphabetically
+  List.sortBy (\str -> (String.length str, str)) ["Hi","mum","hello"]
+#+end_src
+
+* SEO
+** head.html
+
+https://github.com/MartinSStewart/state-of-elm/blob/master/head.html
+
+#+begin_src html
+<!-- Primary Meta Tags -->
+<title>State of Elm 2023</title>
+<meta name="title" content="State of Elm 2023">
+<meta name="description" content="An Elm community survey">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://state-of-elm.com/">
+<meta property="og:title" content="State of Elm 2023">
+<meta property="og:description" content="An Elm community survey">
+<meta property="og:image" content="https://state-of-elm.com/favicon.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://state-of-elm.com/">
+<meta property="twitter:title" content="State of Elm 2023">
+<meta property="twitter:description" content="An Elm community survey">
+<meta property="twitter:image" content="https://state-of-elm.com/favicon.png">
+
+<!-- Favicon -->
+<link rel="shortcut icon" href="./favicon.ico">
+
+<meta name="apple-mobile-web-app-title" content="State of Elm 2023">
+<meta name="application-name" content="State of Elm 2023">
+<meta name="theme-color" content="#ffffff">
+#+end_src

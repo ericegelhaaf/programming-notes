@@ -1,3 +1,6 @@
+- https://www.scs.stanford.edu/14sp-cs240h/
+- https://github.com/AndrasKovacs/elaboration-zoo
+  https://www.youtube.com/playlist?list=PL2ZpyLROj5FOt99f_KCxARvd1hDqKns5b
 - http://learn.hfm.io/
 - Haskell via Sokoban - Tutorial - https://haskell-via-sokoban.nomeata.de/
 - https://github.com/kowainik/learn4haskell

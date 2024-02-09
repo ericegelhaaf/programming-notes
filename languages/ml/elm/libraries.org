@@ -1,0 +1,62 @@
+|---------------------------------+------------------------------------------------------|
+| alternative to regex            | https://github.com/elm/parser                        |
+| js-style regex                  | https://github.com/elm/regex                         |
+| csv                             | https://github.com/BrianHicks/elm-csv                |
+| json (when unconsistent fields) | https://github.com/NoRedInk/elm-json-decode-pipeline |
+| parsing date                    | https://github.com/jweir/elm-iso8601                 |
+| validate data                   | https://github.com/rtfeldman/elm-validate            |
+| animation                       | https://github.com/mdgriffith/elm-animator           |
+| string-hexa to int              | https://github.com/rtfeldman/elm-hex                 |
+| measure units                   | https://github.com/ianmackenzie/elm-units            |
+|---------------------------------+------------------------------------------------------|
+* Data Structures
+|----------------------+----------------------------------------------------------------------------------|
+| assoc list           | https://github.com/pzp1997/assoc-list                                            |
+| assoc set            | https://github.com/erlandsona/assoc-set                                          |
+| list extra           | https://github.com/elm-community/list-extra                                      |
+|                      | https://package.elm-lang.org/packages/elm-community/list-extra/latest/List-Extra |
+| non empty string     | https://github.com/MartinSStewart/elm-nonempty-string                            |
+| non empty list       | https://github.com/mgold/elm-nonempty-list                                       |
+|----------------------+----------------------------------------------------------------------------------|
+* Dev Coding/Editors
+|-------------+----------------------------------------------------|
+| lsp         | https://github.com/elm-tooling/elm-language-server |
+| emacs test  | https://github.com/juanedi/elm-test-runner         |
+| formatter   | https://github.com/avh4/elm-format                 |
+| review      | https://github.com/jfmengels/elm-review            |
+| live reload | https://github.com/wking-io/elm-live               |
+|-------------+----------------------------------------------------|
+* Dev
+|--------------------+-----------------------------------------------+-----------|
+| benchmark          | https://github.com/elm-explorations/benchmark |           |
+| testing            | https://github.com/elm-explorations/test      | unit/fuzz |
+| testing (elm-test) | https://github.com/rtfeldman/node-test-runner |           |
+|--------------------+-----------------------------------------------+-----------|
+* Web (non visual)
+|----------------------+------------------------------------------------|
+| file upload/download | https://github.com/elm/file                    |
+| html parser          | https://github.com/hecrj/html-parser           |
+| generate html        | https://github.com/tesk9/accessible-html       |
+| http builder         | https://github.com/lukewestby/elm-http-builder |
+|----------------------+------------------------------------------------|
+* Web (Visual)
+|-----------+---------------------------------------------------+----|
+| ui        | https://github.com/mdgriffith/elm-ui              | 21 |
+| ui        | https://github.com/NoRedInk/noredink-ui           | 23 |
+| css       | https://github.com/rtfeldman/elm-css              | 22 |
+| plots     | https://github.com/terezka/elm-charts             | 21 |
+| loaders   | https://github.com/jouderianjr/elm-loaders/       | 19 |
+| animation | https://github.com/mdgriffith/elm-style-animation |    |
+| geometry  | https://github.com/ianmackenzie/elm-geometry      |    |
+|-----------+---------------------------------------------------+----|
+* Game
+|----------------+----------------------------------------------------+----|
+| webgl          | https://github.com/elm-explorations/webgl          | 21 |
+| glsl           | https://github.com/Zinggi/elm-glsl-generator/      | 19 |
+| 2d collision   | https://github.com/yujota/elm-collision-detection/ | 21 |
+| 3d physics     | https://github.com/w0rm/elm-physics                | 23 |
+| .obj import    | https://github.com/w0rm/elm-obj-file               | 21 |
+| vector matrix  | https://github.com/elm/linear-algebra              |    |
+| elm-playground | https://github.com/evancz/elm-playground           |    |
+| 2d raycasting  | https://github.com/janiczek/elm-raycasting         |    |
+|----------------+----------------------------------------------------+----|

@@ -1,47 +1,378 @@
-* 18 | Introduction to Elm v2 | Richard Feldman
+* DONE 16 | Elm Beyond the Basics
+code https://github.com/knowthen/elm-beyond-basics
+uses (20) library not supported by 0.19 https://package.elm-lang.org/packages/rluiten/elm-date-extra/latest
+** 4 The Elm Architecture Example
+
+- use this pattern when you are positive you needed
+
+- we use Html.map to convert
+  - from a Msg of a SubModule.Msg type
+  - to another type of type Main.Msg
+
+#+begin_src elm
+
+type Msg
+    = ChangePage Page
+    | LeaderBoardMsg LeaderBoard.Msg
+    | LoginMsg Login.Msg
+
+view : Model -> Html Msg
+view model =
+    let
+        page =
+            case model.page of
+                LeaderBoardPage ->
+                    Html.map LeaderBoardMsg
+                        (LeaderBoard.view model.leaderBoard)
+                LoginPage ->
+                    Html.map LoginMsg
+                        (Login.view model.login)
+    in
+        div []
+            [ div []
+                  [ a [ href "#" , onClick (ChangePage LeaderBoardPage)]
+                      [ text "LeaderBoard" ]
+                  , span [] [ text " | " ]
+                  , a [ href "#" , onClick (ChangePage LoginPage)]
+                      [ text "LoginPage" ]
+                  , hr [] []
+                  , page
+                  ]
+            ]
+#+end_src
+
+** 6 Effects Example, Chuck Norris App
+
+Http.getString someURL
+getString : String -> Request String
+
+Http.send Joke aRequest
+send : (Result Error a -> msg) -> Request a -> Cmd msg
+
+type Msg
+  = Joke (Result Http.Error String)
+
+** 7 JSON decoding
+
+*** long way, using a decoder on a string with "at" and "decodeString"
+
+#+begin_src elm
+json : String
+json = "{}"
+
+decoder : Decoder String
+decoder = Decoder.at ["value","joke"] Decoder.string
+
+jokeResult : Result String String
+jokeResult =
+   decodeString decoder json
+
+main : Html msg
+main =
+    case jokeResult of
+        Ok joke ->
+            text joke
+        Err err ->
+            text err
+#+end_src
+
+*** short way, using "at" and "Http.get"
+
+#+begin_src elm
+decoder : Decode String
+decoder = Decoder.at ["value","joke"] Decoder.string
+
+get : String -> Decoder a -> Request a
+
+Http.send Joke <|
+    Http.get someUrl decoder
+#+end_src
+
+*** decode a record
+
+#+begin_src elm
+type alias Response =
+    { id: Int
+    , joke: String
+    , categories : List String
+    }
+
+respondeDecoder : Decoder Response
+responseDecoder =
+    Http.map3 Response
+        (Http.field "id" int)
+        (Http.field "joke" string)
+        (Http.field "categories" (list string))
+        |> at ["value"]
+
+#+end_src
+
+*** json-decode-pipeline - better when fields are unconsistent or want to hardcode a default value
+  https://github.com/NoRedInk/elm-json-decode-pipeline
+
+#+begin_src elm
+responseDecoder : Decoder Response
+responseDecoder =
+    decode Response
+        |> required "id" int
+        |> required "joke" string
+        |> optional "categories" (list string) []
+        |> at ["value"]
+#+end_src
+
+** 8 Websockets time streaming example
+
+~the *subscriptions* functions gets called everytime the update function is called~
+
+Websocket.listen : String -> (String -> msg) -> Sub msg
+Websocket.send : String -> String -> Cmd msg
+
+type Msg = Echo String
+
+subscriptions model =
+    if model.streamTime then
+        listen "ws://echo.websocket.org" Echo
+    else
+        Sub.none
+
+send "ws://echo.websocket.org" "Hello!"
+
+** 9 Navigation SPA Routing
+
+- the Navigation package has a =program= function that can be used in place of *Html.program*
+  first argument function is called everytime the Location changes
+  program : (Location -> msg)
+          -> {init : Location -> (model Cmd msg), update: msg -> (model, Cmd msg), view : model -> Html msg, subscriptions : }
+          -> Program Never model msg
+
+- =Location= is a record with many fields
+  href,host, hostname, protocol, origin, port_, pathname, search, hash, username, password
+
+#+begin_src elm
+hashToPage : String -> Page
+hashToPage hash =
+    case hash of
+        ""       -> LeaderBoard
+        "#add"   -> AddRunner
+        "#login" -> Login
+        _        -> NotFound
+
+locationToMsg : Location -> Msg
+locationToMsg location =
+    location.hash
+        |> hashToPage
+        |> ChangePage
+
+pageToHash : Page -> String
+pageToHash page =
+    case page of
+        LeaderBoard -> "#"
+        AddRunner   -> "#add"
+        Login       -> "#login"
+        NotFound    -> "#notfound"
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+    case msg of
+        Navigate page ->
+            ( model, Navigation.newUrl <| pageToHash page )
+        ChangePage page ->
+            ( { model | page = page }, Cmd.none )
+
+init : Location -> (Model, Cmd Msg)
+init location =
+    let page = hashToPage location.hash in
+    ( initModel page, Cmd.none )
+#+end_src
+
+** 10 Ports Firebase Waiting List
+
+*** From ELM to JS
+
+port module Main Exposing (..)
+port addCustomer : Customer -> Cmd msg
+app.ports.addCustomer.subscribe(cus => {
+});
+
+*** From JS to ELM
+
+port customerAdded : (String -> msg) -> Sub msg
+subscriptions model =
+    customerAdded CustomerAdded -- send a msg when JS sends something
+
+app.ports.customerAdded.send( id );
+
+*** Firebase
+
+port addCustomer : String -> Cmd msg -- outbound
+port customerSaved : (String -> msg) -> Sub msg -- inbound
+port newCUstomer : (Customer -> msg) -> Sub msg -- inbound
+
+app.ports.addCustomer.subscribe(customerName => {
+    addCustomer({name: customerName})
+      .then(response => {
+        console.log("Saved!")
+        app.ports.customerSaved.send(response.key);
+      }, err => console.log("error:",err))
+});
+var listener = customerLIstener();
+listener.on("child_added", data => {
+  var customer = Object.assign({id: data.key}, data.val())
+  app.ports.newCustomer.send(customer);
+});
+
+** 14 Setting up LoginAuthentication
+
+https://jwt.io/
+
+- JWT - JSON Web Token
+  Encoded string includes 3 parts
+  1) header: aka metadata algorithm and token type
+  2) payload: key value pairs, aka one or more "claims"
+     - exp: expiration time
+     - iat: issued at claims
+  3) signature: generated by the server, using the header+payload and a server side secret
+
+- Sibling modules communication, is possible, but it's messy and should be avoided
+  - keep common state and first direct ancestor
+
+- it is very important to reinitialize the model, once we got a jwt token
+  otherwise the user/pass could been reused if logoff but the page wasn't closed
+
+- we update the return value of =update= to return the token
+  update : Msg -> Model -> (Model, Cmd Msg, Maybe String)
+
+** 15 Saving Retrieving Login Token JWT
+
+- in localStorage through flags
+
+** 16 Logging out
+
+port deleteToken : () -> Cmd msg
+
+app.ports.deleteToken.subscribe(() => {
+    localStorage.removeItem('token');
+})
+
+** 17 Access Control Locking Pages
+
+- To restrict acessing pages directly, we have to modify =update=
+
+#+begin_src elm
+authForPage : Page -> Bool -> Bool
+authForPage page loggedIn =
+    loggedIn || not (List.member page authPages)
+
+authRedirect : Page -> Bool -> (Page, Cmd Msg)
+authRedirect page loggedIn =
+    if authForPage page loggedIn
+    then ( page, Cmd.none )
+    else ( LoginPage, Navigation.modifyUrl <| pageToHash LoginPage)
+
+-- on init
+let
+    page = hashToPage location.hash
+    (updatePage, cmd) = authRedirect page (flags.token /= Nothing)
+
+-- on update
+LogOut -> -- add a new Cmd to move the user to the login page?
+    ( {}
+    , Cmd.batch
+        [ deleteToken ()
+        , Navigation.modifyUrl <| pageToHash LeaderBoardPage ])
+
+ChangePage -> -- to ensure we can access this page or not
+    let
+        ( updatePage, cmd ) =
+            authRedirect page model.loggedIn
+    in
+        ({ model | page = updatedPage }, cmd)
+#+end_src
+
+** 18 Adding Runners Http Post
+
+#+begin_src elm
+runnerEncoder : Model -> JE.Value
+runner { name, location, age, bib } =
+    let
+        ageInt = age |> String.toInt |> Result.withDefault 0
+        bibInt = bib |> String.toInt |> Result.withDefault 0
+    in
+        JE.object
+            [ ( "name", JE.string name )
+            , ( "location", JE.string location )
+            , ( "age", JE.int ageInt )
+            , ( "bib", JE.int bibInt )
+            ]
+
+save : String -> Model -> (Model, CMd Msg)
+save token model =
+    let
+        headers =
+            [ Http.header "AUthorization" ("Bearer " ++ token) ]
+        body =
+            Http.jsonBody <| runnerEncoder model
+        decoder =
+            field "_id" JD.string
+        request =
+            post url headers body decoder
+        cmd =
+            Http.send SaveResponse request
+    in
+        ( model, cmd )
+
+post : String -> List Http.Header -> Http.Body -> JD.Decoder a -> Http.Request a
+post url headers body decoder =
+    Http.request
+        { method = "POST"
+        , headers = headers
+        , url = url
+        , body = body
+        , expect = HTtp.expectJson decoder
+        , timeout = Nothing
+        , withCredentials = False
+        }
+#+end_src
+
+* DONE 18 | Introduction to Elm v2 | Richard Feldman
 |----------------------+----------------------------------------------------------------------|
 | same webapp,         | https://github.com/gothinkster/realworld                             |
 | build with different | https://www.realworld.how/                                           |
+|----------------------+----------------------------------------------------------------------|
 | backend/frontends    | https://github.com/jeko2000/tiny-routes-realworld-example-app        |
-|----------------------+----------------------------------------------------------------------|
 | css in elm           | https://github.com/rtfeldman/elm-css                                 |
-|----------------------+----------------------------------------------------------------------|
 | example spa codebase | https://github.com/rtfeldman/elm-spa-example/                        |
-|----------------------+----------------------------------------------------------------------|
-| onInput              | https://www.w3schools.com/jsref/event_oninput.asp                    |
-|----------------------+----------------------------------------------------------------------|
-| unsound typescript   | https://www.typescriptlang.org/docs/handbook/type-compatibility.html |
-|----------------------+----------------------------------------------------------------------|
 | some JS library      | https://github.com/localForage/localForage                           |
+| onInput              | https://www.w3schools.com/jsref/event_oninput.asp                    |
+| unsound typescript   | https://www.typescriptlang.org/docs/handbook/type-compatibility.html |
 |----------------------+----------------------------------------------------------------------|
 ** 01 Course Introduction
 
 - Elm compiles to JS
+  - Main.elm -> elm.js
+
 - Elm does the same thing that Babel/TS does
 
-- Costs
+- Cons
   - fewer web APIs have first-class support, there is a period of lag
 
 - Benefits
   - small bundle size
   - less exceptions, "no runtime exceptions", not zero
   - cohesive ecosystem solution, provides a good integration of these things needed for a webapp
-    |-----------+--------------------------------------------------------------+----------------|
-    |           | example technologies                                         | in elm         |
-    |-----------+--------------------------------------------------------------+----------------|
-    | dialect   | js, ts, babel, flow                                          | elm            |
-    | ui        | angular, react, vue, ember.js                                | view function  |
-    | state     | redux, mobx, relay, observables?                             | model          |
-    | async     | redux sagas, redux thunks, redux promises, redux observables | update         |
-    | utilities | lodash, jquery, immutable.js, rambda                         | core libraries |
-    | packages  | npm, yarn, dependable types, flow types, es6 modules         | elm install    |
-    |-----------+--------------------------------------------------------------+----------------|
+    |-----------+----------------+--------------------------------------------------------------|
+    |           |            <r> |                                                              |
+    |           |         in Elm | other technologies                                           |
+    |-----------+----------------+--------------------------------------------------------------|
+    | dialect   |            Elm | js, ts, babel, flow                                          |
+    | ui        |           view | angular, react, vue, ember.js                                |
+    | state     |          model | redux, mobx, relay, observables?                             |
+    | async     |         update | redux sagas, redux thunks, redux promises, redux observables |
+    | utilities | core libraries | lodash, jquery, immutable.js, rambda                         |
+    | packages  |    elm install | npm, yarn, dependable types, flow types, es6 modules         |
+    |-----------+----------------+--------------------------------------------------------------|
 
-- Workshop based on https://github.com/gothinkster/realworld
 - Most of benefits come with applications that are big and serious and have to be maintained for a long time.
-- Main.elm -> elm.js
-
-- You can do CSS in elm https://github.com/rtfeldman/elm-css
 
 - import into index.html for incremental adoption
   #+begin_src html
@@ -180,7 +511,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
 init =
-    { tags = Article.tags
+    { tags        = Article.tags
     , selectedTag = "elm"
     , allArticles = Article.feed
     }
@@ -193,6 +524,8 @@ update msg model =
 main =
   Browser.sandbox { init = init, view = view, update = update }
 #+end_src
+
+*** Exercise: Main.elm - view
 
 #+name: view
 #+begin_src elm
@@ -251,8 +584,7 @@ viewTags model =
   div [] (List.map (viewTag model.selectedTag) model)
 #+end_src
 
-
-*** Article.elm
+*** Exercise: Article.elm
 
 #+begin_src elm
 module Article exposing (feed, tags)
@@ -272,9 +604,9 @@ feed =
      ]
 #+end_src
 
-** 05 Type Annotations      | (:)
+** 05 Type Annotations      | (:) , records (type alias)
 
-- Annotations are done, like Haskell, but with (:) instead of (::)
+- ~Type Annotations~ are done, like in Haskell, but with (:) instead of (::)
 
  #+begin_src elm
 username : String
@@ -287,7 +619,7 @@ String.length : String -> Int -- function
 searchResult : { name : String, stars : Int } -- record
   #+end_src
 
-- Alias
+- alias
   #+begin_src elm
     type alias Article =
       { title : String
@@ -304,21 +636,21 @@ searchResult : { name : String, stars : Int } -- record
         }
   #+end_src
 
-- If you see on a function signature 2 types that are the same
+- If you see on a function signature with >1 consecutive types that are the same
   it might be a signal that is something that you might get confused to:
-  * pass instead 1 record
+  - pass instead 1 record
 
-** 06 Custom Types          | type
+** 06 Custom Types          | union types (type)
 
 - =Redux= is based on the Elm architecture
 - =React= attribute *onChange* is called like that due devs didn't like the name *onInput*
 
-- enumeration aka sum types, union types, ADTs, descriminated unions
+- enumeration aka sum types, ~union types~, ADTs, descriminated unions
 
   #+begin_src elm
-    type Tab = -- a brand new type
+    type Tab = -- a brand NEW type
       YourFeed | GlobalFed | TagFeed -- variants
-      -- no deriving, but they can be compared
+      -- no "deriving", but they can be compared
   #+end_src
 
 - containers, aka type constructors
@@ -327,10 +659,10 @@ searchResult : { name : String, stars : Int } -- record
     type Tab
         = YourFeed
         | GlobalFeed
-        | TagFeed String
+        | TagFeed String -- container
   #+end_src
 
-- It is more common to use an union type instead of a record for *Msg*
+- It is more common to use an ~union type~ instead of a record for *Msg*
 
   #+begin_src elm
     type Msg
@@ -353,9 +685,8 @@ searchResult : { name : String, stars : Int } -- record
 ** 08 Decoding JSON         | Decode
 
 - Records
-
   - when creating a *type alias* of a record
-    it creates a Nth argument ~constructor~ function
+    it also creates a Nth argument ~constructor function~
     for each Nth field
 
 - Decoding
@@ -380,25 +711,17 @@ searchResult : { name : String, stars : Int } -- record
               |> optional "email" string "me@foo.com"
     #+end_src
 
-- You might prefer, to have an intermediate record type alias
-  that will be "pessimistic" in considering all fields "nullable"
-  and then solve those.
+  - You might prefer, to have an intermediate record type alias
+    that will be "pessimistic" in considering all fields "nullable"
+    and then solve those.
 
-- in =Typescript=
-  https://www.typescriptlang.org/docs/handbook/type-compatibility.html
-  #+begin_src
-    TypeScript’s type system allows certain operations that can’t be
-    known at compile-time to be safe.
+- https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+  TypeScript’s type system allows certain operations that can’t be
+  known at compile-time to be safe.
 
-    When a type system has this property, it is said to not be
-    “sound”.
-  #+end_src
+  When a type system has this property, it is said to NOT be “sound”.
 
 ** 09 Talking to Servers    | Cmd, Http
-
-Tuples
- - have a 3 elements MAXIMUM
-
 *** Commands & Randomness
 
  - Introduce a new capability to ~update~
@@ -406,6 +729,7 @@ Tuples
    A "Cmd Msg" send from ~update~ to ER.
    For which ~update~ will return a tuple (Cmd,Model)+
    A description of something you want done. Not a side effect.
+
  - Example
    #+begin_src elm
      pickGreeting : List String -> Cmd Msg -- Command
@@ -555,16 +879,17 @@ receiveSessionFromJavascript toMsg =
 #+end_src
 
 ** 11 Wrapping Up
-* 18 | Advanced Elm           | Richard Feldman
+* TODO 18 | Advanced Elm           | Richard Feldman
 
-|------------------------------+----------------------------------------------------------------|
-| opaque data types            | https://en.wikipedia.org/wiki/Opaque_data_type                 |
-| extensible custom types      | https://allanderek.prose.sh/extensible-custom-types            |
+|------------------------------+----------------------------------------------------------------------------------|
+| opaque data types            | https://en.wikipedia.org/wiki/Opaque_data_type                                   |
+| extensible custom types      | https://allanderek.prose.sh/extensible-custom-types                              |
 | extensible custom types WASM | https://dev.to/briancarroll/elm-in-wasm-custom-types-and-extensible-records-15m0 |
-| mars climate orbiter bug     | https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Cause_of_failure |
-| library                      | https://github.com/tesk9/accessible-html                       |
-| talk                         | https://www.youtube.com/watch?v=XpDsk374LDE                    |
-|------------------------------+----------------------------------------------------------------|
+| mars climate orbiter bug     | https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Cause_of_failure              |
+| library                      | https://github.com/tesk9/accessible-html                                         |
+| talk                         | https://www.youtube.com/watch?v=tyFe9Pw6TVE                                      |
+| talk                         | https://www.youtube.com/watch?v=XpDsk374LDE                                      |
+|------------------------------+----------------------------------------------------------------------------------|
 
 ** 01 Overview
 
@@ -576,68 +901,106 @@ receiveSessionFromJavascript toMsg =
 
 ** 02 Opaque Types (module exposing)
 
-- Module Boundaries
-  - use encapsulation to enforce *invariants*
-  - NOT *exposing/exporting* constructors of variants
+- it is common to just return, when we don't want to return anything on a case
+  text ""
+
+*** Module Boundaries / Opaque Types
+
+- use encapsulation to enforce *invariants*
+- by NOT *exposing/exporting* constructors of variants
+
+- instead you can export things that will keep the invariant
+  #+begin_src elm
+    module Email exposing (Email, fromString, toString)
+
+    type Email =
+        ValidEmail String
+
+    fromString : String -> Result String Email
+    toString : Email -> String
+  #+end_src
 
 - =Opaque Types=: means that other modules cannot see what's inside the types by themselves.
-  - we can resort to defining a type, even when it doesn't have any data.
-  - just to enforce the invariant
-  - Even something as boring as this:
-    #+begin_src elm
-      type Email = Email
-    #+end_src
 
-- it is common to just return
-  text ""
-  when we don't want to return anything on a case
+- we can resort to defining a type, ~even when it doesn't have any data~
+  just to enforce the invariant
+  #+begin_src elm
+    type Email = Email
+  #+end_src
 
-*** Validated data
-  - Or this that the only way to *submitForm* is with a *Valid* type
-    Which the only way to get it is with a call to *validate*
-    Make the *invariant* enforceable by the types and the compiler
-    #+begin_src elm
+
+*** Example: Validated data (rtfeldman/elm-validate)
+
+- Or this that the only way to *submitForm* is with a *Valid* type
+  Which the only way to get it is with a call to *validate*
+  Make the *invariant* enforceable by the types and the compiler
+
+  #+begin_src elm
+    submitForm : Valid Form -> Http.Request User
+  #+end_src
+
+- Snippet rtfeldman/elm-validate code
+
+#+begin_src elm
 module Validate exposing (Validator, Valid,...)
+
 type Valid a = Valid a
+
 fromValid
     : Valid a
     -> a
-submitForm
-    : Valid Form
-    -> Http.Request User
+
 validate
     : Validator error subject
     -> subject
     -> Result (List error) (Valid subject)
-    #+end_src
+#+end_src
 
-  - Example: Credentials
-    - if you have a *Cred* that means you are logged in.
-    - Since is the only way to expose a way to get those values.
+*** Example: Credentials (elm-spa-example)
+
+- if you have a *Cred* that means you are logged in.
+- Since is the only way to expose a way to get those values.
+
     #+begin_src elm
 module Credentials exposing (Cred, login)
+
 type Cred = ...
-login    : LoginInfo -> http.Request Cred
-follow   :         Bool -> Author -> Html Msg -- without Cred, it wouldn't make sense to follow someone without being logged in
-follow   : Cred -> Bool -> Author -> Html Msg -- Bool, could bring confusion later
-follow   : Cred         -> Author -> Html Msg -- broke down into separate functions
-unfollow : Cred         -> Author -> Html Msg
+
+login    : LoginInfo -> http.Request Cred     -- if I have a Cred, it means a user must have logged in
     #+end_src
 
+- at the same time, you can build the rest of your code like this
+
+#+begin_src elm
+follow   :         Bool -> Author -> Html Msg -- without Cred, it wouldn't make sense to follow someone without being logged in
+
+follow   : Cred -> Bool -> Author -> Html Msg -- Bool, could bring confusion later
+
+follow   : Cred         -> Author -> Html Msg -- broke down into separate functions
+unfollow : Cred         -> Author -> Html Msg
+#+end_src
+
+
 *** When NOT to go Opaque
-  Example:
-  - when I am rendering an author, there are 3 possible states
-  - The only way to render a follow button is to handle 3 states.
+
+Example:
+
+- when I am rendering an author, there are 3 possible states
+- The only way to render a follow button is to handle 3 states.
+- By exposing the variants allows us to pattern match outside the module,
+  while still keeping the invariant, since we need an opaque argument to construct one of those
+
+
   #+begin_src elm
 module Author exposing
     ( Author(..) -- non-opaque, exposing all variants
-    , FollowedAuthor -- opaque, the only way to get one of them is by using follow/unfollow/requestFollow/requestUnfollow
-    , UnfollowedAuthor -- opaque, the only way to get one of them is by using follow/unfollow/requestFollow/requestUnfollow
+    , FollowedAuthor -- has opaque argument, the only way to get one of them is by using follow/unfollow/requestFollow/requestUnfollow
+    , UnfollowedAuthor -- has opaque argument, the only way to get one of them is by using follow/unfollow/requestFollow/requestUnfollow
     )
 type Author
     = IsFollowing FollowedAuthor
     | IsNotFollowing UnfollowedAuthor
-    | IsViewer Cred Profile -- currently logged user
+    | IsViewer Cred Profile -- non-opaque, currently logged user
 
 type FollowedAuthor
     = FollowedAuthor Username Profile
@@ -646,10 +1009,12 @@ type UnfollowedAuthor
     = UnfollowedAuthor Username Profile
 
 follow : UnfollowedAuthor -> FollowedAuthor
-follow (UnfollowedAuthor uname prof) = FollowedAuthor uname prof
+follow (UnfollowedAuthor uname prof) =
+    FollowedAuthor uname prof
 
 unfollow : FollowedAuthor -> UnfollowedAuthor
-unfolow (FollowedAuthor uname prof) = UnfollowedAuthor uname prof
+unfolow (FollowedAuthor uname prof) =
+    UnfollowedAuthor uname prof
 
 requestFollow : UnfollowedAuthor -> Cred -> Http.Request Author
 requestFollow (UnfollowedAuthor uname _) cred =
@@ -659,6 +1024,8 @@ requestUnfollow : FollowedAuthor -> Cred -> http.Request Author
 requestUnfollow (FollowedAuthor uname _) cred =
     requestHelp HttpBuilder.delete uname cred
   #+end_src
+
+
 *** Exercise
 
 #+begin_src elm
@@ -921,7 +1288,7 @@ Task.perform ViewportChanged getViewport
   - dividing into smaler files without a clear objective
     leads to over-exposing things, just to have the other module to have access
 
-** 06 Reuse
+** TODO 06 Reuse
 
 - Helper functions
   - when things are quite similar with just a minor thing differing
@@ -931,7 +1298,7 @@ Task.perform ViewportChanged getViewport
       --     updateform (\form -> {form | email = email}) model
       updateForm : (Form -> Form) -> Model -> (Model, Cmd Msg)
       updateForm transform model =
-          ({model | form = transform model.form}
+          ({ model | form = transform model.form }
           , Cmd.none)
     #+end_src
 
@@ -941,5 +1308,133 @@ Task.perform ViewportChanged getViewport
 - Cmd.map
 
 ** 07 Sources of Truth
+
+*** Impossible States
+
+- Examples
+
+  1) agreement where some piece of data lives
+     eg: some nested data that represents exactly the same that some other data nested elsewhere
+     #+begin_src elm
+       type alias Model =
+           { selectedTag : String
+           , theSelectedTag : String
+           , ...
+           }
+     #+end_src
+
+  2) agreement where some piece of data lives
+     a list of "tabs" records that have a bool field "active" true in multiple
+     #+begin_src elm
+       -- bad
+       type alias Tab =
+           { name : String
+           , active : Bool
+           }
+       -- better
+       type Tab
+           = YourFeed
+           | GlobalFeed
+           | TagFeed Tag
+     #+end_src
+
+*** Derived Data
+
+Database Timestamp
+> ISO-8601 string
+> Time.posix
+> String
+> Html msg
+
+- Some derived data might be stored and need to be expired/revalidated
+- Some others might just be "intermediate representations",
+  and you should NOT store them, to avoid multiple sources of truth
+
+*** Authentication
+
+- caching authentication tokens
+- in localstorage, where localstorage is the only source of truth
+
+#+begin_src javascript
+var app = Elm.Main.init({flags: localStorage.session || null});
+
+app.ports.storeSession.subscribe(function(session) {
+  localStorage.session = session;
+  setTimeout(function() { app.ports.onSessionChange.send(session); }, 0);
+});
+
+// when a different tab modifies localstorage for the same domain (eg: logout)
+window.addEventListener("storage", function(event) {
+  if (event.storageArea === localStorage && event.key === "session") {
+    app.ports.onSessionChange.send(event.newValue);
+  }
+}, false);
+#+end_src
+
+*** Javascript
+
+- in practice, the source of truth should be kept on JS
+
 ** 08 Decoding
-** 09 SPAs
+
+*** Pipeline types
+
+#+begin_src elm
+Decode.map3
+    Instructor
+    (field "name" string)
+    (field "courses" int)
+    (field "active" bool) -- Decoder Instructor
+
+-- Decode.succeed : a -> Decoder a
+-- each "required" partially applies one argument
+
+Decode.succeed Instructor
+    |> required "name" string
+    |> required "courses" int
+    |> required "active" bool
+#+end_src
+
+*** Decode.andThen
+
+- with map we "stay on the happy path"
+- with andThen we can potentially fail
+
+Decode.map     : (a -> b)         -> Decoder a -> Decoder b
+Decode.andThen : (a -> Decoder b) -> Decoder a -> Decoder b
+
+*** Decoderizing
+
+#+begin_src elm
+iso8601Decoder : Decoder Time.Posix
+iso8601Decoder =
+    Decode.string
+        |> Decode.andThen fromString
+
+fromString : String -> Decoder Time.Posix
+fromString str =
+    case Iso8601.toTime str of
+        Ok successValue ->
+            succeed successValue
+        Err _ ->
+            fail ("Invalid date: " ++ str)
+#+end_src
+
+*** Intermediate representations
+
+- Making a type opaque while still getting access to the fields on the file
+- As types with only 1(one) variant, they will get "unboxed" by the compiler.
+
+#+begin_src elm
+type Comment
+    = Comment Internals
+
+type alias Internals =
+    { id : CommentId
+    , body : String
+    , createdAt : Time.Posix
+    , author : Author
+    }
+#+end_src
+
+** TODO 09 SPAs

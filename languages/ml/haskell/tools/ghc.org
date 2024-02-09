@@ -27,13 +27,13 @@
   https://downloads.haskell.org/~ghc/7.8.3/docs/html/users_guide/options-sanity.html
 
 |----------------------------+----------------------------------------------------------------------|
-| -Wall                      | enables more common warnings                                         |
+| -Wall                      | enables more common warnings (including missing case branch)         |
 | -Weverything               | enables EVERY warning                                                |
 | -Werror                    | turns warning into errors                                            |
 |----------------------------+----------------------------------------------------------------------|
 | -fno-warn-type-defaults    | ommit warning when using numeric constants on polymorphics functions |
 | -fwarn-incomplete-patterns | on incomplete pattern matches                                        |
 | -prof                      | enables profiling information, needs P.I. from each lib              |
-| -fdefer-typed-holes        | allows you to type (_) in place of an expression                     |
+| -fdefer-typed-holes        | allows ~typed holes~, aka to type (_) in place of an expression      |
 | -fforce-recomp             |                                                                      |
 |----------------------------+----------------------------------------------------------------------|

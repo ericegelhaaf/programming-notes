@@ -1,9 +1,13 @@
 - Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
   https://unsafeperform.io/retroclash/
-- https://leanpub.com/simple-haskell-book/read
+- https://lokathor.gitbooks.io/using-haskell/content/
+- https://leanpub.com/simple-haskell-book/read - build a CI
+  official source https://github.com/alpacaaa/quad-ci
+  unofficial source https://github.com/jturner/quad-ci
 - https://leanpub.com/production-haskell/read
 - https://leanpub.com/haskell-cookbook/read
 - https://leanpub.com/haskell-stdlibs
+
 * 00 | The Haskell School of Expressive Language | Paul Hudak
 ** 3 Simple Graphics
 *** 3.1 Basic Input/Output
@@ -352,6 +356,10 @@ module Main (main) where
 | tuple | (A,B) | fst/snd   | let (a,b)=('a',1) |   |
 | list  | [T]   | head/tail |                   |   |
 * 20 | Finding Success and Failure               | Julie Moronuki
+
+ERRATA:
+- solutions, page 188, exercise 28, "remove brackets from cleanWhitespace"
+
 ** Preface
 
 - Most programming languages have, in some form or other, a way of dealing with failure.
@@ -890,7 +898,10 @@ module Main (main) where
   #+end_src
 
 - alternatively using ~GeneralizedNewTypeDeriving~ language extension
-  we could have just "derived" Semigroup
+  - can only be used with /newtype/, not /data/ declarations
+  - we could have just "derived" Semigroup
+  - deriving means you get the standard instance for the underlying type,
+    that the new type is isomorphic to
 
   #+begin_src haskell
     {-# LANGUAGE GeneralisedNewtypeDeriving #-}
@@ -899,6 +910,611 @@ module Main (main) where
   #+end_src
 
 *** Using Applicative
+
+- fixes 1)
+
+- We use the =Applicative= operators
+
+  - they let you sequence /function applications/
+  - discarding either the first or second value respectly
+  - they do NOT eay any effects that are part of /f/
+  |----+-----------------------------+---------------+-------------------|
+  | *> | left "facing bird"/"shark"  | Applicative f | f a -> f b -> f b |
+  | <* | right "facing bird"/"shark" | Applicative f | f a -> f b -> f a |
+  |----+-----------------------------+---------------+-------------------|
+
+  #+begin_src haskell
+    Failure ["x"] *> Failure ["y"]              -- Failure ["x","y"]
+    Success 1     *> Failure ["y"]              -- Failure ["y"]
+    Failure ["x"] *> Success 1                  -- Failure ["x"]
+    Failure ["x"] *> Success 1 *> Failure ["y"] -- Failure ["x","y"]
+    Success 1     *> Success 2 *> Success 3     -- Success 3
+    Success 1     <* Success 2 <* Success 3     -- Success 1
+  #+end_src
+
+- we refactor functions to stop using >>=, since we cannot have a Monad instance
+  we use a /case/
+
+  #+begin_src haskell
+    validatePassword :: Password -> Validation Error Password
+    validatePassword (Password password) =
+      case (cleanWhitespace password) of
+           Failure err       -> Failure err
+           Success password2 -> requireAlphaNum password2 *>
+                                checkPasswordLength password2
+  #+end_src
+*** Exercises
+
+1) we could use Applicative for =Either= since is a =Monad=, and as such is an =Applicative=
+
+   - in some more complex cases it might matter if =Applicative= compose better
+   - or we can possible achieve better parallelism with it
+   - ME: I have no idea how this will compose? appending string errors?
+
+   #+begin_src haskell
+     validatePassword :: Password -> Either String String
+     validatePassword pwd =
+       case (cleanWhitespace pwd) ->
+         Left err   -> Left err
+         Right pwd' -> requireAlphaNum pwd' *>
+                       checkPasswordLength pwd'
+   #+end_src
+
+2) refactor code from using "do" to "applicative"
+
+   #+begin_src haskell
+     -- FROM
+     promptWord1 :: IO String
+     promptWord1 =
+       do
+         putStr "Please enter a word.\n"
+         getLine
+
+     -- TO
+     prompWord1 =
+        putStr "Please enter a word.\n" *> getLine
+
+     -- main refactor
+     main :: IO ()
+     main =
+       checkAnagram <$> prompt1 <*> prompt2 >>= print
+   #+end_src
+
+3) extension for using "do" notation for when you not have monads
+
+   #+begin_src haskell
+     {-# LANGUAGE ApplicativeDo #-}
+     makeUser :: Username -> Password -> Validation Error User
+     makeUser usr pwd =
+       do
+         usr' <- validateUsername usr
+         pwd' <- validatePassword pwd
+         pure $ User usr' pwd'
+   #+end_src
+
+4) While =String= is a type alias for =[Char]=, and a linked list.
+   As such his memory layout might not be the efficient.
+   =Text= is an alternative data type that is more efficient.
+   - add "text" in the .cabal dependencies
+   - import it
+     #+begin_src haskell
+       import qualified Data.Text as T    -- avoid Prelude clashing
+       import qualified Data.Text.IO as T -- avoid Prelude clashing
+       import Data.Text (Text)            -- avoid calling the type Text as T.Text
+     #+end_src
+   - type conversion functions
+     #+begin_src haskell
+       T.pack :: String -> Text
+       T.unpack :: Text -> String
+     #+end_src
+   - language extension allows us to use the same "string" syntax for any string type
+     #+begin_src haskell
+       {-# LANGUAGE OverloadedStrings #-}
+     #+end_src
+
+5) Refactoring using =Text=
+
+  #+begin_src haskell
+    -- just changing String for T.Text
+    newtype Username = Username T.Text deriving Show
+    newtype Password = Password T.Text deriving Show
+    newtype Error = Error [T.Text] deriving (Semigroup, Show)
+
+    checkPasswordLength :: T.Text -> Validation Error Password
+    checkPasswordLength password =
+      case (T.length password > 20) of -- !!
+        True  -> Failure (Error ["Your password cannot be longer than 20 characters"])
+        False -> Success (Password password)
+
+    requireAlphaNum :: T.Text -> Validation Error Text
+    requireAlphaNum xs =
+      case (T.all isAlphaNum xs) of -- !!
+        False -> Failure (Error ["Cannot contain white space or special characters."])
+        True  -> Success xs
+
+    cleanWhitespace :: T.Text -> Validation Error Text
+    cleanWhitespace input =
+      if T.null (T.strip input) -- !!
+      then Failure (Error ["Cannot be empty."])
+      else Success (T.strip input) -- !!
+
+    main :: IO ()
+    main =
+      do
+        putStrLn "Please enter a username."
+        username <- Username <$> T.getLine
+        putStrLn "Please enter a password."
+        password <- Password <$> T.getLine
+        print (makeUser username password)
+  #+end_src
+
+** 9 Better error messages
+
+- Goal of this chapter is write ~errorCoerce~ function,
+  to be able use list functions with our =Error= newtype
+
+- We will use
+  1) explicit coercion in a separate function
+  2) destructuring in pattern matching
+
+*** The problem
+
+- We would like to be able to distinguish between errors.
+  Currently only is possible for length errors, since they use different functions.
+  But for "empty input" errors there is no way to disambiguate.
+
+- We could refactor our "main" or we could write new functions for it.
+  We would do the later one.
+  To prepend a custom label (a String) to each error string and format them.
+
+*** The error functions
+
+- ~passwordErrors~, complementary to ~validatePassword~ it will do nothing instersting on Success.
+
+  #+begin_src haskell
+    passwordErrors :: Password -> Validation Error Password
+    passwordErrors pwd =
+      case validatePassword pwd of
+            Failure err  -> Failure (Error ["Invalid password:"] <> err)
+            Success pwd' -> Success pwd'
+
+    usernameErrors :: Username -> Validation Error Username
+    usernameErrors usr =
+          case validateUsername usr of
+               Failure err  -> Failure (Error ["Invalid username:"] <> err)
+               Success usr' -> Success usr'
+  #+end_src
+
+*** Gathering up the errors
+
+- To combine the errors, we use the "...Errors" functions instead of "validate..."
+
+  #+begin_src haskell
+    makeUser :: Username -> Password -> Validation Error User
+    makeUser usr pwd =
+      User <$> usernameErrors usr
+           <*> passwordErrors pwd
+  #+end_src
+
+*** Lists upon lists
+
+- We want to write a function to display the Success and Error better
+
+  #+begin_src haskell
+    display :: Username -> Password -> IO ()
+    display usr pwd =
+      case makeUser usr pwd of
+        --Failure err -> _ -- we will want to use "unlines" and "putStr" for this
+        Failure err ->
+           putStr $ unlines $ errorCoerce err
+        Success (User (Username name) pwd') ->
+           putStr $ "Welcome, " ++ name
+  #+end_src
+
+*** Coercion
+
+- It's good that =Error= and =[String]= are different nominal types
+  1) allows us to have different typeclasses for them
+  2) explicit type conversions make it clear in our code,
+     the points when we think of data in different light
+
+- Coercion functions
+
+  #+begin_src haskell
+    errorCoerce :: Error -> [String]
+    errorCoerce (Error err) = err
+  #+end_src
+
+*** Handling sucess
+
+- Just adding the Success branch printing of the name "Welcome, NAME"
+  by destructuring =Username= on the branch pattern matching
+
+*** The final ~main~
+
+#+begin_src haskell
+  main :: IO ()
+  main = do
+    putStr "Please enter a username.\n>"
+    username <- Username <$> getLine
+    putStr "Please enter a password.\n>"
+    password <- Password <$> getLine
+    display username password
+#+end_src
+
+*** Exercises
+
+1) Changing the type of Error from [String] to String separated by "\n"
+
+   #+begin_src haskell
+     newtype Error = Error String deriving Show
+     instance Semigroup Error where
+       Error x <> Error y = Failure (x ++ "\n" ++ y)
+   #+end_src
+
+2) Write a function to coerce from =String= to =Error=,
+   and use it instead of constructing directly new =Error= s
+   this avoids refactoring types when changing the underlying type of =Error=
+   so instead of adding/removing brace[] everywhere we would just do it on the new constructor function
+
+   #+begin_src haskell
+     errorMessage :: String -> Error
+     errorMessage msg = Error msg
+   #+end_src
+
+3) Because (Error []) has no meaning for us but is still type valid.
+   We consider a new type for =Error=, the =Data.List.NonEmpty=.
+   Which has only 1(one) constructor (:|)
+
+   #+begin_src haskell
+     > 1 :| 2 : 3 : [] -- 1 :| [2,3]
+     import Data.List.NonEmpty (NonEmpty ((:|)))
+     import qualified Data.List.NonEmpty as NE
+
+     newtype Error = Error (NonEmpty String)
+       deriving (Semigroup, Show) -- Semigroup is also list concatenation
+
+     errorMessage :: String -> Error
+     errorMessage msg = Error (msg :| [])
+
+     -- putStrLn (unlines (NE.toList (errorCoerce err)))
+   #+end_src
+
+** 10 Coercible
+
+- Instead of manually writting coercing functions like ~errorCoerce~ above.
+  Or in worst situations, having to coerce newtypes that contain other newtypes.
+  We will use =Coercible=.
+
+*** Enter =Coercible=
+
+#+begin_src haskell
+  class Coercible a b where -- approximate definition
+    coerce :: a -> b
+#+end_src
+
+- It's a "magic" typeclass, you do NOT need to define your own instances of it.
+  But you need to import the module.
+
+  #+begin_src haskell
+    import Data.Coerce
+  #+end_src
+
+*** What can be coerced?
+
+- simple newtypes definition like this
+
+  #+begin_src haskell
+    newtype B = N A
+  #+end_src
+
+- Will create for us instances like these, without us having to write them
+
+  #+begin_src haskell
+    instance Coercible A B where
+      coerce a = N a
+
+    instance Coercible B A where
+      coerce (N a) = a
+  #+end_src
+
+*** Updating the display function
+
+- we update the above ~display~ to use ~coerce~ for "err" on "Failure err" branch
+
+*** Type applications
+
+1) Using ~coerce~ might give away some /type safety/
+   This type checks, but has a bug.
+
+   #+begin_src haskell
+     greet :: User -> IO ()
+     greet (User password name) = -- !!
+       putStrLn ("Welcome, " ++ coerce name) -- will compile, and display the actual Password :(
+   #+end_src
+
+2) is better to use explicit type applications with ~coerce~ (or other similary extremly polymorphic function)
+
+   #+begin_src haskell
+     greet :: User -> IO ()
+     greet (User password name) = -- !!
+       putStrLn ("Welcome, " ++ coerce @Username @String name) -- won't compile
+   #+end_src
+
+*** Coercibility is transitive
+
+- This means that:
+  + if A and B are coercible
+  + and B and C coercible
+  + then A and C are coercible
+
+- this means that we can just write coerce
+
+  #+begin_src haskell
+    userPasswordCoerce' :: UserPW -> String
+    userPasswordCoerce' = coerce
+  #+end_src
+
+*** Coercion in type parameters
+
+- if types A and B are coercible, then:
+
+  1) lists [A] and [B] are coercible
+  2) tuples (A,C) and (B,C) are coercible
+
+- As such, not all uses of ~coerce~ are sensible:
+
+  Password -> String
+  Error -> [String] -> [Password]
+
+*** Coercing functions
+
+- we can coercion to define a function to replace both
+
+  - requireAlphaNumUsername :: Username -> Validation Error Username
+  - requireAlphaNumPassword :: Password -> Validation Error Password
+
+- or the more generic version we picked
+
+  - requireAlphaNum :: String -> Validation Error String
+
+- we create a type, to make it easier to write
+
+  - type Rule a = (a -> Validation Error a)
+  - checkPasswordLength :: Rule Password
+  - checkUsernameLength :: Rule Username
+  - requireAlphaNum     :: Rule String
+  - cleanWhitespace     :: Rule String
+  - validatePassword    :: Rule Password
+  - validateUsername    :: Rule Username
+
+#+begin_src haskell
+  validatePassword :: Rule Password
+  validatePassword password =
+    -- coercing fn from "Rule String" to "Rule Password"
+    case (coerce cleanWhitespace :: Rule Password) password of
+      Failure err -> Failure err
+      Success password2 ->
+        -- coercing fn from "Rule String" to "Rule Password"
+        (coerce requireAlphaNum :: Rule Password) password2 *>
+        checkPasswordLength password2
+#+end_src
+
+** 11 Generalizing Further
+
+- So far we showed 2 constrasts
+
+  1) =Right= is the side of =Either= were functions like fmap and (>>=) act upon
+     =Left= is the side that just tags along for the ride
+  2) =Either= is the type for which (<*>) stops at the first left value
+     =Validation= is the type for which (<*>) accumulates left values
+
+- And as such we could conclude
+  1) =Either a b= is not really different from =Either b a=
+  2) both =Either= and =Validation= have exactly the same structure
+
+- recommendation:
+  * don't start with a generality
+  * start with concrete examples
+  * then observe what aspects they share
+
+*** Designing a typeclass
+*** Folding over sum types
+
+- there are additional versions of some types or expressions in Haskell
+  called ~folds~ or ~catamorphisms~
+
+  #+begin_src haskell
+    Data.Bool.bool :: a        -> a        -> Bool           -> a -- ifFalse     -> ifTrue      -> condition
+    maybe          :: b        -> (a -> b) -> Maybe a        -> b -- ifIsNothing -> FN          -> Maybe a
+    either         :: (a -> c) -> (b -> c) -> Either a b     -> c -- fnIfLeft    -> fnIfIfRight -> Either a b
+    validation     :: (e -> c) -> (a -> c) -> Validation e a -> c
+  #+end_src
+
+- ~either~ and ~validation~ catamorphisms are identical, seems ripe for generalization
+
+- we try a new class that defines the deconstruction of a sum type as fold
+
+  #+begin_src haskell
+    class FoldAB f where
+      foldAB :: (a -> c) -> (b -> c) -> f a b -> c
+  #+end_src
+
+- instances will only need to specialize the type of the third argument,
+  and can be implemented with the catamorphism already exits
+
+  #+begin_src haskell
+    instance FOldAB Either where
+      foldAB = either
+
+    instance FoldAB Validation where
+      foldAB = validation
+  #+end_src
+
+- rewriting ~display~ with ~foldAB~
+
+  #+begin_src haskell
+    display :: Username -> Password -> IO ()
+    display name password =
+      foldAB (\err -> _ {- Print the error -})
+             (\user -> _ {- Greet the user -})
+             (makeUser name password)
+  #+end_src
+
+*** Desire for a generalized ~fmap~
+
+- generalized part of ~passwordErrors~ were we "modify the failure value if there is one"
+
+  #+begin_src haskell
+    mapFailure :: (e1 -> e2) -> Validation e1 a -> Validation e2 a
+    mapFailure f (Failure e) = Failure (f e)
+    mapFailure _ (Success x) = Success x
+  #+end_src
+
+- rewriting ~passwordErrors~, previously written with a case
+
+  #+begin_src haskell
+    passwordErrors :: Password -> Validation Error Password
+    passwordErrors password =
+      mapFailure (\err -> Error ["Invalid password:"] <> err)
+                 (validatePassword password)
+  #+end_src
+
+- an hipotethical ~mapSuccess~ would just be plain old ~fmap~
+
+- ~Data.Bifunctor.first~ and ~Data.Bifunctor.second~
+  - provide functions that do an "fmap" over the first or second type parameter.
+  - But only work on sum types with 2(two) type parameters.
+
+- ~Data.Validation~ instead of containing many functions like these, contains 2(two) prisms.
+
+  #+begin_src haskell
+    _Failure :: Prism (Validation e1 a) (Validation e2 a) e1 e2
+    _Success :: Prism (Validation e  a) (Validation e  b) a  b
+  #+end_src
+
+*** The ~lens~ library
+
+- add ~lens~ to .cabal and ~import Control.Lens~
+
+- the types in the ~lens~ library are called =optics=
+  - =Prism=
+  - Lens
+  - =Iso=
+  - Traversal
+  - Fold
+  - Getter
+  - Setter
+
+*** The =Success= and =Failure= prisms
+
+- Once we have
+  - a /general function/ that operates on a particular "side" of a sum type,
+  - a ~prism~ parameter specifies which side.
+
+- ~over~ function is the generalization of ~fmap~ in the ~lens~ library
+
+  1) if we pass it the =_Success= ~prism~ it behaves like ~fmap~
+     #+begin_src haskell
+       > over _Success (+ 1) (Success 4)
+         Success 5
+       > over _Success (+ 1) (Failure "x")
+         Failure "x"
+     #+end_src
+
+  2) if we pass it the =_Failure= ~prism~ we will map over the failure
+     #+begin_src haskell
+       > over _Failure (<> "y") (Success 4)
+         Success 4
+       > over _Failure (<> "y") (Failure "x")
+         Failure "xy"
+     #+end_src
+
+- comparison of type signatures
+  #+begin_src haskell
+    fmap :: Functor f     => (a -> b) -> (f a -> f b)
+    over :: Prism s t a b -> (a -> b) -> (s   -> t)
+  #+end_src
+
+- differences
+  1) the method of lifting "a -> b" function comes from the =Prism= value rather than the =Functor= constraint
+  2) more general result
+
+- using the ~prism~ on our ~passwordErrors~ function
+
+  #+begin_src haskell
+    passwordErrors password =
+      over _Failure (\err -> Error ["Invalid password:"] <> err)
+                    (validatePassword password)
+  #+end_src
+
+- =Prism= tye variable values are
+  - s = Validation Error Password
+  - t = Validation Error Password
+  - a = Error
+  - b = Error
+
+- Is common that types s=t and a=b, so there is a type alias
+  a.k.a ~simple prism~
+
+  #+begin_src haskell
+    type Prism' s a = Prism s s a a
+  #+end_src
+
+- Using the lens ~preview~ we can define ~maybeSuccess~ a ~maybeFailure~
+
+  #+begin_src haskell
+    preview _Success :: Validation e a -> Maybe a
+    preview _Failure :: Validation e a -> Maybe e
+
+    > preview _Success (Success "Hello")
+      Just "Hello"
+    > preview _Success (Failure ":(")
+      Nothing
+
+    > preview _Failure (Success "Hello")
+      Nothing
+    > preview _Failure (Failure ":(")
+      Just ":("
+  #+end_src
+
+- ~preview~ can only be used with simple prisms
+
+  #+begin_src haskell
+    preview :: Prism' s a -> (s -> Maybe a)
+  #+end_src
+
+*** TODO The =Either= & =Validation= isomorphism
+
+- ...can be represented by an =Iso= called =_Validation=
+
+  #+begin_src haskell
+    -- type Iso' s a = Iso s s a a -- two parameter, "simple" variant of Iso
+    _Validation :: Iso' (Either a b) (Validation a b)
+  #+end_src
+
+- Can also be used as a parameter by ~over~
+
+  #+begin_src haskell
+    over :: Iso s t a b -> (a -> b) -> (s -> t)
+  #+end_src
+
+- Differences between =Prism'= and =Iso'=
+  - A =Prism' s a= indicates that ~s~ is a sum type, and ~a~ is one of his components
+  - A =Iso'   s a= indicates that ~s~ and ~a~ are merelly different representations of the same information
+    (you can convert between them)
+
+- ~view~ and ~review~ used for converting between "s" and "a"
+  #+begin_src haskell
+    view   :: Iso' s a -> (s -> a)
+    review :: Iso' s a -> (a -> s)
+  #+end_src
+
+- isomorphism is a bit like coercibility, but differ in:
+  - if two types are coercible, then they are certainly isomorphic
+
+*** TODO The =Validate= class
+*** TODO Exercises
 * 22 | Practical Haskell                         | Alejandro Serrano Mena
 source https://github.com/Apress/practical-haskell
 - Packages https://hackage.haskell.org/
@@ -2240,39 +2856,192 @@ After Step 2
 **** Profiling with GHC
 *** Strictness annotations
 * 22 | Sockets & Pipes                           | Chris Martin
-- cabal environment
-  https://hackage.haskell.org/package/sockets-and-pipes
-  https://github.com/joyofhaskell/sockets-and-pipes
-- someone's code https://github.com/brhutchins/sockets-and-pipes/blob/main/Book.hs
-** Preface
-- Libraries: bytestring, text, sockets, network, attoparsec
-- Monad Transformers: ResourceT, ListT, ExceptT
-- once you have the file:
-  $ cabal repl
-  ghci> getDataDir
-  "/home/sendai/.local/share/sockets-and-pipes"
-*** book.cabal
-#+begin_src yaml
-  cabal-version: 3.0 # NECESSARY
-  name: book         # NECESSARY
-  version: 0         # NECESSARY
-  data-files: **/*.txt
 
-  library # no colon (:), nor this comment
+| deps library   | https://github.com/joyofhaskell/sockets-and-pipes |
+| anon code      | https://github.com/brhutchins/sockets-and-pipes/blob/main/Book.hs |
+| http semantics | https://www.rfc-editor.org/rfc/rfc9110.html       |
+| http 1.1       | https://www.rfc-editor.org/rfc/rfc9112.html       |
+
+ERRATA: 10 - "A typical running computer contains multitudes" add "of processes" at the end?
+
+** Preface
+
+- "What exactly /is/ a a web server?"
+- Creating a webserver that speaks HTTP from scratch
+- Libraries:
+  - bytestring, text
+  - sockets, network
+  - attoparsec (from bytestring to http messages)
+- Monad Transformers: ResourceT, ListT, ExceptT
+- We use =ResourceT= to deal with files/sockets without resource leaks
+- We use =ExceptT= to deal with different errors
+
+** 0 Setup
+
+- GHC 9.2 or 9.4 is required
+
+*** book.cabal
+
+old book version
+#+begin_src yaml
+  common base
     default-language:   Haskell2010
     default-extensions: BlockArguments
                         QuasiQuotes
                         TypeApplications
                         ScopedTypeVariables
-    ghc-options:        -Wall -fdefer-typed-holes
     build-depends:      sockets-and-pipes ^>=0.3
-    exposed-modules:    Book
 #+end_src
+
+
+#+begin_src yaml
+  cabal-version: 3.0 # NECESSARY
+  name: book         # NECESSARY
+  version: 0.0.0.0   # NECESSARY
+
+  common base
+    default-language: GHC2021
+    default-extensions: BlockArguments
+                        DerivingVia
+                        NoImplicitPrelude
+                        QuasiQuotes
+    ghc-options:        -Wall -fdefer-typed-holes
+    build-depends:      sockets-and-pipes ^>= 1.0
+
+  library
+    import:          base
+    hs-source-dirs:  library
+    exposed-modules: Book
+#+end_src
+
+*** sockets-and-pipes - dependencies
+
+  - ascii
+  - aeson
+  - async
+  - attoparsec
+  - attoparsec-run
+  - base
+  - blaze-html
+  - bytestring
+  - containers
+  - directory
+  - filepath
+  - hash-addressed
+  - mtl
+  - network
+  - network-simple
+  - pipes
+  - relude
+  - resourcet
+  - safe-exceptions
+  - stm
+  - text
+  - time
+  - unfork
+
+*** sockets-and-pipes - reexported-modules
+
+-- aeson
+, Data.Aeson
+, Data.Aeson.Key
+, Data.Aeson.KeyMap
+
+-- ascii
+, ASCII
+, ASCII.Char
+, ASCII.Decimal
+
+-- async
+, Control.Concurrent.Async
+
+-- attoparsec
+, Data.Attoparsec.ByteString
+
+-- attoparsec-run
+, Data.Attoparsec.ByteString.Run
+
+-- base
+, Control.Concurrent
+, Control.Monad
+, Data.Char
+, Prelude
+, System.IO
+
+-- blaze-html
+, Text.Blaze.Html
+, Text.Blaze.Html.Renderer.Utf8
+, Text.Blaze.Html5
+, Text.Blaze.Html5.Attributes
+
+-- bytestring
+, Data.ByteString
+, Data.ByteString.Builder
+, Data.ByteString.Char8
+, Data.ByteString.Lazy
+
+-- containers
+, Data.Map.Strict
+
+-- directory
+, System.Directory
+
+-- filepath
+, System.FilePath
+
+-- hash-addressed
+, HashAddressed.Directory
+, HashAddressed.HashFunction
+
+-- mtl
+, Control.Monad.Except
+
+-- network
+, Network.Socket
+, Network.Socket.ByteString
+
+-- network-simple
+, Network.Simple.TCP
+
+-- pipes
+, Pipes
+
+-- relude
+, Relude
+
+-- resourcet
+, Control.Monad.Trans.Resource
+
+-- safe-exceptions
+, Control.Exception.Safe
+
+-- stm
+, Control.Concurrent.STM
+, Control.Concurrent.STM.TVar
+, Control.Monad.STM
+
+-- text
+, Data.Text
+, Data.Text.Encoding
+, Data.Text.IO
+, Data.Text.Lazy
+, Data.Text.Lazy.Builder
+, Data.Text.Lazy.Builder.Int
+, Data.Text.Lazy.Encoding
+, Data.Text.Lazy.IO
+
+-- time
+, Data.Time
+
+-- unfork
+, Unfork
+
 *** Book.hs
+
 #+begin_src haskell
 module Book where
 
-import Prelude ()
+import Prelude () -- not needed withNoImplicitPrelude?
 import Relude
 import qualified System.Directory as Dir
 import System.FilePath ((</>))
@@ -2283,59 +3052,130 @@ getDataDir = do
   Dir.createDirectoryIfMissing True dir
   return dir
 #+end_src
+
+- once you have the file:
+  $ cabal repl
+  ghci> getDataDir
+  "/home/sendai/.local/share/sockets-and-pipes"
+
 ** 1 Handles
-- ~multiplexing~ is allowing many "tenants" to share the same facilities without interfering with one another
-- IO =~ system calls to the OS
-- a "handle" is the identifier for the OS<->Process "conversation
-  - windows: file handle
-  - linux: file descriptor
-- IO.(openFile/hClose/hPutStrLn/putStrLn)
-- what could go wrong?
+
+*** The Necessity of indirection
+
+- ~multiplexing~ is allowing many "tenants" to /share/ the same facilities without interfering with each other.
+  - This is the job of the *OS*, to coordinate shared use of (limited) physical resources.
+  - When we say that the program performs an /action/,
+    we are usually talking about interacting with physical resources.
+
+- =IO= /system calls/ to the OS
+  - $ man 2 syscalls
+
+
+*** Writing to a file
+
+- A ~handle~ is the identifier for the OS<->Process conversation
+  - Windows: file handle
+  - Linux:   file descriptor (aka fd)
+
+- A ~handle~ on a resource is a temporary means of grabbing onto it,
+  like the handhold provided by an ice climber's axe.
+
+- ~System.IO.putStrLn~ is a specialization of the more general ~System.IO.hPutStrLn~
+
+- Example: handle used to write into a file
+  #+begin_src haskell
+    import qualified System.IO as IO
+
+    writeGreetingFile :: IO ()
+    writeGreetingFile = do
+      dir <- getDataDir
+      h   <- IO.openFile (dir </> "greeting.txt") WriteMode -- ReadMode|AppendMode|ReadWriteMode
+      IO.hPutStrLn h "hello"
+      IO.hPutStrLn h "world"
+      IO.hClose h
+  #+end_src
+
+- it is ok to call ~IO.hClose~ more than once on the same handle
+
+
+*** Exceptions
+
+- What can fail on our example?
+  - ~openFile~ - insufficient file permissions
+  - ~putStrLn~ - storage is full
+
+- use ~Control.Exception.Safe.tryAny~ to change the default /halt action/ that happens when an exception happens
+  #+begin_src haskell
+    tryAny :: IO a -> IO (Either SomeException a)
+  #+end_src
+
+- Example: custom error message on ~openFile~ error
+  #+begin_src haskell
+    writeGreetingTry :: IO ()
+    writeGreetingTry = do
+      dir <- getDataDir
+      IO.hPutStrLn IO.stderr "About to open the file :/"
+      openResult <- tryAny $ IO.openFile (dir </> "greeting.txt") WriteMode
+      case openResult of
+           Left _ -> IO.hPutStrLn IO.stderr "Cannot open file to write :("
+           Right h -> do
+             IO.hPutStrLn h "hello"
+             IO.hPutStrLn h "world"
+             IO.hClose h
+             IO.hPutStrLn IO.stderr "Done :)"
+  #+end_src
+
+- What could go wrong?
   1) IO Exceptions: eg: disk is full
-  2) Asynchronous exceptions: eg: someone throws an interrupt (Control.Exception.throwTo function)
-- the ~T~ at the end of a type stands for *transformer*
-  wherever there are monad transformers we find an abundance of polymorphism
-- ~ResourceT~ is a monad transformer
-  if *m* is a monad *mT* is a monad as well
+  2) Asynchronous exceptions:
+     NOT captured by ~tryAny~
+     An action can receive an exception at any time, like when the it is "killed".
+     Catching them should be left to dedicated libraries that know what they are doing.
+     eg: someone throws an interrupt with ~Control.Exception.throwTo~
+
+
+*** Diligent cleanup
+
+- Using ~tryAny~ to attempt to cleanup the handle on error.
+  Still, does NOT capture asynchronous exceptions.
+  #+begin_src haskell
+    writeGreetingSafeAttempt :: IO ()
+    writeGreetingSafeAttempt = do
+      dir <- getDataDir
+      h   <- IO.openFile (dir </> "greeting.txt") WriteMode
+      _   <- tryAny do -- !!
+        IO.hPutStrLn h "hello"
+        IO.hPutStrLn h "world"
+      IO.hClose h
+  #+end_src
+
+- We will use =ResourceT= from the ~resourcet~ library
+  - the ~T~ at the end of a type stands for *transformer*
+  - is a monad transformer
+  #+begin_src haskell
+    import Control.Monad.Trans.Resouce (ReleaseKey, ResourceT, allocate, runResourceT)
+    writeGreetingSafe = runResourceT @IO do
+      dir <- liftIO getDataDir
+      (_releaseKey, h) <-
+        allocate (IO.openFile (dir </> "greeting.txt") WriteMode)
+                  IO.hClose
+      liftIO (IO.hPutStrLn h "hello")
+      liftIO (IO.hPutStrLn h "world")
+  #+end_src
+
 - ~ResourceT IO~
-  - represents the concept of ~IO~ that has been transformed or modified by adding a certain safety feature.
+  - represents the concept of ~IO~ that has been /transformed or modified/ by adding a certain *safety* feature.
   - anything that you can do in ~IO~ can also be done in ~ResourceT IO~
-    by lifting the ordinary ~IO~ inot a resource-safety-agumented ResourceT IO context
+    by lifting the ordinary ~IO~ into a resource-safety-agumented ~ResourceT IO~ context
+
 - whenever learning about a new type, pay attention to:
   1) Introduction: which functions introduce that type (eg: liftIO, allocate)
-  2)  Elimination: which functions eliminate it (eg: runResource)
-- This tell us wht is the general structure of a program using the type will look like.
-*** writeGreetingFile
-#+begin_src haskell
-writeGreetingFile :: IO ()
-writeGreetingFile = do
-  dir <- getDataDir
-  h   <- IO.openFile (dir </> "greeting.txt") WriteMode
-  IO.hPutStrLn h "hello"
-  IO.hPutStrLn h "world"
-  IO.hClose h
-#+end_src
-*** hello-world.hs
-#+begin_src haskell
-module Main (main) where
-import qualified System.IO as IO
-main = IO.putSTrLn "hello world!"
-#+end_src
-*** writeGreetingFile - handle-closing reliably
-#+begin_src haskell
-import Control.Monad.Trans.Resource
-    (ReleaseKey, ResourceT, allocate, runResourceT) -- Types are not redundant to import
+  2) Elimination: which functions eliminate it (eg: runResource)
 
-writeGreetingSafe :: IO ()
-writeGreetingSafe = runResourceT @IO do
-  dir <- liftIO getDataDir
-  (_releaseKey, h) <- allocate
-    (IO.openFile (dir </> "greeting.txt") WriteMode)
-    IO.hClose
-  liftIO (IO.hPutStrLn h "hello")
-  liftIO (IO.hPutStrLn h "world")
-#+end_src
-*** resourcet classes
+- This tell us what is the general structure of a program using the type will look like.
+
+**** =ResourceT= classes
+
 - ~MonadIO~
   describes any (m)onad that an ~IO~ action can be lifted into.
   sole method is:
@@ -2346,7 +3186,9 @@ writeGreetingSafe = runResourceT @IO do
 - ~MonadResource~
   class describes the safety augmentation of IO
   exists because ~ResourceT IO~ can have further monad transformers applied to it
-*** resourcet functions type signatures AND specialization in the example
+
+**** =ResourceT= functions type signatures AND specialization in the example
+
 - ~allocate~, takes 2 parameters
   1) IO a      - creates/opens/adquires a resource
   2) a -> IO a - an action that destroys/closes/releases a resource
@@ -2367,10 +3209,35 @@ runResourceT ::                    ResourceT IO a -> IO a
 
 release      :: MonadIO m       => ReleaseKey     -> m ()
 #+end_src
-*** MonadIO class - programmer's relationship to it
+
+
+*** writeGreetingFile - handle-closing reliably
+
+#+begin_src haskell
+  import Control.Monad.Trans.Resource
+      (ReleaseKey, ResourceT, allocate, runResourceT) -- Types are not redundant to import
+
+  writeGreetingSafe :: IO ()
+  writeGreetingSafe = runResourceT @IO do
+    dir <- liftIO getDataDir
+    (_releaseKey, h) <- allocate
+      (IO.openFile (dir </> "greeting.txt") WriteMode)
+      IO.hClose
+    liftIO (IO.hPutStrLn h "hello")
+    liftIO (IO.hPutStrLn h "world")
+#+end_src
+
+
+*** MonadIO
+**** =MonadIO= class - programmer's relationship to it
+
 - when introducing a new *monad transformer* like ~ResourceT~ into an ~IO~ sequence,
   every line under the ~do~ whose type is not already of type ~ResourceT IO~
   will have to be lift into it using *liftIO*
+
+
+*** Exercises
+
 * 23 | Learn Haskell by building a blogGenerator | Gil Mizrahi
 - 04 https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning
 ** 02 - Hello World

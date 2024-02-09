@@ -1,0 +1,3 @@
+- shows dependency trees as a graph
+  https://github.com/haskell-hvr/cabal-plan/
+  https://hackage.haskell.org/package/cabal-plan

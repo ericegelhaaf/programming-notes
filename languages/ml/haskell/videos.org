@@ -236,6 +236,90 @@ z = let !y = undefined in () -- ERROR - is NOT a BangPattern
   z = !(Just !x) = Just undefined in () -- runtime ERROR, !x it IS a BangPattern
 #+end_src
 
+* TODO 07 | A History of Haskell                  | Simon Peyton Jones
+https://www.youtube.com/watch?v=06x8Wf2r2Mc
+
+- Haskell kickoff in '87, first release in '90
+
+- Lazyness keeps you pure
+
+- "do notation"
+  - is syntactic sugar for bind (>>=)
+  - deliberately imperative look and feel
+
+- 50%
+
+* TODO 10 | Data Parallel Haskell                 | Simon Peyton Jones
+
+- DSL for GPU https://www.cs.drexel.edu/~gbm26/files/mainland10nikola.pdf
+
+- 3(three) forms of concurrency
+  1) explicit threads: non-deterministic by design, monadic =forkIO= and =STM=
+     #+begin_src haskell
+       main :: IO ()
+       main =
+         do
+           ch <- newChan
+           forkIO (ioManager ch)
+           forkIO (worker 1 ch)
+          -- ...
+     #+end_src
+  2) semi-explicit: determinisitic, pure (~par~ and ~seq~)
+     #+begin_src haskell
+       f :: Int -> Int
+       f x = a `par` b `seq` a + b
+         where
+           a = f (x-1)
+           b = f (x-2)
+     #+end_src
+  3) data parallel: deteministic, pure (parallel arrays), shared memory initially, distributed memory eventually
+
+- Data parallelism types
+
+  1) Flat Data Parallelism
+     - apply _sequential_ operations on bulk data
+     - does not create a thread for every op, it groups them in bulks
+     - Limited applicability: dense matris, map/reduce
+
+  2) Nested Data Parallelism
+     - apply _parallel_ operations on bulk data
+     - allows for each work to be further paralleised (branching)
+     - Wider applicability: sparse matrix, graph algorithms
+     - easier for the programmer, harder to implement locallity
+
+- It is possible to write a "compiler" that "flattens" a program written
+  in the "nested data parallelism" style into a "flat data parallism" algorithm.
+  aka flattening or vectorization
+
+- NESL, a parallel programming language released in 1993
+  Based on "Nested Data Parallelism".
+  https://en.wikipedia.org/wiki/NESL
+
+- 50:00 vectorization...
+
+** Flat Data Paralleism Examples
+
+- Array comprehensions
+
+  #+begin_src haskell
+    -- [:Float:] is the type of parallel arrays of Float
+    vecMul :: [:Float:] -> [:FLoat:] -> Float
+    vecMul v1 v2 = sumP [: f1*f2 | f1 <- v1 | f2 <- v2 :]
+  #+end_src
+
+- Sparse vector multiplicatin
+
+  #+begin_src haskell
+    svMul :: [:(Int,Float):] -> [:Float:] -> Float
+    svMul sv v = sumP [: f*(v!i) | (i,f) <- sv :]
+  #+end_src
+
+- Sparse matrix
+  #+begin_src haskell
+    smMul :: [:[:(Int,Float):]:] -> [:Float:] -> Float
+    smMul sm v = sumP [: svMul sv v | sv <- sm :]
+  #+end_src
+
 * 10 | AwesomePrelude - Liberating Haskell from data types!
 https://vimeo.com/9351844
 TODO 05:00
@@ -259,6 +343,196 @@ eval (Mul x y) = eval x * eval y
 ** Example: Encoding with (==)
 Prelude's (==) returns Bool, which we cannot override
 AwesomePrelude, provides a more generic (==)
+* 11 | Haskell Amuse-Bouche                  | Mark Lentczner
+
+source/slides https://github.com/mzero/haskell-amuse-bouche
+
+- shell pipes and (some) commands, are functional, pure, and lazy (as soon as they able output)
+  $ cat poem | tr a-z a-Z | sed -e 's/$/!!!/'
+
+- shell pipes-like written in Haskell
+  #+begin_src haskell
+    main :: IO ()
+    main = readFile "poem" >>= putStr . process
+
+    process :: String -> String
+    process = unlines . sort . lines
+  #+end_src
+
+** functions
+
+- we can factor it out the pattern of working with lines
+  #+begin_src haskell
+    byLines f = unlines . f . lines
+  #+end_src
+
+- examples
+  #+begin_src haskell
+    sortLines     = byLines sort
+    reverseLines  = byLines reverse
+    firstTwoLines = byLines (take 2)
+  #+end_src
+
+- in order to work with each string with ~map~
+  #+begin_src haskell
+    indentEachLine :: String -> String
+    indentEachLine = byLines (map indent)
+  #+end_src
+
+- we factor it out again
+  #+begin_src haskell
+    eachLine :: (String -> String) -> String -> String
+    eachLine f = unlines . map f . lines
+
+    indentEachLine :: String -> String
+    indentEachLine = eachLine indent
+  #+end_src
+
+- The turning or ~indent~ function, which only works with =String=
+  to a version of ~indent~ that works with =[String]=
+  we call that /lifting up/.
+
+- We can keep going and work on each "word" on each "line"
+  #+begin_src haskell
+    eachWordOnEachLine :: (String -> String) -> String -> String
+    eachWordOnEachLine f = eachLine (eachWord f)
+
+    yellEachWordOnEachLine :: String -> String
+    yellEachWordOnEachLine = eachWord yell
+  #+end_src
+
+** Example: defining a new ~data~ type for List
+
+#+begin_src haskell
+  data List a
+    = EndOfLIst
+    | Link a (List a)
+
+  empty = EndOfList
+  oneWord = Link "apple" EndOfList
+  twoWords = Link "banana" (Link "cantaloupe" EndOfList)
+  mystery3 = Link "pineapple" mystery3 -- infinite list, haskell is fine with this
+#+end_src
+
+** power Alternatives <|>
+
+#+begin_src haskell
+  (<|>) :: Alternative f => f a -> f a -> f a
+#+end_src
+
+- instances: Maybe, []
+
+- short-circuit evaluation based on =Maybe=
+  returns the first =Just= it gets or =Nothing=
+  #+begin_src haskell
+    pickShow :: Person -> Maybe String
+    pickShow p =
+      favoriteShow (name p)     -- String -> Maybe String
+      <|> showWithName (name p) -- String -> Maybe String
+      <|> showForYear (year p)  -- Int -> Maybe String
+  #+end_src
+
+* TODO 12 | Lens, Folds, and Traversals           | Edward Kmett
+
+video https://www.youtube.com/watch?v=cefnmjtAolY
+slides http://comonad.com/haskell/Lenses-Folds-and-Traversals-NYC.pdf
+scala version https://www.youtube.com/watch?v=efv0SQNde5Q
+
+10:00
+
+** What is a lens?
+
+- "Costate Comonad Coalgebra is equivalent of Java's
+   member variable update tech in for Haskell"
+
+- lens it's getters and setters
+
+- (made up) simplest form of a lens we could make
+  #+begin_src haskell
+    data Lens s a = Lens { set  :: s -> a -> s
+                         , view :: s -> a
+                         }
+    view :: Lens s a -> s -> a
+    set  :: Lens s a -> s -> a -> s
+  #+end_src
+
+- Laws
+  #+begin_src haskell
+    -- if i get something and I put it back, is the same as i did nothing
+    1> set  l (view l s) s  = s
+    -- if I put something in, I should be able to get it back out
+    2> view l (set l s a)   = a
+    -- if i did 2 different sets, only the last set is relevant
+    3> set  l (set l s a) b = set l s b
+  #+end_src
+
+- Our made up definition, using costate/comonad
+  #+begin_src haskell
+    data Lens s a = Lens (s -> (a -> s, a))
+
+    data Store s a = Store (s -> a) s -- Comonad/CoAlgebra
+    data Lens s a = Lens (s -> Store a s)
+  #+end_src
+
+- ?
+  #+begin_src haskell
+    newtype Lens s a = Lens (s -> Store a s)
+    data Store s a = Store (s -> a ) s
+    instance Category Lens where
+      id = Lens (Store id)
+      Lens f . Lens g = Lens $ \r -> case g r of
+        Store sr s -> case f s of
+          Store ts t -> Store (sr . ts) t
+  #+end_src
+
+** "The power is in the dot"
+
+- reference to a Erik Meijer talk
+- the composition function
+
+** Semantic editor combinations
+
+#+begin_src haskell
+  type SEC s t a b = (a -> b) -> s -> t
+#+end_src
+
+** Setters
+** Traversals
+** Folds
+** Lenses
+** Getters
+** Overloading Application
+** Uniplate
+** Zippers
+
+* 13 | Running a Startup with Haskell        | Bryan O'Sullivan
+https://www.youtube.com/watch?v=ZR3Jirqk6W8
+
+- 3 person startup
+  - Backend on Haskell
+  - GUI in C# (he likes the language)
+  - riak for database
+
+- Author of Oreilly's "Real World Haskell"
+
+- http webservers
+  - yesod
+  - snap (presentator uses this)
+
+- wrote more memory efficient json parser
+
+- recommends "property based testing"
+
+- wrote http benchmark https://github.com/bos/pronk
+
+- C# complains
+  - limited type inference
+  - concurrency (locks/mutexes/semaphores)
+  - some seemengly good ideas that make you write code that looks like shit
+    - properties
+      - foo.a   , a is a property
+      - foo.a.b , a ends up being a function
+
 * 13 | Adventure with Types                  | Simon Peyton
   - Simon Peyton Jones Compiling without continuations
     https://www.youtube.com/watch?v=qx5NZmrFnvs
@@ -353,6 +627,96 @@ AwesomePrelude, provides a more generic (==)
       data Pair a    = P a a
       data AnnPair a = AP String a a
     #+end_src
+* 14 | Writtin a game in Haskell             | Elise Huard
+
+code https://github.com/elisehuard/game-talk-code
+
+- openGL
+  #+begin_src haskell
+    initGL width height = do
+      clearColor $= Color4 1 1 1 1
+      viewport $= (Position 0 0,
+                   Size (fromIntegral width)
+                        (fromIntegral height))
+      ortho 0 (fromIntegral width)
+            0 (fromIntegral height) (-1) 1
+  #+end_src
+
+- glfw https://github.com/bsl/GLFW-b
+  #+begin_src haskell
+    main = do
+      withWindow width height "Game-Demo" $ \win -> do
+        initGL width height -- ...
+  #+end_src
+
+- main loop
+  #+begin_src haskell
+    initialState = State { x = 200, y = 200 }
+
+    loop window state = do
+      threadDelay 20000 -- wait
+      pollEvents
+      (left, right, up, down) <- getInputKeys window
+      let newState = movePlayer (left,right,up,down) state
+      renderFrame newState window
+      if k
+        then return ()
+        else loop window newState
+  #+end_src
+
+- Used FRP (functional reactive programming)
+  Meaning that instead of having a *state* struct
+  You have "signals" over time
+
+- using ~elerea~ as a FRP library https://github.com/cobbpg/elerea
+  #+begin_src haskell
+    (directionKey, directionKeySink) <-
+      external (False, False, False, False)
+
+    network <- start $ do
+      state <- transfer initialState movePlayer directionKey
+      return $ renderFrame win <$> state
+
+    fix $ \loop -> do
+      readKeys win directionKeySink
+      join network
+      threadDelay 20000
+      esc <- keyIsPressed win Key'Escape
+      when (not esc) loop
+  #+end_src
+
+- FRP and levels
+  on a game we would want to have some data to die when level changes
+
+- sound with OpenAL, not thread safe
+  #+begin_src haskell
+    playSound path = do
+      withProgNameAndArgs runALUT $ \progName args -> do
+        buf <- createBuffer (File path)
+        source <- genObjectName
+        buffer source $= Just buf
+        play [source]
+        err <- getalErrors
+        unless (null errs) $ do
+          hPutStrLn stderr (concat (intersperse "," [ d | ALError _ d <- errs ]))
+        return ()
+  #+end_src
+
+- updated FRP loop definitions with audio
+  #+begin_src haskell
+    outputFunction levelState soundSignals = (renderFrame levelState) >> (playSounds soundSignals)
+    -- from
+    network <- start $ do
+      state <- transfer initialState movePlayer directionKey
+      return $ renderFrame <$> state
+    -- to
+    network <- start $ do
+      state <- transfer initialState movePlayer directionKey
+      return $ outputFunction <$> state <*> soundState
+  #+end_src
+
+- strict (eager) when possible
+
 * 17 | What is a Monad?                      | Computerphile
 https://www.youtube.com/watch?v=t1e8gqXLbsU
   - Maybe, >>=, do, return
@@ -575,7 +939,9 @@ pp = putStrLn . unlines . map (unwords . map show)
 ** Brute-forcing all Magic Squares
 ** CodeWars Strikes Again
 * 19 | From Haskell to Rust?                 | Michael Snoyman
+
 https://www.youtube.com/watch?v=HKXmEFvsi6M
+
 - Creator of Yesod/Stack
 - VP at "FP Complete"
 - Moved away from GHCjs
@@ -586,11 +952,14 @@ https://www.youtube.com/watch?v=HKXmEFvsi6M
   - Like overload of operators
 - TALK ABOUT MONADS????
 - RESUME 20:00
+
 * TODO 23 | How to make a Haskell Program 5x Fast | Lexi Lambda
+
 - ~ghc-core~ is 1(one) of the intermediary represntations,
   used when compiling a haskell program.
   explicitly typed
   written in a intermediate language
+
 - file: cabal.project.local
   #+begin_src
     package dynamical
@@ -602,7 +971,9 @@ https://www.youtube.com/watch?v=HKXmEFvsi6M
         -dsuppress-module-prefixes   # ditto
         -dsuppress-type-applications # ditto
   #+end_src
+
 - 00:11:30
+
 * TODO 23 | Delimited Continuations | Lexi Lambda
 - native, first-class, delimited continuations
 - =continuations=: is a concept NOT a language feature

@@ -36,3 +36,7 @@
 - parsec: It is defined as a monad transformer that can be stacked on arbitrary monads, and it is also parametric in the input stream type.
 - State of the Haskell ecosystem
   https://github.com/Gabriel439/post-rfc/blob/master/sotu.md
+- opengl https://github.com/madjestic/Haskell-OpenGL-Tutorial
+- glfw
+  - https://github.com/bsl/GLFW-b
+    https://github.com/bsl/GLFW-b-demo

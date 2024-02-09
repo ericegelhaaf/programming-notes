@@ -82,14 +82,19 @@ https://wiki.haskell.org/Import
     (<>) :: a -> a -- sufficient for a "minimal complete definition"
 #+end_src
 
-|-----+-------+---------------+--------------------------|
-|     |       |               |                      <r> |
-|-----+-------+---------------+--------------------------|
-| <$> | fmap  | Functor f     |   (a -> b) -> f a -> f b |
-| <*> | apply | Applicative f | f (a -> b) -> f a -> f b |
-| >>= | bind  | Monad m       | m a -> (a -> m b) -> m b |
-| >>  | then  | Monad m       | m a ->       m b  -> m b |
-|-----+-------+---------------+--------------------------|
+|     |                       <r> |               |                          |
+|-----+---------------------------+---------------+--------------------------|
+| <$> |                      fmap | Functor f     | (a -> b) -> f a -> f b   |
+|-----+---------------------------+---------------+--------------------------|
+| >>= |                      bind | Monad m       | m a -> (a -> m b) -> m b |
+| >>  |                      then | Monad m       | m a ->       m b  -> m b |
+|-----+---------------------------+---------------+--------------------------|
+| <¦> |       Control.Alternative | Alternative f | f a -> f a -> f a        |
+|-----+---------------------------+---------------+--------------------------|
+| <*> |                     apply | Applicative f | f (a -> b) -> f a -> f b |
+| *>  |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
+| <*  | right "facing bird"/shark | Applicative f | f a        -> f b -> f a |
+|-----+---------------------------+---------------+--------------------------|
 ** types primitives
 |---------+-------+--------------------------------------|
 | Bool    |  True | boolean                              |
@@ -128,7 +133,10 @@ https://wiki.haskell.org/Import
 |---------------+----------------------------+-------------------+----------------------------------------|
 #+TBLFM: $2=Left a
 ** language extensions
+
 https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
+https://github.com/i-am-tom/haskell-exercises
+
 - NOTE: some extensions are better enabled globally or prohibited altogether
   enabling some extensions on a module-by-module basis
   can end up causing maintenance burden on the application long term
@@ -137,49 +145,52 @@ https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
 - in repl: *:set -XTypeApplications* or :seti to enable it only for interactive code
 - in source: using a ~language pragma~
    *{-# LANGUAGE TypeApplications, QuasiQuotes #-}*
- |                            |                                                                                                       | 21  |
- |----------------------------+-------------------------------------------------------------------------------------------------------+-----|
- | RecordWildCards            | RecName {..} automatically captures each field by the name, OR creates a new record                   | -   |
- | NamedFieldPuns             | Rec1Name { fieldname1 = Rec2Name { fieldname2 } }                                                     | -   |
- |----------------------------+-------------------------------------------------------------------------------------------------------+-----|
- | BlockArguments             | use just (do) in places where you would use ($ do)                                                    |     |
- | LambdaCase                 | (\case PAT1 -> RET1)                                                                                  |     |
- | PatternSynonyms            |                                                                                                       |     |
- | QuasiQuotes                | alternate form of string literal                                                                      |     |
- | TemplateHaskell            |                                                                                                       |     |
- | ViewPatterns               | (f -> PATTERN) applies "f" to value and then matches the result, on function pattern matching         |     |
- |----------------------------+-------------------------------------------------------------------------------------------------------+-----|
- | AllowAmbiguousTypes        |                                                                                                       | -   |
- | BangPatterns               | makes pattern matching and let bindings strict, instead of lazy, by adding a (!) before the varname   | yes |
- | ConstraintKinds            |                                                                                                       | yes |
- | DataKinds                  |                                                                                                       | -   |
- | DefaultSignatures          | allow us to add a *type signature* to the default implementation of function in a type class          | -   |
- | DeriveAnyClass             | to use any typeclass (with no methods), to be used on a "derive", it will create the no-body instance | -   |
- | DerivingStrategies         | helps resolve conflicts when different derivings extension are enabled stock/anyclass/newtype         | -   |
- | DerivingVia                | to use newtype's as a template for how to define a typeclass for other types                          | -   |
- | ExistentialQuantification  |                                                                                                       | yes |
- | ExplicitForAll             | allows us to make explicit use of *forall*                                                            | yes |
- | FlexibleContexts           |                                                                                                       | yes |
- | FlexibleInstances          |                                                                                                       | yes |
- | FunctionalDependencies     |                                                                                                       | -   |
- | GADTs                      |                                                                                                       | -   |
- | GeneralizedNewtypeDeriving | to derive typeclass instance based on the underlying type                                             | yes |
- | KindSignatures             | allows us to write the kind signatures for types in our type annotations                              | yes |
- | MultiParamTypeClasses      |                                                                                                       | yes |
- | OverloadedStrings          |                                                                                                       | -   |
- | PolyKinds                  |                                                                                                       | yes |
- | QuantifiedConstraints      |                                                                                                       | -   |
- | RankNTypes                 |                                                                                                       | yes |
- | ScopedTypeVariables        | allows type applications to refer to type variables rather that ONLY the concrete type                | yes |
- | TupleSections              |                                                                                                       | yes |
- | TypeApplications           | (@TYPE) to specify a type argument for polymorphic functions                                          | yes |
- | TypeFamilies               |                                                                                                       | -   |
- | TypeOperators              |                                                                                                       | yes |
- | UndecidableInstances       |                                                                                                       | -   |
- | NoStarIsType               |                                                                                                       | -   |
- | PolyKinds                  |                                                                                                       | yes |
- | StandadaloneDeriving       | allows us to write stand-alone "deriving" declarations, useful for GHCI                               | yes |
- |----------------------------+-------------------------------------------------------------------------------------------------------+-----|
+|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
+|                            |                                                                                                       | 21  |
+|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
+| RecordWildCards            | RecName {..} automatically captures each field by the name, OR creates a new record                   | -   |
+| NamedFieldPuns             | Rec1Name { fieldname1 = Rec2Name { fieldname2 } }                                                     | -   |
+|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
+| BlockArguments             | use just (do) in places where you would use ($ do)                                                    |     |
+| LambdaCase                 | (\case PAT1 -> RET1)                                                                                  |     |
+| PatternSynonyms            |                                                                                                       |     |
+| QuasiQuotes                | alternate form of string literal                                                                      |     |
+| TemplateHaskell            |                                                                                                       |     |
+| ViewPatterns               | (f -> PATTERN) applies "f" to value and then matches the result, on function pattern matching         |     |
+|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
+| AllowAmbiguousTypes        |                                                                                                       | -   |
+| BangPatterns               | makes pattern matching and let bindings strict, instead of lazy, by adding a (!) before the varname   | yes |
+| ConstraintKinds            |                                                                                                       | yes |
+| DataKinds                  |                                                                                                       | -   |
+| DefaultSignatures          | allow us to add a *type signature* to the default implementation of function in a type class          | -   |
+| DeriveAnyClass             | to use any typeclass (with no methods), to be used on a "derive", it will create the no-body instance | -   |
+| DerivingStrategies         | helps resolve conflicts when different derivings extension are enabled stock/anyclass/newtype         | -   |
+| DerivingVia                | to use newtype's as a template for how to define a typeclass for other types                          | -   |
+| ExistentialQuantification  |                                                                                                       | yes |
+| ExplicitForAll             | allows us to make explicit use of *forall*                                                            | yes |
+| FlexibleContexts           |                                                                                                       | yes |
+| FlexibleInstances          |                                                                                                       | yes |
+| FunctionalDependencies     |                                                                                                       | -   |
+| GADTs                      |                                                                                                       | -   |
+| GeneralizedNewtypeDeriving | to derive typeclass instance based on the underlying type                                             | yes |
+| KindSignatures             | allows us to write the kind signatures for types in our type annotations                              | yes |
+| MultiParamTypeClasses      |                                                                                                       | yes |
+| OverloadedStrings          |                                                                                                       | -   |
+| PolyKinds                  |                                                                                                       | yes |
+| QuantifiedConstraints      |                                                                                                       | -   |
+| RankNTypes                 |                                                                                                       | yes |
+| ScopedTypeVariables        | allows type applications to refer to type variables rather that ONLY the concrete type                | yes |
+| TupleSections              |                                                                                                       | yes |
+| TypeApplications           | (@TYPE) to specify a type argument for polymorphic functions                                          | yes |
+| TypeFamilies               |                                                                                                       | -   |
+| TypeOperators              |                                                                                                       | yes |
+| UndecidableInstances       |                                                                                                       | -   |
+| NoStarIsType               |                                                                                                       | -   |
+| PolyKinds                  |                                                                                                       | yes |
+| StandadaloneDeriving       | allows us to write stand-alone "deriving" declarations, useful for GHCI                               | yes |
+| ApplicativeDo              | allows us to use "do notation" for non Monads and use it for Applicative                              | ?   |
+| NoImplicitPrelude          | signals we would not be making use of the standard ~Prelude~ module from the ~base~ package           |     |
+|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
 - "21?" column stands for GHC2021 and means,
   if the extension is enabled by default on that version of Haskell (aka GHC 9.4)
 ** Standard Library
@@ -288,7 +299,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | Control.Arrow           |                                                            |
 | Control.Category        |                                                            |
 | Control.Concurrent      |                                                            |
-| Control.Exception       |                                                            |
+| Control.Exception.Safe  | tryAny :: IO a -> IO (Either SomeException a)              |
 | Control.Monad           | sequence :: (Traversable t, Monad m) => t (m a) -> m (t a) |
 |                         | sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()      |
 | Data.Bifoldable         |                                                            |
@@ -337,7 +348,9 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | System.IO               | openFile :: FilePath -> IOMode -> IO Handle                |
 |                         | hClose :: Handle -> IO ()                                  |
 |                         | hGetContents :: Handle -> IO String                        |
+|                         | hputStrLn :: Handle -> IO ()                               |
 |                         | putStrLn :: String -> IO ()                                |
+|                         | stdout :: Handle                                           |
 | System.Info             |                                                            |
 | System.Mem              |                                                            |
 | System.Posix            |                                                            |
@@ -402,6 +415,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
   - https://github.com/chrisdone/hindent "gofmt"
 
 * Codebases
+
 - https://github.com/omelkonian/AlgoRhythm (music)
 - Project
   https://github.com/reanimate/reanimate
@@ -409,6 +423,23 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 - exercises https://github.com/effectfully-ou/haskell-challenges
 - https://github.com/jappeace/cut-the-crap/
   ffmpeg based, cut video silences
+- A Haskell library that simplifies access to remote data, such as databases or web-based services.
+  - source https://github.com/facebook/Haxl
+  - they created ApplicativeDo extension
+- 2012 game https://github.com/nikki-and-the-robots/nikki
+- dead game studio https://github.com/keera-studios
+
+* Snippets
+
+** Hello World
+
+#+CMD: $ runhaskell hello-world.hs
+#+begin_src haskell
+  module Main (main) where
+  import qualified System.IO as IO
+  main = IO.putSTrLn "hello world!"
+#+end_src
+
 * Personalities
 - Simon Peyton-Jones
 - Philip Wadler
