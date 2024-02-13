@@ -1,3 +1,4 @@
+- 24 | https://cohost.org/sakiamu/post/177439-tcl-on-the-brain
 - 04 | 10 Things I Hate About Tcl
   http://tleaves.com/2004/10/20/10-things-i-hate-about-tcl/
 - 94 | Why you should not use Tcl | Richard Stallman
@@ -14,6 +15,7 @@
 - https://wiki.tcl-lang.org/page/Articles
 - Style https://wiki.tcl-lang.org/page/Tcl+Style+Guide
 - Style https://wiki.tcl-lang.org/page/Best+Practices
+
 * Lainchan post
 
 Tcl is the best scripting language for the real but still productive hacker

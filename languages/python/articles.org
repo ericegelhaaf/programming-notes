@@ -1,3 +1,4 @@
+- https://github.com/satwikkansal/wtfpython
 - Packaging
   - 2022 https://usrme.xyz/posts/why-i-moved-away-from-poetry-for-python/
     https://lobste.rs/s/rllajn/why_i_moved_away_from_poetry_for_python

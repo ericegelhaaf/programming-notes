@@ -1,3 +1,13 @@
 - shows dependency trees as a graph
   https://github.com/haskell-hvr/cabal-plan/
   https://hackage.haskell.org/package/cabal-plan
+
+- static build
+  - https://vadosware.io/post/static-binaries-for-haskell-a-convoluted-approach/
+  - .cabal
+    #+begin_src
+      ghc-options: -Wall -O2 -static -threaded
+      cc-options: -static
+      ld-options: -static -pthread
+      extra-lib-dirs: ./.system-work/lib
+    #+end_src

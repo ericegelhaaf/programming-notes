@@ -234,6 +234,9 @@ install: release
 | utils                     | 0.6 | https://github.com/janestreet/base                               |
 | utils                     | 0.9 | https://github.com/janestreet/core                               |
 |---------------------------+-----+------------------------------------------------------------------|
+| smtp client server        |     | https://github.com/janestreet/async_smtp                         |
+| email parser              |     | https://github.com/janestreet/email_message                      |
+|---------------------------+-----+------------------------------------------------------------------|
 - https://github.com/ocaml-community/awesome-ocaml
 - Project: LWT/Telegram bot https://github.com/quernd/SushiBot
 - Project: Synth https://github.com/smimram/monadic-synth

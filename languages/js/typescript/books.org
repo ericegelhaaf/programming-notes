@@ -5,39 +5,256 @@
 3) 7,8 subtyping
 4) 9,10,11 generic programming
 ** 1 Introduction to typing
-* 2019 | Programming Typescript | Boris Cherry
+* 20 | Effective Typescript   | Dan Vanderkam
+code https://github.com/danvk/effective-typescript
+item 7 video https://www.youtube.com/watch?v=wpgKd-rwnMw
+** 1
+*** 1 Understand the Relationship Between JS and TS
+
+- TS is a ~superset~ of JS in the syntactic sense
+  - as long as your JS code doesn't have sintactic errors is a valid TS
+- one of the goals of TS is to detect code that will fail at ~runtime~
+
+*** 2 Know which TS options you are using
+
+- tsc
+- tsconfig.json
+  - noImplicitAny
+  - strictNullChecks
+
+*** 3 Understand that code generation is independent of types
+
+- tsc does these things independently of each other
+  1) converts/transpiles modern TS/JS into older JS that works in browsers
+  2) it checks your code for type errors
+
+- meaning that it will generate code in 1) even if 2) fails
+
+**** you CANNOT check TS types at runtime (aka instanceof)
+
+- TS types are "erasable", part of the compilation to JS is
+  removing all interfaces, types and type annotations from your code
+
+- Problem
+
+  #+begin_src typescript
+    interface Square {
+      width: number;
+    }
+    interface Rectagle extends Square {
+      height: number;
+    }
+    type Shape = Square | Rectangle;
+
+    function calculateArea(shape: Shape) {
+      if (shape instanceof Rectangle) { // ERROR: Rectangle refers to a "type" but is being used as a "value" here
+        return shape.width * shape.height; // ERROR: height does not exist on Shape
+      } else {
+        return shape.width * shape.width;
+      }
+    }
+  #+end_src
+
+- Solution 1: check for fields (aka property checking)
+
+  #+begin_src typescript
+    function calculateArea(shape: Shape) {
+      if ('height' in shape) { // shape = is type Rectangle
+        return shape.width * shape.height;
+      } else { // shape = is type Square
+        return shape.width * shape.width;
+      }
+    }
+  #+end_src
+
+- Solution 2: introduce a "tag" field to check at runtime (aka tagged union)
+
+  #+begin_src typescript
+    interface Square {
+      kind: 'square';
+      width: number;
+    }
+    interface Rectangle {
+      kind: 'rectangle';
+      height: number;
+      width: number;
+    }
+    type Shape = Square | Rectangle // <---- tagged union
+    function calculateArea(shape: Shape) {
+      if (shape.kind == 'rectangle') {
+        return shape.width * shape.height;
+      } else {
+        return shape.width * shape.width;
+      }
+    }
+  #+end_src
+
+- Solution 3: use classes, since they contain both type and value
+
+  #+begin_src typescript
+    class Square {
+      constructor(public width: number) {}
+    }
+    class Rectangle extends Square {
+      constructor(public width: number, public height: number) {
+        super(width);
+      }
+    }
+    type Shape = Square | Rectangle;
+    function calculateArea(shape: Shape) {
+      if (shape instanceof Rectangle) {
+        return shape.width * shape.height;
+      } else {
+        return shape.width * shape.width;
+      }
+    }
+  #+end_src
+
+**** type conversions CANNOT affect runtime values (aka as)
+
+#+begin_src typescript
+  function asNumber(val: number | string): number {
+    return val as number; // compiles to just "return val"
+    return typeof(val) == 'string' ? Number(val) : val;
+  }
+#+end_src
+
+**** runtime types might not be the same as declared types
+
+- declared types (eg arguments) go away at runtime
+  - meaning you might pass the wrong value (example if receiving the value from network)
+
+  #+begin_src typescript
+    interface LightApiResponse {
+      lightSwitchValue: boolean;
+    }
+    async function setLight() {
+      const response = await fetch('/light');
+      const result: LightApiResponse = await response.json(); // Even when we expect a struct we might not get it
+      setLightSwitch(result.ligthSwitchvalue); // expects a boolean, but we might get a string
+    }
+  #+end_src
+
+**** CANNOT overload functions based on TS types
+
+- since types only exist at compile time
+- you CAN however provide different declarations of a function, but only ONE implementation
+  #+begin_src typescript
+    function add(a: number, b: number): number;
+    function add(a: string, b: string): string;
+    function add(a, b) {
+      return a + b;
+    }
+  #+end_src
+
+*** 4 Get comfortable with structural typing
+
+- JS is inherently duck typed
+  - "if it walks like a duck and and talks like a duck..."
+  - TS type system models is modeling JS runtime behavior in ~structural typing~
+
+**** Example: structural typing helping
+
+  #+begin_src typescript
+    interface Vector2D {
+      x: number;
+      y: number;
+    }
+    function calculateLength(v: Vector2D) {
+      return Math.sqrt(v.x * v.x + v.y * v.y);
+    }
+
+    interface NamedVector {
+      name: string;
+      x: number;
+      y: number;
+    }
+    const v: NamedVector = { x: 3, y: 4, name: 'Zee' };
+    calculateLength(v); // OK works fine, even when we are NOT passing a Vector2D
+  #+end_src
+
+**** Example: structural typing backfiring (sealing the type could help, not seen here)
+
+  #+begin_src typescript
+    function normalize(v: Vector3D) {
+      const length = calculateLength(v); // TS allows call with a 3D instead of a 2D one
+      return {
+        x: v.x / length,
+        y: v.y / length,
+        z: v.z / length,
+      };
+    }
+  #+end_src
+
+**** Example: structural typing with classes
+
+  #+begin_src typescript
+    class C {
+      foo: string;
+      constructor(foo: string) {
+        this.foo = foo
+      }
+    }
+    const c = new C('instance of C');
+    const d: C = { foo: 'object literal' }; // structural typing allows this
+  #+end_src
+
+**** Example: structural typing helping with testing, no mocking library necessary
+
+  #+begin_src typescript
+    interface Author {
+      first: string;
+      last: string;
+    }
+    interface DB { // structural typing instead of something like PostgresDB
+      runQuery: (sql: string) => any[];
+    }
+    function getAuthors(database: DB): Author[] {
+      const authorRows = database.runQuery('SELECT first, last FROM authors');
+      return authorRows.map(row => ({first: row[0], last: row[1]}));
+    }
+
+    // The test
+    test('should ', () => {
+      const authors = getAuthors({
+        runQuery(sql: string) {
+          return [['Toni','Morrison'],['Maya','Angelou']];
+        }
+      });
+      expect(authors).toEqual([
+        {first: 'Toni', last: 'Morrison'},
+        {first: 'Maya', last: 'Angelou'}
+      ]);
+    });
+  #+end_src
+
+*** 5 Limit use of the ~any~ type
+
+- TS type system is
+  - gradual: because you can add type information bit by it
+  - optional: you can disable the type checker whenever you like
+
+- There is no type safety with ~any~ types
+- ~any~ lets you break contracts
+  #+begin_src typescript
+    function calculateAge(birthDate: Date): number { /* ... */ }
+    let birthDate: any = '1990-01-19';
+    calculateAge(birthDate); // OK
+  #+end_src
+- there is no language services for ~any~ types (LSP)
+- ~any~ types mask bugs when you refactor
+  - eg: if you used any in related 2 places, when refactoring 1 it won't break at compile time, though it might break at runtime
+- ~any~ hides your type design
+- ~any~ undermines confidence in the type system (and in TS)
+* 19 | Programming Typescript | Boris Cherry
 solutions https://github.com/bcherny/programming-typescript-answers
 ts-node https://github.com/TypeStrong/ts-node
 ts template https://github.com/Microsoft/TypeScript-Node-Starter
 immutable-js https://github.com/immutable-js/immutable-js https://www.youtube.com/watch?v=I7IdS-PbEgI
+- Types (From Chapter 3) (moved to typescript.org)
 ** Types Hierarchy
 #+ATTR_ORG: :width 800
 [[./typescript-types.png]]
-** Types (From Chapter 3)
-| any       |                                                | the default type given by the *compiler* (everything needs a type)   |
-| unknown   | === && ! ? ==                                  | when *YOU* don't know the type ahead of type                         |
-| boolean   | === && ! ? ==                                  | true/false                                                           |
-| number    | + - % <                                        | integers, floats, positives, negatives, Infinity, NaN                |
-| bigint    | + - * / <                                      | ended with "n" like "100n", can be bigger than >2^53                 |
-| string    | + .slice                                       | between simple comma (')                                             |
-| symbol    | Symbol('a')                                    | unique and NOT equal to other instance                               |
-|           |                                                | const f: unique symbol = Symbol('f') // type of f                    |
-| object    |                                                | not much more narrow than *any*, mutable fields even when *const*    |
-|           |                                                | let a: {readonly b: number; c?: string; [key: number]: boolean }     |
-| Arrays    | let c: string[] = ['a']                        | can be heterogeneous, implicitly typed                               |
-|           | let bs: readonly number[] = c.concat(5)        | no-mutable/readonly/Readonly<>/ReadonlyArray<>                       |
-|           | .push                                          | mutable                                                              |
-| Tuples    | let b: [string, string, n] =                   | fixed length, known type at each index, explicitly typed             |
-|           | let fares: [number, number?][] =               | optional field supported                                             |
-|           | let list: [number, boolea, ...string[]] =      | reset elements support                                               |
-| null      |                                                | represent the absent of something, absence of a value                |
-| undefined |                                                | represent the absent of something, something hasn't been defined yet |
-| void      |                                                | return type of a function that retuns nothing                        |
-| never     |                                                | return type of a function that never returns, bottom-type            |
-| enum      | enum Language { English, Spanish }             | stay away from them....enum to numbers, splittable                   |
-|           | enum Color { Red = '#c10000', Pink = 0xc10050} | to strings                                                           |
-|           | const enum Language { English, Spanish }       | access by dot(.) or bracket [], const enforces (.) only              |
-| Function  |                                                | catch-all type for functions, you don't want to use it               |
 ** Preface
 - Keep your DS immutable with spreads (...) most of the time
 - Use Polymorphism
@@ -107,6 +324,7 @@ $ node ./dist/index.js
 #+end_src
 
 ** 03 All About Types
+
 #+begin_src
  unknown -> any -> null
                 -> void -> undefined
@@ -165,6 +383,7 @@ $ node ./dist/index.js
 *** Type aliases
 - Useful for DRYing (don't repeat yourself) repeated complex types
 - Block-scoped
+
 - Define
  #+begin_src typescript
    type Age = number
@@ -174,6 +393,7 @@ $ node ./dist/index.js
      age: Age
    }
  #+end_src
+
 - *Aliases are NEVER inferred by TS* so you have to type them.
   Aliases are substitutable
   #+begin_src typescript
@@ -183,6 +403,7 @@ $ node ./dist/index.js
       age: age
     }
   #+end_src
+
 *** Union (|) and Intersection (&) types
 
 - Union type isn't necesarrily 1(one) specific member of the union

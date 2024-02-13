@@ -11,7 +11,7 @@
  uuid-ossp          │ 1.1     │ extensions │ generate universally unique identifiers (UUIDs)
 (8 rows)
 #+end_src
-
+- explain queries https://explain.dalibo.com/
 * functions
 https://www.postgresql.org/docs/9.6/functions-datetime.html
 |-------------------------------------+-------------------------------------------------------------------------------------------------|

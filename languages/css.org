@@ -1,3 +1,4 @@
+- https://css-tricks.com/examples/nth-child-tester/
 - https://www.matuzo.at/blog/2022/100-days-of-more-or-less-modern-css/
 - https://developer.mozilla.org/en-US/docs/Web/CSS
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/css/css-quiz.md
@@ -201,7 +202,7 @@ https://learningwebdesign.com/5e/materials/
    - 3 values, LR will use the same one
    - 2 values, TB will use the same one
    - 1 value , all will use the same one
- - background-position, box-shado, text-shadow:
+ - background-position, box-shadow, text-shadow:
    take 2 values, RLTB, represent a cartesian grid
 ** 02 Working with relative units (em, rems, viewport-relative, $)
  - Absolute: always means the same thing.
@@ -351,10 +352,12 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
    Happens only when you set an element's height.
    Not accounted by NDF.
    Properties: overflow, overflow-x, overflow-y
+   |-------------------+-----------------------------------------------------|
    | visible (default) | all content is visible, even on overflow            |
    | hidden            | overflow content is clipped                         |
    | scroll            | adds scrollbars to the container (enabled/disabled) |
    | auto              | adds scrollbars, only if overflow                   |
+   |-------------------+-----------------------------------------------------|
 **** Same Height Columns
  1) Height by %, if container height is:
     - Fixed: it works
@@ -1125,7 +1128,7 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
      table {
        width: 100%;
      }
-     @media (max-diwth: 30em) {
+     @media (max-width: 30em) {
        table, thead, tbody, tr, th, td {
          display: block;
        }

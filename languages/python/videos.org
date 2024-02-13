@@ -1,3 +1,5 @@
+- 22 https://www.youtube.com/watch?v=6P68IBou_cg 
+ https://github.com/switowski/writing-faster-python3
 - Micha Gorelick, Fast Forward Labs | Innovation Day 2016
   https://www.youtube.com/watch?v=vE7fWPAwY-M
   word2vec > recurrent neural networks

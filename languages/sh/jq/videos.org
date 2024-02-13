@@ -1,5 +1,5 @@
 * DONE 17 | Serious Programming with jq?!          | Charles Chamberlain
-ohttps://www.youtube.com/watch?v=PS_9pyIASvQ
+https://www.youtube.com/watch?v=PS_9pyIASvQ
 
 #+begin_src jq
   def select(f): if f then . else empty end;

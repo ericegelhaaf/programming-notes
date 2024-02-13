@@ -1,5 +1,6 @@
 - Channel: Sergei Winitzki https://www.youtube.com/channel/UCWpjX-z6_oNZhcHPzAAQy6g/videos
   Programming Papers explained with scala
+- Lens https://www.youtube.com/watch?v=efv0SQNde5Q
 * 11 | What Scala Adopted from Erlang         | 00:58:00 | Martin Odersky
 https://vimeo.com/18912803
 - Quotes from the man that wrote the java spec.

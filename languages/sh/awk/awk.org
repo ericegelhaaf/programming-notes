@@ -2,7 +2,7 @@
 | AWK Home   | https://www.awk.dev/              |
 | AWK Source | https://github.com/onetrueawk/awk |
 | wiki       | https://en.wikipedia.org/wiki/AWK |
-| wiki       | https://en.wikibooks.org/wiki/AWK |
+| wikibooks  | https://en.wikibooks.org/wiki/AWK |
 | web repl   | https://awk.js.org/               |
 |------------+-----------------------------------|
 
@@ -64,7 +64,15 @@
 - Unique at the time due
   - being a scripting language
   - having associative arrays
+- can assign a value on a if
+  #+begin_src awk
+    if (disjoint = r[2] <= m1 || m2 <= r[1])
+        continue
+  #+end_src
+
 ** Types (will be automaticaly coerced when needed)
+
+https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 
 1) Strings
 2) Numbers
@@ -75,9 +83,15 @@
    - ALWAYS asssociative (aka hashtables)
    - for (variable in array)
    - delete array[subscript]
+   - use this to coerce into an array in a body's function
+     "" in arr
 
 - Set the order an already created array would be presented on a forIn
-  PROCINFO["sorted_in"] = "afunctionname" like compare(index1, value1, index2, value2) returns a boolean
+  https://www.gnu.org/software/gawk/manual/html_node/Controlling-Array-Traversal.html
+  # comp_func(i1, v1, i2, v2) < 0  Index i1 comes before index i2
+  # comp_func(i1, v1, i2, v2) == 0 Indices i1 and i2 come together
+  # comp_func(i1, v1, i2, v2) > 0  Index i1 comes after in2
+  PROCINFO["sorted_in"] = "afunctionname" like comp_func(index1, value1, index2, value2)
   PROCINFO["sorted_in"] = "@val_num_asc"
   PROCINFO["sorted_in"] = "@val_num_desc"
   PROCINFO["sorted_in"] = "@val_str_asc"
@@ -121,16 +135,15 @@
 |----------+----------------------------------------------+-----------|
 ** built-in functions
 https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
-*** BITWISE
-
-https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
-
+*** BITWISE https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 |--------------------+-------------------------------------|
-| and(v1,v2,...)     |                                     |
-| xor(v1,v2,...)     |                                     |
-| or(v1,v2,...)      |                                     |
+|                <r> | returns                             |
 |--------------------+-------------------------------------|
-| compl(val)         | complement                          |
+|     and(v1,v2,...) |                                     |
+|     xor(v1,v2,...) |                                     |
+|      or(v1,v2,...) |                                     |
+|--------------------+-------------------------------------|
+|         compl(val) | complement                          |
 |--------------------+-------------------------------------|
 | lshift(val, count) | *val* left shifted by *count* bits  |
 | rshift(val, count) | *val* right shifter by *count* bits |
@@ -143,9 +156,10 @@ https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 |-----------------+---------------------------+--------------------------------------------------|
 |  asort(SRC,DST) | number of elements in SRC | sort by value, DST has idx=numeric val=old_value |
 | asorti(SRC,DST) | number of elements in SRC | sort by index, DST has idx=numeric val=old_index |
+|    isarray(arr) | boolean                   |                                                  |
 |-----------------+---------------------------+--------------------------------------------------|
 
-*** MATH
+*** MATH https://www.gnu.org/software/gawk/manual/html_node/Numeric-Functions.html
 |------------+------------------------------------|
 | atan2(y,x) | arctangent of y/x in -x to x range |
 | cos(x)     | cosine of x, with x in radians     |
@@ -159,28 +173,40 @@ https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 | rand()     | random nuber r, 0 <= r < 1         |
 | srand(x)   | x is new seed for rand()           |
 |------------+------------------------------------|
-*** STRING
-|---------------------+---------------------------+------------------------------|
-|                     | returns                   | does                         |
-|---------------------+---------------------------+------------------------------|
-| sub(r,s)            | number of subst made      | substitute one r for s in $0 |
-| sub(r,s,t)          | number of subst made      | substitute one r for s in t  |
-| gsub(r,s)           | number of subst made      | substitute all r for s in $0 |
-| gsub(r,s,t)         | number of subst made      | substitute all r for s in t  |
-|---------------------+---------------------------+------------------------------|
-| substr(s,start)     | substring of s            |                              |
-| substr(s,start,len) | substring of s            |                              |
-|---------------------+---------------------------+------------------------------|
-| split(s,a)          | number of fields          | stores the pieces in array a |
-| split(s,a,fs)       | number of fields          | stores the pieces in array a |
-|---------------------+---------------------------+------------------------------|
-| length()            | number of chars in $0     |                              |
-| length(s)           | number of chars in s      |                              |
-|---------------------+---------------------------+------------------------------|
-| index(s,t)          | 0 or n position of t in s |                              |
-| match(s,r)          | index or 0                | test if s contains r         |
-| sprintf(fmt, ...)   | formated string           |                              |
-|---------------------+---------------------------+------------------------------|
+*** STRING https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html
+|---------------------+---------------------------+-----------------------------------------------|
+|                     | returns                   | does                                          |
+|---------------------+---------------------------+-----------------------------------------------|
+| sub(r,s)            | number of subst made      | substitute one r for s in $0                  |
+| sub(r,s,t)          | number of subst made      | substitute one r for s in t                   |
+| gsub(r,s)           | number of subst made      | substitute all r for s in $0                  |
+| gsub(r,s,t)         | number of subst made      | substitute all r for s in t                   |
+| gensub(r,s,h)       | copy of s modified        | substitute h'th instance of r by s in $0      |
+| gensub(r,s,h,t)     | copy of s modified        | substitute h'th instance of r by s in t       |
+|---------------------+---------------------------+-----------------------------------------------|
+| substr(s,start)     | substring of s            |                                               |
+| substr(s,start,len) | substring of s            |                                               |
+|---------------------+---------------------------+-----------------------------------------------|
+| split(s,a)          | number of fields          | stores the pieces in array a                  |
+| split(s,a,fs)       | number of fields          | stores the pieces in array a                  |
+|---------------------+---------------------------+-----------------------------------------------|
+| length()            | number of chars in $0     |                                               |
+| length(s)           | number of chars in s      |                                               |
+|---------------------+---------------------------+-----------------------------------------------|
+| index(s,t)          | 0 or n position of t in s |                                               |
+| match(s,r)          | index or 0                | test if s contains r, sets RSTART and RLENGTH |
+| match(s,r,a)        |                           | ... sets a to portions of s that match r      |
+|                     |                           | [0]           = whole matched part of s       |
+|                     |                           | [N, "start"]  = starting index of match       |
+|                     |                           | [N, "length"] = length of match               |
+|---------------------+---------------------------+-----------------------------------------------|
+| sprintf(fmt, ...)   | formated string           |                                               |
+| strtonum(s)         |                           |                                               |
+|---------------------+---------------------------+-----------------------------------------------|
+| tolower(s)          | lowercased s              |                                               |
+| toupper(s)          | uppercased s              |                                               |
+|---------------------+---------------------------+-----------------------------------------------|
+
 *** operators
 |---------------------+------------------|
 | = += -= *= /= %= ^= | Assigments       |
@@ -207,7 +233,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 | close(command)  | break connection between print and command  |
 | system(command) | execute command                             |
 |-----------------+---------------------------------------------|
-*** getline
+*** getline https://www.gnu.org/software/gawk/manual/html_node/Getline.html
 |----------------------+-------------------------------------+---------------------|
 | getline              | reads next input record             | NF, NR, FNR, RT, $0 |
 | getline var          | reads n.i.r. into var               | NR, FNR, RT         |
@@ -225,16 +251,18 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 - %+-width.prec(?)
 
 |--------+------------------------------|
-| %a, %A | hexa float                   |
-| %c     | numbers as character         |
+| %f, %F | float                        |
+| %a, %A | float hexa                   |
+| %g, %G | float or scientific notation |
+|--------+------------------------------|
 | %d, %i | decimal integer              |
 | %e, %E | scientific notation          |
-| %f, %F | float                        |
-| %g, %G | float or scientific notation |
 | %o     | unsigned octal               |
-| %s     | string                       |
 | %u     | unsigned decimal integer     |
 | %x, %X | unsigned hexadecimal integer |
+|--------+------------------------------|
+| %c     | numbers as character         |
+| %s     | string                       |
 | %%     | literal "%"                  |
 |--------+------------------------------|
 
@@ -256,6 +284,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 | system logs parsing | https://github.com/kaworu/hawk               |
 | CHIP-8              | https://github.com/patsie75/awk-chip8        |
 | game tetris         | https://github.com/mikkun/AWKTC              |
+| toy lang compiler   | https://cowlark.com/mercat/com.awk.txt       |
+| git                 | https://github.com/djanderson/aho            |
 |---------------------+----------------------------------------------|
 | exercises           | https://github.com/exercism/awk              |
 | exercises           | https://github.com/kaworu/adventofcode-2015/ |
@@ -270,4 +300,55 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
   $ awk '{ $1=$1 }1' file.txt
   $ awk '{ $1=$1 }; { print }' file.txt
   $ awk '/.*/ { $1=$1 }; /.*/ { print $0 }' file.txt
+  #+end_src
+- array
+  #+begin_src awk
+    function format_matrix(    arr, row, col, res) {
+        for (row in arr) {
+            for (col in arr[row]) res = res sprintf(arr[row][col])
+            res = res sprintf("\n")
+        }
+        return res
+    }
+    function print_matrix_dimensions(    arr) {
+        printf "%dx%d\n", length(arr), length(arr[1])
+    }
+  #+end_src
+- math
+  #+begin_src awk
+    function max(    x,y) { return (x>y)?x:y  }
+    function min(    x,y) { return (x<y)?x:y  }
+    function abs(    x)   { return (x<0)?-x:x }
+  #+end_src
+- untestes stack?
+  #+begin_src awk
+    function isEmpty()    { return idx == 0 }
+    function peek()       { return stack[idx] }
+    function push(el)     { print el; stack[++idx] = el }
+    function pop(    tmp) { tmp = stack[idx]; delete stack[idx--]; return tmp }
+  #+end_src
+- tested stack?
+  #+begin_src awk
+    function push(a, x) {
+        "" in a # coerce into array
+        a[length(a) + 1] = x
+    }
+
+    function pop(a, __x, __i) {
+        __x = a[1]
+        for (__i = 1; __i < length(a); __i++) a[__i] = a[__i + 1]
+        delete a[__i]
+        return __x
+    }
+  #+end_src
+- PGM - grayscale 1-D array of a 2-D matrix
+  #+begin_src awk
+    function array2PGM(arr,    out) {
+        out = out "P2"    # format id
+        out = out NF" "NR # dimensions
+        out = out 9       # max value
+        for (idx in cache)
+            out = out arr[idx] " "
+        return out "\n"
+    }
   #+end_src

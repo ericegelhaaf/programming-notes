@@ -1,3 +1,8 @@
+- dialog
+  - all languages https://wiki.archlinux.org/title/GTK/Development
+  - https://github.com/v1cont/yad/
+  - https://gitlab.gnome.org/GNOME/zenity
+  - https://invisible-island.net/dialog/
 - "Destructuring" with *read* https://stackoverflow.com/questions/1952404/linux-bash-multiple-variable-assignment
 - Haskell like in cli https://github.com/gelisam/hawk
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
