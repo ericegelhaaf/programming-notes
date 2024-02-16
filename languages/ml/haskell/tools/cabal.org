@@ -1,4 +1,11 @@
-manual https://cabal.readthedocs.io/en/3.4/index.html
+- manual https://cabal.readthedocs.io/en/3.4/index.html
+
+- Cabal keeps a Hackage indexes locally
+- Cabal mutability landscape changed with the introduction of =sandboxes=
+  - Packages were installed globally
+  - Used to be an opt-in feature
+  - IF you use the cabal commands starting with ~new-~ you use sandboxes
+    They must run in a folder in which a .cabal file exists
 
 ** cmd
 

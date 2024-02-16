@@ -9,6 +9,8 @@
   - 18 Making a Game Using COBOL! https://www.youtube.com/watch?v=qaApxBPKOdw
   - 19 Brainf**k Compiler Written in COBOL that Compiles to COBOL?  https://www.youtube.com/watch?v=O299XNnXdxM
   - 20 Making a Simple Tic-Tac-Toe Game in COBOL https://www.youtube.com/watch?v=N-Qj77CjPEA
+  - 23 https://www.youtube.com/watch?v=TAtpTU6ZzrA
+
 * 22 Nerdearla | Aprender COBOL desde cero
 https://www.youtube.com/watch?v=Ksz1PIVB9JM
 - COmmon Business Oriented Language

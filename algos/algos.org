@@ -32,14 +32,21 @@
 - Programming
   - https://hackattic.com/challenges
   - https://codecrafters.io/
+  - Data
+    - https://www.datawars.io/
   - Projects
     - https://github.com/codecrafters-io/build-your-own-x
     - https://github.com/practical-tutorials/project-based-learning
+    - https://austinhenley.com/blog/challengingalgorithms.html
+    - https://austinhenley.com/blog/morechallengingprojects.html
+    - https://austinhenley.com/blog/challengingprojects.html
+      https://news.ycombinator.com/item?id=21790779
   - Server
     - https://protohackers.com/
   - Distributed
     - https://fly.io/blog/gossip-glomers/
   - Problems
+    - https://www.janestreet.com/puzzles/archive/
     - https://leetcode.com/
     - https://adventofcode.com/
     - https://cses.fi/problemset/
@@ -50,8 +57,16 @@
     - https://www.hackerrank.com/
     - https://www.codewars.com/
     - https://projecteuler.net/
-
+* Algos
+** Graphs
+|          | type | requirements             | O()      |
+|----------+------+--------------------------+----------|
+| Dijkstra | SSSP | no negative weight paths | E*log(V) |
+|          |      |                          |          |
+|----------+------+--------------------------+----------|
+SSSP = Single Source Shortest Path
 * Congruencies
+
 - https://en.wikipedia.org/wiki/Modular_arithmetic
 - problem https://www.codewars.com/kata/554f76dca89983cc400000bb/train/ocaml
 - Books

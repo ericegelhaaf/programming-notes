@@ -20,7 +20,9 @@ https://github.com/rvirding/lfe/
 https://lfe.io/books/casting-spels/
 - We can abuse (? defmacro to create complex guards and make it clear.
   Due by design, on guards, we can only have kernel functions.
+
 * Language
+
 - https://lfex.github.io/hyperpolyglot/
   - *(when)* exists only when used in guards
   - there are NOT multiple value returns
@@ -32,6 +34,7 @@ https://lfe.io/books/casting-spels/
   - (==) and (=:=) are used instead of (eq) for symbols
   - 'true and 'false are used, instead of t and nil
   - some functions are directly translated, with _ instead of -
+
 ** Type Creation
 |                 | ERLANG                      | LFE (short)                  | LFE (long)                                 |
 |-----------------+-----------------------------+------------------------------+--------------------------------------------|

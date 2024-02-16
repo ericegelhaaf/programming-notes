@@ -2,10 +2,17 @@
   https://downloads.haskell.org/ghc/latest/docs/users_guide/index.html
   https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html
 
+- GHCI https://wiki.haskell.org/GHC/GHCi
+
 - -I0
   -Iw
   +RTS -I0 -RTS
   -rtsopts to ghc-options in .cabal
+
+- use ":{" and ":}" for multi-line blocks on ghci
+  :?
+  :show languag
+  :quit
 
 * usage
 

@@ -188,6 +188,7 @@
   https://github.com/checkcheckzz/system-design-interview
   https://github.com/shashank88/system_design
   https://github.com/lei-hsia/grokking-system-design
+  https://github.com/karanpratapsingh/system-design
 - HackerRank is more used for inexperienced programmers.
 ** III Special Situations
 - Everybody has algorithm questions

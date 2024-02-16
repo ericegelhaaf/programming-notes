@@ -1516,15 +1516,16 @@ ERRATA:
 *** TODO The =Validate= class
 *** TODO Exercises
 * 22 | Practical Haskell                         | Alejandro Serrano Mena
+
 source https://github.com/Apress/practical-haskell
 - Packages https://hackage.haskell.org/
 - Packages https://www.stackage.org/ (subset of hackage)
-- Installation Manager https://www.haskell.org/ghcup/
-- GHCI https://wiki.haskell.org/GHC/GHCi
 - library https://www.yesodweb.com/book/persistent
 - Package Version Policy https://pvp.haskell.org/
 - Encyclopedia of Typeclasses https://wiki.haskell.org/Typeclassopedia
+
 ** 1 Going Functional
+
 - Haskell:
   1) Functional
   2) Purity, separates code with side-effects
@@ -1544,35 +1545,20 @@ source https://github.com/Apress/practical-haskell
      - and *type classes* which groups different types witha common interface
 - 1980 - Miranda was one of the most important lazy functional programming languages
 - Haskell Versions: 98, 10
-- $ ghcup install cabal
-  $ ghcup install stack
-  $ ghcup list
-  $ ghcup install hls
-  $ ghcup compile <TOOL_NAME>
-- Emacs: lsp-mode, lsp-ui, lsp-haskell
-- use ":{" and ":}" for multi-line blocks on ghci
-  :?
-  :show languag
-  :quit
+
 ** 2 Declaring the Data Model
+
 *** Characters, Numbers and Lists
-|---------+-------------------------------------------+--------------------+------------------------|
-| Char    | contains one Unicode character            | 'a', '\97', '\x61' | import Data.Char       |
-| Int     | have the native width of the architecture |                    |                        |
-| Integer | unbounded integral type                   |                    |                        |
-| Ratio   |                                           | 1 % 3              | import Data.Ratio      |
-| [Char]  |                                           | "Hello World!"     |                        |
-| Bool    | has short-circuiting due laziness         | True, False        | and, or, not, ==, >, < |
-|         |                                           |                    |                        |
-|---------+-------------------------------------------+--------------------+------------------------|
+
 - Data: Clients, Machines and Orders
-- "Sometimes, ADTs and pattern mathcing lead to code that's not clear enough.
+- "Sometimes, ADTs and pattern matching lead to code that's not clear enough.
    Records introduce some syntactic forms that make values easier to create and modify"
 - Haskell does not make numeric constants of a specific type.
-  Uses Num and Fractional. Which are polymorphic.
+  Uses =Num= and =Fractional=. Which are polymorphic.
 - Like in most functional languages, lists in Haskell are *linked lists*
 - Lists of lists do not need to be of the same dimension, so they are not equivalent to arrays of multiple dimensions.
   [] and [[]] are NOT equivalent
+
 *** Creating a New Project (and module)
 
 |-------+----------------------------------+--------------+-------------+----------|
@@ -1589,10 +1575,12 @@ source https://github.com/Apress/practical-haskell
 - modules in Haskell
   - similar to packages in Java or namespaces in C#
   - each modulo defined on his own file
-  -        Chapter2.Section2.Example goes in path Chapter2/Section2/Example.hs
+  -        Chapter2.Section2.Example goes in
+      path Chapter2/Section2/Example.hs
   - module Chapter2.Section2.Example where
 
 *** Defining Simple Functions
+
 - tuples of different lengths are completely different types
 - src/Chapter2/SimpleFunctions.hs
   #+begin_src haskell
@@ -1632,6 +1620,7 @@ source https://github.com/Apress/practical-haskell
 - Data Types and Constructors live in *different namespaces* (? worlds
 - All *types inside* a "showable" must derive Show too
 - Functions that are not defined over the complete domain of their arguments are called *partial*
+
 *** Working With Data Types
 
 - Pattern Matching does *NOT backtrack* when something goes wrong in the body of a match
@@ -1880,6 +1869,7 @@ source https://github.com/Apress/practical-haskell
   saleOffPrice (TimeMachine { price }) : xs = (price * 0.9) + saleOffPrice xs
 #+end_src
 ** 3 Increasing Code Reuse
+
 *** Parametric Polymorphism
 
 - Etymology
@@ -2228,6 +2218,7 @@ source https://github.com/Apress/practical-haskell
   #+end_src
 *** Summary
 ** 4 Using Containers and Type Classes
+
 *** Using Packages
 
 - A ~package~ is the *distribution unit of code* understood by Cabal and Stack
@@ -2255,14 +2246,6 @@ source https://github.com/Apress/practical-haskell
 
 **** Cabal
 
-- Cabal mutability landscape changed with the introduction of =sandboxes=
-  - Packages were installed globally
-  - Used to be an opt-in feature
-  - IF you use the cabal commands starting with ~new-~ you use sandboxes
-    They must run in a folder in which a .cabal file exists
-
-- Cabal keeps a Hackage indexes locally
-
 - How to: Develop several packages at the same time, one depending of the other.
   - Avoids "global mutation" of packages
   - Put all the packages in a common folder
@@ -2272,30 +2255,12 @@ source https://github.com/Apress/practical-haskell
     $ cabal new-build chapter4
     $ cabal new-build wonderful
 
-**** Stack
-- stack.yaml
-  extra-deps: is for packages not in Stackage, but in Hackage. Needs name and version.
-  #+begin_src
-    resolver: lts-19.6
-    packages:
-    - .
-    extra-deps: []
-    - wonderful-0.2.1.0
-    - git: my.server/my.repo.git
-      commit: a67bc8
-  #+end_src
-- $ stack init
-  - creates the stack.yaml file
-  - it treis to use the most recent LTS resolver in which all dependencies can be satisfied
-- $ stack setup
-  - downloads the corresponding vesion of GHC, if needed
-  - the same compiler is used for all the packages using the same major LTS version
-- $ stack build
-  - take scare of updating the information about its repositories before downloading any dependencies
 *** Containers: Maps, Sets, Trees, Graphs
+
 - A =container= is any *Data Structure* whose purpose is to hold elements of other types in it.
   - Lists
   - Trees
+
 **** Data.Map
 - Special purpose map where integers are the keys (more performant), in *unordered-containers*
   IntMap
@@ -2767,19 +2732,24 @@ After Step 2
               rightValue = foldr f newValue r
   #+end_src
 ** 5 Laziness and Infinite Structures
+
 *** An infinite Number of Time Machines
+
 - Each TimeMachine has a year that is ONLY allowed to travel
   #+begin_src haskell
     data TimeMachine = TM { manufacturer :: String, year :: Integer }
                      deriving (Eq, Show)
   #+end_src
+
 - Haskell *infinite list ranges*, means all elements "larger than", NOT infinite
   > zip allNumbers "abcd"
   > zip [1 .. ] "abcd"
   [(1,'a'),(2,'b'),(3,'c'),(4,'d')]
   > [False ..]
   [False, True]
+
 - Some operations might enter into an infinite computation and will never return.
+
 **** Example: A function to return all the time machines from a year *n* on.
 #+begin_src haskell
   timeMachinesFrom :: String -> Integer -> [TimeMachine]
@@ -3070,7 +3040,6 @@ getDataDir = do
 - =IO= /system calls/ to the OS
   - $ man 2 syscalls
 
-
 *** Writing to a file
 
 - A ~handle~ is the identifier for the OS<->Process conversation
@@ -3096,7 +3065,6 @@ getDataDir = do
   #+end_src
 
 - it is ok to call ~IO.hClose~ more than once on the same handle
-
 
 *** Exceptions
 
@@ -3154,7 +3122,7 @@ getDataDir = do
   - is a monad transformer
   #+begin_src haskell
     import Control.Monad.Trans.Resouce (ReleaseKey, ResourceT, allocate, runResourceT)
-    writeGreetingSafe = runResourceT @IO do
+    writeGreetingSafe = runResourceT @IO do -- ResourceT IO ()
       dir <- liftIO getDataDir
       (_releaseKey, h) <-
         allocate (IO.openFile (dir </> "greeting.txt") WriteMode)
@@ -3165,8 +3133,15 @@ getDataDir = do
 
 - ~ResourceT IO~
   - represents the concept of ~IO~ that has been /transformed or modified/ by adding a certain *safety* feature.
+  - much like an ~IO~ action, but it is augmented with a register of /resources/ that are guarenteed to be closed.
   - anything that you can do in ~IO~ can also be done in ~ResourceT IO~
-    by lifting the ordinary ~IO~ into a resource-safety-agumented ~ResourceT IO~ context
+
+- new used functions
+  #+begin_src haskell
+    liftIO       :: MonadIO m       => IO a -> m a
+    allocate     :: MonadResource m => IO a ->(a -> IO ()) -> m (ReleaseKey, a)
+    runResourceT :: MonadUnliftIO m => ResourceT m a -> m a
+  #+end_src
 
 - whenever learning about a new type, pay attention to:
   1) Introduction: which functions introduce that type (eg: liftIO, allocate)

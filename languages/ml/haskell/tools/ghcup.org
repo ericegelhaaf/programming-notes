@@ -1,0 +1,8 @@
+- home https://www.haskell.org/ghcup/
+  - Installation Manager
+
+- $ ghcup install cabal
+  $ ghcup install stack
+  $ ghcup list
+  $ ghcup install hls
+  $ ghcup compile <TOOL_NAME>

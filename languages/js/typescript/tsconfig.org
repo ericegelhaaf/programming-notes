@@ -1,0 +1,36 @@
+- tsconfig.json
+
+$ tsc --noImplicitAny main.ts
+$ tsc --init # creates a tsconfig.json
+
+https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+https://www.typescriptlang.org/tsconfig
+
+|--------------------------------+---------------------------------------------------------------------------------------+----------------------------------------|
+|                                | description                                                                           | default or some example value          |
+|--------------------------------+---------------------------------------------------------------------------------------+----------------------------------------|
+| files                          |                                                                                       | ["core.ts","sys.ts"]                   |
+| filesGlob                      | DEPRECATED > 2.0, use include                                                         | ["*.ts"]                               |
+| include                        | where to find the source files                                                        | ["src"]                                |
+| extends                        |                                                                                       |                                        |
+| compilerOptions                |                                                                                       |                                        |
+| > paths > @/* > ["src/*"]      |                                                                                       |                                        |
+| > lib                          | which APIs use                                                                        | ["es2015"]                             |
+| > module                       | which module systems use                                                              | "commonjs"                             |
+| > outDir                       | output dir for generated JS                                                           | "dist"                                 |
+| > strict                       | check for invalid code                                                                | true                                   |
+| > target                       | which JS version use                                                                  | "es3,es5,es2015,es2016,ES2020"         |
+| > sourceMap                    | ?                                                                                     | true                                   |
+| > preserveConstEnums           | enable runtime code generation for conts enums, due *inline* of them can cause issues |                                        |
+| > downlevelIteration           | to enable custom iterators pre es2015                                                 |                                        |
+| > noEmit                       |                                                                                       | true?                                  |
+| > types                        |                                                                                       | ["cypres", "@testing-library/cypress"] |
+| > isolatedModules              |                                                                                       | false?                                 |
+|--------------------------------+---------------------------------------------------------------------------------------+----------------------------------------|
+| > noImplicitAny                | to get TS to complain about implicit anys, variables have known types                 | true if strict                         |
+| > noImplicitThis               |                                                                                       | true if strict                         |
+| > strictBindCallApply          |                                                                                       | true if strict                         |
+| > strictNUllChecks             | wheter null or undefined are permissible values in every type                         | true if strict                         |
+| > strictPropertyInitialization |                                                                                       | true if strict                         |
+| > strictFunctionTyps           |                                                                                       | true if strict                   |
+|--------------------------------+---------------------------------------------------------------------------------------+----------------------------------------|

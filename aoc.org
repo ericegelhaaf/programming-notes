@@ -1,3 +1,67 @@
+* vis
+
+https://en.wikipedia.org/wiki/Netpbm
+https://netpbm.sourceforge.net/doc/pbm.html
+
+#+begin_src
+  val heatMap = Seq('█', '█', '█', '▓', '▓', '▒', '▒', '░', '░', ' ')
+#+end_src
+
+** ml
+#+begin_src fsharp
+module Scaffold.Image
+
+open System.IO
+open System.Text
+
+/// Splits an integer into three byte values.
+let intToRGB num =
+    let red = (num >>> 16) &&& 0xFF |> byte
+    let green = (num >>> 8) &&& 0xFF |> byte
+    let blue = num &&& 0xFF |> byte
+    (red, green, blue)
+
+/// <summary>Render a grayscale PGM frame.</summary>
+/// <param name="width">The width of the generated image.</param>
+/// <param name="height">The height of the generated image.</param>
+/// <param name="path">The output file path.</param>
+/// <param name="byteFn">A function that accepts a row and column index and returns a one-byte grayscale value.</param>
+let saveToPGM width height path byteFn =
+    let header = $"P5 {width} {height} 255 "
+
+    let body = Array.zeroCreate<byte> (ASCIIEncoding.ASCII.GetByteCount header + width * height)
+    let offset = ASCIIEncoding.ASCII.GetBytes(header, body)
+
+    for i in 0 .. width * height - 1 do
+        let r, c = i / width, i % width
+        body[i + offset] <- byteFn r c
+
+    File.WriteAllBytes(path, body)
+
+/// <summary>Render a color PPM frame.</summary>
+/// <param name="width">The width of the generated image.</param>
+/// <param name="height">The height of the generated image.</param>
+/// <param name="path">The output file path.</param>
+/// <param name="byteFn">A function that accepts a row and column index and returns a three-byte color value.</param>
+let saveToPPM width height path byteFn =
+    let header = $"P6 {width} {height} 255 "
+
+    let body = Array.zeroCreate<byte> (ASCIIEncoding.ASCII.GetByteCount header + width * height * 3)
+    let offset = ASCIIEncoding.ASCII.GetBytes(header, body)
+
+    for i in 0 .. width * height - 1 do
+        let r, c = i / width, i % width
+        let (red, green, blue) = byteFn r c
+        body[i * 3 + offset] <- red
+        body[i * 3 + offset + 1] <- green
+        body[i * 3 + offset + 2] <- blue
+
+    File.WriteAllBytes(path, body)
+#+end_src
+** mine
+#+begin_src bash
+  
+#+end_src
 * Advent Of Code Community Repo
 - Repo comun
 - Benchmark
@@ -36,6 +100,52 @@
   - mantener todo en stdlib
     - aunque no deberia ser complicado(tm) instalar deps globales
   - muy probablemente mantener todo en un 1(un) archivo
+* 2023
+** day 1 - se7en
+#+begin_src
+WIDE bigboy repost (as opposed to tall bigboy) >>97636176 →
+
+bigboy #1 (alternative version)
+
+url: https://bpa.st/raw/BEEQ
+silver: 231
+gold: 229
+#+end_src
+
+#+begin_src
+bigboy #1
+url:    https://0x0.st/HxMf.txt
+size:   21M
+lines:  1M
+silver: 55022487
+gold:   55015199
+>#+end_src
+** day 2
+#+begin_src
+bigboy #2
+url: https://0x0.st/HxLF.txt.7z
+size:   79M
+lines:  1M
+silver: 71327370192
+gold:   2221048073
+#+end_src
+** day 3
+#+begin_src
+url:    https://0x0.st/Hxtu.txt
+    size:   24M
+    grid:   5000x5000
+    silver: 258006204
+    gold:   17158526595  
+#+end_src
+** day 7
+#+begin_src
+bigboy #7
+url:    https://0x0.st/H3Hv.txt
+size:   2.5M
+hands:  200K
+silver: 6678229757944529
+gold:   7246011492564128
+#+end_src
 * 2022
 - Clojure Video https://www.youtube.com/playlist?list=PLbPrugU2oQ8W5qGiiiFJRlQ8vZ8AZXlG8
 - GO https://github.com/lukechampine/advent/
