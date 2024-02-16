@@ -1,3 +1,4 @@
+- 22 | Elixir: The Wickedly Awesome Batch and Stream Processing Language You Should Have in Your Toolbox https://www.youtube.com/watch?v=4c6tY0dLni4
 * Channels
 - Tetris Phoenix, https://www.youtube.com/playlist?list=PLKBMoE8mCkXi-sAkesjaUnDQqyrkAK8R5
 - Cryptocurrency, https://www.youtube.com/c/KamilSkowron/videos

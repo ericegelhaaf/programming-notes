@@ -847,7 +847,9 @@ Function Call:  print_name.(:josh)
 
 
 * Elixir and Phoenix or Beginners
+
 - LISP2 http://www.nhplace.com/kent/Papers/Technical-Issues.html
+
 ** 04,05 Thinking about concurrency, Concurrency in sequential languages
 
 - Most programming languages, were designed for the ground up for ~sequential~ tasks
@@ -860,9 +862,10 @@ Function Call:  print_name.(:josh)
   - they are slow (network/disk access),
   - which causes idle threads
 
-- "Software follows Hardware"
+- Quotes
+  - "Software follows Hardware"
+  - "Shared memory is the root of all evil" Joe Armstrong
 
-- "Shared memory is the root of all evil" Joe Armstrong
 ** 15 Strings
 
 #+begin_src elixir
@@ -870,20 +873,22 @@ Function Call:  print_name.(:josh)
   "James" == <<74,97,109,101,115>> # true
 #+end_src
 
-- *String* in elixir are a collection of *bytes* encoded in UTF-8
-- *Binary* if the series of bits is evenly divisible by 8
-- *BitString* is a series of bits
+- =String= in elixir are a collection of *bytes* encoded in UTF-8
+- =Binary= if the series of bits is evenly divisible by 8
+- =BitString= is a series of bits
 
 - To pass a string to erlang, you need to use a *CharList*
   Using single quotes (')
+
 ** 22 Immutable data
 
 - Google docs are like ~immutable~ data, because you change a document
   you are making a *copy* of a document and changing that one.
 
-- Data in =Prolog= is immutable
+- Data in =Prolog= is immutable.
 
-- Immutability helps with some, but not ALL problems of concurrency
+- Immutability helps with some, but not ALL problems of concurrency.
+
 ** 23 Variables
 
 - naming
@@ -893,11 +898,13 @@ Function Call:  print_name.(:josh)
 
 - you can rebind variables
 
-- elixir is dynamically, strongly typed language
+- Elixir is dynamically, strongly typed language
+
 ** 24 Pattern Matching
 
 - The (=) represents a match operator
 - The left side of the (=) gets binded
+
 ** 35 Anonymous Functions
 
 - functions != methods
@@ -911,7 +918,9 @@ Function Call:  print_name.(:josh)
 - =Data and Code= (that modifies the data)
   - In OO, are combined together in classes/objects
   - In FP, we don't like to mix them
+
 ** 36 named functions
+
 #+begin_src elixir
   defmodule Voter do       # CamelCase
     def add(arg1, arg2) do # snake_case
@@ -937,6 +946,7 @@ Function Call:  print_name.(:josh)
     end
   end
 #+end_src
+
 ** 48 pure vs impure functions
 
 - in order to be pure
@@ -956,7 +966,9 @@ Function Call:  print_name.(:josh)
 
 - Side effects: ??
 - Side causes: eg, get the current time from Time.utc_now
+
 ** 56 Composition with ¦>
+
 #+begin_src elixir
   district_canidate_votes = [
     %{district:1, candidate:1, votes:1050},
@@ -1003,7 +1015,6 @@ Function Call:  print_name.(:josh)
 
 - They shine when dealing with mapping&filtering&reduce
   over more than 1 list.
-
   #+begin_src elixir
     for x <- [1,2,3], do: x * 2
     for x <- [1,2,3], y <- [10,20,30], do: x * y
