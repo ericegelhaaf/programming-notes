@@ -1,1 +1,8 @@
-https://www.gnu.org/software/datamash/
+- home https://www.gnu.org/software/datamash/
+  - 2013-
+- source (C) https://git.savannah.gnu.org/gitweb/?p=datamash.git
+- doc alternative https://www.gnu.org/software/datamash/alternatives/
+- doc examples https://www.gnu.org/software/datamash/examples/
+- doc https://www.gnu.org/software/datamash/manual/datamash.html
+  - https://www.gnu.org/software/datamash/manual/datamash.html#Statistical-Operations
+    "GNU Datamash is designed to closely follow R’s statistical functions."
