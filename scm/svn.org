@@ -1,0 +1,7 @@
+* Checkout only file extension
+  https://stackoverflow.com/questions/192810/svn-checkout-filtered-by-file-extension
+  svn ls $URL --recursive > files.txt
+  svn co $URL --depth empty
+  cd repo
+  grep $EXTENSION files.txt
+    - svn update --parents $GREPPED

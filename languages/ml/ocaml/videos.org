@@ -17,6 +17,8 @@
 - Video: 2012 - Xavier Leroy - The continuation of functional programming by other means
   https://events.inf.ed.ac.uk/Milner2012/X_Leroy-html5-mp4.html
 - 2020 Retrofitting Parallelism onto Ocaml (ICFP 2020) https://www.youtube.com/watch?v=9ClMPz7QaIs
+- 16 video | LDN Functionals #8: OCaml the Ultimate Config Format | https://www.youtube.com/watch?v=GT4mF7lu4U0
+
 * Channels
 - Westley Weimer https://www.youtube.com/channel/UCSZ5lYLg6ARj4Wow3ZQXQzA/videos
 - Anwar Mamat https://www.youtube.com/playlist?list=PLF-pVzrCrXdj7rBvOOwulglwwDjVy96uI

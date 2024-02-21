@@ -3,6 +3,7 @@
   https://www.youtube.com/user/ltaravilse/videos
 - https://dojorena.io/with/the-best-coding-challenge
 
+- https://github.com/charlax/professional-programming
 - https://github.com/cl2333/Grokking-the-Coding-Interview-Patterns-for-Coding-Questions
 - https://github.com/codenjoyme/codenjoy
 - https://github.com/ec24/tc-arg

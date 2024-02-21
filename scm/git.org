@@ -1,0 +1,211 @@
+- https://blog.scottlowe.org/2023/12/15/conditional-git-configuration/
+- workflow https://sethrobertson.github.io/GitFixUm/fixup.html
+- book Pro Git https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+- https://bytes.zone/posts/modeling-git-internals-in-alloy-part-1-blobs-and-trees/
+- https://www.boringcactus.com/2021/02/22/can-we-please-move-past-git.html
+- https://dev.to/yonkeltron/is-it-time-to-look-past-git-ah4
+- VSCODE
+  https://github.com/gitkraken/vscode-gitlens
+  https://github.com/DonJayamanne/gitHistoryVSCode
+- https://ohshitgit.com/
+- https://www.youtube.com/watch?v=Uszj_k0DGsg
+- https://stackoverflow.com/questions/14352932/view-a-files-history-in-magit
+  ~magit-log-buffer-file~, view log for file
+- git-gutter-fringe font
+  https://ianyepan.github.io/posts/emacs-git-gutter/
+- Video:  Advanced Git: Graphs, Hashes, and Compression, Oh My!
+  https://www.youtube.com/watch?v=ig5E8CcdM9g
+- Video:  Git From the Bits Up
+  https://www.youtube.com/watch?v=MYP56QJpDr4
+- Github Action
+  https://simonwillison.net/2020/Oct/9/git-scraping/
+  https://news.ycombinator.com/item?id=37082289
+* Github Altenatives
+- Gitlab
+- Bitbucket
+- https://sourcehut.org/
+  - aka sr.ht
+  - has ci
+  - kingcons uses it
+  - free while on alpha
+  - OS: linux, bsd
+    https://man.sr.ht/builds.sr.ht/compatibility.md
+* Video: 2020 - Emacs: introduction to VC (version control framework)
+  https://www.youtube.com/watch?v=SQ3Beqn2CEc
+  C-x v v - will do the first logical action, 1) initialize git repo, 2) commit file
+  C-x v l - will show you the history of commits for the current file
+  C-x v = - will show the current diff for the file
+  C-x v g - will anotate in a new tab, the older the bluer
+  C-x v h - after you selected a region, it will show you the changes of that region through commits, diffs included
+* 1 git stats
+Output format: Nr. of lines, hash and message
+100 HASH commit message here
+
+| git rev-list HEAD           | get a list of revisions (as hashes)                     |
+|                             | HEAD is a ref                                           |
+|                             | last commit last                                        |
+| git rev-list --reverse HEAD |                                                         |
+| git log -1 $revision        | same of just git log                                    |
+| git ls-tree $revision       | all the files on revision                               |
+| git ls-tree -r $revision    | -r does recursion of commits to actually show the files |
+| git show $blobid            | shows whole file                                        |
+... | view -             # read only vim
+git log --oneline -1 $revision
+- on vim
+:!./script.sh
+:map ,t :w\|:!./script.sh<cr>
+* DONE Video: 2016 - Magit: Git in Emacs - Grumpy Gits SG
+  https://www.youtube.com/watch?v=OMIxZhLU71U
+  - IntellIj copied magit
+  - GitGutter: shows +- on the side of the line
+    https://github.com/emacsorphanage/git-gutter
+    https://github.com/emacsorphanage/git-gutter-fringe
+  - Smerge: a way to deal with conflicts
+    Comes with Emacs
+  - artist-mode, mode to freely edit text
+  - VC Mode
+  - Magit
+    - *magit-list-repositories*, needs to be enabled, can keep track of status with upstream
+    - workflow: jump from *magit-blame* to the commits from that line
+  - "keep your branches very short-lived, aim to do it in a day
+    if not, rebase at the end of the day"
+* DONE Video: 2018 - It's Magit! by John Wiegley
+  https://www.youtube.com/watch?v=j-k-lkilbEs
+- Interface copied from =Darcs=, a cvs like git
+- using 1,2,3,4 to toggle detail levels
+  using M-1234 to apply global instead per section
+- On diff section
+  - n,p move by blocks in a diff
+  - using -,+, and region selection to commit exact hunks of code
+  - select a region and "s" to stage that region
+  - S,U un/stage everything
+- g,G refresh, refresh ALL
+- ~magit-save-repository-buffers~
+  ~magit-auto-revert-mode~ (reverts all the files that were modifying those things)
+- j u jump to unstaged
+  j s jump to staged
+  j ?
+- ~magit-dired-jump~ C-x C-j
+- d   to open diff on a separate buffer
+  d r to diff for range
+- C-C C-t, (on a diff) viewing the history of changes for that function (?
+- C-C C-e, (on a diff) edit line (might rebase to it)
+- E (Ediff) current (HEAD), index, actual file
+- E s (Ediff to stage changes)
+      Between 3 HEAD/Index/WorkingFile
+      If done on a file that needs a merge resolution:
+      It will be 4, current, index, actual file, common ancestor
+- ~global-magit-file-mode~, magit actions without going into magit-status buffer
+- ~magit-dispatch~ (suggested C-x M-g) alternative to above
+- i , to add to .gitignore or .gitinfo?
+- K , untrack
+- X, Reset (soft/hard) (3/2023 updated)
+  s HEAD^ (to pop a commit) (keeps it staged)
+  h HEAD^ (") (keeps it unstaged????)
+  k **KILLS FILES***
+- R rename
+- c f fixup commit message
+- On a commit
+  C-c C-a Acked By
+  C-c C-t
+  M-p     to scroll down on old commit messages
+- b s - create a new spin-off
+  When you make commits to master locally, but then decide
+  that you won't push it.
+  But instead put it on a different branch.
+  And reset your local master.
+- % worktrees
+  different branch in a different directory, sharing the same repo
+- $ magit process buffer
+  k kill process in buffer
+- o Submodules
+- O Subtree (equivalent to submodules, the commits go into their own repo)
+- r i rebase interactive, to select commit then C-c C-c
+  1) select commit from list
+  2) then pick/squash/fixup commits
+  3) resolve conflicts
+- r f rebase quick fix up
+  C-c C-e
+- z z save stash
+  z Z snapshot stash, saves staged and unstaged, good to do at the end of the day if you don't want to commit
+- : will ask for the git arguments
+- y     list branches local and on remote (a ref browser)
+  y y   to pick a different branch to compare
+  y L v change visibility, show commits behind
+  y k   over a branch to kill it (remotely or locally)
+- Y cherries, shows you what you will see if you were to commit to master
+    useful when part of your work/commits were already cherry picked into master
+- V V revert commit
+    v rever changes on your working files
+- T git notes, do not create a new object, only relevant for the person saving them
+    like saving the build output
+    "mutable metadata"
+- git bisect, works best/easily with master branches were only things that pass CI are commited
+- ~magit-blame~, use "c" to cycle to next style
+- ~vc-annotate~ shows the blame besides the line
+- ~vc-revision-other-window~ C-u C-x v ~, to view how the file looks on another branch
+  ~vc-diff~                  C-x v =, to diff the file with master
+- https://hackage.haskell.org/package/git-monitor
+  https://github.com/jwiegley/gitlbitwi
+* DONE Video: 2020 - Lecture 6: Version Control (git)
+  https://www.youtube.com/watch?v=2sjqTHE0zok
+** Data Model
+- blobs, trees, commits - all are git objects with an id hash
+- type blob = array<bytes>
+  type tree = map<string, tree|blob>
+  type commit = struct {
+     parents: array<commits>
+     author: string
+     message: string
+     snapshot: tree
+  }
+  type object = <blob|tree|commit>
+  type objects = map<string, object> # key is the hash
+  def store(o)
+    id = sha(o)
+    objects[id] = o
+  type references = map<string,string> # description to hash
+- blobs are the files
+  trees are the folders (subdir or subblobs)
+  commits (msg,author,parent commits,tree)
+  root is the directoy being tracked
+  snapshot is the whole state in a moment in time
+- each snapshot *points* back to the snapshot before
+  each snapshot has some metadata in the form of commits
+  you can branch one snapshot into differents and then merge them
+** Exploring
+- git has the concept of a "staging area" that lets you
+  select what you are going to commit to the snapshot
+- ls .git/
+  HEAD config description hooks/ info/ objects/ refs/
+- HEAD is the current commit pointer
+- git log --all --graph --decorate --oneline
+- git cat-file -p HASH(of any object)
+- git push <remote> <localbranch>:<remotebranch>
+** Merge 2 branches
+- git checkout -b newbranch
+- ...vim, add, commit...
+- git checkout master
+- git checkout -b otherbranch
+- ...vim, add, commit....
+- git checkout master
+- git merge newbranch
+- git merge otherbranch
+  - fails so I can git merge --abort OR
+  - git mergetool OR
+  - vim...git add...git merge --continue
+** remote
+- git pull == git fetch; git merge
+- git push origin master:master
+- git branch --set-upstream-to-origin=origin/master
+- git branch -vv
+- git fetch
+  git pull == git fetch; git merge
+** cloning
+   git clone --shallow URL # to just get the current snapshot of the repo and not the full thing
+   git add -p # to interactive select hunks I want to commit
+* git-lfs
+https://git-lfs.github.com/
+1. git lfs install
+2. git lfs track ".psd"
+3. git add .gitattributes
