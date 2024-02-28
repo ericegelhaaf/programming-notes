@@ -4,16 +4,6 @@
 - editor https://tarides.com/blog/2022-12-21-advanced-merlin-features-destruct-and-construct
 - profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
 - optimizing http://ocamlverse.net/content/optimizing_performance.html
-- https://dune.readthedocs.io/en/stable/quick-start.html#building-a-hello-world-program-in-bytecode
-  Bytecode compilation is compatible with *ocamldebug*
-  > dune build hello_world.bc
-  > cat dune
-  #+begin_src elisp
-    (executable
-     (name hello_world)
-     (modes byte exe))
-  #+end_src
-  "dune will add -g flag for you by default"
 - https://batsov.com/articles/2022/08/29/ocaml-at-first-glance/
   https://lobste.rs/s/dwt32y/ocaml_at_first_glance
 - https://www.cl.cam.ac.uk/teaching/1617/L28/materials.html
@@ -37,6 +27,7 @@
 - Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
 - Tutorial: 2019 https://github.com/lindig/ocaml-style
 - https://github.com/imandra-ai/ocaml-tracy
+
 * Language
 ** Standard Library
 - https://v2.ocaml.org/manual/stdlib.html
@@ -125,76 +116,7 @@
 |            |                        |         |           | let v1 = v1.x + v2.y            |        |                |
 | struct     | struct let foo = 3 end |         |           |                                 |        |                |
 |------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-* ocamldebug
-- https://www.youtube.com/watch?v=DGvJk14sfi8
-  - let _ = print_string;
-  - #trace
-  - restrict type for polymorphic functions
-    - type annotations
-  - ocamlc -g file.ml
-    ocamldebug a.out
-  - (odb) break @filename/module? LINE
-    (odb) r
-- https://ocaml.org/docs/debugging
-  Using the debugger under Emacs
-  > ocamlc -g uncaught.ml
-  > ocamldebug a.out
-  (ocd) (r)un
-  (ocd) b
-  (ocd) bt
-  (ocd) info breakpoints
-  (ocd) help break
-  (ocd) (g)oto 0
-  (ocd) (r)un
-  (ocd) (p)rint VARIABLE
-** Emacs
-- https://v2.ocaml.org/releases/4.14/htmlman/debugger.html#s:inf-debugger
-- Under Emacs you call the debugger using =ESC-x ocamldebug a.out=
-- Then Emacs will send you directly to the file and character reported by the debugger,
-  and you can step back and forth using =ESC-b= and =ESC-s=,
-  you can set up break points using =CTRL-X space=, and so on...
-** (ocd) help
-(ocd) help
-List of commands:
-| address         | last           |
-| backstep        | list           |
-| backtrace       | load_printer   |
-| break           | next           |
-| bt              | pid            |
-| cd              | previous       |
-| complete        | print          |
-| delete          | pwd            |
-| directory       | quit           |
-| display         | remove_printer |
-| down            | reverse        |
-| environment     | run            |
-| finish          | set            |
-| frame           | shell          |
-| goto            | show           |
-| help            | source         |
-| info            | start          |
-| install_printer | step           |
-| kill            | up             |
-* utop
-- larger default prints
-  https://www.reddit.com/r/ocaml/comments/72nlch/utop_disable_truncation/
-  #print_lengh N;;
-  #print_depth N;,
-* Makefile
-#+begin_src makefile
-.PHONY: dev release deps test clean run install
 
-dev:     ; opam exec -- dune build
-release: ; opam exec -- dune build --profile release --build-dir _build_release
-
-deps:  ; opam install . --deps-only --with-test
-test:  ; opam exec -- dune runtest
-clean: ; opam exec -- dune clean ; rm -rf _build_release _build
-run:   ; opam exec -- dune exec ./src/main.exe
-
-install: release
-	install _build_release/default/src/main.exe $(HOME)/.newsboat/feeds/sql2rss
-#+end_src
 * Editor
 - https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
 - https://github.com/Gopiandcode/gopcaml-mode

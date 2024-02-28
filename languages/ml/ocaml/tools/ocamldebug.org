@@ -1,0 +1,51 @@
+- https://www.youtube.com/watch?v=DGvJk14sfi8
+  - let _ = print_string;
+  - #trace
+  - restrict type for polymorphic functions
+    - type annotations
+  - ocamlc -g file.ml
+    ocamldebug a.out
+  - (odb) break @filename/module? LINE
+    (odb) r
+
+- https://ocaml.org/docs/debugging
+  Using the debugger under Emacs
+  > ocamlc -g uncaught.ml
+  > ocamldebug a.out
+  (ocd) (r)un
+  (ocd) b
+  (ocd) bt
+  (ocd) info breakpoints
+  (ocd) help break
+  (ocd) (g)oto 0
+  (ocd) (r)un
+  (ocd) (p)rint VARIABLE
+
+** Emacs
+- https://v2.ocaml.org/releases/4.14/htmlman/debugger.html#s:inf-debugger
+- Under Emacs you call the debugger using =ESC-x ocamldebug a.out=
+- Then Emacs will send you directly to the file and character reported by the debugger,
+  and you can step back and forth using =ESC-b= and =ESC-s=,
+  you can set up break points using =CTRL-X space=, and so on...
+** (ocd) help
+(ocd) help
+List of commands:
+| address         | last           |
+| backstep        | list           |
+| backtrace       | load_printer   |
+| break           | next           |
+| bt              | pid            |
+| cd              | previous       |
+| complete        | print          |
+| delete          | pwd            |
+| directory       | quit           |
+| display         | remove_printer |
+| down            | reverse        |
+| environment     | run            |
+| finish          | set            |
+| frame           | shell          |
+| goto            | show           |
+| help            | source         |
+| info            | start          |
+| install_printer | step           |
+| kill            | up             |

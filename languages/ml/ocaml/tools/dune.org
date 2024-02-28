@@ -1,0 +1,90 @@
+- https://dune.readthedocs.io/en/stable/quick-start.html#building-a-hello-world-program-in-bytecode
+  Bytecode compilation is compatible with *ocamldebug*
+  > dune build hello_world.bc
+  > cat dune
+  #+begin_src elisp
+    (executable
+     (name hello_world)
+     (modes byte exe))
+  #+end_src
+  "dune will add -g flag for you by default"
+
+* dune on project (+static)
+
+#+begin_src lisp
+  (env
+   (dev
+    (flags (:standard)))
+   (release
+    (flags (:standard -cclib -static -cclib -no-pie)); static BINARY!
+    (ocamlopt_flags (:standard -O3))))
+#+end_src
+
+* dune on .ml dir
+|------------+----------------+----------------------------------|
+|            | name           | the name of the project          |
+|            | public_name    | ?                                |
+|            | libraries      | the dependencies                 |
+|------------+----------------+----------------------------------|
+| executable |                |                                  |
+|            | modes          |                                  |
+|            | modes byte exe |                                  |
+|            | package        |                                  |
+|------------+----------------+----------------------------------|
+| library    |                |                                  |
+|            | inline_tests   |                                  |
+|            | preprocess     | pps, ppx_inline_test, ppx_assert |
+|------------+----------------+----------------------------------|
+* dune commands
+|---------------------------------+---------------------------------------|
+| build                           | --profile PROF --build-dir _build     |
+| build NAME.exe                  | where NAME is the "name" in dune      |
+| clean                           |                                       |
+| OCAMLRUNPARAM=b exec ./NAME.exe | to run printing full backtrace        |
+| exec ./src/NAME.exe             |                                       |
+| exec -- ./src/NAME.exe -arg foo | to pass arguments to the final binary |
+| runtest                         |                                       |
+| promote                         | aka "promotion apply"                 |
+| promotion ?                     | ???                                   |
+|---------------------------------+---------------------------------------|
+* Example - Executable with dune - From "Real World Ocaml"
+
+#+NAME: dune
+#+begin_src lisp
+  (executable
+    (name sum)
+    (libraries base stdio))
+#+end_src
+
+** sum.ml
+
+#+begin_src ocaml
+  open Base
+  open Stdio
+
+  let rec read_and_accumulate accum =
+    let line = In_channel.input_line In_channel.stdin in
+    match line with
+    | None   -> accum
+    | Some x -> read_and_accumulate (accum +. Float.of_string x)
+
+  let () =
+    printf "Total: %F\n" (read_and_accumulate 0.)
+#+end_src
+
+* Makefile
+
+#+begin_src makefile
+.PHONY: dev release deps test clean run install
+
+dev:     ; opam exec -- dune build
+release: ; opam exec -- dune build --profile release --build-dir _build_release
+
+deps:  ; opam install . --deps-only --with-test
+test:  ; opam exec -- dune runtest
+clean: ; opam exec -- dune clean ; rm -rf _build_release _build
+run:   ; opam exec -- dune exec ./src/main.exe
+
+install: release
+	install _build_release/default/src/main.exe $(HOME)/.newsboat/feeds/sql2rss
+#+end_src

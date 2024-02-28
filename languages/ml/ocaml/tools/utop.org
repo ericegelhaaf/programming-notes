@@ -1,0 +1,4 @@
+- larger default prints
+  https://www.reddit.com/r/ocaml/comments/72nlch/utop_disable_truncation/
+  #print_lengh N;;
+  #print_depth N;,

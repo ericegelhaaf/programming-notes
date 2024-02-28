@@ -285,28 +285,6 @@
     done
     if !pos = Array.length array then None else Some !pos
 #+end_src
-*** Executable with dune
-- sum.ml
-   #+begin_src ocaml
-     open Base
-     open Stdio
-
-     let rec read_and_accumulate accum =
-       let line = In_channel.input_line In_channel.stdin in
-       match line with
-       | None -> accum
-       | Some x -> read_and_accumulate (accum +. Float.of_string x)
-
-     let () =
-       printf "Total: %F\n" (read_and_accumulate 0.)
-   #+end_src
-- dune
-  #+begin_src lisp
-    (executable
-      (name sum)
-      (libraries base stdio))
-  #+end_src
-- > dune build sum.exe
 ** 2 Variables and Functions
 - There are *mutable values* in ocaml, but no *mutable variables*
 - =assert=, can be used to complete a *match* branch that is impossible to happen
@@ -485,10 +463,6 @@ let () =
 - let () =, takes the role of the main function
 - Building, ocamlfind is like pkgconf for ocaml
   $ ocamlfind ocamlopt -linkpkg -package base -package stdio freq.ml -o freq
-- dune
-  $ vim dune
-  $ dune build freq.exe
-  $ dune exec ./freq.exe
 - Compilers
   |------------+------------|
   | ocamlopt   | ocamlc     |

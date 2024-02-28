@@ -353,6 +353,6 @@ https://dev.to/yawaramin/practical-ocaml-multicore-edition-3gf2
 ** dune-project
   (lang dune 3.4)
 ** dune
-  (executable
+(executable
     (name ocaml_statsd_filter)
     (libraries str eio_main))

@@ -3,6 +3,7 @@
 - pre builds https://github.com/nim-lang/nightlies/
 - https://nim-lang.org/docs/manual.html#types-tuples-and-object-types
 - exercises https://github.com/sergiotapia/nimlings
+
 * Language
 ** Types
 |------------+------------------------------------+----------------------------------|

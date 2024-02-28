@@ -98,6 +98,7 @@
   https://bitbucket.org/naviserver/naviserver/src/main/
 ** First version of redis
   https://gist.github.com/antirez/6ca04dd191bdb82aad9fb241013e88a8
+
 #+begin_src tcl
   # LVDB - LLOOGG Memory DB
   # Copyriht (C) 2009 Salvatore Sanfilippo <antirez@gmail.com>
@@ -420,6 +421,7 @@
   main
   vwait forever
 #+end_src
+
 * Snippets
 - '01 try/catch/finally implementation (before it was added to the language)
   https://code.activestate.com/recipes/68396-try-catch-finally/

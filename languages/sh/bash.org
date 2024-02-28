@@ -12,6 +12,7 @@
 - https://github.com/mrzool/bash-sensible
 - https://github.com/joseluisq/awesome-bash-commands
 - https://lobste.rs/s/iofste/please_stop_writing_shell_scripts
+- "|&" is a shorthand for "2>&1 |" https://stackoverflow.com/questions/35917552/what-does-the-syntax-mean-in-shell-language
 - Why doesn't set -e (or set -o errexit, or trap ERR) do what I expected?
   http://mywiki.wooledge.org/BashFAQ/105
 - shfmt

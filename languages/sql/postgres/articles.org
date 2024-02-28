@@ -45,6 +45,7 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
   is a sorted list of distinct ~lexemes~ which
   are words that have been normalized to make
   diferent variants of the same word look alike.
+
 - The number, on a tsvector, represents the location of the lexeme in the original string
 
 ** querying (@@)
@@ -55,7 +56,7 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
 #+end_src
 
 - can have a column with the language (simple, english, french)
-  and then cast it to *regconfig* on the to_tsvector() call
+  and then cast it to =regconfig= on the ~to_tsvector()~ call
 
 - ~simple~ regconfig does not skip stopwords, or stem.
   Every word is a lexeme.
@@ -63,26 +64,23 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
 ** (un)accent
 
 - postgres provides an extension that removes all the accents
-
   #+begin_src sql
     create extension unaccent;
     select unaccent('èéêë'); -- eeee
   #+end_src
 
 - we could manually unaccent()
-
   #+begin_src sql
     select to_tsvector(post.language, unaccent(post.title)) -- ...
   #+end_src
 
 - or even better create a ~text search configuration~
-  which as a side effect, it might not be able to recognize some stopwords
-
+  which as a side effect, it might not be able to recognize some stopwords...
   #+begin_src sql
     create text search configuration fr ( COPY = french );
 
     alter text search configuration fr alter mapping
-      for hword, hword_part, word WITH unaccent, french_stem;
+      for hword, hword_part, word with unaccent, french_stem;
 
     select to_tsvector('fr', 'il était une fois');
   #+end_src
@@ -125,7 +123,6 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
 
 - using a =function based index=
   creating a GIN index around the tsvector()
-
 #+begin_src sql
   create index idx_fts_post
     on post
@@ -145,30 +142,27 @@ https://rachbelaid.com/postgres-full-text-search-is-good-enough/?ref=blog.meilis
     - materialized views
 
 - adding a materialized view, at the cost of delay before new documents can be found
-
   #+begin_src sql
- create materialized view search_index as
-   select post.id,
-          post.title,
-          setweight(to_tsvector(post.language::regconfig, post.title), 'A') ||
-          setweight(to_tsvector(post.language::regconfig, post.content), 'B') ||
-          setweight(to_tsvector('simple', author.name), 'C') ||
-          setweight(to_tsvector('simple', coalesce(string_agg(tag.name, ' '))), 'A') as document
-     from post
-          join author on author.id = post.author_id
-          join posts_tags on posts_tags.post_id = post_tags.tag_id
-          join tag on tag.id = posts_tags.tag_id
-    group by post.id, author.id;
+    create materialized view search_index as
+      select post.id,
+             post.title,
+             setweight(to_tsvector(post.language::regconfig, post.title), 'A') ||
+             setweight(to_tsvector(post.language::regconfig, post.content), 'B') ||
+             setweight(to_tsvector('simple', author.name), 'C') ||
+             setweight(to_tsvector('simple', coalesce(string_agg(tag.name, ' '))), 'A') as document
+        from post
+             join author on author.id = post.author_id
+             join posts_tags on posts_tags.post_id = post_tags.tag_id
+             join tag on tag.id = posts_tags.tag_id
+       group by post.id, author.id;
   #+end_src
 
 - then to reindex the search engine will consist on
-
   #+begin_src sql
     create index idx_fts_search on search_index using gin(document);
   #+end_src
 
 - while querying will be simpler
-
   #+begin_src sql
     select id as post_id, title
       from search_index
