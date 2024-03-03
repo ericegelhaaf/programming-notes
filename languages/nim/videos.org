@@ -57,17 +57,21 @@ Source: https://github.com/tsoding/boomer
 * 21 | Wang Tiles 01             | Tsoding
 https://www.youtube.com/watch?v=IGTuv_KKLFs
 * 22 | Nim in 100 Seconds
-  https://www.youtube.com/watch?v=WHyOHQ_GkNo
-  - no need of a main function
-  - identation matters
-  - iterators
-  - closures
-  - Generics
-  - RC (reference counting) GC, but switchable
-  - Can trasnpile to C, C++, ObjectiveC, Js
-  - Later compiled by Clang
-  - Macros/Metaprogramming
-  - First class functions
+
+https://www.youtube.com/watch?v=WHyOHQ_GkNo
+
+- no need of a main function
+- identation matters
+- iterators
+- closures
+- generics
+- RC (reference counting) GC, but switchable
+- Can transpile to:
+  - C, C++, ObjectiveC, Js
+- Later compiled by Clang
+- macros / metaprogramming
+- First class functions
+
 * 22 | ⚡ Learning Nim - First Look
 https://www.youtube.com/watch?v=Htjq9yF11m0
 - Right tool for _security hacking_ tools? Like Go, but NOT Rust.

@@ -9,38 +9,46 @@
 
 ** cmd
 
+- $ cabal init --is-libandexe --license=BSD3
+- $ cabal init --is-executable -n -m -l BSD3
+
+- -v0 sets verbosity level to 0, disabling cabal output
 - cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
 - ~/.cabal/bin
 
-|------------------------------+---------------------------------------------------------------|
-| build                        | fetch deps, and builds all targets                            |
-| build NAME                   | target name                                                   |
-| build exe:NAME               | disambiguation if lib/exe are named the same                  |
-| build lib:NAME               | disambiguation if lib/exe are named the same                  |
-|------------------------------+---------------------------------------------------------------|
-| exec NAME                    | run it                                                        |
-| exec -- which NAME           | prints the path of the compiled NAME                          |
-| run                          | compile it anr run it                                         |
-| run NAME -- ARGS             | compile it and run it                                         |
-|------------------------------+---------------------------------------------------------------|
-| init --interactive           |                                                               |
-| init --libandexe             |                                                               |
-|------------------------------+---------------------------------------------------------------|
-| install BIN                  | downloads, compiles and installs BIN in ~/.cabal/bin          |
-| install --lib LIB            | downloads, compiles and installs LIB in ~/.cabal              |
-|------------------------------+---------------------------------------------------------------|
-| repl --build-depends PKG     |                                                               |
-| repl LIB                     | loads repl, with project loaded                               |
-| repl                         | loads repl, with project loaded                               |
-|------------------------------+---------------------------------------------------------------|
-| clean                        | cleans build artifacts                                        |
-| configure --enable-profiling | download profiling information for all your dependencies      |
-| freeze                       | generate file with packages versions and build flags          |
-| gen-bounds                   | generate version bounds for packages                          |
-| sdist                        | bundle project in a tarball, which can be uploaded to hackage |
-| update                       | updates package cache, ~package list~ from haskell            |
-| haddock                      | generates html documentation of our project                   |
-|------------------------------+---------------------------------------------------------------|
+|------------------------------------+---------------------------------------------------------------|
+| init -n -m -l BSD3 --is-executable | -n --non-interactive                                          |
+| init -n -m -l BSD3 --is-libandexe  | -m --minimal                                                  |
+| init -n -m -l BSD3 --is-library    | -l --license=??                                               |
+|------------------------------------+---------------------------------------------------------------|
+| build                              | fetch deps, and builds all targets                            |
+| build NAME                         | target name                                                   |
+| build exe:NAME                     | disambiguation if lib/exe are named the same                  |
+| build lib:NAME                     | disambiguation if lib/exe are named the same                  |
+|------------------------------------+---------------------------------------------------------------|
+| exec NAME                          | run it                                                        |
+| exec -- which NAME                 | prints the path of the compiled NAME                          |
+| run -v0                            |                                                               |
+| run                                | compile and run executable                                    |
+| run NAME -- ARGS                   | compile and run executable                                    |
+|------------------------------------+---------------------------------------------------------------|
+| install BIN                        | downloads, compiles and installs BIN in ~/.cabal/bin          |
+| install --lib LIB                  | downloads, compiles and installs LIB in ~/.cabal              |
+|------------------------------------+---------------------------------------------------------------|
+| repl --build-depends PKG           |                                                               |
+| repl LIB                           | loads repl, with project loaded                               |
+| repl                               | loads repl, with project loaded                               |
+|------------------------------------+---------------------------------------------------------------|
+| clean                              | cleans build artifacts                                        |
+| configure --enable-profiling       | download profiling information for all your dependencies      |
+| freeze                             | generate file with packages versions and build flags          |
+| gen-bounds                         | generate version bounds for packages                          |
+| sdist                              | bundle project in a tarball, which can be uploaded to hackage |
+| update                             | updates package cache, ~package list~ from haskell            |
+| haddock                            | generates html documentation of our project                   |
+| test  [PROJECT]                    |                                                               |
+| bench [PROJECT]                    |                                                               |
+|------------------------------------+---------------------------------------------------------------|
 
 ** .cabal
 

@@ -1,27 +1,30 @@
-|-------------------------+---------------------------------------------------------------------|
-|                         | description                                                         |
+- ~/.stack/config.yml
+- source https://github.com/commercialhaskell/stack
+- doc https://docs.haskellstack.org/en/stable/
+- tool: get a dependency DOT graph
+  https://stackoverflow.com/questions/69270620/generating-haskell-module-dependency-tree
+  https://docs.haskellstack.org/en/stable/dependency_visualization/
+
+* cli
 |-------------------------+---------------------------------------------------------------------|
 | init                    | creates stack.yaml, tries most recent resolver that statisfies deps |
 | build                   | installs ghc, package deps and builds the project                   |
 | clean                   | cleans build artifacts                                              |
-| exec EXENAME            |                                                                     |
+|-------------------------+---------------------------------------------------------------------|
 | exec -- which EXE       |                                                                     |
+| exec EXE                |                                                                     |
 | exec EXE -- ARGS        | will run the EXE with ARGS                                          |
+|-------------------------+---------------------------------------------------------------------|
+| repl [:COMPONENT]       |                                                                     |
 | ghc -- -dynamic test.hs |                                                                     |
 | ghci LIB                | starts repl in LIB context                                          |
-| repl                    |                                                                     |
 | setup                   | downloads GHC                                                       |
 | new NAME                |                                                                     |
 | new NAME simple         | "simple" is the most minimal of the templates that stack provides   |
-| test                    |                                                                     |
+| test [:SUITE]           |                                                                     |
+| bench                   |                                                                     |
 |-------------------------+---------------------------------------------------------------------|
-
-- ~/.stack/config.yml
-
-- dot - get a dependency DOT graph
-  https://stackoverflow.com/questions/69270620/generating-haskell-module-dependency-tree
-  https://docs.haskellstack.org/en/stable/dependency_visualization/
-
+* stack.yaml
 |------------+---------------------------------------------------|
 | resolver   | lts-19.6                                          |
 | packages   | [.]                                               |

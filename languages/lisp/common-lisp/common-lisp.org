@@ -37,7 +37,7 @@
   https://github.com/privet-kitty/wild-package-inferred-system
 - sectorLISP https://www.youtube.com/watch?v=xD14SLU2u2k
 - https://mumble.net/~campbell/scheme/style.txt
-.- https://github.com/hanshuebner/bknr-datastore
+- https://github.com/hanshuebner/bknr-datastore
 - music composition
   https://quod.lib.umich.edu/s/spobooks/bbv9810.0001.001?rgn=main;view=fulltext
 - https://bernsteinbear.com/blog/compiling-a-lisp-0/
@@ -477,6 +477,7 @@ and that doesn't work if the code is provided as a *.a or *.o file
 - doc https://shinmera.github.io/deeds/
 - example https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0151-deeds.org
 * Gamedev
+https://awkravchuk.itch.io/cl-fast-ecs/devlog/622054/gamedev-in-lisp-part-1-ecs-and-metalinguistic-abstraction
 ** CEPL
   https://github.com/cbaggers/spring-lisp-gamejam
 ** Trial
@@ -555,16 +556,6 @@ and that doesn't work if the code is provided as a *.a or *.o file
   - but can be constraint with, assert! or (=v) or (memberv) or (<v)
   - to name it, give an extra argument to most non-det created functions
   - there is no way to reverse contrainsts once added
-* Looping
-- 'User-extensible sequences in Common Lisp' by Christophe Rhodes[1]
-  https://web.archive.org/web/20150918224411/http://www.doc.gold.ac.uk/\~mas01cr/papers/ilc2007/sequences-20070301.pdf
-  like iterate
-** loop
-  https://web.archive.org/web/20171127083905/http://www.method-combination.net/blog/archives/2010/04/06/looping-issues.html
-  https://lispcookbook.github.io/cl-cookbook/iteration.html
-  https://gigamonkeys.com/book/loop-for-black-belts.html
-** gtwiwtg "naive generators"
-https://github.com/cbeo/gtwiwtg
 * LIBRARIES
 - http://edicl.github.io/cl-fad/        - directory file, clossplatform
 - readtable for string interpolation https://github.com/edicl/cl-interpol

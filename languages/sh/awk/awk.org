@@ -245,6 +245,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | "cmd" ¦& getline var | reads from a two-way pipe into var  | RT                  |
 |----------------------+-------------------------------------+---------------------|
 ** format strings
+
 https://www.gnu.org/software/gawk/manual/html_node/Control-Letters.html
 https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 

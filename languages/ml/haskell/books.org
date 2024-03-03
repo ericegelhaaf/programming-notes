@@ -8,7 +8,7 @@
 - https://leanpub.com/haskell-cookbook/read
 - https://leanpub.com/haskell-stdlibs
 
-* 00 | The Haskell School of Expressive Language | Paul Hudak
+* 00 | The Haskell School of Expressive Language |          | Paul Hudak
 ** 3 Simple Graphics
 *** 3.1 Basic Input/Output
 - ~Standard Prelude~ and ~Standard Libraries~
@@ -52,7 +52,7 @@ sierpinskiTri w x y size
 - Many indirect graphics functions, to:
   1) being able to work with each shape properties
 ** 5 Polymorphic and High-order Funtions
-* 08 | Real World Haskell                        | Bryan O'Sullivan
+* 08 | Real World Haskell                        | O'Reilly | Bryan O'Sullivan
 - Updated code version https://github.com/tssm/up-to-date-real-world-haskell/
 - Real World Haskell outdated parts https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
 - Online http://book.realworldhaskell.org/read/
@@ -98,6 +98,7 @@ instance BasicEq3 Color where
 - ~Types~ are made instances of a particular type class
 - Typeclasses
   - Show: Used to display your custom types. ghci repl uses it.
+
     #+begin_src haskell
 data Color = Red | Green | Blue
 
@@ -106,8 +107,9 @@ instance Show Color where
   show Green = "verde"
   show Blue = "azul"
     #+end_src
-* 10 | Seven Languages in 7 weeks                | Bruce A. Tate
-** Haskell
+
+* 10 | Seven Languages in 7 weeks                | PragProg | Bruce A. Tate
+
 - "In Haskell, indentation is significant." (?
 - on Haskell, IF is a function, not a control structure, it returns a value.
 - "." for function composition
@@ -118,6 +120,7 @@ instance Show Color where
 - ~where~ on function definition can define local functions too
 - every function does have 1(one) parameter
   - the process of reducing a function of N parameters to N of 1 param is ~currying~
+
 #+NAME: single-line vs multi-line pattern-matching vs guards
 #+begin_src haskell
 fact x = if x == 0 then 1 else fact (x - 1) * x
@@ -131,7 +134,8 @@ factorio x
   | x > 1     = x * factorio (x - 1)
   | otherwise = 1
 #+end_src
-* 18 | Haskell School of Music                   | Donya Quick
+
+* 18 | Haskell School of Music                   |          | Donya Quick
 ** 1 Computer Music, Euterpea, and Haskell
 *** 1.1 The Note versus Signal Dichotomy
 - High/Low    level music concepts a.k.a.
@@ -341,7 +345,401 @@ data InstrumentName = AcousticGrandPiano | BrightAcousticPiano ...
   2) the single portamento on note three of bar sixteen.
   These situations will be addressed differently in a later chapter.
 *** 4.4 Simple Algorithmic Composition
-* 21 | Haskell Tutorial and Cookbook             | Mark Watson
+* 21 | Haskell in Depth                          | Manning  | Vitaly Bragilevsky
+
+- source https://github.com/bravit/hid-examples
+  - GHC 8.6 or newer
+  - cabal 3.0 or newer
+
+- Author is a member of the "GHC Steering Committee"
+  - https://twitter.com/VBragilevsky
+
+- Contains:
+  - Libraries: lens, singletons, servant
+  - Cabal & Stack
+  - Error-handling and testing
+  - Pure Parallelism for multicore processors
+
+- Preface
+  - https://www.microsoft.com/en-us/research/publication/a-history-of-haskell-being-lazy-with-class/
+  - https://wiki.haskell.org/Non-strict_semantics
+  - https://taylor.fausak.me/2020/11/22/haskell-survey-results/
+  - https://wiki.haskell.org/IDEs
+  - DEPRECATED by GHCup https://www.haskell.org/platform/
+
+** Foreward
+
+By Simon Peyton Jones
+
+#+begin_src haskell
+  traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
+#+end_src
+
+- Book exposes many of the more sophisticated parts of the language
+  - typeclasses, type families
+  - existentials
+  - GADTs
+  - type families
+  - kinds
+  - kind polymorphism
+  - deriving
+  - metaprogramming
+
+- Explains key abstractions
+  - Functor
+  - Applicative
+  - Traversable
+
+- "Functional programming lets you think big thoughts. It reduce the brain-to-code
+   distance by allowing you to program at a very high level."
+
+** Preface
+
+- Non-Strict Semantics https://wiki.haskell.org/Non-strict_semantics
+  An expression language is said to have non-strict semantics if
+  expressions can have a value even if some of their subexpressions do
+  not.
+
+- Components commonly discuss of a industry programming language
+  1) Libraries
+  2) Tooling
+  3) Language features AND programming style
+     + functional programming
+     + static (polymorphic) typing with type inference
+       * static = means that types are checked at compile type
+       * polymorphic = any function entity (fn/expr/var) can have different types, depending on context being used
+     + lazyness (aka non-strict semantics)
+       semantics = relating to the definition of how things should behave
+
+- =Referential transparency= https://wiki.haskell.org/Referential_transparency
+  Bein able to replace a /variable/ with its /value/ without introduccing effects
+- =Equational reasoning= https://wiki.haskell.org/Equational_reasoning_examples
+  The ability to reason about functions and their results
+
+- Other programming languages use the term /function/ as a synonym for /subroutine/ or /procedure/
+
+- Th idea of introducing new types all the time contradicts the well-known programming
+  principle of avoiding repetition ~DRY~. Haskell makes it easier to use types *without repeating*
+  via mechanism of functions over types.
+  - GADTs
+  - Type Families
+  - Kind Polymorphism
+
+- Type discipline:
+  - Weak type systems: we can use an integer value instead of a Bool, the compiler does NOT help
+  - Dynamic Typing: we face type errors at runtime
+
+- When we write programs relying on lazy evaluation, we don't have to know how they are
+  /actually/ evaluated. (aka "declarative")
+
+- Book uses
+  - Stack for Window & Mac
+  - And Cabal for Linux.
+
+** Core Haskell
+***  1 Functions and types
+
+- Data.Text provides many functions analogous to the Data.List
+  #+begin_src haskell
+    toCaseFold :: Text -> Text -- analogue of "map toLower" over each String character
+    dropAround :: (Char -> Bool) -> Text -> Text -- removes leading and trailing chars, that satisfy 1st fn arg
+  #+end_src
+
+- ~Data.Text.ICU~ module from ~text-icu~ package, will work moreliable to split non-english text with unicode
+
+- Counting words on a text
+**** Take 1: on the REPL
+
+#+begin_src haskell
+  > :module + Data.List Data.Char -- import a couple modules
+  > text <- readFile "data/texts/hamlet.txt"
+  > ws = map head $ group $ sort $ words $ map toLower text
+  > take 7 ws
+#+end_src
+
+**** Take 2: on a file
+
+#+begin_src haskell
+  import Data.Char
+  import Data.List (group, sort)
+  import qualified Data.Text as T      -- to avoid clashes with Prelude
+  import qualified Data.Text.IO as TIO -- "
+  import System.Environment -- getArgs
+
+  main = do
+    [fname] <- getArgs
+    text <- TIO.readFile fname
+    let ws = map head
+             $ group
+             $ sort
+             $ map T.tocaseFold
+             $ filter (not . T.null)
+             $ map (T.dropAround $ not . isLetter)
+             $ T.words text
+    TIO.putStrLn $ T.unwords ws
+    print $ length ws
+#+end_src
+
+**** Take 3: on a file as many IO actions
+
+#+begin_src haskell
+  type Entry = (T.Text, Int)
+  type Vocabulary = [Entry]
+
+  extractVocab :: T.Text -> Vocabulary -- pure
+  extractVocab t = map buildEntry $ group $ sort ws
+    where
+      buildEntry xs@(x:_) = (x, length xs)
+      cleanWord = T.dropAround (not . isLetter)
+      ws = map T.toCaseFold $ filter (not . T.null) $ map cleanWord $ T.words t
+
+  printAllWords :: Vocabulary -> IO ()
+  printAllWords vocab = do
+    putStrLn "All words: "
+    TIO.putSTrLn $ T.unlines $ map fst vocab
+
+  processTextFile :: FilePath -> IO ()
+  processTextFile fname = do
+    text <- TIO.readFile fname
+    let vocab = extractVocab text
+    printAllWords vocab
+
+  -- makes it easier to extend
+  printWordsCount :: Vocabulary -> IO ()
+  printFrequentWords :: VOcabulary -> Int -> IO ()
+
+  main :: IO()
+  main = do
+    args <- getArgs
+    case args of
+      [fname] -> processTextFile fname
+      _ -> putStrLn "Usage: vocab-builder filename"
+#+end_src
+
+**** Take 4.0: Embracing pure functions - Just the Types
+
+#+begin_src haskell
+  import Data.Text (Text)
+  import qualified Data.Text as T
+  import Data.Ord (comparing, Down)
+
+  extractVocab :: Text -> Vocabulary
+
+  -- prepares it for printing
+  -- returns a Text ready to print, to be used in processTextFile
+  allWordsReport :: Vocabulary -> Text
+  wordsCountReport :: Vocabulary -> Text
+  frequentWordsReport :: Vocabulary -> Int -> Text
+
+  -- auxiliary functions
+  allWords :: Vocabulary -> [Text]
+  wordsCount :: Vocabulary -> (Int, Int)
+  wordsByFrequency :: Vocabulary -> Vocabulary
+  wordsByFrequency = sortBy (comparing $ Down . snd) -- reverse order
+
+  processTextFile :: FilePath -> Bool -> Int -> IO ()
+  main :: IO ()
+#+end_src
+
+**** Take 4.1: wordsCountReport without OverloadedStrings
+
+#+begin_src haskell
+  wordsCountReport :: Vocabulary -> Text
+  wordsCountReport vocab = T.unlines [part1, part2]
+    where
+      (total, unique) = wordsCount vocab
+      part1 = T.append (T.pack "Total number of words: ")
+                       (T.pack $ show total)
+      part2 = T.append (T.pack "Number of unique words: ")
+                       (T.pack $ show unique)
+#+end_src
+
+**** Take 4.2: wordsCountReport with OverloadedStrings
+
+#+begin_src haskell
+  {-# LANGUAGE OverloadedStrings #-}
+  wordsCountReport :: Vocabulary -> Text
+  wordsCountReport vocab = T.unlines [part1, part2]
+    where
+      (total, unique) = wordsCount vocab
+      part1 = T.append "Total number of words: "
+                       (T.pack $ show total)
+      part2 = T.append "Number of unique words: "
+                       (T.pack $ show unique)
+#+end_src
+
+**** Take 4.3: wordsCountReport with OverloadedStrings + =fmt= package
+
++||+ to include variables and formatters, inside ("")
++||||+ to implicitly call *show* if there are not default formatters for it
+A new formatters can be writting by writting  a function returning *Builder*
+*nameF* - gives a name to the rest of the output
+*unlinesF* - combines elements of the list into one /Builder/
+*blockListF'* formats list elements into the given way, line by line
+
+#+begin_src haskell
+  import Fmt
+
+  allWordsReport :: Vocabulary -> Text
+  allWordsReport vocab =
+    fmt $ nameF "All words" $ unlinesF (allWords vocab)
+
+  wordsCountReport :: Vocabulary -> Text
+  wordsCountReport vocab = fmt $
+                           "Total number of words: " +|total|+
+                           "\nNumber of unique words: " +|unique|+ "\n"
+    where
+      (total, unique) = wordCount vocab
+
+  frequentWordsReport :: Vocabulary -> Int -> Text
+  frequentWordsReport vocab num =
+    fmt $ nameF "Frequent words"
+        $ blockListF' "" fmtEntry reportData
+    where
+      reportData = take num $ wordsByFrequency vocab
+      fmtEntry (t,n) = ""+|t|+": "+|n|+""
+#+end_src
+
+**** Take 4.4: IO() impure function - processTextFile
+
+#+begin_src haskell
+  processTextFile :: FilePath -> Bool -> Int -> IO ()
+  processTextFile fname withAllWords n = do
+    text <- TIO.readFile fname
+    let vocab = extractVocab text
+    when withAllWords -- from the Control.Monad module
+      $ TIO.putStLn $ allWordsReport vocab
+    TIO.putStrLn $ wordsCountReport vocab
+    TIO.putStrLn $ frequentWordsReport vocab n
+#+end_src
+
+#+begin_src haskell
+  main :: IO ()
+  main = do
+    args <- getArgs
+    case args of
+      ["-a", fname, num] -> processTextFile fname True (read num)
+      [fname, num]       -> processTextFile fname False (read num)
+      _                  -> putStrLn "Usage: vocab3 [-a] filename freq_words_num"
+#+end_src
+
+***  2 Type classes
+
+- Typeclass
+  - defined with respect to some /type variable/
+  - it contains a collection of methods, given by type signatures
+  - we can define as many instances (of a /typeclass/), or implementations, for specific types as needed
+
+- Problem:
+  - A radar antenna, a device with the ability to be /oriented/ toward 4 points of direction.
+  - Input
+    - List of turns, and an initial direction. Outputs list of directions.
+    - List of directions. Outputs list of turns.
+
+**** Step 1: overview with types only
+
+#+begin_src haskell
+  data Direction = North | East | South | West
+    deriving (Eq, Enum, Bounded, Show)
+  data Turn = TNone | TLeft | TRight | TAround
+    deriving (Eq, Enum, Bounded, Show)
+
+  -- basic ops
+  rotate :: Turn -> Direction -> Direction
+  orient :: Direction -> Direction -> Turn
+
+  -- over lists
+  rotateManySteps :: Direction -> [Turn] -> [Direction]
+  rotateMany :: Direction -> [Turn] -> Direction
+  orientMany :: [Direction] -> [Turn]
+
+  -- file processing
+  rotateFromFile :: Direction -> FilePath -> IO ()
+  orientFromFile :: FilePath -> IO ()
+  main :: IO ()
+#+end_src
+
+**** Step 2: deriving custom typeclass for cycles
+
+Then derived on data types using =DeriveAnyClass= GHC extension
+
+#+begin_src haskell
+  class CyclicEnum a where
+      cpred :: a -> a
+      cpred d
+        | d == minBound = maxBound
+        | otherwise = pred d
+      csucc :: a -> a
+      csucc d
+        | d == maxBound = minBound
+        | otherwise = succ d
+#+end_src
+
+**** Step 3: ~rotate~ definition - using custom new typecass methods
+
+#+begin_src haskell
+  rotate :: Turn -> Direction -> Direction
+  rotate TNone   = id
+  rotate TLeft   = cpred
+  rotate TRight  = csucc
+  rotate TAround = cpred . cpred
+#+end_src
+
+**** Step 4: ~orient~ definition - using Enum/Bounded
+
+#+begin_src haskell
+  [TNone, TLeft, TRight, TAround]
+  [TNone..TAround]     -- due Enum
+  [minBound..maxBound] -- due Bounded
+
+  every :: (Enum a, Bounded a) => [a]
+  every = enumFrom minBound -- due Enum & Bounded
+#+end_src
+
+Now writting =orient= using every
+
+#+begin_src haskell
+  orient :: Direction -> Direction -> Turn
+  orient d1 d2 = head $ filter (\t -> rotate t d1 == d2) every
+#+end_src
+
+**** Step 5: defining list functions - using stdlib list functions
+
+#+begin_src haskell
+  rotateMany :: Direction -> [Turn] -> Direction
+  rotateMany = foldl (flip rotate)
+
+  rotateManySteps :: Direction -> [Turn] -> [Direction]
+  rotateManySteps = scanl (flip rotate) -- like foldl but returns the list of "reductions"
+
+  orientMany :: [Direction] -> [Turn]
+  orientMany ds@(_:_:_) = zipWith orient ds (tail ds)
+  orientMany _          = []
+#+end_src
+
+**** Step 6: combining 2 turns as a binary op - using Semigroup/Monoids
+
+
+
+***  3 Developing and application: Stock quotes
+** Introduction to Application Design
+***  4 Haskell development with modules, packages, and projects
+***  5 Monads as practical functionality providers
+***  6 Structuring programs with monad transformers
+** Quality Assurance
+***  7 Error handling and logging
+***  8 Writing tests
+***  9 Haskell data and code at run time
+*** 10 Benchmarking and profiling
+** Advanced Haskell
+*** 11 Type system advances
+*** 12 Metaprogramming in Haskell
+*** 13 More about types
+** Haskell Toolkit
+*** 14 Data-processing pipelines
+*** 15 Working with relational databases
+*** 16 Concurrency
+* 21 | Haskell Tutorial and Cookbook             |          | Mark Watson
 ** 1
 #+begin_src haskell
 module Main where
@@ -355,7 +753,7 @@ module Main (main) where
 |-------+-------+-----------+-------------------+---|
 | tuple | (A,B) | fst/snd   | let (a,b)=('a',1) |   |
 | list  | [T]   | head/tail |                   |   |
-* 20 | Finding Success and Failure               | Julie Moronuki
+* 20 | Finding Success and Failure               | JoyH     | Julie Moronuki
 
 ERRATA:
 - solutions, page 188, exercise 28, "remove brackets from cleanWhitespace"
@@ -1515,7 +1913,7 @@ ERRATA:
 
 *** TODO The =Validate= class
 *** TODO Exercises
-* 22 | Practical Haskell                         | Alejandro Serrano Mena
+* 22 | Practical Haskell                         | Apress   | Alejandro Serrano Mena
 
 source https://github.com/Apress/practical-haskell
 - Packages https://hackage.haskell.org/
@@ -2545,8 +2943,10 @@ After Step 2
 1) treeInsert for BinaryTree2
 2) concatenation of ninary trees, by repeatedly inserting all the elements in one of the binary trees
 **** Step 3 - Binary Trees with Monoidal Cache
+
 - New Problem: finding the smalles price still takes some time (going into the left subtree until you reach a leaf)
   Solution: include a cache in evey node. Stores the price of the smalles in the tree.
+
 #+begin_src haskell
   data BinaryTree3 v c = Node3 v c (BinaryTree3 v c) (BinaryTree3 v c)
                        | Leaf3
@@ -2564,7 +2964,9 @@ After Step 2
         GT -> Node3 v2 (min c c2) l (treeInsert3 v c r)
   treeInsert3 v c Leaf3 = Node3 v c Leaf3 Leaf3
 #+end_src
+
 **** Step 3.1 Monoid and Semigroup (<>)
+
 - Properties of the function to cache on the Binary Tree.
   An associative binary operation with an eelement that does not affect the outcome.
   A =Monoid=.
@@ -2572,6 +2974,7 @@ After Step 2
   2) Operation must be associative. Structure of the BT might not be the same.
   3) neutral element
      f e x = f x e = x
+
 - =Data.Monoid=
   #+begin_src haskell
     class Monoid a where
@@ -2579,19 +2982,24 @@ After Step 2
       mappend :: a -> a -> a -- associative binary operation
       mconcat :: [a] -> a
   #+end_src
-- Since GHC 8.4 Monois is subclass of a more general notion called
+
+- Since GHC 8.4
+  =Monoid= is subclass of a more general notion called
   =Semigroup= which *drops the neutral element* requirement and just includes the associative binary operation.
   #+begin_src haskell
     class Semigroup a where
       (<>) :: a -> a -> a
     class Semigroup a => Monoid a where ... -- since GHC 8.4
   #+end_src
+
 - Examples of monoidal structures
   1) All with && and True
   2) All with || and False
   3) numbers, with Sum with addition and 0,
   4) numbers, with Product with multiplication and 1
+
 **** Step 3.2 New version, using Monoid as a restriction
+
 #+begin_src haskell
   treeInsert :: (Ord v, Monoid c)
              => v
@@ -2615,15 +3023,19 @@ After Step 2
   cached (Node3 _ c _ _) = c
   cached Leaf3           = mempty
   #+end_src
+
 - Semigroup/Monoid instance and newtype needed for cache insertion algorithm to work
   #+begin_src haskell
     newtype Min = Min Double deriving Show
+
     instance Semigroup Min where
       Min x <> Min y = Min $ min x y
+
     instance Monoid Min where
       mempty  = Min infinity where infinity = 1/0
       mappend = (<>) -- use the definition from Semigroup
   #+end_src
+
 *** Container-Related Type Classes (=Functors/Foldables=)
 - Thinking about the commonalities between different containers.
   Lead to discover some useful type class.
@@ -2825,7 +3237,7 @@ After Step 2
 **** Pattern Matching and Laziness
 **** Profiling with GHC
 *** Strictness annotations
-* 22 | Sockets & Pipes                           | Chris Martin
+* 22 | Sockets & Pipes                           | JoyH     | Chris Martin
 
 | deps library   | https://github.com/joyofhaskell/sockets-and-pipes |
 | anon code      | https://github.com/brhutchins/sockets-and-pipes/blob/main/Book.hs |
@@ -3213,7 +3625,7 @@ release      :: MonadIO m       => ReleaseKey     -> m ()
 
 *** Exercises
 
-* 23 | Learn Haskell by building a blogGenerator | Gil Mizrahi
+* 23 | Learn Haskell by building a blogGenerator |          | Gil Mizrahi
 - 04 https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning
 ** 02 - Hello World
 - The order in which we declare the binding does NOT matter
@@ -3603,7 +4015,7 @@ useful when we want ot do some uneffectul computation that depnds on IO
 ** 08 Writing tests
 ** 09 Generating documentation
 ** 10 Recap
-* 23 | Effective Haskell                         | Rebecca Skinner
+* 23 | Effective Haskell                         | PragProg | Rebecca Skinner
 ERRATA:
 192
 "You can export field constructors just..." should be

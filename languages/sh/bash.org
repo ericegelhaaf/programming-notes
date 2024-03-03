@@ -3,8 +3,9 @@
   - https://github.com/v1cont/yad/
   - https://gitlab.gnome.org/GNOME/zenity
   - https://invisible-island.net/dialog/
+  - https://github.com/charmbracelet/gum
+
 - "Destructuring" with *read* https://stackoverflow.com/questions/1952404/linux-bash-multiple-variable-assignment
-- Haskell like in cli https://github.com/gelisam/hawk
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
 - https://github.com/xwmx/bash-boilerplate
 - https://github.com/dylanaraps/pure-sh-bible
@@ -12,7 +13,6 @@
 - https://github.com/mrzool/bash-sensible
 - https://github.com/joseluisq/awesome-bash-commands
 - https://lobste.rs/s/iofste/please_stop_writing_shell_scripts
-- "|&" is a shorthand for "2>&1 |" https://stackoverflow.com/questions/35917552/what-does-the-syntax-mean-in-shell-language
 - Why doesn't set -e (or set -o errexit, or trap ERR) do what I expected?
   http://mywiki.wooledge.org/BashFAQ/105
 - shfmt
@@ -25,7 +25,11 @@
   $ grep --fixed-strings --line-regexp --file file1 file2
 - Not common lines
   $ grep -vFxf file1 file2
+- https://wizardzines.com/comics/bash-debugging/
+  https://news.ycombinator.com/item?id=39568728
+
 * Tutorial: Style https://google.github.io/styleguide/shellguide.html
+
   - Don’t brace-delimit single character shell specials / positional parameters,
     unless strictly necessary or avoiding deep confusion.
   - Indentation: Indent 2 spaces. No tabs.
@@ -50,8 +54,26 @@
       * Scripts more than 100 lines long
       * Using non-straightfoward control flow logic
       * if performance matters
+
 * Language
-** Arithmetic Evaluation
+
+- "|&" is a shorthand for "2>&1 |" https://stackoverflow.com/questions/35917552/what-does-the-syntax-mean-in-shell-language
+
+** Special Parameters
+
+|----+---------------------------|
+| $_ | argument of last command  |
+| $? | exit code of last command |
+| $$ | self PID                  |
+| $! | recent bg PID             |
+|----+---------------------------|
+| $# | number of arguments       |
+| $0 | name of the script        |
+| $* |                           |
+| $@ |                           |
+|----+---------------------------|
+
+** Arithmetic Evaluation $(())
 - "Evaluation is done in fixed-width *integers* with no check for
    overflow, though division by 0 is trapped and flaged as an error."
 - "A shell variable that is null or unset evaluates to 0"
@@ -81,3 +103,8 @@ From man
 | ^                                 | bitwise exclusive OR                        |
 | ¦                                 | bitwise OR                                  |
 |-----------------------------------+---------------------------------------------|
+* Snippets
+
+#+begin_src bash
+  die() { echo $1 >&2; exit 1; } # some_command || die "oh no!"
+#+end_src

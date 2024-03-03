@@ -3,6 +3,15 @@
   https://hackage.haskell.org/package/cabal-plan
 
 * static build
+
+- Requires Cabal >= 3
+  $ cabal build --enable-executable-static
+
+- Docker image - ghcup
+  https://hub.docker.com/r/fossa/haskell-static-alpine
+  https://github.com/fossas/haskell-static-alpine/
+  https://github.com/someodd/burrow/blob/50ec9697e791085eb12ffc684b797350f07d7b6a/Makefile#L10
+
 - https://vadosware.io/post/static-binaries-for-haskell-a-convoluted-approach/
   - .cabal
     #+begin_src sh

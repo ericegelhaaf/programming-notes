@@ -9,33 +9,10 @@
   #+end_src
   "dune will add -g flag for you by default"
 
-* dune on project (+static)
-
-#+begin_src lisp
-  (env
-   (dev
-    (flags (:standard)))
-   (release
-    (flags (:standard -cclib -static -cclib -no-pie)); static BINARY!
-    (ocamlopt_flags (:standard -O3))))
-#+end_src
-
-* dune on .ml dir
-|------------+----------------+----------------------------------|
-|            | name           | the name of the project          |
-|            | public_name    | ?                                |
-|            | libraries      | the dependencies                 |
-|------------+----------------+----------------------------------|
-| executable |                |                                  |
-|            | modes          |                                  |
-|            | modes byte exe |                                  |
-|            | package        |                                  |
-|------------+----------------+----------------------------------|
-| library    |                |                                  |
-|            | inline_tests   |                                  |
-|            | preprocess     | pps, ppx_inline_test, ppx_assert |
-|------------+----------------+----------------------------------|
 * dune commands
+|---------------------------------+---------------------------------------|
+| init project NAME               | creates project on NAME/              |
+| init executable NAME            | on current dir, creates NAME project  |
 |---------------------------------+---------------------------------------|
 | build                           | --profile PROF --build-dir _build     |
 | build NAME.exe                  | where NAME is the "name" in dune      |
@@ -47,6 +24,35 @@
 | promote                         | aka "promotion apply"                 |
 | promotion ?                     | ???                                   |
 |---------------------------------+---------------------------------------|
+* dune on project (+static)
+
+#+begin_src lisp
+  (env
+   (dev
+    (flags (:standard)))
+   (release
+    ;(flags (:standard -cclib -static))
+    (flags (:standard -cclib -static -cclib -no-pie))
+    (ocamlopt_flags (:standard -O3))))
+#+end_src
+
+* dune on .ml dir
+|------------+----------------+----------------------------------|
+|            | name           | the name of the project          |
+|            | libraries      | the dependencies                 |
+|------------+----------------+----------------------------------|
+| executable |                |                                  |
+|            | public_name    | ?                                |
+|            | modes          |                                  |
+|            | modes byte exe |                                  |
+|            | package        |                                  |
+|------------+----------------+----------------------------------|
+| library    |                |                                  |
+|            | inline_tests   |                                  |
+|            | preprocess     | pps, ppx_inline_test, ppx_assert |
+|------------+----------------+----------------------------------|
+| test       |                |                                  |
+|------------+----------------+----------------------------------|
 * Example - Executable with dune - From "Real World Ocaml"
 
 #+NAME: dune

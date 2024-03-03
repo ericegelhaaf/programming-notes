@@ -71,7 +71,15 @@
 | trivial-do                   | https://github.com/yitzchak/trivial-do/                  |
 | do+                          | https://github.com/alessiostalla/doplus                  |
 | trivial-extensible-sequences | https://github.com/Shinmera/trivial-extensible-sequences |
+| gtwiwtg                      | https://github.com/cbeo/gtwiwtg                          |
 |------------------------------+----------------------------------------------------------|
+- 'User-extensible sequences in Common Lisp' by Christophe Rhodes[1]
+  https://web.archive.org/web/20150918224411/http://www.doc.gold.ac.uk/\~mas01cr/papers/ilc2007/sequences-20070301.pdf
+  like iterate
+** loop
+  https://web.archive.org/web/20171127083905/http://www.method-combination.net/blog/archives/2010/04/06/looping-issues.html
+  https://lispcookbook.github.io/cl-cookbook/iteration.html
+  https://gigamonkeys.com/book/loop-for-black-belts.html
 ** for
  manual https://shinmera.github.io/for/
 ** SERIES

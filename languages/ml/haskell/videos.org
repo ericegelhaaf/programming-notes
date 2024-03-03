@@ -237,6 +237,8 @@ z = let !y = undefined in () -- ERROR - is NOT a BangPattern
 #+end_src
 
 * TODO 07 | A History of Haskell                  | Simon Peyton Jones
+
+https://www.microsoft.com/en-us/research/publication/a-history-of-haskell-being-lazy-with-class/
 https://www.youtube.com/watch?v=06x8Wf2r2Mc
 
 - Haskell kickoff in '87, first release in '90

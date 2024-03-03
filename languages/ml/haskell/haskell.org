@@ -60,14 +60,18 @@
 |--------------------------------------+---------------------------------------------|
 ** imports
 https://wiki.haskell.org/Import
-|------------+----------------------------------------+-----------------------------------|
-| import ALL | import Data.List                       | brings everything in              |
-| import     | import Data.List (intercalate)         | brings ONLY specific things       |
-| as         | import Data.ByteString as BS           | brings everything in AND into BS. |
-| as         | import qualified Data.ByteString as BS | brings into BS.                   |
-| hiding     | import Prelude hiding (foldl, foldr)   | import all except ...             |
-|------------+----------------------------------------+-----------------------------------|
+|--------------+----------------------------------------+--------------------------------------|
+| import ALL   | import Data.List                       | brings everything in                 |
+| import       | import Data.List (intercalate)         | brings ONLY specific things          |
+| as           | import Data.ByteString as BS           | brings everything in AND into BS.    |
+| as qualified | import qualified Data.ByteString as BS | brings into BS.                      |
+| hiding       | import Prelude hiding (foldl, foldr)   | import all except ...                |
+|--------------+----------------------------------------+--------------------------------------|
+| type import  | import Data.Text (Text)                | to use Text type identifier directly |
+| + qualified  | import qualified Data.Text as T        |                                      |
+|--------------+----------------------------------------+--------------------------------------|
 ** operators
+*** simples
 |------+---------------------------+--------------------+--------------+-------------------|
 | ($)  | function application      | map ($ 10) [(+ 1)] |              |                   |
 | (.)  | function composition      | printLn . show     |              |                   |
@@ -76,12 +80,8 @@ https://wiki.haskell.org/Import
 | (!!) | list indexing             | [1,2] !! 0         |              |                   |
 | (:)  | list consing, preppending | 1 : [2, 3]         | [1,2,3] : [] |                   |
 |------+---------------------------+--------------------+--------------+-------------------|
-
-#+begin_src haskell
-  class Semigroup a where
-    (<>) :: a -> a -- sufficient for a "minimal complete definition"
-#+end_src
-
+*** typeclasses
+|-----+---------------------------+---------------+--------------------------|
 |     |                       <r> |               |                          |
 |-----+---------------------------+---------------+--------------------------|
 | <$> |                      fmap | Functor f     | (a -> b) -> f a -> f b   |
@@ -133,67 +133,6 @@ https://wiki.haskell.org/Import
 |               | ¦ Right b                  |                   | Left  = we got an error                |
 |---------------+----------------------------+-------------------+----------------------------------------|
 #+TBLFM: $2=Left a
-** language extensions
-
-https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts.html
-https://github.com/i-am-tom/haskell-exercises
-
-- NOTE: some extensions are better enabled globally or prohibited altogether
-  enabling some extensions on a module-by-module basis
-  can end up causing maintenance burden on the application long term
-  since applciations that use it ned to be careful.
-- in cabal: by adding it to *default-extensions* enables it across the target
-- in repl: *:set -XTypeApplications* or :seti to enable it only for interactive code
-- in source: using a ~language pragma~
-   *{-# LANGUAGE TypeApplications, QuasiQuotes #-}*
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
-|                            |                                                                                                       | 21  |
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
-| RecordWildCards            | RecName {..} automatically captures each field by the name, OR creates a new record                   | -   |
-| NamedFieldPuns             | Rec1Name { fieldname1 = Rec2Name { fieldname2 } }                                                     | -   |
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
-| BlockArguments             | use just (do) in places where you would use ($ do)                                                    |     |
-| LambdaCase                 | (\case PAT1 -> RET1)                                                                                  |     |
-| PatternSynonyms            |                                                                                                       |     |
-| QuasiQuotes                | alternate form of string literal                                                                      |     |
-| TemplateHaskell            |                                                                                                       |     |
-| ViewPatterns               | (f -> PATTERN) applies "f" to value and then matches the result, on function pattern matching         |     |
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
-| AllowAmbiguousTypes        |                                                                                                       | -   |
-| BangPatterns               | makes pattern matching and let bindings strict, instead of lazy, by adding a (!) before the varname   | yes |
-| ConstraintKinds            |                                                                                                       | yes |
-| DataKinds                  |                                                                                                       | -   |
-| DefaultSignatures          | allow us to add a *type signature* to the default implementation of function in a type class          | -   |
-| DeriveAnyClass             | to use any typeclass (with no methods), to be used on a "derive", it will create the no-body instance | -   |
-| DerivingStrategies         | helps resolve conflicts when different derivings extension are enabled stock/anyclass/newtype         | -   |
-| DerivingVia                | to use newtype's as a template for how to define a typeclass for other types                          | -   |
-| ExistentialQuantification  |                                                                                                       | yes |
-| ExplicitForAll             | allows us to make explicit use of *forall*                                                            | yes |
-| FlexibleContexts           |                                                                                                       | yes |
-| FlexibleInstances          |                                                                                                       | yes |
-| FunctionalDependencies     |                                                                                                       | -   |
-| GADTs                      |                                                                                                       | -   |
-| GeneralizedNewtypeDeriving | to derive typeclass instance based on the underlying type                                             | yes |
-| KindSignatures             | allows us to write the kind signatures for types in our type annotations                              | yes |
-| MultiParamTypeClasses      |                                                                                                       | yes |
-| OverloadedStrings          |                                                                                                       | -   |
-| PolyKinds                  |                                                                                                       | yes |
-| QuantifiedConstraints      |                                                                                                       | -   |
-| RankNTypes                 |                                                                                                       | yes |
-| ScopedTypeVariables        | allows type applications to refer to type variables rather that ONLY the concrete type                | yes |
-| TupleSections              |                                                                                                       | yes |
-| TypeApplications           | (@TYPE) to specify a type argument for polymorphic functions                                          | yes |
-| TypeFamilies               |                                                                                                       | -   |
-| TypeOperators              |                                                                                                       | yes |
-| UndecidableInstances       |                                                                                                       | -   |
-| NoStarIsType               |                                                                                                       | -   |
-| PolyKinds                  |                                                                                                       | yes |
-| StandadaloneDeriving       | allows us to write stand-alone "deriving" declarations, useful for GHCI                               | yes |
-| ApplicativeDo              | allows us to use "do notation" for non Monads and use it for Applicative                              | ?   |
-| NoImplicitPrelude          | signals we would not be making use of the standard ~Prelude~ module from the ~base~ package           |     |
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----|
-- "21?" column stands for GHC2021 and means,
-  if the extension is enabled by default on that version of Haskell (aka GHC 9.4)
 ** Standard Library
 - https://packages.ubuntu.com/bionic/amd64/ghc/filelist
 *** Prelude.hs functions
@@ -295,70 +234,74 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 *** base
 - https://hackage.haskell.org/package/base
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
-|-------------------------+------------------------------------------------------------|
-| Control.Applicative     |                                                            |
-| Control.Arrow           |                                                            |
-| Control.Category        |                                                            |
-| Control.Concurrent      |                                                            |
-| Control.Exception.Safe  | tryAny :: IO a -> IO (Either SomeException a)              |
-| Control.Monad           | sequence :: (Traversable t, Monad m) => t (m a) -> m (t a) |
-|                         | sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()      |
-| Data.Bifoldable         |                                                            |
-| Data.Bifoldable1        |                                                            |
-| Data.Bifunctor          |                                                            |
-| Data.Bitraversable      |                                                            |
-| Data.Bits               |                                                            |
-| Data.Bool               |                                                            |
-| Data.Char               | isPrint                                                    |
-| Data.Coerce             |                                                            |
-| Data.Complex            |                                                            |
-| Data.Data               |                                                            |
-| Data.Dynamic            |                                                            |
-| Data.Either             |                                                            |
-| Data.Eq                 |                                                            |
-| Data.Fixed              |                                                            |
-| Data.Foldable           |                                                            |
-| Data.Foldable1          |                                                            |
-| Data.Function           |                                                            |
-| Data.Functor            |                                                            |
-| Data.IORef              |                                                            |
-| Data.Int                |                                                            |
-| Data.Ix                 |                                                            |
-| Data.Kind               |                                                            |
-| Data.List               | permutations                                               |
-| Data.Maybe              |                                                            |
-| Data.Monoid             |                                                            |
-| Data.Ord                |                                                            |
-| Data.Proxy              |                                                            |
-| Data.Ratio              |                                                            |
-| Data.STRef              |                                                            |
-| Data.Semigroup          |                                                            |
-| Data.String             |                                                            |
-| Data.Traversable        |                                                            |
-| Data.Tuple              |                                                            |
-| Data.Typeable           |                                                            |
-| Data.Unique             |                                                            |
-| Data.Version            |                                                            |
-| Data.Void               |                                                            |
-| Data.Word               |                                                            |
-| Foreign.*               |                                                            |
-| System.CPUTime          |                                                            |
-| System.Console          |                                                            |
-| System.Environment      | getArgs :: IO [String]                                     |
-| System.Exit             |                                                            |
-| System.IO               | openFile :: FilePath -> IOMode -> IO Handle                |
-|                         | hClose :: Handle -> IO ()                                  |
-|                         | hGetContents :: Handle -> IO String                        |
-|                         | hputStrLn :: Handle -> IO ()                               |
-|                         | putStrLn :: String -> IO ()                                |
-|                         | stdout :: Handle                                           |
-| System.Info             |                                                            |
-| System.Mem              |                                                            |
-| System.Posix            |                                                            |
-| System.Timeout          |                                                            |
-| Text.ParserCombinators  |                                                            |
-| Text.(Read/Printf/Show) |                                                            |
-|-------------------------+------------------------------------------------------------|
+|------------------------+------------------------------------------------------------|
+| Control.Applicative    |                                                            |
+| Control.Arrow          |                                                            |
+| Control.Category       |                                                            |
+| Control.Concurrent     |                                                            |
+| Control.Exception.Safe | tryAny :: IO a -> IO (Either SomeException a)              |
+| Control.Monad          | sequence  :: (Traversable t, Monad m) => t (m a) -> m (t a) |
+|                        | sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()      |
+|                        | when      :: Applicative f => Bool -> f () -> f ()         |
+| Data.Bifoldable        |                                                            |
+| Data.Bifoldable1       |                                                            |
+| Data.Bifunctor         |                                                            |
+| Data.Bitraversable     |                                                            |
+| Data.Bits              |                                                            |
+| Data.Bool              |                                                            |
+| Data.Char              | isPrint                                                    |
+| Data.Coerce            |                                                            |
+| Data.Complex           |                                                            |
+| Data.Data              |                                                            |
+| Data.Dynamic           |                                                            |
+| Data.Either            |                                                            |
+| Data.Eq                |                                                            |
+| Data.Fixed             |                                                            |
+| Data.Foldable          |                                                            |
+| Data.Foldable1         |                                                            |
+| Data.Function          |                                                            |
+| Data.Functor           |                                                            |
+| Data.IORef             |                                                            |
+| Data.Int               |                                                            |
+| Data.Ix                |                                                            |
+| Data.Kind              |                                                            |
+| Data.List              | permutations                                               |
+| Data.Maybe             |                                                            |
+| Data.Monoid            |                                                            |
+| Data.Ord               |                                                            |
+| Data.Proxy             |                                                            |
+| Data.Ratio             |                                                            |
+| Data.STRef             |                                                            |
+| Data.Semigroup         |                                                            |
+| Data.String            |                                                            |
+| Data.Traversable       |                                                            |
+| Data.Tuple             |                                                            |
+| Data.Typeable          |                                                            |
+| Data.Unique            |                                                            |
+| Data.Version           |                                                            |
+| Data.Void              |                                                            |
+| Data.Word              |                                                            |
+| Foreign.*              |                                                            |
+| System.CPUTime         |                                                            |
+| System.Console         |                                                            |
+| System.Environment     | getArgs :: IO [String]                                     |
+| System.Exit            |                                                            |
+| System.IO              | openFile :: FilePath -> IOMode -> IO Handle                |
+|                        | hClose :: Handle -> IO ()                                  |
+|                        | hGetContents :: Handle -> IO String                        |
+|                        | hputStrLn :: Handle -> IO ()                               |
+|                        | putStrLn :: String -> IO ()                                |
+|                        | stdout :: Handle                                           |
+| System.Info            |                                                            |
+| System.Mem             |                                                            |
+| System.Posix           |                                                            |
+| System.Timeout         |                                                            |
+| Text.ParserCombinators |                                                            |
+|------------------------+------------------------------------------------------------|
+| Text                   |                                                            |
+| .pack                  | String -> Text                                             |
+| .append   (slow)       | Text -> Text -> Text                                       |
+|------------------------+------------------------------------------------------------|
 *** non base
 |------------------+-----------------------------------+------------------------------------------------------|
 | array            | Data.Array                        | https://hackage.haskell.org/package/array            |
@@ -407,6 +350,34 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | unix             | System.Posix                      | https://hackage.haskell.org/package/unix             |
 | xhtml            | Text.XHtml                        | https://hackage.haskell.org/package/xhtml            |
 |------------------+-----------------------------------+------------------------------------------------------|
+
+** typeclasses
+
+*** Shipped
+|-------------+--------------------+-------------------------------------------+------------|
+|             | MINIMAL            | description                               | extras     |
+|-------------+--------------------+-------------------------------------------+------------|
+| Show        | show               | conversion of values to readable String's |            |
+| Eq          | (==) (=/)          | equality and inequality                   |            |
+| Enum        | toEnum, fromEnum   | can be enumerated by the *Int* value      | [Foo..Bar] |
+| Bounded     | minBound, maxBound | with minimum and maximum bounds           |            |
+| Functor     | fmap (<$>)         | can be mapped over                        |            |
+| Semigroup   | (<>)               | associative operation?                    |            |
+| Monoid      | mempty             | associative operation with identity       |            |
+| Applicative | pure (<*>)         | a functor, sequence and combine ops       |            |
+| Monad       | bind (>>=)         |                                           | do         |
+|-------------+--------------------+-------------------------------------------+------------|
+*** Declaring
+
+#+begin_src haskell
+  class Eq a where -- name=Eq - type_variable=a
+    (==), (/=) :: a -> a -> Bool -- they share the same signature
+    {-# INLINE (/=) #-} -- GHC pragma to define inline methods?
+    {-# INLINE (==) #-}
+    x /= y = not (x == y) -- default implementation
+    x == y = not (x /= y)
+    {-# MINIMAL (==) | (/=) #-} -- minimal complete definition, either
+#+end_src
 
 * Emacs Setup
 

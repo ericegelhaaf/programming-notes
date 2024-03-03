@@ -5,14 +5,16 @@
 - https://www.pement.org/sed/sed1line.txt
 - https://web.archive.org/web/20180602001217/http://www.folkstalk.com/2012/01/sed-command-in-unix-examples.html
 - https://web.archive.org/web/20230322091010/https://www.grymoire.com/Unix/Sed.html
-- https://tldp.org/LDP/abs/html/x23170.html
+- https://tldp.porg/LDP/abs/html/x23170.html
 - https://catonmat.net/proof-that-sed-is-turing-complete
+- 21 article | https://jol.dev/blog/2021-11-16-n2-sed-challenge-join-cal-y-months-into-a-single-column.html
 - article https://fideo.info/wiki.lua/blog/sed-circuit-simulator
   - https://news.ycombinator.com/item?id=30660203
 - article https://github.com/adrianlarion/useful-sed
   - https://news.ycombinator.com/item?id=29196221
 - code: bach prelude https://github.com/laserbat/bach.sed https://clyp.it/dqgahq1x
 - code: tetris https://github.com/uuner/sedtris
+- code: https://github.com/linguisticmind/search-in-subs
 * TODO Video: AoC 2021 Day 18 using Sed [Binary tree math]
   https://www.youtube.com/watch?v=cbpNdzKLg4c
   - Sed provides *conditional branches* in a single string register called the "holdspace"

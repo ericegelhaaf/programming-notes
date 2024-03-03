@@ -1,0 +1,23 @@
+- static
+  - 21 https://ocamlpro.com/blog/2021_09_02_generating_static_and_portable_executables_with_ocaml/
+  - 21 https://github.com/rbjorklin/throttle-fstrim
+    - docker https://github.com/rbjorklin/throttle-fstrim/blob/main/Dockerfile
+      #+begin_src dockerfile
+        FROM alpine:3.14
+
+        RUN apk add bash bubblewrap coreutils gcc git\
+            m4 make musl-dev opam
+
+        RUN opam init\
+            --disable-sandboxing\
+            --auto-setup\
+            --compiler ocaml-base-compiler.4.13.1
+
+        WORKDIR /build
+
+        ADD Makefile /build/
+        ADD throttle-fstrim.opam /build/
+
+        RUN make deps
+      #+end_src
+  - 17 http://rgrinberg.com/posts/static-binaries-tutorial/
