@@ -28,7 +28,7 @@
 |---------+---------------------------------------|
 | Bounded | with finite upper and lower *bounds*  |
 | Eq      | can be compared for *equality*        |
-| Ord     | have a total *ordering*               |
+| Ord     | have a total *ordering* (extends Eq)  |
 | Ix      | support indexing into a range         |
 | Read    | can be parsed from strings            |
 | Show    | can be converted into strings         |
@@ -112,6 +112,7 @@ https://wiki.haskell.org/Import
 |---------------+----------------------------+-------------------+----------------------------------------|
 | [1,2]         | [Int]                      | linked list       |                                        |
 | "foo"         | type A = String            | type alias        |                                        |
+| 0 :¦ [1,2]    | data NonEmpty a = a :¦ [a] | non empty list    | Data.List.NonEmpty                     |
 |---------------+----------------------------+-------------------+----------------------------------------|
 | A "foo"       | newtype A = A String       | type "safe" alias | can have only 1 type                   |
 |               |                            |                   | no alternatives                        |
@@ -354,19 +355,45 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 ** typeclasses
 
 *** Shipped
-|-------------+--------------------+-------------------------------------------+------------|
-|             | MINIMAL            | description                               | extras     |
-|-------------+--------------------+-------------------------------------------+------------|
-| Show        | show               | conversion of values to readable String's |            |
-| Eq          | (==) (=/)          | equality and inequality                   |            |
-| Enum        | toEnum, fromEnum   | can be enumerated by the *Int* value      | [Foo..Bar] |
-| Bounded     | minBound, maxBound | with minimum and maximum bounds           |            |
-| Functor     | fmap (<$>)         | can be mapped over                        |            |
-| Semigroup   | (<>)               | associative operation?                    |            |
-| Monoid      | mempty             | associative operation with identity       |            |
-| Applicative | pure (<*>)         | a functor, sequence and combine ops       |            |
-| Monad       | bind (>>=)         |                                           | do         |
-|-------------+--------------------+-------------------------------------------+------------|
+|-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
+|             | MINIMAL            | description                               | extras                                                 |
+|-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
+| Foldable    | foldr foldMap      | data structure that can be folded         | foldr foldl null length sum product maximum minim elem |
+| Show        | show               | conversion of values to readable String's |                                                        |
+| Eq          | (==) (=/)          | equality and inequality                   |                                                        |
+| Ord         | compare (<=)       |                                           | max min < > <= >=                                      |
+| Enum        | toEnum, fromEnum   | can be enumerated by the *Int* value      | [Foo..Bar]                                             |
+| Bounded     | minBound, maxBound | with minimum and maximum bounds           |                                                        |
+| Functor     | fmap (<$>)         | can be mapped over                        |                                                        |
+| Semigroup   | (<>)               | associative binary op                     | sconcat stimes                                         |
+| Monoid      | mempty             | associative binary op with identity       | mconcat mappend (<>)                                   |
+| Applicative | pure (<*>)         | a functor, sequence and combine ops       |                                                        |
+| Monad       | bind (>>=)         |                                           | do                                                     |
+|-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
+**** definitions
+
+#+begin_src haskell
+  class Monoid a where
+    mempty  :: a           -- neutral element
+    mappend :: a -> a -> a -- associative binary operation
+    mconcat :: [a] -> a
+
+  class Semigroup a where
+    (<>) :: a -> a -> a
+
+  class Semigroup a => Monoid a where ... -- since GHC 8.4
+
+  class Foldable t where
+    foldMap :: Monoid m => (a -> m) -> t a -> m
+    foldr   :: (a -> b -> b) -> b -> t a -> b
+    fold    :: Monoid m => t m -> m
+    foldr'  :: (a -> b -> b) -> b -> t a -> b
+    foldl   :: (a -> b -> a) -> a -> t b -> a
+    foldl'  :: (a -> b -> a) -> a -> t b -> a
+    foldr1  :: (a -> a -> a) -> t a -> a
+    foldl1  :: (a -> a -> a) -> t a -> a
+#+end_src
+
 *** Declaring
 
 #+begin_src haskell
@@ -379,6 +406,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
     {-# MINIMAL (==) | (/=) #-} -- minimal complete definition, either
 #+end_src
 
+
 * Emacs Setup
 
 - Emacs: lsp-mode, lsp-ui, lsp-haskell
@@ -390,6 +418,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 
 * Codebases
 
+- shell like library https://github.com/luke-clifton/shh
 - https://github.com/omelkonian/AlgoRhythm (music)
 - Project
   https://github.com/reanimate/reanimate
@@ -413,7 +442,3 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
   import qualified System.IO as IO
   main = IO.putSTrLn "hello world!"
 #+end_src
-
-* Personalities
-- Simon Peyton-Jones
-- Philip Wadler

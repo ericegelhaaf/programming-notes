@@ -28,6 +28,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Live Notebooks https://clerk.vision/
 - (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
+- C++ Dialect https://github.com/jank-lang/jank
 
 * language
 

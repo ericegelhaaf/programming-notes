@@ -5,6 +5,7 @@
   - no typeclass support
   - high boilerplate code
 
+- https://github.com/hmsk/vite-plugin-elm
 - "Successors"
   - 1.9k https://github.com/roc-lang/roc
     https://www.roc-lang.org/tutorial

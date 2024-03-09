@@ -28,35 +28,9 @@
 - https://wizardzines.com/comics/bash-debugging/
   https://news.ycombinator.com/item?id=39568728
 
-* Tutorial: Style https://google.github.io/styleguide/shellguide.html
-
-  - Don’t brace-delimit single character shell specials / positional parameters,
-    unless strictly necessary or avoiding deep confusion.
-  - Indentation: Indent 2 spaces. No tabs.
-  - Comment at the header
-    #+begin_src bash
-      #!/bin/bash
-      #
-      # Perform hot backups of Oracle databases.
-    #+end_src
-  - Redirect errors to STDERR
-    #+begin_src bash
-      err() {
-        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
-      }
-    #+end_src
-  - Do not put an extension on executables, only on libraries
-  - Guidelines
-    - When is ok
-      * mostly calling other utilities
-      * relatively little data manipulation
-    - When NOT use
-      * Scripts more than 100 lines long
-      * Using non-straightfoward control flow logic
-      * if performance matters
-
 * Language
 
+- "cmd | tee >(cmd2) >(cmd3)" - sends "cmd" output to both "cmd2" and "cmd3" stdin https://tecadmin.net/bash-process-substitution/
 - "|&" is a shorthand for "2>&1 |" https://stackoverflow.com/questions/35917552/what-does-the-syntax-mean-in-shell-language
 
 ** Special Parameters
@@ -103,6 +77,40 @@ From man
 | ^                                 | bitwise exclusive OR                        |
 | ¦                                 | bitwise OR                                  |
 |-----------------------------------+---------------------------------------------|
+* Tutorial: Style https://google.github.io/styleguide/shellguide.html
+
+  - Don’t brace-delimit single character shell specials / positional parameters,
+    unless strictly necessary or avoiding deep confusion.
+  - Indentation: Indent 2 spaces. No tabs.
+  - Comment at the header
+    #+begin_src bash
+      #!/bin/bash
+      #
+      # Perform hot backups of Oracle databases.
+    #+end_src
+  - Redirect errors to STDERR
+    #+begin_src bash
+      err() {
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+      }
+    #+end_src
+  - Do not put an extension on executables, only on libraries
+  - Guidelines
+    - When is ok
+      * mostly calling other utilities
+      * relatively little data manipulation
+    - When NOT use
+      * Scripts more than 100 lines long
+      * Using non-straightfoward control flow logic
+      * if performance matters
+
+* Codebases
+
+- minecraft server
+  https://sdomi.pl/weblog/15-witchcraft-minecraft-server-in-bash/
+  https://github.com/sdomi/witchcraft
+  https://news.ycombinator.com/item?id=30347501
+
 * Snippets
 
 #+begin_src bash

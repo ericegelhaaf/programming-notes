@@ -1,0 +1,33 @@
+* TODO Video: AoC 2021 Day 18 using Sed [Binary tree math]
+  https://www.youtube.com/watch?v=cbpNdzKLg4c
+  - Sed provides *conditional branches* in a single string register called the "holdspace"
+    which is more than enough to make the sed language turing complete.
+  - Is a little bit nicer than programming in a turing machine, only a little.
+    At least the way we are going to program it.
+  - They way you are supposed to solve this AOC problem is to read the list as a binary tree and write different tree walking routines.
+  - $ watch time sed -E -f x.sed sample1.txt
+  - TODO: 00:03:00
+* Course: Linux Administration with SED and AWK | Andrew Mallett
+** 1
+#+begin_src sh
+#!/bin/sed -Ef
+/ClientAliveInterval/ {
+  s/^(ClientAliveInterval).*$/\1 60/
+  t count
+  s/.*/ClientAliveInterval 60/
+  t count
+}
+
+:count
+/clientAliveCountmax/ {
+    s/^(ClientAliveInterval).*$/\1 60/
+    t count
+    s/.*/ClientAiveInterval 60/
+    t count
+}
+#+end_src
+** 2
+- $ grep -E '/(udp|tcp)' /etc/services
+- Types of Regular expressions
+| BRE | Basic Regular Expresions     |
+| ERE | Enhanced Regular Expressions |

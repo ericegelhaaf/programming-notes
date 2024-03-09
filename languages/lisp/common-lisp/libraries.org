@@ -1,3 +1,48 @@
+* Web
+- Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
+|---------+----------------------+-----------------------------------------------------------------|
+| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
+| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
+| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
+| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
+|---------+----------------------+-----------------------------------------------------------------|
+* GUI
+
+|---------+-------------------------------------------|
+| QT      | https://github.com/Shinmera/qtools        |
+| GTK3    | https://github.com/lispnik/iup            |
+| GTK4    | https://github.com/bohonghuang/cl-gtk4    |
+| MCCLIM  | https://codeberg.org/McCLIM/McCLIM        |
+| Nuklear | https://github.com/borodust/bodge-nuklear |
+| nodgui  | https://codeberg.org/cage/nodgui          |
+|---------+-------------------------------------------|
+
+- ALL https://lispcookbook.github.io/cl-cookbook/gui.html
+- nodgui
+  https://codeberg.org/cage/nodgui
+  https://quickref.common-lisp.net/nodgui.html
+- MCCLIM+classowary
+  https://github.com/djeis97/dumb-mcclim-statusbar/
+  http://turtleware.eu/posts/McCLIM-backends---Part-I-Medium-Output-Protocol.html
+  Maze: https://www.youtube.com/watch?v=_PYGSfiX6tw[1] 1h30
+  (https://gist.github.com/epanji/5901227977fd64689f01d3fb7eaa351b[2])
+  decision tree: https://www.youtube.com/watch?v=8KHEwySzi9o[3] 5m
+  (https://github.com/epanji/decision-tree/[4])
+  building: https://www.youtube.com/watch?v=0uKptCcTqCc&t=19s[5] 2m
+- CLOG https://lisp-journey.gitlab.io/blog/clog-contest/
+- QT   https://github.com/commonqt/commonqt5
+       https://github.com/kierangrant/cl-qt-example
+       https://github.com/Shinmera/qtools/tree/master/examples
+- GTK3 https://dev.to/goober99/learn-common-lisp-by-example-gtk-gui-with-sbcl-5e5c
+       http://www.crategus.com/books/cl-gtk/gtk-tutorial.html
+       https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#properties
+- GTK4 https://github.com/bohonghuang/cl-gtk4
+- LTK  https://lisp-journey.gitlab.io/blog/gui-programming-in-common-lisp-part-1-of-5-tk/
+       https://github.com/VitoVan/cl-pkr (image picker mutiple platform build)
+       https://github.com/mijohnson99/ltk-small-games example
+       http://www.peter-herth.de/ltk/ltkdoc/ doc
+       https://peterlane.netlify.app/ltk-examples/#_more_widgets doc examples
+
 * Plotting
 |--------------+-------------------------+-----------------------------------------------------------|
 | eazy-gnuplot | gnuplot raw-ish         | https://guicho271828.github.io/eazy-gnuplot/              |
@@ -22,15 +67,15 @@
 - Naive generators for Common Lisp
   https://github.com/cbeo/gtwiwtg
 * Data Structures
-|----------------+------------------+---------------------------------------------|
+|----------------+------------------+------------------------------------------------------|
 | fset           | immutables       | https://fset.common-lisp.dev/Site/FSet-Tutorial.html |
-| pileup         | binary heap      | https://nikodemus.github.io/pileup/         |
-| jpl-queues     | queues           | https://cliki.net/jpl-queues                |
-| select         | array slices     | https://lisp-stat.github.io/select/         |
-| aops           | array operations | https://github.com/bendudson/array-operations |
-| numcl          | numpy            | https://github.com/numcl/numcl              |
-| cl-competitive | algorithms       | https://github.com/privet-kitty/cl-competitive/ |
-|----------------+------------------+---------------------------------------------|
+| pileup         | binary heap      | https://nikodemus.github.io/pileup/                  |
+| jpl-queues     | queues           | https://cliki.net/jpl-queues                         |
+| select         | array slices     | https://lisp-stat.github.io/select/                  |
+| aops           | array operations | https://github.com/bendudson/array-operations        |
+| numcl          | numpy            | https://github.com/numcl/numcl                       |
+| cl-competitive | algorithms       | https://github.com/privet-kitty/cl-competitive/      |
+|----------------+------------------+------------------------------------------------------|
 - fset
   https://www.youtube.com/watch?v=wx9BN2ppESY
   https://www.youtube.com/watch?v=AfcjnBkWbfw

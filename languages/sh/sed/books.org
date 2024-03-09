@@ -1,0 +1,15 @@
+- book https://learnbyexample.github.io/learn_gnused/
+- book https://www.grymoire.com/Unix/Sed.html
+- book https://www.ehdp.com/press/sed-book/
+
+** sed & awk
+
+- official source fork https://github.com/adam-fabricio/sed_awk_oreilly/tree/main/utils/sedawk2progs
+
+*** 4 Writing /sed/ scripts
+
+- is NOT that /sed/ applies individual editing commands to ALL lines.
+  But, /sed/ applies the ENTIRE editing script to one line at the time.
+
+- compares two files, silenty byte by byte
+  $ cmp --silent file1 fil2

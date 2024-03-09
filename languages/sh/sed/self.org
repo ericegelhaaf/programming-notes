@@ -1,0 +1,95 @@
+- source (C) https://git.savannah.gnu.org/gitweb/?p=sed.git
+- home https://www.gnu.org/software/sed/
+- manual https://www.gnu.org/software/sed/manual/sed.html
+- wiki https://en.wikipedia.org/wiki/Sed
+  - "Stream EDitor"
+  - Author: Lee E. McMahon
+  - 1974-
+  - _line-oriented_ text processing utility
+  - #!/bin/sed -f
+
+- https://en.wikibooks.org/wiki/Sed
+
+* language
+
+- reads text, line by line, into a temporary *buffer* called ~pattern space~
+- each line read starts a =cycle=
+- there is a special buffer called ~hold space~ used by some commands
+  to hold and accumulate text between /cycles/
+- https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome
+  aka when a quoted expresion becomes unreadable
+  because it contains a large number of escape characters
+
+** Script
+- a series of operations/actions
+- the "body of a loop" that iterates through lines
+- each line of a script is a pattern-action pair
+  aka a conditional statement
+** Operations
+- of a command
+- applied over the /pattern space/
+- by default, after run, sed output the /pattern space/
+- and begins the /cycle/ again with the next line
+** Commands
+- Might take an additional (1 or 2) =address=
+- 25 commands
+|---+-------------------------------------------------------------|
+| d | delete the pattern space                                    |
+| q | quit                                                        |
+| N | add the next line to the /pattern space/ now                |
+| s | substitution                                                |
+| g | global                                                      |
+| P | print the top line of the /pattern space/                   |
+| D | delete the top line from the /pattern space/, and run again |
+|---+-------------------------------------------------------------|
+** Addresses
+
+- If
+  - 0 address, command is applied to each line
+  - 1 address, to the line matching
+  - address is followed by a (!), inverse the address match
+
+- Can be
+  - 1,1 a comma separated tuple, command is applied from and upto including the matched line
+    "You can think of the 1st address as enabling the action and the second address as disabling it."
+  - /aregex/
+  - NUMBER of line (not reset by different files)
+  - $ represents the last line
+  - {} to group different commands to the same OR different address
+  - line addressing symbol
+
+eg: "2d" aka apply delete to line 2
+eg: "/Sebastopol/s/CA/California/g" performs the substituion ONLY on lines cointaining "Sebastopol"
+
+
+** Flags
+|----------------+---------------------------------|
+| -e script      | inline script                   |
+| -f script-file | path to script-file             |
+| -n             | only output via the *p* command |
+|----------------+---------------------------------|
+
+
+* snippets
+https://sed.sourceforge.io/#scripts
+|---------------+-----------------------------------------------|
+| 2d            | delete line 2                                 |
+| /^ /d         | filters out lines starting with space         |
+| /^ *$/d       | filters out lines containing only spaces      |
+| s/.*/Hello/;q | reads 1st line of input and prints "Hello"    |
+| /needle/d     | deletes lines containing "needle"             |
+| s/needle//g   | deletes "needle" from lines                   |
+| 50,$d         | deletes from line 50 to the end               |
+| 1,/^$/d       | deletes from 1st line to the first blank line |
+|---------------+-----------------------------------------------|
+** remove before (#)
+  sed -i -n '/#/,$p' file.txt
+** remove the last 10 lines of a file
+  https://stackoverflow.com/questions/13380607/how-to-use-sed-to-remove-the-last-n-lines-of-a-file/13380679
+  sed -i -n -e :a -e '1,10!{P;N;D;};N;ba' file.txt
+** remove the first 10 lines of a file
+  sed -e '1,10d' file.txt
+* codebases
+- bach prelude https://github.com/laserbat/bach.sed https://clyp.it/dqgahq1x
+- tetris https://github.com/uuner/sedtris
+- https://github.com/linguisticmind/search-in-subs

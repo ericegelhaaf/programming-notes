@@ -59,6 +59,7 @@ https://github.com/i-am-tom/haskell-exercises
   enabling some extensions on a module-by-module basis
   can end up causing maintenance burden on the application long term
   since applciations that use it ned to be careful.
+
 - in cabal: by adding it to *default-extensions* enables it across the target
 - in repl: *:set -XTypeApplications* or :seti to enable it only for interactive code
 - in source: using a ~language pragma~
@@ -99,7 +100,7 @@ https://github.com/i-am-tom/haskell-exercises
 | GeneralizedNewtypeDeriving | to derive typeclass instance based on the underlying type                                             | yes | x |
 | KindSignatures             | allows us to write the kind signatures for types in our type annotations                              | yes | x |
 | MultiParamTypeClasses      |                                                                                                       | yes | x |
-| OverloadedStrings          |                                                                                                       | -   | x |
+| OverloadedStrings          | replaces every string litearal, with a call to ~fromString~ on that literal                           | -   | x |
 | PolyKinds                  |                                                                                                       | yes | x |
 | QuantifiedConstraints      |                                                                                                       | -   | - |
 | RankNTypes                 |                                                                                                       | yes | x |
@@ -110,7 +111,7 @@ https://github.com/i-am-tom/haskell-exercises
 | TypeOperators              |                                                                                                       | yes | - |
 | UndecidableInstances       |                                                                                                       | -   | - |
 | NoStarIsType               |                                                                                                       | -   | - |
-| StandaloneDeriving         | allows us to write stand-alone "deriving" declarations, useful for GHCI                               | yes | x |
+| StandaloneDeriving         | allows us to write stand-alone "deriving instance Read? SomeType" declarations, useful for GHCI       | yes | x |
 | ApplicativeDo              | allows us to use "do notation" for non Monads and use it for Applicative                              | ?   | - |
 | NoImplicitPrelude          | signals we would not be making use of the standard ~Prelude~ module from the ~base~ package           |     | x |
 | +AutoDeriveTypeable+       |                                                                                                       |     | x |
