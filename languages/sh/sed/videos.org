@@ -1,14 +1,39 @@
+- GNU sed - the stream editor https://www.youtube.com/watch?v=Dd-x7kHCc44
+* 13 | Understanding how sed works
+
+- 1 https://www.youtube.com/watch?v=l0mKlIswojA
+  - cmd | sed '' # acts like "cat"
+  - address ranges with braces
+
+- 2 https://www.youtube.com/watch?v=4vr8Aao0Mfo
+  - <filename sed '' # alternative to piping
+  - <filename >outfilename sed ''
+  - "=" prints the current line numbers
+  - "=;n" and "=;n;p"
+  - pP, nN, dD
+
+- 3 https://www.youtube.com/watch?v=P4ZcBrJ38I8
+  - y///
+  - I,r,w
+
+- 4 https://www.youtube.com/watch?v=W95wrzAgdWk
+  - l to list the current line unambigously for debugging
+  - a,i,c
+  - 5:00
+
 * TODO Video: AoC 2021 Day 18 using Sed [Binary tree math]
-  https://www.youtube.com/watch?v=cbpNdzKLg4c
-  - Sed provides *conditional branches* in a single string register called the "holdspace"
-    which is more than enough to make the sed language turing complete.
-  - Is a little bit nicer than programming in a turing machine, only a little.
-    At least the way we are going to program it.
-  - They way you are supposed to solve this AOC problem is to read the list as a binary tree and write different tree walking routines.
-  - $ watch time sed -E -f x.sed sample1.txt
-  - TODO: 00:03:00
+https://www.youtube.com/watch?v=cbpNdzKLg4c
+
+- Sed provides *conditional branches* in a single string register called the "holdspace"
+  which is more than enough to make the sed language turing complete.
+- Is a little bit nicer than programming in a turing machine, only a little.
+  At least the way we are going to program it.
+- They way you are supposed to solve this AOC problem is to read the list as a binary tree and write different tree walking routines.
+- $ watch time sed -E -f x.sed sample1.txt
+- TODO: 00:03:00
 * Course: Linux Administration with SED and AWK | Andrew Mallett
 ** 1
+
 #+begin_src sh
 #!/bin/sed -Ef
 /ClientAliveInterval/ {
@@ -26,6 +51,7 @@
     t count
 }
 #+end_src
+
 ** 2
 - $ grep -E '/(udp|tcp)' /etc/services
 - Types of Regular expressions

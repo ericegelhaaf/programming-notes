@@ -13,3 +13,19 @@
 
 - compares two files, silenty byte by byte
   $ cmp --silent file1 fil2
+
+- Types of sed scripts
+  1) Multiple edits to the same file (multiple operations)
+  2) Making changes across a set of files (multiple input files)
+  3) Extracting contents of a file (address range)
+  4) Edits to go (as part of a pipe)
+
+- The order of commands is important,
+  eg: non printed substituion should happen before, something that prints
+
+- Examples on this chapter deal with a lot of TROFF file format
+  an his utils (tbl,nroff,col,pic,eql)
+
+- # aka "octothorp", for comments
+  - on systemV version it is only allowed on the first line of the script
+  - #n to not produce output (aka -n)

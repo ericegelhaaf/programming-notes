@@ -31,17 +31,35 @@
 - by default, after run, sed output the /pattern space/
 - and begins the /cycle/ again with the next line
 ** Commands
+- [address]command
+  address { cmd1; cmd2; } # cannot have a space before ";"
 - Might take an additional (1 or 2) =address=
 - 25 commands
-|---+-------------------------------------------------------------|
-| d | delete the pattern space                                    |
-| q | quit                                                        |
-| N | add the next line to the /pattern space/ now                |
-| s | substitution                                                |
-| g | global                                                      |
-| P | print the top line of the /pattern space/                   |
-| D | delete the top line from the /pattern space/, and run again |
-|---+-------------------------------------------------------------|
+|     <r> |                                                                                      |
+|---------+--------------------------------------------------------------------------------------|
+|       q | quit                                                                                 |
+|       d | delete the /pattern space/                                                           |
+|       D | delete the first line from the /pattern space/, and run again                        |
+|       n | next, explicitly goes to the next line (the default behaviour)                       |
+|       N | pulls the next line into the /pattern space/, without deleting what is already there |
+|       p | print the /pattern space/                                                            |
+|       P | print the first line on the /pattern space/                                          |
+|       = | prints the current line number plus a new line                                       |
+|       y | /src/dst/ (tr)ansliterates src by dst                                                |
+|       r | reads from provided filename                                                         |
+|       w | writes to provided filename                                                          |
+|       l | list the /pattern space/ unambigously, nice for debugging                            |
+|---------+--------------------------------------------------------------------------------------|
+| [line]a | appends, after current /pattern space/                                               |
+| [line]i | inserts, before current /pattern space/                                              |
+| [addr]c | change, replaces current /pattern space/ with given argument                         |
+|---------+--------------------------------------------------------------------------------------|
+|       s | /pattern/replacement/flags                                                           |
+|         | uses address for pattern if missing                                                  |
+|         | replacement can be (& pattern matched, \n n-match)                                   |
+|         | [w FILE,g,p,I,NUMBER]                                                                |
+|         | hk                                                                                   |
+|---------+--------------------------------------------------------------------------------------|
 ** Addresses
 
 - If
@@ -72,16 +90,21 @@ eg: "/Sebastopol/s/CA/California/g" performs the substituion ONLY on lines coint
 
 * snippets
 https://sed.sourceforge.io/#scripts
-|---------------+-----------------------------------------------|
-| 2d            | delete line 2                                 |
-| /^ /d         | filters out lines starting with space         |
-| /^ *$/d       | filters out lines containing only spaces      |
-| s/.*/Hello/;q | reads 1st line of input and prints "Hello"    |
-| /needle/d     | deletes lines containing "needle"             |
-| s/needle//g   | deletes "needle" from lines                   |
-| 50,$d         | deletes from line 50 to the end               |
-| 1,/^$/d       | deletes from 1st line to the first blank line |
-|---------------+-----------------------------------------------|
+|--------------------+-------------------------------------------------------------------------------|
+| $=                 | prints the number of lines (slow?)                                            |
+| =;n                | interleaves printing the number of line every 2 numbers (1,3..) and each line |
+| 2d                 | delete line 2                                                                 |
+| /^ /d              | filters out lines starting with space                                         |
+| /^ *$/d            | filters out lines containing only spaces                                      |
+| s/.*/Hello/;q      | reads 1st line of input and prints "Hello"                                    |
+| /needle/d          | deletes lines containing "needle"                                             |
+| s/needle//g        | deletes "needle" from lines                                                   |
+| 50,$d              | deletes from line 50 to the end                                               |
+| 1,/^$/d            | deletes from 1st line to the first blank line                                 |
+| /---/!s/--/\\(em/g | on all lines that do not have 3(-), replace 2(-)                              |
+| s/.$//             | dos2unix, aka CRLF to LF                                                      |
+|--------------------+-------------------------------------------------------------------------------|
+#+TBLFM: $1=;n
 ** remove before (#)
   sed -i -n '/#/,$p' file.txt
 ** remove the last 10 lines of a file

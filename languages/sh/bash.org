@@ -30,8 +30,34 @@
 
 * Language
 
-- "cmd | tee >(cmd2) >(cmd3)" - sends "cmd" output to both "cmd2" and "cmd3" stdin https://tecadmin.net/bash-process-substitution/
-- "|&" is a shorthand for "2>&1 |" https://stackoverflow.com/questions/35917552/what-does-the-syntax-mean-in-shell-language
+- <filename cmd1              - alternative to cat pipe
+  <filename >outfile cmd1
+
+- Process substitution
+  - "cmd | tee >(cmd2) >(cmd3)" - sends "cmd" output to both "cmd2" and "cmd3" stdin https://tecadmin.net/bash-process-substitution/
+
+- Redirection Operators
+  - "|&" https://stackoverflow.com/questions/35917552/what-does-the-syntax-mean-in-shell-language
+  - "<>" https://bash.cyberciti.biz/guide/Opening_the_file_descriptors_for_reading_and_writing
+  |-------------+------------------------------------------------|
+  | ¦&          | shorthand for "2>&1"                           |
+  | [n]<>word   | opens fd n at word, for r/w                    |
+  | [n]<&word   | duplicates fd                                  |
+  | [n]>&word   | duplicates fd                                  |
+  | [n]<&-      | closes fd n (or 0)                             |
+  | [n]<&digit- | moves fd digit to n (or 0), closes digit after |
+  | [n]>&digit- | moves fd digit to n (or 1)                     |
+  |-------------+------------------------------------------------|
+
+- Brace Expansion
+  - support integer zero padding
+  - supports a step {FROM..TO..STEP}
+  - you can use an "enumeration" on a "for loop" using "for i in {this,that,theother}"
+
+- coproc [NAME] cmd [redirections]
+  - like running "cmd &"
+  - stdout in NAME[0], stdin in NAME[1]
+  - "wait"
 
 ** Special Parameters
 
