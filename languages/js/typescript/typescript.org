@@ -4,6 +4,30 @@
 - https://www.youtube.com/watch?v=MbZoQlmQaWQ
 - Tutorial: https://github.com/gibbok/typescript-book
 
+- new project
+  #+begin_src sh
+    #!/bin/bash
+
+    set -exuo pipefail
+
+    yarn init -y
+    yarn add next@canary react react-dom
+    yarn add -D eslint eslint-config-next@canary
+    yarn add -D typescript @types/react @types/node
+
+    mkdir -p pages/
+
+    cat >.eslintrc <<<EOF
+    {
+            "extends": "next/core-web-vitals"
+    }
+    EOF
+
+    touch tsconfig.json
+
+    npx next lint
+  #+end_src
+
 * Language
 ** Primitive Types
 |-----------+------------------------------------------------+----------------------------------------------------------------------|
