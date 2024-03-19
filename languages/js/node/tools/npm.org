@@ -1,0 +1,33 @@
+- node_modules/.bin - where binaries are installed (symlinked?)
+
+* Commands
+|-------------------------+----------------------------------------------------------|
+| i[nstall] PKG[@VERSION] |                                                          |
+| -S --save               | saves into package.json                                  |
+| -g --global             | install globally                                         |
+| --save-prod             | default                                                  |
+| -D --save-dev           |                                                          |
+| --production            | ?                                                        |
+|-------------------------+----------------------------------------------------------|
+| init                    |                                                          |
+| docs express            |                                                          |
+| link [PKG]              | executed twice, first on source, then with PKG on target |
+|-------------------------+----------------------------------------------------------|
+| start                   | when package.json/"scripts" has                          |
+|                         | "start": "nodemon main.js"                               |
+|-------------------------+----------------------------------------------------------|
+* package.json
+|-------------+----------------+--------+------------------------|
+| name        | foo            | -      |                        |
+| version     | 1.1.0          | -      |                        |
+| description | bar            | -      |                        |
+| main        | index.js       | -      |                        |
+| keywords    | []             | -      |                        |
+| author      | baz            | -      |                        |
+| license     | ISC            | -      |                        |
+| bin         | ./bin/index.js | -      | binary entry point     |
+| bin         | NAME           | JSPATH | for multiple binaries  |
+|-------------+----------------+--------+------------------------|
+| scripts     |                |        |                        |
+|             | NAME           | CMD    | runs CMD on "npm NAME" |
+|-------------+----------------+--------+------------------------|

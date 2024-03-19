@@ -1,0 +1,16 @@
+- article 22 https://til.simonwillison.net/sqlite/one-line-csv-operations
+- article 22 https://fly.io/blog/all-in-on-sqlite-litestream/
+- article 22 https://www.twilio.com/en-us/blog/sqlite-postgresql-complicated
+- article 22 https://muratbuffalo.blogspot.com/2022/09/sqlite-past-present-and-future.html
+- article 21 https://avi.im/blag/2021/fast-sqlite-inserts/
+- article 21
+  https://phiresky.github.io/blog/2021/hosting-sqlite-databases-on-github-pages/
+  https://news.ycombinator.com/item?id=28015980
+- article 21 https://antonz.org/sqlite-is-not-a-toy-database/
+- article 21 https://unixdigest.com/articles/sqlite-the-only-database-you-will-ever-need-in-most-cases.html
+- article 21 https://blog.wesleyac.com/posts/consider-sqlite
+- article 21 https://jlongster.com/future-sql-web
+- article 17 https://tech.marksblogg.com/sqlite3-tutorial-and-guide.html
+- article 16 https://charlesleifer.com/blog/five-reasons-you-should-use-sqlite-in-2016/
+- article 15 https://use.expensify.com/blog/the-simplest-sqlite-common-table-expression-tutorial
+- article 14 https://charlesleifer.com/blog/sqlite-small-fast-reliable-choose-any-three-/

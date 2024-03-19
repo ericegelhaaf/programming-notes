@@ -1,0 +1,10 @@
+- home https://opam.ocaml.org/
+- intro https://ocaml.org/install
+
+* cmd
+|-------------+-----------------------------------|
+| list -a     | list available packages           |
+| install PKG | install PKG                       |
+| update      | update metadata                   |
+| upgrade     | update packages to latest version |
+|-------------+-----------------------------------|

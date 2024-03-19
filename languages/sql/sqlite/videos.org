@@ -1,0 +1,7 @@
+- video 06 | An Introduction to SQLite https://www.youtube.com/watch?v=giAMt8Tj-84
+- video 08 | How SQL Database Engines Work https://www.youtube.com/watch?v=Z_cX3bzkExE
+- video 14 | https://www.youtube.com/watch?v=8y_ABXwYtuc
+- video 15 | https://www.youtube.com/watch?v=gpxnbly9bz4
+- video 14 | https://www.youtube.com/watch?v=MvLJqi0FQoA
+- video 18 | SQLite and Go https://www.youtube.com/watch?v=RqubKSF3wig
+- video 21 | Building Production Applications Using Go & SQLite https://www.youtube.com/watch?v=XcAYkriuQ1o

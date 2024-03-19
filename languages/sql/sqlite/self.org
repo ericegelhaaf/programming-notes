@@ -1,0 +1,14 @@
+- wiki https://en.wikipedia.org/wiki/SQLite
+- https://exercism.org/tracks/sqlite
+- diy https://cstack.github.io/db_tutorial/
+  source https://github.com/cstack/db_tutorial
+
+- tool https://sqlite-utils.datasette.io/en/stable/cli.html
+- tool
+  https://litestream.io/
+  https://github.com/benbjohnson/litestream
+
+- ?? static.wiki in 46GB SQLite https://news.ycombinator.com/item?id=28012829
+
+- https://www.sqlite.org/lang_attach.html
+  The ATTACH DATABASE statement adds another database file to the current database connection.

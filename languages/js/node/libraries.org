@@ -1,0 +1,26 @@
+* API Frameworks
+|----------+--------------------------------------------------|
+| express  | https://expressjs.com/                           |
+| hapi     | https://hapi.dev/ https://github.com/hapijs/hapi |
+| restify* | https://github.com/restify/node-restify          |
+| koa      | https://github.com/koajs/koa                     |
+| sails    | https://github.com/balderdashy/sails             |
+| totaljs  | https://github.com/totaljs                       |
+|----------+--------------------------------------------------|
+* Templating
+|------------+--------------------------------------------------|
+| mustache   | https://github.com/janl/mustache.js/             |
+| handlebars | https://github.com/handlebars-lang/handlebars.js |
+| underscore | https://github.com/jashkenas/underscore          |
+| pug        | https://github.com/pugjs/pug                     |
+| ejs        | https://github.com/mde/ejs                       |
+|------------+--------------------------------------------------|
+* Terminal
+|-------------+----------------------+------------------------------------+----|
+| arg         | cli argument parsing | https://github.com/vercel/arg      |  1 |
+| commmanders | cli argument parsing | https://github.com/tj/commander.js | 26 |
+| yargs       | cli argument parsing | https://github.com/yargs/yargs     | 10 |
+| chalk       | terminal colors      | https://github.com/chalk/chalk     | 21 |
+| *blessed    | ncurses              | https://github.com/chjj/blessed    | 11 |
+|-------------+----------------------+------------------------------------+----|
+*ABANDONED
