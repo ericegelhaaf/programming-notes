@@ -5,16 +5,9 @@
 - Easy to code your own webserver
 - Preinstalled modules: fs, http, tcp, dns, events, child_process, crypto
   https://nodejs.org/api/index.html (NOTE: node.js v17.0 at Nov/2021)
-- API frameworks
-  1) express https://expressjs.com/
-  2) hapi https://hapi.dev/ https://github.com/hapijs/hapi
-  3) restify (abandoned?) https://github.com/restify/node-restify
 - Distributed systems, use tcp modules along with stream abstraction
   - dnode (abandoned) https://github.com/substack/dnode
 - #!/usr/bin/env node
-  1) yargs (command line arguments) https://github.com/yargs/yargs
-  2) chalk (terminal colors) https://github.com/chalk/chalk
-  3) blessed (~abandoned~, ncurses) https://github.com/chjj/blessed
 - Example interop with lower level languages
   - C/Rust https://github.com/RisingStack/node-with-rust
 - Lacks globals, and common browser DOM APIs (window, document)
@@ -189,15 +182,6 @@
   const messageModule = require("./messages");
   messageModule.messages.forEach(m => console.log(m));
   #+end_src
-*** npm install
-npm install cities --save
-|--------------+----+----------------------------|
-| --save       | -S | saves it into package.json |
-| --global     | -g | installs globally          |
-| --save-prod  |    | by default                 |
-| --save-dev   |    |                            |
-| --production |    |                            |
-|--------------+----+----------------------------|
 ** 4 (http.createServer) Creating a simple WebServer in Node.js
 - port 3000 is generally used for web servers in development
 - callbacks are overwhelmingly used throughout Node.js
@@ -570,17 +554,9 @@ module.exports = {
     2) display that data
     3) handle request to interact with that data
 ** 8 (app.get) Setting up an app with Express.js
-- Other Frameworks
-  | name     | active? |
-  |----------+---------|
-  | [[https://github.com/koajs/koa][koa.js]]   | yes     |
-  | [[https://github.com/hapijs/hapi][hapi.js]]  | yes     |
-  | [[https://github.com/balderdashy/sails][sails.js]] | yes*    |
-  | [[https://github.com/totaljs][total.js]] | yes     |
-  |----------+---------|
 - npm init
   npm install express@4.16.3 --save
-- npm docs express
+  npm docs express
 - res.write() -> res.send()
   Does NOT need .end()
 - req.params {}
@@ -589,12 +565,10 @@ module.exports = {
   req.query { name: 'jon' }
 - You can think of ~Middleware~ like a post office.
   It makes sure to inspect the package. Before delivery.
-*** nodemon
- | npm i nodemon -g         | global install             |
- | npm i nodemon --save-dev | dev install                |
- | npm i nodemon -D         | dev install                |
- | npm start                | add to package.json        |
- |                          | "start": "nodemon main.js" |
+- $ npm i nodemon -D or -g
+- add to package .json ~"start": "nodemon main.js"~
+- $ npm start
+
 *** Example: simple
 #+begin_src javascript
 const port = 3000,
@@ -677,14 +651,6 @@ request made to: /
 ** 10 (EJS) Connecting views with templates
 - npm install ejs --save
   npm install express-ejs-layouts --save
-- Other template engines
-  |            | active? | only? |                                                  |
-  |------------+---------+-------+--------------------------------------------------|
-  | mustache   | yes     | yes   | https://github.com/janl/mustache.js/             |
-  | handlebars | yes     | yes   | https://github.com/handlebars-lang/handlebars.js |
-  | underscore | yes     | no    | https://github.com/jashkenas/underscore          |
-  | pug        | yes*    | yes   | https://github.com/pugjs/pug                     |
-  |------------+---------+-------+--------------------------------------------------|
 *** app.set() - sets application settings properties
   - app.set("port", process.env.PORT || 3000);
     .listen(app.get("port"))

@@ -1,9 +1,11 @@
+- tool: dependency graph https://github.com/mjambon/dune-deps
+
 - https://dune.readthedocs.io/en/stable/quick-start.html#building-a-hello-world-program-in-bytecode
   Bytecode compilation is compatible with *ocamldebug*
   > dune build hello_world.bc
   > cat dune
   #+begin_src elisp
-    (executable
+    (executablepp
      (name hello_world)
      (modes byte exe))
   #+end_src
@@ -17,12 +19,14 @@
 | build                           | --profile PROF --build-dir _build     |
 | build NAME.exe                  | where NAME is the "name" in dune      |
 | clean                           |                                       |
-| OCAMLRUNPARAM=b exec ./NAME.exe | to run printing full backtrace        |
-| exec ./src/NAME.exe             |                                       |
-| exec -- ./src/NAME.exe -arg foo | to pass arguments to the final binary |
 | runtest                         |                                       |
 | promote                         | aka "promotion apply"                 |
 | promotion ?                     | ???                                   |
+|---------------------------------+---------------------------------------|
+| OCAMLRUNPARAM=b exec ./NAME.exe | to run printing full backtrace        |
+| exec NAME                       |                                       |
+| exec ./src/NAME.exe             |                                       |
+| exec -- ./src/NAME.exe -arg foo | to pass arguments to the final binary |
 |---------------------------------+---------------------------------------|
 * dune on project (+static)
 

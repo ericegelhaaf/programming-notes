@@ -35,25 +35,27 @@ https://www.youtube.com/watch?v=cbpNdzKLg4c
 ** 1
 
 #+begin_src sh
-#!/bin/sed -Ef
-/ClientAliveInterval/ {
-  s/^(ClientAliveInterval).*$/\1 60/
-  t count
-  s/.*/ClientAliveInterval 60/
-  t count
-}
+  #!/bin/sed -Ef
+  /ClientAliveInterval/ {
+      s/^(ClientAliveInterval).*$/\1 60/
+    t count
+    s/.*/ClientAliveInterval 60/
+    t count
+  }
 
-:count
-/clientAliveCountmax/ {
-    s/^(ClientAliveInterval).*$/\1 60/
-    t count
-    s/.*/ClientAiveInterval 60/
-    t count
-}
+  :count
+  /clientAliveCountmax/ {
+      s/^(ClientAliveInterval).*$/\1 60/
+      t count
+      s/.*/ClientAiveInterval 60/
+      t count
+  }
 #+end_src
 
 ** 2
+
 - $ grep -E '/(udp|tcp)' /etc/services
 - Types of Regular expressions
-| BRE | Basic Regular Expresions     |
-| ERE | Enhanced Regular Expressions |
+  1) BRE - Basic Regular Expresions
+  2) ERE - Enhanced Regular Expressions
+- 05:00

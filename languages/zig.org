@@ -1,7 +1,7 @@
 - https://ziglang.org/learn/why_zig_rust_d_cpp/
 - https://github.com/ratfactor/ziglings
 - https://github.com/michal-z/zig-gamedev
-
+- article 22 https://rischmann.fr/blog/how-i-built-zig-sqlite
 * Video
 - Tsoding - Paid Zig Stream https://www.youtube.com/watch?v=eIX9zER9vjY
 ** Video: 2023 | Thoughts on Zig         | Zach Oakes

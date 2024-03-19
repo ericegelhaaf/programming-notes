@@ -1,3 +1,4 @@
+- https://citw.dev/tutorial/create-your-own-cli-tool
 - To native
   1) https://github.com/criblio/js2bin
   2) https://github.com/nexe/nexe
@@ -11,6 +12,7 @@
 - --enable-lto
   --with-snapshot (enabled by default)
   - Introduced in https://github.com/nodejs/node/issues/17058
+
 - How to npm install global not as root?
   https://stackoverflow.com/questions/18088372/how-to-npm-install-global-not-as-root
   #+NAME: ~/.npmrc
@@ -29,6 +31,9 @@
   MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
   #+end_src
 - https://github.com/sindresorhus/awesome-nodejs
+
+- process.argv - array of: path to node, path to script, and the rest of arguments
+
 * Standard Modules
 - https://www.w3schools.com/nodejs/ref_modules.asp
   Here is a list of the built-in modules of Node.js version 6.10.3:

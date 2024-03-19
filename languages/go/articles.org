@@ -1,3 +1,4 @@
+- https://xeiaso.net/blog/gokrazy/
 - 2023 https://totallygamerjet.hashnode.dev/writing-an-os-in-go-the-bootloader
 - maps
   https://dave.cheney.net/2017/04/30/if-a-map-isnt-a-reference-variable-what-is-it

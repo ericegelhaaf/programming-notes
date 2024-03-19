@@ -25,10 +25,11 @@
   - PEP 484 – Type Hints https://peps.python.org/pep-0484/
   - PEP 483 – The Theory of Type Hints https://peps.python.org/pep-0483/
   - PEP 482 – Literature Overview for Type Hints https://peps.python.org/pep-0482/
+
 * Language
 - .format() https://pyformat.info/
 - f"string" https://fstring.help/
-v** Versions Changes
+** Changelog
 | year | ver  | usage                                            |  PEP | description                                  |
 |------+------+--------------------------------------------------+------+----------------------------------------------|
 | 2015 | [[https://docs.python.org/3/whatsnew/3.5.html][3.5]]  | typing package                                   | 0484 | type hints                                   |

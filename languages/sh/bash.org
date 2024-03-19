@@ -5,6 +5,13 @@
   - https://invisible-island.net/dialog/
   - https://github.com/charmbracelet/gum
 
+- https://en.wikipedia.org/wiki/ANSI_escape_code
+- article https://muhammadraza.me/2023/webscraping-in-bash/
+- article https://muhammadraza.me/2023/shell-functions/
+- article https://garnix.io/blog/contextual-cli
+- https://github.com/dylanaraps/writing-a-tui-in-bash
+- https://www.commandlinefu.com/
+- https://command-not-found.com/
 - "Destructuring" with *read* https://stackoverflow.com/questions/1952404/linux-bash-multiple-variable-assignment
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
 - https://github.com/xwmx/bash-boilerplate
@@ -34,6 +41,7 @@
   <filename >outfile cmd1
 
 - Process substitution
+  - careful of not forgetting an "<" in "cmd < <(cmd2)"
   - "cmd | tee >(cmd2) >(cmd3)" - sends "cmd" output to both "cmd2" and "cmd3" stdin https://tecadmin.net/bash-process-substitution/
 
 - Redirection Operators
@@ -132,6 +140,11 @@ From man
 
 * Codebases
 
+- maze solver https://gist.github.com/xsot/99a8a4304660916455ba2c2c774e623a
+- web server https://github.com/dzove855/Bash-web-server
+- web framework
+  https://github.com/cgsdev0/bash-stack/
+  https://bashsta.cc/0-index
 - minecraft server
   https://sdomi.pl/weblog/15-witchcraft-minecraft-server-in-bash/
   https://github.com/sdomi/witchcraft

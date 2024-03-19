@@ -418,6 +418,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 
 * Codebases
 
+- https://github.com/jwiegley/git-all/blob/master/Main.hs
 - shell like library https://github.com/luke-clifton/shh
 - https://github.com/omelkonian/AlgoRhythm (music)
 - Project
