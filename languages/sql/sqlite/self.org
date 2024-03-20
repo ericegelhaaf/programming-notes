@@ -1,14 +1,65 @@
+- home https://sqlite.org/
+- source (C) https://www.sqlite.org/src/doc/trunk/README.md
 - wiki https://en.wikipedia.org/wiki/SQLite
-- https://exercism.org/tracks/sqlite
+  - Author: Richard Hipp
+  - 2000- (db format released 2004)
+  - embedded database
+  - Include a hidden "rowid" index column (uses the pkey if set)
+  - Max database size 281 TB
+  - Implements most of ~SQL-92~
+    - triggers
+    - readonly views
+  - Foreign Key constraints (2009 - 3.16.19)
+  - Full Text Search
+    - FTS4 (2010 - 3.7.4)
+    - FTS5 (2015 - 3.8.11)
+  - Dynamically Typed
+    - Types are assigned to individual values, NOT columns
+    - BUT sqlite will try to convert it to the prefered column type
+    - Support for strict tables (2015 - 3.37.1)
+
+- gotchas https://sqlite.org/quirks.html
 - diy https://cstack.github.io/db_tutorial/
   source https://github.com/cstack/db_tutorial
 
-- tool https://sqlite-utils.datasette.io/en/stable/cli.html
-- tool
-  https://litestream.io/
-  https://github.com/benbjohnson/litestream
+* language
 
-- ?? static.wiki in 46GB SQLite https://news.ycombinator.com/item?id=28012829
-
+- https://exercism.org/tracks/sqlite
 - https://www.sqlite.org/lang_attach.html
   The ATTACH DATABASE statement adds another database file to the current database connection.
+- FTS https://www.sqlite.org/fts5.html
+- JSON https://www.sqlite.org/json1.html
+- $ sqlite3 file.db 'PRAGMA journal_mode=WAL;'
+
+* commands
+|----------+------------------+-----------------------------------|
+| .dump    | [TABLEPAT]       | sql dump whole db or table        |
+| .headers | on/off           | toggle header display             |
+| .schema  | [TABLEPAT]       | shows schema of whole db or table |
+| .show    | -                | shows settings                    |
+| .stats   | -                | session? stats                    |
+| .load    | NAME             | loads an ~extension~              |
+| .timer   | on/off           | show runtime after queries        |
+|----------+------------------+-----------------------------------|
+| .mode    |                  | change output mode                |
+|          | insert           | sql INSERT statements             |
+|          | html             | html <table> code                 |
+|          | column           | cli human readable                |
+|          | csv              |                                   |
+|          | tabs             | aka tsv                           |
+|----------+------------------+-----------------------------------|
+| PRAGMA   | compile_options; | show sqlite's compile options     |
+|----------+------------------+-----------------------------------|
+* tools
+- vector search https://github.com/asg017/sqlite-vss
+- (edge db) https://turso.tech/
+- compression https://github.com/mlin/sqlite_zstd_vfs
+- compression
+  https://phiresky.github.io/blog/2022/sqlite-zstd/
+  https://github.com/phiresky/sqlite-zstd
+- https://sqlite-utils.datasette.io/en/stable/cli.html
+- https://litestream.io/
+  - source https://github.com/benbjohnson/litestream
+  - example
+    - article https://mtlynch.io/litestream/
+    - source https://github.com/mtlynch/logpaste

@@ -1,0 +1,39 @@
+- vfs https://sqlite.org/cloudsqlite/doc/trunk/www/index.wiki
+  - has azure and google cloud support
+
+- article 21
+  - https://phiresky.github.io/blog/2021/hosting-sqlite-databases-on-github-pages/
+  - may 21 https://news.ycombinator.com/item?id=28015980
+  - jul 21 https://news.ycombinator.com/item?id=27016630
+  - demo has a live SQLite
+  - example database details
+    - 6 tables
+    - 8 million rows
+    - 670 Mb
+
+
+- library original https://github.com/phiresky/sql.js-httpvfs
+- library go https://github.com/psanford/sqlite3vfshttp
+- library wasm https://github.com/mmomtchev/sqlite-wasm-http
+- library python https://github.com/uktrade/sqlite-s3vfs
+
+- site using library https://github.com/noman-land/transcript.fish
+- site using library
+  - site https://matrixlogs.bakkot.com/WHATWG/search?q=database
+  - source https://github.com/bakkot/matrix-archive-bot
+  - one SQL database per channel
+  - split into one-megabyte chunks (to make the git diffs more manageable).
+
+- site static.wiki in 46GB SQLite
+  - source https://github.com/segfall/static-wiki
+    - gets media directly from wikipedia
+  - https://news.ycombinator.com/item?id=28012829
+    - Is downloading a small portion of the 43GB SQLite file
+      with ~HTTP Range~ requests
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests
+      - Test support, should return a "accept-ranges: bytes"
+        $ curl -I http://...
+    - "One reason FTS does not work is that it uses standard B-Trees"
+    - "Another is that it forces storing all token positions
+       if you want BM25 sorting, which is a huge overhead
+       for articles as long as Wikipedia's"

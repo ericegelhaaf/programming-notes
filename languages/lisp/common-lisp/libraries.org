@@ -5,6 +5,7 @@
 | clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
 | cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
 | slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
+| piccolo | html5 generation     | https://github.com/skyizwhite/piccolo                           |
 |---------+----------------------+-----------------------------------------------------------------|
 * GUI
 
