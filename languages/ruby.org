@@ -1,0 +1,1 @@
+- book: https://learnbyexample.github.io/learn_ruby_oneliners/

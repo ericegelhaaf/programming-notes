@@ -1,0 +1,3 @@
+- home http://duckdb.org/
+- doc https://duckdb.org/docs/
+- httpfs https://duckdb.org/docs/extensions/httpfs/overview.html

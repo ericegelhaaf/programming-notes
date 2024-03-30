@@ -1,3 +1,4 @@
+- https://sqlite.org/whyc.html
 - 11 Object-oriented design patterns in the kernel, part 1 https://lwn.net/Articles/444910/
 - sockets https://roscas.github.io/reseau/Linux-Sockets-CheatSheet.html
 - 2010 https://web.archive.org/web/20100715074224/https://www.securecoding.cert.org/confluence/display/seccode/STR05-C.+Use+pointers+to+const+when+referring+to+string+literals

@@ -1,3 +1,4 @@
+- Fault tolerant patterns https://github.com/failsafe-go/failsafe-go
 - DAP Debug
   - emacs - https://github.com/emacs-lsp/dap-mode/issues/374
   https://www.youtube.com/watch?v=r033vEzL6a4 "Delve: The Best Golang Debugger"

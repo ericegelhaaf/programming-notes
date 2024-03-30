@@ -1,14 +1,86 @@
-- article 22 https://til.simonwillison.net/sqlite/one-line-csv-operations
-- article 22 https://fly.io/blog/all-in-on-sqlite-litestream/
-- article 22 https://www.twilio.com/en-us/blog/sqlite-postgresql-complicated
-- article 22 https://muratbuffalo.blogspot.com/2022/09/sqlite-past-present-and-future.html
-- article 21 https://avi.im/blag/2021/fast-sqlite-inserts/
-- article 21 https://antonz.org/sqlite-is-not-a-toy-database/
-- article 21 https://unixdigest.com/articles/sqlite-the-only-database-you-will-ever-need-in-most-cases.html
-- article 21 https://blog.wesleyac.com/posts/consider-sqlite
-- article 20 https://phiresky.github.io/blog/2020/sqlite-performance-tuning/
-- article 21 https://jlongster.com/future-sql-web
-- article 17 https://tech.marksblogg.com/sqlite3-tutorial-and-guide.html
-- article 16 https://charlesleifer.com/blog/five-reasons-you-should-use-sqlite-in-2016/
-- article 15 https://use.expensify.com/blog/the-simplest-sqlite-common-table-expression-tutorial
-- article 14 https://charlesleifer.com/blog/sqlite-small-fast-reliable-choose-any-three-/
+- elixir https://web.archive.org/web/20230215152735/https://silbernagel.dev/posts/distributed-sqlite-with-elixir
+- https://www.powersync.com/blog/sqlite-optimizations-for-ultra-high-performance
+- https://developer.android.com/topic/performance/sqlite-performance-best-practices
+- 24 https://www.powersync.com/blog/sqlite-persistence-on-the-web
+- 23 https://fly.io/blog/skip-the-api/
+- 23 https://www.epicweb.dev/why-you-should-probably-be-using-sqlite
+- 22 https://til.simonwillison.net/sqlite/one-line-csv-operations
+- 22 https://tailscale.com/blog/database-for-2022
+- 22 https://fly.io/blog/introducing-litefs/
+- 22 https://fly.io/blog/all-in-on-sqlite-litestream/
+- 22 https://www.twilio.com/en-us/blog/sqlite-postgresql-complicated
+- 22 https://muratbuffalo.blogspot.com/2022/09/sqlite-past-present-and-future.html
+- 21 https://avi.im/blag/2021/fast-sqlite-inserts/
+- 21 https://unixdigest.com/articles/sqlite-the-only-database-you-will-ever-need-in-most-cases.html
+- 21 https://blog.wesleyac.com/posts/consider-sqlite
+- 20 https://phiresky.github.io/blog/2020/sqlite-performance-tuning/
+- 21 https://jlongster.com/future-sql-web
+- 19 https://nickb.dev/blog/sqlite-dropping-an-index-for-a-300x-speedup/
+- 19 https://simonwillison.net/2019/Jan/7/exploring-search-relevance-algorithms-sqlite/
+- 17 https://tech.marksblogg.com/sqlite3-tutorial-and-guide.html
+- 16 https://charlesleifer.com/blog/five-reasons-you-should-use-sqlite-in-2016/
+- 15 https://use.expensify.com/blog/the-simplest-sqlite-common-table-expression-tutorial
+- 14 https://charlesleifer.com/blog/sqlite-small-fast-reliable-choose-any-three-/
+
+* 23 | Go and SQLite in the Cloud
+
+- https://www.golang.dk/articles/go-and-sqlite-in-the-cloud
+- hn https://news.ycombinator.com/item?id=33894995
+- source https://github.com/maragudk/sqlite-app
+
+* 21 | SQLite is not a toy database
+https://antonz.org/sqlite-is-not-a-toy-database/
+- selecting json from a file, as it were a table
+  #+begin_src sql
+    select
+      json_extract(value, '$.iso.code') as code,
+      json_extract(value, '$.iso.number') as num,
+      json_extract(value, '$.name') as name,
+      json_extract(value, '$.units.major.name') as unit
+    from
+      json_each(read_file('current.sample.json'));
+  #+end_src
+
+- selecting iregardless of depth
+  #+begin_src sql
+    select
+      json_extract(value, '$.id') as id,
+      json_extract(value, '$.name') as name
+    from
+      json_tree(readfile('industry.sample.json'))
+    where
+      path like '$[%].industries';
+  #+end_src
+
+- CTE (Common Table Expression) support
+  - WITH
+  - WITH RECURSIVE
+
+- Creating a table from a json (destructuring columns in creation)
+  #+begin_src sql
+    create table currency(
+      body text,
+      code text as (json_extract(body, '$.code')),
+      name text as (json_extract(body, '$.name'))
+    );
+    create index currency_code_idx on currency(code);
+    insert into currency
+    select value
+    from json_each(readfile('currency.sample.json'));
+  #+end_src
+
+- FTS example
+  #+begin_src sql
+    create virtual table books_fts;
+    using fts5(title, author, publisher);
+
+    insert into books_fts
+    select title, author, publisher from books;
+    select
+      author,
+      substr(title, 1, 30) as title,
+      substr(publisher, 1, 10) as publisher
+     from books_fts
+    where books_fts match 'ann'
+    limit 5;
+  #+end_src

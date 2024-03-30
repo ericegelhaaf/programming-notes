@@ -1,3 +1,5 @@
+- https://korban.net/elm/catalog/
+
 |---------------------------------+------------------------------------------------------|
 | alternative to regex            | https://github.com/elm/parser                        |
 | js-style regex                  | https://github.com/elm/regex                         |
@@ -48,6 +50,7 @@
 | loaders   | https://github.com/jouderianjr/elm-loaders/       | 19 |
 | animation | https://github.com/mdgriffith/elm-style-animation |    |
 | geometry  | https://github.com/ianmackenzie/elm-geometry      |    |
+| plots     | https://github.com/gampleman/elm-visualization/   | 24 |
 |-----------+---------------------------------------------------+----|
 * Game
 |----------------+----------------------------------------------------+----|

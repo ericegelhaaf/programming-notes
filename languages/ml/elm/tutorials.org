@@ -1,3 +1,4 @@
+- https://sporto.github.io/elm-workshop/
 - https://guide.elm-lang.org/
   https://github.com/evancz/elm-architecture-tutorial
 - https://elmprogramming.com/

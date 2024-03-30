@@ -1,5 +1,6 @@
 - home https://sqlite.org/
 - source (C) https://www.sqlite.org/src/doc/trunk/README.md
+- faq https://www.sqlite.org/faq.html
 - wiki https://en.wikipedia.org/wiki/SQLite
   - Author: Richard Hipp
   - 2000- (db format released 2004)
@@ -25,34 +26,226 @@
 * language
 
 - https://exercism.org/tracks/sqlite
+- https://www.sqlite.org/lang.html
 - https://www.sqlite.org/lang_attach.html
   The ATTACH DATABASE statement adds another database file to the current database connection.
-- FTS https://www.sqlite.org/fts5.html
 - JSON https://www.sqlite.org/json1.html
-- $ sqlite3 file.db 'PRAGMA journal_mode=WAL;'
+- wasm https://sqlite.org/wasm/doc/trunk/index.md
+  - vanilla JS https://sqlite.org/wasm/doc/trunk/demo-123.md
+  - persistence https://sqlite.org/wasm/doc/trunk/persistence.md
 
-* commands
-|----------+------------------+-----------------------------------|
-| .dump    | [TABLEPAT]       | sql dump whole db or table        |
-| .headers | on/off           | toggle header display             |
-| .schema  | [TABLEPAT]       | shows schema of whole db or table |
-| .show    | -                | shows settings                    |
-| .stats   | -                | session? stats                    |
-| .load    | NAME             | loads an ~extension~              |
-| .timer   | on/off           | show runtime after queries        |
-|----------+------------------+-----------------------------------|
-| .mode    |                  | change output mode                |
-|          | insert           | sql INSERT statements             |
-|          | html             | html <table> code                 |
-|          | column           | cli human readable                |
-|          | csv              |                                   |
-|          | tabs             | aka tsv                           |
-|----------+------------------+-----------------------------------|
-| PRAGMA   | compile_options; | show sqlite's compile options     |
-|----------+------------------+-----------------------------------|
+- Types
+  - INTEGER
+  - REAL: floating point numbers
+  - TEXT: readable text
+  - BLOB: binary data
+  - NULL: no data
+
+- Each table in the FROM clause of a query can use at most one index
+  - After it uses one, it needs to SCAN each row for the other index
+  - https://www.sqlite.org/optoverview.html#choosing_between_multiple_indexes
+  - An index constraint in a WHERE can be escaped with (+)
+    https://www.sqlite.org/optoverview.html#disqualifying_where_clause_terms_using_unary_
+    #+begin_src sql
+      create table ex2(x,y,z);
+      create index ex2i1 on ex2(x);
+      create index ex2i2 on ex2(y);
+      select z
+        from ex2
+       where +x=5 and y=6;
+    #+end_src
+
+** Command
+
+- CREATE [TEMP]   TABLE                     [IF NOT EXISTS] tname
+- CREATE [UNIQUE] INDEX                     [IF NOT EXISTS] iname ON tname
+- DROP           [INDEX|TABLE|TRIGGER|VIEW] [IF     EXISTS]  name
+
+** Functions
+https://www.sqlite.org/lang_corefunc.html
+|-------------+-------------+-----------------------------------------------------|
+| char        | uc1,uc2,... | build a string of unicode codes passed as ints      |
+| concat      | x  ,...     | concatenates non-null args                          |
+| concat_ws   | sep, x, ... | concatenates non-null args with SEP                 |
+| format      | fmt,...     | aka printf()                                        |
+| instr       | x  ,y       | position of y in x                                  |
+| length      | x           |                                                     |
+| lower       | x           | ascii only by default, load ICU extension for other |
+| upper       | x           | ascii only                                          |
+| ltrim       | x[,y]       |                                                     |
+| rtrim       | x[,y]       |                                                     |
+| trim        | x[,y]       |                                                     |
+| replace     | x ,y ,z     | replaces y by z in x                                |
+| substr[ing] | x ,y[,z]    | starting at y for z length                          |
+| unicode     | x           | unicode for first char in x                         |
+|-------------+-------------+-----------------------------------------------------|
+| glob        | pat,col     | like GLOB, which is like LIKE, but globbing         |
+| like        | x  ,y       |                                                     |
+|             | x  ,y  ,z   |                                                     |
+|-------------+-------------+-----------------------------------------------------|
+| coalesce    | x,y,...     | returns first non-null arg (ME: lisp or)            |
+| ifnull      | x,y         | returns first non-null arg                          |
+| iif         | x,y,z       | "ternary operator", like CASE expression            |
+| nullif      | x,y         | returns X if x!=y, otherwise returns NULL           |
+|-------------+-------------+-----------------------------------------------------|
+** Numeric Functions
+- https://www.sqlite.org/lang_mathfunc.html
+- [a][cos|sin|tan][h],log[2|10]
+|-----------+-------------+--------------------------------------------------|
+| abs       | n           | returns the absolute value,                      |
+| max       | x  ,y  ,... |                                                  |
+| min       | x  ,y  ,... |                                                  |
+| random    | -           | pseudo-random integer                            |
+| sign      | x           | return -1,0 or +1 for negative, zero or positive |
+| exp       | x           | e^x                                              |
+| ln        | x           | natural logarithm                                |
+| mod       | x,y         | remainder of x/y                                 |
+| pi        | -           |                                                  |
+| pow[er]   | x,y         | x^y                                              |
+| sqrt      | x           |                                                  |
+|-----------+-------------+--------------------------------------------------|
+| degrees   | x           | radians -> degrees                               |
+| radians   | x           | degrees -> radians                               |
+|-----------+-------------+--------------------------------------------------|
+| round     | x [,y]      | round float by y digits, default y=0             |
+| ceil[ing] | x           | rounding                                         |
+| floor     | x           | rounding down                                    |
+| trunc     | x           | rounding                                         |
+|-----------+-------------+--------------------------------------------------|
+** Date and Time Functions
+https://www.sqlite.org/lang_datefunc.html
+- all functions can take no arguments to return the current time in FN format
+- all functions can take an optional ~modifier~
+  - which can be used to modify the value red by adding/sub "2 days" in human language
+  - or to affect how the value is interpreted, "unixepoch"
+|-----------+--------------------------------|
+|           | returns..                      |
+|-----------+--------------------------------|
+| date      | %Y-%m-%d                       |
+| time      | %H:%M:%S                       |
+| datetime  | %Y-%m-%d %H:%M:%S              |
+| julianday | 2460396.3689133                |
+| unixepoch | %s, fn added on 3.38 (2022-02) |
+|-----------+--------------------------------|
+| srtftime  |                                |
+| timediff  | fn added on 3.43 (2023-08)     |
+|-----------+--------------------------------|
+** BLOB Functions
+|--------------+-------+-----------------|
+| hex          | x     | blob -> string  |
+| unhex        | x[,y] | ?    -> blob    |
+| instr        | x,y   |                 |
+| length       | x     | length in bytes |
+| octet_length | x     |                 |
+| randomblob   | n     | n-byte blob     |
+| substr[ing]  | x,y   |                 |
+| zeroblob     | n     | n-bytes of 0x00 |
+|--------------+-------+-----------------|
+** Foreign Keys
+https://www.sqlite.org/foreignkeys.html
+
+#+begin_src sql
+  create table artist( -- parent table
+    artistid   integer primary key, -- parent key
+    artistname text
+  );
+  create table track( -- child table
+    trackid     integer,
+    trackname   text,
+    trackartist integer, -- add NOT NULL? -- child key
+    foreign key(trackartist) references artist(artistid)
+  );
+  create index trackindex ON track(trackartist); -- !!! not created automatically
+#+end_src
+
+- Disabled by default
+- Enabled on each db =connection=
+  #+begin_src sql
+  > PRAGMA foreign_keys = ON; -- ON=1 OFF=0
+  #+end_src
+- Used to enforce "exists" relationships between tables
+- If foreign key is NULL, then no corresponding parent entry is required
+
+** FTS - Full Text Search
+https://www.sqlite.org/fts5.html
+
+#+begin_src sql
+  create virtual table mytablename using fts5(
+    linkid UNINDEXED, -- not added to the FTS index
+    header, -- mostly ignores "column options", everything after the table name, but warns if type doesn't match
+    title,
+    columnsize=0 -- ?
+  );
+#+end_src
+
+- functions
+  - highlight(table,colidx,leftstr,rightstr) - returns a copy of the text, matchs wrapped by leftstr and rightstr
+  - bm25(table) - returns the accuracy of the current match (lower is better match)
+    "ORDER BY bm25(table)"
+  - snippet() - like highlight() but returns smaller part of the column text
+
+#+begin_src sql
+  select * from tb1
+  where col1 match ? AND col2 match ?;
+#+end_src
+
+* cli (metacomands)
+- $ sqlite3 :memory: # or just not pass any argument
+- cli getting started https://www.sqlite.org/cli.html (TODO 6)
+|------------+-------------------+---------------------------------------------------|
+| .bail      | on/off            | exits on error (also -bail)                       |
+| .dump      | [TABLEPAT]        | sql dump whole db or table                        |
+| .headers   | on/off            | toggle header display                             |
+| .schema    | [TABLEPAT]        | shows schema of whole db or table                 |
+| .show      | -                 | shows settings                                    |
+| .stats     | -                 | session? stats                                    |
+| .timer     | on/off            | show runtime after queries                        |
+| .import    | --csv foo.csv bar | import csv file into "bar" table                  |
+| .tables    | -                 | list all tables                                   |
+| .output    | FILE              | redirects output to FILE                          |
+| .load      | EXNAME            | loads an ~extension~                              |
+| .open      | DBFILE            | opens database when non was already opened        |
+| .save      | DBFILE            | write in-memory db into FILE                      |
+| .separator | "¦"               | change the separator for ".mode list"             |
+| .eqp       | on/off/full       | explain query planner                             |
+|------------+-------------------+---------------------------------------------------|
+| .mode      |                   | change output format                              |
+|            | list              | DEFAULT                                           |
+|            | csv               |                                                   |
+|            | tabs              | aka tsv                                           |
+|            | json              | returns an array of json objects                  |
+|            | insert [TNAME]    | sql INSERT statements                             |
+|            | html              | html <table> code                                 |
+|            | markdown          |                                                   |
+|            | ascii             | ??? broken ???                                    |
+|            | line              | human? vertical, one column per line              |
+|            | column            | human readable, ascii table                       |
+|            | box               | human readable, utf8 table                        |
+|            | --wrap N          | some modes accept a max length to wrap, default 0 |
+|------------+-------------------+---------------------------------------------------|
+| PRAGMA     | compile_options;  | show sqlite's compile options                     |
+| PRAGMA     | journal_mode=WAL  | useful for concurrent writes                      |
+| PRAGMA     | busy_timeout=5000 | how long a write transaction will wait            |
+| PRAGMA     | foreign_keys=ON   | disabled by default                               |
+|------------+-------------------+---------------------------------------------------|
 * tools
+- fork https://github.com/tursodatabase/libsql
+  - (edge db) https://turso.tech/
+  - (edge db) https://www.scylladb.com/
+
+- gui https://sqlitebrowser.org/
+- common extensions https://github.com/nalgeon/sqlean/
+  - crypto, fileio, ipaddr, math, regexp, stats, unicode, uuid
+  - text: string functions
+  - define: user defined functions
+  - fuzzy: string matching and phonetics
+  - vsv: csv files as virtual tables
+- tool wrapper around
+  https://sqlsync.dev/
+  https://sqlsync.dev/posts/stop-building-databases/
+- sqlite wasm https://github.com/rhashimoto/wa-sqlite
+  - officially not on npm https://github.com/rhashimoto/wa-sqlite/issues/12
 - vector search https://github.com/asg017/sqlite-vss
-- (edge db) https://turso.tech/
 - compression https://github.com/mlin/sqlite_zstd_vfs
 - compression
   https://phiresky.github.io/blog/2022/sqlite-zstd/
@@ -63,3 +256,23 @@
   - example
     - article https://mtlynch.io/litestream/
     - source https://github.com/mtlynch/logpaste
+* bindings
+- go https://github.com/mattn/go-sqlite3
+- go (pure) https://pkg.go.dev/modernc.org/sqlite
+- go https://github.com/crawshaw/sqlite
+  - low-level cgo wrapper
+  - features not supported by go-sqlite (at least at the time)
+    1) streaming blobs
+    2) session extension
+    3) shared cache
+* exercism
+
+- subselects or WITH RECURSIVE, do =not= well with UPDATE
+- iif() is a sweet ternary operator (sadly not available on postgresql)
+- there is a BOOL (true/false) but internally is converted to 1/0
+- there is mod(), but % is still an option
+- you have = and == for equality
+  and have != and <> for inequality
+- you can do 2 UPDATE passes
+  - 1st pass to load intermediate results
+  - 2nd pass to cleanup

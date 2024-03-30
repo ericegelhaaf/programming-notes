@@ -275,7 +275,7 @@ Cmd.none
 | Array.fromList   | Array Int         | Array.get | Array.set              |                      |
 |------------------+-------------------+-----------+------------------------+----------------------|
 | { name = "foo" } | { name : String } | rec.name  | { rec ¦ name = "bar" } | { foo, bar }         |
-|                  |                   |           |                        | ({ name } as person) |
+| { "foo" }        |                   |           |                        | ({ name } as person) |
 |------------------+-------------------+-----------+------------------------+----------------------|
 
 - =Array=, immutable
@@ -341,6 +341,28 @@ length vector =
   List.sortBy String.length ["Hi","mum","hello"]
   -- sort by length and alphabetically
   List.sortBy (\str -> (String.length str, str)) ["Hi","mum","hello"]
+#+end_src
+
+Stops browser default action (eg: fold <details>)
+
+#+begin_src elm
+import Json.Decode as JD
+
+alwaysPreventDefault : msg -> ( msg, Bool )
+alwaysPreventDefault msg =
+    ( msg, True )
+
+onClickWithPreventDefault : msg -> Html.Attribute msg
+onClickWithPreventDefault msg =
+    preventDefaultOn "click" (JD.map alwaysPreventDefault (JD.succeed msg))
+#+end_src
+
+Similar to stop propagation
+
+#+begin_src elm
+onClickWithStopPropagation : msg -> Html.Attribute msg
+onClickWithStopPropagation msg =
+    stopPropagationOn "click" (JD.map (\m -> ( m, True )) (JD.succeed msg))
 #+end_src
 
 * SEO

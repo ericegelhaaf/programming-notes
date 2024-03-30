@@ -1,7 +1,23 @@
-- video 06 | An Introduction to SQLite https://www.youtube.com/watch?v=giAMt8Tj-84
-- video 08 | How SQL Database Engines Work https://www.youtube.com/watch?v=Z_cX3bzkExE
-- video 14 | https://www.youtube.com/watch?v=8y_ABXwYtuc
-- video 15 | https://www.youtube.com/watch?v=gpxnbly9bz4
-- video 14 | https://www.youtube.com/watch?v=MvLJqi0FQoA
-- video 18 | SQLite and Go https://www.youtube.com/watch?v=RqubKSF3wig
-- video 21 | Building Production Applications Using Go & SQLite https://www.youtube.com/watch?v=XcAYkriuQ1o
+- SQLite for Beginners https://www.youtube.com/playlist?list=PLWENznQwkAoxww-cDEfIJ-uuPDfFwbeiJ
+- 06 | An Introduction to SQLite https://www.youtube.com/watch?v=giAMt8Tj-84
+- 08 | How SQL Database Engines Work https://www.youtube.com/watch?v=Z_cX3bzkExE
+- 14 | https://www.youtube.com/watch?v=8y_ABXwYtuc
+- 14 | https://www.youtube.com/watch?v=MvLJqi0FQoA
+- 15 | https://www.youtube.com/watch?v=gpxnbly9bz4
+- 18 | SQLite and Go | David Crawshaw
+  https://www.youtube.com/watch?v=RqubKSF3wig
+  - fts5
+    #+begin_src sql
+      create virtual table playsearch
+      using fts5(playsrowid, text);
+
+      insert into playsearch
+      select rowid, text from plays;
+
+      select *
+      from playsearch
+      where text match "wheter tis nobler";
+    #+end_src
+  - uses an extension called "session" for client synchronization
+- 21 | Building Production Applications Using Go & SQLite | Ben Johnson https://www.youtube.com/watch?v=XcAYkriuQ1o
+  - Author of BoldDB & Litestream

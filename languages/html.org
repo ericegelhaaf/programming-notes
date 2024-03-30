@@ -1,6 +1,33 @@
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/html/html-quiz.md
 - https://developer.mozilla.org/en-US/docs/Web/HTML
 
+* type= (s) of <input>
+|----------------+------------------------------------------------|
+| button         | displays value=                                |
+| checkbox       |                                                |
+| color          | color picker                                   |
+| date           | date picker                                    |
+| datetime       | OBSOLETE!!!                                    |
+| datetime-local | datetime picker                                |
+| email          | text with validation                           |
+| file           | opens filemanager, accept= to filter filetypes |
+| hidden         |                                                |
+| image          | button with src= image                         |
+| month          | month-year picker                              |
+| number         | text with validation                           |
+| password       | will alert if not-secure site                  |
+| radio          |                                                |
+| range          | number, between min= and max=                  |
+| reset          | resets forms to default NOT RECOMMENDED?       |
+| search         | may include a delete icon                      |
+| submit         | button                                         |
+| tel            | text with validation (phone number)            |
+| text           | text single line                               |
+| time           |                                                |
+| url            | text with valiration                           |
+| week           |                                                |
+|----------------+------------------------------------------------|
+- Those with /validation/ also enable keyboard special modes on mobile.
 * W3 Schools
 - HSL colors https://www.w3schools.com/colors/colors_hsl.asp
  | Hue        | (°) on color wheel (0-360) 0=red 120=green 240=blue |

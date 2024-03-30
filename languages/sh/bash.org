@@ -142,6 +142,7 @@ From man
 
 - maze solver https://gist.github.com/xsot/99a8a4304660916455ba2c2c774e623a
 - web server https://github.com/dzove855/Bash-web-server
+- web framework https://github.com/emasaka/shails
 - web framework
   https://github.com/cgsdev0/bash-stack/
   https://bashsta.cc/0-index

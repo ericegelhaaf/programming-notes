@@ -1,3 +1,7 @@
+- article: 96 https://www.foo.be/docs/tpj/issues/vol1_2/tpj0102-0001.html
+- video: Day 2: Pirum Theatre: Mark Fowler - The Perl Advent Calendar 2017 Redux https://www.youtube.com/watch?v=vSAzNMJM9-o
+- book: https://learnbyexample.github.io/learn_perl_oneliners/cover.html
+- exercises: https://perladvent.org/archives.html
 - channel https://www.youtube.com/@YAPCNA
 - Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
 - codebase https://github.com/trizen/youtube-viewer

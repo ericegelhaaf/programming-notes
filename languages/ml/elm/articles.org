@@ -7,6 +7,11 @@
   - no typeclasses: instead there are some obscure compiler magic
   - TODO
 - 18 https://dev.to/kspeakman/elm-019-broke-us--khn
+- 23 | Haskell for Elm developers
+  https://flaviocorpa.com/haskell-for-elm-developers-giving-names-to-stuff-part-1-functors.html
+  https://flaviocorpa.com/haskell-for-elm-developers-giving-names-to-stuff-part-2-applicative-functors.html
+  https://flaviocorpa.com/haskell-for-elm-developers-giving-names-to-stuff-part-3-monads.html
+- 23 | Taking Screenshots with Elm 0.19 https://flaviocorpa.com/taking-screenshots-with-elm-0-19.html
 * 18 | A Short Guide to Function Operators in Elm (|>, <|, >>, <<)
   https://harfangk.github.io/2018/01/27/elm-function-operators.html
 

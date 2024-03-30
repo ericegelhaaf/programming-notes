@@ -10,20 +10,34 @@
     - 6 tables
     - 8 million rows
     - 670 Mb
+  - takes advantage of SQLite's pages (set to 1KiB from default size 4KiB)
+    - with a pre-fetching system, that detects access patterns
+    - reducing nr of requests
+  - uses sqlite WASM
+    - compiled with emscript
+    - based on using https://github.com/sql-js/sql.js/
+      - only allows in memory sqlite dbs
+  - "only works well if your database and indexes are structured well"
+  - DOM as database
 
 
 - library original https://github.com/phiresky/sql.js-httpvfs
+- library without sql.js, using official sqlite's WASM dist https://github.com/mmomtchev/sqlite-wasm-http
+  - site (on vercel)
+    https://github.com/gyng/album
+    https://album-bice.vercel.app/
 - library go https://github.com/psanford/sqlite3vfshttp
-- library wasm https://github.com/mmomtchev/sqlite-wasm-http
 - library python https://github.com/uktrade/sqlite-s3vfs
+- library c++ https://github.com/mlin/sqlite_web_vfs
 
+
+- site using library + IPFS https://news.ycombinator.com/item?id=28585208 https://libgen-crypto.ipns.dweb.link/
 - site using library https://github.com/noman-land/transcript.fish
 - site using library
   - site https://matrixlogs.bakkot.com/WHATWG/search?q=database
   - source https://github.com/bakkot/matrix-archive-bot
   - one SQL database per channel
   - split into one-megabyte chunks (to make the git diffs more manageable).
-
 - site static.wiki in 46GB SQLite
   - source https://github.com/segfall/static-wiki
     - gets media directly from wikipedia

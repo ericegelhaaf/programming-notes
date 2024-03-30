@@ -1,0 +1,28 @@
+- man https://www.gnu.org/software/coreutils/manual/html_node/index.html
+- binaries (rare/useful)
+  |----------+------------------------------------------------|
+  |      <r> |                                                |
+  |----------+------------------------------------------------|
+  |   factor | print factors of given number                  |
+  |   numfmt | human formatting of numbers                    |
+  |    shred | secure file delete                             |
+  |  install |                                                |
+  |    rmdir | remove empty directories                       |
+  |    nproc | number of processors available                 |
+  |  timeout | run command with a timeout limit               |
+  |   stdbuf | changes buffering behavior of standard streams |
+  |----------+------------------------------------------------|
+  |    split | split file by N lines                          |
+  |   csplit | split file by N lines, with context?           |
+  | truncate | shrink or extends the size of a file           |
+  |     comm | compare 2 sorted files                         |
+  |----------+------------------------------------------------|
+  |     join | join lines on common fields                    |
+  |   expand | tabs -> spaces                                 |
+  | unexpand | spaces -> tabs                                 |
+  |    tsort | topological sort of each word                  |
+  |       nl | cat-like with numbered lines                   |
+  |      fmt | formatter, wrap lines                          |
+  |     fold | formatter, wrap lines, breaks words            |
+  |       pr | formatter, in pages ready for printing         |
+  |----------+------------------------------------------------|
