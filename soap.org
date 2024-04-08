@@ -1,0 +1,4 @@
+- https://en.wikipedia.org/wiki/SOAP
+  - Simple Object Access Protocol
+  - 1998-
+  - A messaging protocol

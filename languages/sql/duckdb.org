@@ -1,3 +1,4 @@
 - home http://duckdb.org/
 - doc https://duckdb.org/docs/
 - httpfs https://duckdb.org/docs/extensions/httpfs/overview.html
+- article 24 https://www.pgrs.net/2024/03/21/duckdb-as-the-new-jq/

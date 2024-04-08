@@ -1,3 +1,7 @@
+- 24 Ask HN: SQLite in Production? https://news.ycombinator.com/item?id=39955288
+- 24 Optimizing SQLite for servers https://archive.is/Xfjh6 https://kerkour.com/sqlite-for-servers
+- htmx https://github.com/bigskysoftware/htmx/pull/1969
+- https://developer.chrome.com/blog/sqlite-wasm-in-the-browser-backed-by-the-origin-private-file-system/
 - elixir https://web.archive.org/web/20230215152735/https://silbernagel.dev/posts/distributed-sqlite-with-elixir
 - https://www.powersync.com/blog/sqlite-optimizations-for-ultra-high-performance
 - https://developer.android.com/topic/performance/sqlite-performance-best-practices

@@ -6,6 +6,9 @@
   - https://github.com/charmbracelet/gum
 
 - https://en.wikipedia.org/wiki/ANSI_escape_code
+- article 24
+  https://mtlynch.io/zig-extraneous-build/#my-mental-model-of-bash-pipelines-is-wrong
+  https://hackaday.com/2024/03/28/is-your-mental-model-of-bash-pipelines-wrong/
 - article https://muhammadraza.me/2023/webscraping-in-bash/
 - article https://muhammadraza.me/2023/shell-functions/
 - article https://garnix.io/blog/contextual-cli
@@ -34,6 +37,11 @@
   $ grep -vFxf file1 file2
 - https://wizardzines.com/comics/bash-debugging/
   https://news.ycombinator.com/item?id=39568728
+
+- LLM
+  https://hackaday.com/2023/12/29/using-local-ai-on-the-command-line-to-rename-images-and-more/
+  https://justine.lol/oneliners/
+  https://gist.github.com/jart/bd2f603aefe6ac8004e6b709223881c0
 
 * Language
 
@@ -66,6 +74,9 @@
   - like running "cmd &"
   - stdout in NAME[0], stdin in NAME[1]
   - "wait"
+
+- commands run in a pipeline run at the same time
+  https://mtlynch.io/zig-extraneous-build/#my-mental-model-of-bash-pipelines-is-wrong
 
 ** Special Parameters
 

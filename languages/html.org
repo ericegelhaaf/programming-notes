@@ -43,15 +43,17 @@
  | embed     | use img/iframe/video/audio instead            |
 *** div
 **** Landmarks https://en.wikipedia.org/wiki/HTML_landmarks
- | main    | unique, no parent of article/aside/footer/header/nav                  |
- | aside   | aka sidebar (can be removed?)                                         |
- |---------+-----------------------------------------------------------------------|
- | header  | child of body, article, section                                       |
- | footer  | child of body, article, section                                       |
- |---------+-----------------------------------------------------------------------|
- | section | eg: main>div>section+section                                          |
- | article | selfcontained/independent (forum/blog/news post), eg: main>article*2  |
- | nav     | <a>'s container, not all, just the ones in a major navigation section |
+|---------+-----------------------------------------------------------------------|
+| main    | unique, no parent of article/aside/footer/header/nav                  |
+| aside   | aka sidebar (can be removed?)                                         |
+|---------+-----------------------------------------------------------------------|
+| header  | child of body, article, or section                                    |
+| footer  | child of body, article, or section                                    |
+|---------+-----------------------------------------------------------------------|
+| section | eg: main>div>section+section // eg: article>section*2                 |
+| article | selfcontained/independent (forum/blog/news post), eg: main>article*2  |
+| nav     | <a>'s container, not all, just the ones in a major navigation section |
+|---------+-----------------------------------------------------------------------|
 **** Other
  | span            | inline, to markup text              |
  | dialog          | open= middle of screen              |

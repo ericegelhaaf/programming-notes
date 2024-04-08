@@ -1,3 +1,12 @@
+- github keywords to close issues https://github.blog/2013-01-22-closing-issues-via-commit-messages/
+  - accept capitalization
+  - keywords
+    - close
+    - closes
+    - closed
+    - fixes
+    - fixed
+
 - tutorial
   http://jwiegley.github.io/git-from-the-bottom-up/
   https://github.com/jwiegley/git-from-the-bottom-up
@@ -6,6 +15,8 @@
   - https://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/
   - https://vaibhavsagar.com/blog/2017/08/13/i-haskell-a-git/
 
+- article | extract dir into new repo
+  https://www.johno.com/move-directory-between-repos-with-git-history
 - article 17 | magit https://emacsair.me/2017/09/01/magit-walk-through/
 - https://github.com/k88hudson/git-flight-rules
 - https://blog.scottlowe.org/2023/12/15/conditional-git-configuration/

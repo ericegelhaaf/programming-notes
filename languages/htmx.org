@@ -1,1 +1,3 @@
-https://quii.dev/HTMX_is_the_Future
+- https://quii.dev/HTMX_is_the_Future
+- Experimental sqlite extension, request for comments/ideas #1969
+  https://github.com/bigskysoftware/htmx/pull/1969

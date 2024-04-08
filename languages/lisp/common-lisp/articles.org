@@ -1,0 +1,4 @@
+- https://inconvergent.net/2023/a-vector-dsl/
+- https://inconvergent.net/2023/lets-write-a-dsl/
+- https://edoput.it/2023/11/19/data-oriented-clos.html
+- https://awkravchuk.itch.io/cl-fast-ecs/devlog/622054/gamedev-in-lisp-part-1-ecs-and-metalinguistic-abstraction

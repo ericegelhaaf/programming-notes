@@ -541,29 +541,29 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
    /* ... */
    #+end_src
 ** 05 Flexbox (Flexible Box Layout)
- - Concepts: Flex Containers, Flex Items, Main Axis, Cross Axis, Size/Alignment of objects in flexbox
- - Introduces 12 new properties to CSS (included some shorthands)
+- Concepts: Flex Containers, Flex Items, Main Axis, Cross Axis, Size/Alignment of objects in flexbox
+- Introduces 12 new properties to CSS (included some shorthands)
 *** Flexbox Principles
- - ~Flex Container~ = *display: flex*
-   ~Flex Items~ (are the childrens)
- - TIP: there is also *display: inline-flex*
-   - Won't grow auto to 100% width
-   - Like inline-block, it flows inline, with other inline elements
- - ~Main Axis~  (x) items are placed along it (from main-start to main-end)
- - ~Cross Axis~ (y) from top to bottom (cross-start to cross-end)
- - Older browsers would use, so you might want to use both. A browser ignores declaration it doesn't understand.
-   *display*: -ms-flexbox;
-   *display*: -webkit-flex;
-   *display*: flex;
- - Recommended to autoprefix https://github.com/postcss/autoprefixer
+- ~Flex Container~ = *display: flex*
+  ~Flex Items~ (are the childrens)
+- TIP: there is also *display: inline-flex*
+  - Won't grow auto to 100% width
+  - Like inline-block, it flows inline, with other inline elements
+- ~Main Axis~  (x) items are placed along it (from main-start to main-end)
+- ~Cross Axis~ (y) from top to bottom (cross-start to cross-end)
+- Older browsers would use, so you might want to use both. A browser ignores declaration it doesn't understand.
+  *display*: -ms-flexbox;
+  *display*: -webkit-flex;
+  *display*: flex;
+- Recommended to autoprefix https://github.com/postcss/autoprefixer
 **** Example
- - <ul> as the flex container
-   <li> as the flex items
- - ul/li/a
-   display block  would make the padding+content  add to the parent
-   display inline would make only the line height add to the parent
- - *margin-left*: auto
-   will fill the available space (push it to the right)
+- <ul> as the flex container
+  <li> as the flex items
+- ul/li/a
+  display block  would make the padding+content  add to the parent
+  display inline would make only the line height add to the parent
+- *margin-left*: auto
+  will fill the available space (push it to the right)
 *** Flex item sizes
 - Instead margin for space between items
 - ~flex~ property controls the size of the flex items along the main axis (width)
@@ -637,11 +637,11 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
  - It uses both *center* on both axes (justify-content, align-items)
  - Overrides center on one
 *** A couple of things to be aware of
- - TIP: trust the document flow and ONLY add flexbox where you know you'll need it
- - List of flexbox bugs https://github.com/philipwalton/flexbugs
- - Use CSS Grid Layout for fullpage layout instead of flexbox https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/
-   flex-direction: row
-   Only with multiple columns in a row. Not on the inverse.
+- TIP: trust the document flow and ONLY add flexbox where you know you'll need it
+- List of flexbox bugs https://github.com/philipwalton/flexbugs
+- Use CSS Grid Layout for fullpage layout instead of flexbox https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/
+  flex-direction: row
+  Only with multiple columns in a row. Not on the inverse.
 ** 06 Grid Layout
 *** Web Layout is Here
  - Grid Container (display: grid)

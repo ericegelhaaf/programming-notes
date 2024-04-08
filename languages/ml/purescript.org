@@ -1,13 +1,28 @@
-https://www.purescript.org/
-https://book.purescript.org/
-
-
-- https://github.com/alpacaaa/elm-to-purescript-cheatsheet
-
-- Getting started https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md
+- home https://www.purescript.org/
 
 - https://en.wikipedia.org/wiki/PureScript
   - strict language (not lazy)
   - transpiles to JavaScript, C++11, Erlang, and Go
   - has "row polymorphism"
   - has "extensible records"
+
+- Getting started https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md
+- https://github.com/alpacaaa/elm-to-purescript-cheatsheet
+
+- book
+  https://github.com/JordanMartinez/purescript-jordans-reference
+  https://jordanmartinez.github.io/purescript-jordans-reference-site/
+
+- book
+  https://github.com/purescript-contrib/purescript-book
+  https://book.purescript.org/
+
+- libraries
+  - https://github.com/passy/awesome-purescript
+  - https://github.com/rowtype-yoga/awesome-purescript
+
+- compilers
+  - lua     https://github.com/Unisay/purescript-lua
+  - erlang  https://github.com/purerl/purerl
+  - node.js https://github.com/purescript-node
+  - native  https://github.com/andyarvanitis/purescript-native

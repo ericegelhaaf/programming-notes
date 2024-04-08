@@ -55,6 +55,19 @@
        where +x=5 and y=6;
     #+end_src
 
+- BLOBs are 35% faster than file system access
+  https://www.sqlite.org/fasterthanfs.html
+
+- INSERT
+  - conflict resolution https://www.sqlite.org/lang_conflict.html
+    - rollback
+    - abort
+    - fail
+    - ignore
+    - replace
+  - INSERT OR IGNORE           - UNIQUE
+  - INSERT ON CONFLICT IGNORE  - UNIQUE+NULL
+
 ** Command
 
 - CREATE [TEMP]   TABLE                     [IF NOT EXISTS] tname
@@ -88,7 +101,7 @@ https://www.sqlite.org/lang_corefunc.html
 | iif         | x,y,z       | "ternary operator", like CASE expression            |
 | nullif      | x,y         | returns X if x!=y, otherwise returns NULL           |
 |-------------+-------------+-----------------------------------------------------|
-** Numeric Functions
+** Numeric       Functions
 - https://www.sqlite.org/lang_mathfunc.html
 - [a][cos|sin|tan][h],log[2|10]
 |-----------+-------------+--------------------------------------------------|
@@ -130,7 +143,7 @@ https://www.sqlite.org/lang_datefunc.html
 | srtftime  |                                |
 | timediff  | fn added on 3.43 (2023-08)     |
 |-----------+--------------------------------|
-** BLOB Functions
+** BLOB          Functions
 |--------------+-------+-----------------|
 | hex          | x     | blob -> string  |
 | unhex        | x[,y] | ?    -> blob    |
@@ -228,34 +241,55 @@ https://www.sqlite.org/fts5.html
 | PRAGMA     | busy_timeout=5000 | how long a write transaction will wait            |
 | PRAGMA     | foreign_keys=ON   | disabled by default                               |
 |------------+-------------------+---------------------------------------------------|
-* tools
-- fork https://github.com/tursodatabase/libsql
-  - (edge db) https://turso.tech/
-  - (edge db) https://www.scylladb.com/
+* extensions
 
-- gui https://sqlitebrowser.org/
+- column oriented https://github.com/dgllghr/stanchion
 - common extensions https://github.com/nalgeon/sqlean/
   - crypto, fileio, ipaddr, math, regexp, stats, unicode, uuid
   - text: string functions
   - define: user defined functions
   - fuzzy: string matching and phonetics
   - vsv: csv files as virtual tables
-- tool wrapper around
-  https://sqlsync.dev/
-  https://sqlsync.dev/posts/stop-building-databases/
-- sqlite wasm https://github.com/rhashimoto/wa-sqlite
-  - officially not on npm https://github.com/rhashimoto/wa-sqlite/issues/12
 - vector search https://github.com/asg017/sqlite-vss
 - compression https://github.com/mlin/sqlite_zstd_vfs
 - compression
   https://phiresky.github.io/blog/2022/sqlite-zstd/
   https://github.com/phiresky/sqlite-zstd
+
+* tools
+
+- fork https://github.com/tursodatabase/libsql
+  - (edge db) https://turso.tech/
+  - (edge db) https://www.scylladb.com/
+  - https://github.com/osquery/osquery
+    - https://news.ycombinator.com/item?id=39501281
+      osquery is a cool project, with a lot of outstanding issues. It
+      has a great deal of technical debt, including performance and
+      security debts that don't receive adequate attention. It also
+      has a huge user community around it, but only a handful of
+      active recurring contributors and companies actually funding
+      development on it (and, even then, the bulk of the development
+      is feature work rather than debt burndown).
+
+- ceph vfs https://docs.ceph.com/en/latest/rados/api/libcephsqlite/
+  - this is not: a distributed SQL engine. [...]
+    SQLite on RADOS is meant to be accessed by a single SQLite client
+    database connection at a given time.
+
+- gui https://sqlitebrowser.org/
+
+- tool wrapper around
+  https://sqlsync.dev/
+  https://sqlsync.dev/posts/stop-building-databases/
+- sqlite wasm https://github.com/rhashimoto/wa-sqlite
+  - officially not on npm https://github.com/rhashimoto/wa-sqlite/issues/12
 - https://sqlite-utils.datasette.io/en/stable/cli.html
 - https://litestream.io/
   - source https://github.com/benbjohnson/litestream
   - example
     - article https://mtlynch.io/litestream/
     - source https://github.com/mtlynch/logpaste
+
 * bindings
 - go https://github.com/mattn/go-sqlite3
 - go (pure) https://pkg.go.dev/modernc.org/sqlite
