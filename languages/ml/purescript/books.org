@@ -1,0 +1,7 @@
+- book
+  https://github.com/JordanMartinez/purescript-jordans-reference
+  https://jordanmartinez.github.io/purescript-jordans-reference-site/
+
+- book
+  https://github.com/purescript-contrib/purescript-book
+  https://book.purescript.org/

@@ -1,0 +1,5 @@
+- Video 18: PureScript's Typesystem | Phil Freeman https://www.youtube.com/watch?v=SPpIbiZFPRY
+- Videos: Branium https://www.youtube.com/playlist?list=PLCbbPAsJ9DaJE5Er9txmPfdCMPV7CnWOv
+- Videos: Impure Pics https://www.youtube.com/playlist?list=PLxn_Aq3QlOQd3nyoe9vv72qQwP2qAfP6r
+- Channel: https://www.youtube.com/@PhilFreeman/videos
+- Channel: https://www.youtube.com/@PureScriptCommunity/videos
