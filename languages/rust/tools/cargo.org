@@ -1,0 +1,4 @@
+- Private Cargo registry https://shipyard.rs/
+- https://github.com/sagiegurari/cargo-make
+- https://github.com/burtonageo/cargo-bundle
+- cargo.toml

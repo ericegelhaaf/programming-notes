@@ -3,24 +3,56 @@
 - https://www.youtube.com/c/timClicks/videos
 - Jon Gjengset https://www.youtube.com/channel/UC_iD0xppBwwsrM9DegC5cQQ/
 - Crazcalm's Tech Stack https://www.youtube.com/channel/UCfgXeSss8LaDtlK0ohwUX_w
-* 17 | Rust 101                         | E. Dunham
-  https://www.youtube.com/watch?v=FMqydRampuo
+* 17 | Rust 101                                   | E. Dunham
+https://www.youtube.com/watch?v=FMqydRampuo
 - "Go is a SysAdmins programming language, Rust is language for system level programming."
 - Compiler can output:
   - LLVM IR
   - ASM
 - Macro syntax
-  - "shorthand for funftions with variable number of arguments." ???????
+  - "shorthand for functions with variable number of arguments." ???????
   - end with "!", ex: println!
 - Rust team compiles all public projects (?) and PR breaking changes on code in Stable to those projects.
-* 18 | Rust Programming Techniques      | Nicholas Cameron
-  https://www.youtube.com/watch?v=vqavdUGKeb4
-- A rust a reference is a pointer, BUT references can never be NULL
+* 18 | Rust Programming Techniques                | Nicholas Cameron
+https://www.youtube.com/watch?v=vqavdUGKeb4
+
+Sample C code
+#+begin_src c
+  void f(Foo* ptr) { // ptr can be mutated
+    if (!ptr) { // can forget this null check
+      return;
+    }
+    ptr->g(); // ptr could be invalid (point somewhere nonsensical)
+  }
+#+end_src
+
+
+Equivalent Rust code
+#+begin_src rust
+  fn f(ptr: Option<&Foo>) { // &Foo = reference to Foo
+    match ptr {
+      Some(ptr) => ptr.g(),
+      None      => {}
+    }
+  }
+#+end_src
+
+- a rust a reference is a pointer, BUT =references can never be NULL=
+  - If you want to represent a pointer that might be null,
+    wrap it on an Option
+
+- a macro can hide a return
+
 - *match* the compiler checks that the matching type gets ~exhausted~
-- *if let* on the other hand does ~non-exhaustive~ pattern matching
-- A macro can hide a return
-* 19 | Why would a python programmer learn rust when there are no jobs in it
-  https://www.youtube.com/watch?v=IYLf8lUqR40
+- *if let*, on the other hand, does ~non-exhaustive~ pattern matching
+  - useful with Option
+
+- 21:00
+
+* 19 | Why would a python programmer learn rust...| ?
+...when there are no jobs in it
+
+https://www.youtube.com/watch?v=IYLf8lUqR40
 - C++ has no stable ABI
 - Enumerated types can contain variables
 - Structures+Traits VS Objects
@@ -57,7 +89,8 @@
     }
   }
   #+end_src
-* 19 | All about rust                   | Microsoft Developer
+
+* 19 | All about rust                             | Microsoft Developer
   https://www.youtube.com/watch?v=FYGS2q1bljE
 - "Cost on the compiler"
 - linkerd "proxy" is written in Rust, the rest (cli, webservice) in Go
@@ -66,7 +99,7 @@
   | Hyper | http library that uses Tokio            |
   | Tower | service framework                       |
 - Microsoft IOT does some rust: https://github.com/Azure/iotedge/
-* 19 | Build a cryptocurrency!          | Geeklaunch
+* 19 | Build a cryptocurrency!                    | Geeklaunch
 ** Blockchain in Rust #01: Blocks & Hashing
 https://www.youtube.com/watch?v=vJdT05zl6jk
 #+begin_src rust
@@ -80,7 +113,7 @@ https://www.youtube.com/watch?v=vJdT05zl6jk
 - Create      [u8; 16]
   Instantiate [0; 16]
 - use supper:**;
-* 20 | Considering Rust                 | Jon Gjengset
+* 20 | Considering Rust                           | Jon Gjengset
   https://www.youtube.com/watch?v=DnT-LUQgc7s
 - No GC, no runtime
 - Compiler guarantees
@@ -115,7 +148,7 @@ https://www.youtube.com/watch?v=vJdT05zl6jk
 - bindgen  - generates rust code from C header
   cbindgen - generates a header file that you can use from other languages
 - tools that work with rust: perf, gdb/lldb, valgrind, llvm sanitizers
-* 20 | 12 Things to Help You Learn Rust | Gary explains
+* 20 | 12 Things to Help You Learn Rust           | Gary explains
 https://www.youtube.com/watch?v=a8abW3RlOn8
 - println!
   - basic:      {}

@@ -1,7 +1,7 @@
 - https://google.github.io/comprehensive-rust/welcome.html
 * Tutorial: EasyRust
-  https://github.com/Dhghomon/easy_rust
-
+https://github.com/Dhghomon/easy_rust
+|----------------+----------------+------------|
 |                | UpperCamelCase | snake_case |
 |----------------+----------------+------------|
 | Implementation | YES            |            |
@@ -9,12 +9,15 @@
 | Enum           | YES            |            |
 | Variables      |                | YES        |
 | Functions      |                | YES        |
+|----------------+----------------+------------|
 ** Comments
+
 #+begin_src rust
 // Comment
 /* Comment */
 let some_number  /*: i16*/ = 100;
 #+end_src
+
 ** Types
 *** Primitive types
 - ~usize~, ~isize~, are architecture dependant i32 or i64
@@ -752,82 +755,94 @@ io::stdin().read_line(&mut something).unwrap()
 ** cargo doc
 ** The end?
 * Tutorial: Rust by Example
-  https://doc.rust-lang.org/stable/rust-by-example/
+https://doc.rust-lang.org/stable/rust-by-example/
 ** 8 Flow of Control
 *** 8.5 Match
 **** 8.5.1 Pointers/ref
+
 - Dereferencing uses *
+
 - Destructuring uses &, ref, and ref mut
 #+begin_src rust
-let reference = &4;
-match reference {
-  &val => println!("{:?}", val),
-}
-// Alternatively, you can dereference before matching
-match *reference {
-  val => println!("{:?}", val),
-}
+  let reference = &4;
+  match reference {
+    &val => println!("{:?}", val),
+  }
+  // Alternatively, you can dereference before matching
+  match *reference {
+    val => println!("{:?}", val),
+  }
 #+end_src
+
 - ref modifies the assignment so that a reference is created for the element
 #+begin_src rust
-let ref _is_a_reference = 3;
-match value {
-  ref r => println!("{:?}", r),
-}
-match mut_value {
-   ref mut m => {
-     *m += 10; // gotta dereference before we can use it
-     println!("{:?}", m);
-   },
-}
-#+end_src
-**** 8.5.2 Guards
-    You must use the _ pattern at the end.
-    As the compiler won't check aribitrary expressions for completeness.
-**** 8.5.3 Binding @
-     It can also be used with enum's like Option
-     #+begin_src rust
-fn age() -> u32 {
-  15
-}
-fn main() {
-  println!("Tell me what type of person you are");
-  match age() {
-    0 => println!("I haven't celebrated my birthday yet"),
-    n @ 1 ..= 12 => println!("I'm a child of age {:?}", n),
-    n @ 13 ..= 19 => println!("I'm a teen of age {:?}", n),
-    n => println!("I'm an old person of age {:?}", n),
+  let ref _is_a_reference = 3;
+  match value {
+    ref r => println!("{:?}", r),
   }
-}
-}
+  match mut_value {
+     ref mut m => {
+       ,*m += 10; // gotta dereference before we can use it
+       println!("{:?}", m);
+     },
+  }
 #+end_src
+
+**** 8.5.2 Guards
+
+You must use the _ pattern at the end.
+As the compiler won't check aribitrary expressions for completeness.
+
+**** 8.5.3 Binding @
+
+It can also be used with enum's like Option
+#+begin_src rust
+  fn age() -> u32 {
+    15
+  }
+  fn main() {
+    println!("Tell me what type of person you are");
+    match age() {
+      0 => println!("I haven't celebrated my birthday yet"),
+      n @ 1 ..= 12 => println!("I'm a child of age {:?}", n),
+      n @ 13 ..= 19 => println!("I'm a teen of age {:?}", n),
+      n => println!("I'm an old person of age {:?}", n),
+    }
+  }
+#+end_src
+
 *** 8.6 if let
-    Also works with binding
-    #+begin_src rust
-    if let Foo::(value @ 100) = c {
-      println!("c is one hundred");
-    }
-    #+end_src
-    Also works with enums that don't implement PartialEq
-    #+begin_src rust
-    if let Foo::Bar == a {
+
+Also works with binding
+#+begin_src rust
+  if let Foo::(value @ 100) = c {
+    println!("c is one hundred");
+  }
+#+end_src
+
+Also works with enums that don't implement PartialEq
+#+begin_src rust
+  if let Foo::Bar == a {
       println!("a is foobar");
-    }
-    #+end_src
+  }
+#+end_src
+
 *** 8.7 while let
-    Alternative to loop+match
-    #+begin_src rust
-    let mut optional = Some(0);
-    while let Some(i) = optional {
-      if i > 9 {
-        println!("Greater than 9, quit!");
-        optional = None;
-      } else {
-        println!("{}", i);
-        optional = Some(i + 1);
-      }
+
+Alternative to loop+match
+#+begin_src rust
+  let mut optional = Some(0);
+  while let Some(i) = optional {
+    if i > 9 {
+      println!("Greater than 9, quit!");
+      optional = None;
+    } else {
+      println!("{}", i);
+      optional = Some(i + 1);
     }
-    #+end_src
+  }
+#+end_src
+
 ** 9 Functions
 *** 9.1 Methods
    - Associated methods are called using ~::~ double colons
@@ -854,23 +869,24 @@ fn main() {
 
 ** 10 Modules
 *** 10.2 Structures
-    - Can have Generic type fields
-      #+begin_src rust
-      mod my {
-        pub struct OpenBox<T> {
-          pub contents: T,
-        }
 
-        pub struct ClosedBox<T> {
-          contents: T,
-        }
+- Can have Generic type fields
+#+begin_src rust
+  mod my {
+    pub struct OpenBox<T> {
+      pub contents: T,
+    }
 
-        impl<T> ClosedBox<T> {
-          pub fn new(contents: T) -> ClosedBox<T> {
-            ClosedBox {
-              contents: contents,
-            }
-          }
+    pub struct ClosedBox<T> {
+      contents: T,
+    }
+
+    impl<T> ClosedBox<T> {
+      pub fn new(contents: T) -> ClosedBox<T> {
+        ClosedBox {
+          contents: contents,
         }
       }
-      #+end_src
+    }
+  }
+#+end_src

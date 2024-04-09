@@ -1,4 +1,3 @@
-- Private Cargo registry https://shipyard.rs/
 - Article: https://rauljordan.com/rust-concepts-i-wish-i-learned-earlier/
 - tutorial https://google.github.io/comprehensive-rust/
 - https://github.com/trickster0/OffensiveRust
@@ -16,8 +15,6 @@
 - https://github.com/not-fl3/macroquad
 - https://github.com/martinszy/rustelbrot
 - https://docs.rs/nannou/latest/nannou/
-- https://github.com/sagiegurari/cargo-make
-- https://github.com/burtonageo/cargo-bundle
 - https://github.com/glium/glium
 - https://github.com/not-fl3/macroquad
 - Ultimate Rust 2: Intermediate Concepts
@@ -42,9 +39,11 @@
 - https://github.com/bevyengine/bevy
 - tut dns server https://github.com/EmilHernvall/dnsguide
 - https://research.mozilla.org/rust/
+
 * Language
 ** Types
 *** Primitive
+|-------+-----+---|
 | u8    | 1u8 |   |
 | i32   |  10 |   |
 | i64   |   ? |   |
@@ -52,10 +51,10 @@
 | isize |  10 |   |
 | usize |  10 |   |
 | char  | 'a' |   |
-
+|-------+-----+---|
 *** Compound
 |---------+----------------+-----------+--------------+-------------------|
-|         | Create         | Access    | Match        | Insert            |
+|         | create         | access    | match        | insert            |
 |---------+----------------+-----------+--------------+-------------------|
 | Tuple   |                | .0        | (a,_b)       |                   |
 | struct  |                | .FIELD    |              |                   |
@@ -65,10 +64,23 @@
 | Array   | []             |           |              |                   |
 |---------+----------------+-----------+--------------+-------------------|
 ** Standard Library
-- https://doc.rust-lang.org/std/#modules
-* People
-| Steve Klabnik | was lead of Rust documentation, worked with Ruby |
-| Carol Nichols | member of Rust crates.io       |
+
+https://doc.rust-lang.org/std/#modules
+
+#+begin_src rust
+  enum Option<T> {
+    Some(T),
+    None,
+  }
+#+end_src
+
+#+begin_src rust
+  enum Result<T,E> {
+    Ok(T),
+    Err(E),
+  }
+#+end_src
+
 * Codebases
 - https://github.com/pop-os/system76-power
 * Learn

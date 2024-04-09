@@ -27,6 +27,7 @@
 - Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
 - Tutorial: 2019 https://github.com/lindig/ocaml-style
 - https://github.com/imandra-ai/ocaml-tracy
+- exercises (based on "Perl Cookbook") https://pleac.sourceforge.net/pleac_ocaml/index.html
 
 * Language
 ** Standard Library

@@ -161,4 +161,3 @@ Rust, Destructuring
 - If you .unwrap() and return a None,
   you program will still explode
 ** 2
-
