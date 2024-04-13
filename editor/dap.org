@@ -15,6 +15,9 @@
   - https://discuss.ocaml.org/t/debug-ocaml-code/10867
     "debuggers never work for concurrent code, nor for really complex D.S." - someone
   - (abandoned on 2021?) https://github.com/hackwaly/ocamlearlybird/
+- Go
+  - Docker+dlv
+    https://golangforall.com/en/post/go-docker-delve-remote-debug.html
 - Erlang
   (require 'dap-erlang)
   https://erlang-ls.github.io/articles/tutorial-debugger/

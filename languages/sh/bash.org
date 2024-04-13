@@ -164,6 +164,15 @@ From man
 
 * Snippets
 
+#+NAME: scramble string
+#+begin_src bash
+echo -n "${1}" | fold -w1 | sort -R | xargs -ILETTER echo -n LETTER
+
+echo -n "${1}" | while read -n1 -r letter; do
+     echo $letter
+done | sort -R | xargs -ILETTER echo -n LETTER
+#+end_src
+
 #+begin_src bash
   die() { echo $1 >&2; exit 1; } # some_command || die "oh no!"
 #+end_src

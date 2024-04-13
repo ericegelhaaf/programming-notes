@@ -79,6 +79,7 @@
 | limits.h      |     | Ranges of integer types                                                                                 |
 | locale.h      |     | Localization utilities                                                                                  |
 | math.h        |     | Common mathematics functions                                                                            |
+| paths.h       |     | constants with string paths of common LINUX files                                                       |
 | setjmp.h      |     | Nonlocal jumps                                                                                          |
 | signal.h      |     | Signal handling                                                                                         |
 | stdalign.h    | C11 | alignas and alignof convenience macros                                                                  |
@@ -122,6 +123,7 @@
 - (80) https://github.com/ludocode/pottery
 - (24) https://github.com/begriffs/libderp
 - (10) https://github.com/lelanthran/libds
+- (480) coroutines https://github.com/tidwall/neco
 * Sanitizers
 - Static http://splint.org/
 - https://www.youtube.com/watch?v=Q2C2lP8_tNE

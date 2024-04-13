@@ -17,6 +17,13 @@
 
 - article | extract dir into new repo
   https://www.johno.com/move-directory-between-repos-with-git-history
+
+- change author/email on a repo
+  - (DOES NO WORK) https://stackoverflow.com/questions/2919878/git-rewrite-previous-commit-usernames-and-emails
+  - works https://stackoverflow.com/questions/750172/how-do-i-change-the-author-and-committer-name-email-for-multiple-commits
+    $ git rebase -r --root --exec "git commit --amend --no-edit --reset-author"
+    $ git push --force --all
+
 - article 17 | magit https://emacsair.me/2017/09/01/magit-walk-through/
 - https://github.com/k88hudson/git-flight-rules
 - https://blog.scottlowe.org/2023/12/15/conditional-git-configuration/

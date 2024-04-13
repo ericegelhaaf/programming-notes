@@ -1,0 +1,64 @@
+- man gnu https://www.gnu.org/software/bc/manual/html_mono/bc.html
+- man posix https://web.archive.org/web/20090501204511/http://manpages.ubuntu.com/manpages/jaunty/en/man1/bc.1posix.html
+
+- wiki https://en.wikipedia.org/wiki/Bc_%28programming_language%29
+  - "basic calculator"
+  - Authors:
+    - Robert Morris
+    - Lorinda Cherry
+      - https://ncwit.org/profile/lorinda-cherry/
+      - https://news.ycombinator.com/item?id=30354391
+
+- resources http://www.phodd.net/gnu-bc/
+- functions https://web.archive.org/web/20160304092132/http://x-bc.sourceforge.net/extensions_bc.html
+- functions https://github.com/idealvin/bc
+- constants https://web.archive.org/web/20160304081309/http://x-bc.sourceforge.net/scientific_constants_bc.html
+
+* Language
+
+- Runs interactively (REPL) if you just run it bare "bc"
+- default ~scale=0~, aka integer division
+- in POSIX mode, functions and variables can only be 1 character long
+- if/while/for
+- undefined variables return 0
+
+** Functions & Variables
+
+#+begin_src bash
+define foo(x) {
+  print "this is 2 to the power of "; x*1; 2^x
+  print "\n"
+}
+#+end_src
+
+|-----------+-------------------------------------------|
+| length(n) | length in digits of n, including decimals |
+| s(n)      | sine                                      |
+|-----------+-------------------------------------------|
+| last      | last numer output                         |
+| scale     | number of decimals (default 0)            |
+| obase     | "output base" (default 10)                |
+| ibase     | "input base"                              |
+|-----------+-------------------------------------------|
+
+** Flags
+
+|----+-----------+------------------------------------------------|
+| -q | --quiet   | suppreses welcome message                      |
+| -l | --mathlib | enables trigonometric functions, sets scale=20 |
+|----+-----------+------------------------------------------------|
+
+
+* Articles
+
+- https://web.archive.org/web/20140112080500/http://mylinuxbook.com/linux-command-line-calculator-bc-examples/
+- https://unixetc.co.uk/2014/01/19/bc-rounding-errors/
+- https://www.johndcook.com/blog/2010/07/14/bc-math-library/
+- https://www.johndcook.com/blog/2019/10/29/computing-pi-with-bc/
+
+* Videos
+
+- Bc: Deep Dive Into The POSIX Calculator Language | Broodie Robertson
+  https://www.youtube.com/watch?v=JascI_29sks
+- Linux in the Shell Ep 25 - bcNot Yet Rated
+  https://vimeo.com/101977655

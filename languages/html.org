@@ -42,6 +42,9 @@
  | head>meta | metadata, name= content= charset= http-equiv= |
  | embed     | use img/iframe/video/audio instead            |
 *** div
+
+div's are mostly used as a wrapper to apply styling, have to inherit semantic? representation
+
 **** Landmarks https://en.wikipedia.org/wiki/HTML_landmarks
 |---------+-----------------------------------------------------------------------|
 | main    | unique, no parent of article/aside/footer/header/nav                  |
@@ -50,7 +53,9 @@
 | header  | child of body, article, or section                                    |
 | footer  | child of body, article, or section                                    |
 |---------+-----------------------------------------------------------------------|
-| section | eg: main>div>section+section // eg: article>section*2                 |
+| section | generic standalone, 99% should have a <h>eadeing                      |
+|         | eg: main>div>section+section // eg: article>section*2                 |
+|---------+-----------------------------------------------------------------------|
 | article | selfcontained/independent (forum/blog/news post), eg: main>article*2  |
 | nav     | <a>'s container, not all, just the ones in a major navigation section |
 |---------+-----------------------------------------------------------------------|
@@ -61,82 +66,100 @@
  | data            | to add metadata in ul/li attributes |
  | details>summary | open= toggable                      |
 *** Font
- | abbr         | title=                                             |
- | address      | block/italic (contact info)                        |
- | b            | bold (last resort after hN/em/strong/mark)         |
- | cite         | italic                                             |
- | del/ins      | line-through/underline                             |
- | s            | line-through                                       |
- | dfn          | italic                                             |
- | em           | italic                                             |
- | i            | italic (last resort after em/string/mark/cite/dfn) |
- | mark         | bg-yellow                                          |
- | pre          | preformatted, preserves spaces and line breaks     |
- | q/blockquote | short/long quotation                               |
- | small        | font size smaller                                  |
- | strong       | bold (important text)                              |
- | sub/sup      | small valign sub/sup                               |
- | time         | can also add machine readable datetime=            |
- | u            | misspelled (unarticulated)                         |
- | wbr          | word break opportunity                             |
+|-
+| abbr         | title=                                             |
+| address      | block/italic (contact info)                        |
+| b            | bold (last resort after hN/em/strong/mark)         |
+| cite         | italic                                             |
+| del/ins      | line-through/underline                             |
+| s            | line-through                                       |
+| dfn          | italic                                             |
+| em           | italic                                             |
+| i            | italic (last resort after em/string/mark/cite/dfn) |
+| mark         | bg-yellow                                          |
+| pre          | preformatted, preserves spaces and line breaks     |
+| q/blockquote | short/long quotation                               |
+| small        | font size smaller                                  |
+| strong       | bold (important text)                              |
+| sub/sup      | small valign sub/sup                               |
+| time         | can also add machine readable datetime=            |
+| u            | misspelled (unarticulated)                         |
+| wbr          | word break opportunity                             |
+|-
 **** UI
- | template       | hidden content (JS showable) |
- | progress/meter | id= value= max= progress var |
+|----------------+------------------------------|
+| template       | hidden content (JS showable) |
+| progress/meter | id= value= max= progress var |
+|----------------+------------------------------|
 **** Computer
- | kbd  | monospace                       |
- | code | monospace                       |
- | var  | variable                        |
- | samp | "sample output" computer output |
+|------+---------------------------------|
+| kbd  | monospace                       |
+| code | monospace                       |
+| var  | variable                        |
+| samp | "sample output" computer output |
+|------+---------------------------------|
 **** Idiom
- | ruby/rt+rp | japanese                                                 |
- | bdi        | "bi-directional isolation", for lang with diff direction |
- | bdo        | "bi-directional override"                                |
+|------------+----------------------------------------------------------|
+| ruby/rt+rp | japanese                                                 |
+| bdi        | "bi-directional isolation", for lang with diff direction |
+| bdo        | "bi-directional override"                                |
+|------------+----------------------------------------------------------|
 *** media et all
- | img                      |                                            |
- | picture>img+source*N     | sets different images for different widths |
- | figure>img+figcaption    |                                            |
- | imp+map>area*N           | defines a clickable are on an img          |
- |--------------------------+--------------------------------------------|
- | audio                    | content will be the "alt"                  |
- | video                    |                                            |
- | video/audio>source       | media source in different format           |
- | video/audio>source+track | .vtt subtitles tracks                      |
- |--------------------------+--------------------------------------------|
- | svg                      | circle/rect/polygon/ellipse/text           |
- | canvas                   |                                            |
+|--------------------------+--------------------------------------------|
+| img                      |                                            |
+| picture>img+source*N     | sets different images for different widths |
+| figure>img+figcaption    |                                            |
+| imp+map>area*N           | defines a clickable are on an img          |
+|--------------------------+--------------------------------------------|
+| audio                    | content will be the "alt"                  |
+| video                    |                                            |
+| video/audio>source       | media source in different format           |
+| video/audio>source+track | .vtt subtitles tracks                      |
+|--------------------------+--------------------------------------------|
+| svg                      | circle/rect/polygon/ellipse/text           |
+| canvas                   |                                            |
+|--------------------------+--------------------------------------------|
 *** form
- | fieldset                 | for legend/label/input                   |
- | fieldset>legend          |                                          |
- | label                    | for input/select/progress/textarea/meter |
- |--------------------------+------------------------------------------|
- | textarea                 |                                          |
- | select>option*N          |                                          |
- | select>optgroup>option*N |                                          |
- | datalist>option*N        |                                          |
- |--------------------------+------------------------------------------|
- | output                   | to put JS output                         |
- | button                   | can contain an image, html or text       |
+|------------------------------+------------------------------------------|
+| fieldset                     | for legend/label/input                   |
+| fieldset>legend              | perfect for input[type="radio"] groups   |
+|------------------------------+------------------------------------------|
+| label[for="ID"]              | for input/select/progress/textarea/meter |
+|------------------------------+------------------------------------------|
+| input[aria-describedby="ID"] | can be used to link an error message     |
+|                              | div[id="ID"]>span[role="alert"]          |
+|------------------------------+------------------------------------------|
+| textarea                     |                                          |
+| select>option*N              |                                          |
+| select>optgroup>option*N     |                                          |
+| datalist>option*N            |                                          |
+|------------------------------+------------------------------------------|
+| output                       | to put JS output                         |
+| button                       | can contain an image, html or text       |
+|------------------------------+------------------------------------------|
 *** Lists
- | ul>li*N    | un-ordered list  |
- |------------+------------------|
- | ol>li*N    | ordered list     |
- |------------+------------------|
- | dl>dt+dd*N | description list |
- | dt         |                  |
- | dd         |                  |
+|------------+------------------|
+| ul>li*N    | un-ordered list  |
+|------------+------------------|
+| ol>li*N    | ordered list     |
+|------------+------------------|
+| dl>dt+dd*N | description list |
+| dt         |                  |
+| dd         |                  |
+|------------+------------------|
 *** table>
- |---------------+------------------------|
- | >caption      | caption title          |
- |---------------+------------------------|
- | >thead>tr>th  | header                 |
- | >tr>th        |                        |
- |---------------+------------------------|
- | >tbody>tr>td  |                        |
- |---------------+------------------------|
- | >tfoot>tr>td  |                        |
- |---------------+------------------------|
- | >tr>td        |                        |
- |---------------+------------------------|
- | >colgroup     | to style groups of col |
- | >colgroup>col |                        |
- |---------------+------------------------|
+|---------------+------------------------|
+| >caption      | caption title          |
+|---------------+------------------------|
+| >thead>tr>th  | header                 |
+| >tr>th        |                        |
+|---------------+------------------------|
+| >tbody>tr>td  |                        |
+|---------------+------------------------|
+| >tfoot>tr>td  |                        |
+|---------------+------------------------|
+| >tr>td        |                        |
+|---------------+------------------------|
+| >colgroup     | to style groups of col |
+| >colgroup>col |                        |
+|---------------+------------------------|
