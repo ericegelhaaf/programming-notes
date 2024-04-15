@@ -31,36 +31,45 @@ https://www.youtube.com/watch?v=cbpNdzKLg4c
 - They way you are supposed to solve this AOC problem is to read the list as a binary tree and write different tree walking routines.
 - $ watch time sed -E -f x.sed sample1.txt
 - TODO: 00:03:00
-* Course: Linux Administration with SED and AWK | Andrew Mallett
+* DONE Course: Linux Administration with SED and AWK | Andrew Mallett
 source https://github.com/theurbanpenguin/sed-and-awk
-** 1
-
-#+begin_src sh
-  #!/bin/sed -Ef
-  /ClientAliveInterval/ {
-      s/^(ClientAliveInterval).*$/\1 60/
-    t count
-    s/.*/ClientAliveInterval 60/
-    t count
-  }
-
-  :count
-  /clientAliveCountmax/ {
-      s/^(ClientAliveInterval).*$/\1 60/
-      t count
-      s/.*/ClientAiveInterval 60/
-      t count
-  }
-#+end_src
-
-** 2
+** 2 Introduction to Regular Expressions and Filtering Text
 
 - $ grep -E '/(udp|tcp)' /etc/services
 - Types of Regular expressions
   1) BRE - Basic Regular Expresions
   2) ERE - Enhanced Regular Expressions
 - 05:00
+
 ** 3 SED - The (S)tream (Ed)itor
 
 $ vim +/Server/ file.conf
 $ vim +10 file.conf
+$ alias cleanfile="sed -E '/^\s*(#|$)/d'"
+
+"ESC+." add last command argument
+
+** 4 Advanced Editing using sed
+
+$ sed -f simple.sed
+
+#+begin_src sed
+  #!/bin/sed -Ef
+  /ClientAliveInterval/ { # run blocks of code against this line
+      s/^(ClientAliveInterval).*$/\1 60/ # if starts with key, ensure set to 60
+      t count # if substitution worked goto label "count"
+      s/.*/ClientAliveInterval 60/ # if it didn't start with key, then replace line with setting
+      t count
+  }
+
+  :count
+  /ClientAliveCountmax/ {
+      s/^(ClientAliveCountMax).*$/\1 3/
+      t del
+      s/.*/ClientAliveCountMax 3/
+      t del
+  }
+
+  :del
+  /^($|#)/d
+#+end_src

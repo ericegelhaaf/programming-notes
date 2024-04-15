@@ -1,3 +1,4 @@
+- https://yannesposito.com/Scratch/en/blog/Haskell-the-Hard-Way/
 - https://github.com/alpacaaa/zero-bs-haskell
 - aeson https://web.archive.org/web/20201121162141mp_/https://artyom.me/aeson
 - optparse https://github.com/pcapriotti/optparse-applicative/blob/master/README.md

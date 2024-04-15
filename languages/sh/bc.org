@@ -1,6 +1,6 @@
 - man gnu https://www.gnu.org/software/bc/manual/html_mono/bc.html
 - man posix https://web.archive.org/web/20090501204511/http://manpages.ubuntu.com/manpages/jaunty/en/man1/bc.1posix.html
-
+- source (C) https://github.com/fivepiece/gnu-bc/
 - wiki https://en.wikipedia.org/wiki/Bc_%28programming_language%29
   - "basic calculator"
   - Authors:
@@ -9,18 +9,16 @@
       - https://ncwit.org/profile/lorinda-cherry/
       - https://news.ycombinator.com/item?id=30354391
 
-- resources http://www.phodd.net/gnu-bc/
-- functions https://web.archive.org/web/20160304092132/http://x-bc.sourceforge.net/extensions_bc.html
-- functions https://github.com/idealvin/bc
-- constants https://web.archive.org/web/20160304081309/http://x-bc.sourceforge.net/scientific_constants_bc.html
+- faq http://phodd.net/gnu-bc/bcfaq.html
+- tutorial https://org.coloradomesa.edu/~mapierce2/bc/
 
 * Language
 
 - Runs interactively (REPL) if you just run it bare "bc"
 - default ~scale=0~, aka integer division
 - in POSIX mode, functions and variables can only be 1 character long
-- if/while/for
 - undefined variables return 0
+- if/while/for
 
 ** Functions & Variables
 
@@ -31,15 +29,18 @@ define foo(x) {
 }
 #+end_src
 
-|-----------+-------------------------------------------|
-| length(n) | length in digits of n, including decimals |
-| s(n)      | sine                                      |
-|-----------+-------------------------------------------|
-| last      | last numer output                         |
-| scale     | number of decimals (default 0)            |
-| obase     | "output base" (default 10)                |
-| ibase     | "input base"                              |
-|-----------+-------------------------------------------|
+|-------------+--------------------------------------------|
+| length(n)   | length in digits of n, including decimals  |
+| s(n)        | sine                                       |
+| random()    | returns a random positive? integer         |
+| read()      | reads value from stdin, returns value read |
+| print "foo" | ala Python 2                               |
+|-------------+--------------------------------------------|
+| last        | last numer output                          |
+| scale       | number of decimals (default 0)             |
+| obase       | "output base" (default 10)                 |
+| ibase       | "input base"                               |
+|-------------+--------------------------------------------|
 
 ** Flags
 
@@ -62,3 +63,12 @@ define foo(x) {
   https://www.youtube.com/watch?v=JascI_29sks
 - Linux in the Shell Ep 25 - bcNot Yet Rated
   https://vimeo.com/101977655
+
+* Libraries
+
+- gcd, fibo https://literateprograms.org/category_programming_language_bc.html
+- official examples https://github.com/fivepiece/gnu-bc/tree/master/Examples
+- resources http://www.phodd.net/gnu-bc/
+- functions https://web.archive.org/web/20160304092132/http://x-bc.sourceforge.net/extensions_bc.html
+- functions https://github.com/idealvin/bc
+- constants https://web.archive.org/web/20160304081309/http://x-bc.sourceforge.net/scientific_constants_bc.html

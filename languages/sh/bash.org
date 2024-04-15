@@ -93,9 +93,13 @@
 |----+---------------------------|
 
 ** Arithmetic Evaluation $(())
-- "Evaluation is done in fixed-width *integers* with no check for
-   overflow, though division by 0 is trapped and flaged as an error."
+
+- "Evaluation is done in fixed-width *integers* with no check for overflow,
+   though division by 0 is trapped and flaged as an error."
+  - aka NOT floats
+
 - "A shell variable that is null or unset evaluates to 0"
+
 *** Operators
 From man
 |-----------------------------------+---------------------------------------------|
@@ -122,6 +126,8 @@ From man
 | ^                                 | bitwise exclusive OR                        |
 | ¦                                 | bitwise OR                                  |
 |-----------------------------------+---------------------------------------------|
+
+
 * Tutorial: Style https://google.github.io/styleguide/shellguide.html
 
   - Don’t brace-delimit single character shell specials / positional parameters,

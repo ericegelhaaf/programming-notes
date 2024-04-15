@@ -1,3 +1,4 @@
+- https://github.com/Khan/kotlin-for-python-developers
 - https://www.youtube.com/c/Quillraven/videos
 - Code Bases
   - https://github.com/tachiyomiorg/tachiyomi

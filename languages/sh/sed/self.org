@@ -1,8 +1,9 @@
-- source (C) https://git.savannah.gnu.org/gitweb/?p=sed.git
+- source (C) https://git.savannah.gnu.org/gitweb/?p=sed.git https://github.com/mirror/sed
 - home https://www.gnu.org/software/sed/
 - manual https://www.gnu.org/software/sed/manual/sed.html
 - wiki https://en.wikipedia.org/wiki/Sed
   - "Stream EDitor"
+  - frontend for "dc"
   - Author: Lee E. McMahon
   - 1974-
   - _line-oriented_ text processing utility
@@ -19,74 +20,94 @@
 - https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome
   aka when a quoted expresion becomes unreadable
   because it contains a large number of escape characters
+- can separate commands with "cmd1;cmd2" or "-e cmd2 -e cmd2"
 
-** Script
+** script
 - a series of operations/actions
 - the "body of a loop" that iterates through lines
 - each line of a script is a pattern-action pair
   aka a conditional statement
-** Operations
+** operations
 - of a command
 - applied over the /pattern space/
 - by default, after run, sed output the /pattern space/
 - and begins the /cycle/ again with the next line
-** Commands
+** commands
 - [address]command
   address { cmd1; cmd2; } # cannot have a space before ";"
 - Might take an additional (1 or 2) =address=
 - 25 commands
-|---------+--------------------------------------------------------------------------------------|
-|     <r> |                                                                                      |
-|---------+--------------------------------------------------------------------------------------|
-|       q | quit                                                                                 |
-|       d | delete the /pattern space/                                                           |
-|       D | delete the first line from the /pattern space/, and run again                        |
-|       n | next, explicitly goes to the next line (the default behaviour)                       |
-|       N | pulls the next line into the /pattern space/, without deleting what is already there |
-|       p | print the /pattern space/                                                            |
-|       P | print the first line on the /pattern space/                                          |
-|       = | prints the current line number plus a new line                                       |
-|       y | /src/dst/ (tr)ansliterates src by dst                                                |
-|       r | reads from provided filename                                                         |
-|       w | writes to provided filename                                                          |
-|       l | list the /pattern space/ unambigously, nice for debugging                            |
-|---------+--------------------------------------------------------------------------------------|
-| [line]a | appends, after current /pattern space/                                               |
-| [line]i | inserts, before current /pattern space/                                              |
-| [addr]c | change, replaces current /pattern space/ with given argument                         |
-|---------+--------------------------------------------------------------------------------------|
-|       s | /pattern/replacement/flags                                                           |
-|         | uses address for pattern if missing                                                  |
-|         | replacement can be (& pattern matched, \n n-match)                                   |
-|         | [w FILE,g,p,I,NUMBER]                                                                |
-|         | hk                                                                                   |
-|---------+--------------------------------------------------------------------------------------|
-** Addresses
+|---------+----------+---------------------------------------------------------------------------------|
+|     <r> | name     | description                                                                     |
+|---------+----------+---------------------------------------------------------------------------------|
+|       q | quit     |                                                                                 |
+|       d | delete   | the /pattern space/                                                             |
+|       D | delete   | only the first line from the /pattern space/, and run again                     |
+|       n | next     | reads   the next line into the /pattern space/, and prints previous value there |
+|       N | next     | appends the next line into the /pattern space/, in a new line                   |
+|       p | print    | the /pattern space/                                                             |
+|       P | print    | the first line on the /pattern space/                                           |
+|       = |          | prints the current line number plus a new line                                  |
+|       y |          | /srcstr/dststr/ (tr)ansliterates src by dst                                     |
+|       l |          | list the /pattern space/ unambigously, nice for debugging                       |
+|---------+----------+---------------------------------------------------------------------------------|
+|       r | reads    | from provided filename                                                          |
+|       w | writes   | to provided filename                                                            |
+|---------+----------+---------------------------------------------------------------------------------|
+|       t |          | jump to given tag if previous substitution succeded                             |
+|       T |          | jump to given tag if previous substitution failed                               |
+|---------+----------+---------------------------------------------------------------------------------|
+| [line]a |          | appends, after current /pattern space/                                          |
+| [line]i |          | inserts, before current /pattern space/                                         |
+| [addr]c |          | change, replaces current /pattern space/ with given argument                    |
+|---------+----------+---------------------------------------------------------------------------------|
+|       s |          | /pattern/replacement/flags                                                      |
+|         |          | uses address for pattern if missing                                             |
+|         |          | replacement can be ("&" /pattern/ matched, or \N where N is the N-match group)  |
+|         |          | [w FILE,g,p,I,NUMBEROFMATCH]                                                    |
+|         |          | hk                                                                              |
+|---------+----------+---------------------------------------------------------------------------------|
+|       h | hold     | copy     pattern -> hold                                                        |
+|       H | hold     | append \npattern -> hold                                                        |
+|       g | get      | copy        hold -> pattern                                                     |
+|       G | get      | append    \nhold -> pattern                                                     |
+|       x | exchange | aka swap content between /hold space/ and /pattern space/                       |
+|---------+----------+---------------------------------------------------------------------------------|
+
+** addresses
 
 - If
-  - 0 address, command is applied to each line
-  - 1 address, to the line matching
-  - address is followed by a (!), inverse the address match
+  - NO  address, command is applied to each line
+  - has address, applies to the line matching
+    - address is followed by a (!), inverse the address match
 
 - Can be
-  - 1,1 a comma separated tuple, command is applied from and upto including the matched line
+  - 1,2  where 1=startline and 2=endline
+    a comma separated tuple, command is applied from and upto including the matched line
     "You can think of the 1st address as enabling the action and the second address as disabling it."
+  - 1~2  where 1=startline and  2=step
+  - 1,+2 where 1=startline and +2=distance/length
   - /aregex/
+    - also supports arbitrary characters as delimitators, with a backslash for the left one
+    - \:aregex:
   - NUMBER of line (not reset by different files)
   - $ represents the last line
   - {} to group different commands to the same OR different address
   - line addressing symbol
+  - can mix up line number and regex
 
 eg: "2d" aka apply delete to line 2
 eg: "/Sebastopol/s/CA/California/g" performs the substituion ONLY on lines cointaining "Sebastopol"
 
+** flags
 
-** Flags
-|----------------+---------------------------------|
-| -e script      | inline script                   |
-| -f script-file | path to script-file             |
-| -n             | only output via the *p* command |
-|----------------+---------------------------------|
+|----------------+---------------------------------------------------------|
+| -e script      | inline script                                           |
+| -f script-file | path to script-file                                     |
+| -n             | only output via the *p* command                         |
+| -i             | inplace edit                                            |
+| -i.bkp         | inplace edit, saves old version with the .bkp extension |
+|----------------+---------------------------------------------------------|
 
 
 * snippets
@@ -98,6 +119,7 @@ https://sed.sourceforge.io/#scripts
 | $p                    | -n            | prints last line                                                        |
 | 1,3p                  | -n            | prints lines 1 through 3                                                |
 | 20,$p                 | -n            | prints from line 20 to end                                              |
+| /#/,$p                | -n            | remove before comment (#)                                               |
 |-----------------------+---------------+-------------------------------------------------------------------------|
 | =;n                   |               | interleaves printing line number, every 2 numbers (1,3..) and each line |
 | $=                    | -n            | prints the number of lines (slow?)                                      |
@@ -107,12 +129,14 @@ https://sed.sourceforge.io/#scripts
 | $d                    | -i /etc/hosts | deletes last line                                                       |
 |-----------------------+---------------+-------------------------------------------------------------------------|
 | 2d                    |               | delete line 2                                                           |
+| 1,10d                 |               | remove the first 10 lines                                               |
 | /^ /d                 |               | filters out lines starting with space                                   |
 | /^ *$/d               |               | filters out lines containing only spaces                                |
 | 50,$d                 |               | deletes from line 50 to the end                                         |
 | /needle/d             |               | deletes lines containing "needle"                                       |
 | 1,/^$/d               |               | deletes from 1st line to the first blank line                           |
 | /^(#¦$)/d             | -E            | remove comments and empty lines                                         |
+| /^#/d;/^$/d           |               | remove comments and empty lines                                         |
 | /^\s*(#¦$)/d          | -E            | remove comments, indentend comments, and empty lines                    |
 |-----------------------+---------------+-------------------------------------------------------------------------|
 | /---/!s/--/\\(em/g    |               | on all lines that do not have 3(-), replace 2(-)                        |
@@ -122,14 +146,18 @@ https://sed.sourceforge.io/#scripts
 | s/.$//                |               | dos2unix, aka CRLF to LF                                                |
 |-----------------------+---------------+-------------------------------------------------------------------------|
 #+TBLFM: $1=;n
-** remove before (#)
-  sed -i -n '/#/,$p' file.txt
+- https://literateprograms.org/category_programming_language_sed.html
+  - rot13 https://literateprograms.org/rot13__sed_.html
 ** remove the last 10 lines of a file
   https://stackoverflow.com/questions/13380607/how-to-use-sed-to-remove-the-last-n-lines-of-a-file/13380679
   sed -i -n -e :a -e '1,10!{P;N;D;};N;ba' file.txt
-** remove the first 10 lines of a file
-  sed -e '1,10d' file.txt
 * codebases
+
+- debugger https://github.com/aureliojargas/sedsed
 - bach prelude https://github.com/laserbat/bach.sed https://clyp.it/dqgahq1x
 - tetris https://github.com/uuner/sedtris
+- chess https://github.com/moldabekov/chess-sed
 - https://github.com/linguisticmind/search-in-subs
+- scripts | seder's grab bag https://sed.sourceforge.io/grabbag/scripts/
+- python interpreter https://github.com/GillesArcas/PythonSed
+- lisp interpreter https://github.com/mb64/sel
