@@ -2,3 +2,4 @@
 - tool: json to grep-able format https://github.com/tomnomnom/gron
 - tool: shell https://www.nushell.sh/
 - tool: language+shell https://github.com/refaktor/rye
+- tools: https://github.com/jlevy/the-art-of-command-line/blob/master/README.md

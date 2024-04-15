@@ -1,0 +1,24 @@
+- home https://www.gnu.org/software/autoconf/
+- wiki https://en.wikipedia.org/wiki/M4_(computer_language)
+  - Authors: Brian Kernighan, Dennis Ritchie
+  - 1977-
+  - general purpose macro pre-processor
+  - used by sendmail
+  - mostly used by *autoconf* (part of autotools)
+    - in configure.ac
+    - Author: David Makenzie
+    - 1991-
+
+- used in the "xz backdoor"
+  - https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=m4/build-to-host.m4
+  - https://felipec.wordpress.com/2024/04/04/xz-backdoor-and-autotools-insanity/
+    #+begin_src m4
+    AC_CONFIG_COMMANDS([build-to-host],
+                       [eval $gl_config_gt | $SHELL 2>/dev/null],
+                       [gl_config_gt="eval \$gl_[$1]_config"])
+    #+end_src
+  - https://lwn.net/Articles/967205/
+    - The exploit is in two parts.
+      1) Two "test files" which contain the payload;
+      2) and a modified =m4= script (m4/build-to-host.m4)
+         which initiates the process of loading the payload.

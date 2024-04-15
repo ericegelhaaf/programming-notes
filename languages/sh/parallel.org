@@ -1,3 +1,8 @@
 - home https://www.gnu.org/software/parallel/
+- tutorial https://www.gnu.org/software/parallel/parallel_tutorial.html
 - wikipedia https://en.wikipedia.org/wiki/GNU_parallel
+
+- https://docs.alliancecan.ca/wiki/GNU_Parallel
 - article 19 | https://vfoley.xyz/parallel/
+- article 21 | https://blog.ronin.cloud/gnu-parallel/
+- article 23 | https://alexplescan.com/posts/2023/08/20/gnu-parallel/

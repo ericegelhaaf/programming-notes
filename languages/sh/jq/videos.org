@@ -249,3 +249,6 @@ TODO: 20:50
 |---------------------------------------------+----------------|
 
 $ grep "event_type" eve.json | jq .flow_id
+
+* DONE 24 | jq: A Practical Guide                  | Navek
+https://www.youtube.com/watch?v=j7xZ2VkLYIY
