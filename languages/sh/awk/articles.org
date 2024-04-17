@@ -5,6 +5,7 @@
 - 16 | Example Code in Shell, Awk, and Make https://www.oilshell.org/blog/2016/11/14.html
 - 16 | Shell, Awk, and Make Should Be Combined https://www.oilshell.org/blog/2016/11/13.html
 - 10 https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
+- 19 | Using AWK and R to parse 25tb https://livefreeordichotomize.com/posts/2019-06-04-using-awk-and-r-to-parse-25tb/
 * 99 | Juergen Kahrs      | Network Administration with AWK
 
 https://www.linuxjournal.com/article/3132

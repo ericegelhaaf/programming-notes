@@ -1,0 +1,12 @@
+- home https://xmlstar.sourceforge.net/
+- source (C) https://sourceforge.net/p/xmlstar/code/ci/master/tree/
+
+- article 21 https://opensource.com/article/21/7/parse-xml-linux
+- $ xmlstarlet sel --template --value-of /rss/channel/item/title rssfeed.xml
+
+* sel --template
+|----+------------------+----------------|
+| -t | --template       |                |
+| -n | --nl             | print new line |
+| -v | --value-of XPATH |                |
+|----+------------------+----------------|

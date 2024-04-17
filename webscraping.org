@@ -1,0 +1,13 @@
+- Python Intro https://scrapfly.io/blog/web-scraping-with-python/
+- Site Guides https://scrapfly.io/blog/tag/scrapeguide/
+
+- 23 https://scrapecrow.com/year-of-writing-in-review.html
+  - Python is the most popular, with best libraries for it
+  - Tools
+    - Playwright https://scrapfly.io/blog/web-scraping-with-playwright-and-python/
+    - Selenium https://scrapfly.io/blog/web-scraping-with-selenium-and-python/
+    - puppeteer https://scrapfly.io/blog/web-scraping-with-puppeteer-and-nodejs/
+    - httpx https://pypi.org/project/httpx/
+    - parsel (supports css/xpath selectors for html) https://pypi.org/project/parsel/
+    - jmespath (json query language) https://scrapfly.io/blog/parse-json-jmespath-python/
+      - "jsonpath implementations aren't great"

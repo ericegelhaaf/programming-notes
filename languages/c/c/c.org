@@ -130,10 +130,14 @@
 - https://github.com/google/sanitizers/wiki/AddressSanitizer
 - https://valgrind.org/docs/manual/quick-start.html
 - https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
-* 0x00sec
-** I Remote Shells
+* 0x00sec - Remote Shells
+**   I Use Cases
 https://0x00sec.org/t/remote-shells-part-i/269/1
-** II Remote Shells. Part II. Crypt your link
+
+- in the cases when is not possible to even deploy a service like "ssh" or "telnet"
+  you can easily write your own remote shell program
+
+**  II Crypt your link
 - https://0x00sec.org/t/remote-shells-part-ii-crypt-your-link/306
 - https://en.wikipedia.org/wiki/Loop_unrolling
 - SocketPair
@@ -155,7 +159,8 @@ https://0x00sec.org/t/remote-shells-part-i/269/1
   read()
   memfrob()
 - We use stdin socket as the input socket for async_read() on main()
-** III Remote Shells Part III. Shell Access your Phone
+
+** III Shell Access your Phone
 - setsockopt() - SO_REUSEADDR
 * Projects
 - http://www.tendra.org/tdfc2-config/#S11.2

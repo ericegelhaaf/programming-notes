@@ -326,15 +326,19 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 
 * snippets filters/expressions
 
-|-------------------------------------------------------+---------------------------------------------------|
-| filter                                                | description                                       |
-|-------------------------------------------------------+---------------------------------------------------|
-| .foo?                                                 |                                                   |
-| .[] ¦ {msg: .commit.msg, name: .commit.commiter.name} | builds a new json                                 |
-| .parse.categories[].name                              | the contents of each field "name"                 |
-| .["parse"] ¦ .["categories"] ¦ .[] ¦ .["name"]        | equivalent code, using pipelines                  |
-| path(..) ¦ map(tostring) ¦ join("/")                  | instant schema                                    |
-|-------------------------------------------------------+---------------------------------------------------|
+- Get 5 random emails
+  $ curl -s "https://randomuser.me/api/1.2/?results=5&seed=dsatcl2e" | jq -r '.results[].email'
+
+|-------------------------------------------------------+-------------------------------------|
+| filter                                                | description                         |
+|-------------------------------------------------------+-------------------------------------|
+| .foo?                                                 |                                     |
+| .[] ¦ {msg: .commit.msg, name: .commit.commiter.name} | builds a new json                   |
+| path(..) ¦ map(tostring) ¦ join("/")                  | instant schema                      |
+|-------------------------------------------------------+-------------------------------------|
+| .parse.categories[].name                              | the contents of each field's "name" |
+| .["parse"] ¦ .["categories"] ¦ .[] ¦ .["name"]        | equivalent code using pipelines     |
+|-------------------------------------------------------+-------------------------------------|
 
 |---------------------+---------------------------+----------------------+-------------------------------------------|
 | input               | filter                    | output               | description                               |

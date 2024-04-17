@@ -1,0 +1,85 @@
+- article 09 | https://www.spinellis.gr/blog/20090304/
+- article 10 | https://danielmiessler.com/p/find/
+- article 10 | https://web.archive.org/web/20110811070630/http://www.xcombinator.com/2010/09/06/a-crawler-using-wget-and-xargs/
+- article 10 | https://web.archive.org/web/20121202101153/http://blog.labrat.info:80/20100429/using-xargs-to-do-parallel-processing
+- article 11 | https://web.archive.org/web/20120720071737/http://bitops.io/blog/1336893229/xargs
+- article 12 | https://www.r-bloggers.com/2012/03/find-xargs-like-a-boss/
+- article 18 | https://intoli.com/blog/sitemaps-in-bash/
+- article 21 | https://www.linuxjournal.com/content/parallel-shells-xargs-utilize-all-your-cpu-cores-unix-and-windows
+- article 21 | https://codefaster.substack.com/p/xargs-considered-harmful
+- article 21 | https://www.networkworld.com/article/970340/using-the-xargs-command-on-linux-to-simplify-your-work.html
+- article 21 | https://www.oilshell.org/blog/2021/08/xargs.html
+
+* Flags
+
+|---------+-----------------+-------------------------------------------|
+| -P n    | --max-procs=n   | process to run at the same time           |
+| -0      | --null          | input will be separate by null characters |
+| -n n    | --max-args=n    | use at most ~n~ arguments per command     |
+| -I s    |                 | where ~s~ is replacement string           |
+| -a file | --arg-file=file | reads from ~file~ instead of stdin        |
+|---------+-----------------+-------------------------------------------|
+
+* article 10 | http://widgetsandshit.com/teddziuba/2010/10/taco-bell-programming.html
+
+- Taco Bell programming
+  - is about developers knowing enough about ops so that they don't overthink things,
+    and arrive at simple, scalable solutions.
+- ~functionality is an asset, but code is a liability~
+- Every time you write code or introduce some 3rd party service, you are introducing
+  the possibility of failure into your system.
+- Example:
+  1) Clojure + EC2 + SQS/ZeroMq
+  2) xargs + wget (+ split + rsync)
+  3) =find= craw_dir/ -type f -print0 | =xargs= -n1 -0 -P32 ./process
+
+* article 14 | https://adamdrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html
+
+- Author saw someone using EMR (elastic map reduce) with Python (mrjob) to perform analysis
+- Original Data (1.75GB)
+  - from Chess games database named "million base"
+  - in PGN (portable game notation) format https://en.wikipedia.org/wiki/Portable_Game_Notation
+  - old https://web.archive.org/web/20161006225337/https://www.top-5000.nl/pgn.htm
+  - new http://rebel13.nl/rebel13/rebel%2013.html
+- New Data (3.46GB) used by the Author https://github.com/rozim/ChessData
+- REMINDER:
+  - Commands in a shell pipeline run in parallel, this returns immediately.
+    $ sleep 3 | echo "Hello world"
+  - Since they are both not io-bounded commands.
+
+** Experiment
+
+- 13 seconds - 272MB/s - Baseline
+  $ cat *.pgn > /dev/null
+
+- 70 seconds
+  $ cat *.pgn | grep "Result" | sort | uniq -c
+
+- 65 seconds - removing sort/uniq for awk
+  $ cat *.pgn | grep "Result" | awk -f doom.awk
+  #+NAME: doom.awk
+  #+begin_src awk
+    {
+        split($0, a, "-");
+        res = substr(a[1], length(a[1]), 1);
+        if (res == 1) white++;
+        if (res == 0) black++;
+        if (res == 2) draw++;
+    }
+    END { print white+black+draw, white, black, draw }
+  #+end_src
+
+- 38 seconds - xargs (ME: output gets corrupted)
+  - htop showed grep being the bottleneck, in full usage of 1 CPU
+  - $ find . -type f -name '*.pgn' -print0 | xargs -0 -n1 -P4 grep -F "Result" | gawk -f doom.awk
+
+- 18 seconds - removing grep and doing per file summaries in awk + a new awk for totals
+  $ find . -type f -name '*.pgn' -print0 | xargs -0 -n4 -P4 awk -f doom.awk | awk -f bar.awk
+  #+NAME: bar.awk
+  #+begin_src awk
+    { games += $1; white += $2; black += $3; draw += $4; }
+    END { print games, white, black, draw }
+  #+end_src
+
+- 12 seconds - using mawk https://invisible-island.net/mawk/mawk.html
+

@@ -1,3 +1,4 @@
+- https://elixir-lang.org/blog/2017/10/31/stream-data-property-based-testing-and-data-generation-for-elixir/
 - https://david-delassus.medium.com/elixir-and-kubernetes-a-love-story-721cc6a5c7d5
 * TODO https://joearms.github.io/published/2013-05-31-a-week-with-elixir.html
 - sigils are from ruby

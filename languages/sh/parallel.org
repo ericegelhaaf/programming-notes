@@ -1,8 +1,32 @@
 - home https://www.gnu.org/software/parallel/
 - tutorial https://www.gnu.org/software/parallel/parallel_tutorial.html
 - wikipedia https://en.wikipedia.org/wiki/GNU_parallel
+  - Author: Ole Tange
 
+- https://docs-research-it.berkeley.edu/services/high-performance-computing/user-guide/running-your-jobs/gnu-parallel/
 - https://docs.alliancecan.ca/wiki/GNU_Parallel
+- https://msi.umn.edu/our-resources/knowledge-base/jobs-faqs/how-can-i-use-gnu-parallel-run-lot-commands-parallel
+- article 18 | https://opensource.com/article/18/5/gnu-parallel
 - article 19 | https://vfoley.xyz/parallel/
 - article 21 | https://blog.ronin.cloud/gnu-parallel/
+- article 22 | https://omgenomics.com/parallel/
+- article 22 | https://www.redhat.com/sysadmin/gnu-parallel
 - article 23 | https://alexplescan.com/posts/2023/08/20/gnu-parallel/
+- article 23 | https://thenybble.de/posts/json-analysis/
+
+- video
+  - part 1 https://vimeo.com/20838834
+
+* flags
+
+|------+----------+--------------------------------------------|
+| -j n | --jobs=n | max number of jobs to run at the same time |
+|------+----------+--------------------------------------------|
+
+* snippets
+
+- replaces a for loop
+  $ seq 0 2 100 | parallel "echo {}^2 | bc" | trim
+
+- run no more than 2 jobs concurrently
+  $ parallel --jobs 2 ./slow.sh :: {A..C}
