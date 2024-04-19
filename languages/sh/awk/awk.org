@@ -1,10 +1,14 @@
-|------------+-----------------------------------|
-| AWK Home   | https://www.awk.dev/              |
-| AWK Source | https://github.com/onetrueawk/awk |
-| wiki       | https://en.wikipedia.org/wiki/AWK |
-| wikibooks  | https://en.wikibooks.org/wiki/AWK |
-| web repl   | https://awk.js.org/               |
-|------------+-----------------------------------|
+|-----------+-------------------------------------------------------------------------------|
+| book      | https://www.awk.dev/                                                          |
+| wiki      | https://en.wikipedia.org/wiki/AWK                                             |
+| wikibooks | https://en.wikibooks.org/wiki/AWK                                             |
+| web repl  | https://awk.js.org/                                                           |
+|-----------+-------------------------------------------------------------------------------|
+| nawk      | https://github.com/onetrueawk/awk                                             |
+| mawk      | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
+| gawk      | https://www.gnu.org/software/gawk/                                            |
+| goawk     | https://github.com/benhoyt/goawk                                              |
+|-----------+-------------------------------------------------------------------------------|
 
 - coverage
   https://benhoyt.com/writings/goawk-coverage/

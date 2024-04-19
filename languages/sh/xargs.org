@@ -1,4 +1,4 @@
-- article 09 | https://www.spinellis.gr/blog/20090304/
+- article 09 (DONE) | https://www.spinellis.gr/blog/20090304/
 - article 10 | https://danielmiessler.com/p/find/
 - article 10 | https://web.archive.org/web/20110811070630/http://www.xcombinator.com/2010/09/06/a-crawler-using-wget-and-xargs/
 - article 10 | https://web.archive.org/web/20121202101153/http://blog.labrat.info:80/20100429/using-xargs-to-do-parallel-processing
@@ -14,8 +14,8 @@
 
 |---------+-----------------+-------------------------------------------|
 | -P n    | --max-procs=n   | process to run at the same time           |
-| -0      | --null          | input will be separate by null characters |
 | -n n    | --max-args=n    | use at most ~n~ arguments per command     |
+| -0      | --null          | input will be separate by null characters |
 | -I s    |                 | where ~s~ is replacement string           |
 | -a file | --arg-file=file | reads from ~file~ instead of stdin        |
 |---------+-----------------+-------------------------------------------|

@@ -1,3 +1,5 @@
+- 18 https://benhoyt.com/writings/goawk/
+- 22 https://benhoyt.com/writings/goawk-compiler-vm/
 - https://github.com/freznicek/awesome-awk
 - 13 | https://codegolf.stackexchange.com/questions/13014/tips-for-golfing-in-awk
 - 20 | https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
