@@ -10,6 +10,7 @@
   - Implements most of ~SQL-92~
     - triggers
     - readonly views
+  - CONCAT()                (2023 - 3.44.0)
   - Foreign Key constraints (2009 - 3.16.19)
   - Full Text Search
     - FTS4 (2010 - 3.7.4)
@@ -35,7 +36,7 @@
   - persistence https://sqlite.org/wasm/doc/trunk/persistence.md
 
 - Types
-  - INTEGER
+  - INTEGER: also includes literals true/false which map to 1/0
   - REAL: floating point numbers
   - TEXT: readable text
   - BLOB: binary data
@@ -154,6 +155,21 @@ https://www.sqlite.org/lang_datefunc.html
 | substr[ing]  | x,y   |                 |
 | zeroblob     | n     | n-bytes of 0x00 |
 |--------------+-------+-----------------|
+** Aggregate     Functions
+https://www.sqlite.org/lang_aggfunc.html
+|--------------+---------+-------------------------------------------------------|
+| avg          | x       | interprets string/blob values as zero, floating point |
+| count        | x       | number of times that x is not-null                    |
+|              | *       | total number of rows in a group                       |
+| max          | x       | -                                                     |
+| min          | x       | -                                                     |
+| sum          | x       | -                                                     |
+| decimal_sum  | x       | same as sum(), for floats sum, avoids imprecisions    |
+| total        | x       | same as sum(), but returns 0.0 if all values are null |
+|--------------+---------+-------------------------------------------------------|
+| group_concat | x[,sep] | "," is used if sep(arator) is ommited                 |
+| string_agg   | x ,sep  | alias of group_concat(x,y)                            |
+|--------------+---------+-------------------------------------------------------|
 ** Foreign Keys
 https://www.sqlite.org/foreignkeys.html
 

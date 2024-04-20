@@ -1,3 +1,4 @@
+- https://github.com/thheller/chrome-ext-v3
 - https://tonsky.me/blog/clojurescript-2/
   - ShadowCLJS, ignores hand-written externs by default. Because they
     are supposed to be “automatically deduced”. And it works. Until it

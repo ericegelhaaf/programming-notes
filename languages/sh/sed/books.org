@@ -53,7 +53,7 @@
   #+begin_src sed
     s/Owner and Operator Guide/Installation Guide/
     /Owner/{
-        N
+        $!N       # appends next line, but excludes last line
         s/ *\n/ / # remove embedded newline, wherever it is
         s/Owner and Operator Guide */Installation Guide\n/
     }
