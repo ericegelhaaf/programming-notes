@@ -45,6 +45,8 @@
       https://news.ycombinator.com/item?id=21790779
   - Server
     - https://protohackers.com/
+    - https://play.battlesnake.com/
+    - https://yare.io/
   - Distributed
     - https://fly.io/blog/gossip-glomers/
   - Problems

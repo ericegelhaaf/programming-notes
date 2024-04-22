@@ -1,0 +1,4 @@
+- The Uxn/Varvara ecosystem is a personal computing stack based on a small virtual machine that lies at the heart of our software, and that allows us to run the same application on a variety of systems.
+  https://100r.co/site/uxn.html
+- https://github.com/hundredrabbits/awesome-uxn
+- tai https://wiki.xxiivv.com/site/uxntal.html

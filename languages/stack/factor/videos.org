@@ -1,0 +1,29 @@
+- 08 | Factor: an extensible interactive language | Slave Pestov https://www.youtube.com/watch?v=f_0QlhYlS8g
+  - functions=words
+  - functions take inputs from the stack, output to stack
+  - functions as first class values, anonymous code blocks
+  - non enforced immutability
+  - runtime dispatch, polymorphism
+  - data structures = collections
+  - named local variables
+  - C-w - opens code in a *walker* to step through the code
+    s - step
+    i - enter into
+  - Example: factorial
+    #+begin_src factor
+    USE: math.ranges
+    : factorial ( n -- n! )
+        1 [1,b] product ;
+    #+end_src
+    - ( n -- n! )
+      "stack comment" or "stack effect declaration"
+      tells how many values it takes, and how many pushes
+    - 100 factorial .
+- 08 | The ACL is dead | Zed Shaw https://www.youtube.com/watch?v=9BmcB_gp8kw
+- 09 | Factor | Doug Coleman https://vimeo.com/6203360
+- 17 | The Factor Programming Language | Zachery L. Arnold https://www.youtube.com/watch?v=FjW4-5tGidk
+- 22 | Factor 2022 | https://www.youtube.com/watch?v=OLh61q4c4XE
+- 23 | Battle Snake |
+  https://www.youtube.com/watch?v=sqHY3YDGj80
+  https://www.youtube.com/watch?v=tPXAmEsS_6I
+  https://www.youtube.com/watch?v=9cti_7OLrsw

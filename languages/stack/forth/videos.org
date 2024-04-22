@@ -1,0 +1,7 @@
+- https://www.youtube.com/watch?v=z5qISgx50Fk
+- 23 | Introduction to Forth Language Programming Tutorial using Bitcoin
+  https://www.youtube.com/watch?v=i7Vz6r6p1o4
+  - gforth
+  - everything is separated by a space, new line is considered a space
+  - postfix operators is just like assembly works
+  - 8:48

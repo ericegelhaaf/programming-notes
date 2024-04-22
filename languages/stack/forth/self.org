@@ -1,0 +1,25 @@
+- home https://www.forth.com/resources/forth-programming-language/
+- home https://forth-standard.org/
+- wiki https://en.wikipedia.org/wiki/Forth_(programming_language)
+  - Author: Charles H. Moore (aka Chuck Moore) https://en.wikipedia.org/wiki/Charles_H._Moore
+  - 1970-
+
+- article 17 | https://hackaday.com/2017/01/27/forth-the-hackers-language/
+- http://ratfactor.com/forth/the_programming_language_that_writes_itself.html
+- https://blog.information-superhighway.net/what-the-hell-is-forth
+- how to write a forth?
+  http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.S
+  http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.f
+
+* snippets
+|----------------+-------+-------------------------------------|
+| .s             |       | show stack                          |
+| 0 10 .         |     0 | pop top of stack                    |
+| 10 20          | 10 20 |                                     |
+| 10 20 +        |    30 |                                     |
+| : add10 10 + ; |       | defines a new word "add10"          |
+| 5 add10        |    15 |                                     |
+| 2 dup          |   2 2 |                                     |
+| 1 2 swap       |   2 1 |                                     |
+| 10 emit        |       | prints ascii of the number on stack |
+|----------------+-------+-------------------------------------|

@@ -17,10 +17,26 @@ source: https://github.com/kyclark/command-line-rust
 - std::process::exit(1)
   std::process::abort()
 * 21 | Rust In Action (Manning)
+** DONE Preface & About
+- Despite being a systems programming book, every example works on Windows.
+- Rust 2018 edition
+- Projects
+  - grep (2)
+  - database (7)
+  - hexdump (7)
+  - CPU emulator (5)
+  - http client (8)
+  - ntp client (9)
+  - memory scanner (6)
+  - operative system kernel
+  - generative art (6)
+  - turtle graphics (10)
+  - parallel parser (10)
+  - bootleader/kernel (11)
 ** DONE 1 Introducing Rust
 - Not all security bugs can be solved with rust
-  - Hearthbleed: buffer reutilization bug
-  - goto fail: extra goto, variable initialized with success
+  1) Hearthbleed: buffer reutilization bug
+  2) goto fail: extra goto, variable initialized with success
 - println!() exists as a macro since it does a bunch of type detection
 - Integer overflow checks on debug mode
 ** DONE 2 Language Foundations

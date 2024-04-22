@@ -1,0 +1,22 @@
+- tutorial
+  http://jwiegley.github.io/git-from-the-bottom-up/
+  https://github.com/jwiegley/git-from-the-bottom-up
+
+- diy
+  - https://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/
+  - https://vaibhavsagar.com/blog/2017/08/13/i-haskell-a-git/
+
+- article | extract dir into new repo
+  https://www.johno.com/move-directory-between-repos-with-git-history
+- article 17 | magit https://emacsair.me/2017/09/01/magit-walk-through/
+- https://github.com/k88hudson/git-flight-rules
+- https://blog.scottlowe.org/2023/12/15/conditional-git-configuration/
+- workflow https://sethrobertson.github.io/GitFixUm/fixup.html
+- book Pro Git https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+- https://bytes.zone/posts/modeling-git-internals-in-alloy-part-1-blobs-and-trees/
+- https://www.boringcactus.com/2021/02/22/can-we-please-move-past-git.html
+- https://dev.to/yonkeltron/is-it-time-to-look-past-git-ah4
+- https://www.freecodecamp.org/news/tag/git/
+- https://ohshitgit.com/
+- https://stackoverflow.com/questions/14352932/view-a-files-history-in-magit
+  ~magit-log-buffer-file~, view log for file

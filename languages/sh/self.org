@@ -9,7 +9,6 @@
 - find
   - -ok, is like -exec, but ask user before running
 
-
 - tool: awk like in cli, with haskell flavor https://github.com/gelisam/hawk
 - tool: json to grep-able format https://github.com/tomnomnom/gron
 - tool: shell https://www.nushell.sh/
@@ -19,3 +18,4 @@
 
 - article 06 | https://ridiculousfish.com/blog/posts/old-age-and-treachery.html
 - article 17 | http://www.pixelbeat.org/docs/unix-parallel-tools.html
+- article 23 | https://muhammadraza.me/2023/webscraping-in-bash/

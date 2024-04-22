@@ -1,0 +1,41 @@
+- home https://factorcode.org/
+- wiki https://en.wikipedia.org/wiki/Factor_(programming_language)
+  - Author: Slave Pestov
+  - Stack-Oriented Programming Language
+  - 2003-
+  - Created as scripting language for a video game (aka JFactor)
+  - Dynamically typed
+  - Object System
+  - FFI
+
+- wiki http://progopedia.com/language/factor/
+- native compiling https://concatenative.org/wiki/view/Factor/Deployment
+- https://re.factorcode.org/
+- https://re.factorcode.org/2014/04/scraping-re-factor.html
+- https://bluishcoder.co.nz/tags/factor/index.html
+- https://bluishcoder.co.nz/2020/04/18/fun-factor-libraries.html
+- https://andreaferretti.github.io/factor-tutorial/
+
+* language
+
+- Procedures are called =words=
+  - 1-3 LOC generally
+  - Fixed number of arguments
+- Stack is used to organize calls to words, NOT as a data structure.
+- No package manager.
+  All libraries of the language are part of the Factor monorepo.
+  Along with docs.
+
+* libraries/vocabularies
+
+- all https://docs.factorcode.org/content/article-vocab-index.html
+- opengl examples https://github.com/George66/Factor/tree/main/OpenGL3.2%2B%20examples
+- furnace
+  https://concatenative.org/wiki/view/Factor/Furnace
+  https://docs.factorcode.org/content/vocab-furnace.html
+
+* codebases
+- examples https://concatenative.org/wiki/view/Factor/Examples
+- utils https://github.com/mrjbq7/re-factor
+- aoc solutions https://github.com/gifti258/aoc-factor
+* snippet
