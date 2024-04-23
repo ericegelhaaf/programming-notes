@@ -1,0 +1,51 @@
+- wiki https://en.wikipedia.org/wiki/Plan_9_from_Bell_Labs
+- wiki https://en.wikipedia.org/wiki/9P_(protocol)
+
+
+- https://www.youtube.com/@adventuresin9797/videos
+- video 06 | Plan 9 https://www.youtube.com/watch?v=VJSlvoUFkBA
+- video 14 | https://www.youtube.com/watch?v=5BNhCW6wkBA
+- video 19 | Plan 9 | Ori Bernstein https://www.youtube.com/watch?v=6m3GuoaxRNM
+- video 23 | Plan 9 | Brian L Stuart https://www.youtube.com/watch?v=BTxzsz6_4I0
+- video 23 | Plan 9 on 64-bit RISC-V https://www.youtube.com/watch?v=EOg6UzSss2A
+- video 23 | https://www.youtube.com/watch?v=r2mDpHbO6pI
+  17:00
+- video 23 | Plan 9 from Bell Labs | DJ Ware https://www.youtube.com/watch?v=Ltpa2tqjZdk
+  - the OS is designed as a loosely coupled services that can be hosted in different machines
+  - while unix is "monolitic", has 1 namespace
+  - plan9 has per process namespace, a namespace can have multiple processes
+  - utf8 first implemented in plan9 (ME: rob pike created it afaik)
+  - unix
+    - wasn't designed for workstations
+    - graphics/networking were "addons"
+  - born from the desire to have centralized time-sharing
+    on multiple cheaper computers (terminals)
+- video 23 | Plan 9 | Angelo Papenhoff https://www.youtube.com/watch?v=mCiRxM8dOSY
+  - ccc
+  - made at Bell Labs
+  - plan9 = unix + graphics + networks
+  - mostly initially written by Rob Pike and Ken Thompson
+  - 1980-
+  - forks
+    - 9front: main active fork
+    - Plan 9: patches over the original
+  - https://en.wikipedia.org/wiki/Blit_(computer_terminal)
+  - ~40 syscalls
+    - no ioctl
+    - no sockets
+    - no graphics
+    - everything else is done through the filesystem
+  - bind   copies something
+    mount  adds something new to the namespace
+    umount removes that
+  - To get access to the other computer network.
+    If you already have access to the filesystem of the other computer.
+    Kind of a vpn.
+    $ bind /n/dyaus/net /net
+  - DEMO: 17:11
+    $ mount /srv/rio.app.16734 /mnt/foo new # opens a new window
+    $ cd /mnt/foo
+    $ lc                                    # to list files associated with that window
+    $ echo hello, vcfb >cons                # to print a message to the window
+  - $ ns # is like a "ps"
+  - TODO: 20:15
