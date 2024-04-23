@@ -1,10 +1,20 @@
+- uxn source https://git.sr.ht/~rabbits/uxn
 - The Uxn/Varvara ecosystem is a personal computing stack based on a small virtual machine that lies at the heart of our software, and that allows us to run the same application on a variety of systems.
   https://100r.co/site/uxn.html
+  https://100r.co/site/uxn_guide.html
 - https://wiki.xxiivv.com/site/uxn.html
 - https://eighty-twenty.org/2023/08/11/virtualizing-uxn
 - https://compudanzas.net/uxn.html
 - https://github.com/hundredrabbits/awesome-uxn
+- https://llllllll.co/t/uxn-virtual-computer/46103/435?page=20
+- https://wiki.xxiivv.com/site/varvara.html
+- https://applied-langua.ge/posts/i-dont-want-to-go-to-chel-c.html
 - tal
   - a stack based asm language for the uxn vm
+  - https://learnxinyminutes.com/docs/uxntal/
   - https://wiki.xxiivv.com/site/uxntal.html
+  - https://wiki.xxiivv.com/site/uxntal_reference.html
+  - https://wiki.xxiivv.com/site/uxntal_devices.html
   - https://concatenative.org/wiki/view/Tal
+  - emacs https://github.com/non/uxntal-mode
+  - snippets https://rosettacode.org/wiki/Category:Uxntal

@@ -1,5 +1,59 @@
-- 23 | https://www.youtube.com/watch?v=T3u7bGgVspM
-- 23 | https://www.youtube.com/watch?v=LrNuq_JgaOA
-- 23 | https://www.youtube.com/watch?v=9TJuOwy4aGA
-- 24 | tsoding https://www.youtube.com/watch?v=d41KIL4cjQM
-- 24 | Game of Life | tsoding https://www.youtube.com/watch?v=rTb6NFKUmQU
+* TODO 23 | Intro to Uxn                | Babycastles
+
+https://www.youtube.com/watch?v=LrNuq_JgaOA
+
+* TODO 23 | Weathering Software Winter  | Devine Lu Linvega
+
+https://www.youtube.com/watch?v=9TJuOwy4aGA
+
+- "Our philosophy is that to make fast software,
+   you need slow computers."
+
+- "Suddently that *skill* that you thought you had was
+   actually entirely owned by someone.
+   Even though you have been paying that software for years
+   the moment you can't have access to authenticate yourself
+   well, that *skill* is taken away. That scared us."
+
+- ="Does it work offline?"=
+
+- Xcode updates can be up to 11G, cannot be resumed.
+
+- bbc domesday project: to keep knowledge for future generations
+  - based on a previous book of a "comprehensive store of national information"
+  - used LaserDiscs
+  - project failed in the preservation front
+  - but worked as an Digital Encyclopedia at the time i guess
+  - https://en.wikipedia.org/wiki/BBC_Domesday_Project
+  - https://www.youtube.com/watch?v=vn0oFJU5pxM
+
+- TODO: 8:30
+
+* DONE 23 | An approach to computing... | Devine Lu Linvega
+...and sustainability inspired from permaculture
+
+https://www.youtube.com/watch?v=T3u7bGgVspM
+
+- 34:38 start general vm talk
+  - assembly was "too vertical", wanted something like a =Forth=
+  - has 32 op codes
+  - inpired by =Joy= https://en.wikipedia.org/wiki/Joy_(programming_language)
+  - not necesarilly recommends stack-machines
+  - mentions https://en.wikipedia.org/wiki/Warren_Abstract_Machine
+
+- 41:00 start of uxn code
+  - wrote "type" checker in assembly, to ensure no side-effects
+  - mentions another stack based language https://kittenlang.org/
+  - in forth you end up using registers or variables to do complex
+    stack operations and that is a kind of global variable
+* TODO 24 | Uxn                         | tsoding
+
+- The Most Bizarre and Fascinating Project I've seen!
+  https://www.youtube.com/watch?v=d41KIL4cjQM
+- Game of Life
+  https://www.youtube.com/watch?v=rTb6NFKUmQU
+  - result source https://gist.github.com/rexim/5d9c9b368c6081b2309960f4b8832bec
+  - creates etags for jumping around in Emacs, while browsing uxn source code
+    $ etags $(find src/ -type f)
+  - TODO: 25:00
+

@@ -1,0 +1,19 @@
+- 17 | Stanford Seminar - Concatenative Programming: From Ivory to Metal | Jon Purdy
+  https://www.youtube.com/watch?v=_IgqJr8jG8M
+- 17 https://vimeo.com/216476362
+- 18 https://vimeo.com/275529966
+- 23 | "Concatenative programming and stack-based languages" by Douglas Creager
+  https://www.youtube.com/watch?v=umSuLpjFUf8
+  - TODO 14:00
+  - you don't use names, you don't name the values you are operating on
+  - a program is just gonna be a sequence of instructions (not a tree)
+    - input program is provided in reverse polish notation
+    - executed from left to right
+    - each *value* is pushed into the stack
+    - when an *operation* reaches, the values ot operate are whatever is on the top of the stack
+  - 3 4 [dup * swap dup * + sqrt] apply
+    - [] are usually called a "quotation"
+    - the whole thing gets put into the stack
+  - "stack effects"
+    - you can think of the meaning of a stack program,
+      as the effects that has on the runtime stack
