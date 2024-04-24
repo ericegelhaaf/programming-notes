@@ -29,13 +29,16 @@
 * libraries/vocabularies
 
 - all https://docs.factorcode.org/content/article-vocab-index.html
+- ui examples https://docs.factorcode.org/content/article-ui.html
 - opengl examples https://github.com/George66/Factor/tree/main/OpenGL3.2%2B%20examples
-- furnace
+- web framework
   https://concatenative.org/wiki/view/Factor/Furnace
   https://docs.factorcode.org/content/vocab-furnace.html
 
 * codebases
+
 - examples https://concatenative.org/wiki/view/Factor/Examples
 - utils https://github.com/mrjbq7/re-factor
 - aoc solutions https://github.com/gifti258/aoc-factor
+
 * snippet

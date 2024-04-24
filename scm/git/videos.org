@@ -1,10 +1,83 @@
-- 21 | Git internals | Omer Rosenbaum https://www.youtube.com/watch?v=b_0_nF9yX9c
-- 21 | Git for Professionals Tutorial https://www.youtube.com/watch?v=Uszj_k0DGsg
-- 15 | Git just say no | Richard Hipp https://www.youtube.com/watch?v=ghtpJnrdgbo
+- 21 | Git internals             | Omer Rosenbaum https://www.youtube.com/watch?v=b_0_nF9yX9c
+- 21 | Git for Professionals     | https://www.youtube.com/watch?v=Uszj_k0DGsg
+- 19 | Git Internals CS50        | John Britton https://www.youtube.com/watch?v=lG90LZotrpo
+- 15 | Git just say no           | Richard Hipp https://www.youtube.com/watch?v=ghtpJnrdgbo
 - 12 | Advanced Git: Graphs, Hashes, and Compression, Oh My! https://www.youtube.com/watch?v=ig5E8CcdM9g
-- 13 | Git From the Bits Up | Tim Berglund https://www.youtube.com/watch?v=MYP56QJpDr4
+* DONE 13 | Git From the Bits Up      | Tim Berglund
 
-* DONE 16 | Magit: Git in Emacs - Grumpy Gits SG
+https://www.youtube.com/watch?v=MYP56QJpDr4
+
+- A git repository is
+  1) collection of objects
+  2) a system for naming those objects (refs)
+
+- Types of hashes
+  - The file content is stored in a =blob=
+  - A =tree= object, stores the (file/dir) (name/mode)
+  - A =commit= owns a tree
+
+- The =HEAD= ref, is the commit you are on.
+
+- Creating a .git from scratch (kinda)
+  #+begin_src sh
+    $ mkdir -p .git/objects
+    $ mkdir -p .git/refs/heads
+    $ echo "Hello" | git-hash-object --stdin -w
+    $ git cat-file b0d9c44
+    $ git update-index --add --cacheinfo 100644 b0d9c44 hello.txt
+    $ echo <COMMITHASH> > .git/refs/heads/master
+    $ git checkout HEAD -- beowulf.txt # restore file
+  #+end_src
+
+- What is now called the "staging area" was once called "index"
+  (see "git update-index")
+
+- Typical merge
+  #+begin_src sh
+    $ vi raven.txt
+    $ git add .
+    $ git commit -m "Bleak"
+
+    $ git branch feature 3d09
+    $ # or "HEAD^"  for 1 commit previous to the parent
+    $ # or "HEAD~5" for 5 commits previous to the parent
+    $ git branch -f feature HEAD
+    $ vi raven.txt
+    $ git add .
+    $ git commit -m "Ember"
+
+    $ git checkout feature
+    $ vi raven.txt
+    $ git add .
+    $ git commit -m "Title"
+
+    $ git checkout master
+    $ git merge feature master # creates a merge commit
+#+end_src
+
+
+- With a *rebasing* allows the branch to forward in time their base commit.
+  Still needs to *merge* later.
+  #+begin_src sh
+    $ git reset --hard b7fda   # undo merge
+
+    $ git checkout feature
+    $ git rebase master        # the rebase
+
+    $ git checkout master
+    $ git merge feature        # fast-forward merge, make master to point to head of branch
+  #+end_src
+
+- If you want to get a commit delete with "git reset --hard"
+  use *git reflog*
+
+- interactive rebase, from last 10 commit,
+  you cannot squash the first one, you gotta squash into somtehing
+  $ git rebase -i HEAD~10
+
+- $ git reset --hard HEAD@{1} # single step undo
+
+* DONE 16 | Magit: Git in Emacs       | Grumpy Gits SG
   https://www.youtube.com/watch?v=OMIxZhLU71U
   - IntellIj copied magit
   - GitGutter: shows +- on the side of the line
@@ -20,7 +93,7 @@
     - workflow: jump from *magit-blame* to the commits from that line
   - "keep your branches very short-lived, aim to do it in a day
     if not, rebase at the end of the day"
-* DONE 18 | It's Magit! by John Wiegley
+* DONE 18 | It's Magit!               | John Wiegley
   https://www.youtube.com/watch?v=j-k-lkilbEs
 - Interface copied from =Darcs=, a cvs like git
 - using 1,2,3,4 to toggle detail levels
@@ -98,7 +171,8 @@
   ~vc-diff~                  C-x v =, to diff the file with master
 - https://hackage.haskell.org/package/git-monitor
   https://github.com/jwiegley/gitlbitwi
-* DONE 20 | Lecture 6: Version Control (git)
+* DONE 20 | Git                       | Missing Semester
+aka "Lecture 6: Version Control (git)"
 https://www.youtube.com/watch?v=2sjqTHE0zok
 ** Data Model
 - blobs, trees, commits - all are git objects with an id hash
@@ -130,10 +204,62 @@ https://www.youtube.com/watch?v=2sjqTHE0zok
 - ls .git/
   HEAD config description hooks/ info/ objects/ refs/
 - HEAD is the current commit pointer
-* DONE 20 | Emacs: introduction to VC (version control framework)
-  https://www.youtube.com/watch?v=SQ3Beqn2CEc
-  C-x v v - will do the first logical action, 1) initialize git repo, 2) commit file
-  C-x v l - will show you the history of commits for the current file
-  C-x v = - will show the current diff for the file
-  C-x v g - will anotate in a new tab, the older the bluer
-  C-x v h - after you selected a region, it will show you the changes of that region through commits, diffs included
+* DONE 20 | Emacs: introduction to VC
+"...(version control framework)"
+
+https://www.youtube.com/watch?v=SQ3Beqn2CEc
+
+C-x v v - will do the first logical action, 1) initialize git repo, 2) commit file
+C-x v l - will show you the history of commits for the current file
+C-x v = - will show the current diff for the file
+C-x v g - will anotate in a new tab, the older the bluer
+C-x v h - after you selected a region, it will show you the changes of that region through commits, diffs included
+* TODO 24 | So You Think You Know Git | Scott Chacon
+
+https://www.youtube.com/watch?v=aolI_Rz0ZqY
+
+- Speaker
+  - Founders of github.com (left)
+  - Wrote "Pro Git" book
+  - Works on a git client gitbutler.com
+
+** Oldies
+
+- Alias: stash --all
+  $ git config --global alias.staasj 'stash --all'
+- Alias: run a script
+  $ git config --global alias.bb !better-branch.sh
+
+- Config: setup different .gitconfig for things under different paths
+  #+begin_src conf
+    [includeIf "gitdir:~/projects/work/"]
+      path = ~/projects/work/.gitconfig
+    [includeIf "gitdir:~/projects/oss/"]
+      path = ~/projects/oss/.gitconfig
+  #+end_src
+
+- $ git blame -L 15,26 path/to/file
+- $ git log -L 15,26:path/to/file
+
+- Try to let git figure out the context by the name of the function
+  $ git log -L :FileClass:path/to/file
+
+- $ git blame -w -C
+  | -w   | ignore whitespace                    |
+  | -C   | detect code moved                    |
+  | -CC  | or the commit that created that file |
+  | -CCC | or any commit at all                 |
+
+- filter log by regex
+  $ git log -S <REGEX> -p
+
+- $ git diff --word-diff
+
+- REuse REcorded REsolution: to remember merge-conflicts and how they were fixed
+  $ git config --global rerere.enabled true
+
+** Some New Stuff
+
+- TODO: 16:50
+- $ git branch --column
+  $ git config --global column.ui auto

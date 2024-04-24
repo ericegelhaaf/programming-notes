@@ -20,12 +20,18 @@ https://www.youtube.com/watch?v=9TJuOwy4aGA
 - Xcode updates can be up to 11G, cannot be resumed.
 
 - bbc domesday project: to keep knowledge for future generations
+  - wiki https://en.wikipedia.org/wiki/BBC_Domesday_Project
+  - video ad https://www.youtube.com/watch?v=vn0oFJU5pxM
   - based on a previous book of a "comprehensive store of national information"
   - used LaserDiscs
   - project failed in the preservation front
   - but worked as an Digital Encyclopedia at the time i guess
-  - https://en.wikipedia.org/wiki/BBC_Domesday_Project
-  - https://www.youtube.com/watch?v=vn0oFJU5pxM
+
+- Techniques for preservation
+  - migration: periodically convert (cons: degradation)
+  - emulation: mimicking hardware with software (cons: with time, chains of emulators will break down)
+  - encapsulation: ?
+  - universal virtual computer: paper copies of specs (cons: difficult translation into paper)
 
 - TODO: 8:30
 
@@ -46,14 +52,17 @@ https://www.youtube.com/watch?v=T3u7bGgVspM
   - mentions another stack based language https://kittenlang.org/
   - in forth you end up using registers or variables to do complex
     stack operations and that is a kind of global variable
+
 * TODO 24 | Uxn                         | tsoding
 
-- The Most Bizarre and Fascinating Project I've seen!
+- 1: The Most Bizarre and Fascinating Project I've seen!
   https://www.youtube.com/watch?v=d41KIL4cjQM
-- Game of Life
+- 2: Game of Life
   https://www.youtube.com/watch?v=rTb6NFKUmQU
   - result source https://gist.github.com/rexim/5d9c9b368c6081b2309960f4b8832bec
   - creates etags for jumping around in Emacs, while browsing uxn source code
     $ etags $(find src/ -type f)
-  - TODO: 25:00
-
+  - %macros are a single word that gets replaced by a sequence of tokens
+  - there is no difference between "#00" and "00" (except that # adds LIT?)
+  - https://wiki.c2.com/?TheKenThompsonHack
+  - TODO: 01:22

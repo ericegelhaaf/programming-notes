@@ -4,7 +4,9 @@
   https://100r.co/site/uxn_guide.html
 - https://wiki.xxiivv.com/site/uxn.html
 - https://eighty-twenty.org/2023/08/11/virtualizing-uxn
+- https://compudanzas.net/intro_to_uxn_programming.html
 - https://compudanzas.net/uxn.html
+- https://compudanzas.net/uxn_tutorial.html
 - https://github.com/hundredrabbits/awesome-uxn
 - https://llllllll.co/t/uxn-virtual-computer/46103/435?page=20
 - https://wiki.xxiivv.com/site/varvara.html

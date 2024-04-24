@@ -1,3 +1,11 @@
+- source (C) https://git.kernel.org/pub/scm/git/git.git/tree/
+- wiki https://en.wikipedia.org/wiki/Git
+  - Author: Linux Torvalds
+  - 2005-
+  - creation prompted by the revocation of the free license of *BitKeeper*
+  - distributed version control system
+
+
 - github.com keywords to close issues https://github.blog/2013-01-22-closing-issues-via-commit-messages/
   - accept capitalization
   - keywords
@@ -20,42 +28,95 @@
     $ git push --force --all
 
 
-* command
-|----------+-----------------------+----------------------------------------------------|
-| add      |                       |                                                    |
-|          | -p                    | interactively select ~hunks~ of patches to add     |
-|----------+-----------------------+----------------------------------------------------|
-| branch   |                       |                                                    |
-|          | -vv                   |                                                    |
-|          | --set-upstream-to=?/? |                                                    |
-|----------+-----------------------+----------------------------------------------------|
-| cat-file | HASH_OBJECT           | content+size+information of OBJECT                 |
-|----------+-----------------------+----------------------------------------------------|
-| checkout | BRANCH                | switch to BRANCH                                   |
-|          | -b                    | creates the BRANCH                                 |
-|----------+-----------------------+----------------------------------------------------|
-| clone    | URL                   |                                                    |
-|          | --shallow             | only gets the current snapshot, not the full thing |
-|----------+-----------------------+----------------------------------------------------|
-| fetch    |                       |                                                    |
-|----------+-----------------------+----------------------------------------------------|
-| lfs      | install               | https://git-lfs.github.com/                        |
-|          | track ".EXT"          |                                                    |
-|----------+-----------------------+----------------------------------------------------|
-| log      |                       |                                                    |
-|          | --all                 | show all refs+HEAD                                 |
-|          | --graph               | draw                                               |
-|          | --decorate            | prints refnames                                    |
-|          | --oneline             | aka --pretty=oneline --abbrev-commit               |
-|----------+-----------------------+----------------------------------------------------|
-| merge    | BRANCH                |                                                    |
-|          | --abort               |                                                    |
-|          | --continue            |                                                    |
-|----------+-----------------------+----------------------------------------------------|
-| pull     |                       | fetch + merge                                      |
-|----------+-----------------------+----------------------------------------------------|
-| push     | <REMOTE> <LB:RB>      | LB = "local branch" RB = "remote branch"           |
-|----------+-----------------------+----------------------------------------------------|
+* .git/
+
+index
+
+HEAD
+
+refs/
+refs/heads
+refs/heads/master # contains the hash of the previous commit
+refs/tags
+
+objects/b0/<HASH>
+
+logs/
+logs/HEAD
+logs/refs/heads/master
+
+info/
+info/exclude
+
+* command (145)
+
+- 82 Porcelain commands
+| 44 | main          | add, commit, push, pull |
+| 11 | manipulators  | config, reflog, replace |
+| 17 | interrogators | blame, fsck, rerere     |
+| 10 | interactors   | send-email, p4, svn     |
+
+- 64 Plumbing commands
+| 19 | manipulators  | apply, commit-tree, update-ref |
+| 21 | interrogators | cat-file, for-each-ref         |
+|  5 | syncing       | fetch-pack, send-pack          |
+| 18 | internal      | check-attr, sh-i18n            |
+
+** Descriptions
+
+|--------------+------------------------------+----------------------------------------------------------|
+| add          |                              |                                                          |
+|              | -p                           | interactively select ~hunks~ of patches to add           |
+|--------------+------------------------------+----------------------------------------------------------|
+| branch       |                              |                                                          |
+|              | -vv                          |                                                          |
+|              | --set-upstream-to=?/?        |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| cat-file     | HASH_OBJECT                  | content+size+information of OBJECT                       |
+|              | -p                           | content only                                             |
+|              | -t                           | type only                                                |
+|              | -s                           | size only                                                |
+|--------------+------------------------------+----------------------------------------------------------|
+| checkout     | BRANCH [-- FNAME]            | switch to BRANCH                                         |
+|              | -b                           | creates the BRANCH                                       |
+|--------------+------------------------------+----------------------------------------------------------|
+| clone        | URL                          |                                                          |
+|              | --shallow                    | only gets the current snapshot, not the full thing       |
+|--------------+------------------------------+----------------------------------------------------------|
+| fetch        |                              |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| help         | MODULE_NAME                  | man page of MODULE_NAME                                  |
+|--------------+------------------------------+----------------------------------------------------------|
+| init         | DIRECTORY                    |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| lfs          | install                      | https://git-lfs.github.com/                              |
+|              | track ".EXT"                 |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| log          |                              |                                                          |
+|              | --all                        | show all refs+HEAD                                       |
+|              | --graph                      | draw                                                     |
+|              | --decorate                   | prints refnames                                          |
+|              | --oneline                    | aka --pretty=oneline --abbrev-commit                     |
+|              | --format=raw                 |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| merge        | BRANCH                       |                                                          |
+|              | --abort                      |                                                          |
+|              | --continue                   |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| pull         |                              | fetch + merge                                            |
+|--------------+------------------------------+----------------------------------------------------------|
+| push         | <REMOTE> <LB:RB>             | LB = "local branch" RB = "remote branch"                 |
+|--------------+------------------------------+----------------------------------------------------------|
+| reflog       |                              | shows the changes YOU made that caused commits to change |
+| reset        |                              |                                                          |
+|              | --hard HEAD@{1}              | single step undo                                         |
+|--------------+------------------------------+----------------------------------------------------------|
+| status       |                              |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
+| update-index |                              |                                                          |
+|              | --add                        |                                                          |
+|              | --cache-info MODE HASH FNAME |                                                          |
+|--------------+------------------------------+----------------------------------------------------------|
 ** 1 git stats
 Output format: Nr. of lines, hash and message
 100 HASH commit message here
@@ -84,8 +145,10 @@ git log --oneline -1 $revision
   https://ianyepan.github.io/posts/emacs-git-gutter/
 
 * github.com Alternatives
+
 - Gitlab
 - Bitbucket
+- https://codeberg.org/
 - https://sourcehut.org/
   - aka sr.ht
   - has ci
