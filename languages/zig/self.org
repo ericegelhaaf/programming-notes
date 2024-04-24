@@ -1,0 +1,64 @@
+- source (Zig) https://github.com/ziglang/zig
+- home https://ziglang.org/
+- wiki https://en.wikipedia.org/wiki/Zig_(programming_language)
+  - Author: Andrew Kelley
+  - built-in testing framework
+  - not included GC (has an option type)
+- https://ziglang.org/learn/why_zig_rust_d_cpp/
+- https://github.com/ratfactor/ziglings
+- https://github.com/michal-z/zig-gamedev
+- article 22 https://rischmann.fr/blog/how-i-built-zig-sqlite
+
+* language
+
+- declarations with either =const= or =var=
+- typed with a type signature or with =@as(TYPE,VAL)=
+- variables do NOT get initialized by default
+  - undefined is a valid zig value, you need to provide
+- if - only evaluate boolean values
+- $ zig test some.zig
+
+- if () {}
+- if () {} else {}
+- loops
+  - support continue/break
+  - while(i < 10) {}
+  - while(i < 10) : (i += 1){}
+  - for(aString) |aChar| {}
+  - for(aString, 0..) |aChar,index| {}
+
+** stdlib
+
+#+begin_src zig
+cons std = @import("std");
+pub fn main() void {
+  std.debug.print("Hello, {s}!\n", .{"World"});
+}
+#+end_src
+
+#+begin_src zig
+const expect = @import("std").testing.expect;
+
+test "if statement" {
+  const isTrue = true;
+  var x: u16 = 0;
+  if(isTrue) {
+    x =+ 1;
+  } else {
+    x =+ 5;
+  }
+  try expect(x == 1);
+}
+#+end_src
+
+** types
+*** simple
+|---------+---|
+| i<SIZE> |   |
+| u<SIZE> |   |
+|---------+---|
+*** complex
+|-------+------------+------|
+| array | [2]u8{1,2} | .len |
+|       | [_]u8{1,2} |      |
+|-------+------------+------|
