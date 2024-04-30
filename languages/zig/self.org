@@ -4,12 +4,24 @@
   - Author: Andrew Kelley
   - built-in testing framework
   - not included GC (has an option type)
-- https://ziglang.org/learn/why_zig_rust_d_cpp/
-- https://github.com/ratfactor/ziglings
-- https://github.com/michal-z/zig-gamedev
-- article 22 https://rischmann.fr/blog/how-i-built-zig-sqlite
+
+- https://codeberg.org/ziglings/exercises
+- https://github.com/rofrol/zig-companies
+- libs https://github.com/zigcc/awesome-zig
+- libs https://github.com/zig-gamedev/zig-gamedev
+- libs https://github.com/darkr4y/OffensiveZig
+- action https://github.com/goto-bus-stop/setup-zig
+- book https://cookbook.ziglang.cc/
+- tutorial https://www.openmymind.net/learning_zig/
+- tutorial https://gist.github.com/ityonemo/769532c2017ed9143f3571e5ac104e50
 
 * language
+
+- zig cc it’s a C compiler that has easy,
+  out-of-the-box support for cross-compilation
+
+- variable_names
+  functionNames
 
 - declarations with either =const= or =var=
 - typed with a type signature or with =@as(TYPE,VAL)=
@@ -17,15 +29,99 @@
   - undefined is a valid zig value, you need to provide
 - if - only evaluate boolean values
 - $ zig test some.zig
+- safety can be turn on/off (panic or undefined behaviour)
+  @setRUntimeSafety(false);
+
+- in =defer=, gets executed at the end of the scope,
+  if there are multiple they run in a queue order (LIFO)
+
+- =unreachable= is value that returns something of type "no return"
+
+- pub fn(x: u32) u32 { return x + 5; }
+
+- structs fields order is NOT guaranteed
+
+** imports
+
+const std      = @import("std");
+const parseInt = std.fmt.parseInt;
+const expect   = @import("std").testing.expect;
+const focus    = @import("../lib/focus.zig");
+
+** pointers
+
+- *Type
+- &foo to reference a var/const to pointer
+- foo.* to dereference pointer foo
+- CANNOT assign 0(zero) or null to a pointer
+- pointers to *const* are type checked to not be modified
+- @sizeOf() ??????
+
+** slices
+
+- ~= pointer to date + element count
+- []const u8
+- array[0..]
+- array[0..10] is not inclusive on the right
+
+** enums
+
+- enum{a,b}
+- enum(u2){a,b}
+- @enumToInt(E.a)
+- enum static variables
+- enum methods
+  - const E = enum{a,b,pub fn f(self: E) bool { } }
+  - it can be use as both as
+    - instance method
+    - static method
+
+** structs
+
+- can have instance method
+- fields can have default values
+
+** unions
+
+- fiels with no type, imply *void*
+- type defined like structs
+- BUT can only hold 1 active field at the time
+- can create a *tagged union* (aka union with a value) by using an union of an enum,
+  keeping the same field names
+
+** errors
+|--------------------+---------------------------------------------------------|
+| error{A}           | defines a new error class?, with possibility A          |
+| ErrA ¦¦ ErrB       | defines a new error class?, union of other classes?     |
+| errdefer           | runs side-effects, only on scope error                  |
+| ErrA!u16           | (!) annotate the possibility of an specific error class |
+| !u16               | (!) annotate the possibility of ANY error class         |
+| f() catch ¦err¦ {} | catch if returned error                          |
+| try                | shorthand for running and throw on error                |
+|--------------------+---------------------------------------------------------|
+** control flow
+
+- if/switch can be used as an expression
 
 - if () {}
 - if () {} else {}
-- loops
-  - support continue/break
-  - while(i < 10) {}
-  - while(i < 10) : (i += 1){}
-  - for(aString) |aChar| {}
-  - for(aString, 0..) |aChar,index| {}
+- switch (var) { // =exaustive, non-fallthrough=
+    -1...1 => {}
+    10, 20 => {}
+    else   => {}
+  }
+
+** loops
+
+- support continue/break
+  - break can take an argument
+  - else+break allows it to be used as expression
+
+- while(i < 10) {}
+- while(i < 10) {} else
+- while(i < 10) : (i += 1){} // =aka c-style for=
+- for(aString) |aChar| {}
+- for(aString, 0..) |aChar,index| {} # parallel loop
 
 ** stdlib
 
@@ -53,12 +149,34 @@ test "if statement" {
 
 ** types
 *** simple
-|---------+---|
-| i<SIZE> |   |
-| u<SIZE> |   |
-|---------+---|
+
+- automatic integer *widening*
+- explicit *downcasting* with, will error if overflow:
+  @intCast(u8, x);
+
+|---------+----------------------------------|
+| i<SIZE> | 23 1_000                         |
+| u<SIZE> | 23 1_000 0xff 0xFF 0o755 0b11010 |
+|---------+----------------------------------|
+
 *** complex
-|-------+------------+------|
-| array | [2]u8{1,2} | .len |
-|       | [_]u8{1,2} |      |
-|-------+------------+------|
+|--------+---------------+----------+------+------|
+| array  | [2]u8{1,2}    | [2]u8    | .len | a[0] |
+|        | [_]u8{1,2}    |          |      |      |
+|--------+---------------+----------+------+------|
+| slice  | arr[0..3]     | [2]u8    |      | a[0] |
+|--------+---------------+----------+------+------|
+| struct | Foo{.x = 10}  | struct{} |      | a.x  |
+|--------+---------------+----------+------+------|
+| union  | Foo{.int = 1} | union{}  |      |      |
+|--------+---------------+----------+------+------|
+* codebases
+|-------------------+---------------------------------------------|
+| wm / status bar   | https://github.com/nmeum/creek              |
+| status bar        | https://github.com/arguablykomodo/zitrus    |
+| status bar        | https://sr.ht/~andreafeletto/levee/         |
+| appindicator+gtk  | https://github.com/CarpeNecopinum/TrayMagic |
+| pulseaudio volume | https://github.com/arguablykomodo/minimixer |
+| game engine       | https://github.com/hexops/mach              |
+| editor            | https://github.com/drcode/zek               |
+|-------------------+---------------------------------------------|

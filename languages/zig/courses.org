@@ -1,0 +1,160 @@
+- Zig in Depth | Dude the builder https://www.youtube.com/playlist?list=PLtB7CL7EG7pCw7Xy1SQC53Gl8pI7aDg9t
+- Zig Programming | Bayo Code https://www.youtube.com/playlist?list=PLRMNjZSQLv5iGpjubyzlWYcGqiTPVyK3s
+* Introduction to Zig
+** 11 Errors
+
+- defining NEW error{}
+  #+begin_src zig
+    const FileOpenError = error{
+        AccessDenied,
+        OutOfMemory,
+        FileNotFound,
+    };
+    const AllocationError = error{OutOfMemory}; // instance coercible to FileOpenError
+  #+end_src
+
+- instancing, error unions (!)
+  #+begin_src zig
+    const maybe_error: AllocationError!u16 = 10; // 2 possible types, error or u16
+    const no_error = maybe_error catch 0;        // we catch the error
+  #+end_src
+
+- returning an error
+  #+begin_src zig
+    fn failingFunction() error{Oops}!void {
+        return error.Oops;
+    }
+
+    failingFunction() catch |err| {
+      try expect(err == error.Oops);
+      return;
+    }
+  #+end_src
+
+- returning an error, shorthand
+  #+begin_src zig
+    fn failFn() error{Oops}!i32 {
+        try failingFunction(); // shorthand for when error handling is not appropiate
+        return 12;
+    }
+  #+end_src
+
+- =errdefer=, runs side-effects only on error
+  #+begin_src zig
+    var problems: u32 = 99;
+    fn failFnCounter() error{Oops}!void {
+        errdefer problems += 1; // !!!
+        try failingFunction();
+    }
+  #+end_src
+
+- ! for any error
+  #+begin_src zig
+    fn createFile() !void {
+        return error.AccessDenied;
+    }
+  #+end_src
+
+- ||
+  #+begin_src zig
+    const A = error{NotDir, PathNotFound};
+    const B = error{OutOfMemory,  PathNotFound};
+    const C = A || B;
+  #+end_src
+
+** 15 Pointers
+
+- CANNOT assign 0(zero) or null to a pointer
+- pointers to *const* are type checked to not be modified
+
+#+begin_src zig
+  fn increment(num: *u8) void { // takes a pointer
+      num.* += 1; // dereference, getting the value in addr
+  }
+  var x: u8 = 1;
+  increment(&x); // reference -- x = 2
+#+end_src
+
+- CANNOT assign 0(zero) or null to a pointer
+
+#+begin_src zig
+  var x: u16 = 0;
+  var y *u8 = @intToPointer(*u8, x); // panics!!
+#+end_src
+
+** 18 Enums
+
+#+begin_src zig
+  const Direction = enum { north, south }
+  const Value     = enum(u2){ zero, one, two } // 2^2 = 4 values
+  const Value2    = enum(u32){ hundred = 100, next } // next = 101
+  @enumToInt(Value.zero) == 0
+  const Suit = enum {
+      clubs,
+      spades,
+      pub fn isClubs(self: Suit) bool {
+        return self == Suit.clubs;
+      }
+  }
+  Suit.spades.isClubs(); // instance method
+  Suit.isClubs(.spades); // static method
+  const Mode = enum {
+      var count: u32 = 0;
+      on, off
+  };
+#+end_src
+
+** 19 Structs
+#+begin_src zig
+  const Struct1 = struct { x: f32, y: f32, z: f32 };
+  const struct1_created = Struct1{
+      .x = 10,
+      .y = 10.2,
+      .z = 50,
+  };
+#+end_src
+
+
+#+begin_src zig
+  const Stuff = struct {
+      x: i32,
+      y: i32 = 0, // default value
+      fn swap(self: *Stuff) void {
+          const temp = self.x;
+          self.x = self.y;
+          self.y = temp;
+      }
+  };
+  var thing = Stuff {.x = 10, .y = 20};
+  thing.swap();
+#+end_src
+
+** 20 Unions
+
+#+begin_src zig
+  const Result = union {
+      int: i64,
+      float: f64,
+      bool: bool,
+  };
+  var result = Result{.int = 1234};
+  result.float = 12.34; // errors, dues trying to use "float" while field "int" is active
+#+end_src
+
+Tagged union
+
+#+begin_src zig
+  // Long  way
+  const Tag = enum { a, b, c };
+  const Tagged = union(Tag) { a: u8, b: f32, c: bool };
+
+  // Shorthand syntax
+  const Tagged = union(enum) { a: u8, b: f32, c: bool };
+
+  var value = Tagged { .b = 1.5};
+  switch (value) {
+      .a => |*byte|  byte.*  += 1,
+      .b => |*float| float.* += 2,
+      .c => |*b|     b.*      = !b.*,
+  };
+#+end_src

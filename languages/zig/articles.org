@@ -1,0 +1,28 @@
+- https://ziglang.org/learn/why_zig_rust_d_cpp/
+
+- 20 https://www.scattered-thoughts.net/writing/assorted-thoughts-on-zig-and-rust/
+- 20 https://andrewkelley.me/post/zig-cc-powerful-drop-in-replacement-gcc-clang.html
+
+- 21 https://kevinleynagh.com/rust-zig/
+- 21 https://jacobgw.com/blog/zig/low-level/2021/03/15/elf-linux.html
+- 21 http://msinilo.pl/blog2/post/zig-pathtracer/
+- 21 https://zig.news/kprotty/resource-efficient-thread-pools-with-zig-3291
+
+- 22 https://www.huy.rocks/everyday/12-11-2022-zig-using-zig-for-advent-of-code
+- 22 https://www.forrestthewoods.com/blog/failing-to-learn-zig-via-advent-of-code/
+- 22 https://rischmann.fr/blog/how-i-built-zig-sqlite
+- 22 https://renato.athaydes.com/posts/testing-building-c-with-zig.html
+
+- 23 https://handling.website/archives/1977/making-a-chip-8-emulator-in-zig-emulation-guide-series/
+- 23 https://zackoverflow.dev/writing/unsafe-rust-vs-zig/
+- 23 https://kristoff.it/blog/zig-multi-sequence-for-loops/
+- 23 https://monadmonkey.com/dnns-from-scratch-in-zig
+- 23 https://www.openmymind.net/Zig-Quirks/
+- 23 https://mtlynch.io/notes/zig-unit-test-c/
+- 23 https://vercel.com/blog/how-we-continued-porting-turborepo-to-rust
+- 23 http://ratfactor.com/zig/hard
+- 23
+  https://blog.orhun.dev/zig-bits-01/
+  https://blog.orhun.dev/zig-bits-02/
+  https://blog.orhun.dev/zig-bits-03/
+  https://blog.orhun.dev/zig-bits-04/

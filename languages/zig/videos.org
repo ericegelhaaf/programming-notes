@@ -1,26 +1,43 @@
+- 24 | Zig for Impatient Devs     | Isaac Harris-Holt https://www.youtube.com/watch?v=5I4ZkmMS4-0
+- 21 | A way better C!            | https://www.youtube.com/watch?v=J6ZxxnSp_fY
+- 24 | Zig Roadmap 2024           | Andrew Kelley https://www.youtube.com/watch?v=5eL_LcxwwHg
+- 23 | Zig Roadmap 2023           | Andrew Kelley https://www.youtube.com/watch?v=AqDdWEiSwMM
+- 23 | Intro to Zig @GOTO         | Andrew Kelley https://www.youtube.com/watch?v=YXrb-DqsBNU
+- 19 | Road to 1.0                | Andrew Kelley https://www.youtube.com/watch?v=Gv2I7qTux7g
+- 18 | Zig                        | Andrew Kelley https://www.youtube.com/watch?v=Z4oYSByyRak
+- 23 | Zig Build System           | Andrew Kelley https://www.youtube.com/watch?v=wFlyUzUVFhw
+- 23 | Zig @CppCast               | Andrew Kelley https://www.youtube.com/watch?v=AdP6seB4sp4
 - 23 | "My Zig Experience"        | ThePrimeTime https://www.youtube.com/watch?v=SBe8DgBCjTc
-- 23 | Paid Zig Stream            | tsoding https://www.youtube.com/watch?v=eIX9zER9vjY
 - 23 | Using Zig                  | ThePrimeagen https://www.youtube.com/watch?v=VU1h-h9doS8
-* Channel
+- 23 | Paid Zig Stream            | tsoding https://www.youtube.com/watch?v=eIX9zER9vjY
+
+* Playlists
+- 22 | Gamedev - Hyper            | Madrigal https://www.youtube.com/playlist?list=PLCcN1sD0WbbKfeEIg1tOsr-YOFmNUmtDe
+- 23 | Gamedev - Fighthing Game   | Zinac https://www.youtube.com/playlist?list=PLvc15SkZM1FCkxyeRpUjFCT2hlKQ_UC_G
+- 23 | Gamedev - Engine           | nothke https://www.youtube.com/playlist?list=PLECtDQFQZX02MQQoqQLodPwTbx_T67Teg
+* Channels
 - https://www.youtube.com/@UtahZig/streams
 - https://www.youtube.com/c/ZigSHOWTIME
+- https://www.youtube.com/@zigmeetups6619/videos
+
+
 * 23 | Thoughts on Zig         | Zach Oakes
 
 https://www.youtube.com/watch?v=zlWqpRTgXBg
 
-- almost the opposite design desition of *nim*
-  - nim said no to interfaces
-  - nim said yes to source code filters
-  - nim imports are by default qualified (pull everything in) like in C
+- almost the opposite design desition of *Nim*
+  - nim said NO to interfaces
+  - nim said YES to source code filters
+  - nim imports are by default unqualified (pull everything in) like in C
   - nim has exceptions
-  - compiles to C, but not a single file
+  - nim compiles to C, but NOT to a single file
 
-- *zig* says no to almost every feature
+- *Zig* says no to almost every feature
   - no function overloading
   - no operator overloading
   - you can stil put a function inside a struct
-  - threats erros as values that you return
-    - you cannot pass data with the error
+  - threats *errors* as values that you return
+    - you CANNOT pass data with the error
   - nulls are *union* types "better than wrappig and unwrapping in the monadic style"
   - no package manager
   - drop-in c compiler
@@ -42,7 +59,7 @@ https://www.youtube.com/watch?v=SCj2J3HcEfc
 - Uber
     - Primarly Go (for infra) and Java (some rare C++)
     - Monorepo per language
-    - Will use the Zig's C toolchain for crosscompilation
+    - Will use the Zig's C toolchain for cross-compilation
 
 - Hermetic: when the tool to compile the program comes with the source.
     - Go is Hermetic (with bazel?), C++ is not.
