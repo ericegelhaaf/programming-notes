@@ -131,6 +131,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 |----------+----------------------------------------------+-----------|
 | ARGC     | number of cli arguments                      | -         |
 | ARGV     | array of cli arguents                        | -         |
+| ENVIRON  | array of environment variables               |           |
 |----------+----------------------------------------------+-----------|
 | RLENGTH  | length of string matched by *match* function | -         |
 | RSTART   | start of string matched by *match* function  | -         |

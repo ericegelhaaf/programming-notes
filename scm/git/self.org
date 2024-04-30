@@ -16,6 +16,21 @@
     - fixed
 
 
+- github.com/marvinpinto/actions - automatic-releases ConventionalCommitTypes
+  https://github.com/marvinpinto/actions/blob/873de0f4dc68121da64907afaabe332d194eec17/packages/automatic-releases/src/utils.ts#L42
+  - feat     = Features
+  - fix      = Bug Fixes
+  - docs     = Documentation
+  - style    = Styles
+  - refactor = Code Refactoring
+  - perf     = Performance Improvements
+  - test     = Tests
+  - build    = Builds
+  - ci       = Continuous Integration
+  - chore    = Chores
+  - revert   = Reverts
+
+
 - Github Action
   https://simonwillison.net/2020/Oct/9/git-scraping/
   https://news.ycombinator.com/item?id=37082289

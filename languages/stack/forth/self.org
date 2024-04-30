@@ -5,8 +5,8 @@
   - 1970-
 
 - article 17 | https://hackaday.com/2017/01/27/forth-the-hackers-language/
-- http://ratfactor.com/forth/the_programming_language_that_writes_itself.html
-- https://blog.information-superhighway.net/what-the-hell-is-forth
+- article 23 | http://ratfactor.com/forth/the_programming_language_that_writes_itself.html
+- article 19 | https://blog.information-superhighway.net/what-the-hell-is-forth
 - how to write a forth?
   http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.S
   http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.f

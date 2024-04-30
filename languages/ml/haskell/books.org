@@ -8,6 +8,24 @@
 - https://leanpub.com/haskell-cookbook/read
 - https://leanpub.com/haskell-stdlibs
 
+* ?? | Learn You a Haskell
+
+** 10 Functionally Solving Problems
+** Reverse Polish Notation Calculator
+
+- Alternatives to =read= that are more fault tolerant
+  - Text.Read.readMaybe
+  - reads, intended for ambiguous parses, a Maybe masquerading as a []
+
+#+begin_src haskell
+  solveRPN :: (Num a, Read a) => String -> a
+  solveRPN = head . foldl foldingFunction [] . words
+    where foldingFunction (x:y:ys) "*" = (x*y) : ys
+          foldingFunction (x:y:ys) "+" = (x+y) : ys
+          foldingFunction (x:y:ys) "-" = (y-x) : ys
+          foldingFunction xs numberString = read numberString : xs
+#+end_src
+
 * 00 | The Haskell School of Expressive Language |          | Paul Hudak
 ** 3 Simple Graphics
 *** 3.1 Basic Input/Output

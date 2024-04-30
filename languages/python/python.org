@@ -471,3 +471,8 @@ https://docs.python.org/3/reference/datamodel.html#object.__setitem__
 | rtmidi    | 23 | 0.2 | rtmidi bindings                   | https://github.com/SpotlightKid/python-rtmidi |
 | moderngl  | 24 | 1.7 | opengl bindings                   | https://github.com/moderngl/moderngl          |
 |-----------+----+-----+-----------------------------------+-----------------------------------------------|
+* codebases
+- protohackers
+  - threading,socket,socketserver https://github.com/simon816/Protohackers-solutions
+  - asyncio, socket https://github.com/pyxyne/protohackers
+  - asyncio https://github.com/ryan-gang/protohackers/

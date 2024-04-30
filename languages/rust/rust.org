@@ -83,6 +83,16 @@ https://doc.rust-lang.org/std/#modules
 
 * Codebases
 - https://github.com/pop-os/system76-power
+- protohackers
+  - serde+async+tokio https://github.com/nkitsaini/protohackers_impl
+  - serde https://github.com/mvolfik/protohackers-challenge
+  - serde+async+tokio+futures https://github.com/maxmarcon/protohackers/
+  - serde+tokio https://github.com/dwalker109/protohackers
+  - tokio https://github.com/camas/protohackers
+  - tokio+futures https://gitlab.com/adirelle/protohackers
+  - tokio+futures https://git.sr.ht/~sgeisenh/protohackers/tree
+  - tokio https://github.com/tumdum/protohackers
+  - tokio https://github.com/ajurna/protohackers
 * Learn
 - https://github.com/sger/RustBooks
 - https://github.com/mre/idiomatic-rust

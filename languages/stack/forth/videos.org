@@ -1,4 +1,11 @@
+- 22 | FORTH? | truttle1 https://www.youtube.com/watch?v=nFsBX_w2fRI&t=16s
+  #+begin_src forth
+  : even 2 mod 0 = if ." Even" else ." Odd" then ;
+  : myloop 100 1 do i . loop .
+  #+end_src
+
 - https://www.youtube.com/watch?v=z5qISgx50Fk
+
 - 23 | Introduction to Forth Language Programming Tutorial using Bitcoin
   https://www.youtube.com/watch?v=i7Vz6r6p1o4
   - gforth
