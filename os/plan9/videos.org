@@ -1,7 +1,3 @@
-- wiki https://en.wikipedia.org/wiki/Plan_9_from_Bell_Labs
-- wiki https://en.wikipedia.org/wiki/9P_(protocol)
-
-
 - https://www.youtube.com/@adventuresin9797/videos
 - video 06 | Plan 9 https://www.youtube.com/watch?v=VJSlvoUFkBA
 - video 14 | https://www.youtube.com/watch?v=5BNhCW6wkBA
