@@ -1,1 +1,56 @@
 - book: https://learnbyexample.github.io/learn_ruby_oneliners/
+
+* Language
+
+** Types
+
+- Variables
+  - nouns of Ruby
+  - global if they begin with ($)
+  - instance variables with (@) (think "at"-ttribute)
+  - class variables with (@@)
+
+- Strings
+  - Both single and double quotes are used to create strings
+
+- Symbols
+  - start with a colon
+  - like lightweight strings
+  - used when you need a string but you won't be printing it
+
+- Constants
+  - capitalized
+  - proper nouns of Ruby
+
+- Methods (.)
+  - the verbs of ybru
+  - attached at the end of variables with by a dot
+  - some methods (such as =print=) are kernel methods, won't use the dot
+
+- Class Methods (::)
+  - attached after variables and constants by a double colon
+
+* Book: why's (poignant) guide to Ruby
+
+** 3 A Quick Ride Through Ruby
+
+http://poignant.guide/book/chapter-3.html
+
+- ="My conscience won't let me call Ruby a computer language. That would imply that the language works primarily on the computer's terms."=
+
+- Read the following aloud to yourself.
+  - Punctuation silent.
+  - "Punctuation adds meaning to words, helps give cues as to waht the author intended by a sentence."
+  #+begin_src ruby
+    5.times { print "0delay!" }
+    exit unless "restaurant".include? "aura"
+  #+end_src
+
+- This one reads more like "shorter english"
+  #+begin_src ruby
+    ['toast', 'cheese', 'wine'].each { |food| print food.capitalize }
+  #+end_src
+
+- ="Ruby is built from sentences. They aren't exactly English sentences. They are short collections of words and punctuation which emcompass a single thought. These sentences can form books. They can form pages. They can form entire novels, when trung together. Novels that can be read by humans, but also by computers."=
+
+- "Punctuation and capitalization will help your brain to see bits of code and feel intense recognition."

@@ -9,9 +9,8 @@
 - https://leanpub.com/haskell-stdlibs
 
 * ?? | Learn You a Haskell
-
-** 10 Functionally Solving Problems
-** Reverse Polish Notation Calculator
+** DONE 10 Functionally Solving Problems
+*** Reverse Polish Notation Calculator
 
 - Alternatives to =read= that are more fault tolerant
   - Text.Read.readMaybe
@@ -25,6 +24,184 @@
           foldingFunction (x:y:ys) "-" = (y-x) : ys
           foldingFunction xs numberString = read numberString : xs
 #+end_src
+
+*** Heatrow to London
+
+#+begin_src haskell
+  data Node = Node Road Road | EndNode Road -- OR
+  data Node = Node Road (Maybe Road)
+  data Road = Road Int Node
+#+end_src
+
+Attempt 3: custom data type
+- fits perfect with our problem description
+- won't use a tuple because you can mixup elements
+
+#+begin_src haskell
+  data Section = Section { getA :: Int, getB :: Int, getC :: Int } deriving (Show)
+  data RoadSystem = [Section]
+
+  heathrowToLondon :: RoadSystem
+  heathrowToLondon = [Section 50 10 30, Section 5 90 20, Section 40 2 25, Section 10 8 0]
+#+end_src
+
+Our solution, will take a *RoadSystem* and will generate a *Path* of the solution
+
+#+begin_src haskell
+  data Label = A | B | C deriving (Show)
+  type Path = [(Label, Int)]
+#+end_src
+
+We use *fold* to reduce the *RoadSytem*
+
+#+begin_src haskell
+  roadStep :: (Path, Path) -> Section -> (Path, Path)
+  roadStep (pathA, PathB) (Section a b c) =
+    let priceA = sum $ map snd pathA
+        priceB = sum $ map snd pathB
+        forwardPriceToA = priceA + a
+        crossPriceToA   = priceB + b + c
+        forwardPriceToB = priceB + b
+        crossPriceToB   = priceA + a + c
+        newPathToA      = if forwardPriceToA <= crossPRiceToA
+                          then (A,a):pathA
+                          else (C,c):(B,b):pathB
+        newPathToB      = if forwardPriceToB <= crossPriceToB
+                          then (B,b):pathB
+                          else (C,c):(A,a):pathA
+    in
+      (newPathToA, newPathToB)
+#+end_src
+
+#+begin_src haskell
+  optimalPath :: RoadSystem -> Path
+  optimalPath roadSystem =
+    let (bestAPath, bestBPath) = foldl roadStep ([],[]) roadSystem
+    in
+      if sum (map snd bestAPath) <= sum (map snd bestBPath) -- check what is the cheapest
+      then reverse bestAPath
+      else reverse bestBPath
+#+end_src
+
+#+begin_src haskell
+  groupsOf :: Int -> [a] -> [[a]]
+  groupsOf 0 _  = undefined
+  groupsOf _ [] = []
+  groupsOf n xs = take n xs : groupsOf n (drop n xs) -- take throws!!
+#+end_src
+
+#+begin_src haskell
+  import Data.List
+  main = do
+    contents <- getContents
+    let threes = groupsOf 3 (map read $ lines contents)
+        roadSystem = map (\[a,b,c] -> Section a b c) threes -- throws if not grouped in 3
+        path = optimalPath roadSystem
+        pathString = concat $ map (show . fst) path
+        pathPrice = sum $ map snd path
+    in
+      putStrLn $ "The best path to take is: " ++ pathString
+      putStrLn $ "The price is: " ++ show pathPrice
+#+end_src
+** TODO 11 Applicative Functors
+
+- "We don't need to think about types belonging to a big hierarchy."
+
+- "Typeclasses are open, which means that we can define our own data type...and connect it with the type classes that define its behaviors."
+
+- Functors
+  - definition: things that can be mapped over, aka values with added =context=
+  - *fmap* applies a function to a value while preserving its =context=
+  - it must have kind of "* -> *" (aka it takes exactly one concrete type parameter)
+
+***   Functor applied to IO
+
+- The action that a =do= block produces will always yield the result value of its last action.
+#+begin_src haskell
+  instance Functor IO where
+    fmap f action =
+      result <- action
+      return (f result)
+#+end_src
+
+***   Functions as Functors
+
+- It bends our minds a bit and lets us see how things that act more like computations than boxes (IO and "(->) r") can be functors.
+
+- "(->) r" is another instance of Functor
+  - aka the partial application of
+    - "r -> a"
+- "->" is just a type constructor that takes 2 type parameters, like Either
+
+- How? Implemented in =Control.Monad.Instances=
+  #+begin_src haskell
+    instance Functor ((->) r) where
+      fmap f g = (\x -> f (g x))
+    instance Functor ((->) r) where
+      fmap = (.)
+  #+end_src
+  - mapping a over a function must produce a function,
+    aka =function composition=
+    fmap :: (a -> b) -> ((->) r a) -> ((->) r b)
+    fmap :: (a -> b) -> (r -> a)   -> (r -> b)
+
+- You can think of =fmap= in 2 ways
+  1) as a function that takes a function and a functor value and then maps that function over the functor value
+  2) as a function that takes a function and ~lifts~ that function so it operates on functor values
+
+#+begin_src haskell
+  fmap (replicate 3) [1,2]          -- [[1,1,1],[2,2,2]]
+  fmap (replicate 3) (Just 4)       -- Just [4,4,4]
+  fmap (replicate 3) (Right "blah") -- Right ["blah","blah","blah"]
+  fmap (replicate 3)  Nothing       -- Nothing
+  fmap (replicate 3) (Left "foo")   -- Left "foo"
+#+end_src
+
+***   Functor Laws
+
+- Not enforced by the compiler. Ensure the common behavior of the functor when mapping.
+  1) fmap id = id
+  2) fmap (f . g) = fmap f . fmap g
+
+Example: Breaking the Law
+
+#+begin_src haskell
+  data CMaybe a = CNothing | CJust Int a
+                deriving (Show)
+
+  instance Functor CMaybe where
+    fmap f CNothing = CNothing
+    fmap f (CJust counter x) = CJust (counter+1) (f x)
+#+end_src
+
+Fails the 1st law.
+
+#+begin_src haskell
+  fmap id (CJust 0 "haha") -- CJust 1 "haha"
+       id (CJust 0 "haha") -- CJust 0 "haha"
+#+end_src
+
+*** Using Applicative Functors
+
+- If we fmap with a function that takes 2 parameters over a Functor.
+  We get a function partially applied into the Functor. (aka Functor values that contain functions inside them)
+
+  #+begin_src haskell
+    fmap (*) (Just 3) -- Just ((*) 3)
+    :t fmap (++) (Just "hey")               -- :: Maybe ([Char] -> [Char])
+    :t fmap compare (Just 'a')              -- :: Maybe (Char -> Ordering)
+    :t fmap compare "A LIST OF CHARS"       -- :: [Char -> Ordering]
+    :t fmap (\x y z -> x + y / z) [3,4,5,6] -- :: (Fractional a) => [a -> a -> a]
+  #+end_src
+
+- We could then use that and fmap over that Functor
+  #+begin_src haskell
+    let a = fmap (*) [1,2,3,4]
+      in fmap (\f -> f 9) a -- [9,18,27,36]
+  #+end_src
+
+- But we CANNOT easily operate with both "kind" of functors at the same time
+  eg: with "Just 9" and "Just (3 *)"
 
 * 00 | The Haskell School of Expressive Language |          | Paul Hudak
 ** 3 Simple Graphics
