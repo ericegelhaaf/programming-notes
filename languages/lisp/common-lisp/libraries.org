@@ -1,12 +1,55 @@
-* Web
-- Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
-|---------+----------------------+-----------------------------------------------------------------|
-| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
-| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
-| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
-| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
-| piccolo | html5 generation     | https://github.com/skyizwhite/piccolo                           |
-|---------+----------------------+-----------------------------------------------------------------|
+- https://github.com/40ants/lisp-project-of-the-day
+- ncurses https://github.com/HiTECNOLOGYs/cl-charms
+
+* Binary/Stream Parsing
+|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
+| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel                                    |
+| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio                                     |
+| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher                            |
+| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack                              |
+| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/                                     |
+| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/                              |
+| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
+|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
+| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats                               |
+| lisp-binary    | A library to easily read and write complex binary formats.     | https://github.com/j3pic/lisp-binary                                 |
+| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap                                     |
+| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles                                   |
+| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors                           |
+| simple-streams | bivalent, varying-width elements support                       | http://www.sbcl.org/manual/#Simple-Streams                           |
+|                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
+| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
+| unboxable      | support contiguous arrays of structs                           | https://github.com/digikar99/unboxables                              |
+|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
+* CFFI
+- https://github.com/bohonghuang/cffi-ops
+- https://github.com/borodust/cffi-c-ref
+* CLOS
+|--------------------+-------------------------------------+-------------------------------------------------|
+| cells              | reactive programming                | https://github.com/kennytilton/cells/wiki       |
+| defclass-std       | shorthand declaration               | https://github.com/EuAndreh/defclass-std        |
+| filtered-functions | filter function before method calls | https://github.com/pcostanza/filtered-functions |
+| quid-pro-quo       | contract programming                | https://github.com/sellout/quid-pro-quo         |
+| sanity-clause      | class type checking                 | https://github.com/fisxoj/sanity-clause         |
+|--------------------+-------------------------------------+-------------------------------------------------|
+** Libraries
+- Efficiently represent several finite sets or small integers as a single non-negative integer.
+  https://github.com/marcoheisig/bitfield
+- Naive generators for Common Lisp
+  https://github.com/cbeo/gtwiwtg
+* Data Structures
+|----------------+------------------+------------------------------------------------------|
+| fset           | immutables       | https://fset.common-lisp.dev/Site/FSet-Tutorial.html |
+| pileup         | binary heap      | https://nikodemus.github.io/pileup/                  |
+| jpl-queues     | queues           | https://cliki.net/jpl-queues                         |
+| select         | array slices     | https://lisp-stat.github.io/select/                  |
+| aops           | array operations | https://github.com/bendudson/array-operations        |
+| numcl          | numpy            | https://github.com/numcl/numcl                       |
+| cl-competitive | algorithms       | https://github.com/privet-kitty/cl-competitive/      |
+|----------------+------------------+------------------------------------------------------|
+- fset
+  https://www.youtube.com/watch?v=wx9BN2ppESY
+  https://www.youtube.com/watch?v=AfcjnBkWbfw
 * GUI
 
 |---------+-------------------------------------------|
@@ -44,72 +87,6 @@
        http://www.peter-herth.de/ltk/ltkdoc/ doc
        https://peterlane.netlify.app/ltk-examples/#_more_widgets doc examples
 
-* Plotting
-|--------------+-------------------------+-----------------------------------------------------------|
-| eazy-gnuplot | gnuplot raw-ish         | https://guicho271828.github.io/eazy-gnuplot/              |
-| clgplot      | gnuplot abstraction-ish | https://github.com/masatoi/clgplot/                       |
-| sketch       | sdl graphics            | https://github.com/vydd/sketch                            |
-| donuts       | graphviz                | https://github.com/tkych/donuts/blob/master/doc/index.org |
-|--------------+-------------------------+-----------------------------------------------------------|
-* CFFI
-- https://github.com/bohonghuang/cffi-ops
-- https://github.com/borodust/cffi-c-ref
-* CLOS
-|--------------------+-------------------------------------+-------------------------------------------------|
-| cells              | reactive programming                | https://github.com/kennytilton/cells/wiki       |
-| defclass-std       | shorthand declaration               | https://github.com/EuAndreh/defclass-std        |
-| filtered-functions | filter function before method calls | https://github.com/pcostanza/filtered-functions |
-| quid-pro-quo       | contract programming                | https://github.com/sellout/quid-pro-quo         |
-| sanity-clause      | class type checking                 | https://github.com/fisxoj/sanity-clause         |
-|--------------------+-------------------------------------+-------------------------------------------------|
-** Libraries
-- Efficiently represent several finite sets or small integers as a single non-negative integer.
-  https://github.com/marcoheisig/bitfield
-- Naive generators for Common Lisp
-  https://github.com/cbeo/gtwiwtg
-* Data Structures
-|----------------+------------------+------------------------------------------------------|
-| fset           | immutables       | https://fset.common-lisp.dev/Site/FSet-Tutorial.html |
-| pileup         | binary heap      | https://nikodemus.github.io/pileup/                  |
-| jpl-queues     | queues           | https://cliki.net/jpl-queues                         |
-| select         | array slices     | https://lisp-stat.github.io/select/                  |
-| aops           | array operations | https://github.com/bendudson/array-operations        |
-| numcl          | numpy            | https://github.com/numcl/numcl                       |
-| cl-competitive | algorithms       | https://github.com/privet-kitty/cl-competitive/      |
-|----------------+------------------+------------------------------------------------------|
-- fset
-  https://www.youtube.com/watch?v=wx9BN2ppESY
-  https://www.youtube.com/watch?v=AfcjnBkWbfw
-* Pattern Matching/Destructuring
-|-----------------+------------------------+---------------------+------------------------------------------------|
-| optima          | pattern matching (old) |                     | https://github.com/m2ym/optima                 |
-| trivia          | pattern matching       | defun-match*, ppcre | https://github.com/guicho271828/trivia         |
-| fare-quasiquote | extensions for trivia  |                     | https://github.com/fare/fare-quasiquote        |
-| let-plus        | destructuring          | defun+, let+        | https://github.com/tpapp/let-plus              |
-| metabang-bind   | destructuring          | bind                | https://common-lisp.net/project/metabang-bind/ |
-| serapeum        |                        | mvlet               |                                                |
-|-----------------+------------------------+---------------------+------------------------------------------------|
-- https://common-lisp.net/project/metabang-bind/user-guide.html
-* Binary/Stream Parsing
-|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
-| babel          | charset enc/dec, strings and (unsigned-byte 8)                 | https://github.com/cl-babel/babel                                    |
-| bitio          | read multiples of 8 bits                                       | https://github.com/psilord/bitio                                     |
-| bit-smasher    | utilities for =bit vectors=                                    | https://github.com/thephoeron/bit-smasher                            |
-| conspack       | MessagePack like, encode and decode data types                 | https://github.com/conspack/cl-conspack                              |
-| fast-io        | read arbitray sizes from streams                               | https://github.com/rpav/fast-io/                                     |
-| flexi-streams  | read/write streams, dynamic encoding, in-memory binary streams | https://github.com/edicl/flexi-streams/                              |
-| gray-streams   |                                                                | https://lisp-journey.gitlab.io/gray-streams/                         |
-|                |                                                                | https://franz.com/support/documentation/current/doc/gray-streams.htm |
-| ieee-floats    | read float values from strings                                 | https://github.com/marijnh/ieee-floats                               |
-| lisp-binary    | A library to easily read and write complex binary formats.     | https://github.com/j3pic/lisp-binary                                 |
-| mmap           | read file into memory (mmap, munmap, msync,mprotect)           | https://github.com/Shinmera/mmap                                     |
-| nibbles        | read/write 16/32/64 bits from octet vectors                    | https://github.com/froydnj/nibbles                                   |
-| static-vectors | vectors from lisp to C                                         | https://github.com/sionescu/static-vectors                           |
-| simple-streams | bivalent, varying-width elements support                       | http://www.sbcl.org/manual/#Simple-Streams                           |
-|                |                                                                | https://franz.com/support/documentation/current/doc/streams.htm      |
-| swap-bytes     | changing endianness of unsigned integers                       | https://github.com/sionescu/swap-bytes                               |
-| unboxable      | support contiguous arrays of structs                           | https://github.com/digikar99/unboxables                              |
-|----------------+----------------------------------------------------------------+----------------------------------------------------------------------|
 * Looping
 |------------------------------+----------------------------------------------------------|
 | for                          | https://github.com/Shinmera/for                          |
@@ -309,6 +286,23 @@ manual https://github.com/alessiostalla/doplus/blob/master/MANUAL.md
 
 ** trivial-extensible-sequences https://github.com/Shinmera/trivial-extensible-sequences
   manual  https://shinmera.github.io/trivial-extensible-sequences/
+* Pattern Matching/Destructuring
+|-----------------+------------------------+---------------------+------------------------------------------------|
+| optima          | pattern matching (old) |                     | https://github.com/m2ym/optima                 |
+| trivia          | pattern matching       | defun-match*, ppcre | https://github.com/guicho271828/trivia         |
+| fare-quasiquote | extensions for trivia  |                     | https://github.com/fare/fare-quasiquote        |
+| let-plus        | destructuring          | defun+, let+        | https://github.com/tpapp/let-plus              |
+| metabang-bind   | destructuring          | bind                | https://common-lisp.net/project/metabang-bind/ |
+| serapeum        |                        | mvlet               |                                                |
+|-----------------+------------------------+---------------------+------------------------------------------------|
+- https://common-lisp.net/project/metabang-bind/user-guide.html
+* Plotting
+|--------------+-------------------------+-----------------------------------------------------------|
+| eazy-gnuplot | gnuplot raw-ish         | https://guicho271828.github.io/eazy-gnuplot/              |
+| clgplot      | gnuplot abstraction-ish | https://github.com/masatoi/clgplot/                       |
+| sketch       | sdl graphics            | https://github.com/vydd/sketch                            |
+| donuts       | graphviz                | https://github.com/tkych/donuts/blob/master/doc/index.org |
+|--------------+-------------------------+-----------------------------------------------------------|
 * Utils
 |------------+--------------+---------------------------------------------------------------------|
 | alexandria |              | https://common-lisp.net/project/alexandria/draft/alexandria.html    |
@@ -357,3 +351,12 @@ manual https://github.com/alessiostalla/doplus/blob/master/MANUAL.md
 | interleave    | (interleave '(1 2) '(3 4))                          | (1 3 2 4)                        |                                     |
 | comp          | (funcall (comp #'evenp #'length) '(1 2 3))          | NIL                              |                                     |
 |---------------+-----------------------------------------------------+----------------------------------+-------------------------------------|
+* Web
+- Static site https://paste.stevelosh.com/3ffff3a56c98d98de38c793945b54f3c1b545667
+|---------+----------------------+-----------------------------------------------------------------|
+| plump   | html,xml parser      | https://github.com/Shinmera/plump                               |
+| clss    | css selectors        | https://github.com/Shinmera/CLSS                                |
+| cl-who  | lisp to html         | https://github.com/edicl/cl-who https://edicl.github.io/cl-who/ |
+| slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
+| piccolo | html5 generation     | https://github.com/skyizwhite/piccolo                           |
+|---------+----------------------+-----------------------------------------------------------------|

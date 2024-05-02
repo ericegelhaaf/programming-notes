@@ -3,29 +3,20 @@
 - incudine project
   https://github.com/ormf/cl-ats
   https://selma.hfmdk-frankfurt.de/gitlab/orm.finnendahl/ats-cuda/-/blob/master/examples.lisp
-- DavidWesselsVIU https://www.youtube.com/@davidwesselsviu6016/playlists
+
 - https://mfiano.net/posts/2022-09-04-from-common-lisp-to-julia/
   https://gist.github.com/digikar99/24decb414ddfa15a220b27f6748165d7
   https://news.ycombinator.com/item?id=32745318
-- https://stevelosh.com/blog/2022/08/depending-in-common-lisp/
 - https://www.csee.umbc.edu/courses/331/resources/lisp/LISP-tutorial.html
-- Article: Conditions and Restarts in Common Lisp https://z0ltan.wordpress.com/2016/08/06/conditions-and-restarts-in-common-lisp/
 - Article: https://vindarel.github.io/cl-torrents/tutorial.html
 - https://lisp-journey.gitlab.io/gray-streams/
 - http://www.softwarepreservation.org/projects/LISP/common_lisp_family
 - Quicklisp Snapshot http://blog.quicklisp.org/2011/08/going-back-in-dist-time.html
-- https://unthought.net/2016/12/22-lisp-memory-woes-but-not/
 - Firefox Add-on PCL https://github.com/vale981/practical-cl-beautified
 - Package-local nicknames in Common Lisp
   https://gist.github.com/phoe/2b63f33a2a4727a437403eceb7a6b4a3
 - History http://www.nhplace.com/kent/Papers/cl-untold-story.html
 - Some abbreviature macros https://github.com/cl21/cl21/blob/c36644f3b6ea4975174c8ce72de43a4524dd0696/src/stdlib/abbr.lisp
-- Blog: http://funcall.blogspot.com/
-- https://funcall.blogspot.com/2022/09/playing-with-raycasting.html
-- Video: 2008 Raytracer in lisp
-  https://www.youtube.com/watch?v=N1oMRw04W3E
-  https://github.com/afwlehmann/clrt-tutorial
-  https://web.archive.org/web/20130107155225/http://rudairandamacha.blogspot.de/2012/09/writing-simple-raytracer-in-common-lisp.html
 - http://www.paulgraham.com/rootsoflisp.html
   http://www.paulgraham.com/diff.html
   http://paulgraham.com/avg.html
@@ -35,7 +26,6 @@
    https://gitlab.common-lisp.net/asdf/asdf/blob/master/doc/best_practices.md#package_inferred
   https://common-lisp.net/project/asdf/asdf/The-package_002dinferred_002dsystem-extension.html#The-package_002dinferred_002dsystem-extension
   https://github.com/privet-kitty/wild-package-inferred-system
-- sectorLISP https://www.youtube.com/watch?v=xD14SLU2u2k
 - https://mumble.net/~campbell/scheme/style.txt
 - https://github.com/hanshuebner/bknr-datastore
 - music composition
@@ -43,14 +33,11 @@
 - https://bernsteinbear.com/blog/compiling-a-lisp-0/
 - CLI arguments
   https://stackoverflow.com/questions/1021778/getting-command-line-arguments-in-common-lisp
-- Video: Escape from the Heap Low Level Programming
-  https://www.youtube.com/watch?v=njfyWgqZmkI
 - Android APK Compiler? https://github.com/3b/3b-dex
 - https://www.ic.unicamp.br/~meidanis/courses/mc336/problemas-lisp/L-99_Ninety-Nine_Lisp_Problems.html
 - https://franz.com/support/documentation/current/doc/mop/concepts.html
 - https://mov.im/?blog/phoe%40movim.eu&page=2
 - https://mov.im/?blog/phoe%40movim.eu/a9391f4b-485e-4f3a-ae02-051a5fc65ed1
-- https://stevelosh.com/blog/2016/08/lisp-jam-postmortem/
 - http://wcp.sdf-eu.org/software/index.html
 - ALL SYMBOLS http://clhs.lisp.se/Front/X_AllSym.htm
 - zap https://malisper.me/zap/
@@ -63,12 +50,8 @@
   - "You may of course use *intern* at compile-time"
     - alexandria:symbolicate
     - alexandria:format-symbol
-- Diferentiation in lisp (resume at 11:00)
-  https://www.youtube.com/watch?v=EyhL1DNrSME
 - Reader Macros in Common Lisp
   https://gist.github.com/chaitanyagupta/9324402
-- nes https://ahefner.livejournal.com/20528.html
-- https://z0ltan.wordpress.com/2016/09/02/basic-concurrency-and-parallelism-in-common-lisp-part-3-concurrency-using-bordeaux-and-sbcl-threads/
 - https://github.com/emacs-helm/helm-sly
 - https://ambrevar.xyz/modern-common-lisp/index.html
 - https://lainchan.org/~lisp/textdumps-and-videos.txt
@@ -93,6 +76,7 @@
     https://github.com/svetlyak40wt/qlot-without-roswell
   - https://github.com/ocicl/ocicl
   - https://github.com/roswell/roswell/
+
 * Elf Binary Release
 |-----------------+-------------+-------+-----+-----|
 |                 | compression | extra | .so | X11 |
@@ -289,10 +273,6 @@ and that doesn't work if the code is provided as a *.a or *.o file
   (ldb (byte  4   4) #b1100)     ->     #b1100 ; next 4 bits
   (ldb (byte  8   0) #b11000111) -> #b11000111 ; lowest  bits
   #+end_src
-* books
-- https://leanpub.com/lovinglisp/read
-- https://leanpub.com/readevalprintlove001/read
-- https://github.com/mark-watson/loving-common-lisp
 * cffi
 - function argument is a pointer to something
   #+begin_src c
@@ -807,66 +787,3 @@ https://lisp-lang.org/learn/continuous-integration
 - (subtypep)
 - ATOM are anything are are not cons
 - (functionp)
-* Youtube
-- Common LISP Object Standard
-  https://www.youtube.com/watch?v=IrmHp1rRQ68
-- Lisp NYC
-  https://vimeo.com/lispnyc
-  https://www.youtube.com/channel/UCv33UlfX5S4PKxozGwUY_pA
-- Patrik Stein -  https://vimeo.com/nklein
-- ELS https://www.youtube.com/channel/UC55S8D_44ge2cV10aQmxNVQ/
-- MIT 6.001 Structure and Interpretation, 1986
-  https://www.youtube.com/playlist?list=PLE18841CABEA24090
-- kraklisp https://www.youtube.com/channel/UCymtXMj1M7cKiV9TKLoTtEg
-- INF4820 https://www.youtube.com/c/INF4820/
-- Baggers https://www.youtube.com/user/CBaggers
-- Neil Munro https://www.youtube.com/user/njalmunro
-- Allegro CL https://www.youtube.com/c/FranzAllegroCL/
-- Fare https://www.youtube.com/c/Fran%C3%A7oisRen%C3%A9Rideau/
-- "afp" https://www.youtube.com/channel/UCYg6qFXDE5SGT_YXhuJPU0A/
-** AFP Concurrency on Lisp - https://www.youtube.com/watch?v=3c7LwUjb-DU
-- Bourdeux Threads
-  - Initial bindings, to control the local environment.
-  - Locks: (with-lock-held ())
-  - Recursive locks: multiple operations on the same thread, take/release/take/release..
-  - Semaphores: "a thread safe counter", signal and wait
-  - Condition Locks: A lock + A conditional variable (not thread safe)
-- Atomics
-  - incf: use a cons and FIXNUM
-  - cas: COMPARE-AND-SWAP on sbcl works on (slot-value)
-- Memory order, "it prevents re-ordering across the fence"
-  - (sb-thread:barrier)
-- lparallel: channels/workers support, priority, queue, pmap, promises
-* Book: https://leanpub.com/readevalprintlove001/read
-- Tour of Lisp(s)
-** Article: 2006 The Nature of Lisp
-   https://www.defmacro.org/ramblings/lisp.html
-- Put off by syntax at first
-- Attempt to explain lisp with familiar concepts
-- Comparison with XML
-  - XML can be represented as a tree
-  - So can be any programming language be represented as XML
-- ANT(Another Near Tool) was build as a Make replacement for Java, to avoid spaces issues
-  - Started using Java Property files and then moved to XML
-  - XML to interpret and execute java code
-* Book: https://leanpub.com/readevalprintlove002/read
-* Book: https://leanpub.com/readevalprintlove003/read
-* Book: https://leanpub.com/readevalprintlove004/read
-* Article: https://etc.ruricolist.com/2020/01/02/the-multiple-value-call-trick/
-  (multiple-value-bind) is a macro using (multiple-value-call)
-  #+begin_src lisp
-  (multiple-value-bind (x y z)
-    (+ x y z))
-  ;; Is the same as doing...
-  (multiple-value-call (lambda (&optional x y z)
-                         (+ x y z))
-    (values 1 2 3))
-  ;; But m-v-c can capture values from all the forms
-  (m-v-c (lambda (&optional x y z)
-           (+ x y z))
-    ;; (values 1 2) 3
-    ;; 1 2 3
-    (values 1) (values 2 3))
-  #+end_src
-  - m-v-c works directly on the stack, with NO allocations
-  - (values-list), takes a list and returns it as multiple values  

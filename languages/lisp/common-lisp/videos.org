@@ -1,4 +1,5 @@
 - channel https://www.youtube.com/@the-lisper/videos
+
 - stylewarning
   https://www.youtube.com/playlist?list=PLjHa38CO26-PWcJXE1G8XYlwmV4zdjbr9
   https://www.youtube.com/playlist?list=PLjHa38CO26-PS4GeZyayEwe7wLBZChZeE
@@ -8,6 +9,50 @@
 
 - 12 Robert Smith - Excursions In Mathematics Using Lisp
   https://www.youtube.com/watch?v=nTI_d-jS6dI
+
+- DavidWesselsVIU https://www.youtube.com/@davidwesselsviu6016/playlists
+
+- Diferentiation in lisp (resume at 11:00)
+  https://www.youtube.com/watch?v=EyhL1DNrSME
+
+- Escape from the Heap Low Level Programming
+  https://www.youtube.com/watch?v=njfyWgqZmkI
+
+- 2008 Raytracer in lisp
+  https://www.youtube.com/watch?v=N1oMRw04W3E
+  https://github.com/afwlehmann/clrt-tutorial
+  https://web.archive.org/web/20130107155225/http://rudairandamacha.blogspot.de/2012/09/writing-simple-raytracer-in-common-lisp.html
+
+* Youtube
+- Common LISP Object Standard
+  https://www.youtube.com/watch?v=IrmHp1rRQ68
+- Lisp NYC
+  https://vimeo.com/lispnyc
+  https://www.youtube.com/channel/UCv33UlfX5S4PKxozGwUY_pA
+- Patrik Stein -  https://vimeo.com/nklein
+- ELS https://www.youtube.com/channel/UC55S8D_44ge2cV10aQmxNVQ/
+- MIT 6.001 Structure and Interpretation, 1986
+  https://www.youtube.com/playlist?list=PLE18841CABEA24090
+- kraklisp https://www.youtube.com/channel/UCymtXMj1M7cKiV9TKLoTtEg
+- INF4820 https://www.youtube.com/c/INF4820/
+- Baggers https://www.youtube.com/user/CBaggers
+- Neil Munro https://www.youtube.com/user/njalmunro
+- Allegro CL https://www.youtube.com/c/FranzAllegroCL/
+- Fare https://www.youtube.com/c/Fran%C3%A7oisRen%C3%A9Rideau/
+- "afp" https://www.youtube.com/channel/UCYg6qFXDE5SGT_YXhuJPU0A/
+** AFP Concurrency on Lisp - https://www.youtube.com/watch?v=3c7LwUjb-DU
+- Bourdeux Threads
+  - Initial bindings, to control the local environment.
+  - Locks: (with-lock-held ())
+  - Recursive locks: multiple operations on the same thread, take/release/take/release..
+  - Semaphores: "a thread safe counter", signal and wait
+  - Condition Locks: A lock + A conditional variable (not thread safe)
+- Atomics
+  - incf: use a cons and FIXNUM
+  - cas: COMPARE-AND-SWAP on sbcl works on (slot-value)
+- Memory order, "it prevents re-ordering across the fence"
+  - (sb-thread:barrier)
+- lparallel: channels/workers support, priority, queue, pmap, promises
 
 * 23 | How Lisp is Designing Nano-technology
 

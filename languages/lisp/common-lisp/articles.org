@@ -1,4 +1,54 @@
-- https://inconvergent.net/2023/a-vector-dsl/
-- https://inconvergent.net/2023/lets-write-a-dsl/
-- https://edoput.it/2023/11/19/data-oriented-clos.html
+- 12 nes https://ahefner.livejournal.com/20528.html
+- 16 https://z0ltan.wordpress.com/2016/09/02/basic-concurrency-and-parallelism-in-common-lisp-part-3-concurrency-using-bordeaux-and-sbcl-threads/
+- 16 Conditions and Restarts in Common Lisp https://z0ltan.wordpress.com/2016/08/06/conditions-and-restarts-in-common-lisp/
+- 16 https://unthought.net/2016/12/22-lisp-memory-woes-but-not/
+- 22 https://stevelosh.com/blog/2022/08/depending-in-common-lisp/
+- 22 https://funcall.blogspot.com/2022/09/playing-with-raycasting.html
+- 23 https://inconvergent.net/2023/a-vector-dsl/
+- 23 https://inconvergent.net/2023/lets-write-a-dsl/
+- 23 https://edoput.it/2023/11/19/data-oriented-clos.html
 - https://awkravchuk.itch.io/cl-fast-ecs/devlog/622054/gamedev-in-lisp-part-1-ecs-and-metalinguistic-abstraction
+
+* 20 | https://etc.ruricolist.com/2020/01/02/the-multiple-value-call-trick/
+
+- (multiple-value-bind) is a macro using (multiple-value-call)
+
+#+begin_src lisp
+  (multiple-value-bind (x y z)
+    (+ x y z))
+  ;; Is the same as doing...
+  (multiple-value-call (lambda (&optional x y z)
+                         (+ x y z))
+    (values 1 2 3))
+  ;; But m-v-c can capture values from all the forms
+  (m-v-c (lambda (&optional x y z)
+           (+ x y z))
+    ;; (values 1 2) 3
+    ;; 1 2 3
+    (values 1) (values 2 3))
+#+end_src
+
+- m-v-c works directly on the stack, with NO allocations
+- (values-list), takes a list and returns it as multiple values  
+
+* TODO 16 | Lisp Game Jam Postmortem | Steve Losh
+
+https://stevelosh.com/blog/2016/08/lisp-jam-postmortem/
+
+- 1 year into CL from Clojure
+- cl-charms (ncurses wrapper) https://github.com/HiTECNOLOGYs/cl-charms
+- Rowswell for binary build
+- game ran fine withing neovim terminal emulator
+
+- with macro
+  #+begin_src lisp
+  (defmacro with-color (color &body body)
+    (once-only (color)
+      `(unwind-protect
+        (progn
+          (charms/ll:attron (charms/ll:color-pair ,color))
+          ,@body)
+        (charms/ll:attroff (charms/ll:color-pair ,color)))))
+  #+end_src
+
+- replaced the *game-loop* for a *state-machine*

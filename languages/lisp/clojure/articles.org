@@ -1,3 +1,4 @@
+- 15 https://stevelosh.com/blog/2015/12/ludum-dare-34/
 - deps
   https://blog.michielborkent.nl/new-clojure-project-quickstart.html
   https://github.com/babashka/neil

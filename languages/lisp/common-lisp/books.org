@@ -1,0 +1,18 @@
+- https://github.com/mark-watson/loving-common-lisp
+- https://leanpub.com/lovinglisp/read
+- https://leanpub.com/readevalprintlove001/read
+- https://leanpub.com/readevalprintlove002/read
+- https://leanpub.com/readevalprintlove003/read
+- https://leanpub.com/readevalprintlove004/read
+* Book: https://leanpub.com/readevalprintlove001/read
+- Tour of Lisp(s)
+** Article: 2006 The Nature of Lisp
+   https://www.defmacro.org/ramblings/lisp.html
+- Put off by syntax at first
+- Attempt to explain lisp with familiar concepts
+- Comparison with XML
+  - XML can be represented as a tree
+  - So can be any programming language be represented as XML
+- ANT(Another Near Tool) was build as a Make replacement for Java, to avoid spaces issues
+  - Started using Java Property files and then moved to XML
+  - XML to interpret and execute java code
