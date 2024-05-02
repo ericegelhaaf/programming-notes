@@ -1,3 +1,4 @@
+- https://medium.com/twelve-days-of-monad
 - https://yannesposito.com/Scratch/en/blog/Haskell-the-Hard-Way/
 - https://github.com/alpacaaa/zero-bs-haskell
 - aeson https://web.archive.org/web/20201121162141mp_/https://artyom.me/aeson

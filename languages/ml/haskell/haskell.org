@@ -380,8 +380,14 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 
   class Semigroup a where
     (<>) :: a -> a -> a
-
   class Semigroup a => Monoid a where ... -- since GHC 8.4
+
+  class Functor f where
+    fmap :: (a -> b) -> f a -> f b
+
+  class (Functor f) => Applicative f where -- class constraint
+    pure  :: a -> f a
+    (<*>) :: f (a -> b) -> f a -> f b
 
   class Foldable t where
     foldMap :: Monoid m => (a -> m) -> t a -> m
@@ -397,7 +403,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 *** Declaring
 
 #+begin_src haskell
-  class Eq a where -- name=Eq - type_variable=a
+  class Eq a where -- name=Eq - type_variable=a -- posible class constraint goes here, after class, before =>
     (==), (/=) :: a -> a -> Bool -- they share the same signature
     {-# INLINE (/=) #-} -- GHC pragma to define inline methods?
     {-# INLINE (==) #-}

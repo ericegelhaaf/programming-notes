@@ -1,3 +1,5 @@
+- wiki https://en.wikipedia.org/wiki/Scala_(programming_language)
+  - Author: Martin Odersky
 - Article: https://www.scrapingbee.com/blog/web-scraping-scala/
 - Article: https://degoes.net/articles/scala-resurrection
 - FP library https://typelevel.org/cats/
@@ -16,14 +18,15 @@
 ** Standard Library
 - https://www.scala-lang.org/api/current/
 ** Binary Compatibility
+
 #+begin_src
 Scala doesn't have binary compatibility, you can't even use a library compiled for 2.12 on Scala 2.13. For that
 reason library developers cross-compile to all versions they support.
 
 This is fixed in Scala 3, but it's only valid for Scala 3 and higher, it doesn't help for Scala 2.
 #+end_src
+
 * Codebases
 - https://github.com/twitter/the-algorithm
-* People
-- Martin Odersky (Creator)
-- Dick Wall (Courses)
+- https://scalacenter.github.io/scala-advent-of-code/
+  https://github.com/scalacenter/scala-advent-of-code

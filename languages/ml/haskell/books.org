@@ -203,6 +203,10 @@ Fails the 1st law.
 - But we CANNOT easily operate with both "kind" of functors at the same time
   eg: with "Just 9" and "Just (3 *)"
 
+- <*> in an =Applicative= is similar to fmap but,
+  takes a functor value that has a function in it AND another functor
+  extracts the function from the 1st and maps it over the 2nd
+
 * 00 | The Haskell School of Expressive Language |          | Paul Hudak
 ** 3 Simple Graphics
 *** 3.1 Basic Input/Output
