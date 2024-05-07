@@ -5042,7 +5042,6 @@ run expr =
   #+end_src
 
 ** DONE 05 Creating And Structuring Haskell Projects
-
 *** cabal
   - package manager
   - dependency manager

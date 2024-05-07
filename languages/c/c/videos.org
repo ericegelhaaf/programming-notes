@@ -139,6 +139,34 @@
     header h;
     data d[]; // THIS
   }
+* 21 | Checking out raylib                    | Tsoding
+
+https://www.youtube.com/watch?v=fHojJ9Nxb0E
+
+ 03:22:00 START
+
+- is like an engine as a library
+- a zero initialized structure, is a convention that should be handled
+  by the functions handling them
+  = {0}
+
+** Example: minimal example
+
+#+begin_src c
+  #include "raylib.h"
+  #define SCREEN_WIDTH 800
+  #define SCREEN_HEIGHT 600
+  int main(void) {
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raylib probe");
+    while (!WindowShouldClose()) {
+      BeginDrawing();
+      CLearBackground(BLACK);
+      EndDrawing();
+    }
+    return 0;
+  }
+#+end_src
+
 * 21 | Modern C and What We Can Learn From It | Luca Sas
    https://www.youtube.com/watch?v=QpAhX-gsHMs
 - WG14 Standarization Group https://www.open-std.org/jtc1/sc22/wg14/

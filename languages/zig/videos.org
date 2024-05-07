@@ -12,10 +12,13 @@
 - 23 | Paid Zig Stream            | tsoding https://www.youtube.com/watch?v=eIX9zER9vjY
 
 * Playlists
-- 22 | Gamedev - Hyper            | Madrigal https://www.youtube.com/playlist?list=PLCcN1sD0WbbKfeEIg1tOsr-YOFmNUmtDe
-- 23 | Gamedev - Fighthing Game   | Zinac https://www.youtube.com/playlist?list=PLvc15SkZM1FCkxyeRpUjFCT2hlKQ_UC_G
-- 23 | Gamedev - Engine           | nothke https://www.youtube.com/playlist?list=PLECtDQFQZX02MQQoqQLodPwTbx_T67Teg
+
+- 22 | Gamedev - Hyper          | Madrigal https://www.youtube.com/playlist?list=PLCcN1sD0WbbKfeEIg1tOsr-YOFmNUmtDe
+- 23 | Gamedev - Fighthing Game | Zinac https://www.youtube.com/playlist?list=PLvc15SkZM1FCkxyeRpUjFCT2hlKQ_UC_G
+- 23 | Gamedev - Engine         | nothke https://www.youtube.com/playlist?list=PLECtDQFQZX02MQQoqQLodPwTbx_T67Teg
+
 * Channels
+
 - https://www.youtube.com/@UtahZig/streams
 - https://www.youtube.com/c/ZigSHOWTIME
 - https://www.youtube.com/@zigmeetups6619/videos

@@ -1,19 +1,13 @@
-Guys what about?:
-Core:
-Official Website: https://clojure.org/
-Documentation: https://clojuredocs.org/
-Cheat-sheet: https://clojure.org/api/cheatsheet
+|---------------+------------------------------------|
+| home          | https://clojure.org/               |
+| docs official | https://clojuredocs.org/           |
+| docs 3rd      | https://cljdoc.org/                |
+| cheatsheet    | https://clojure.org/api/cheatsheet |
+| quickref      | https://clojuredocs.org/quickref   |
+|---------------+------------------------------------|
+
 Community Resources: https://clojure.org/community/resources
-Clojure Libraries: https://clojars.org/
-Libraries Documentation: https://cljdoc.org/
 
-Practice:
-4Clojure: https://www.4clojure.com/
-Koans: https://github.com/functional-koans/clojure-koans
-Clojure problems on Exercism: https://exercism.io/tracks/clojure
-
-Tools:
-Clojure Toolbox: https://www.clojure-toolbox.com/
 EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-api.html
 
 - Blog https://www.juxt.pro/blog
@@ -21,25 +15,23 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - Transforming Data with ClojureScript¶ https://langintro.com/cljsbook/
 - https://github.com/magomimmo/modern-cljs
 - https://www.cs.utexas.edu/users/novak/cs378contents.html
-- Simulating Machines in Clojure https://stopa.io/post/255
-- https://github.com/functional-koans/clojure-koans/
 - https://github.com/bbatsov/clojure-style-guide
-- https://clojuredocs.org/quickref
 - Live Notebooks https://clerk.vision/
-- (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
-- (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
 - C++ Dialect https://github.com/jank-lang/jank
+
+- exercises
+  - https://exercism.io/tracks/clojure
+  - https://github.com/functional-koans/clojure-koans/
+  - https://github.com/4clojure/4clojure
 
 * language
 
 - "The use of keyword argument had fallen in and out of fashin in the Clojure comunity over the years"
 - One-pass compiler https://gist.github.com/reborg/dc8b0c96c397a56668905e2767fd697f#why-clojure-compiler-is-single-pass-arent-many-possible-optimizations-lost-this-way
 - code organized in ~namespaces~
-- on if, else is optional
-- cond/:else
-- an int is a 32bit integer
-- a float is a 64bit floating-point number
 - EDN = Extensible Data Notation
+- (binding) is like Bagger's (with-setf) https://clojuredocs.org/clojure.core/binding
+- (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
 
 ** require/import
 | (:require)                      |   |
@@ -51,6 +43,8 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 
 - (do)
 - (if) (when) (cond) (dotimes)
+  - on if, else is optional
+  - cond/:else
 - (case)  - aka "switch", cases must be compile time literals
 - (doseq) - can iterate over >1 sequence at the time, like nested for loops
 - (for) aka "list comprehensions"
@@ -103,33 +97,31 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
   (=)
 ** Types
 *** Primitive / Literals
-
-|------------+-----------------------------------|
-| "foo"      | java.lang.String                  |
-| #"a*b"     | java.util.regex.Pattern           |
-| true/false |                                   |
-| nil        |                                   |
-|------------+-----------------------------------|
-| ##Inf      | symbolic values                   |
-| ##-Inf     |                                   |
-| ##NaN      |                                   |
-|------------+-----------------------------------|
-| \f         | java.lang.Character               |
-| \newline   |                                   |
-| \uNNNN     | unicode                           |
-| \oNNN      | octal                             |
-|------------+-----------------------------------|
-| 3.14       | doubles (~15-17 digits precision) |
-| 3.14M      | big decimal (arbitrary precision) |
-|------------+-----------------------------------|
-| 42         | integer                           |
-| 42N        | big integer                       |
-| 052        | (octal)                           |
-| 2r0101110  |                                   |
-| 8r52       |                                   |
-| 0x2a       |                                   |
-|------------+-----------------------------------|
-
+|------------+-------------------------------------------|
+| "foo"      | java.lang.String                          |
+| #"a*b"     | java.util.regex.Pattern                   |
+| true/false |                                           |
+| nil        |                                           |
+|------------+-------------------------------------------|
+| ##Inf      | symbolic values                           |
+| ##-Inf     |                                           |
+| ##NaN      |                                           |
+|------------+-------------------------------------------|
+| \f         | java.lang.Character                       |
+| \newline   |                                           |
+| \uNNNN     | unicode                                   |
+| \oNNN      | octal                                     |
+|------------+-------------------------------------------|
+| 3.14       | doubles (64bit) (~15-17 digits precision) |
+| 3.14M      | big decimal (arbitrary precision)         |
+|------------+-------------------------------------------|
+| 42         | integer (32bit)                           |
+| 42N        | big integer                               |
+| 052        | (octal)                                   |
+| 2r0101110  |                                           |
+| 8r52       |                                           |
+| 0x2a       |                                           |
+|------------+-------------------------------------------|
 - char https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html
   - Character/isLetter
   - .isLetter https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html#isLetter(char)
@@ -256,139 +248,6 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 | .reflect      |                                                                  |
 |---------------+------------------------------------------------------------------|
 
-* libraries
-
-clojure https://clojure.org/community/libraries
-clojure https://clojars.org/
-clojurescript https://clojurescript.org/community/libraries
-
-- popular way to compile clojurescript https://github.com/thheller/shadow-cljs
-
-|-----------------------+-----+----------------------------------------------|
-| Async programming     | 1.9 | https://github.com/clojure/core.async        |
-| Logic programming     | 1.4 | https://github.com/clojure/core.logic        |
-| Pattern Matching      | 1.1 | https://github.com/clojure/core.match        |
-| Cache strategies      | 0.4 | https://github.com/clojure/core.cache        |
-| Memoization           | 0.2 | https://github.com/clojure/core.memoize      |
-| RRB-Trees             | 0.1 | https://github.com/clojure/core.rrb-vector   |
-| Contracts programming | 0.1 | https://github.com/clojure/core.contracts    |
-| Type System           | 0.3 | https://github.com/typedclojure/typedclojure |
-|-----------------------+-----+----------------------------------------------|
-
-- java.time
-  https://stackoverflow.com/questions/62969992/clojure-whats-the-way-to-have-current-time-string-with-babashka-with-least-dep
-** :deps (clojure >= 1.11)
-
- https://clojure.org/guides/deps_and_cli
- https://clojure.org/reference/clojure_cli
- https://clojure.org/reference/deps_edn
-
-- list depedencies, and in a tree
-  $ clj -X:deps list
-  $ clj -X:deps tree
-
-- list versions of clojure.java-time
-  $ clj -X:deps find-versions :lib clojure.java-time/clojure.java-time
-
-- execute "run" function defined at src/hello.clj
-  $ clj -X hello/run
-
-*** maven
-
-- add 3rd party to deps.edn
-  #+begin_src clojure
-    {:deps
-     {clojure.java-time/clojure.java-time {:mvn/version "1.1.0"}}}
-  #+end_src
-
-*** local
-
-- add local dependency in parent directory ../time-lib to deps.edn
-  #+begin_src clojure
-    {:deps
-      {time-lib/time-lib {:local-root "../time-lib"}}}
-  #+end_src
-
-*** git 
-- get sha locally
-  $ git rev-parse --short v0.0.1^{commit}
-
-- get sha remotelly
-  $ git ls-remote https://github.com/yourname/time-lib.git v0.0.1
-
-- add git dependency, needs a tag and sha?
-  #+begin_src clojure
-    {:deps
-     {io.github.yourname/time-lib {:git/tag "v0.0.1" :git/sha "4c4a34d"}}}
-  #+end_src
-
-** Web
-- https://www.youtube.com/watch?v=wEjNWUMCX78&list=PLVi9lDx-4C_T7jkihlQflyqGqU4xVtsfi
-*** hiccup
-- https://clojurebridgelondon.github.io/community-docs/docs/web-applications/hiccup/
-- https://github.com/yokolet/hiccup-samples/blob/master/src/hiccup_templating/views/contents.clj
-- https://github.com/weavejester/hiccup/blob/master/src/hiccup/element.clj
-*** luminus template dependencies
-| Name               | Description                                                                  | Home                                                    |
-|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
-| bulma              | CSS framework                                                                | https://bulma.io/                                       |
-| chesire            | json encoding/decoding                                                       | https://github.com/dakrone/cheshire                     |
-| conman             | managing database connections                                                | https://github.com/luminus-framework/conman             |
-| cprop              | likes properties, environments, configs, profiles..                          | https://github.com/tolitius/cprop                       |
-| expound            | Human-optimized error messages for clojure.spec                              | https://github.com/bhb/expound                          |
-| http-kit           | HTTP client+server                                                           | https://github.com/http-kit/http-kit                    |
-| h2                 | H2 is a database distributed as library...                                   | http://www.h2database.com/html/main.html                |
-| java-time          | wrapper for Java 8 Date-Time API.                                            | https://github.com/dm3/clojure.java-time                |
-| logback-classic    | successor to the popular log4j                                               | http://logback.qos.ch/                                  |
-| luminus-http-kit   | HTTP Kit adapter for Luminus                                                 | https://github.com/luminus-framework/luminus-http-kit   |
-| luminus-migrations | For DB migrations. The library is a command line wrapper for Migratus.       | https://github.com/luminus-framework/luminus-migrations |
-| luminus-transit    | transit serialization helpers for Luminus                                    | https://github.com/luminus-framework/luminus-transit    |
-| markdown-clj       | Markdown parser in Clojure                                                   | https://github.com/yogthos/markdown-clj                 |
-| material-icons     | Webjars. A font for the web.                                                 | https://google.github.io/material-design-icons/         |
-| mount              | managing app state since (reset)                                             | https://github.com/tolitius/mount                       |
-| muuntaja           | Clojure library for fast http api format negotiation, encoding and decoding. | https://github.com/metosin/muuntaja                     |
-| nrepl              | network REPL                                                                 | https://github.com/nrepl/nrepl                          |
-| reitit             | data-driven router                                                           | https://github.com/metosin/reitit                       |
-| ring               | HTTP server                                                                  | https://github.com/ring-clojure/ring                    |
-| ring-webjars       | Ring middleware to serve static assets from WebJars.                         | https://github.com/weavejester/ring-webjars             |
-| ring-http-response | Handling HTTP Statuses with Clojure(Script)                                  | https://github.com/metosin/ring-http-response           |
-| selmer             | Templating system                                                            | https://github.com/yogthos/Selmer                       |
-| struct             | Structural/Scheme validation                                                 | https://github.com/funcool/struct                       |
-|--------------------+------------------------------------------------------------------------------+---------------------------------------------------------|
-*** threeagent
-- https://martin.varela.fi/2019/11/01/webgl-react-and-no-javascript/
-  https://www.youtube.com/watch?v=myigRnZHhTw
-*** quil
-- https://github.com/quil/quil-templates/
-- https://gist.github.com/mmzsource/340322e6ff4b17be8b7dcb84d16d5172
-#+begin_src
-:profiles {:dev {:source-paths ["src"]
-                   :repl-options {:nrepl-middleware
-                                  [cider.piggieback/wrap-cljs-repl]}
-                   :dependencies [[figwheel-sidecar "0.5.19"]
-                                  [cider/piggieback "0.4.1"]]}}
-#+end_src
-- https://www.reddit.com/r/Clojure/comments/a69wse/setup_dynamic_clojurescript_and_quil_environment/  
-*** Overtone
-- https://github.com/pjagielski/disclojure
-
-* tools
-
-- https://github.com/babashka/neil
-- nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
-  https://docs.cider.mx/cider/0.26/basics/middleware_setup.html
-
-** GraalVM
-- native-image on deps.edn https://github.com/taylorwood/clj.native-image
-  - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
-  - AWS Example https://github.com/latacora/lamed-sample-app
-  - Lein Plugin https://github.com/taylorwood/lein-native-image
-- https://clojure.atlassian.net/browse/CLJ-2582
-- https://github.com/clj-easy/graal-docs
-- https://www.graalvm.org/reference-manual/native-image/StaticImages/
-- https://www.innoq.com/en/blog/native-clojure-and-graalvm/
-- https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html
-
 
 * snippets
 ** memoize
@@ -412,10 +271,5 @@ https://clojure.org/reference/atoms
 #+end_src
 
 * codebases
+
 - https://shaunlebron.github.io/t3tr0s-slides/#0
-
-* personalities
-** Rich Hickey
-- Talks https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr
-- https://github.com/tallesl/Rich-Hickey-fanclub
-

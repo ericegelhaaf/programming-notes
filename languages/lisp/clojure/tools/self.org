@@ -1,0 +1,3 @@
+- https://github.com/babashka/neil
+- nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
+  https://docs.cider.mx/cider/0.26/basics/middleware_setup.html

@@ -360,3 +360,65 @@ manual https://github.com/alessiostalla/doplus/blob/master/MANUAL.md
 | slugify | text to slugged-text | https://github.com/EuAndreh/cl-slug/                            |
 | piccolo | html5 generation     | https://github.com/skyizwhite/piccolo                           |
 |---------+----------------------+-----------------------------------------------------------------|
+* Gamedev
+** eon
+
+*** claw-rawlib
+
+raylib:set-config-flags (title (width height))
+raylib:with-window
+raylib:set-target-fps
+
+raylib:bounding-box-min
+raylib:bounding-box-max
+raylib:color-brightness <RAYLIB:COLOR> factor (outputs a new color)
+raylib:clear-background <RAYLIB:COLOR>
+raylib:make-vector3 (:x :y :z)
+raylib:vector3-subtract <RAYLIB:VECTOR3> <RAYLIB:VECTOR3>
+raylib:vector3-zero
+raylib:vector2-one
+raylib:vector2-scale    <RAYLIB:VECTOR2> FLOAT
+raylib:vector2-x        <RAYLIB:VECTOR2>
+raylib:vector2-y        <RAYLIB:VECTOR2>
+raylib:font
+raylib:make-camera-3d  (:target :position :up :fovy :projection)
+raylib:make-camera-2d  (:target :offset :zoom :rotation)
+raylib:camera-2d-target <RAYLIB:CAMERA>
+raylib:camera-2d-zoom   <RAYLIB:CAMERA>
+raylib:with-shader-mode <RAYLIB:SHADER>
+raylib:with-mode-2d     <RAYLIB:CAMERA>
+raylib:with-mode-3d     eon:*scene3d-camera*
+raylib:update-camera    <RAYLIB:CAMERA> CFFI-ENUM-MODE?
+raylib:face             <RAYLIB:COLOR> alpha
+raylib:draw-grid            slices spacing
+raylib:draw-plane           center-pos-v3 size-v2 color
+raylib:draw-cube-v          pos-v3 size-v3 raylib:color
+raylib:draw-cube-wires-v    pos-v3 size-v3 raylib:color
+raylib:draw-rectangle-lines pos-x  pos-y   width height raylib:color
+
+raylib:model-materials        accessor
+raylib:model-material-count   accessor
+raylib:material-shader        accessor
+
+defmethod eon:scene3d-draw ((cube scene3d-cube) position origin scale rotation tint)
+rlgl:push-matrix
+(eon::rlgl-apply-scene3d-draw-arguments position origin scale rotation tint)
+rlgl:pop-matrix
+
+*** eon-examples
+
+basic-3d-scene.lisp
++bgm-sfx.lisp+
++dialog-box.lisp+
++input-field.lisp+
+logo.lisp
+package.lisp
++parallax-background.lisp+
++particle-system.lisp+
++scene2d-image.lisp+
++scene2d-label.lisp+
+scene2d-layout.lisp
++scene2d-window.lisp+
+screen-transition.lisp
++select-box.lisp+
+tiled-map.lisp

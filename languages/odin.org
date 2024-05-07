@@ -1,0 +1,130 @@
+* Make games using Odin + Raylib
+** #1: Setup and first code
+** #2: Move, jump & fall
+
+https://www.youtube.com/watch?v=MC5C4SF2Cds
+
+*** move position from key
+
+#+begin_src odin
+  player_pos := rl.Vector2 { 640, 320 }
+  // for
+  if rl.IsKeyDown(.LEFT) {
+    player_pos.x -= 400*rl.GetFrameTime() // how long the last frame took
+  }
+  rl.DrawRectangleV(player_pos,{64,64},rl.GREEN)
+#+end_src
+
+*** move using velocity
+
+#+begin_src odin
+  player_vel: r1.Vector2 // init vector with 0
+  // for
+  if rl.IsKeyDown(.LEFT) {
+      player_vel.x = -400
+  } else if rl.IsKeyDown(.RIGHT) {
+      player_vel.x = 400
+  } else {
+      player_vel.x = 0
+  }
+  player_pos += player_vel * rl.GetFrameTime()
+#+end_src
+
+*** gravity+floor
+
+#+begin_src odin
+  // for
+  player_vel.y += 2000 * rl.GetFrameTIme()
+  if rl.IsKeyPressed(.SPACE) {
+     player_vel.y = -600
+  }
+  if player_pos.y > f32(rl.GetScreenHeight()) - 64 {
+     player_pos.y = f32(rl.GetScreenHeight()) - 64
+  }
+#+end_src
+
+*** grounded jump
+
+#+begin_src odin
+  player_grounded = true
+  // for
+  if player_grounded && rl.IsKeyPressed(.SPACE) {
+      player_vel.y = -600
+      player_grounded = false
+  }
+  if player_pos.y > f32(rl.GetScreenHeight()) - 64 {
+      player_pos.y = f32(rl.GetScreenHeight()) - 64
+      player_grounded = true
+  }
+#+end_src
+
+** #3: An animated player
+
+https://www.youtube.com/watch?v=qJA7laC3q18
+
+#+begin_src go
+  player_run_texture := rl.LoadTexture("cat_run.png")
+  // for
+  // r1.DrawTextureV(player_run_texture, player_pos, rl.WHITE)
+  r1.DrawTextureEx(player_run_texture, player_pos, 0, 4, rl.WHITE) // rot + scale
+#+end_src
+
+only show sprite
+
+#+begin_src go
+  player_run_num_frames := 4
+  // for
+  player_run_width := f32(player_run_texture.width)
+  player_run_height := f32(player_run_texture.height)
+  draw_player_source := rl.Rectangle {
+    x = 0,
+    y = 0,
+    width = player_run_width / f32(player_run_num_frames),
+    height = player_run_height,
+  }
+  draw_player_dest := rl.Rectangle {
+    x = player_pos.x,
+    y = player_pos.y,
+    width = player_run_width * 4 / f32(player_run_num_frames),
+    height = player_run_height * 4,
+  }
+  //rl.DrawTextureRec(player_run_texture, draw_player_source, player_pos, rl.WHITE)
+  rl.DrawTexturePro(player_run_texture, draw_player_source, player_pos, draw_player_dest, 0,0, rl.WHITE) // ox oy
+#+end_src
+
+animate sprite
+
+#+begin_src go
+  player_run_frame_timer: f32
+  player_run_current_frame: int
+  player_run_frame_length := f32(0.1)
+  // for
+  player_run_frame_timer += rl.GetFrameTime()
+  if player_run_frame_timer > player_run_frame_length {
+    player_run_current_frame += 1
+    player_run_frame_timer = 0
+    if player_run_current_frame == player_run_num_frames {
+      player_run_current_frame = 0
+    }
+  }
+  draw_player_source := rl.Rectangle {
+    x = f32(player_run_current_frame) * player_run_width / f32(player_run_num_frames),
+    //...
+  }
+#+end_src
+
+turn around
+
+#+begin_src odin
+  player_flip: bool
+  if rl.IsKeyDown(.LEFT) {
+     player_flip = true
+  } else if {
+     player_flip = false
+  }
+
+  if player_flip {
+    draw_player_source.width = -draw_player_source.width
+  }
+#+end_src
+

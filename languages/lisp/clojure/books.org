@@ -5,10 +5,11 @@
 - (.pow js/Math NUMBER POWER)
   (js/Math.pow NUMBER POWER)
 * 16 | Clojure In Action
-| Type of Polymorphism | https://en.wikipedia.org/wiki/Parametric_polymorphism |
-|                      | https://en.wikipedia.org/wiki/Ad_hoc_polymorphism     |
-|                      | https://en.wikipedia.org/wiki/Subtyping               |
-|                      | https://en.wikipedia.org/wiki/Structural_type_system  |
+- Type of Polymorphism
+  - https://en.wikipedia.org/wiki/Parametric_polymorphism
+  - https://en.wikipedia.org/wiki/Ad_hoc_polymorphism
+  - https://en.wikipedia.org/wiki/Subtyping
+  - https://en.wikipedia.org/wiki/Structural_type_system
 ** 4 Multimethod Polymorphism
 *** Polymorphism and his types
 - "In a certain sense polymorphism provides the ability to create your own abstractions."
@@ -57,6 +58,7 @@
 * 17 | Reactive with ClojureScript Recipies
 ** 2 - ClojureScript
 *** Elements
+|---------------+-------------------------+-------------------------------|
 |               | Javascript              | Clojure                       |
 |---------------+-------------------------+-------------------------------|
 | new*          | document.createElement  |                               |
@@ -75,6 +77,7 @@
 |---------------+-------------------------+-------------------------------|
 | get attribute |                         | (aget) (.-)                   |
 | set attribute |                         | (aset)                        |
+|---------------+-------------------------+-------------------------------|
 - new nodes still need to get attached to the DOM tree on a separate step
 - *innerHTML* is a property on all nodes that take a string of the childrens
 *** Events
@@ -95,7 +98,6 @@
 ** Introduction
 - Focus on the *Luminous* stack
 ** 1 Getting your feet wet
-- Clojure libraries https://clojars.org/
 - myapp/src/myapp/core.clj
   (require myapp.core) Namespace declaration, matches folder structure
 - myapp/project.clj
@@ -132,21 +134,25 @@ timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 - Dependencies CANNOT be loades dynamically by the JVM,
   they need a restart of the REPL
 *** resources/sql/queries.sql
-   Used by HugSQL, which creates function to interact with a database, based on SQL files
-   :! indicates the query is destructive
-   :n returns the number of affected rows
-   :? indicates a SELECT query
-   :* indicates that multiple rows are returned
-   #+begin_src sql
--- :name save-message! :! :n
--- :doc creates a new message using the name and message keys
-INSERT INTO guestbook
-(name, message)
-VALUES (:name, :message)
--- :name get-messages :? :*
--- :doc selects all available messages
-SELECT * from guestbook
-   #+end_src
+
+Used by HugSQL, which creates function to interact with a database, based on SQL files
+|----+-------------------------------------------|
+| :! | indicates the query is destructive        |
+| :n | returns the number of affected rows       |
+| :? | indicates a SELECT query                  |
+| :* | indicates that multiple rows are returned |
+|----+-------------------------------------------|
+
+#+begin_src sql
+  -- :name save-message! :! :n
+  -- :doc creates a new message using the name and message keys
+  INSERT INTO guestbook (name, message)
+  VALUES (:name, :message)
+  -- :name get-messages :? :*
+  -- :doc selects all available messages
+  SELECT * from guestbook
+#+end_src
+
 *** {dev,test}-config.edn
    - Not supposed to be commited to svn
     :database-url "jdbc:h2:./guestbook_dev.db"
@@ -158,31 +164,40 @@ SELECT * from guestbook
    (save-message! {:name "bob" :message "hello world"})
    (get-messages)
 *** test/clj/guestbook/db/core_test.clj
-- Update (deftest)
-  #+begin_src clojure
-    (deftest test-users
-      (jdbc/with-transaction [t-conn *db* {:rollback-only true}]
-        (is (= 1 (db/save-message!
-                  t-conn
-                  {:name "bob"
-                   :message "hello world"}
-                  {:connection t-conn})))
-        (is (= {:name "bob"
-                :message "hello world"}
-               (-> (db/get-messages t-conn {})
-                   (first)
-                   (select-keys [:name :message]))))))
-       #+end_src
-- lein test
-  lein test-refresh
-*** src/clj/guestbook/db/core.clj
-   (conman/bind-connection *db* "sql/queries.sql")
-*** src/clj/guestbook/routes/home.clj
-   Where the paths, functions, middleware are put together.
+
+#+begin_src clojure
+  (deftest test-users
+    (jdbc/with-transaction [t-conn *db* {:rollback-only true}]
+      (is (= 1 (db/save-message!
+                t-conn
+                {:name "bob"
+                 :message "hello world"}
+                {:connection t-conn})))
+      (is (= {:name "bob"
+              :message "hello world"}
+             (-> (db/get-messages t-conn {})
+                 (first)
+                 (select-keys [:name :message]))))))
+#+end_src
+
+***  src/clj/guestbook/db/core.clj
+
+#+begin_src clojure
+  (conman/bind-connection *db* "sql/queries.sql")
+#+end_src
+
+***  src/clj/guestbook/routes/home.clj
+
+Where the paths, functions, middleware are put together.
+
 *** resources/html/home.html
- - extends base.html and process the :doc through markdown
+
+Extends base.html and process the :doc through markdown
+
 *** resources/html/home.html
- - Setup to use Bulma CSS
+
+Setup to use Bulma CSS
+
 * 22 | Clojure: The Essential Reference MEAP v28
 |-------------------------+------------------------------------------------------------------|
 |                         | http://manifesto.softwarecraftsmanship.org/#/es                  |

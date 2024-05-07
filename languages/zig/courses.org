@@ -1,4 +1,4 @@
-- Zig in Depth | Dude the builder https://www.youtube.com/playlist?list=PLtB7CL7EG7pCw7Xy1SQC53Gl8pI7aDg9t
+- Zig in Depth    | Dude the builder https://www.youtube.com/playlist?list=PLtB7CL7EG7pCw7Xy1SQC53Gl8pI7aDg9t
 - Zig Programming | Bayo Code https://www.youtube.com/playlist?list=PLRMNjZSQLv5iGpjubyzlWYcGqiTPVyK3s
 * Introduction to Zig
 ** 11 Errors
@@ -157,4 +157,25 @@ Tagged union
       .b => |*float| float.* += 2,
       .c => |*b|     b.*      = !b.*,
   };
+#+end_src
+
+** 22 Optional
+
+#+begin_src zig
+  var found_index: ?usize = null;
+  const data = [_]i32{ 1,2,3,4,5,6,7,8,12 };
+  for(data,0..) |v,i| {
+      if (v == 10) found_index = i;
+  }
+  //
+  var a: ?f32 = null;
+  var b = a orelse 0;
+  //
+  var c = a orelse unreachable;
+  var d = a.?;
+  //
+  var b: ?i32 = 5;
+  if (b) |*value| { // null check
+      value.* += 1;
+  }
 #+end_src

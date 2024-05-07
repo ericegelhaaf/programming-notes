@@ -1,0 +1,9 @@
+- native-image on deps.edn https://github.com/taylorwood/clj.native-image
+  - Example https://gist.github.com/taylorwood/23d370f70b8b09dbf6d31cd4f27d31ff
+  - AWS Example https://github.com/latacora/lamed-sample-app
+  - Lein Plugin https://github.com/taylorwood/lein-native-image
+- https://clojure.atlassian.net/browse/CLJ-2582
+- https://github.com/clj-easy/graal-docs
+- https://www.graalvm.org/reference-manual/native-image/StaticImages/
+- https://www.innoq.com/en/blog/native-clojure-and-graalvm/
+- https://www.redpill-linpro.com/techblog/2021/03/31/faster-clojure-with-graalvm.html

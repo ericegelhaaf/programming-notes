@@ -7,9 +7,6 @@
 
 - https://codeberg.org/ziglings/exercises
 - https://github.com/rofrol/zig-companies
-- libs https://github.com/zigcc/awesome-zig
-- libs https://github.com/zig-gamedev/zig-gamedev
-- libs https://github.com/darkr4y/OffensiveZig
 - action https://github.com/goto-bus-stop/setup-zig
 - book https://cookbook.ziglang.cc/
 - tutorial https://www.openmymind.net/learning_zig/
@@ -40,6 +37,17 @@
 - pub fn(x: u32) u32 { return x + 5; }
 
 - structs fields order is NOT guaranteed
+
+- comptime
+  - can used with
+    * function calls
+    * labeled blocks
+
+- labeled blocks:
+  const count = blk: {
+      var sum: u32 = 0;
+      break :blk sum;
+  };
 
 ** imports
 
@@ -89,6 +97,13 @@ const focus    = @import("../lib/focus.zig");
 - can create a *tagged union* (aka union with a value) by using an union of an enum,
   keeping the same field names
 
+** optionals (?)
+
+- *?* means that it can be null or the given type
+- *orelse* from optional to value
+- *a orelse unreachable* can be shorten to *a.?*
+- if(b)|v|{} can be used to check if *b* is null
+
 ** errors
 |--------------------+---------------------------------------------------------|
 | error{A}           | defines a new error class?, with possibility A          |
@@ -115,13 +130,24 @@ const focus    = @import("../lib/focus.zig");
 
 - support continue/break
   - break can take an argument
-  - else+break allows it to be used as expression
+  - else+break allows it to be used as ~expression~
 
 - while(i < 10) {}
 - while(i < 10) {} else
 - while(i < 10) : (i += 1){} // =aka c-style for=
 - for(aString) |aChar| {}
 - for(aString, 0..) |aChar,index| {} # parallel loop
+
+- labelled loops
+  #+begin_src zig
+    var count: usize = 0;
+    outer: for ([_]{1,2,3,4,5,6,7,8}) |_| {
+        for ([_]{1,2,3,4,5}) |_| {
+            count += 1;
+            continue :outer; // !! skips loop, like inner loop didn't existed
+        }
+    }
+  #+end_src
 
 ** stdlib
 
@@ -151,13 +177,22 @@ test "if statement" {
 *** simple
 
 - automatic integer *widening*
-- explicit *downcasting* with, will error if overflow:
-  @intCast(u8, x);
+- float casting
+  @as(DSTTYPE, VAR)
+- int explicit *downcasting* with, will error if overflow:
+  @intCast(DSTTYPE, SRCVAR);
+- @intToFLoat(FLOATYPE, VAR)
+  @floatToInt(INTYPE, VAR) // can throw?
 
-|---------+----------------------------------|
-| i<SIZE> | 23 1_000                         |
-| u<SIZE> | 23 1_000 0xff 0xFF 0o755 0b11010 |
-|---------+----------------------------------|
+|---------+---------------------------------------|
+| i<SIZE> | 23 1_000                              |
+| u<SIZE> | 23 1_000 0xff 0xFF 0o755 0b11010      |
+| f<SIZE> | 123.0 123.0e+77 123.0E+77 0x103.70p-5 |
+|---------+---------------------------------------|
+
+- a +%= 1 - allows wrapping in case of overflow
+    *%=
+    -%=
 
 *** complex
 |--------+---------------+----------+------+------|
@@ -180,3 +215,7 @@ test "if statement" {
 | game engine       | https://github.com/hexops/mach              |
 | editor            | https://github.com/drcode/zek               |
 |-------------------+---------------------------------------------|
+* libraries
+- libs https://github.com/zigcc/awesome-zig
+- libs https://github.com/zig-gamedev/zig-gamedev
+- libs https://github.com/darkr4y/OffensiveZig

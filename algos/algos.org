@@ -36,6 +36,7 @@
   - Data
     - https://www.datawars.io/
   - Projects
+    - https://hanukkah.bluebird.sh/5784/data/
     - https://github.com/codecrafters-io/build-your-own-x
     - books https://github.com/AlgoryL/Projects-from-Scratch
     - https://github.com/practical-tutorials/project-based-learning

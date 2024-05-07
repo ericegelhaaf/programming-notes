@@ -12,9 +12,11 @@
 - Doc https://book.babashka.org/
 - Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
   - As such the code is NOT compiled.
+
 - Article: https://rattlin.blog/bbgum.html
 - Article: https://yogthos.net/posts/2023-05-12-nbb-resume.html
 - Article: https://faster-than-light-memes.xyz/binaural-beats-using-scittle.html
+
 * Example: newspod.clj - sqlite3
 #+begin_src clojure
   ;; TODO: gh-actions
