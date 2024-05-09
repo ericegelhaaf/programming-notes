@@ -31,8 +31,8 @@
 - has TCO for /0 arity functions ONLY
 
 #+begin_src jq
-  def funcname: expression;
-  def funcname(args) expression;
+  def funcname: expression; # takes stdin implicitly
+  def funcname(args) expression; # takes an argument explicitly
   def A:
     def B(n): n + 1; # nested function definition
     B(10)
@@ -220,7 +220,7 @@ MODNAME::FUNCTION;
 |        [2,4,6,8]        |             nth(2)              |            6            |
 | {name: "Jane", age: 21} |         map(.age += 1)          | {name: "Jane", age: 22} |
 |        [2,4,6,8]        |           map(. * 10)           |      [20,40,60,80]      |
-|                         |            join(",")            |                         |
+|      ["foo","bar"]      |            join(",")            |        "foo,bar"        |
 | {name: "Jane", age: 1}  |        select(.age > 18)        |           []            |
 |        [1,2,3,4]        |           any(. >= 4)           |          true           |
 |        [1,2,3,4]        |           all(. >= 4)           |          false          |
@@ -287,6 +287,7 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | {"a": 1, "b": 2, "c": 3}   |                     has("a")                     | true                        |
 | "a"                        |                    in({...})                     | true                        |
 | {"a": 1, "b": 2, "c": 3}   |                       add                        | 6                           |
+| {"a": 1, "b": 2, "c": 3}   |                      {a,c}                       | {"a": 1, "c": 3}            |
 |----------------------------+--------------------------------------------------+-----------------------------|
 | {"a": 1, "b": 2, "c": 3}   |                     del(.a)                      | {"b":2, "c":3}              |
 | {"a": 1, "b": 2, "c": 3}   |                    to_entries                    | [{"key":"a","value":1},...] |
@@ -394,4 +395,6 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | ,"nr":"86"}         |                           |                      |                                           |
 |---------------------+---------------------------+----------------------+-------------------------------------------|
 | {"name":"john"}     | + {"age": 18}             | {name:"john",age:18} |                                           |
+|---------------------+---------------------------+----------------------+-------------------------------------------|
+| {foo: 1} {bar: 2}   | [inputs]                  | [{foo: 1}, {bar: 2}] | streams to array                          |
 |---------------------+---------------------------+----------------------+-------------------------------------------|

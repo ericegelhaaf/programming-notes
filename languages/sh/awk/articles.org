@@ -1,3 +1,4 @@
+- https://hoi.st/posts/2024-01-22-lets-play-some-cards-in-awk.txt
 - 10 | https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
 - 13 | https://codegolf.stackexchange.com/questions/13014/tips-for-golfing-in-awk
 - 16 | https://blog.0branch.com/posts/2016-05-13-awk-tco.html

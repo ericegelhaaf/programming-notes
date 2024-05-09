@@ -1,3 +1,4 @@
+- https://remysharp.com/drafts/jq-recipes
 - JQ Cookbook Examples by Noah Sussman
   https://github.com/textarcana/jq-cookbook/blob/master/recipes.sh
   https://gist.github.com/textarcana/bdadb1fc830aed4e55a6a669e940ac35

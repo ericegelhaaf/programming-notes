@@ -1,0 +1,2 @@
+- Learning 6502 Assembly on the Apple II, the easy way
+  https://www.youtube.com/playlist?list=PLJcdG3gTlDaxIa5UEhErGau0CSOlV84Oy
