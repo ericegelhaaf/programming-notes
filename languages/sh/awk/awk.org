@@ -300,6 +300,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 | jvm                 | https://github.com/rethab/awk-jvm                              |
 | toy lang compiler   | https://cowlark.com/mercat/com.awk.txt                         |
 | plot.awk (to svg)   | https://gist.github.com/katef/fb4cb6d47decd8052bd0e8d88c03a102 |
+| gemini client       | http://git.vgx.fr/gem.awk/file/gem.awk.html                    |
+| gopher client       | https://git.sr.ht/~akarle/gc/tree/main/item/gc                                                               |
 |---------------------+----------------------------------------------------------------|
 | libs                | https://github.com/e36freak/awk-libs                           |
 | libs                | https://github.com/dubiousjim/awkenough                        |

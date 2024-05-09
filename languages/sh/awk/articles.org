@@ -1,14 +1,16 @@
-- 16 https://blog.0branch.com/posts/2016-05-13-awk-tco.html
-- 18 https://benhoyt.com/writings/goawk/
-- 22 https://benhoyt.com/writings/goawk-compiler-vm/
-- https://github.com/freznicek/awesome-awk
+- 10 | https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
 - 13 | https://codegolf.stackexchange.com/questions/13014/tips-for-golfing-in-awk
-- 20 | https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
-- 17 | Comments About Shell, Awk, and Make https://www.oilshell.org/blog/2017/10/25.html
-- 16 | Example Code in Shell, Awk, and Make https://www.oilshell.org/blog/2016/11/14.html
+- 16 | https://blog.0branch.com/posts/2016-05-13-awk-tco.html
+- 16 | https://blog.jpalardy.com/posts/my-best-awk-tricks/
 - 16 | Shell, Awk, and Make Should Be Combined https://www.oilshell.org/blog/2016/11/13.html
-- 10 https://gregable.com/2010/09/why-you-should-know-just-little-awk.html
+- 16 | Example Code in Shell, Awk, and Make https://www.oilshell.org/blog/2016/11/14.html
+- 17 | Comments About Shell, Awk, and Make https://www.oilshell.org/blog/2017/10/25.html
+- 18 | https://benhoyt.com/writings/goawk/
 - 19 | Using AWK and R to parse 25tb https://livefreeordichotomize.com/posts/2019-06-04-using-awk-and-r-to-parse-25tb/
+- 20 | https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
+- 21 | https://web.archive.org/web/20210505004021/https://portal.drewdevault.com/2021/05/03/awk-is-the-coolest-tool-you-dont-know.gmi
+- 22 | https://benhoyt.com/writings/goawk-compiler-vm/
+- https://github.com/freznicek/awesome-awk
 * 99 | Juergen Kahrs      | Network Administration with AWK
 
 https://www.linuxjournal.com/article/3132

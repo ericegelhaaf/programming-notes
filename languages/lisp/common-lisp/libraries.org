@@ -361,6 +361,11 @@ manual https://github.com/alessiostalla/doplus/blob/master/MANUAL.md
 | piccolo | html5 generation     | https://github.com/skyizwhite/piccolo                           |
 |---------+----------------------+-----------------------------------------------------------------|
 * Gamedev
+
+** fennel
+
+https://itch.io/jam/spring-lisp-game-jam-2024/topic/3728933/getting-started-writing-a-game-with-fennel-and-lve
+
 ** eon
 
 *** claw-rawlib
