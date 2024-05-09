@@ -5,13 +5,14 @@
 - [JQ CookBook] jq CookBook #linux #jq #json #parser #101 #cookbook
   https://gist.github.com/vpnwall-services/ece867608e00fe1ee77ed4780ff5298f
 - 23 The Ultimate Interactive JQ Guide https://ishan.page/blog/2023-11-06-jq-by-example/
-- article https://github.com/jqlang/jq/wiki/jq-Language-Description
-- article https://github.com/jqlang/jq/wiki/Cookbook
-- article https://github.com/jqlang/jq/wiki/Advanced-Topics
-- article https://github.com/jqlang/jq/wiki/How-to:-Avoid-Pitfalls
-- article https://mosermichael.github.io/jq-illustrated/dir/content.html
-- article https://codefaster.substack.com/p/mastering-jq-part-1-59c
-- article https://about.gitlab.com/blog/2021/04/21/devops-workflows-json-format-jq-ci-cd-lint/
+- 23 https://ishan.page/blog/2023-12-07-jq-hammer-nails/
+- https://github.com/jqlang/jq/wiki/jq-Language-Description
+- https://github.com/jqlang/jq/wiki/Cookbook
+- https://github.com/jqlang/jq/wiki/Advanced-Topics
+- https://github.com/jqlang/jq/wiki/How-to:-Avoid-Pitfalls
+- https://mosermichael.github.io/jq-illustrated/dir/content.html
+- https://codefaster.substack.com/p/mastering-jq-part-1-59c
+- 21 https://about.gitlab.com/blog/2021/04/21/devops-workflows-json-format-jq-ci-cd-lint/
 - 20 Parsing JSON at the CLI: A Practical Introduction to `jq` (and more!) https://sequoia.makes.software/parsing-json-at-the-cli-a-practical-introduction-to-jq-and-more/
 - jq cheat sheet https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/
 - 23 Displaying My Washing Machine's Remaining Time With curl, jq, and pizauth

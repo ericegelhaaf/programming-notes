@@ -1,11 +1,12 @@
 |--------------+---------------------------------------------------------|
 | wiki         | https://en.wikipedia.org/wiki/Jq_(programming_language) |
-| source       | https://github.com/jqlang/jq/                           |
+| source (C)   | https://github.com/jqlang/jq/                           |
 | basic manual | https://jqlang.github.io/jq/manual/                     |
 | home         | https://jqlang.github.io/jq/                            |
 | repl online  | https://jqplay.org/                                     |
 | repl         | https://github.com/gpanders/ijq                         |
 | awesome      | https://github.com/fiatjaf/awesome-jq                   |
+| rust rewrite | https://github.com/01mf02/jaq                           |
 |--------------+---------------------------------------------------------|
 
 - code
@@ -109,21 +110,24 @@ import modname as modname
 MODNAME::FUNCTION;
 
 ** operators
-
-|----------+----------------------------------------------------------|
-| ¦        | pipe operator                                            |
-| ,        | operator to join multiple streams                        |
-| ()       | to group subexpressions                                  |
-| []       | constructor                                              |
-| {foo: .} | constructor                                              |
-| +        | string concatenation                                     |
-| +        | arrays append                                            |
-| +        | objects merge                                            |
-| /        | operator version of the split/1 function                 |
-| A // B   | if A then A else B end (alternative operator)            |
-| ?        | error suppresion, optional operator, shorthand for *try* |
-|----------+----------------------------------------------------------|
-
+|----------+------------------------------------------------------------|
+| +        | addition, concatenation([]), merge({})                     |
+| -        | subtraction                                                |
+| ¦        | pipe operator                                              |
+| ,        | operator to join multiple streams                          |
+| ()       | to group subexpressions                                    |
+| []       | constructor                                                |
+| {foo: .} | constructor                                                |
+|----------+------------------------------------------------------------|
+| +        | string concatenation                                       |
+| +        | arrays append                                              |
+| +        | objects merge                                              |
+|----------+------------------------------------------------------------|
+| /        | operator version of the split/1 function                   |
+| A // B   | if A then A else B end (~alternative operator~)            |
+| ?        | error suppresion, ~optional operator~, shorthand for *try* |
+| ?//      | ~destructuring alternative operator~                       |
+|----------+------------------------------------------------------------|
 ** generators?
 
 |---+-------------------------------------------------+--------------+--------------------------------------|
@@ -132,6 +136,17 @@ MODNAME::FUNCTION;
 | 4 | [.,1]¦until(.[0] < 1; [.[0]-1, .[1]*.[0]])¦.[1] | 24           |                                      |
 |---+-------------------------------------------------+--------------+--------------------------------------|
 
+** casting functions
+|-------------+----------+---------------+---|
+| [1,"1"]     | tonumber | 1,1           |   |
+| [1,"1",[1]] | tostring | "1","1","[1]" |   |
+| 0           | type     | "number"      |   |
+|-------------+----------+---------------+---|
+**  stream functions
+|------------+-----------+-------------------+---|
+| 86, 99, 13 | . + 1     | 87, 100, 14       |   |
+| 86, 99, 13 | [ . + 1 ] | [87], [100], [14] |   |
+|------------+-----------+-------------------+---|
 **   regex functions
 
 - https://jqlang.github.io/jq/manual/v1.7/#regular-expressions
@@ -204,6 +219,17 @@ MODNAME::FUNCTION;
 |           <c>           |               <c>               |           <c>           |
 |           in            |             filter              |           out           |
 |-------------------------+---------------------------------+-------------------------|
+|    {foo:[1],bar:[2]}    |           .foo + .bar           |          [1,2]          |
+|  {foo:[1,2],bar:[2,3]}  |           .foo - .bar           |           [1]           |
+|       [2,4,6,8][]       |                                 |         2,4,6,8         |
+|        [2,4,6,8]        |               .[]               |         2,4,6,8         |
+|        [2,4,6,8]        |             . + [1]             |       [2,4,6,8,1]       |
+|        [2,4,6,8]        |           [ .[] + 1 ]           |        [3,5,7,9]        |
+|        [2,4,6,8]        |             .[] + 1             |         3,5,7,9         |
+|        [2,4,6,8]        |              .[1]               |            4            |
+|        [2,4,6,8]        |             .[1+1]              |            6            |
+|        [2,4,6,8]        |             .[1:2]              |           [4]           |
+|-------------------------+---------------------------------+-------------------------|
 |        [2,4,6,8]        |             length              |            4            |
 |        [2,4,6,8]        |           indices(8)            |           [3]           |
 |        [2,4,6,8]        |          contains([2])          |          true           |
@@ -244,6 +270,7 @@ being "Hello!" the INPUT
 | filter          | out                     |                            |
 |-----------------+-------------------------+----------------------------|
 | split("l")      | ["He","","o"]           |                            |
+| "a,b" / ","     | ["a","b"]               |                            |
 | test("He.*")    | true                    |                            |
 | length          | 6                       |                            |
 | contains("!")   | true                    |                            |
@@ -254,6 +281,9 @@ being "Hello!" the INPUT
 | index("el")     | 1                       | position, otherwise *null* |
 | explode         | [72,101,108,108,111,33] | splits into codepoints     |
 | implode         |                         |                            |
+| "foo" +  "bar"  | "foobar"                |                            |
+| "foo" * 3       | "foofoofoo"             |                            |
+| "foo" * 0       | ""                      |                            |
 |-----------------+-------------------------+----------------------------|
 
 **    math functions
@@ -275,32 +305,39 @@ https://jqlang.github.io/jq/manual/v1.7/#math
   - fma
 
 **  object functions
-
-|----------------------------+--------------------------------------------------+-----------------------------|
-|                            |                       <c>                        |                             |
-|                            |                      filter                      | out                         |
-|----------------------------+--------------------------------------------------+-----------------------------|
-| [{"a": 1, "b": 2, "c": 3}] |                       .[]                        | [1,2,3]                     |
-| {"a": 1, "b": 2, "c": 3}   |                     flatten                      | [1,2,3]                     |
-| {"a": 1, "b": 2, "c": 3}   |                       keys                       | ["a","b","c"]               |
-| {"a": 1, "b": 2, "c": 3}   |                  keys_unsorted                   | ["a","c","b"]               |
-| {"a": 1, "b": 2, "c": 3}   |                     has("a")                     | true                        |
-| "a"                        |                    in({...})                     | true                        |
-| {"a": 1, "b": 2, "c": 3}   |                       add                        | 6                           |
-| {"a": 1, "b": 2, "c": 3}   |                      {a,c}                       | {"a": 1, "c": 3}            |
-|----------------------------+--------------------------------------------------+-----------------------------|
-| {"a": 1, "b": 2, "c": 3}   |                     del(.a)                      | {"b":2, "c":3}              |
-| {"a": 1, "b": 2, "c": 3}   |                    to_entries                    | [{"key":"a","value":1},...] |
-| [{"key":"a","value":1}]    |                   from_entries                   | {"a":1}                     |
-| {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42","Jane"}               |
-| {"first": "jane"}          |             map_values(ascii_upcase)             | {first: "JANE"}             |
-| [{foo:1},{foo:2}]          |                  group_by(.foo)                  | [[{foo:1}],[{foo:2}]]       |
-|----------------------------+--------------------------------------------------+-----------------------------|
+|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
+|                            |                       <c>                        |                             |                           |
+|                            |                      filter                      | out                         |                           |
+|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
+| {"a": 1, "b": 2, "c": 3}   |                       .[]                        | 1,2,3                       | stream of values          |
+| {"a": 1, "b": 2, "c": 3}   |                      {a,c}                       | {"a": 1, "c": 3}            |                           |
+| {a: {foo: 1}, b: {bar: 2}} |                     .a + .b                      | {foo: 1, bar: 2}            |                           |
+| {}                         |                        .a                        | null                        | *projection, dot notation |
+| {"a": 1, "b": 2}           |                        .a                        | 1                           |                           |
+| {"a": 1, "b": 2}           |                      .["a"]                      | 1                           |                           |
+| {"a": 1, "b": 2}           |                      "foo"                       | "foo"                       |                           |
+| {"a": 1, "b": 2}           |                     .a = 100                     | {a: 100, b: 2}              | create/update property    |
+| {"a": 1, "b": 2}           |                    {foo: .a}                     | {foo: 1}                    | new obj, old prop         |
+|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
+| {"a": 1, "b": 2, "c": 3}   |                     flatten                      | [1,2,3]                     |                           |
+| {"a": 1, "b": 2, "c": 3}   |                       keys                       | ["a","b","c"]               |                           |
+| {"a": 1, "b": 2, "c": 3}   |                  keys_unsorted                   | ["a","c","b"]               |                           |
+| {"a": 1, "b": 2, "c": 3}   |                     has("a")                     | true                        |                           |
+| "a"                        |                   in({"a": 2})                   | true                        |                           |
+| {"a": 1, "b": 2, "c": 3}   |                       add                        | 6                           |                           |
+|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
+| {"a": 1, "b": 2, "c": 3}   |                     del(.a)                      | {"b":2, "c":3}              |                           |
+| {"a": 1, "b": 2, "c": 3}   |                    to_entries                    | [{"key":"a","value":1},...] |                           |
+| [{"key":"a","value":1}]    |                   from_entries                   | {"a":1}                     |                           |
+| {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42","Jane"}               |                           |
+| {"first": "jane"}          |             map_values(ascii_upcase)             | {first: "JANE"}             |                           |
+| [{foo:1},{foo:2}]          |                  group_by(.foo)                  | [[{foo:1}],[{foo:2}]]       |                           |
+|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
 
 - with_entries(filter), is equivalent to:
   to_entries | map(filter) | from_entries
 
-** string escape
+** format & escape strings
 
 |---------+------------------------------------|
 | @text   | just calls tostring                |
@@ -316,13 +353,15 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 
 * command
 
-|------+-----------------+------------------------------------------------|
-|      |                 | description                                    |
-|------+-----------------+------------------------------------------------|
-| -n   | --null-input    | allows you to generate JSON data without input |
-| -c   | --compat-output | minimizes output                               |
-| -f F | --from-file F   | read .jq program from F(ile)                   |
-|------+-----------------+------------------------------------------------|
+|------+---------------------+------------------------------|
+|      |                     | description                  |
+|------+---------------------+------------------------------|
+| -n   | --null-input        | do NOT read input            |
+| -c   | --compat-output     | minimizes output             |
+| -f F | --from-file F       | read .jq program from F(ile) |
+| -C   | --color-output      |                              |
+| -M   | --monochrome-output |                              |
+|------+---------------------+------------------------------|
 
 
 * snippets filters/expressions
@@ -347,33 +386,14 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 |                     | ..                        |                      | recursive identity, from self to values   |
 | 42                  | .                         | 42                   | "identity"                                |
 | 99                  | 42                        | 42                   | "constant"                                |
-| {}                  | .color                    | null                 | "projection", dot notation                |
-| {color: "red"}      | .color                    | "red"                |                                           |
-| {color: "red"}      | .["color"]                |                      |                                           |
-| {color: "red"}      | "woah"                    | "woah"               |                                           |
-| {color: "red"}      | .color = "pink"           | {color: "pink"}      | creates or updates a property             |
-| {color: "red"}      | {tint: .color}            | {tint: "red"}        | creates a new object with an old property |
+| 5                   | . * 2, . + 3, . / 5       | 10, 8, 1             | multiple selectors?                       |
 | "color"             | {(.): "red"}              | {color: "red"}       |                                           |
-| [86, 99, 13]        | .[1]                      | 99                   |                                           |
-| [86, 99, 13]        | .[1+1]                    | 13                   |                                           |
-| [86, 99, 13]        | .[1:2]                    | [99]                 | slice, 1 = inclusive, 2 = exclusive       |
 | {"k":1,"v":[8,9]}   | .v[1]                     | 9                    |                                           |
 | {"k":1,"v":[8,9]}   | .v[ .["k"] ]              | 9                    |                                           |
-| [86, 99, 13]        | .[] + 1                   | 87, 100, 14          |                                           |
-| [86, 99, 13]        | .[] ¦ . + 1               | 87, 100, 14          |                                           |
-| [86, 99, 13]        | [ . + 1 ]                 | [87, 100, 14]        |                                           |
-| 86, 99, 13          | . + 1                     | 87, 100, 14          |                                           |
-| 86, 99, 13          | [ . + 1 ]                 | [87], [100], [14]    |                                           |
-| 5                   | . * 2, . + 3, . / 5       | 10, 8, 1             | multiple selectors?                       |
 | [range(10)]         | map(select(. % 2 == 0))   | [0,2,4,6,8]          |                                           |
 | [range(10) ¦        | select(. % 2 == 0) ]      | [0,2,4,6,8]          |                                           |
 | [{}, true, {"a":1}] | .[] ¦ .a?                 | null, 1              | optional operator                         |
 | ["1","invalid",4]   | .[] ¦ tonumber?           | 1, 4                 |                                           |
-|---------------------+---------------------------+----------------------+-------------------------------------------|
-| [86, 99, 13]        | .[]                       | 86, 99, 13           |                                           |
-|---------------------+---------------------------+----------------------+-------------------------------------------|
-| {"name":"john"      | .[]                       | "john", "kaos"       |                                           |
-| ,"org":"kaos"}      |                           |                      |                                           |
 |---------------------+---------------------------+----------------------+-------------------------------------------|
 | [86, 99, 13]        | length as $count          | 66                   | declaring variables with *as*             |
 |                     | ¦ add / $count            |                      |                                           |
