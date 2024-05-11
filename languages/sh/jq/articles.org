@@ -4,6 +4,7 @@
   https://gist.github.com/textarcana/bdadb1fc830aed4e55a6a669e940ac35
 - [JQ CookBook] jq CookBook #linux #jq #json #parser #101 #cookbook
   https://gist.github.com/vpnwall-services/ece867608e00fe1ee77ed4780ff5298f
+- 16 https://programminghistorian.org/en/lessons/json-and-jq
 - 23 The Ultimate Interactive JQ Guide https://ishan.page/blog/2023-11-06-jq-by-example/
 - 23 https://ishan.page/blog/2023-12-07-jq-hammer-nails/
 - https://github.com/jqlang/jq/wiki/jq-Language-Description
@@ -17,3 +18,4 @@
 - jq cheat sheet https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/
 - 23 Displaying My Washing Machine's Remaining Time With curl, jq, and pizauth
   https://tratt.net/laurie/blog/2023/displaying_my_washing_machines_remaining_time_with_curl_jq_pizauth.html
+- 24 https://www.baeldung.com/linux/jq-command-json

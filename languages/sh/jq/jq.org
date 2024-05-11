@@ -20,6 +20,12 @@
 - First written in Haskell, but early rewritten in C for performance (?)
 - Created by Stephen Dolan in 2012
 - jq binary is of 33k
+- filters (aka functions)
+  - all have an input and an output
+  - so manual plumbing is not necessary
+  - (aka to pass a value from one part of a program to the next)
+  - eg: "add / length" both filters get the same input
+- variables are "lexically scoped bindings"
 - jq-mode
   - bug: wrong string interpolation can have (") inside (")
   - bug: wrong identation constructing objects
@@ -36,8 +42,7 @@
   def funcname(args) expression; # takes an argument explicitly
   def A:
     def B(n): n + 1; # nested function definition
-    B(10)
-  ;
+    B(10);
 #+end_src
 
 *** function arguments are ~filters~ (not values)
@@ -78,7 +83,7 @@
       (.[1:] | count_occurrences(x))
     end;
 
-    [11,22,33,22,44] | count_occurrences(22) # => 22
+  [11,22,33,22,44] | count_occurrences(22) # => 22
 #+end_src
 
 ** types
@@ -208,13 +213,21 @@ MODNAME::FUNCTION;
 |------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
 
 ** general functions
-
-|-------------------+--------------------------------------|
-| debug             | like (.) but it prints to stderr too |
-| range(TO)         |                                      |
-| range(FROM;TO;BY) | produces a stream of numbers         |
-|-------------------+--------------------------------------|
-
+|-------------------+----------------------------------------------|
+| debug             | like (.) but it prints to stderr too         |
+| range(TO)         |                                              |
+| range(FROM;TO;BY) | produces a stream of numbers                 |
+| empty             | returns empty                                |
+| input             | outputs 1 NEW input                          |
+| inputs            | outputs all remaining inputs, one by one     |
+|-------------------+----------------------------------------------|
+| halt              | stop processing current item                 |
+| halt_error/0      | stop processing current item AND print it    |
+| halt_error/1      | with exit code                               |
+|-------------------+----------------------------------------------|
+| error/0           | returns an error, can be catched (try/catch) |
+| error/1           | with message                                 |
+|-------------------+----------------------------------------------|
 **   array functions
 |-------------------------+---------------------------------+-------------------------|
 |           <c>           |               <c>               |           <c>           |
@@ -234,6 +247,7 @@ MODNAME::FUNCTION;
 |        [2,4,6,8]        |             length              |            4            |
 |        [2,4,6,8]        |           indices(8)            |           [3]           |
 |        [2,4,6,8]        |          contains([2])          |          true           |
+|        [2,4,6,8]        |            index(6)             |            2            |
 |        [2,4,6,8]        |             reverse             |        [8,6,4,2]        |
 |        [8,4,6,2]        |              sort               |        [2,4,6,8]        |
 |        [2,4,6,8]        |               min               |            2            |
@@ -261,6 +275,7 @@ MODNAME::FUNCTION;
 |            1            |           in([0,23])            |          true           |
 |           23            |           in([0,23])            |          false          |
 |-------------------------+---------------------------------+-------------------------|
+|         [10,20]         |         as [$foo,$bar]          | (empty, destructuring)  |
 |                         | reduce stream as $var (init;fn) |                         |
 |      [10,20,30,40]      |  reduce .[] as $n (0; . + $n)   |           100           |
 |    ["A","B","C","D"]    | reduce .[] as $e ([]; [$e] + .) |    ["D","C","B","A"]    |
@@ -274,25 +289,32 @@ MODNAME::FUNCTION;
 
 =being "Hello!" the INPUT=
 
-|-----------------+-------------------------+----------------------------|
-| filter          | out                     |                            |
-|-----------------+-------------------------+----------------------------|
-| split("l")      | ["He","","o"]           |                            |
-| "a,b" / ","     | ["a","b"]               |                            |
-| test("He.*")    | true                    |                            |
-| length          | 6                       |                            |
-| contains("!")   | true                    |                            |
-| startswith("!") | false                   |                            |
-| endswith("!")   | true                    |                            |
-| ascii_downcase  | "hello!"                |                            |
-| ascii_upcase    | "HELLO!"                |                            |
-| index("el")     | 1                       | position, otherwise *null* |
-| explode         | [72,101,108,108,111,33] | splits into codepoints     |
-| implode         |                         |                            |
-| +  "bar"        | "hellobar"              |                            |
-| * 3             | "hellohellohello"       |                            |
-| * 0             | ""                      |                            |
-|-----------------+-------------------------+----------------------------|
+|----------------------+-------------------------+----------------------------|
+| filter               | out                     | description                |
+|----------------------+-------------------------+----------------------------|
+| ascii_downcase       | "hello!"                |                            |
+| ascii_upcase         | "HELLO!"                |                            |
+|----------------------+-------------------------+----------------------------|
+| / "l"                | ["He","","o!"]          |                            |
+| split("l")           | ["He","","o!"]          |                            |
+|----------------------+-------------------------+----------------------------|
+| explode              | [72,101,108,108,111,33] | splits into codepoints     |
+| implode              |                         |                            |
+|----------------------+-------------------------+----------------------------|
+| startswith("!")      | false                   |                            |
+| endswith("!")        | true                    |                            |
+| test("He.*")         | true                    | supports regex             |
+| contains("!")        | true                    |                            |
+| inside("Hi, Hello!") | true                    | inverse of contains/1      |
+|----------------------+-------------------------+----------------------------|
+| length               | 6                       |                            |
+| index("el")          | 1                       | position, otherwise *null* |
+| +  "bar"             | "Hello!bar"             |                            |
+| * 3                  | "Hello!Hello!Hello"     |                            |
+| * 0                  | ""                      |                            |
+|----------------------+-------------------------+----------------------------|
+| trim/ltrim/rtrim     | "Hello!"                | trims whitespace           |
+|----------------------+-------------------------+----------------------------|
 
 **    math functions
 
@@ -313,34 +335,39 @@ https://jqlang.github.io/jq/manual/v1.7/#math
   - fma
 
 **  object functions
-|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
-|                            |                       <c>                        |                             |                           |
-|                            |                      filter                      | out                         |                           |
-|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
-| {"a": 1, "b": 2, "c": 3}   |                       .[]                        | 1,2,3                       | stream of values          |
-| {"a": 1, "b": 2, "c": 3}   |                      {a,c}                       | {"a": 1, "c": 3}            |                           |
-| {a: {foo: 1}, b: {bar: 2}} |                     .a + .b                      | {foo: 1, bar: 2}            |                           |
-| {}                         |                        .a                        | null                        | *projection, dot notation |
-| {"a": 1, "b": 2}           |                        .a                        | 1                           |                           |
-| {"a": 1, "b": 2}           |                      .["a"]                      | 1                           |                           |
-| {"a": 1, "b": 2}           |                      "foo"                       | "foo"                       |                           |
-| {"a": 1, "b": 2}           |                     .a = 100                     | {a: 100, b: 2}              | create/update property    |
-| {"a": 1, "b": 2}           |                    {foo: .a}                     | {foo: 1}                    | new obj, old prop         |
-|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
-| {"a": 1, "b": 2, "c": 3}   |                     flatten                      | [1,2,3]                     |                           |
-| {"a": 1, "b": 2, "c": 3}   |                       keys                       | ["a","b","c"]               |                           |
-| {"a": 1, "b": 2, "c": 3}   |                  keys_unsorted                   | ["a","c","b"]               |                           |
-| {"a": 1, "b": 2, "c": 3}   |                     has("a")                     | true                        |                           |
-| "a"                        |                   in({"a": 2})                   | true                        |                           |
-| {"a": 1, "b": 2, "c": 3}   |                       add                        | 6                           |                           |
-|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
-| {"a": 1, "b": 2, "c": 3}   |                     del(.a)                      | {"b":2, "c":3}              |                           |
-| {"a": 1, "b": 2, "c": 3}   |                    to_entries                    | [{"key":"a","value":1},...] |                           |
-| [{"key":"a","value":1}]    |                   from_entries                   | {"a":1}                     |                           |
-| {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42","Jane"}               |                           |
-| {"first": "jane"}          |             map_values(ascii_upcase)             | {first: "JANE"}             |                           |
-| [{foo:1},{foo:2}]          |                  group_by(.foo)                  | [[{foo:1}],[{foo:2}]]       |                           |
-|----------------------------+--------------------------------------------------+-----------------------------+---------------------------|
+|----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
+|                            |                       <c>                        |                             |                               |
+|                            |                      filter                      | out                         |                               |
+|----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
+| {"a": 1, "b": 2, "c": 3}   |                       .[]                        | 1,2,3                       | stream of values              |
+| {"a": 1, "b": 2, "c": 3}   |                      {a,c}                       | {"a": 1, "c": 3}            |                               |
+| {a: {foo: 1}, b: {bar: 2}} |                     .a + .b                      | {foo: 1, bar: 2}            |                               |
+| {}                         |                        .a                        | null                        | *projection, dot notation     |
+| {"a": 1, "b": 2}           |                        .a                        | 1                           |                               |
+| {"a": 1, "b": 2}           |                    . + {c: 3}                    | {a: 1, b: 2, c: 3}          |                               |
+| {"a": 1, "b": 2}           |                      .["a"]                      | 1                           |                               |
+| {"a": 1, "b": 2}           |                      "foo"                       | "foo"                       |                               |
+| {"a": 1, "b": 2}           |                     .a = 100                     | {a: 100, b: 2}              | create/update property        |
+| {"a": 1, "b": 2}           |                  .a ¦= . + 100                   | {a: 101, b: 2}              |                               |
+| {"a": 1, "b": 2}           |                    {foo: .a}                     | {foo: 1}                    | new obj, old prop             |
+|----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
+| {"name": "john"}           |                as {name: $n} ¦ $n                | "john"                      | as object destructuring       |
+| {"name": "john"}           |                as {$name} ¦ $name                | "john"                      | as object destructuring short |
+|----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
+| {"a": 1, "b": 2, "c": 3}   |                     flatten                      | [1,2,3]                     | array of values               |
+| {"a": 1, "b": 2, "c": 3}   |                       keys                       | ["a","b","c"]               | array of keys                 |
+| {"a": 1, "b": 2, "c": 3}   |                  keys_unsorted                   | ["a","c","b"]               | array of keys                 |
+| {"a": 1, "b": 2, "c": 3}   |                     has("a")                     | true                        |                               |
+| "a"                        |                   in({"a": 2})                   | true                        |                               |
+| {"a": 1, "b": 2, "c": 3}   |                       add                        | 6                           | adds values                   |
+|----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
+| {"a": 1, "b": 2, "c": 3}   |                     del(.a)                      | {"b":2, "c":3}              |                               |
+| {"a": 1, "b": 2, "c": 3}   |                    to_entries                    | [{"key":"a","value":1},...] |                               |
+| [{"key":"a","value":1}]    |                   from_entries                   | {"a":1}                     |                               |
+| {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42": "Jane"}              |                               |
+| {"first": "jane"}          |             map_values(ascii_upcase)             | {first: "JANE"}             |                               |
+| [{foo:1},{foo:2}]          |                  group_by(.foo)                  | [[{foo:1}],[{foo:2}]]       |                               |
+|----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
 
 - with_entries(filter), is equivalent to:
   to_entries | map(filter) | from_entries
@@ -377,6 +404,7 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 - Get 5 random emails
   $ curl -s "https://randomuser.me/api/1.2/?results=5&seed=dsatcl2e" | jq -r '.results[].email'
 
+
 |-------------------------------------------------------+-------------------------------------|
 | filter                                                | description                         |
 |-------------------------------------------------------+-------------------------------------|
@@ -387,6 +415,7 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | .parse.categories[].name                              | the contents of each field's "name" |
 | .["parse"] ¦ .["categories"] ¦ .[] ¦ .["name"]        | equivalent code using pipelines     |
 |-------------------------------------------------------+-------------------------------------|
+
 
 |---------------------+---------------------------+----------------------+-------------------------------------------|
 | input               | filter                    | output               | description                               |
@@ -406,14 +435,6 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | [86, 99, 13]        | length as $count          | 66                   | declaring variables with *as*             |
 |                     | ¦ add / $count            |                      |                                           |
 |---------------------+---------------------------+----------------------+-------------------------------------------|
-| [86, 99, 13]        | . as [$a,$b,$c] ¦ $c + 3  | 16                   | as array destructuring                    |
-| {"name": "john"}    | . as {name: $n} ¦ $n      | "john"               | as object destructuring                   |
-| {"name": "john"}    | . as {$name}    ¦ $name   | "john"               | as object destructuring short             |
-|---------------------+---------------------------+----------------------+-------------------------------------------|
-| {"agent":86         | .org = "CONTROL"          | {"agent":86          | add + update                              |
-| ,"name":"max"}      | ¦ .name ¦= ascii_upcase   | ,"name":"MAX"        |                                           |
-|                     |                           | ,"org":"CONTROL"}    |                                           |
-|---------------------+---------------------------+----------------------+-------------------------------------------|
 | {"size": 34.6       | if ((.size¦floor)%2) == 0 | "even"               | 1.6 - must have an ELSE                   |
 | ,"weight": 24.1}    | then "even"               |                      | 1.7 - ELSE defaults to .                  |
 |                     | else "odd"                |                      |                                           |
@@ -421,8 +442,6 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 |---------------------+---------------------------+----------------------+-------------------------------------------|
 | {"name":"John"      | "\(.name), Agent \(.nr)"  | "John, Agent 86"     | string interpolation                      |
 | ,"nr":"86"}         |                           |                      |                                           |
-|---------------------+---------------------------+----------------------+-------------------------------------------|
-| {"name":"john"}     | + {"age": 18}             | {name:"john",age:18} |                                           |
 |---------------------+---------------------------+----------------------+-------------------------------------------|
 | {foo: 1} {bar: 2}   | [inputs]                  | [{foo: 1}, {bar: 2}] | streams to array                          |
 |---------------------+---------------------------+----------------------+-------------------------------------------|
