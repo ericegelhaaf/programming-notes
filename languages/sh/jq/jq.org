@@ -114,6 +114,7 @@ MODNAME::FUNCTION;
 | +        | addition, concatenation([]), merge({})                     |
 | -        | subtraction                                                |
 | ¦        | pipe operator                                              |
+| ¦=       | update operator                                            |
 | ,        | operator to join multiple streams                          |
 | ()       | to group subexpressions                                    |
 | []       | constructor                                                |
@@ -248,10 +249,17 @@ MODNAME::FUNCTION;
 |        [2,4,6,8]        |           map(. * 10)           |      [20,40,60,80]      |
 |      ["foo","bar"]      |            join(",")            |        "foo,bar"        |
 | {name: "Jane", age: 1}  |        select(.age > 18)        |           []            |
+|      [true,false]       |               any               |          true           |
+|      [true,false]       |               all               |          false          |
 |        [1,2,3,4]        |           any(. >= 4)           |          true           |
 |        [1,2,3,4]        |           all(. >= 4)           |          false          |
 |           [1]           |           to_entries            |    [{key:0,value:1}]    |
+|-------------------------+---------------------------------+-------------------------|
 |      [10,20,30,40]      |              keys               |        [0,1,2,3]        |
+|          [2,4]          |             has(1)              |          true           |
+|          [2,4]          |             has(4)              |          false          |
+|            1            |           in([0,23])            |          true           |
+|           23            |           in([0,23])            |          false          |
 |-------------------------+---------------------------------+-------------------------|
 |                         | reduce stream as $var (init;fn) |                         |
 |      [10,20,30,40]      |  reduce .[] as $n (0; . + $n)   |           100           |
@@ -264,7 +272,7 @@ MODNAME::FUNCTION;
 
 **  string functions
 
-being "Hello!" the INPUT
+=being "Hello!" the INPUT=
 
 |-----------------+-------------------------+----------------------------|
 | filter          | out                     |                            |
@@ -281,9 +289,9 @@ being "Hello!" the INPUT
 | index("el")     | 1                       | position, otherwise *null* |
 | explode         | [72,101,108,108,111,33] | splits into codepoints     |
 | implode         |                         |                            |
-| "foo" +  "bar"  | "foobar"                |                            |
-| "foo" * 3       | "foofoofoo"             |                            |
-| "foo" * 0       | ""                      |                            |
+| +  "bar"        | "hellobar"              |                            |
+| * 3             | "hellohellohello"       |                            |
+| * 0             | ""                      |                            |
 |-----------------+-------------------------+----------------------------|
 
 **    math functions

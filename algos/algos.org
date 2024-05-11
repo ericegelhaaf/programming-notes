@@ -31,6 +31,10 @@
   - https://overthewire.org/wargames/bandit/
 
 - Programming
+  - https://rosalind.info/about/
+  - https://projectlovelace.net/
+  - https://selectstarsql.com/
+  - https://cryptopals.com/
   - https://hackattic.com/challenges
   - https://codecrafters.io/
   - Data
