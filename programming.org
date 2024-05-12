@@ -1,27 +1,3 @@
-- hanukkah of data
-  - JS animation https://www.evalapply.org/posts/animate-text-art-javascript/
-  - article R/Julia https://www.practicalsignificance.com/posts/hanukkah-of-data-5784/
-  - article R https://ellakaye.co.uk/posts/2023-12-07_hanukkah-of-data-5784/
-  - article R https://www.pmassicotte.com/posts/2022-12-28-hanukkah_of_data/
-  - article R
-    https://www.datannery.com/posts/hanukkah-of-data/
-    https://www.datannery.com/posts/hanukkah-of-data-revisited-2023-speedrun/
-  - R https://rpubs.com/nathaniel_olin/hanukkah2022
-  - article python/sqlite https://dev.to/ajkerrigan/hanukkah-of-data-2022-puzzle-1-5eb2
-  - article https://www.georgeho.org/hanukkah-of-data-2022/
-  - sqlite https://observablehq.com/@visnup/hanukkah-of-data
-  - sqlite https://thedataist.com/hanukah-of-data-solving-a-data-challenge-with-ai-and-sql/
-  - sqlite https://di.nmfay.com/hanukkah
-  - python https://github.com/desilinguist/hanukkah-of-data-2022
-  - python https://www.jordanhutchings.com/blog/2023-12-08-hanukkah-of-data-2023/
-  - clojure https://gitlab.com/hanukkah-of-data/hanukkah-of-data-2023
-- protohackers
-  - https://gergely.imreh.net/blog/2022/09/programming-challenge-protohackers-3/
-  - https://geekingfrog.com/blog/post/protohackers-learnings
-  - tunnels
-    - https://ngrok.com/
-    - https://telebit.cloud/
-    - https://github.com/cloudflare/cloudflared
 - Course: Design Patterns in the Real World, an Analysis-Based Approach
   https://archive.org/details/design-patterns-in-the-real-world-an-analysis-based-approach
 - Channel: Programming Codebases Review https://www.youtube.com/@ants_are_everywhere/videos
@@ -79,6 +55,63 @@
   https://www.youtube.com/channel/UCnmJoeNk2mrItxXJ2-XOCcQ/videos
 - L01 Functional Programming | UC Berkeley CS 61A, Spring 2010
   https://www.youtube.com/watch?v=4leZ1Ca4f0g&list=PLhMnuBfGeCDNgVzLPxF9o5UNKG1b-LFY9
+* hanukkah of data
+  - JS animation https://www.evalapply.org/posts/animate-text-art-javascript/
+  - article R/Julia https://www.practicalsignificance.com/posts/hanukkah-of-data-5784/
+  - article R https://ellakaye.co.uk/posts/2023-12-07_hanukkah-of-data-5784/
+  - article R https://www.pmassicotte.com/posts/2022-12-28-hanukkah_of_data/
+  - article R
+    https://www.datannery.com/posts/hanukkah-of-data/
+    https://www.datannery.com/posts/hanukkah-of-data-revisited-2023-speedrun/
+  - R https://rpubs.com/nathaniel_olin/hanukkah2022
+  - article python/sqlite https://dev.to/ajkerrigan/hanukkah-of-data-2022-puzzle-1-5eb2
+  - article https://www.georgeho.org/hanukkah-of-data-2022/
+  - sqlite https://observablehq.com/@visnup/hanukkah-of-data
+  - sqlite https://thedataist.com/hanukah-of-data-solving-a-data-challenge-with-ai-and-sql/
+  - sqlite https://di.nmfay.com/hanukkah
+  - python https://github.com/desilinguist/hanukkah-of-data-2022
+  - python https://www.jordanhutchings.com/blog/2023-12-08-hanukkah-of-data-2023/
+  - clojure https://gitlab.com/hanukkah-of-data/hanukkah-of-data-2023
+* protohackers
+
+- videos
+  - elixir https://www.youtube.com/playlist?list=PLd7I3U4fDsULTLqbRAkWzA002-IzMe8fl
+- https://gergely.imreh.net/blog/2022/09/programming-challenge-protohackers-3/
+- https://geekingfrog.com/blog/post/protohackers-learnings
+- tunnels
+  - https://ngrok.com/
+  - https://telebit.cloud/
+  - https://github.com/cloudflare/cloudflared
+
+** code
+
+- node https://github.com/borisovg/protohackers-ts
+- rust
+  - serde+async+tokio https://github.com/nkitsaini/protohackers_impl
+  - serde https://github.com/mvolfik/protohackers-challenge
+  - serde+async+tokio+futures https://github.com/maxmarcon/protohackers/
+  - serde+tokio https://github.com/dwalker109/protohackers
+  - tokio https://github.com/camas/protohackers
+  - tokio+futures https://gitlab.com/adirelle/protohackers
+  - tokio+futures https://git.sr.ht/~sgeisenh/protohackers/tree
+  - tokio https://github.com/tumdum/protohackers
+  - tokio https://github.com/ajurna/protohackers
+- ocaml
+  - Eio https://github.com/TheLortex/protocaml
+- python
+  - threading,socket,socketserver https://github.com/simon816/Protohackers-solutions
+  - asyncio, socket https://github.com/pyxyne/protohackers
+  - asyncio https://github.com/ryan-gang/protohackers/
+- erlang
+  - ranch, jiffy https://github.com/314eter/protohackers
+- go
+  - stdlib https://github.com/bbeck/protohackers
+  - stdlib https://github.com/zackorndorff/protohackers
+  - stdlib https://github.com/snobb/protohacker
+  - stdlib+uuid https://github.com/STollenaar/protohackers
+  - stdlib+go-proxyproto https://github.com/fanatic/protohackers
+  - stdlib https://github.com/richmans/proto
+
 * gamelisp.rs
   https://gamelisp.rs/reference/overview.html
 * Lisp Cast

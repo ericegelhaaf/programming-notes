@@ -1,0 +1,4 @@
+- https://re.factorcode.org/
+- https://re.factorcode.org/2014/04/scraping-re-factor.html
+- https://bluishcoder.co.nz/tags/factor/index.html
+- https://bluishcoder.co.nz/2020/04/18/fun-factor-libraries.html

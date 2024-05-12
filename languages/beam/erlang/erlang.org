@@ -295,5 +295,3 @@ rebar.config
 - Gradual type checker https://github.com/josefs/Gradualizer
 - Example: https://github.com/adoptingerlang/service_discovery
 - DNS authoritative server https://github.com/dnsimple/erldns
-- protohackers
-  - ranch, jiffy https://github.com/314eter/protohackers

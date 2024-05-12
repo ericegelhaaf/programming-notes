@@ -168,7 +168,7 @@ https://www.sqlite.org/lang_aggfunc.html
 | total        | x       | same as sum(), but returns 0.0 if all values are null |
 |--------------+---------+-------------------------------------------------------|
 | group_concat | x[,sep] | "," is used if sep(arator) is ommited                 |
-| string_agg   | x ,sep  | alias of group_concat(x,y)                            |
+| string_agg   | x ,sep  | alias of group_concat(x,sep)                          |
 |--------------+---------+-------------------------------------------------------|
 ** Foreign Keys
 https://www.sqlite.org/foreignkeys.html
