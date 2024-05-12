@@ -1,6 +1,5 @@
 - Channel https://www.youtube.com/@nimprogramminglanguage3130
 - Channel https://www.youtube.com/@kiloneie/playlists
-- tsoding aoc 2020 day 11 https://www.youtube.com/watch?v=lHzbWWjdloM
 - Video: #ChillCode | Nim for Pentesting w/HuskyHacks! https://www.youtube.com/watch?v=NirjqeUWi9o
   starts 12:00
 - Video: 16. BYOT: Build Your Own Tools for Fun and Profit by Cas van Cooten  https://www.youtube.com/watch?v=PAxYI99A0mg

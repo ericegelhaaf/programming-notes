@@ -39,6 +39,5 @@
 
 - examples https://concatenative.org/wiki/view/Factor/Examples
 - utils https://github.com/mrjbq7/re-factor
-- aoc solutions https://github.com/gifti258/aoc-factor
 
 * snippet

@@ -4,9 +4,9 @@
 | wikibooks | https://en.wikibooks.org/wiki/AWK                                             |
 | web repl  | https://awk.js.org/                                                           |
 |-----------+-------------------------------------------------------------------------------|
-| nawk      | https://github.com/onetrueawk/awk                                             |
-| mawk      | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
 | gawk      | https://www.gnu.org/software/gawk/                                            |
+| mawk      | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
+| nawk      | https://github.com/onetrueawk/awk                                             |
 | goawk     | https://github.com/benhoyt/goawk                                              |
 | bioawk    | https://github.com/lh3/bioawk                                                 |
 |-----------+-------------------------------------------------------------------------------|
@@ -15,7 +15,7 @@
   https://benhoyt.com/writings/goawk-coverage/
 
 - editor
-   https://github.com/Beaglefoot/awk-language-server
+  https://github.com/Beaglefoot/awk-language-server
   https://emacs-lsp.github.io/lsp-mode/page/lsp-awk/
 
 - style https://github.com/soimort/translate-shell/wiki/AWK-Style-Guide
@@ -25,9 +25,11 @@
   - case have a *default* branch
   - use "IF" and not "ELSE IF" if the previous branch uses a "RETURN"
   - use () before pipes |
+
 - Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
-- Manual network features https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
-- https://ketancmaheshwari.github.io/posts/2020/05/24/SMC18-Data-Challenge-4.html
+- Manual network features
+  https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
+  https://www.gnu.org/software/gawk/manual/html_node/TCP_002fIP-Networking.html
 
 - 2023
   - --csv, supports fields surrounded by double quotes
@@ -307,9 +309,6 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 | libs                | https://github.com/dubiousjim/awkenough                        |
 |---------------------+----------------------------------------------------------------|
 | exercises           | https://github.com/exercism/awk                                |
-| exercises           | https://github.com/kaworu/adventofcode-2015/                   |
-| exercises           | https://github.com/ferd/advent-of-code-2021/                   |
-| exercises           | https://github.com/phillbush/aoc                               |
 |---------------------+----------------------------------------------------------------|
 * snippets
 - wEiRd - removes leading space

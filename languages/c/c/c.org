@@ -102,10 +102,6 @@
 | wctype.h      | C95 | Functions to determine the type contained in wide character data                                        |
 |---------------+-----+---------------------------------------------------------------------------------------------------------|
 * Codebases
-- aoc2022 https://github.com/antirez/adventofcode2022/
-  1) day1/1.c
-     - while (fgets(buf,sizeof(buf),stdin) != NULL)
-     - strtol(buf,NULL,10)
 - https://github.com/curl/trurl/blob/master/trurl.c
 - https://github.com/gsingh93/display-manager
 - https://github.com/lpereira/lwan

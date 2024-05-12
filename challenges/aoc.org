@@ -1,6 +1,39 @@
 home https://adventofcode.com/
 
-- Python https://github.com/fogleman/AdventOfCode2021/
+* repos/code
+
+- Awk
+  - https://github.com/phillbush/aoc
+  - https://github.com/ferd/advent-of-code-2021/
+  - https://github.com/kaworu/adventofcode-2015/
+- C
+  - https://github.com/antirez/adventofcode2022/
+    - day1/1.c
+      - while (fgets(buf,sizeof(buf),stdin) != NULL)
+      - strtol(buf,NULL,10)
+- Clojure
+  - Video https://www.youtube.com/playlist?list=PLbPrugU2oQ8W5qGiiiFJRlQ8vZ8AZXlG8
+  - https://github.com/unclebob/AdventOfCode2022
+  - https://github.com/borkdude/advent-of-babashka
+- Factor
+  - https://github.com/gifti258/aoc-factor
+  - https://github.com/Bubbler-4/factor-problem-solving/
+  - https://github.com/pablo-meier/advent-of-code/
+- GO
+  - https://github.com/lukechampine/advent/
+- Nim
+  - video tsoding aoc 2020 day 11 https://www.youtube.com/watch?v=lHzbWWjdloM
+- Kotlin (beatiful solution)
+  - https://github.com/ClouddJR/advent-of-code-2022/blob/main/src/main/kotlin/com/clouddjr/advent2022/Day18.kt
+- Ocaml
+  - https://github.com/quernd/Advent-of-Code/blob/main/2022/07/day07.ml
+  - https://github.com/hellopatrick/xmas/blob/v2022/day07/main.ml
+  - https://github.com/DrearyLisper/aoc-2022
+- Python
+  - https://github.com/fogleman/AdventOfCode2021/
+- tcl
+  - https://codeberg.org/NRK/slashtmp/src/branch/master/AoC/2022
+
 * vis
 
 https://en.wikipedia.org/wiki/X_PixMap
@@ -66,7 +99,7 @@ let saveToPPM width height path byteFn =
 #+begin_src bash
   
 #+end_src
-* Advent Of Code Community Repo
+* Idea: Advent Of Code Community Repo
 - Repo comun
 - Benchmark
   - https://benchmarksgame-team.pages.debian.net/benchmarksgame/why-measure-toy-benchmark-programs.html
@@ -105,6 +138,7 @@ let saveToPPM width height path byteFn =
     - aunque no deberia ser complicado(tm) instalar deps globales
   - muy probablemente mantener todo en un 1(un) archivo
 * 2023
+
 ** day 1 - se7en
 #+begin_src
 WIDE bigboy repost (as opposed to tall bigboy) >>97636176 →
@@ -150,19 +184,9 @@ hands:  200K
 silver: 6678229757944529
 gold:   7246011492564128
 #+end_src
+
 * 2022
-- Clojure Video https://www.youtube.com/playlist?list=PLbPrugU2oQ8W5qGiiiFJRlQ8vZ8AZXlG8
-- GO https://github.com/lukechampine/advent/
-- Clojure https://github.com/unclebob/AdventOfCode2022
-- Clojure https://github.com/borkdude/advent-of-babashka
-- Kotlin (beatiful solution)
-  https://github.com/ClouddJR/advent-of-code-2022/blob/main/src/main/kotlin/com/clouddjr/advent2022/Day18.kt
-- Ocaml
-  https://github.com/quernd/Advent-of-Code/blob/main/2022/07/day07.ml
-  https://github.com/hellopatrick/xmas/blob/v2022/day07/main.ml
-  https://github.com/DrearyLisper/aoc-2022
-- Ocaml parser combinator
-  https://github.com/inhabitedtype/angstrom
+
 ** review 15-
 #+begin_src
  15 is fun if you don't slap it onto a constraint solver for a quick no-brain solution

@@ -21,8 +21,7 @@
   - https://yare.io/
   - https://fly.io/blog/gossip-glomers/
   - game https://play.battlesnake.com/
-  - game https://dojorena.io/with/the-best-coding-challenge
-    https://dojorena.io/manuals/43
+  - game https://dojorena.io/with/the-best-coding-challenge https://dojorena.io/manuals/43
 - Algo
   - https://www.janestreet.com/puzzles/archive/
   - https://leetcode.com/

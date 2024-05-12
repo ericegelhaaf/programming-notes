@@ -423,6 +423,7 @@
 #+end_src
 
 * Snippets
+
 - '01 try/catch/finally implementation (before it was added to the language)
   https://code.activestate.com/recipes/68396-try-catch-finally/
 - tcp example
@@ -431,7 +432,7 @@
   https://wiki.tcl-lang.org/page/Network+server+application+template
 - examples https://en.wikibooks.org/wiki/Tcl_Programming/Examples
 - eggdrop's twitter https://github.com/horgh/twitter-tcl
-- aoc 2022 https://codeberg.org/NRK/slashtmp/src/branch/master/AoC/2022
+
 * https://en.wikipedia.org/wiki/Tcl
 - 1990-2012
 - Scripting Language, embeded in C
