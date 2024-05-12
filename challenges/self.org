@@ -1,0 +1,48 @@
+- https://rosalind.info/about/
+- https://projectlovelace.net/
+- https://selectstarsql.com/
+- https://cryptopals.com/
+- https://hackattic.com/challenges
+- katas https://web.archive.org/web/20160701032652/https://codingdojo.org/cgi-bin/index.pl?KataCatalogue
+- Data
+  - https://www.datawars.io/
+  - https://hanukkah.bluebird.sh/5784/data/
+- Projects
+  - https://codecrafters.io/
+  - https://github.com/codecrafters-io/build-your-own-x
+  - books https://github.com/AlgoryL/Projects-from-Scratch
+  - https://github.com/practical-tutorials/project-based-learning
+  - https://austinhenley.com/blog/challengingalgorithms.html
+  - https://austinhenley.com/blog/morechallengingprojects.html
+  - https://austinhenley.com/blog/challengingprojects.html
+    https://news.ycombinator.com/item?id=21790779
+- Server
+  - https://protohackers.com/
+  - https://yare.io/
+  - https://fly.io/blog/gossip-glomers/
+  - game https://play.battlesnake.com/
+  - game https://dojorena.io/with/the-best-coding-challenge
+    https://dojorena.io/manuals/43
+- Algo
+  - https://www.janestreet.com/puzzles/archive/
+  - https://leetcode.com/
+  - https://adventofcode.com/
+  - https://cses.fi/problemset/
+  - https://codeforces.com/
+  - https://www.codechef.com/
+  - https://www.hackerearth.com/
+  - https://www.codingame.com/
+  - https://www.hackerrank.com/
+  - https://www.codewars.com/
+  - https://projecteuler.net/
+- Web Hacking
+  - https://overthewire.org/wargames/natas/
+  - XSS
+    - google XSS game https://xss-game.appspot.com/
+    - PWN fucntion XSS Labs https://xss.pwnfunction.com/
+    - port swigger XSS https://portswigger.net/web-security/cross-site-scripting
+    - alert to win http://alf.nu/alert1?world=alert&level=alert0
+- Admin Troubleshoting
+  - https://sadservers.com/
+- Terminal Skills
+  - https://overthewire.org/wargames/bandit/

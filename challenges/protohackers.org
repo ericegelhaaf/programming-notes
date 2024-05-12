@@ -1,0 +1,39 @@
+home https://protohackers.com/
+
+- videos
+  - elixir https://www.youtube.com/playlist?list=PLd7I3U4fDsULTLqbRAkWzA002-IzMe8fl
+- https://gergely.imreh.net/blog/2022/09/programming-challenge-protohackers-3/
+- https://geekingfrog.com/blog/post/protohackers-learnings
+- tunnels
+  - https://ngrok.com/
+  - https://telebit.cloud/
+  - https://github.com/cloudflare/cloudflared
+
+* code
+
+- node https://github.com/borisovg/protohackers-ts
+- rust
+  - serde+async+tokio https://github.com/nkitsaini/protohackers_impl
+  - serde https://github.com/mvolfik/protohackers-challenge
+  - serde+async+tokio+futures https://github.com/maxmarcon/protohackers/
+  - serde+tokio https://github.com/dwalker109/protohackers
+  - tokio https://github.com/camas/protohackers
+  - tokio+futures https://gitlab.com/adirelle/protohackers
+  - tokio+futures https://git.sr.ht/~sgeisenh/protohackers/tree
+  - tokio https://github.com/tumdum/protohackers
+  - tokio https://github.com/ajurna/protohackers
+- ocaml
+  - Eio https://github.com/TheLortex/protocaml
+- python
+  - threading,socket,socketserver https://github.com/simon816/Protohackers-solutions
+  - asyncio, socket https://github.com/pyxyne/protohackers
+  - asyncio https://github.com/ryan-gang/protohackers/
+- erlang
+  - ranch, jiffy https://github.com/314eter/protohackers
+- go
+  - stdlib https://github.com/bbeck/protohackers
+  - stdlib https://github.com/zackorndorff/protohackers
+  - stdlib https://github.com/snobb/protohacker
+  - stdlib+uuid https://github.com/STollenaar/protohackers
+  - stdlib+go-proxyproto https://github.com/fanatic/protohackers
+  - stdlib https://github.com/richmans/proto

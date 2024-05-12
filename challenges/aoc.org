@@ -1,3 +1,6 @@
+home https://adventofcode.com/
+
+- Python https://github.com/fogleman/AdventOfCode2021/
 * vis
 
 https://en.wikipedia.org/wiki/X_PixMap

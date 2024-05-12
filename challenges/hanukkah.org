@@ -1,0 +1,18 @@
+home https://hanukkah.bluebird.sh/5784/data/
+
+- JS animation https://www.evalapply.org/posts/animate-text-art-javascript/
+- article R/Julia https://www.practicalsignificance.com/posts/hanukkah-of-data-5784/
+- article R https://ellakaye.co.uk/posts/2023-12-07_hanukkah-of-data-5784/
+- article R https://www.pmassicotte.com/posts/2022-12-28-hanukkah_of_data/
+- article R
+  https://www.datannery.com/posts/hanukkah-of-data/
+  https://www.datannery.com/posts/hanukkah-of-data-revisited-2023-speedrun/
+- R https://rpubs.com/nathaniel_olin/hanukkah2022
+- article python/sqlite https://dev.to/ajkerrigan/hanukkah-of-data-2022-puzzle-1-5eb2
+- article https://www.georgeho.org/hanukkah-of-data-2022/
+- sqlite https://observablehq.com/@visnup/hanukkah-of-data
+- sqlite https://thedataist.com/hanukah-of-data-solving-a-data-challenge-with-ai-and-sql/
+- sqlite https://di.nmfay.com/hanukkah
+- python https://github.com/desilinguist/hanukkah-of-data-2022
+- python https://www.jordanhutchings.com/blog/2023-12-08-hanukkah-of-data-2023/
+- clojure https://gitlab.com/hanukkah-of-data/hanukkah-of-data-2023

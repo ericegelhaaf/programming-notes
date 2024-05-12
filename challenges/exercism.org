@@ -1,0 +1,13 @@
+- AWK
+  - ME: In awk "pattern matching" is king.
+        And strings and regular expressions are at the center of it all.
+- "scrable score"
+  - AWK's switch has support for regular expressions
+- "grade school"
+  - some community solutions didn't work for me as they won't sorting twice grade/name
+  - it worked on their platform though
+- "bob" - wacky regular expressions
+  - [^a-z] matches a character that isn't a-z
+  - [?] matches the "?" character
+  - \s matches a space character
+  - RS="^$", read the whole input as a single record

@@ -1,0 +1,18 @@
+* Bash
+- Deletes all elements containing a or A
+  ${countries/*[aA]*/}
+- sort --stable
+- readarray -t
+- 2D Array - doesn't need $, can run operaations
+  grid[col,row]='-'
+  grid[col*row]='-'
+- Slicing array
+  ${countries[@]:START:HOWLONG}
+- Concatenate 3 lines at the time ?????????????'''
+  paste -d';' - - -
+  paste -d';;\n'
+- Sed I for insensitive eg: "s/FOO/BAR/gI" matches foo and FOo
+- Sed & returns matched eg: "s/FOO/{&}/g" wraps in braces match
+- forc loop, "rows" is a variable, not needing $
+  for (( row = 0; row < rows; row++))
+- += NEVER adds, always appends
