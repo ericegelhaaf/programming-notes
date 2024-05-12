@@ -1,0 +1,567 @@
+- http://skilldrick.github.io/easy6502/
+- http://visual6502.org/
+* Videos: Build a 65c02-based computer from scratch
+https://www.youtube.com/playlist?list=PLowKtXNTBypFbtuVMUVXNR0z1mu7dp7eH
+  - 6502 (890 pesos at 15Aug/20)
+  - AT28C256 (1887 pesos at 15Aug/20)
+** 01 - "Hello, world" from scratch on a 6502
+https://www.youtube.com/watch?v=LnzuMJLZRdU
+- 1x W65C02S
+  - 16bit/2^16 addresses 128K of memory
+- Connecting:
+  - 5v VDD(+) VCC(-)
+  - READ_WRITE: tells if it is and read or write operation
+  - A0-A16 are address pins that outputs the *current* address
+  - Min clock: new one allow stopping and step by step execution
+  - Max clock: orig 1mhz, new 16mhz
+  - Inputs: are connected (RDY,IRQB,NMIB,BE,PHI2O(clock),...) some to HIGH/UP and some to LOW/DOWN
+  - Outputs: kept disconnected (VPB,A0-15,...)
+  - I/O (D1-6)
+- We can use a "logic analyzer" to capture each signal.
+  Overkill. Especially useful for fast speed circuits.
+- Arduino Read
+  1) Read Address Bus
+  #+begin_src c++
+  unsigned int address = 0;
+  for(...){
+     int bit = digitalRead(NNN) ? 1 : 0; // to int
+     address = (address << 1) + bit // an address as a number
+  }
+  #+end_src
+  1) Read Clock Pulse (have it trigger an interrupt)
+  #+begin_src c++
+  void init() {
+    // ...
+    attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING);
+  }
+  void onClock(){
+   // put what you want to run JUST on a clock
+  }
+  #+end_src
+  1) Read Data Bus
+  #+begin_src c++
+  unsigned int data = 0;
+  for(...){
+     int bit = digitalRead(NNN) ? 1 : 0; // to int
+     data = (data << 1) + bit // an address as a number
+  }
+  #+end_src
+  1) Convert all the bits read one at the time into a number, by shifting and adding bits
+  2) Read READ_WRITE pin
+- Hardcodes the DATA (D1-6) pins with 1k? resistors connected to vcc or vdd.
+  0xea 11101010
+- Things might happen across than more than 1 clock cycle. Depending of the
+  "Addressing Mode"
+  1) Reset sequence  (7 clocks)
+  2) Reads the reset vector from locations below.
+     - FFFC (low byte)   -> 0xea
+     - FFFD (high bytes) -> 0xea
+  3) Loads PC register with that read addresses.
+  4) Instruction NOP (2) is also 0xea (mindblow)
+     It takes 2 clock cycles.
+** 02 - How do CPUs read machine code?
+https://www.youtube.com/watch?v=yl8vPW5hydQ
+- 6502 - Little Endian, reads the lower order byte followed by the high order byte
+*** EEPROM Connecting
+- Adding a EEPROM, so instructions are loaded from it.
+- 1x AT28C256 - 32Kilobytes (or 256Kilobits)
+  - 15 Addresses pins (while 6502 has 16)
+  - CE: Chip enable, active low
+  - WE: Write enable, active low
+  - OE: Output enable, active low
+- The EEPROM is fully used.
+- The CPU can address 2^16, the memory has 2^15 addresses
+  The CPU will then only be able to see the UPPER half of the memory it can address.
+      the dangling *inverted* signal to CE on the EEPROM
+- We use a NAND gate, instead of a NOT
+*** Programming NOPs
+- Python script that creates a file with 0's
+  #+begin_src python
+rom = bytearray([0xea] * 32768)
+with open("rom.bin", "wb") as out_file:
+    out_file.write(rom)
+  #+end_src
+- EEPROM programmer TL866II+
+  > minipro -p AT28C256 -w some.bin
+*** Programming ASM, save to EEPROM from CPU
+- Python script, jumping to beggining of memory, AND programming
+  #+begin_src python
+rom = bytearray([0xea] * 32768)
+rom[0] = 0xa9 # LDA, immediate value
+rom[1] = 0x42 # Value
+
+rom[2] = 0x8d # STA, memory address
+rom[3] = 0x00 # Memory address 6000
+rom[4] = 0x60 # Note: address outside 0x800-0xfff range the EEPROM has currently
+
+rom[0x7ffc] = 0x00 # Address 1000000000000000
+rom[0x7ffd] = 0x80 # Address 8000 on the CPU (which is the zero on the ROM)
+with open("rom.bin", "wb") as out_file:
+    out_file.write(rom)
+  #+end_src
+*** 65C22 Register - Hooked into CPU's Address and Data Bus
+- We can use the write to some memory addressed (STA) as "commands" for external hardware
+  (Address Decoder) HW Will have to look at the address BUS of the CPU
+  (Latch)           HW Will have to then look at the data BUS
+- 65C22 - VIA - Versitale Interface Adapter
+  - D0-7: Data lines from the CPU
+  - RWB: Read/Write signal, from the CPU
+  - RS0-3: Register Selector: Select which port we are talking
+  - CS1/CS2B: Chip Select, to let it know WHEN the CPU will talk to the chip
+  - PA0-7, PB0-7: Port A and B, with latched I/O
+  - 16 internal registers
+- We want to detect the address ~0x0600~
+  - Binary: 011 0000 0000 0000
+  - We JUST check the first 3 bits. (good enough)
+  - A15, A14 to two CS2B, on the VIA IC
+    Connected through NAND gates.
+  - A13, to the CS1 directly.
+- We want to select the ouput port (PA,PB)
+  - We connect the lower A0-3 to RS0-3
+  - This maps memory location to RS flags
+    0x600-0x60f to RS flags combinations
+  - After the flag is set we write what the register is going to have
+    - For example to setup each pin either as input or output
+*** 65C22 Register - Programming a loop
+#+begin_src python
+code = bytearray([
+  0xa9, 0xff,       # LDA #$ff -- Putting 1's to mark all pins of port B as output
+  0x8d, 0x02, 0x60, # STA 6002 -- RS to configure port B mode
+
+  0xa9, 0x55,       # LDA #$55 -- Outputs in port B 0x55
+  0x8d, 0x00, 0x60, # STA 6000
+  0xa9, 0xaa,       # LDA #$aa -- Outputs in port B 0xaa
+  0x8d, 0x00, 0x60, # STA 6000
+
+  0x4c, 0x05, 0x80, # JMP $8005 -- Jumps back to LDA #$55
+])
+rom = code + bytearray([0xea] * (32768 - len(code)))
+
+rom[0x7ffc] = 0x00 # Address 1000000000000000
+rom[0x7ffd] = 0x80 # Address 8000 on the CPU (which is the zero on the ROM)
+
+with open("rom.bin", "wb") as out_file:
+    out_file.write(rom)
+#+end_src
+** 03 - Assembly language vs. machine code
+- Replacing the python script used before
+- Using an assembler: vasm
+  - Old 8-bit style syntax
+  - Raw, binary output
+  - $ make CPU=6502 SYNTAX=oldstyle
+- Directives: .org .word
+- Labels: loop: reset:
+- Example: needs to have spaces at the beggining
+  #+NAME: bare jump + directives for memory layout
+  #+begin_src asm
+  .org $8000 // From the CPU perspective
+  lda #$ff  // "#" meeans load immediate
+  sta $6002 // "$" means the number is hexadecimal
+
+  lda #$55
+  sta $6000
+  lda #$aa
+  sta $6000
+
+  jmp $8005
+
+  .org $fffc
+  .word $8000
+  .word $0000
+  #+end_src
+  #+NAME: label jump
+  #+begin_src asm
+  .org $8000 // From the CPU perspective
+
+reset:
+  lda #$ff  // "#" meeans load immediate
+  sta $6002 // "$" means the number is hexadecimal
+
+loop: // label
+  lda #$55
+  sta $6000
+  lda #$aa
+  sta $6000
+
+  jmp loop
+
+  .org $fffc
+  .word reset
+  .word $0000
+  #+end_src
+  #+NAME: ror
+  #+begin_src asm
+  .org $8000 // From the CPU perspective
+
+reset:
+  lda #$ff  // "#" meeans load immediate
+  sta $6002 // "$" means the number is hexadecimal
+
+  lda #$50
+  sta $6000
+
+loop: // label
+  ror // shifting pattern to the right
+  sta $6000
+
+  jmp loop
+
+  .org $fffc
+  .word reset
+  .word $0000
+  #+end_src
+- $ vasm6502_oldstyle -Fbin -dotdir example.s
+  $ hexdump -C a.out
+** 04 - Connecting an LCD to our computer
+- HD44780U (LDC-II) - "Dot matrix Liquid Crystal Display Controller/Driver"
+  - V0: contrast (to ground to a resistor 10K)
+  - A: Anode (5V) has a current limit resistor
+  - K: Katode (GND)
+  - Connected to through the (internal) MPU
+    - D0-7: Data (it has a mode to make it work with 4 pins), it can send data to the Intruction Register or Data Register
+    - RS: Registry Select signal, select if we write to the IR (instruction register) or DR (data register) (high)
+    - RW: Whether we are reading or writing
+    - E: Enable signal
+- MPU: Micro Processor Unit
+- Assembly, using variables, writting a character to the LCD
+#+begin_src asm
+PORTB = $6000
+PORTA = $6001
+DDRB = $6002
+DDRA = $6003
+
+E  = %10000000
+RW = %01000000
+RS = %00100000
+
+  .org $8000
+
+; "%" used for binary literals
+reset:
+  lda #%11111111 ; Set all pins for output
+  sta DDRB
+  lda #%11100000  ; Set top 3 pins for Output
+  sta DDRA
+
+  lda #%00111000 ; Set 8-bit mode, 2-line display, 5x8 font
+  sta PORTB
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+  lda #E   ; Set E bit to send instruction
+  sta PORTA
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+
+  lda #%00001110 ; Display on, cursor on, blink off
+  sta PORTB
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+  lda #E   ; Set E bit to send instruction
+  sta PORTA
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+
+  lda #%00000110 ; Increment and shift cursor, don't shift display
+  sta PORTB
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+  lda #E   ; Set E bit to send instruction
+  sta PORTA
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+
+  lda #"H"
+  sta PORTB
+  lda #RS       ; Set RS (we are sending data not an instruction), Clears RW/E bits
+  sta PORTA
+  lda #(RS | E) ; Set E bit to send instruction
+  sta PORTA
+  lda #RS       ; Clear E bits
+  sta PORTA
+
+loop:
+  jmp loop ;; "halts" the program, infinite loop
+
+  .org $ffc
+  .word reset
+  .word $0000
+#+end_src
+** 05 - What is a stack and how does it work?
+- Assembler: Using a sub-routine
+  #+begin_src asm
+PORTB = $6000
+PORTA = $6001
+DDRB = $6002
+DDRA = $6003
+
+E  = %10000000
+RW = %01000000
+RS = %00100000
+
+  .org $8000
+
+; "%" used for binary literals
+reset:
+  lda #%11111111 ; Set all pins for output
+  sta DDRB
+  lda #%11100000  ; Set top 3 pins for Output
+  sta DDRA
+
+  lda #%00111000 ; Set 8-bit mode, 2-line display, 5x8 font
+  jsr lcd_instruction
+  lda #%00001110 ; Display on, cursor on, blink off
+  jsr lcd_instruction
+  lda #%00000110 ; Increment and shift cursor, don't shift display
+  jsr lcd_instruction
+
+  lda #"H"
+  jsr print_char
+
+loop:
+  jmp loop ;; "halts" the program, infinite loop
+
+lcd_instruction: ; subroutine declaration
+  sta PORTB
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+  lda #E   ; Set E bit to send instruction
+  sta PORTA
+  lda #0   ; Clear RS/RW/E bits
+  sta PORTA
+  rts ; return from subroutine
+
+print_char:
+  sta PORTB
+  lda #RS       ; Set RS (we are sending data not an instruction), Clears RW/E bits
+  sta PORTA
+  lda #(RS | E) ; Set E bit to send instruction
+  sta PORTA
+  lda #RS       ; Clear E bits
+  sta PORTA
+  rts
+
+  .org $ffc
+  .word reset
+  .word $0000
+#+end_src
+- Stack: example of extra steps the CPU does when a subroutine is called
+  #+begin_src
+  0124 r 5d
+  0124 W 80
+  0123 W 0e
+  #+end_src
+- Stack uses memory from 0100 to 01ff
+  - It wraps around when it runs out of it
+  - Stack pointer starts with a random value (an offset in the range)
+  - *TXS* transfer X to Stack Register
+  #+begin_src asm
+  ldx #$ff
+  txs
+  #+end_src
+- Calls to subroutine/stack changes the A register
+- *pha* puts value of register A into the stack
+  *pla* puts back the value into the register A
+- Current problem is that it can't read the return address
+  Due to the half memory "hack" we have with the CE and upper half of memory addresses
+** 06 - RAM and bus timing
+- We want to have some writable memory, not just to allocate the stack.
+- 1x 62256 (32 Kilobytes)
+  - A0-14n
+  - D0-7:
+  - WE: connected to the RW signal of the CPU
+  - OE: A14
+  - CS: A15
+- We are going to use 16K of the 32K in our memory layout
+  - Active when A15 and A14 are both 0
+    0000-3fff
+- Just plugging OE,CS to A14-15 *might not* work.
+  There might be an access delay when reading from the ram.
+  For read/write operations, look at the times of the setup&hold of data
+  If not looking carefully to the protocol/timings of the communication.
+  - Might not work under certain conditions
+  - Like high temperature
+- Other timing issues might happen if you overclock the CPU, as it will shorter times.
+- Timing Issue: Address gets invalid before data. Due Timing on CS and WE.
+  - We need to make sure CS is only LOW when the *clock* is HIGH
+    - negate the 15 and NAND it with the *clock*
+  - Propagation delay is 8ns (worst case 15ns)
+** 07 - Subroutine calls, now with RAM
+- Connecting and seeing it works with the Stack/RAM now.
+- Added instruction to clear display
+** 08 - Why build an entire computer on breadboards?
+- The quality of the vertical springs, wether are flexible or not. Make the quality of the breadboard.
+  - Shopping list https://eater.net/breadboards
+- Capacitance: Any time you have 2 wires close together, you have a capacitor. Oppose the change of voltage.
+- Inductance: everytime you have a current, you have a magnetic field. Opposes the change of current.
+- Both, can cause some phase-shifting and attenuated
+- To avoid drops on the power rail
+  1) is a good practice add capacitors (0.1mf) across the power riel
+  2) AND/OR extra 1 Capacitor for every Chip, across the power lines
+- CPU: Fall time, Rise time are 5 ns
+  - All square waves are sum of sine waves
+  - we have less perfect square waves the lower the frequency (as they are less sine waves too)
+- 1Mhz oscillator
+  - Issue: on the LED, sending data too early. Without checking for "busy flag"
+** 09 - How assembly language loops work
+- Display doesn't work with the 1Mhz due we are not waiting for the LCD to finish the instructions that we send.
+  Clock cycles are 37us and instructions on the LCD run on 35us
+  We *could* add NOP's to add delay. (750 nops)
+- We do it properly and read the CPU's *busy flag*, and loop while the flag is up.
+- Conditional jumps use the CPU "Process Status Register"
+#+NAME: while loop for busy flag to clear
+#+begin_src asm
+lcd_wait:
+  pha ; Push A register to stack
+  lda #%00000000 ; Port B is input for now
+  sta DDRB
+lcdbusy:
+  lda #RW
+  sta PORTA
+  lda #(RW | E)
+  sta PORTA
+  lda PORTB
+  and #%10000000
+  bne lcdbusy
+
+  lda #%11111111 ; Port B is output for now
+  sta DDRB
+  pla ; Restore A register
+  rts
+
+lcd_instruction:
+  jsr lcd_wait
+  ...
+print_char:
+  jsr lcd_wait
+  ...
+  #+end_src
+#+NAME: Put string into memory
+#+begin_src asm
+  ldx #0
+print:
+  lda message,x ;; Adds to the X register
+  beq loop      ;; If we Loaded a zero, we exit "jmp" loop
+  jsr print_char
+  inx
+  jmp print
+
+message: .byte "H"
+message: .asciiz "Hello, world!" ; ascii with and extra zero
+#+end_src
+- Using a oscilloscope to debug performance
+** 10 - Binary to decimal can't be that hard, right?
+- 164 lines of assembly
+- We want to display a binary number in decimal.
+  We could use binary shifting to run division which will separate the decimal digits.
+  Since we don't have OP codes for division.
+- Algorithm??????
+#+NAME: for loop, and division algorithm, reverse word
+#+begin_src asm
+value = $0200 ; 2 bytes
+mod10 = $0202 ; 2 bytes
+message = $0204 ; 6 bytes
+
+  lda #0
+  sta message
+
+  ; Initialize value to be the number to convert
+  lda number
+  sta value
+  lda number + 1
+  sta value + 1
+
+divide:
+  ; Initialize the remainder to zero
+  lda #0
+  sta mod10
+  sta mod10 + 1
+  clc
+
+  ldx #16 ; loop counter
+
+divloop:
+  ; Rotate quotation and reminder
+  rol value
+  rol value + 1
+  rol mod10
+  rol mod10 + 1
+
+  ; a,y = dividend - divisor
+  ; Subtracting to the mod10
+  ; Since we can only subtract 8-bits at the time
+  sec
+  lda mod10 ; The right half of mod10
+  sbc #10   ; Subtract with carry
+  tay       ; Save the Low byte in Y
+  lda mod10 + 1
+  sbc #0
+  bcc ignore_result ; branch if carry clear, if dividend is < divisor
+  sty mod10         ; Store the result
+  sta mod10 + 1
+
+ignore_result:
+  dex
+  bne divloop
+  rol value ; shift in the last bit of the quotient
+  rol value + 1
+
+  lda mod10
+  clc
+  add #"0"
+  jsr push_char;print_char
+
+  ; if value != 0, then continue dividing
+  lda value
+  ora value + 1
+  bne divide ; branch if value not zero
+
+  ldx #0
+print:
+  lda message,x
+  beq loop
+  jsr print_char
+  inx
+  jmp print
+
+loop:
+  jmp loop ; Halt
+
+; Add the character in the A register to the beginning of the
+; null-terminated string `message`
+push_char:
+  pha ; Push new first char onto stack
+  ldy #0 ; index into the message
+
+char_loop:
+  lda message,y ; Get char on string and put into X
+  tax
+  pla
+  sta message,y ; Pull char off stack and add it to the string
+  iny
+  txa
+  pha           ; PUsh char from string onto stack
+  bne char_loop
+
+  pla
+  sta message,y ; PUll the null off the stack and add to the end of the string
+
+  rts
+
+number: .word 1729
+#+end_src
+** TODO Part 11 - Hardware Interrupts
+- 6502 pins
+  IRQ: interrupt request pin, high on low
+  NMI: non-masquable interrupt pin, high on low
+- 0xfffa for NMI
+  0xfffe for IRQ
+#+NAME: setup the code that runs on interrupt
+#+begin_src asm
+nmi:
+irq:
+  .org $fffa
+  .word nmi
+  .word reset
+  .word irq
+#+end_src
+** TODO Part 12 - Interrupt Handling  

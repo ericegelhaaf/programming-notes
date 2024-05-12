@@ -159,7 +159,7 @@ git log --oneline -1 $revision
 - git-gutter-fringe font
   https://ianyepan.github.io/posts/emacs-git-gutter/
 
-* github.com Alternatives
+* github.com alternatives
 
 - Gitlab
 - Bitbucket

@@ -21,8 +21,6 @@ home https://adventofcode.com/
   - https://github.com/pablo-meier/advent-of-code/
 - GO
   - https://github.com/lukechampine/advent/
-- Nim
-  - video tsoding aoc 2020 day 11 https://www.youtube.com/watch?v=lHzbWWjdloM
 - Kotlin (beatiful solution)
   - https://github.com/ClouddJR/advent-of-code-2022/blob/main/src/main/kotlin/com/clouddjr/advent2022/Day18.kt
 - Ocaml
@@ -31,6 +29,8 @@ home https://adventofcode.com/
   - https://github.com/DrearyLisper/aoc-2022
 - Python
   - https://github.com/fogleman/AdventOfCode2021/
+- ruby
+  - https://github.com/JoshCheek/advent_of_code
 - tcl
   - https://codeberg.org/NRK/slashtmp/src/branch/master/AoC/2022
 

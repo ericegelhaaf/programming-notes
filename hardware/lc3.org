@@ -1,0 +1,3 @@
+- https://www.jmeiners.com/lc3-vm/
+- https://justinmeiners.github.io/lc3-vm/
+- https://github.com/resttime/lc3/blob/master/lc3.lisp
