@@ -1,14 +1,17 @@
-- https://raw.githubusercontent.com/qemu/qemu/e75941331e4cdc05878119e08635ace437aae721/scripts/qemu-binfmt-conf.sh
-- https://qemu.readthedocs.io/en/latest/system/target-avr.html
-  https://yeah.nah.nz/embedded/qemu-avr/
-  https://patchwork.kernel.org/project/qemu-devel/patch/20200123000307.11541-15-richard.henderson@linaro.org/
-  https://www.youtube.com/watch?v=3yP3QOT-h98
 - https://www.microchip.com/wwwproducts/en/ATmega328P#datasheet-toggle
 - https://www.arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf
 - Stop auto-reset of arduino on connection
   - 10uF capacitor between reset and gnd (or 100nF ceramic capacitor)
   - 120ohm resistor between 5v and reset pin (or 110-124)
   https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection/
+* qemu-avr
+
+- https://raw.githubusercontent.com/qemu/qemu/e75941331e4cdc05878119e08635ace437aae721/scripts/qemu-binfmt-conf.sh
+- https://qemu.readthedocs.io/en/latest/system/target-avr.html
+  https://yeah.nah.nz/embedded/qemu-avr/
+  https://patchwork.kernel.org/project/qemu-devel/patch/20200123000307.11541-15-richard.henderson@linaro.org/
+  https://www.youtube.com/watch?v=3yP3QOT-h98
+
 * Course Arduino Lessons - Paul McWorther
 https://www.youtube.com/playlist?list=PLGs0VKk2DiYx6CMdOQR_hmJ2NbB4mZQn-
 * 3rd Projects
@@ -107,7 +110,7 @@ https://wiki.archlinux.org/index.php/Arduino
   "AVRDUDE is software for programming Atmel AVR Microcontrollers."
   #+name: avr -?
   -b 115200
-  #+begin_src
+#+begin_src
 [~/texts/electro] > avrdude -?
 Usage: avrdude [options]
 Options:
@@ -143,121 +146,8 @@ Options:
 
 avrdude version 6.3, URL: <http://savannah.nongnu.org/projects/avrdude/>
 #+end_src
+
 ** avrdudess https://github.com/zkemble/AVRDUDESS
 UI for avrdude, C#, can run with MONO...
 [[./avrdudess.png]]
 
-* Book: Arduino Cookbook 3rd edition
-** 3 Mathematic operations
-- fractions are resolved and floored to an *int*
-- Arduino compiles does not upgrade vars to long automatically. You need to put an L.
-  Put it on the innermost paren that overflows.
-  #+begin_src c++
-  long seconds_per_day = 60 * 60 * 24; // overflows
-  long seconds_per_day = 60L * 60 * 24 // works fine
-  #+end_src
-- both pre-increment and post-increment are supported
-  #+begin_src c++
-  int myVal = 1;
-  Serial.println(myVal++); // prints 1
-  Serial.println(++myVal); // prints 2
-  #+end_src
-- if I ask for a fixed number of decimals in println() I might get precision errors
-  Might have been fixed?
-  #+begin_src c++
-  int int_part = 363/30;
-  int remainder = 363%30;
-  int fractional_part = remainder * 100 / 30;
-
-  void setup(){
-    Serial.begin(9600);
-  }
-
-  void loop(){
-    delay(1000 * 1);
-    Serial.println(36.3/3, 10); // 12.0999994277
-    Serial.println(36.3/3);     // 12.10
-    Serial.print(int_part); Serial.print("."); Serial.println(fractional_part); // 12.10
-  }
-  #+end_src
-- abs(n)
-- constrain(n,nmin,nmax)
-  constrain(10, 100, 200); // 100
-- min(n,n) min(n,min(n,n))
-- max(n,n)
-- pow(n,3) - println assumes float
-- sqrt(n)
-*** round/floor/ceil
-- floor(n) - <n integer
-- ceil(n)  - >n integer
-- round(n)
-*** trigonometry
-- sin(x) x being angle in radians
-- cos(x) x being angle in radians
-- tan(x) x being angle in radians
-- float radians = x * PI / 180;
-  float radians = x * DEG_TO_RAD;
-  float x = radians * RAD_TO_DEG;
-*** random
-- random(i) - random(i,i) - returns int
-- randomSeed(i)
-- https://rweather.github.io/arduinolibs/crypto.html
-  https://rweather.github.io/arduinolibs/crypto_rng.html
-*** bits
-- void bitSet(x, pos) - pos from rightmost position
-  void bitClear(x, pos)
-- ???? bitRead(x, pos)
-  void bitWrite(x, pos, value)
-- bit()
-  bit(0) = 1
-  bit(1) = 2
-  bit(2) = 4
-- true  = HIGH = 1
-  false = LOW  = 0
-- x << n bitshifting
-  x >> n
-- << is the same as multiplying by 2^n
-  >> is the same as dividing by 2^n
-*** bytes
-- integer have 16bit - 2 bytes
-- long    have 32bit - 4 bytes
-- byte highByte(i)
-- byte lowByte(i)
-- #define highWord(w) ((w) >> 16)
-  #define lowWord(w)  ((w) & 0xffff)
-- int word(b,b)
-  #define makeLong(hi, low) ((hi) << 16 & (low))
-** 4 Serial communication
-- ttl:
-  - transistor-transistor logic
-  - 0v mean 0 and 5v or 3.3v is 1
-- rs-232:
-  - ~9 connectors
-  - voltage levels that can damage ttl
-- hardware serial vs software serial
-- harware serial > arduino chip > usb
-- some boards reset after serial connection is established, some don't
-- use this on ones that not, to not lose msgs:
-  while(!Serial)
-- Serial.flush()
-- Serial.write() and Serial.print() are non blockers. Unless you flush() too.
-- Serial.peek()
-- Serial.print(,?) - where ? is DEC,OCT,BIN,HEX or float precision
-- Serial.word() - prints byte and char as a character
-** 5 Simple digital and analog input
-- In UNO and compatible boards pins 0 and 1 marked RX and TX are used for USB serial
-  connection and should be avoided
-- Use constants when possible
-  - LED_BUILTIN
-  - A0-A5 (more in Mega)
-- "floating state" when there is no resistor for inputs
-- When choosing a potentiometer, a value of 10K is the best option for connecting to analog pins.
-* Book: Arduino: A Technical Reference - J. M. Hughes
-** TODO 8 Shields
-- Assume that I/O extension shields will use most or all of the avaialbel Arduino pins
-  And some shields not have connection points for accessing unused signals.
-- Types
- | TWI  | A4-A5   | 2 |                      |
- | I2C  | A4-A5   | 2 | exclusive            |
- | SPI  | D10-D13 | 4 | aka SS,MOSI,MISO,SCK |
- | UART | D0-D1   | 2 |                      |

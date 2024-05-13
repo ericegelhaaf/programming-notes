@@ -21,6 +21,9 @@ home https://adventofcode.com/
   - https://github.com/pablo-meier/advent-of-code/
 - GO
   - https://github.com/lukechampine/advent/
+- jq
+  - https://github.com/odnoletkov/advent-of-code-jq https://news.ycombinator.com/item?id=33963383
+  - https://github.com/pingiun/aoc-2022-jq
 - Kotlin (beatiful solution)
   - https://github.com/ClouddJR/advent-of-code-2022/blob/main/src/main/kotlin/com/clouddjr/advent2022/Day18.kt
 - Ocaml
@@ -31,6 +34,9 @@ home https://adventofcode.com/
   - https://github.com/fogleman/AdventOfCode2021/
 - ruby
   - https://github.com/JoshCheek/advent_of_code
+- scala
+  - https://scalacenter.github.io/scala-advent-of-code/
+    https://github.com/scalacenter/scala-advent-of-code
 - tcl
   - https://codeberg.org/NRK/slashtmp/src/branch/master/AoC/2022
 

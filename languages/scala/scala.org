@@ -28,5 +28,3 @@ This is fixed in Scala 3, but it's only valid for Scala 3 and higher, it doesn't
 
 * Codebases
 - https://github.com/twitter/the-algorithm
-- https://scalacenter.github.io/scala-advent-of-code/
-  https://github.com/scalacenter/scala-advent-of-code

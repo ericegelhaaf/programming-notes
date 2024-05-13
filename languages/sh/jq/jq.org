@@ -9,10 +9,6 @@
 | rust rewrite | https://github.com/01mf02/jaq                           |
 |--------------+---------------------------------------------------------|
 
-- code
-  https://github.com/odnoletkov/advent-of-code-jq
-  https://news.ycombinator.com/item?id=33963383
-
 * language
 
 - #!/usr/bin/jq -f
@@ -248,6 +244,9 @@ MODNAME::FUNCTION;
 |        [2,4,6,8]        |           indices(8)            |           [3]           |
 |        [2,4,6,8]        |          contains([2])          |          true           |
 |        [2,4,6,8]        |            index(6)             |            2            |
+|      [2,2,4,6,8,4]      |             unique              |        [2,4,6,8]        |
+|  [{"foo":1},{"foo":1}]  |         unique_by(.foo)         |       [{"foo":1}]       |
+| ["foo","bar","bazinga"] |        unique_by(length)        |    ["foo","bazinga"]    |
 |        [2,4,6,8]        |             reverse             |        [8,6,4,2]        |
 |        [8,4,6,2]        |              sort               |        [2,4,6,8]        |
 |        [2,4,6,8]        |               min               |            2            |
@@ -263,6 +262,7 @@ MODNAME::FUNCTION;
 |        [2,4,6,8]        |           map(. * 10)           |      [20,40,60,80]      |
 |      ["foo","bar"]      |            join(",")            |        "foo,bar"        |
 | {name: "Jane", age: 1}  |        select(.age > 18)        |           []            |
+|     [2,[],3,[4],5]      |             flatten             |        [2,3,4,5]        |
 |      [true,false]       |               any               |          true           |
 |      [true,false]       |               all               |          false          |
 |        [1,2,3,4]        |           any(. >= 4)           |          true           |
