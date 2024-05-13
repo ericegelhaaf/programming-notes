@@ -1,0 +1,263 @@
+- https://raw.githubusercontent.com/qemu/qemu/e75941331e4cdc05878119e08635ace437aae721/scripts/qemu-binfmt-conf.sh
+- https://qemu.readthedocs.io/en/latest/system/target-avr.html
+  https://yeah.nah.nz/embedded/qemu-avr/
+  https://patchwork.kernel.org/project/qemu-devel/patch/20200123000307.11541-15-richard.henderson@linaro.org/
+  https://www.youtube.com/watch?v=3yP3QOT-h98
+- https://www.microchip.com/wwwproducts/en/ATmega328P#datasheet-toggle
+- https://www.arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf
+- Stop auto-reset of arduino on connection
+  - 10uF capacitor between reset and gnd (or 100nF ceramic capacitor)
+  - 120ohm resistor between 5v and reset pin (or 110-124)
+  https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection/
+* Course Arduino Lessons - Paul McWorther
+https://www.youtube.com/playlist?list=PLGs0VKk2DiYx6CMdOQR_hmJ2NbB4mZQn-
+* 3rd Projects
+- https://github.com/Lembed/Awesome-arduino
+- https://github.com/FortySevenEffects/arduino_midi_library
+- https://github.com/thomasfredericks/Bounce2
+- https://github.com/jandelgado/jled
+- https://www.youtube.com/c/Seytonic/playlists
+- https://github.com/mlochen/mouse-scanner/
+- https://github.com/Avamander/arduino-tvout/
+* Tutorial
+** Digital Pins
+  - All(almost) pins can be used as Digital pins.
+  - All default to inputs.
+  - IO
+    |        | impedance | IO         | comment                                   |
+    |--------+-----------+------------+-------------------------------------------|
+    | Input  | high      | 100 megohm | can get weird lectures when not connected |
+    | Output | low       | 40 mA      | Adviced to use a 470ohm or 1k resistor    |
+  - Pull up/down inputs, to get reliable value
+    |           | connected to | resistor |
+    | pull-up   | 5V+          | 10K      |
+    | pull-down | ground       | 10K      |
+*** INPUT_PULLUP
+  - buildin 20K resitors can be used on INPUT_PULLUP mode
+  - read gets inverted
+  |              | HIGH | LOW |
+  | INPUT        | on   | off |
+  | INPUT_PULLUP | off  | on  |
+  - most value of 20kΩ and 50kΩ. On the Arduino Due, it is between 50kΩ and 150kΩ.
+  - The other end should be connected to ground. In the case of a simple switch,
+    this causes the pin to read HIGH when the switch is open, and LOW when the switch is
+    pressed.
+  - pin13 has the led attached, so it gives 1.7V instead of 5V, so if you use the internal
+    pullup resistor it will always be LOW so use an external resistor for it
+** Analog pins
+- Has 6 (8mini/nano and 16 on the mega) A/D (analog digital) converter
+- Values 0-1023 (10 bit depth)
+- GPIO: general purpose IO (aka digital pins)
+** Memory
+- ATMega328
+  | Flash  | 32k | .5k bootloader |
+  | SRAM   | 2k  |                |
+  | EEPROM | 1K  |                |
+- Is easy to run out of SRAM, by using strings or []int instead of []byte
+- Use Flash memory with PROGMEM
+* arduino-cli
+https://github.com/arduino/arduino-cli
+** Getting started
+- https://arduino.github.io/arduino-cli/latest/getting-started/
+  > arduino-cli config init
+  > arduino-cli core update-index
+* Emacs packages
+** arduino-cli-mode   20200615.919  available  melpa      Arduino-CLI command wrapper
+https://github.com/motform/arduino-cli-mode
+https://github.com/arduino/arduino-cli
+Compile         	C-c C-a c
+Upload           	C-c C-a u
+Compile and Upload 	C-c C-a b
+List Connected Boards 	C-c C-a l
+Create new sketch 	C-c C-a n
+Install a Library 	C-c C-a i
+Uninstall a Library 	C-c C-a u
+** arduino-mode       20180509.36   available  melpa      Major mode for editing Arduino code.
+https://github.com/stardiviner/arduino-mode
+Uses arduino ide command *arduino* to *--upload* and *--verify*
+  - syntax highlighting
+  - command-line arduino interface
+  - org-mode babel support
+  - flycheck
+Upload
+    In Arduino source code file, press [C-c C-c] to upload to Arduino board.
+Build
+    In Arduino source code file, press [C-c C-v] to build.
+** company-arduino    20160306.1739 available  melpa      company-mode for Arduino
+https://github.com/yuutayamada/company-arduino/
+This package is a set of configuration to let you auto-completion by using:
+ - irony-mode
+ - company-irony
+ - company-c-headers on arduino-mode.
+* UIless compile
+
+- https://create.arduino.cc/projecthub/milanistef/introduction-to-bare-metal-programming-in-arduino-uno-f3e2b4
+*avr-gcc* compiler and *avrdude* to upload
+avr-gcc > OBJECT > avr-gcc > ELF > avr-objcopy > BIN > avrdude
+
+* Serial
+
+https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection/
+https://wiki.archlinux.org/index.php/Arduino
+#+begin_src shell
+  stty -F /dev/ttyACM0 cs8 9600 ignbrk -brkint -imaxbel -opost -onlcr -isig -icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh -ixon -crtscts
+#+end_src
+
+* avrdude https://github.com/sigmike/avrdude (dnf)
+  "AVRDUDE is software for programming Atmel AVR Microcontrollers."
+  #+name: avr -?
+  -b 115200
+  #+begin_src
+[~/texts/electro] > avrdude -?
+Usage: avrdude [options]
+Options:
+  -p <partno>                Required. Specify AVR device.
+  -b <baudrate>              Override RS-232 baud rate.
+  -B <bitclock>              Specify JTAG/STK500v2 bit clock period (us).
+  -C <config-file>           Specify location of configuration file.
+  -c <programmer>            Specify programmer type.
+  -D                         Disable auto erase for flash memory
+  -i <delay>                 ISP Clock Delay [in microseconds]
+  -P <port>                  Specify connection port.
+  -F                         Override invalid signature check.
+  -e                         Perform a chip erase.
+  -O                         Perform RC oscillator calibration (see AVR053).
+  -U <memtype>:r|w|v:<filename>[:format]
+                             Memory operation specification.
+                             Multiple -U options are allowed, each request
+                             is performed in the order specified.
+  -n                         Do not write anything to the device.
+  -V                         Do not verify.
+  -u                         Disable safemode, default when running from a script.
+  -s                         Silent safemode operation, will not ask you if
+                             fuses should be changed back.
+  -t                         Enter terminal mode.
+  -E <exitspec>[,<exitspec>] List programmer exit specifications.
+  -x <extended_param>        Pass <extended_param> to programmer.
+  -y                         Count # erase cycles in EEPROM.
+  -Y <number>                Initialize erase cycle # in EEPROM.
+  -v                         Verbose output. -v -v for more.
+  -q                         Quell progress output. -q -q for less.
+  -l logfile                 Use logfile rather than stderr for diagnostics.
+  -?                         Display this usage.
+
+avrdude version 6.3, URL: <http://savannah.nongnu.org/projects/avrdude/>
+#+end_src
+** avrdudess https://github.com/zkemble/AVRDUDESS
+UI for avrdude, C#, can run with MONO...
+[[./avrdudess.png]]
+
+* Book: Arduino Cookbook 3rd edition
+** 3 Mathematic operations
+- fractions are resolved and floored to an *int*
+- Arduino compiles does not upgrade vars to long automatically. You need to put an L.
+  Put it on the innermost paren that overflows.
+  #+begin_src c++
+  long seconds_per_day = 60 * 60 * 24; // overflows
+  long seconds_per_day = 60L * 60 * 24 // works fine
+  #+end_src
+- both pre-increment and post-increment are supported
+  #+begin_src c++
+  int myVal = 1;
+  Serial.println(myVal++); // prints 1
+  Serial.println(++myVal); // prints 2
+  #+end_src
+- if I ask for a fixed number of decimals in println() I might get precision errors
+  Might have been fixed?
+  #+begin_src c++
+  int int_part = 363/30;
+  int remainder = 363%30;
+  int fractional_part = remainder * 100 / 30;
+
+  void setup(){
+    Serial.begin(9600);
+  }
+
+  void loop(){
+    delay(1000 * 1);
+    Serial.println(36.3/3, 10); // 12.0999994277
+    Serial.println(36.3/3);     // 12.10
+    Serial.print(int_part); Serial.print("."); Serial.println(fractional_part); // 12.10
+  }
+  #+end_src
+- abs(n)
+- constrain(n,nmin,nmax)
+  constrain(10, 100, 200); // 100
+- min(n,n) min(n,min(n,n))
+- max(n,n)
+- pow(n,3) - println assumes float
+- sqrt(n)
+*** round/floor/ceil
+- floor(n) - <n integer
+- ceil(n)  - >n integer
+- round(n)
+*** trigonometry
+- sin(x) x being angle in radians
+- cos(x) x being angle in radians
+- tan(x) x being angle in radians
+- float radians = x * PI / 180;
+  float radians = x * DEG_TO_RAD;
+  float x = radians * RAD_TO_DEG;
+*** random
+- random(i) - random(i,i) - returns int
+- randomSeed(i)
+- https://rweather.github.io/arduinolibs/crypto.html
+  https://rweather.github.io/arduinolibs/crypto_rng.html
+*** bits
+- void bitSet(x, pos) - pos from rightmost position
+  void bitClear(x, pos)
+- ???? bitRead(x, pos)
+  void bitWrite(x, pos, value)
+- bit()
+  bit(0) = 1
+  bit(1) = 2
+  bit(2) = 4
+- true  = HIGH = 1
+  false = LOW  = 0
+- x << n bitshifting
+  x >> n
+- << is the same as multiplying by 2^n
+  >> is the same as dividing by 2^n
+*** bytes
+- integer have 16bit - 2 bytes
+- long    have 32bit - 4 bytes
+- byte highByte(i)
+- byte lowByte(i)
+- #define highWord(w) ((w) >> 16)
+  #define lowWord(w)  ((w) & 0xffff)
+- int word(b,b)
+  #define makeLong(hi, low) ((hi) << 16 & (low))
+** 4 Serial communication
+- ttl:
+  - transistor-transistor logic
+  - 0v mean 0 and 5v or 3.3v is 1
+- rs-232:
+  - ~9 connectors
+  - voltage levels that can damage ttl
+- hardware serial vs software serial
+- harware serial > arduino chip > usb
+- some boards reset after serial connection is established, some don't
+- use this on ones that not, to not lose msgs:
+  while(!Serial)
+- Serial.flush()
+- Serial.write() and Serial.print() are non blockers. Unless you flush() too.
+- Serial.peek()
+- Serial.print(,?) - where ? is DEC,OCT,BIN,HEX or float precision
+- Serial.word() - prints byte and char as a character
+** 5 Simple digital and analog input
+- In UNO and compatible boards pins 0 and 1 marked RX and TX are used for USB serial
+  connection and should be avoided
+- Use constants when possible
+  - LED_BUILTIN
+  - A0-A5 (more in Mega)
+- "floating state" when there is no resistor for inputs
+- When choosing a potentiometer, a value of 10K is the best option for connecting to analog pins.
+* Book: Arduino: A Technical Reference - J. M. Hughes
+** TODO 8 Shields
+- Assume that I/O extension shields will use most or all of the avaialbel Arduino pins
+  And some shields not have connection points for accessing unused signals.
+- Types
+ | TWI  | A4-A5   | 2 |                      |
+ | I2C  | A4-A5   | 2 | exclusive            |
+ | SPI  | D10-D13 | 4 | aka SS,MOSI,MISO,SCK |
+ | UART | D0-D1   | 2 |                      |
