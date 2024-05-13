@@ -1,3 +1,6 @@
+- Zine: Amazing https://archive.org/details/amazing-computing-magazine?page=2
+- Zine: "RUN" https://archive.org/details/run-magazine?page=3
+- Zine: "Dr. Dobb's Journal" https://archive.org/search?query=creator%3A%22Dr.+Dobb%27s+Journal%22
 - Course: Design Patterns in the Real World, an Analysis-Based Approach
   https://archive.org/details/design-patterns-in-the-real-world-an-analysis-based-approach
 - Channel: Programming Codebases Review https://www.youtube.com/@ants_are_everywhere/videos
@@ -8,7 +11,6 @@
   https://www.youtube.com/playlist?list=PL-R-PWkyRREf3Zjk6UFI5mhKt9XuLMC3G
   https://cs.brown.edu/courses/cs173/2012/Videos/
 - https://github.com/mtdvio/every-programmer-should-know
-- https://github.com/codecrafters-io/build-your-own-x
 - https://github.com/chiroptical/ctfp-book-club
   https://github.com/hmemcpy/milewski-ctfp-pdf
 - Category Theory
@@ -45,11 +47,6 @@
 - https://github.com/dwmkerr/hacker-laws
 - https://github.com/hemanth/functional-programming-jargon
   https://github.com/jmesyou/functional-programming-jargon.py
-- APL
-  talks, pure functional https://github.com/Co-dfns/Co-dfns
-  reference https://github.com/jpellegrini/gnu-apl-refcard
-- ASM
-  examples https://github.com/cirosantilli/x86-bare-metal-examples
 - Course: 2022 - Waterloo - Principles of Programming Languages
   https://student.cs.uwaterloo.ca/~cs442/W22/notes/
   https://www.youtube.com/channel/UCnmJoeNk2mrItxXJ2-XOCcQ/videos

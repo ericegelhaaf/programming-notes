@@ -1,3 +1,4 @@
+- examples https://github.com/cirosantilli/x86-bare-metal-examples
 - Hello World using 6 different methods in Assembly Language for Raspberry Pi
   https://github.com/ksaj/helloworld
 - https://www.youtube.com/c/flatassembler/videos

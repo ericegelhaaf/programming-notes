@@ -5,6 +5,16 @@
   #+end_src
 
 - https://www.youtube.com/watch?v=z5qISgx50Fk
+- 21 Programming in FORTH on Commodore 64 https://www.youtube.com/watch?v=1XdgUK1NbpI
+  - Games written in a Forth
+    - Worms?
+    - Adventure Construction Set
+    - Financial Cookbook
+    - Cut & Paste
+    - Chipwits
+    - Starflight
+    - Death Road to Canada (NEW!!)
+  - TODO
 
 - 23 | Introduction to Forth Language Programming Tutorial using Bitcoin
   https://www.youtube.com/watch?v=i7Vz6r6p1o4

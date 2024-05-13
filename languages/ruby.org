@@ -1,5 +1,7 @@
+- books https://github.com/manjunath5496/Ruby-Programming-Books
 - book: https://learnbyexample.github.io/learn_ruby_oneliners/
-
+- video Advent of Code 2019/6 https://vimeo.com/378152632
+- video https://brightonruby.com/2016/the-point-of-objects-john-cinnamond/?utm_source=rubyweekly&utm_medium=email
 * Language
 
 ** Types

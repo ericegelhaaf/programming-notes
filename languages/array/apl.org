@@ -1,0 +1,3 @@
+- wiki https://en.wikipedia.org/wiki/APL_(programming_language)
+- talks, pure functional https://github.com/Co-dfns/Co-dfns
+- reference https://github.com/jpellegrini/gnu-apl-refcard

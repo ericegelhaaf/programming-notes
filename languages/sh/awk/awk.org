@@ -27,9 +27,6 @@
   - use () before pipes |
 
 - Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
-- Manual network features
-  https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
-  https://www.gnu.org/software/gawk/manual/html_node/TCP_002fIP-Networking.html
 
 - 2023
   - --csv, supports fields surrounded by double quotes
@@ -76,6 +73,35 @@
     if (disjoint = r[2] <= m1 || m2 <= r[1])
         continue
   #+end_src
+
+** network
+
+- Manual network features
+  https://www.gnu.org/software/gawk/manual/html_node/TCP_002fIP-Networking.html
+  https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
+  https://www.gnu.org/software/gawk/manual/gawkinet/gawkinet.html#Primitive-Service
+
+*** rossetta - web server
+
+https://rosettacode.org/wiki/Hello_world/Web_server
+#+begin_src awk
+  #!/usr/bin/gawk -f
+  BEGIN {
+      RS = ORS = "\r\n"
+      HttpService = "/inet/tcp/8080/0/0"
+      Hello = "<HTML><HEAD>" \
+          "<TITLE>A Famous Greeting</TITLE></HEAD>" \
+          "<BODY><H1>Hello, world</H1></BODY></HTML>"
+      Len = length(Hello) + length(ORS)
+      print "HTTP/1.0 200 OK"          |& HttpService
+      print "Content-Length: " Len ORS |& HttpService
+      print Hello                      |& HttpService
+      while ((HttpService |& getline) > 0)
+          continue;
+      close(HttpService)
+  }
+
+#+end_src
 
 ** Types (will be automaticaly coerced when needed)
 
