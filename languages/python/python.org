@@ -463,12 +463,3 @@ https://docs.python.org/3/reference/datamodel.html#object.__setitem__
 | __add__()          | other    |           |           | emulating numeric types        |
 | __sub__()          | other    |           |           |                                |
 |--------------------+----------+-----------+-----------+--------------------------------|
-* Libraries
-|-----------+----+-----+-----------------------------------+-----------------------------------------------|
-| psutil    | 23 | 9.1 | process and system monitoring     | https://github.com/giampaolo/psutil           |
-| unidecode | 23 | 0.4 | ascii transliterations of unicode | https://github.com/avian2/unidecode           |
-| mido      | 23 | 1.1 | MIDI objects for python           | https://github.com/mido/mido/                 |
-| rtmidi    | 23 | 0.2 | rtmidi bindings                   | https://github.com/SpotlightKid/python-rtmidi |
-| moderngl  | 24 | 1.7 | opengl bindings                   | https://github.com/moderngl/moderngl          |
-|-----------+----+-----+-----------------------------------+-----------------------------------------------|
-

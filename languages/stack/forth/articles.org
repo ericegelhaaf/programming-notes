@@ -1,0 +1,5 @@
+- 17 | https://hackaday.com/2017/01/27/forth-the-hackers-language/
+- 19 | https://blog.information-superhighway.net/what-the-hell-is-forth
+- 20 | https://web.archive.org/web/20210302015450/https://librehacker.com/2020/11/25/byok-bare-metal-forth/
+- 21 | https://ph1lter.bitbucket.io/blog/2021-01-15-baremetal-x86-forth.html
+- 23 | http://ratfactor.com/forth/the_programming_language_that_writes_itself.html

@@ -20,6 +20,7 @@
 - examples https://devhints.io/makefile
 - examples https://learnxinyminutes.com/docs/make/
 - tool: linter https://github.com/mrtazz/checkmake
+- extension: https://github.com/mitjafelicijan/makext
 
 * Language
 ** Variables

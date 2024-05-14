@@ -1,3 +1,4 @@
+- 24 https://hasufell.github.io/posts/2024-05-07-ultimate-string-guide.html
 - https://medium.com/twelve-days-of-monad
 - https://yannesposito.com/Scratch/en/blog/Haskell-the-Hard-Way/
 - https://github.com/alpacaaa/zero-bs-haskell

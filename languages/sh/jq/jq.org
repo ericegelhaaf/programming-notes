@@ -115,7 +115,7 @@ MODNAME::FUNCTION;
 | +        | addition, concatenation([]), merge({})                     |
 | -        | subtraction                                                |
 | ¦        | pipe operator                                              |
-| ¦=       | update operator                                            |
+| ¦=       | update operator (used for += -= *= /= %= //=)              |
 | ,        | operator to join multiple streams                          |
 | ()       | to group subexpressions                                    |
 | []       | constructor                                                |
@@ -129,6 +129,9 @@ MODNAME::FUNCTION;
 | A // B   | if A then A else B end (~alternative operator~)            |
 | ?        | error suppresion, ~optional operator~, shorthand for *try* |
 | ?//      | ~destructuring alternative operator~                       |
+|----------+------------------------------------------------------------|
+| .[]?     | does NOT error when input is NOT an object or array        |
+| .foo?    | does NOT error when input is NOT an object                 |
 |----------+------------------------------------------------------------|
 ** generators?
 
@@ -214,15 +217,16 @@ MODNAME::FUNCTION;
 | range(TO)         |                                              |
 | range(FROM;TO;BY) | produces a stream of numbers                 |
 | empty             | returns empty                                |
-| input             | outputs 1 NEW input                          |
-| inputs            | outputs all remaining inputs, one by one     |
 |-------------------+----------------------------------------------|
-| halt              | stop processing current item                 |
-| halt_error/0      | stop processing current item AND print it    |
-| halt_error/1      | with exit code                               |
+| input             | outputs 1 NEW input                          |
+| inputs            | outputs all *remaining* inputs, one by one   |
+|-------------------+----------------------------------------------|
+| halt              | exit                                         |
+| halt_error/0      | exit                 AND prints input        |
+| halt_error/1      | exit with given code AND prints input        |
 |-------------------+----------------------------------------------|
 | error/0           | returns an error, can be catched (try/catch) |
-| error/1           | with message                                 |
+| error/1           | with message given                           |
 |-------------------+----------------------------------------------|
 **   array functions
 |-------------------------+---------------------------------+-------------------------|
@@ -239,6 +243,9 @@ MODNAME::FUNCTION;
 |        [2,4,6,8]        |              .[1]               |            4            |
 |        [2,4,6,8]        |             .[1+1]              |            6            |
 |        [2,4,6,8]        |             .[1:2]              |           [4]           |
+|        [2,4,6,8]        |          limit(2;.[])           |           2,4           |
+|        [2,4,6,8]        |              first              |            2            |
+|        [2,4,6,8]        |              last               |            8            |
 |-------------------------+---------------------------------+-------------------------|
 |        [2,4,6,8]        |             length              |            4            |
 |        [2,4,6,8]        |           indices(8)            |           [3]           |
@@ -251,15 +258,17 @@ MODNAME::FUNCTION;
 |        [8,4,6,2]        |              sort               |        [2,4,6,8]        |
 |        [2,4,6,8]        |               min               |            2            |
 |        [2,4,6,8]        |               max               |            8            |
+|-------------------------+---------------------------------+-------------------------|
 |        [2,4,6,8]        |               add               |           20            |
 |      ["foo","bar"]      |               add               |        "foobar"         |
 |   [{foo: 1, bar: 2}]    |               add               |    {foo: 1, bar: 2}     |
+|-------------------------+---------------------------------+-------------------------|
 | [72,101,108,108,111,33] |             implode             |        "Hello!"         |
-|        [2,4,6,8]        |              first              |            2            |
-|        [2,4,6,8]        |              last               |            8            |
 |        [2,4,6,8]        |             nth(2)              |            6            |
 | {name: "Jane", age: 21} |         map(.age += 1)          | {name: "Jane", age: 22} |
 |        [2,4,6,8]        |           map(. * 10)           |      [20,40,60,80]      |
+|        [2,4,6,8]        |        [ .[] ¦ . * 10 ]         |   equivalent to map()   |
+|      ["foo","bar"]      |            add // ""            |        "foobar"         |
 |      ["foo","bar"]      |            join(",")            |        "foo,bar"        |
 | {name: "Jane", age: 1}  |        select(.age > 18)        |           []            |
 |     [2,[],3,[4],5]      |             flatten             |        [2,3,4,5]        |
@@ -365,15 +374,15 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 | {"a": 1, "b": 2, "c": 3}   |                    to_entries                    | [{"key":"a","value":1},...] |                               |
 | [{"key":"a","value":1}]    |                   from_entries                   | {"a":1}                     |                               |
 | {"Jane": 42}               | with_entries({key:(.value¦tostring),value:.key}) | {"42": "Jane"}              |                               |
-| {"first": "jane"}          |             map_values(ascii_upcase)             | {first: "JANE"}             |                               |
 | [{foo:1},{foo:2}]          |                  group_by(.foo)                  | [[{foo:1}],[{foo:2}]]       |                               |
+| {"first": "jane"}          |               .[] ¦= ascii_upcase                | {first: "JANE"}             |                               |
+| {"first": "jane"}          |             map_values(ascii_upcase)             | {first: "JANE"}             | equivalent to above           |
 |----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
 
 - with_entries(filter), is equivalent to:
   to_entries | map(filter) | from_entries
 
 ** format & escape strings
-
 |---------+------------------------------------|
 | @text   | just calls tostring                |
 | @json   | serializes input as JSON           |

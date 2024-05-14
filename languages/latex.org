@@ -5,3 +5,4 @@
   - https://www.overleaf.com/learn/latex/Tables
   - https://en.wikibooks.org/wiki/LaTeX/Tables
   - https://tex.stackexchange.com/questions/320686/itemize-within-a-multirow
+- https://latex-ninja.com/2020/06/14/is-latex-a-programming-language/

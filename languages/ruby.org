@@ -1,8 +1,65 @@
+- home https://www.ruby-lang.org/en/
+- https://en.wikibooks.org/wiki/Ruby_Programming
+- https://en.wikipedia.org/wiki/Ruby_on_Rails
+- https://en.wikipedia.org/wiki/Ruby_(programming_language)
+  - Author: Yukihiro Matsumoto (matz)
+  - 1995-
+  - Written in C
+  - Author wanted an OO language.
+    Didn't like Python, because it wasn't true OO.
+
 - books https://github.com/manjunath5496/Ruby-Programming-Books
 - book: https://learnbyexample.github.io/learn_ruby_oneliners/
 - video Advent of Code 2019/6 https://vimeo.com/378152632
 - video https://brightonruby.com/2016/the-point-of-objects-john-cinnamond/?utm_source=rubyweekly&utm_medium=email
+
 * Language
+
+- Typing: duck, dynamic, strong
+- Everything is an object (including primitive data types)
+- Optional () on function calls
+
+- variable
+- CONSTANT
+- $global
+
+** Changelog
+
+*** 1.0 - 1996
+
+- 1.6   2000
+- 1.8   2003-2013
+- 1.9.3 2011
+  - block local variables
+  - additional lambda syntax (->(){})
+  - additional hash literal syntax (colons after the symbol)
+  - per string encoding
+  - new socket api
+  - require_relative
+
+*** 2.0 - 2013
+
+- 2.0
+  - compatible with 1.9.3
+  - method keyword arguments
+  - new method "Module#prepend" to extend a class
+  - new literal to create array of symbols
+  - new api for lazy eval of Enumerables
+  - new convention of using "#to_h" for object to hash conversion
+
+*** 3.0 - 2020
+
+- 3.0
+  - "3x faster than 2"
+  - introduces MJIT/YJIT
+  - new concurrency utils: Fibre, Scheduler, Ractor
+  - introduces RBS, for typed ruby
+- 3.1   2021
+- 3.2   2022
+  - WASM compatible via WASI
+- 3.3   2023
+  - new parser: Prism
+  - introduces RJIT
 
 ** Types
 

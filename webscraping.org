@@ -1,6 +1,12 @@
-- Python Intro https://scrapfly.io/blog/web-scraping-with-python/
-- Site Guides https://scrapfly.io/blog/tag/scrapeguide/
+- two types of problems
+  1) collect
+  2) parse
 
+- https://scrapfly.io/use-case
+- Site Guides https://scrapfly.io/blog/tag/scrapeguide/
+- 17 https://sangaline.com/post/advanced-web-scraping-tutorial/
+- 21 https://incolumitas.com/2021/11/03/so-you-want-to-scrape-like-the-big-boys/
+- 23 https://blog.ericgoldman.org/archives/2023/08/web-scraping-for-me-but-not-for-thee-guest-blog-post.htm
 - 23 https://scrapecrow.com/year-of-writing-in-review.html
   - Python is the most popular, with best libraries for it
   - Tools
@@ -11,3 +17,28 @@
     - parsel (supports css/xpath selectors for html) https://pypi.org/project/parsel/
     - jmespath (json query language) https://scrapfly.io/blog/parse-json-jmespath-python/
       - "jsonpath implementations aren't great"
+
+* Python Intro https://scrapfly.io/blog/web-scraping-with-python/
+
+- bs4 doc https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+
+#+begin_src python
+  import httpx
+  from parser import Selector
+
+  response = httpx.get("https://www.remotepython.com/jobs")
+  assert response.status_code == 200
+
+  selector = Selector(text=response.text)
+  for job in selector.css('.box-list .item'):
+    title = job.css('h3 a::text').get()
+    print(title)
+    relative_url = job.css('h3 a::attr(href)').get()
+    print(response.url.join(relative_url))
+#+end_src
+
+- parse url
+  #+begin_src python
+    from urllib.parse import urlparse
+    urlparse("http://www.domain.com/path/to/resource?arg1=true&arg2=false") # ParseResult()
+  #+end_src

@@ -1,0 +1,13 @@
+|-----------------------------------+----+-----+-----------------------------------------------|
+| process and system monitoring     | 23 | 9.1 | https://github.com/giampaolo/psutil           |
+| ascii transliterations of unicode | 23 | 0.4 | https://github.com/avian2/unidecode           |
+| MIDI objects for python           | 23 | 1.1 | https://github.com/mido/mido/                 |
+| rtmidi bindings                   | 23 | 0.2 | https://github.com/SpotlightKid/python-rtmidi |
+| opengl bindings                   | 24 | 1.7 | https://github.com/moderngl/moderngl          |
+|-----------------------------------+----+-----+-----------------------------------------------|
+| http client (scraping)            | 24 |  12 | https://github.com/encode/httpx               |
+| http client                       | 24 |  51 | https://github.com/psf/requests               |
+| html/xml parser                   |    |     | https://pypi.org/project/beautifulsoup4/      |
+| html/xml parser (+xpath)          | 24 | 1.1 | https://github.com/scrapy/parsel              |
+| json parser                       |  " |   " | " jmespath                                    |
+|-----------------------------------+----+-----+-----------------------------------------------|

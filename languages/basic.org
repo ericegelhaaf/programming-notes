@@ -1,0 +1,10 @@
+- https://en.wikipedia.org/wiki/BASIC
+  - Beginners'
+    All-purpose
+    Symbolic
+    Instruction
+    Code
+  - 1964-
+  - Authors: John G. Kemeny, Thomas E. Kurtz
+  - *BASIC, is a family of languages
+  - Inspired by fortran

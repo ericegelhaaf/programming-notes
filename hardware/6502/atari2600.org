@@ -1,4 +1,4 @@
-
+- zines: https://www.atarimania.com/list-atari-magazines.html
 - https://bataribasic.com/
 
 - video 18 | Atari 2600 VCS Programming | Computerphile https://www.youtube.com/watch?v=fce39nQm9TY
