@@ -1,3 +1,5 @@
+- 99 | https://www.ultratechnology.com/1xforth.htm
+- 02 | https://www.ultratechnology.com/levels.htm
 - 17 | https://hackaday.com/2017/01/27/forth-the-hackers-language/
 - 19 | https://blog.information-superhighway.net/what-the-hell-is-forth
 - 20 | https://web.archive.org/web/20210302015450/https://librehacker.com/2020/11/25/byok-bare-metal-forth/

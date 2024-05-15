@@ -4,22 +4,30 @@
   - Author: Charles H. Moore (aka Chuck Moore) https://en.wikipedia.org/wiki/Charles_H._Moore
   - 1970-
 
+- tutorial http://skilldrick.github.io/easyforth/
 - book https://leanpub.com/readevalprintlove003/read#leanpub-auto-russ-forth-a-simple-forth-in-ruby
 - https://www.btbytes.com/forth.html
 - how to write a forth?
   http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.S
   http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.f
 - rpi forth https://github.com/organix/pijFORTHos
+- http://collapseos.org/
+  http://collapseos.org/forth.html
 
-* commands
-|------+----------------------|
-| swap |                      |
-| dup  |                      |
-| drop | trashes top of stack |
-| emit |                      |
-| .    | pop                  |
-| .s   | shows stack          |
-|------+----------------------|
+* default operations/words
+T = take
+P = put
+|------+---+---+----------------------|
+|      | T | P |                      |
+|------+---+---+----------------------|
+| swap | - | - | top 2 elements       |
+| dup  | - | 1 |                      |
+| drop | 1 | - | trashes top of stack |
+| emit | 1 | - |                      |
+| rot  | - | - | rotates whole stack  |
+| .    | 1 | - | pop                  |
+| .s   | - | - | shows whole stack    |
+|------+---+---+----------------------|
 * snippets
 |----------------+-------+-------------------------------------|
 | .s             |       | show stack                          |
