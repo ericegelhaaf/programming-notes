@@ -3,6 +3,7 @@
 - pre builds https://github.com/nim-lang/nightlies/
 - https://nim-lang.org/docs/manual.html#types-tuples-and-object-types
 - exercises https://github.com/sergiotapia/nimlings
+- Tutorial: Nim for awk programmers https://github.com/greencardamom/awk
 
 * Language
 ** Types
@@ -266,16 +267,18 @@
 
 ** Operators
 |---------+-------------------------------------------------------|
-| $a      | returns string version of a                           |
-| &       | string concatenation                                  |
-| ..      | iterator?                                             |
-| `/`     | returns a floating-point result                       |
-| div     | returns a integer division result                     |
-| %*      | json: used to create JSON objects                     |
+|   <c>   | description                                           |
+|---------+-------------------------------------------------------|
+|   $a    | returns string version of a                           |
+|    &    | string concatenation                                  |
+|   ..    | iterator?                                             |
+|   `/`   | returns a floating-point result                       |
+|   div   | returns a integer division result                     |
+|   %*    | json: used to create JSON objects                     |
 | "" % [] | strutils: format string                               |
-| fmt""   | strformat: interpolate raw string with {variable}     |
-| &""     | strformat: interpolate non-raw string with {variable} |
-| !$      | hashes: finalizes a hash, ensuring is not repeated    |
+|  fmt""  | strformat: interpolate raw string with {variable}     |
+|   &""   | strformat: interpolate non-raw string with {variable} |
+|   !$    | hashes: finalizes a hash, ensuring is not repeated    |
 |---------+-------------------------------------------------------|
 ** pragmas
 |--------------------+--------+--------------------------------------------------|
@@ -287,7 +290,6 @@
 | {. pure .}         | enum   | requires all ambiguos references to be qualified |
 |--------------------+--------+--------------------------------------------------|
 * Codebases
-- https://github.com/greencardamom/awk
-- https://github.com/treeform/shady
-- some random paint https://github.com/mrgaturus/npainter
-- zoom for linux by tsoding https://github.com/tsoding/boomer
+- library: glsl https://github.com/treeform/shady
+- tool: paint-like https://github.com/mrgaturus/npainter
+- tool: zoom https://github.com/tsoding/boomer

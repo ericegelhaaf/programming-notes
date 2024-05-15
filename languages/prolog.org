@@ -1,3 +1,7 @@
+- wiki https://en.wikipedia.org/wiki/Prolog
+  - 1972-
+  - Author: Alain Colmerauer
+ 
 - https://thesearch.space/
 - https://www.metalevel.at/prolog
 - Book: The power of Prolog https://www.metalevel.at/prolog/videos/

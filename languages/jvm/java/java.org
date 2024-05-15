@@ -1,3 +1,8 @@
+- wiki https://en.wikipedia.org/wiki/Java_(programming_language)
+  - 1995-
+  - Author: James Gosling, Mike Sheridan, Patrick Naughton
+  - Intented for WORA (write once, run anywhere)
+
 - https://www.baeldung.com/
 - https://developer.okta.com/blog/2022/04/08/state-of-ffi-java
 - Library https://developer.okta.com/blog/2022/08/26/state-of-java-project-loom
@@ -20,6 +25,7 @@
   https://www.reddit.com/r/java/comments/okebt8/i_created_a_java_3d_rendering_engine_from_scratch/
   https://github.com/nbrugger-tgm/JRender/
 - java style guide https://google.github.io/styleguide/javaguide.html
+
 * Standard Library
 - JCL - Java Class/Core Libraries
 - https://docs.oracle.com/en/java/javase/19/core/java-core-libraries1.html

@@ -45,6 +45,11 @@ home https://adventofcode.com/
 https://en.wikipedia.org/wiki/X_PixMap
 https://en.wikipedia.org/wiki/Netpbm
 https://netpbm.sourceforge.net/doc/pbm.html
+- https://github.com/charmbracelet/freeze
+  - list of themes
+    https://xyproto.github.io/splash/docs/index.html
+    https://xyproto.github.io/splash/docs/all.html
+    - ++algol
 
 #+begin_src
   val heatMap = Seq('█', '█', '█', '▓', '▓', '▒', '▒', '░', '░', ' ')

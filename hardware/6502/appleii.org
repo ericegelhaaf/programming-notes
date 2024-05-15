@@ -1,2 +1,72 @@
-- Learning 6502 Assembly on the Apple II, the easy way
+- The cursor blinking is a 555
+- Modes
+  1) Text Mode
+     - 40x24 INVERSE/FLASH
+     - 2 pages (each 1k)
+     - UPPERCASE only (lowe and 80col later)
+  2) Lowres
+     - 40x48 (same memory as text mode)
+     - 2 pages (each 1k)
+     - 15 colors (2 greys)
+     - optional 4 bottom lines
+  3) HiRes
+     - 280x192 (really 140x192)
+     - 6 colors
+     - optional 4 bottom lines
+     - 2 pages (8k each)
+
+- 18 Video: Demo Programming for the Apple II (Demosplash 2018)
+  https://www.youtube.com/watch?v=xuOPruUSe3A
+- Video: Learning 6502 Assembly on the Apple II, the easy way
   https://www.youtube.com/playlist?list=PLJcdG3gTlDaxIa5UEhErGau0CSOlV84Oy
+* Applesoft BASIC
+
+- wiki https://en.wikipedia.org/wiki/Applesoft_BASIC
+  - aka FP BASIC
+  - dialect of MS BASIC
+
+|-----------+--------+----------------------------|
+| statement |  <c>   |                            |
+|-----------+--------+----------------------------|
+| RUN       |        | runs the current program   |
+| LIST      |        | lists the current program  |
+| PRINT     | "foo"  |                            |
+| LET       | W = 40 |                            |
+| GOTO      |   N    | goto line N                |
+| GOSUB     |   N    | goto subroutine in line N  |
+| RETURN    |        | return from a subroutine   |
+|-----------+--------+----------------------------|
+| HOME      |        | clear screen               |
+| HTAB      |   N    | cursor horizontal position |
+| VTAB      |   N    | cursor vertical position   |
+| PEEK      |   M    | read memory at address M   |
+| POKE      |   M    | write memory at address M  |
+|-----------+--------+----------------------------|
+| TEXT      |        | text mode (default)        |
+| GR        |        | graphics mode              |
+| XGR       |        | hi-res graphics mode       |
+|-----------+--------+----------------------------|
+
+* TODO Video 21 | What was Coding like 40 years ago?
+
+1 https://www.youtube.com/watch?v=7r83N3c2kPw
+2 https://www.youtube.com/watch?v=UNkHditYGls
+3 https://www.youtube.com/watch?v=PHfKCxjsmos
+
+- on the apple ][ (aka Applesoft BASIC)
+- =subroutines= aka functions
+- ":" can be used to separate *lines* in the same line
+  - you can put the code with an optional line number
+  - is recommended to leave margin between numbers to allow *lines* in between
+
+- TODO 08:30
+
+#+begin_src basic
+  ] PRINT "Hello"
+  ] 10 PRINT "Hello"
+  ] LIST
+  10 PRINT "Hello"
+  ] RUN
+  ] 20 GOTO 10
+  ] HOME
+#+end_src
