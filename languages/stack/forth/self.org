@@ -15,29 +15,72 @@
   http://collapseos.org/forth.html
 - https://github.com/ForthHub
 
-* default operations/words
+* language
+
+- Forth programs are made of NUMBERS and WORDS separated by spaces
+- NUMBERS
+  - are pushed to the data stack
+- WORDS
+  - are interpreded and executed on the fly
+  - consume their arguments, removing them from the stack
+  - . and +, are words too
+
+** words (default)
 T = take
 P = put
-|------+---+---+----------------------|
-|      | T | P |                      |
-|------+---+---+----------------------|
-| swap | - | - | top 2 elements       |
-| dup  | - | 1 |                      |
-| drop | 1 | - | trashes top of stack |
-| emit | 1 | - |                      |
-| rot  | - | - | rotates whole stack  |
-| .    | 1 | - | pop                  |
-| .s   | - | - | shows whole stack    |
-|------+---+---+----------------------|
+|---------+---+---+-------------------------------------------------|
+|         | T | P |                                                 |
+|---------+---+---+-------------------------------------------------|
+| over    | - | 1 | dup top+1 number                                |
+| dup     | - | 1 | when you want to use+keep top number            |
+| 2dup    | - | 2 | aka "over over" (dup 2 top places)              |
+|---------+---+---+-------------------------------------------------|
+| rot     | - | - | rotates 1 position left only the top 3 elements |
+| -rot    | - | - | ? aka "rot rot" (push top 2 places below)       |
+|---------+---+---+-------------------------------------------------|
+| drop    | 1 | - | trashes top of stack                            |
+| 2drop   | 2 | - | aka "drop drop"                                 |
+|---------+---+---+-------------------------------------------------|
+| swap    | - | - | top 2 elements                                  |
+|---------+---+---+-------------------------------------------------|
+| words   | - | - | shows all available words                       |
+| .       | 1 | - | pop & display top as number                     |
+| .s      | - | - | shows whole stack                               |
+| emit    | 1 | - | pop & display top as character                  |
+| bl      | 1 | - | push the code for space " "                     |
+| space   | - | - | aka "bl emit"                                   |
+| cr      | - | - | emits a carriare return (aka new line)          |
+| page    | - | - | clears screen                                   |
+| char C  | 1 | - | puts character code for  "C" into stack         |
+| at-xy   | - | 2 | puts cursor at xy position in stack             |
+| esc[    | - | - | aka "27 emit 91 emit", for escape control char  |
+| ." STR" | - | - | emits STR                                       |
+|---------+---+---+-------------------------------------------------|
+| mod     | 2 | 1 | remainder of division                           |
+| /mod    | 2 | 2 | quotient and remainder of division              |
+| negate  | 1 | 1 |                                                 |
+| max     | 2 | 1 |                                                 |
+| min     | 2 | 1 |                                                 |
+|---------+---+---+-------------------------------------------------|
 * snippets
-|----------------+-------+-------------------------------------|
-| .s             |       | show stack                          |
-| 0 10 .         |     0 | pop top of stack                    |
-| 10 20          | 10 20 |                                     |
-| 10 20 +        |    30 |                                     |
-| : add10 10 + ; |       | defines a new word "add10"          |
-| 5 add10        |    15 |                                     |
-| 2 dup          |   2 2 |                                     |
-| 1 2 swap       |   2 1 |                                     |
-| 10 emit        |       | prints ascii of the number on stack |
-|----------------+-------+-------------------------------------|
+|---------------------------+-------------+-----------------------------------------------------|
+|                       <r> |         <r> |                                                     |
+|---------------------------+-------------+-----------------------------------------------------|
+|                    0 10 . |           0 | pop top of stack                                    |
+|                     10 20 |       10 20 |                                                     |
+|                   10 20 + |          30 |                                                     |
+|            : add10 10 + ; |             | defines a new word "add10"                          |
+|                   5 add10 |          15 |                                                     |
+|                     2 dup |         2 2 |                                                     |
+|                  1 2 swap |         2 1 |                                                     |
+|                   10 emit |             | prints ascii of the number on stack                 |
+|           10 20 over over | 10 20 10 20 | duplicates the top 2 elements                       |
+|             1 2 3 rot rot |       2 1 3 | pushes down top by 2 places                         |
+|            1 2 3 swap rot |       3 2 1 | sorts top 3 elements in the order they were entered |
+|---------------------------+-------------+-----------------------------------------------------|
+|                   27 emit |             | (aka "ESC[") emits the ESC character                |
+|           27 emit ." [2J" |             | (aka "PAGE") clears entire screen                   |
+| 27 emit ." [5;3H" 42 emit |             | (aka "AT-XY") moves cursor and prints "*" (42)      |
+|           esc[ ." 31mFoo" |             | prints in red from now on                           |
+|         cr esc[ ." 0mQux" |             | reset all terminal display attributes               |
+|---------------------------+-------------+-----------------------------------------------------|

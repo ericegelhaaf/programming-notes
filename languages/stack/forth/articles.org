@@ -4,4 +4,25 @@
 - 19 | https://blog.information-superhighway.net/what-the-hell-is-forth
 - 20 | https://web.archive.org/web/20210302015450/https://librehacker.com/2020/11/25/byok-bare-metal-forth/
 - 21 | https://ph1lter.bitbucket.io/blog/2021-01-15-baremetal-x86-forth.html
-- 23 | http://ratfactor.com/forth/the_programming_language_that_writes_itself.html
+* 23 | Forth: The programming language that writes itself
+
+http://ratfactor.com/forth/the_programming_language_that_writes_itself.html
+
+- Programming languages often require us to explicitly name intermediate results
+  so that we can refer to them.
+
+- Working without names (aka as "implicit" or "tacit" or "point-free" programming)
+  is sometimes a more natural and less irritating way to compute.
+
+- Concatenative style has us =composing" functions (aka verbs) by siply putting them in sequence.
+  Each function will be called in sequence.
+  No names (unless explicit), just nouns and verbs.
+
+- Joy, is kind of like starting with a Lisp
+  - 2001-
+  - https://en.wikipedia.org/wiki/Joy_(programming_language)
+  - without variables
+  - without traditional control structures
+  - all functions are unary (arity 1)
+    - take one stack, return one stack
+    - implied

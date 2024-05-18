@@ -1,5 +1,13 @@
 - wiki https://en.wikipedia.org/wiki/Concatenative_programming_language
 - wiki https://en.wikipedia.org/wiki/Stack-oriented_programming
+- https://docs.factorcode.org/content/article-tour-concatenative.html
+  - in a world where
+    1) every value is a function
+    2) the only operation alloed is function composition
+  - composition would be implicit "f g", first execute f, then execute g
+  - to make incompatible function signatures work,
+    functions have to thread the global state,
+    passing it to teach other
 - wiki https://en.wikipedia.org/wiki/Stack_machine
   - Examples
     - the WASM (WebAssembly) bytecode VM, is a stack machine

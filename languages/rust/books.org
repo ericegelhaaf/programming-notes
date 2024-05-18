@@ -18,9 +18,10 @@ source: https://github.com/kyclark/command-line-rust
   std::process::abort()
 * 21 | Rust In Action (Manning)
 ** DONE Preface & About
+
 - Despite being a systems programming book, every example works on Windows.
-- Rust 2018 edition
-- Projects
+- Rust =2018= edition
+- Book Projects:
   - grep (2)
   - database (7)
   - hexdump (7)
@@ -33,12 +34,17 @@ source: https://github.com/kyclark/command-line-rust
   - turtle graphics (10)
   - parallel parser (10)
   - bootleader/kernel (11)
+
 ** DONE 1 Introducing Rust
+
 - Not all security bugs can be solved with rust
   1) Hearthbleed: buffer reutilization bug
   2) goto fail: extra goto, variable initialized with success
+
 - println!() exists as a macro since it does a bunch of type detection
+
 - Integer overflow checks on debug mode
+
 ** DONE 2 Language Foundations
 - Words: lifetime elision, hygienic macros, algebraic datatypes
   Crates: clap, for cli tools

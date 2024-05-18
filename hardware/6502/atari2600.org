@@ -3,3 +3,52 @@
 
 - video 18 | Atari 2600 VCS Programming | Computerphile https://www.youtube.com/watch?v=fce39nQm9TY
 - video 24 | Atari 2600 Programming is a NIGHTMARE | truttle1 https://www.youtube.com/watch?v=-l18Rwbinp8
+
+* Hardware
+
+|-------------+---------------+----------------|
+| ROM         | 4k            | Game cartridge |
+| RAM         | 128 bytes     | 6532 RIOT Chip |
+| CPU         | 1.19 MHz      | 6507 processor |
+| Audio/Video |               | TIA Chip       |
+| Input       | 2 controllers |                |
+| Output      | RCA           | NTSC/PAL/SECAM |
+|-------------+---------------+----------------|
+
+TIA  = Television Interface Adapter
+RIOT = Ram IO Timer
+Schematics: https://www.atariage.com/2600/archives/schematics/images/Schematic_Atari2600_2000.png
+
+- 6507
+  - Cheaper than 6502
+  - 28 pin package
+    - axed A15-A13
+    - axed IRQ
+    - axed NMI
+
+- TIA
+  - NTSC: CO104444D
+  - PAL: CO11903
+
+* Course: Learn Assembly by Making games for the Atari 2600
+
+source: https://github.com/gustavopezzi/atari2600course
+
+- Atari
+  - 1972 founded
+    1975 console
+
+- Arcade Games: Pong, Tank
+  - Common Themes
+    - player 1, 2
+    - scoreboard
+    - ball/missile
+    - playing field
+    - collision
+
+- MOS 6502
+  - picked over Intel 8080 and Motorola 6800
+  - due price
+  - was bought by Commodore before release
+
+- course uses NTSC for the TIA chip

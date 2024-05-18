@@ -1,3 +1,4 @@
+- https://www.youtube.com/playlist?list=PLKaiHc24qCTSOGkkEpeIMupEmnInqHbbV
 * DONE 17 | Serious Programming with jq?!          | Charles Chamberlain
 https://www.youtube.com/watch?v=PS_9pyIASvQ
 
@@ -5,8 +6,12 @@ https://www.youtube.com/watch?v=PS_9pyIASvQ
   def select(f): if f then . else empty end;
 #+end_src
 
-Is mostly PURE programming languages, except
-- debug - function like "." it prints to stderr
+- you can think of any =expression= in jq,
+  as a =function= that has input and output,
+  which can have parameters
+
+- Is mostly PURE programming languages, except for
+  ~debug~ a function like ".", but it prints to stderr
 
 ** modules
 
@@ -32,13 +37,6 @@ $ jq -n -f main.jq # outputs ["Snow", "snow", "snow"]
 
 video https://www.youtube.com/watch?v=_ZTibHotSew
 slides https://www.slideshare.net/btiernay/jq-json-like-a-boss
-
-|------------+------|
-| jq         | json |
-| xmlstarlet | xml  |
-| pup        | html |
-| yq         | yaml |
-|------------+------|
 
 - jq sources ~/.jq automatically
 
@@ -105,8 +103,6 @@ https://www.youtube.com/watch?v=FrT6R75M3BE
 
 https://www.youtube.com/watch?v=MvI6Z85EgVo
 
-- TODO: 3/4
-
 - jq has not integer, only 64bit floating point numbers
 
 - in jq the inputs, of each function are all the same within a pipe
@@ -117,7 +113,6 @@ https://www.youtube.com/watch?v=MvI6Z85EgVo
 
 - "hello"
   - is (kinda) a function that ignores his inputs and returns "hello"
-  - ME: might be an "expression" would be more accurate
 
 - the pipe operator (|)
   - is the most important concept on jq

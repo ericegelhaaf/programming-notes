@@ -1,6 +1,24 @@
 - http://skilldrick.github.io/easy6502/
 - http://visual6502.org/
 
+- Products
+  - Apple IIe
+  - BBC micro
+  - Commodore PET
+  - Commodore VIC-20
+  - Commodore 64
+  - Tamagotchi
+  - Atari 2600
+  - NES
+
+- Pinout: https://content.invisioncic.com/r322239/monthly_2021_11/MOS6502-pinout.gif.b2ac610a8ff1d566286e9428f3f2c321.gif
+  |------+----+--------------|
+  | bits |    |              |
+  |------+----+--------------|
+  |    8 | IO | DATA pins    |
+  |   16 | O  | ADDRESS pins |
+  |------+----+--------------|
+
 * Videos: Build a 65c02-based computer from scratch
 https://www.youtube.com/playlist?list=PLowKtXNTBypFbtuVMUVXNR0z1mu7dp7eH
   - 6502 (890 pesos at 15Aug/20)

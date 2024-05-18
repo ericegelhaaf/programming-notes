@@ -1,3 +1,4 @@
+- Course https://www.youtube.com/playlist?list=PLU8oAlHdN5BmpIQGDSHo5e1r4ZYWQ8m4B
 * Codebases
 - Advent of C# https://csadvent.christmas/archive/2023
 - Discord Bot https://gitlab.com/Kwoth/nadekobot
@@ -7,6 +8,7 @@
 ** 2020 M$ killed the standard
 - 2020 https://devblogs.microsoft.com/dotnet/the-future-of-net-standard/
 - 2019 https://github.com/dotnet/standard/blob/v2.1.0/docs/versions/netstandard2.1.md
+ |-----------------------------------------------+-------|
  | Namespace                                     | #APIs |
  |-----------------------------------------------+-------|
  | Microsoft.Win32.SafeHandles                   |     5 |
@@ -59,3 +61,4 @@
  | System.Xml.Linq                               |    21 |
  | System.Xml.Serialization                      |     2 |
  | Footer                                        |     2 |
+ |-----------------------------------------------+-------|

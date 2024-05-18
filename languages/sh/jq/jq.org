@@ -102,13 +102,19 @@
 
 ** modules
 
-import modname as modname
+#+NAME: main.jq
+#+begin_src jq
+  import "MODNAME" as MODNAME;
+  def main:
+    MODNAME::FUNCTION;
+  main
+#+end_src
 
-/MODNAME/MODNAME.jq
-/MODNAME.jq
-/main.jq
-
-MODNAME::FUNCTION;
+#+NAME: /MODNAME/MODNAME.jq
+#+begin_src jq
+  def FUNCTION:
+      split(", ") ;
+#+end_src
 
 ** operators
 |----------+------------------------------------------------------------|
@@ -141,12 +147,35 @@ MODNAME::FUNCTION;
 | 4 | [.,1]¦until(.[0] < 1; [.[0]-1, .[1]*.[0]])¦.[1] | 24           |                                      |
 |---+-------------------------------------------------+--------------+--------------------------------------|
 
+** format & escape strings
+|---------+------------------------------------|
+| @text   | just calls tostring                |
+| @json   | serializes input as JSON           |
+| @html   | applies HTML/XML escaping          |
+| @uri    | applies percent encoding           |
+| @csv    | rendered as CSV with double quotes |
+| @tsv    | rendered as TSV                    |
+| @sh     | escaped suitable for POSIX shell   |
+| @base64 | as specified by RFC 4648           |
+|---------+------------------------------------|
+
+
 ** casting functions
 |-------------+----------+---------------+---|
 | [1,"1"]     | tonumber | 1,1           |   |
 | [1,"1",[1]] | tostring | "1","1","[1]" |   |
 | 0           | type     | "number"      |   |
 |-------------+----------+---------------+---|
+**     date functions
+|                        |                  <c>                  |                          |
+|------------------------+---------------------------------------+--------------------------|
+| 1425599507             |                todate                 |   "2015-03-05T23:51:47Z" |
+| "2015-03-05T23:51:47Z" |               fromdate                |               1425599507 |
+| "2015-03-05T23:51:47Z" |    strptime("%Y-%m-%dT%H:%M:%SZ")     | [2015,2,5,23,51,47,4,63] |
+| "2015-03-05T23:51:47Z" | strptime("%Y-%m-%dT%H:%M:%SZ")¦mktime |               1425599507 |
+| -                      |                  now                  |        1716057777.153488 |
+| 1425599507             |         strftime("%H:%M:%S")          |               "23:51:47" |
+|------------------------+---------------------------------------+--------------------------|
 **  stream functions
 |------------+-----------+-------------------+---|
 | 86, 99, 13 | . + 1     | 87, 100, 14       |   |
@@ -382,30 +411,24 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 - with_entries(filter), is equivalent to:
   to_entries | map(filter) | from_entries
 
-** format & escape strings
-|---------+------------------------------------|
-| @text   | just calls tostring                |
-| @json   | serializes input as JSON           |
-| @html   | applies HTML/XML escaping          |
-| @uri    | applies percent encoding           |
-| @csv    | rendered as CSV with double quotes |
-| @tsv    | rendered as TSV                    |
-| @sh     | escaped suitable for POSIX shell   |
-| @base64 | as specified by RFC 4648           |
-|---------+------------------------------------|
-
 
 * command
 
-|------+---------------------+------------------------------|
-|      |                     | description                  |
-|------+---------------------+------------------------------|
-| -n   | --null-input        | do NOT read input            |
-| -c   | --compat-output     | minimizes output             |
-| -f F | --from-file F       | read .jq program from F(ile) |
-| -C   | --color-output      |                              |
-| -M   | --monochrome-output |                              |
-|------+---------------------+------------------------------|
+|------+----------------------+-------------------------------------------------|
+|      |                      | description                                     |
+|------+----------------------+-------------------------------------------------|
+| -n   | --null-input         | do NOT read input                               |
+| -c   | --compat-output      | minimizes output                                |
+|------+----------------------+-------------------------------------------------|
+| -C   | --color-output       |                                                 |
+| -M   | --monochrome-output  |                                                 |
+|------+----------------------+-------------------------------------------------|
+| -s   | --slurp              | reads whole STDIN as an array, runs script once |
+|------+----------------------+-------------------------------------------------|
+| -f F | --from-file FILE     | read .jq program from FILE                      |
+|      | --slurpfile VAR FILE | reads json FILE into array variable $VAR        |
+|      | --rawfile VAR FILE   | reads FILE raw into variable $VAR               |
+|------+----------------------+-------------------------------------------------|
 
 
 * snippets filters/expressions
