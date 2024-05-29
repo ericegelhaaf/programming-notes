@@ -4,7 +4,6 @@
   - Author: Charles H. Moore (aka Chuck Moore) https://en.wikipedia.org/wiki/Charles_H._Moore
   - 1970-
 
-- tutorial http://skilldrick.github.io/easyforth/
 - book https://leanpub.com/readevalprintlove003/read#leanpub-auto-russ-forth-a-simple-forth-in-ruby
 - https://www.btbytes.com/forth.html
 - how to write a forth?
@@ -28,41 +27,51 @@
 ** words (default)
 T = take
 P = put
-|---------+---+---+-------------------------------------------------|
-|         | T | P |                                                 |
-|---------+---+---+-------------------------------------------------|
-| over    | - | 1 | dup top+1 number                                |
-| dup     | - | 1 | when you want to use+keep top number            |
-| 2dup    | - | 2 | aka "over over" (dup 2 top places)              |
-|---------+---+---+-------------------------------------------------|
-| rot     | - | - | rotates 1 position left only the top 3 elements |
-| -rot    | - | - | ? aka "rot rot" (push top 2 places below)       |
-|---------+---+---+-------------------------------------------------|
-| drop    | 1 | - | trashes top of stack                            |
-| 2drop   | 2 | - | aka "drop drop"                                 |
-|---------+---+---+-------------------------------------------------|
-| swap    | - | - | top 2 elements                                  |
-|---------+---+---+-------------------------------------------------|
-| words   | - | - | shows all available words                       |
-| .       | 1 | - | pop & display top as number                     |
-| .s      | - | - | shows whole stack                               |
-| emit    | 1 | - | pop & display top as character                  |
-| bl      | 1 | - | push the code for space " "                     |
-| space   | - | - | aka "bl emit"                                   |
-| cr      | - | - | emits a carriare return (aka new line)          |
-| page    | - | - | clears screen                                   |
-| char C  | 1 | - | puts character code for  "C" into stack         |
-| at-xy   | - | 2 | puts cursor at xy position in stack             |
-| esc[    | - | - | aka "27 emit 91 emit", for escape control char  |
-| ." STR" | - | - | emits STR                                       |
-|---------+---+---+-------------------------------------------------|
-| mod     | 2 | 1 | remainder of division                           |
-| /mod    | 2 | 2 | quotient and remainder of division              |
-| negate  | 1 | 1 |                                                 |
-| max     | 2 | 1 |                                                 |
-| min     | 2 | 1 |                                                 |
-|---------+---+---+-------------------------------------------------|
+|--------------+---+---+--------------------------------------------------------------------------------|
+|              | T | P |                                                                                |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| over         | - | 1 | dup top+1 number                                                               |
+| dup          | - | 1 | when you want to use+keep top number                                           |
+| 2dup         | - | 2 | aka "over over" (dup 2 top places)                                             |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| rot          | - | - | rotates 1 position left only the top 3 elements                                |
+| -rot         | - | - | ? aka "rot rot" (push top 2 places below)                                      |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| drop         | 1 | - | trashes top of stack                                                           |
+| 2drop        | 2 | - | aka "drop drop"                                                                |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| swap         | - | - | top 2 elements                                                                 |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| words        | - | - | shows all available words                                                      |
+| .            | 1 | - | pop & display top as number                                                    |
+| .s           | - | - | shows whole stack                                                              |
+| emit         | 1 | - | pop & display top as character                                                 |
+| bl           | 1 | - | push the code for space " "                                                    |
+| space        | - | - | aka "bl emit"                                                                  |
+| cr           | - | - | emits a carriare return (aka new line)                                         |
+| page         | - | - | clears screen                                                                  |
+| char C       | 1 | - | puts character code for  "C" into stack                                        |
+| at-xy        | - | 2 | puts cursor at xy position in stack                                            |
+| esc[         | - | - | aka "27 emit 91 emit", for escape control char                                 |
+| ." STR"      | - | - | emits STR                                                                      |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| mod          | 2 | 1 | remainder of division                                                          |
+| /mod         | 2 | 2 | quotient and remainder of division                                             |
+| negate       | 1 | 1 |                                                                                |
+| max          | 2 | 1 |                                                                                |
+| min          | 2 | 1 |                                                                                |
+|--------------+---+---+--------------------------------------------------------------------------------|
+| EXECUTE      |   |   | gets an address from the stack and runs whatever word is found at that address |
+| VARIABLE foo |   |   | defines "foo" as a new variable                                                |
+| foo          |   |   | leaves it's address on the stack                                               |
+| ' bar        |   |   | gets the address of the word "bar" and puts in on the stack                    |
+| !            |   |   | stores a =value= from the stack at ~address~ on the stack                      |
+| @            |   |   | loads the =value= from the given ~address~ and puts the =value= on the stack   |
+|--------------+---+---+--------------------------------------------------------------------------------|
 * snippets
+
+- high order functions in Forth https://gist.github.com/adolfopa/64a1a59c28cbd77b71449d68f4c36dc0
+
 |---------------------------+-------------+-----------------------------------------------------|
 |                       <r> |         <r> |                                                     |
 |---------------------------+-------------+-----------------------------------------------------|

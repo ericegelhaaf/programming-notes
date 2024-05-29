@@ -1,3 +1,5 @@
+- https://theory.stanford.edu/~blynn/gitmagic/
+
 - tutorial
   http://jwiegley.github.io/git-from-the-bottom-up/
   https://github.com/jwiegley/git-from-the-bottom-up

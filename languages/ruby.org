@@ -13,6 +13,12 @@
 - video Advent of Code 2019/6 https://vimeo.com/378152632
 - video https://brightonruby.com/2016/the-point-of-objects-john-cinnamond/?utm_source=rubyweekly&utm_medium=email
 
+- codebases
+  - http://ratfactor.com/repos/
+    - static site generator http://ratfactor.com/repos/reporat/
+    - crawler http://ratfactor.com/repos/chklnks.rb/
+    - http://ratfactor.com/repos/rubylit/
+
 * Language
 
 - Typing: duck, dynamic, strong

@@ -11,6 +11,8 @@
 | bioawk    | https://github.com/lh3/bioawk                                                 |
 |-----------+-------------------------------------------------------------------------------|
 
+- #!/usr/bin/awk -f
+
 - coverage
   https://benhoyt.com/writings/goawk-coverage/
 

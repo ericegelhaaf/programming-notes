@@ -2,6 +2,7 @@
 - https://github.com/Gabriella439/post-rfc/blob/main/sotu.md
 - https://lokathor.gitbooks.io/using-haskell/content/opengl/
 - https://evanrelf.com/haskell-libraries-i-love
+- Haskell Fan Site https://theory.stanford.edu/~blynn/haskell/
 - Styleguide
   https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
   https://kowainik.github.io/posts/naming-conventions
@@ -440,6 +441,19 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 - dead game studio https://github.com/keera-studios
 
 * Snippets
+
+** yes
+
+https://theory.stanford.edu/~blynn/c2go/
+#+begin_src haskell
+  import Control.Monad
+  import System.Environment
+
+  main = getArgs >>= forever . putStrLn . f
+    where
+      f [] = "y"
+      f xs = unwords xs
+#+end_src
 
 ** Hello World
 

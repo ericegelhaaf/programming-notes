@@ -111,7 +111,28 @@
 | $@ |                           |
 |----+---------------------------|
 
+** getopt(s)
+
+https://en.wikipedia.org/wiki/Getopts
+- 1986-
+- based on C's getopt
+
+#+begin_src bash
+  while getopts ":hf:" arg; do
+      case $arg in
+          h)  echo "help"; exit 1 ;;
+          f)  echo "argument given: $OPTARG" ;;
+          :)  echo "Mandatory argument missing for given flag $OPTARG"; exit 1;;
+          \?) echo "Unknown flag";  exit 1;;
+      esac
+  done
+  shift $((OPTIND - 1)) # allow positional arguments
+#+end_src
+
 ** Arithmetic Evaluation $(())
+
+- Equivalent to "let expressions"
+  let arg [arg ...]
 
 - "Evaluation is done in fixed-width *integers* with no check for overflow,
    though division by 0 is trapped and flaged as an error."

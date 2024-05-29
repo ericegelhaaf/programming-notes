@@ -1,5 +1,6 @@
 - wiki https://en.wikipedia.org/wiki/Concatenative_programming_language
 - wiki https://en.wikipedia.org/wiki/Stack-oriented_programming
+- no stinking loops http://www.nsl.com/
 - https://docs.factorcode.org/content/article-tour-concatenative.html
   - in a world where
     1) every value is a function

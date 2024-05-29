@@ -1,24 +1,3 @@
-- 08 | Factor: an extensible interactive language | Slave Pestov https://www.youtube.com/watch?v=f_0QlhYlS8g
-  - functions=words
-  - functions take inputs from the stack, output to stack
-  - functions as first class values, anonymous code blocks
-  - non enforced immutability
-  - runtime dispatch, polymorphism
-  - data structures = collections
-  - named local variables
-  - C-w - opens code in a *walker* to step through the code
-    s - step
-    i - enter into
-  - Example: factorial
-    #+begin_src factor
-    USE: math.ranges
-    : factorial ( n -- n! )
-        1 [1,b] product ;
-    #+end_src
-    - ( n -- n! )
-      "stack comment" or "stack effect declaration"
-      tells how many values it takes, and how many pushes
-    - 100 factorial .
 - 08 | The ACL is dead | Zed Shaw https://www.youtube.com/watch?v=9BmcB_gp8kw
 - 09 | Factor | Doug Coleman https://vimeo.com/6203360
 - 17 | The Factor Programming Language | Zachery L. Arnold https://www.youtube.com/watch?v=FjW4-5tGidk
@@ -27,3 +6,83 @@
   https://www.youtube.com/watch?v=sqHY3YDGj80
   https://www.youtube.com/watch?v=tPXAmEsS_6I
   https://www.youtube.com/watch?v=9cti_7OLrsw
+
+* TODO 08 | Factor: an extensible interactive language | Slave Pestov
+
+https://www.youtube.com/watch?v=f_0QlhYlS8g
+
+- data structures = collections
+- functions = words
+  - take inputs from the stack, output to stack
+  - as first class values
+  - anonymous code blocks
+  - non enforced immutability
+- named local variables (for when working with the stack is not nice)
+- runtime dispatch, polymorphism
+
+- C-S-h - documentation at point
+- C-w - opens code in a *walker* to step through the code
+  s - step
+  i - enter into
+
+- [] is a block of code pushed on the stack
+  - similar to lambdas or code blocks
+  - aka ~quotations~
+  - ~combinators~: words which take /quotations/ as input are called
+
+- 12:51
+
+** Example: factorial
+
+#+begin_src factor
+USE: math.ranges
+: factorial ( n -- n! )
+    1 [1,b] product ;
+#+end_src
+
+- ( n -- n! )
+  "stack comment" or "stack effect declaration"
+  tells how many values it takes, and how many pushes
+- 100 factorial .
+
+** Example: smtp library
+
+#+begin_src factorial
+
+USING: accessors namespaces smtp io.sockets ;
+IN: smtp-example
+
+"factorcode.org" 25 <inet> smtp-server set-global
+
+<email>
+  { "erg@factorcode.org" }     >>to
+    "slavo@factorcode"         >>from
+    "TechTaslk email test"     >>subject
+    "hi Doug,\nThis is a test" >>body
+send-email
+
+#+end_src
+
+- <email> - constructor, creates an email object
+  
+** Example: control flow
+
+uses combinators
+
+#+begin_src forth
+10 dup 0 < [ 1 - ] [ 1 + ] if .
+#+end_src
+
+#+begin_src forth
+10 [ "Hello googlers!" print ] times
+#+end_src
+
+#+begin_src forth
+USING: io.encodings.ascii unicode.case ;
+
+{ "tomato" "orange" "banana" }
+
+"out.txt" ascii [
+    [ >upper print ] each
+] with-file-writer
+#+end_src

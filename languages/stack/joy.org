@@ -1,0 +1,7 @@
+- https://web.archive.org/web/20210613000126/https://www.latrobe.edu.au/humanities/research/research-projects/past-projects/joy-programming-language
+- 03 | An informal tutorial on Joy https://hypercubed.github.io/joy/html/j01tut.html
+- 03 | A Conversation with Manfred von Thun http://www.nsl.com/papers/interview.htm
+- https://github.com/calroc/joypy
+  git clone https://github.com/calroc/joypy.git
+  cd joypy
+  python -m joy

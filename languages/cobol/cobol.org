@@ -3,6 +3,8 @@ https://www.coursera.org/learn/ibm-cobol-basics
 https://developer.ibm.com/languages/cobol/
 https://exercism.org/tracks/cobol
 
+- books https://www.dasumo.com/libros/cobol-espa%C3%B1ol-pdf.html
+
 * Implementations
 - https://cobolforgcc.sourceforge.net/
 - https://savannah.gnu.org/projects/gnucobol

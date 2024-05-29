@@ -22,6 +22,9 @@
   because it contains a large number of escape characters
 - can separate commands with "cmd1;cmd2" or "-e cmd2 -e cmd2"
 
+- [address]command
+  address { cmd1; cmd2; } # cannot have a space before ";"
+
 ** script
 - a series of operations/actions
 - the "body of a loop" that iterates through lines
@@ -33,8 +36,6 @@
 - by default, after run, sed output the /pattern space/
 - and begins the /cycle/ again with the next line
 ** commands
-- [address]command
-  address { cmd1; cmd2; } # cannot have a space before ";"
 - Might take an additional (1 or 2) =address=
 - 25 commands
 |---------+----------+---------------------------------------------------------------------------------|
@@ -96,9 +97,6 @@
   - line addressing symbol
   - can mix up line number and regex
 
-eg: "2d" aka apply delete to line 2
-eg: "/Sebastopol/s/CA/California/g" performs the substituion ONLY on lines cointaining "Sebastopol"
-
 ** flags
 
 |----------------+---------------------------------------------------------|
@@ -144,6 +142,7 @@ https://sed.sourceforge.io/#scripts
 | s/.*/Hello/;q         |               | reads 1st line of input and prints "Hello"                              |
 | s/needle//g           |               | deletes "needle" from lines                                             |
 | s/.$//                |               | dos2unix, aka CRLF to LF                                                |
+| /ant/s/needle//g      |               | delete needle on lines containing "ant"                                 |
 |-----------------------+---------------+-------------------------------------------------------------------------|
 #+TBLFM: $1=;n
 - https://literateprograms.org/category_programming_language_sed.html

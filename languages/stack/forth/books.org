@@ -1,3 +1,6 @@
+- A Beginner's Guide to Forth | J.V. Noble https://web.archive.org/web/20180919061255/http://galileo.phys.virginia.edu/classes/551.jvn.fall01/primer.htm
+- http://skilldrick.github.io/easyforth/
+- https://www.ultratechnology.com/forth.htm
 - 19 ($) https://leanpub.com/forthin100steps
   - 2^4 | 2 dup dup dup * * * .
   - 2^8 | 2 dup * dup * dup * .
