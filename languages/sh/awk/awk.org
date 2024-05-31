@@ -35,6 +35,12 @@
 
 * language
 
+- https://www.gnu.org/software/gawk/manual/html_node/Conversion
+  gawk always uses the period (.) as the decimal point
+  unless told explicitly to use the local LC_NUMERIC
+  --posix
+  --use-lc-numeric (-N)
+
 - sometimes not enforcing variables to be local can cause weird issues.
   early return, should happen as soon as possible
   otherwise this function will keep looping...
@@ -53,7 +59,9 @@
         return numbers[middle] == target
     }
   #+end_src
+
 - RS="^$" reads the whole file as a single record
+
 - length($0) == 0 { print "this is an empty record==" }
   END { if (NR == 0) print "means that we didn't process any record" }
 - || and && return booleans. AKA 0 or 1. They do NOT return the truthy value.
