@@ -36,6 +36,7 @@
 - tool: language+shell https://github.com/refaktor/rye
 - tool: language http://www.rseventeen.com/ https://github.com/matthewnourse/r17
 - tools: https://github.com/jlevy/the-art-of-command-line/blob/master/README.md
+- tool: svg into png https://manpages.ubuntu.com/manpages/trusty/man1/rsvg-convert.1.html
 
 - article 06 | https://ridiculousfish.com/blog/posts/old-age-and-treachery.html
 - article 17 | http://www.pixelbeat.org/docs/unix-parallel-tools.html

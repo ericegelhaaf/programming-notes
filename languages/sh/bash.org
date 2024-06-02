@@ -4,21 +4,20 @@
 
 - article order of startup https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
 
-- svg into png https://manpages.ubuntu.com/manpages/trusty/man1/rsvg-convert.1.html
-
 - PS1's
   - ";"
     - allows you to copy multiple commands (also on rc shell)
     - PS1='%(?.%(!.#.;).%F{6}%B;%b%f) '
 
 - https://en.wikipedia.org/wiki/ANSI_escape_code
+- https://github.com/dylanaraps/writing-a-tui-in-bash
+
 - article 24
   https://mtlynch.io/zig-extraneous-build/#my-mental-model-of-bash-pipelines-is-wrong
   https://hackaday.com/2024/03/28/is-your-mental-model-of-bash-pipelines-wrong/
 - article https://muhammadraza.me/2023/webscraping-in-bash/
 - article https://muhammadraza.me/2023/shell-functions/
 - article https://garnix.io/blog/contextual-cli
-- https://github.com/dylanaraps/writing-a-tui-in-bash
 - https://www.commandlinefu.com/
 - https://command-not-found.com/
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
