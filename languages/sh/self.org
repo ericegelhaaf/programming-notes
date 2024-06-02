@@ -13,6 +13,20 @@
   - home https://saitoha.github.io/libsixel/
   - tmux fork/rant https://github.com/csdvrx/sixel-tmux
 
+- terminal emulators
+  - kitty
+    - https://sw.kovidgoyal.net/kitty/
+    - glxgears https://github.com/michaeljclark/glkitty
+
+- tool: regex dot plot
+  - https://github.com/katef/libfsm/
+  - ? https://github.com/katef/kgt/
+- tool: dialog helpers
+  - all languages https://wiki.archlinux.org/title/GTK/Development
+  - https://github.com/v1cont/yad/
+  - https://gitlab.gnome.org/GNOME/zenity
+  - https://invisible-island.net/dialog/
+  - https://github.com/charmbracelet/gum
 - tool: html https://github.com/ericchiang/pup
 - tool: yaml/json/xml/csv/toml https://github.com/mikefarah/yq
 - tool: visualization https://github.com/saulpw/visidata https://www.visidata.org/

@@ -1,0 +1,6 @@
+- 17 Video: Handmade Ray
+  https://www.youtube.com/watch?v=pq7dV4sR7lg simple raycaster
+  https://www.youtube.com/watch?v=ZAeU3Z0PmcU multithreading
+  https://www.youtube.com/watch?v=xBBEkn1x7So replacing rand()
+  https://www.youtube.com/watch?v=dpvrPYdTkPw SSE2 & AVX2
+  https://www.youtube.com/watch?v=iHXYFbHAmlw brdf loading

@@ -418,18 +418,17 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 |      |                      | description                                     |
 |------+----------------------+-------------------------------------------------|
 | -n   | --null-input         | do NOT read input                               |
+| -s   | --slurp              | reads whole STDIN as an array, runs script once |
 | -c   | --compat-output      | minimizes output                                |
+|      | --unbuffered         | flush output after each json object is printed  |
 |------+----------------------+-------------------------------------------------|
 | -C   | --color-output       |                                                 |
 | -M   | --monochrome-output  |                                                 |
-|------+----------------------+-------------------------------------------------|
-| -s   | --slurp              | reads whole STDIN as an array, runs script once |
 |------+----------------------+-------------------------------------------------|
 | -f F | --from-file FILE     | read .jq program from FILE                      |
 |      | --slurpfile VAR FILE | reads json FILE into array variable $VAR        |
 |      | --rawfile VAR FILE   | reads FILE raw into variable $VAR               |
 |------+----------------------+-------------------------------------------------|
-
 
 * snippets filters/expressions
 

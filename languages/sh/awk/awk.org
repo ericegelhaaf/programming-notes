@@ -179,6 +179,14 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 |----------+----------------------------------------------+-----------|
 ** built-in functions
 https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
+*** TIME https://www.gnu.org/software/gawk/manual/html_node/Time-Functions.html
+
+|----------+----------------------+-------------------------------------------------|
+| mktime   | DATESTR, UTC?        | given DATESTR, timestamp in seconds since epoch |
+| strftime | FMT, TIMESTAMP, UTC? |                                                 |
+| systime  | -                    | now, timestamp in seconds since epoch           |
+|----------+----------------------+-------------------------------------------------|
+
 *** BITWISE https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 |--------------------+-------------------------------------|
 |                <r> | returns                             |

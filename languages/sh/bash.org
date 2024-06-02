@@ -1,11 +1,8 @@
-- terminal emulators
-  - kitty
-    - https://sw.kovidgoyal.net/kitty/
-    - glxgears https://github.com/michaeljclark/glkitty
+- wiki https://en.wikipedia.org/wiki/Bash_(Unix_shell)
+  - Author: Brian Fox
+  - 1989-
 
-- tool: regex dot plot
-  - https://github.com/katef/libfsm/
-  - ? https://github.com/katef/kgt/
+- article order of startup https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
 
 - svg into png https://manpages.ubuntu.com/manpages/trusty/man1/rsvg-convert.1.html
 
@@ -13,13 +10,6 @@
   - ";"
     - allows you to copy multiple commands (also on rc shell)
     - PS1='%(?.%(!.#.;).%F{6}%B;%b%f) '
-
-- dialog
-  - all languages https://wiki.archlinux.org/title/GTK/Development
-  - https://github.com/v1cont/yad/
-  - https://gitlab.gnome.org/GNOME/zenity
-  - https://invisible-island.net/dialog/
-  - https://github.com/charmbracelet/gum
 
 - https://en.wikipedia.org/wiki/ANSI_escape_code
 - article 24
@@ -31,7 +21,6 @@
 - https://github.com/dylanaraps/writing-a-tui-in-bash
 - https://www.commandlinefu.com/
 - https://command-not-found.com/
-- "Destructuring" with *read* https://stackoverflow.com/questions/1952404/linux-bash-multiple-variable-assignment
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
 - https://github.com/xwmx/bash-boilerplate
 - https://github.com/dylanaraps/pure-sh-bible
@@ -44,13 +33,7 @@
 - shfmt
   https://github.com/mvdan/sh
   (fork?) https://github.com/patrickvane/shfmt
-- Example: concatenation
-  $ cut -d: -f2 studentlist.txt | xargs printf "%s@example.com"
-- Common lines between files
-  $ grep -Fxf file1 file2
-  $ grep --fixed-strings --line-regexp --file file1 file2
-- Not common lines
-  $ grep -vFxf file1 file2
+
 - https://wizardzines.com/comics/bash-debugging/
   https://news.ycombinator.com/item?id=39568728
 
@@ -60,6 +43,8 @@
   https://gist.github.com/jart/bd2f603aefe6ac8004e6b709223881c0
 
 * Language
+
+- "Destructuring" with *read* https://stackoverflow.com/questions/1952404/linux-bash-multiple-variable-assignment
 
 - exec CMD
   - make cmd replace the current shell, no new process is created
@@ -73,16 +58,55 @@
   - supports a step {FROM..TO..STEP}
   - you can use an "enumeration" on a "for loop" using "for i in {this,that,theother}"
 
-- coproc [NAME] cmd [redirections]
-  - like running "cmd &"
-  - stdout in NAME[0], stdin in NAME[1]
-  - "wait"
-
 - commands run in a pipeline run at the same time
   https://mtlynch.io/zig-extraneous-build/#my-mental-model-of-bash-pipelines-is-wrong
 
 - << EOF here document
   <<- EOF here document, ignore leading tabs
+
+- https://zwischenzugs.com/2018/10/12/eleven-bash-tips-you-might-want-to-know/
+  https://zwischenzugs.com/2020/05/09/some-relatively-obscure-bash-tips/
+
+- Bash does NOT support natively floating point.
+
+** Coproc
+
+- commands
+  - simple: sequence of words
+  - compound: shell constructs
+
+- manual https://www.gnu.org/software/bash/manual/html_node/Coprocesses.html
+  - coproc [NAME] cmd [redirections]
+    - like "cmd &", runs async in a subshell
+    - communication happens over pipes
+      - NAME defaults to COPROC if none given
+      - stdout in NAME[0]
+      - stdin  in NAME[1]
+    - "wait"
+
+- example: progress bar https://gist.github.com/drewchapin/f43ab1a10367b1bfa53c55fe612d4245
+- 10 https://www.linuxjournal.com/content/bash-co-processes
+- 11 https://www.zsh.org/mla/users/2011/msg00095.html
+- 18 https://www.linuxjournal.com/content/investigating-some-unexpected-bash-coproc-behavior
+- 19 https://copyconstruct.medium.com/bash-coprocess-2092a93ad912
+- 21 https://mbuki-mvuki.org/posts/2021-05-30-memoize-commands-or-bash-functions-with-coprocs/
+  - a memoization solutions that works
+  - classic solutions won't because =command substitution= $() runs in a subshell
+
+** Types
+
+- array ops
+  ${arr[0]}
+  ${arr[@]:1:3}  #slicing
+  ${arr[@]// /_} # substitute on each element
+
+- string ops
+  ${foo:1:10} # slice
+  ${#foo}     # length
+  ${foo^^}    # uppercase
+  ${foo^}     # capitalize
+  ${foo/a/b}  # substitute once
+  ${foo//a/b} # substitute all
 
 ** Redirections
 
@@ -139,6 +163,18 @@ https://tldp.org/LDP/abs/html/io-redirection.html
 | $* |                           |
 | $@ |                           |
 |----+---------------------------|
+
+** select
+
+- Creates an interactive selection menu
+
+#+begin_src bash
+  select var in {a..z}; do
+    echo $REPLY $var
+  done
+  # ?# 2
+  # 2 b
+#+end_src
 
 ** getopt(s)
 
@@ -224,6 +260,30 @@ From man
       * Using non-straightfoward control flow logic
       * if performance matters
 
+* Changelog
+
+table of changes https://mywiki.wooledge.org/BashFAQ/061
+5.0 discussion https://news.ycombinator.com/item?id=18852523
+
+- 3.0 (2004)
+  - regex? =~
+- 4.0 (2009)
+  - coproc
+  - associative array
+  - &>> and |&
+  - mapfile/readarray
+- 4.4 (2016)
+  - mapfile/readarray -d
+  - ${var@operator} "parameter transformation"
+    - U uppercase
+    - u capitalize
+    - Q single quote
+- 5.0 (2019) https://lists.gnu.org/archive/html/bug-bash/2019-01/msg00063.html
+  - EPOCHSECONDS / EPOCHREALTIME
+  - BASH_ARGV0 (same as $0)
+- 5.1 (2020)
+  - SRANDOM (32 bit random)
+
 * Codebases
 
 - maze solver https://gist.github.com/xsot/99a8a4304660916455ba2c2c774e623a
@@ -238,6 +298,16 @@ From man
   https://news.ycombinator.com/item?id=30347501
 
 * Snippets
+
+- Example: concatenation
+  $ cut -d: -f2 studentlist.txt | xargs printf "%s@example.com"
+
+- Common lines between files
+  $ grep -Fxf file1 file2
+  $ grep --fixed-strings --line-regexp --file file1 file2
+
+- Not common lines
+  $ grep -vFxf file1 file2
 
 #+NAME: scramble string
 #+begin_src bash
@@ -263,3 +333,58 @@ done | sort -R | xargs -ILETTER echo -n LETTER
     done
   done
 #+end_src
+
+* 14 Video: Introduction to Advanced Bash Usage | James Pannacciulli
+
+@ OSCON 2014
+https://www.youtube.com/watch?v=uqHjc7hlqd0
+
+- Bash 3/4
+- Return values: 0-255
+
+- indirect expansion
+  param="parade"; parade="long"
+  ${!param} # long
+
+- list names/variables/functions? matching prefix
+  ${!pa*} or ${!pa@}
+
+- Parameter Expansion: Conditionals (24:43)
+  (check if variable is unset, empty or non-empty)
+|--------------------+--------------+--------------+-------------|
+|                    | unset param  | param=""     | param="gnu" |
+|--------------------+--------------+--------------+-------------|
+| ${param-default}   | default      | -            | gnu         |
+| ${param=default}   | name=default | -            | gnu         |
+| ${param+alternate} | -            | alternate    | alternate   |
+| ${param?error}     | error        | -            | gnu         |
+|--------------------+--------------+--------------+-------------|
+| empty as unseat    | ..           | ..           | ..          |
+|--------------------+--------------+--------------+-------------|
+| ${param:-default   | default      | default      | gnu         |
+| ${param:=default   | name=default | name=default | gnu         |
+| ${param:+alternate | -            | -            | alternate   |
+| ${param:?error}    | error        | error        | gnu         |
+|--------------------+--------------+--------------+-------------|
+
+- example: brace expansion
+  > echo bash{,{d,s},ful{,ly,ness},ing}
+  bash bashed bashes bashful bashfully bashfulness bashing
+  > man man
+  > man{,}
+  > echo {1..5}{0,5}% # BASH 3
+  10% 15% 20% 25% 30% 35% 40% 45% 50% 55%
+  > echo {10..55..5}% # BASH 4
+  10% 15% 20% 25% 30% 35% 40% 45% 50% 55%
+
+- You don't need {} to define a function
+  #+begin_src bash
+    words () # for is the compound command
+    for word # with the missing "in" it reads from STDIN
+    do
+        echo "$word"
+    done
+  #+end_src
+
+- define and then call, being memtop a custom function defined by the user
+  > $ sudo bahs -c "$(declare -f memtop); memtop"

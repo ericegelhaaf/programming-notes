@@ -1,0 +1,83 @@
+- https://lodev.org/cgtutor/raycasting.html
+- https://sszczep.dev/blog/ray-casting-in-2d-game-engines
+  old link https://web.archive.org/web/20210913051439/https://sszczep.github.io/ray-casting-in-2d-game-engines/
+
+* Videos
+
+- Super Fast Ray Casting in Tiled Worlds using DDA https://www.youtube.com/watch?v=NbSee-XM7WA
+- Coding Adventure - Making a Backrooms Game in Python - Exploring Ray Casting https://www.youtube.com/watch?v=fF13RQCSgMY
+- CodingTrain
+  - https://www.youtube.com/watch?v=TOEi6T2mtHo
+  - https://www.youtube.com/watch?v=vYgIKn7iDH8
+
+- 3DSage
+  - https://www.youtube.com/watch?v=gYRrGTC7GtA
+  - https://www.youtube.com/watch?v=PC1RaETIx3Y
+  - https://www.youtube.com/watch?v=w0Bm4IA-Ii8
+
+* Course: Pikuma | Raycasting Engine Programming
+
+- 18h
+
+- Game: Wolfstein
+  - 1992
+  - Author: John Carmark
+  - Target CPU:
+    - 286 (16-bit)
+    - No float arithmetic
+
+- Overview
+  - Intro
+  - Trigonometry / Math
+  - Code: Player movement
+  - Code: 2d view
+  - Code: 3d projection view
+  - JS prototype
+  - C final version
+
+** Intro
+
+- Raycasting
+  - Based on a 2D map
+    - player
+    - walls
+  - Player has ~position~ and ~direction~ (which determines FOV)
+  - Rays are casted on the FOV until hitting a wall
+    Which gives a ~distance~
+  - Then ~projected~ in 3d
+
+- Effects
+  - Draw things far away darker
+
+- In 320x200 resolution, we trace 320 rays.
+
+- Limitations
+  1) Walls are always perpendicular (90° angle) with the floor
+  2) Floor is always flat
+  3) Walls are made of same size cube
+
+** Trigonometry/Math
+
+- 1 radian
+  - the angle form by an arc of the length of the radius
+
+- 180° = 3.14 radians = pi radians
+
+- 0-2pi radians
+  0-360 degrees
+
+#+begin_src c
+  double deg2rad(double degrees) {
+    return degrees * (PI / 180.0);
+  }
+  double rad2deg(double radians) {
+    return radians * (180.0 / PI);
+  }
+#+end_src
+
+#+begin_src c
+  const FOV_ANGLE = 60 * (Math.PI / 180);
+  const NUM_RAYS = 320;
+
+  rayAngle += FOV_ANGLE / NUM_RAYS; // in a loop
+#+end_src
