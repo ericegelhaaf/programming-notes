@@ -1,0 +1,22 @@
+- 22 video: ClojureScript reimagined - Michiel Borkent
+  https://www.youtube.com/watch?v=oCd74TQ-gf4
+  - while ~clojurescript~ is used to make SPAs
+    - is NOT used for libraries for other .js devs
+    - does NOT play well with ES6
+    - can NOT use async/await
+  - ~nbb~
+    - ships with (await) which is useful for REPL work
+      instead of returning the "promesa" object, returns the value
+    - good for AWS Lambdas
+  - ~joyride~
+    - write VS Code plugins https://github.com/BetterThanTomorrow/joyride
+  - ~squint~ solves that
+  - ~cherry~ https://github.com/squint-cljs/cherry
+    - clojurescript (immutable, cljs.core)
+    - 300k bundle size (56k zipped)
+  - ~squint~ https://github.com/squint-cljs/squint
+    - cljs-like (mutable)
+    - compiles to JS
+    - 5bytes of bundle size
+
+- codebase: game https://github.com/trevorcode/zenith-game

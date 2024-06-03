@@ -18,6 +18,7 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - https://github.com/bbatsov/clojure-style-guide
 - Live Notebooks https://clerk.vision/
 - C++ Dialect https://github.com/jank-lang/jank
+- tutorial https://practical.li/clojure/
 
 - exercises
   - https://exercism.io/tracks/clojure
@@ -34,11 +35,21 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
 - (comp)    is like Alexandria's (compose) https://clojuredocs.org/clojure.core/comp
 
 ** require/import
-| (:require)                      |   |
-|---------------------------------+---|
-| [clojure.string :as str]        |   |
-| [clojure.string :refer [split]] |   |
-|---------------------------------+---|
+
+|-----------------------------------------+---------------------------------------------------|
+| (ns (:require <HERE> ))                 |                                                   |
+|-----------------------------------------+---------------------------------------------------|
+| [clojure.string :as str]                |                                                   |
+| [clojure.string :refer [split]]         |                                                   |
+| [clojure.string :refer [split] :as str] | both at the same time                             |
+|-----------------------------------------+---------------------------------------------------|
+| ["fs" :as      fs]                      | node.js, make ns available                        |
+| ["fs" :refer  [writeFileSync]           | node.js, make fn available into current namespace |
+| .     :rename {writeFileSync wfs}]      | with a different name "wfs"                       |
+| ["node-fetch$default" :as fetch]        | new(01) cljs syntax to access ~default~ exports   |
+|-----------------------------------------+---------------------------------------------------|
+https://clojurescript.org/news/2021-04-06-release#_library_property_namespaces
+
 ** Control Flow
 
 - (do)
@@ -92,9 +103,14 @@ EDN (extensible data notation): https://clojure.github.io/clojure/clojure.edn-ap
   #+end_src
 
 ** Operators
+
 - (not=)
   (==) to compare irrespective of the exact type
   (=)
+
+- (.mthd obj)  js interop (. obj mthd)
+  (.-prop obj) js interop (. obj -prop)
+
 ** Types
 *** Primitive / Literals
 |------------+-------------------------------------------|

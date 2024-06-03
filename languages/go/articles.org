@@ -64,7 +64,8 @@ https://blog.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
   -E https://github.com/ReFirmLabs/binwalk/wiki/Usage#-e---entropy
 - executable packer
   https://upx.github.io/
-  $ upx --brute FILENAME
+  $ upx FILENAME
+  $ upx --brute FILENAME # more aggresive/slower
 - removes the DWARF tables, nothe the annotations for stacktraces
   $ GOOS=linux go build -ldflags="-s -w"
 * DONE Go is not an easy language

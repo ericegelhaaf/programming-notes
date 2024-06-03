@@ -30,7 +30,8 @@
 |------------+------------------------------------+----------------------------------|
 ** std(lib) modules
 - https://nim-lang.org/docs/lib.html
-*** Pure Libraries
+***   Pure Libraries
+- do NOT depend on any external *.dll or *.so binary
 **** Algorithms
 
 | algorithm | some common generic algorithms like sort or binary search.                                    |
@@ -225,6 +226,7 @@
 | xmlparser | parses an XML document and creates its XML tree representation.                                                    |
 
 *** Impure Libraries
+- depend on .so or .dll.
 **** Regular expressions
 
 | re | This module contains procedures and operators for handling regular expressions. The current implementation uses PCRE. |
@@ -240,6 +242,7 @@
 | rdstdin | This module contains code for reading from stdin. |
 
 *** Wrappers
+- a very low-level interface to a C library
 **** Database support
 
 | postgres | Contains a wrapper for the PostgreSQL API. |

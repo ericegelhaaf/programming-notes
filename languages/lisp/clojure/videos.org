@@ -19,6 +19,7 @@
 | Clojure/north     | https://www.youtube.com/@clojurenorth4011                |
 | ClojureTV         | https://www.youtube.com/@ClojureTV                       |
 | practically       | https://www.youtube.com/@Practicalli                     |
+| clojure days      | https://www.youtube.com/@clojuredays                     |
 |-------------------+----------------------------------------------------------|
 
 * TODO 12 | Rich Hickey | Clojure for Lisp Programmers

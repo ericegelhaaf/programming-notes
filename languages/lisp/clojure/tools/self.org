@@ -1,3 +1,4 @@
 - https://github.com/babashka/neil
+- clojure (no js?)  https://github.com/seancorfield/deps-new
 - nrepl, inserted with cider-jack-in, but needed on projects if "lein run"
   https://docs.cider.mx/cider/0.26/basics/middleware_setup.html

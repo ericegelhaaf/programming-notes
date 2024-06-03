@@ -6,7 +6,6 @@
 - Pods
   https://github.com/babashka/pod-registry
   https://book.babashka.org/#pods
-- Node.js https://github.com/babashka/nbb
 - Edit Conf https://github.com/exercism/babashka/blob/main/docs/editors.md
   > bb --nrepl-server
 - Doc https://book.babashka.org/
@@ -14,8 +13,22 @@
   - As such the code is NOT compiled.
 
 - Article: https://rattlin.blog/bbgum.html
-- Article: https://yogthos.net/posts/2023-05-12-nbb-resume.html
-- Article: https://faster-than-light-memes.xyz/binaural-beats-using-scittle.html
+- Channel: https://www.youtube.com/@babashkatv/videos
+
+* Native Image Building
+
+- you could get a smaller bb binary size by building bb yourself (?
+  https://github.com/babashka/babashka/blob/306842857803f272f0ac900f54710c61e5717b06/doc/dev.md
+
+- bb release binary size:
+  - v1.3.189 - 63M
+  - v1.3.190 - 77M
+
+- caxa/babashka (with bb in that directory) https://github.com/leafac/caxa/issues/44
+  #+begin_src shell
+  $ npx caxa --input . --output hello -- "{{caxa}}/bb" "{{caxa}}/foo.clj"
+  $ ./hello # 60M (of a 63M bb, or 62M of a 77M bb)
+  #+end_src
 
 * Example: newspod.clj - sqlite3
 #+begin_src clojure

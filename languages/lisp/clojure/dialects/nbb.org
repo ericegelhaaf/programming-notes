@@ -1,0 +1,11 @@
+- source https://github.com/babashka/nbb
+
+- 22 article: https://faster-than-light-memes.xyz/binaural-beats-using-scittle.html
+- 23 article: https://yogthos.net/posts/2023-05-12-nbb-resume.html
+- native image building https://github.com/babashka/nbb/blob/main/doc/caxa/README.md
+- installing ~npm~ packages
+  #+begin_src sh
+    $ echo {} > package.json
+    $ npm i masto
+    $ npx nbb hello.cljs <SOMEARG>
+  #+end_src

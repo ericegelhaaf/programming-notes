@@ -1,2 +1,6 @@
+- babel https://orgmode.org/worg/org-contrib/babel/
+  - scraps http://eschulte.github.io/org-scraps/
+  - gnuplot https://osiux.com/visualizando-org-mode-con-gnuplot.html
+
 - insert date into at cursor https://stackoverflow.com/questions/251908/how-can-i-insert-current-date-and-time-into-a-file-using-emacs
   C-u M-! date
