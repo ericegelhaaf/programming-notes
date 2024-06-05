@@ -1,12 +1,45 @@
-- 08 | The ACL is dead | Zed Shaw https://www.youtube.com/watch?v=9BmcB_gp8kw
-- 09 | Factor | Doug Coleman https://vimeo.com/6203360
-- 22 | Factor 2022 | https://www.youtube.com/watch?v=OLh61q4c4XE
 - 23 | Battle Snake |
-  https://www.youtube.com/watch?v=sqHY3YDGj80
-  https://www.youtube.com/watch?v=tPXAmEsS_6I
-  https://www.youtube.com/watch?v=9cti_7OLrsw
+  - https://www.youtube.com/watch?v=sqHY3YDGj80
+  - https://www.youtube.com/watch?v=tPXAmEsS_6I
+  - https://www.youtube.com/watch?v=9cti_7OLrsw
+  - build an http service using *furnace*
+  - TODO 40:00
+* TODO 09 Factor | Doug Coleman
 
-* TODO 08 | Factor: an extensible interactive language | Slave Pestov
+https://vimeo.com/6203360
+
+#+begin_src factor
+  3 weeks ago noon monday .
+  USE: roman 2009 >roman .
+  : average ( seq -- x )
+      [ sum ] [ length ] bi / ;
+  { 1 2 3 4 } average .
+  1 miles [ km ] undo >float .
+  [ readln eval>string print t ] loop
+#+end_src
+
+* TODO 22 Factor | John Benediktsson & Doug Coleman
+
+https://www.youtube.com/watch?v=OLh61q4c4XE
+
+- Snippets
+  1 2 + .
+  3 weeks ago noon .
+  "hello" rot13 .
+  URL" https://factorcode.org" http-get
+  10 [ "Hello, Factor" print ] times
+  { 4 7 15 16 23 42 } [ sum ] [ length ] bi / .
+
+- Define a word: at parse time
+  : palindrome? ( string -- ? ) dup reverse = ;
+
+- Unit tests
+  { f } [ "Hello" palindrome? ] unit-test
+  { t } [ "racec" palindrome? ] unit-test
+
+- TODO: 5:00
+
+* TODO 08 Factor: an extensible interactive language | Slave Pestov
 
 https://www.youtube.com/watch?v=f_0QlhYlS8g
 
@@ -46,7 +79,7 @@ USE: math.ranges
 
 ** Example: smtp library
 
-#+begin_src factorial
+#+begin_src factor
 
 USING: accessors namespaces smtp io.sockets ;
 IN: smtp-example
@@ -63,20 +96,20 @@ send-email
 #+end_src
 
 - <email> - constructor, creates an email object
-  
+
 ** Example: control flow
 
 uses combinators
 
-#+begin_src forth
+#+begin_src factor
 10 dup 0 < [ 1 - ] [ 1 + ] if .
 #+end_src
 
-#+begin_src forth
+#+begin_src factor
 10 [ "Hello googlers!" print ] times
 #+end_src
 
-#+begin_src forth
+#+begin_src factor
 USING: io.encodings.ascii unicode.case ;
 
 { "tomato" "orange" "banana" }

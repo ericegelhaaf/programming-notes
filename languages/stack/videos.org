@@ -1,19 +1,37 @@
 - 17 | Stanford Seminar - Concatenative Programming: From Ivory to Metal           | Jon Purdy
-  https://www.youtube.com/watch?v=_IgqJr8jG8M
+  - https://www.youtube.com/watch?v=_IgqJr8jG8M
+  - Speaker is Author of *Kitten* programming language
 - 17 | Rediscovering Concatenative Languages with Creative Programming             | Stian Veum Møllersen https://vimeo.com/216476362
 - 18 | Concate-what? Adventures in weird programming for the discerning programmer | Stian Veum Møllersen https://vimeo.com/275529966
-- 23 | Concatenative programming and stack-based languages                         | Douglas Creager
-  https://www.youtube.com/watch?v=umSuLpjFUf8
-  - TODO 14:00
-  - you don't use names, you don't name the values you are operating on
+* 23 | Concatenative programming and stack-based languages                         | Douglas Creager
+
+https://www.youtube.com/watch?v=umSuLpjFUf8
+
+- TODO 13:00
+
+- Starts at 00:02:14
+- on a stack based language
+  - you don't use names
+    you don't name the values you are operating on
   - a program is just gonna be a sequence of instructions (not a tree)
-    - input program is provided in reverse polish notation
+    - input program is provided in RPN (Reverse Polish Notation)
     - executed from left to right
     - each *value* is pushed into the stack
-    - when an *operation* reaches, the values ot operate are whatever is on the top of the stack
-  - 3 4 [dup * swap dup * + sqrt] apply
-    - [] are usually called a "quotation"
-    - the whole thing gets put into the stack
-  - "stack effects"
-    - you can think of the meaning of a stack program,
-      as the effects that has on the runtime stack
+    - when an *operation* reaches,
+      the values ot operate are whatever is on the top of the stack
+
+- Example: pythagoras theorem (from naive to more generic)
+  #+begin_src forth
+    3 3 * 4 4 * + sqrt
+    3 4 dup * swap dup * + sqrt
+    3 4 [dup * swap dup * + sqrt] apply
+    [dup * swap dup * + sqrt] 3 4 dig2 apply
+    [dup * swap dup * + sqrt] dup 3 4 dig2 apply drop 5 12 dig2 apply drop
+  #+end_src
+  - [] are usually called a "quotation"
+  - the whole thing gets put into the stack
+  - on the last one "drop" drops the computation from the stack as we finished calculations
+
+- ~stack effects~
+  - you can think of the meaning of a stack program,
+    as the effects that has on the runtime stack

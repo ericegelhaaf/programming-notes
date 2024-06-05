@@ -1,1 +1,121 @@
-https://www.usenix.org/conference/usenixsecurity20/presentation/lehmann
+- home https://webassembly.org/
+- wiki https://en.wikipedia.org/wiki/WebAssembly
+  - 2017-
+  - Browsers don't allow direct DOM access
+
+- tool: The WebAssembly Binary Toolkit https://github.com/WebAssembly/wabt
+  - .wat -> wat2wasm -> .wasm
+    - wat2wasm file.wat -o file.wasm
+      wat2wasm file.wat -v
+
+- https://www.usenix.org/conference/usenixsecurity20/presentation/lehmann
+
+* 21 Course: WebAssembly | Chris Hay
+
+https://www.youtube.com/playlist?list=PL5Dc_611BqV2NXJpSaOa1neQCwRLCGEIC
+
+** 1 Hello WASM (wat)
+
+- WASM
+  - a new language for browser
+  - is a compiled programming language
+  - easy interop with JS
+  - runs in a sandbox
+
+- Webassembly toolkit for VSCode
+
+- Example: empty module
+  #+begin_src lisp
+    (module)
+  #+end_src
+
+*** Example: wat square number
+
+#+begin_src lisp
+  (module
+   (func $square (param i32) (result i32)
+         local.get 0 ;; get access to param 0, and push it to stack
+         local.get 0 ;; pull it twice
+         i32.mul) ;; by default it returns the last argument in stack
+   (export "square" (func $square)))
+#+end_src
+
+*** Example: nodejs
+  #+NAME: package.json
+  #+begin_src json
+    {
+      "type": "module",
+    }
+  #+end_src
+  #+NAME: index.js
+  #+begin_src js
+    import fs from 'fs';
+    const mathwasm = fs.readFileSync('./math.wasm');
+    const math = await WebAssembly.instantiate(new Uint8Array(mathwasm)).
+          then(res => res.instance.exports);
+    console.log(math.square(10));
+  #+end_src
+
+*** Example: browser
+
+#+NAME: test.html
+#+begin_src html
+  <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>Hello World</title>
+      <script type="module">
+        WebAssembly.instantiateStreaming(fetch('math.wasm'))
+        .then(obj => {
+          var result = obj.instance.exports.square(10);
+          console.log(result);
+        });
+      </script>
+    </head>
+    <body></body>
+  </html>
+#+end_src
+
+** 2 Use Cases
+
+- for performant code to run in the browser
+- new life to old legacy code
+- when sandboxing is desired (?
+  - edge computing (?
+  - shopify already allows to run pieces of code (?
+    https://shopify.engineering/shopify-webassembly
+  - tldr: distribute computing
+
+** 3 Stack Machine
+
+- Turing Machine is a stack machine (?
+- Example: watm return20
+  #+begin_src lisp
+    (module
+     (func $return20 (result i32)
+           i32.const 20)
+     (export "$return20" (func "$return20")))
+  #+end_src
+
+* 21 Course: WebAssembly | Frontend Masters
+
+- 3h30m
+
+** 1 Introduction
+
+- By Jem Young
+  - Other courses by
+    - "Fullstack for Frontend"
+    - "Interviwing for Front-End Engineering"
+
+** 2 Basics
+
+- ~Endinaness~ changes the order in which we read bytes
+- Example: Hexadecimal
+  0x2E7
+  + 2 * 256
+  + 14 * 16
+  + 7 * 1 = 743
+- JS .toString() method accepts an optional BASE number
+
+- TODO: 5 Memory

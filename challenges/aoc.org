@@ -19,6 +19,10 @@ home https://adventofcode.com/
   - https://github.com/gifti258/aoc-factor
   - https://github.com/Bubbler-4/factor-problem-solving/
   - https://github.com/pablo-meier/advent-of-code/
+- Forth
+  - 23 Advent of Code in Forth: Introduction
+    - https://www.youtube.com/playlist?list=PL1ogWmqjJQUFFwRzZ9f53we7W8oCDC8Oo
+    - source https://git.sr.ht/~aw/dusk-aoc
 - GO
   - https://github.com/lukechampine/advent/
 - jq

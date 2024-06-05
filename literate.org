@@ -1,0 +1,23 @@
+- https://en.wikipedia.org/wiki/Literate_programming
+- First invented by Donald Knuth in 80's
+  - "Instead of imagining that our main task is to
+     instruct a computer what to do,
+     let us concentrate rather on explaining
+     to human beings what we want a computer to do."
+
+- 13 Literate Programming in the Large
+  https://www.youtube.com/watch?v=Av0PQDVTP4A
+
+- 15 Literate Devops with Emacs
+  - https://www.youtube.com/watch?v=dljNabciEGg
+  - https://howardism.org/Technical/Emacs/literate-devops.html
+  - discussion
+    https://news.ycombinator.com/item?id=24315057
+    https://news.ycombinator.com/item?id=16559004
+    https://news.ycombinator.com/item?id=32949419
+
+- 16 Emacs as DevOps editor
+  - https://web.archive.org/web/20170106144229/https://cupermind.com/post/Emacs-as-DevOps-editor/
+  - https://www.youtube.com/@avkoval2/videos
+
+- 22 https://wiki.haskell.org/Literate_programming

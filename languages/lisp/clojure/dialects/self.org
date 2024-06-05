@@ -18,5 +18,6 @@
     - cljs-like (mutable)
     - compiles to JS
     - 5bytes of bundle size
+  - TODO: 25:00
 
 - codebase: game https://github.com/trevorcode/zenith-game

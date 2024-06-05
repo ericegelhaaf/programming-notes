@@ -9,12 +9,7 @@
   - FFI
 
 - wiki http://progopedia.com/language/factor/
-- native compiling https://concatenative.org/wiki/view/Factor/Deployment
 - tutorial https://andreaferretti.github.io/factor-tutorial/
-- book of articles
-  https://bluishcoder.co.nz/tags/factor/index.html
-  https://bluishcoder.co.nz/factor-articles.pdf
-  https://github.com/doublec/factor-articles
 
 * language
 
@@ -26,9 +21,28 @@
   All libraries of the language are part of the Factor monorepo.
   Along with docs.
 
+* Standalone Executables
+
+https://concatenative.org/wiki/view/Factor/Deployment
+
+- Dynamically compiled, not stripped, with direct links to:
+  * libc.so.6
+  * libdl.so.2
+  * libgcc_s.so.1
+  * libm.so.6
+  * libpthread.so.0
+  * librt.so.1
+  * libstdc++.so.6
+- does NOT support "stripping" with "strip"
+- single core compiler (?
+- ~8min in compile "tetris" example
+  ~3Mb
+
 * libraries/vocabularies
 
-- all https://docs.factorcode.org/content/article-vocab-index.html
+- all
+  https://docs.factorcode.org/content/article-vocab-index.html
+  https://docs.factorcode.org/content/article-handbook-library-reference.html
 - ui examples https://docs.factorcode.org/content/article-ui.html
 - opengl examples https://github.com/George66/Factor/tree/main/OpenGL3.2%2B%20examples
 - web framework
@@ -39,5 +53,5 @@
 
 - examples https://concatenative.org/wiki/view/Factor/Examples
 - utils https://github.com/mrjbq7/re-factor
-
-* snippet
+- https://bluishcoder.co.nz/2020/04/18/fun-factor-libraries.html
+- supercollider https://github.com/defaultxr/factor-supercollider/

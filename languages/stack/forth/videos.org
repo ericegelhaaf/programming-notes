@@ -1,28 +1,163 @@
+- Course: Back & Forth | Hans Bezemer https://www.youtube.com/playlist?list=PLRWL7HN2PQD5QRW4voNWy6YGyFaxBEpdT
+- Course https://www.youtube.com/playlist?list=PLGY0au-Sczllm2NcYC0Ypk2CYcFAadYZa
 - Channel https://www.youtube.com/@code4th/videos
 - Demo(scene) https://demozoo.org/productions/310231/
-- 22 | FORTH? | truttle1 https://www.youtube.com/watch?v=nFsBX_w2fRI&t=16s
+
+- 24 Forth Bitcoin miner for PC and Game Boy | Lee
+  video https://www.youtube.com/watch?v=QGpZl23vXbw
+  source https://github.com/lf94/gbforth/blob/main/examples/sha256/sha256.fs
+- 24 Beginners Guide to SDL2 in Gforth https://www.youtube.com/playlist?list=PLO02jwa2ZaiAi1DOLTBJloy1mj-Zm5K1s
+
+
+* 22 FORTH? | truttle1
+
+https://www.youtube.com/watch?v=nFsBX_w2fRI&t=16s
+
+#+begin_src forth
+  : even
+    packages-ts 2 mod 0 = if ." Even" else ." Odd" then ;
+  : myloop
+    100 1 do i . loop .
+#+end_src
+
+* 20 FizzBuzz in Forth
+
+https://www.youtube.com/watch?v=z5qISgx50Fk
+
+#+begin_src forth
+  : buzz? 5 mod 0 if ." Buzz" then ;
+  : fizz? 3 mod 0 if ." Fizz" then ;
+  : fizz-buzz? dup fizz? buzz? ;
+  : get-job-at-google 1 do i dup fizz-buzz? loop ;
+#+end_src
+
+* 23 Introduction to Forth Language Programming Tutorial using Bitcoin
+
+https://www.youtube.com/watch?v=i7Vz6r6p1o4
+
+- the language that powers bitcoin
+  - both on the original bitcoin code, and recent(? versions
+    https://github.com/eef2697d62fbe08e2fd927278/bitcoin-0.1.5/blob/master/script.cpp
+    https://github.com/oleganza/CoreBitcoin/blob/master/CoreBitcoin/BTCScriptMachine.m
+  - https://en.bitcoin.it/wiki/Script
+    - a scripting system for transactions
+    - intentionally not turing complete
+    - https://developer.bitcoin.org/devguide/contracts.html
+    - https://github.com/openblockchains/programming-bitcoin-script
+  - some were opcodes were disabled due security issues
+    - https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures
+    - CVE-2010-5137 ?
+    - CVE-2010-5141 ?
+  - has a stack machine that supports common ops
+    are DROP, DUP, NIP, OVER, PICK, ROLL, ROT, SWAP...
+
+- postfix operators is just like webassembly works (?
+
+- msdos eforth https://www.forth.org/eforth.html
+
+* 21 Programming in FORTH on Commodore 64
+
+https://www.youtube.com/watch?v=1XdgUK1NbpI
+
+- Games written in a Forth
+  - Worms?
+    - https://en.wikipedia.org/wiki/Paterson%27s_worms
+  - Adventure Construction Set
+  - Financial Cookbook
+  - Cut & Paste
+  - Chipwits
+  - Starflight
+  - Death Road to Canada (NEW!!)
+    - Programmer: Paul (aka Madgarden)
+    - As their scripting language
+      https://x.com/rocketcatgames/status/800151798199697408
+    - content mod https://github.com/Mezzelo/freaks-and-firepower
+
+- Examples of the "10 print maze"
+
+** in BASIC
+
+#+begin_src basic
+  10 PRINT CHR$(205.5+RND(1));:GOTO 10
+  RUN
+#+end_src
+
+** in 64 FORTH
+
+- when you redefine a "word" old code still calls the old word version
+- The "randomness" happens because is "peek"ing into memory values with "C@"
+  205 is the "/"
+
+#+begin_src forth
+  : 10PRINT
+    BEGIN
+      49151 32768
+      DO
+        I C@ 1 AND 205 +
+        EMIT
+      LOOP 0
+    UNTIL ;
+#+end_src
+
+** in 64 FORTH, using SID randomness
+
+- (!) is for storing words
+- (@) is fetch
+
+#+begin_src forth
+  : 10PRINT
+    SINIT VOICE3 NOISE 65535 FREQ! S!
+    BEGIN
+      OSC3@ 1 AND 205 +
+      EMIT
+    AGAIN ;
+#+end_src
+
+** in 64 FORTH, idiomatic
+
+#+begin_src forth
+  : poke C! ;
+  : rndinit
+    255 54286 poke ( frequency register )
+    255 54287 poke ( frequency register )
+    128 54290 poke ; ( noise register )
+#+end_src
+
+- initialize maze characters
   #+begin_src forth
-  : even 2 mod 0 = if ." Even" else ." Odd" then ;
-  : myloop 100 1 do i . loop .
+    0 variable maze$ -2 allot 171 c, 177 c, 178 c, 179 c, 99 c, 98 c,
+    maze$ .s ( address of variable )
+    6 type   ( print 6 characters )
+  #+end_src
+  - does not keep pesci characters in strings
+    so they needed to create their own buffer
+  - by default creates a 64 bit variable in the data space
+
+- module based random calculation
+  #+begin_src forth
+    : rnd% osc3@ swap mod ;
   #+end_src
 
-- SDL https://www.youtube.com/playlist?list=PLO02jwa2ZaiAi1DOLTBJloy1mj-Zm5K1s
-- https://www.youtube.com/watch?v=z5qISgx50Fk
+- using all
+  #+begin_src forth
+    : ortha
+      rndinit
+      begin
+        6 rnd% maze$ + C@
+        emit
+      again ;
+  #+end_src
 
-- 21 Programming in FORTH on Commodore 64 https://www.youtube.com/watch?v=1XdgUK1NbpI
-  - Games written in a Forth
-    - Worms?
-    - Adventure Construction Set
-    - Financial Cookbook
-    - Cut & Paste
-    - Chipwits
-    - Starflight
-    - Death Road to Canada (NEW!!)
-  - TODO
+** in 64 FORTH, speed improvement
 
-- 23 | Introduction to Forth Language Programming Tutorial using Bitcoin
-  https://www.youtube.com/watch?v=i7Vz6r6p1o4
-  - gforth
-  - everything is separated by a space, new line is considered a space
-  - postfix operators is just like assembly works
-  - 8:48
+trimming bytes from the output (4 bytes maze)
+
+#+begin_src forth
+  : rnd& osc3@ swap and ;
+  : orth4
+    rndint
+    begin
+      3 rnd& maze$ + c@
+      emit
+    again ;
+#+end_src

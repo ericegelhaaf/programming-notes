@@ -2,6 +2,37 @@
 
 https://www.youtube.com/watch?v=LrNuq_JgaOA
 
+- 25:02 uxn computer architecture (zp=zero page)
+  #+ATTR_ORG: :width 600
+  [[./uxn-architecture.jpg]]
+
+- Number Types: always represented in hexadecimal
+  - byte:    #1f
+  - short: #0001
+
+- words: can also be classified by what type of number they take from the stack
+  1) bytes: ADD, INC, DEI
+  2) shorts: ADD2, DEO2
+
+- Example:
+  - Show red to the screen
+  - rgb color has 16 values for each component
+  - Is setting #f to each of the 4 available colors (?
+  - #08 is the device port for the red component
+  #+begin_src
+    |0100
+      #ffff #08 DEO2
+  #+end_src
+
+- Example: alternative way to written it, using labels
+  #+begin_src
+   |00 @System [ &vector $2 &pad $6 &r $2 &g $2 &b &2 ]
+   |0100
+      #ffff .System/r DEO2
+  #+end_src
+
+- TODO: 01:24:20
+
 * TODO 23 | Weathering Software Winter  | Devine Lu Linvega
 
 https://www.youtube.com/watch?v=9TJuOwy4aGA
