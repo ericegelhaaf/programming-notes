@@ -1,4 +1,4 @@
-* TODO 23 | Intro to Uxn                | Babycastles
+* DONE 21 | Intro to Uxn                | Babycastles/sejo
 
 https://www.youtube.com/watch?v=LrNuq_JgaOA
 
@@ -31,9 +31,46 @@ https://www.youtube.com/watch?v=LrNuq_JgaOA
       #ffff .System/r DEO2
   #+end_src
 
-- TODO: 01:24:20
+- Example: draw pixel
+  #+begin_src
+   |00 @System [ &vector $2 &pad $6 &r $2 &g $2 &b &2 ]
+   |20 @Screen [ &vector $2 &width $2 &height $2 &pad $2
+                 &x $2 &y $2 &addr $2 &pixel $1 &sprite $1 ]
+   |0100
+      #1fff .System/r DEO2
+      #1fff .System/g DEO2
+      #1fff .System/b DEO2
 
-* TODO 23 | Weathering Software Winter  | Devine Lu Linvega
+      #0010 .Screen/x DEO2
+      #0020 .Screen/y DEO2
+
+      #01 .Screen/pixel DEO
+  #+end_src
+
+- Example: draw tile/sprite (8x8) of a colored square
+  #+begin_src
+       ;brush .Screen/addr DEO2
+       #01 .Screen/sprite DEO
+    BRK
+    @brush ff81 8181 8181 81ff
+  #+end_src
+  BRK instruction to stop execution
+  Since @brush is in memory, not being pushed to the stack you don't need the "#" for literals
+
+- Example: drawing, animation, other devices
+  #+begin_src
+       ;on-frame .Screen/vector DEO2
+    BRK
+
+    @on-frame ( -> )
+      .Screen/x DEI INC2 .Screen/x DEO2
+      .Mouse/x DEI2 .Screen/x DEO2
+      .Mouse/y DEI2 .Screen/y DEO2
+      #01 .Screen/sprite DEO
+    BRK
+  #+end_src
+
+* DONE 22 | Weathering Software Winter  | Devine Lu Linvega
 
 https://www.youtube.com/watch?v=9TJuOwy4aGA
 
@@ -64,7 +101,13 @@ https://www.youtube.com/watch?v=9TJuOwy4aGA
   - encapsulation: ?
   - universal virtual computer: paper copies of specs (cons: difficult translation into paper)
 
-- TODO: 8:30
+- Inpired by P-code machine https://en.wikipedia.org/wiki/P-code_machine
+  - By Niklaus Wirth
+  - Were NW designed a Pascal language for that VM
+  - https://en.wikipedia.org/wiki/Oberon_(operating_system)
+
+- C history of Plan9 https://en.wikipedia.org/wiki/Plan_9_from_Bell_Labs
+  - and later Inferno https://en.wikipedia.org/wiki/Inferno_(operating_system)
 
 * DONE 23 | An approach to computing... | Devine Lu Linvega
 ...and sustainability inspired from permaculture
@@ -86,14 +129,82 @@ https://www.youtube.com/watch?v=T3u7bGgVspM
 
 * TODO 24 | Uxn                         | tsoding
 
-- 1: The Most Bizarre and Fascinating Project I've seen!
+** TODO 1: The Most Bizarre and Fascinating Project I've seen!
+
   https://www.youtube.com/watch?v=d41KIL4cjQM
-- 2: Game of Life
+
+TODO: 01:30:00
+
+*** Example: unbloated "hello world"
+
+#+begin_src
+  |10 @Console &vector $2 &read $1 &pad $5 &write $1 &error $1
+  |0100 ( -> )
+     ;hello-word
+     &while
+       ( send ) LDAk #8 ( .Console/write ) DEO
+       ( loop ) INC2 LDAk ?&while
+     POP2
+  BRK
+  @hello-word "Hello 20 "World! 00 ( 20 = space, 00 = null termination )
+#+end_src
+
+*** Example: bloated "hello world", print many
+
+#+begin_src
+  |10 @Console &vector $2 &read $1 &pad $5 &write $1 &error $1
+  |0100 ( -> )
+    ;on-screen .Screen/vector DEO2
+  BRK
+
+  @on-screen ( -> )
+    ;hello-world print-text
+  BRK
+
+  @print-text ( str* -- )
+    &while
+      ( send ) LDAk .Console/write DEO
+      ( loop ) INC2 LDAk ?&while
+    POP2
+  JMP2r
+
+  @hello-world
+    "Hello 20 "World! 0a 00
+#+end_src
+
+*** Example: draw heart
+
+#+begin_src
+  |00 @System &vector $2 &expansion $2 &wst $1 &rst $1 &metadata $2 &r $2 &g $2 &b $2 &debug $1 &state $1
+  |20 @Screen &vector $2 &width $2 &height $2 &auto $1 &pad $1 &x $2 &y $2 &addr $2 &pixel $1 &sprite $1
+
+  |0100 ( -> )
+     set-theme
+     #0020       .Screen/x      DEO2
+     #0040       .Screen/y      DEO2
+     ;sprite-icn .Screen/addr   DEO2
+     #01         .Screen/sprite DEO
+  BRK
+
+  @set-theme ( -- )
+    #f07f .System/r DEO2
+    #f0d6 .System/g DEO2
+    #f0b2 .System/b DEO2
+  JMP2r
+
+  @sprite-icn
+    00 66 ff ff ff 7e 3c 18
+#+end_src
+
+
+** TODO 2: Game of Life
+
   https://www.youtube.com/watch?v=rTb6NFKUmQU
-  - result source https://gist.github.com/rexim/5d9c9b368c6081b2309960f4b8832bec
-  - creates etags for jumping around in Emacs, while browsing uxn source code
-    $ etags $(find src/ -type f)
-  - %macros are a single word that gets replaced by a sequence of tokens
-  - there is no difference between "#00" and "00" (except that # adds LIT?)
-  - https://wiki.c2.com/?TheKenThompsonHack
-  - TODO: 01:22
+
+- result source https://gist.github.com/rexim/5d9c9b368c6081b2309960f4b8832bec
+- creates etags for jumping around in Emacs, while browsing uxn source code
+  $ etags $(find src/ -type f)
+- %macros are a single word that gets replaced by a sequence of tokens
+- there is no difference between "#00" and "00" (except that # adds LIT?)
+- https://wiki.c2.com/?TheKenThompsonHack
+- TODO: 01:22

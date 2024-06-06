@@ -1,4 +1,8 @@
-home https://adventofcode.com/
+- home https://adventofcode.com/
+- reddit https://old.reddit.com/r/adventofcode/
+- https://en.wikipedia.org/wiki/Advent_of_Code
+  - Author: Eric Wastl
+  - 2015-
 
 * repos/code
 

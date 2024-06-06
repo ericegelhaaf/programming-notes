@@ -1,4 +1,17 @@
+- "|0100" is the ~reset vector~
+- uxn is un-interruptable
+- 16 devices, each 16 ports
+- Defining:
+  - @label &sublabel $width
+  - &label ( will prefix our new label with the name of the last parent label )
+- Using:
+  - .label/sublabel
+- memory is big endian
+
+- discussion https://llllllll.co/t/uxn-virtual-computer/46103/466
 - uxn source https://git.sr.ht/~rabbits/uxn
+- uxn tools https://git.sr.ht/~rabbits/
+- live editor https://metasyn.srht.site/learn-uxn/
 - The Uxn/Varvara ecosystem is a personal computing stack based on a small virtual machine that lies at the heart of our software, and that allows us to run the same application on a variety of systems.
   https://100r.co/site/uxn.html
   https://100r.co/site/uxn_guide.html
