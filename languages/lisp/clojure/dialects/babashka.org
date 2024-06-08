@@ -14,6 +14,17 @@
 
 - Article: https://rattlin.blog/bbgum.html
 - Channel: https://www.youtube.com/@babashkatv/videos
+- tool: cli json/yaml/edn convert https://github.com/borkdude/jet
+
+* flags
+
+|----------+--------------------------------------------------------------|
+| --stream | from lazy seq, to each element by itself (aka no map needed) |
+| -i       | *input* becomes a lazy seq of strings from stdin             |
+| -I       | *input* becomes a lazy seq of parsed EDN from stdin          |
+| -o       | stdout one entry per line                                    |
+| -O       | stdout one entry per line, as EDN                            |
+|----------+--------------------------------------------------------------|
 
 * Native Image Building
 

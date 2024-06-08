@@ -137,7 +137,7 @@ TODO: 01:30:00
 
 *** Example: unbloated "hello world"
 
-#+begin_src
+#+begin_src uxntal
   |10 @Console &vector $2 &read $1 &pad $5 &write $1 &error $1
   |0100 ( -> )
      ;hello-word
@@ -151,7 +151,7 @@ TODO: 01:30:00
 
 *** Example: bloated "hello world", print many
 
-#+begin_src
+#+begin_src tal
   |10 @Console &vector $2 &read $1 &pad $5 &write $1 &error $1
   |0100 ( -> )
     ;on-screen .Screen/vector DEO2
@@ -174,7 +174,7 @@ TODO: 01:30:00
 
 *** Example: draw heart
 
-#+begin_src
+#+begin_src uxntal
   |00 @System &vector $2 &expansion $2 &wst $1 &rst $1 &metadata $2 &r $2 &g $2 &b $2 &debug $1 &state $1
   |20 @Screen &vector $2 &width $2 &height $2 &auto $1 &pad $1 &x $2 &y $2 &addr $2 &pixel $1 &sprite $1
 

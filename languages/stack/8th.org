@@ -1,0 +1,7 @@
+- home https://8th-dev.com/
+- forum https://8th-dev.com/forum/
+- manual https://8th-dev.com/manual.html
+- words https://8th-dev.com/words.html
+- comparative https://8th-dev.com/compare.html
+
+- single pass compiler

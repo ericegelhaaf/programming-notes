@@ -3,7 +3,7 @@
 
 - Products
   - Apple IIe
-  - BBC micro
+  - BBC Micro
   - Commodore PET
   - Commodore VIC-20
   - Commodore 64
@@ -12,17 +12,44 @@
   - NES
 
 - Pinout: https://content.invisioncic.com/r322239/monthly_2021_11/MOS6502-pinout.gif.b2ac610a8ff1d566286e9428f3f2c321.gif
-  |------+----+--------------|
-  | bits |    |              |
-  |------+----+--------------|
-  |    8 | IO | DATA pins    |
-  |   16 | O  | ADDRESS pins |
-  |------+----+--------------|
+  |-------------+-----+------------------------------------|
+  | n pins/bits | <r> |                                    |
+  |-------------+-----+------------------------------------|
+  |           8 |  IO | DATA bus (registers communication) |
+  |          16 |   O | ADDRESS bus (memory addr)          |
+  |-------------+-----+------------------------------------|
+
+- Pins
+  |-------+------+----+----------------------------------|
+  |   pin | name | IO | description                      |
+  |-------+------+----+----------------------------------|
+  |     1 | Vss  |    |                                  |
+  |     2 | RDY  | I  | when we want to trigger an event |
+  |     3 | OUT  | O  |                                  |
+  |     4 | IRQ  | I  | "interruption request"           |
+  |     5 | NC   |    |                                  |
+  |     6 | NMI  | I  | "interruption hint?"             |
+  |     7 | SYNC | O  |                                  |
+  |     8 | Vcc  |    |                                  |
+  |  9-20 | A??  | O  | address bus                      |
+  |    21 | Vss  |    | ????                             |
+  | 22-33 | A??  | O  | address bus                      |
+  | 26-33 | D?   | IO | data bus                         |
+  |    34 | R/W  | O  |                                  |
+  |    35 | NC   |    |                                  |
+  |    36 | NC   |    |                                  |
+  |    37 | IN   | I  |                                  |
+  |    38 | SO   | I  |                                  |
+  |    39 | OUT  | O  |                                  |
+  |    40 | RES  | I  |                                  |
+  |-------+------+----+----------------------------------|
 
 * Videos: Build a 65c02-based computer from scratch
+
 https://www.youtube.com/playlist?list=PLowKtXNTBypFbtuVMUVXNR0z1mu7dp7eH
   - 6502 (890 pesos at 15Aug/20)
   - AT28C256 (1887 pesos at 15Aug/20)
+
 ** 01 - "Hello, world" from scratch on a 6502
 https://www.youtube.com/watch?v=LnzuMJLZRdU
 - 1x W65C02S

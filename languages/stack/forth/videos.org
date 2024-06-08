@@ -1,3 +1,9 @@
+- 14 Over the Shoulder 1 - Text Preprocessing in Forth https://www.youtube.com/watch?v=mvrE2ZGe-rs
+- 21 Learning Forth by Programming a Game - Bill Ragsdale https://www.youtube.com/watch?v=QO3fiIhRuOg
+- 20 Forth - The New Synthesis Growing Forth with preForth and seedForth https://www.youtube.com/watch?v=5vYUTQAfzr4
+- 19 GBForth: Using Forth to understand the Game Boy https://www.youtube.com/watch?v=g3HNhvW3lI8
+- 13 Programming a 144-computer chip to minimize power https://www.youtube.com/watch?v=0PclgBd6_Zs
+
 - Course: Back & Forth | Hans Bezemer https://www.youtube.com/playlist?list=PLRWL7HN2PQD5QRW4voNWy6YGyFaxBEpdT
 - Course https://www.youtube.com/playlist?list=PLGY0au-Sczllm2NcYC0Ypk2CYcFAadYZa
 - Channel https://www.youtube.com/@code4th/videos

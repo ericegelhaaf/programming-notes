@@ -1,0 +1,16 @@
+- source (C) https://git.kernel.org/pub/scm/utils/dash/dash.git/tree/
+- wiki https://en.wikipedia.org/wiki/Almquist_shell#dash
+  - Debian Alquimist SHell
+  - Author: Herbert Xu
+  - port of ~ash~ from NetBSD to Debian
+  - 1997-
+  - POSIX compliant
+    - no internationalization/localization support
+    - no multi-byte character encoding support
+  - Ubuntu's default (2006-)
+
+- wiki https://wiki.archlinux.org/title/Dash
+  - vs Bash
+    - 13k vs 176k LOC
+    - 134Kb vs 6.5Mb (Disk Space)
+    - 4x faster (CPU)

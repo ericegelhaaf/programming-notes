@@ -10,15 +10,25 @@
 - article 21 | https://www.networkworld.com/article/970340/using-the-xargs-command-on-linux-to-simplify-your-work.html
 - article 21 | https://www.oilshell.org/blog/2021/08/xargs.html
 
+- When NOT to use xargs's -P
+  - https://mywiki.wooledge.org/BashPitfalls#Non-atomic_writes_with_xargs_-P
+  - if *cmd* OUTPUT contains more than 8192 characters (may vary)
+    - buffering?
+    - would split into multiple write() syscalls
+    - or 1k/4k chars? https://unix.stackexchange.com/questions/476080/what-prevents-stdout-stderr-from-interleaving
+  - if *cmd* OUTPUTs multiple lines OR has multiple output sub-cmds
+
 * Flags
 
-|---------+-----------------+-------------------------------------------|
-| -P n    | --max-procs=n   | process to run at the same time           |
-| -n n    | --max-args=n    | use at most ~n~ arguments per command     |
-| -0      | --null          | input will be separate by null characters |
-| -I s    |                 | where ~s~ is replacement string           |
-| -a file | --arg-file=file | reads from ~file~ instead of stdin        |
-|---------+-----------------+-------------------------------------------|
+|---------+-------------------+-------------------------------------------|
+| -P n    | --max-procs=n     | process to run at the same time           |
+| -n n    | --max-args=n      | use at most ~n~ arguments per command     |
+| -0      | --null            | input will be separate by null characters |
+| -I s    |                   | where ~s~ is replacement string           |
+| -a file | --arg-file=file   | reads from ~file~ instead of stdin        |
+| -r      | --no-run-if-empty | GNU extension                             |
+|---------+-------------------+-------------------------------------------|
+
 
 * article 10 | http://widgetsandshit.com/teddziuba/2010/10/taco-bell-programming.html
 

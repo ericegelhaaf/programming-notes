@@ -13,6 +13,7 @@
     arduino uno https://github.com/chochain/eForth1
   - https://eforth.appspot.com/classic.html
   - https://www.forth.org/eforth.html
+  - forth on uxn http://www.call-with-current-continuation.org/uf/uf.html
 
 
 - OS
@@ -32,6 +33,9 @@
 
 * language
 
+- Portability
+  - CPU registers change a lot between hardware, but all machines have a "stack"
+    https://www.youtube.com/watch?v=faHB4MGQIG8
 - everything is separated by a space, new line is considered a space
 - Forth programs are made of NUMBERS and WORDS separated by spaces
 - NUMBERS

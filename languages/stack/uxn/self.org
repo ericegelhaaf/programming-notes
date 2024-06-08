@@ -10,26 +10,58 @@
 
 - discussion https://llllllll.co/t/uxn-virtual-computer/46103/466
 - uxn source https://git.sr.ht/~rabbits/uxn
-- uxn tools https://git.sr.ht/~rabbits/
 - live editor https://metasyn.srht.site/learn-uxn/
 - The Uxn/Varvara ecosystem is a personal computing stack based on a small virtual machine that lies at the heart of our software, and that allows us to run the same application on a variety of systems.
   https://100r.co/site/uxn.html
   https://100r.co/site/uxn_guide.html
-- https://wiki.xxiivv.com/site/uxn.html
 - https://eighty-twenty.org/2023/08/11/virtualizing-uxn
 - https://compudanzas.net/intro_to_uxn_programming.html
 - https://compudanzas.net/uxn.html
 - https://compudanzas.net/uxn_tutorial.html
 - https://github.com/hundredrabbits/awesome-uxn
 - https://llllllll.co/t/uxn-virtual-computer/46103/435?page=20
-- https://wiki.xxiivv.com/site/varvara.html
 - https://applied-langua.ge/posts/i-dont-want-to-go-to-chel-c.html
+
 - tal
   - a stack based asm language for the uxn vm
   - https://learnxinyminutes.com/docs/uxntal/
-  - https://wiki.xxiivv.com/site/uxntal.html
-  - https://wiki.xxiivv.com/site/uxntal_reference.html
-  - https://wiki.xxiivv.com/site/uxntal_devices.html
   - https://concatenative.org/wiki/view/Tal
   - emacs https://github.com/non/uxntal-mode
-  - snippets https://rosettacode.org/wiki/Category:Uxntal
+  - cheatsheet https://github.com/weeble/uxn-cheatsheet
+
+* Codebases
+
+- https://rosettacode.org/wiki/Category:Uxntal
+- https://github.com/hikari-no-yume/unifont-appreciator/
+- https://github.com/keijiro/uxn-sketches/
+- uxn tools https://git.sr.ht/~rabbits/
+- game https://github.com/lynn/shanghai
+- play chords https://github.com/lynn/uxn-harp
+
+* Official Docs
+https://github.com/XXIIVV/oscean
+
+- https://wiki.xxiivv.com/site/uxn.html
+- https://wiki.xxiivv.com/site/uxntal.html
+- https://wiki.xxiivv.com/site/varvara.html
+- https://wiki.xxiivv.com/site/uxntal_syntax.html
+- https://wiki.xxiivv.com/site/uxntal_stacks.html
+- https://wiki.xxiivv.com/site/uxntal_opcodes.html
+- https://wiki.xxiivv.com/site/uxntal_modes.html
+- https://wiki.xxiivv.com/site/uxntal_immediate.html
+- https://wiki.xxiivv.com/site/uxntal_memory.html
+- https://wiki.xxiivv.com/site/uxntal_devices.html
+- https://wiki.xxiivv.com/site/uxntal_software.html
+- https://wiki.xxiivv.com/site/uxntal_macros.html
+- https://wiki.xxiivv.com/site/uxntal_struct.html
+- https://wiki.xxiivv.com/site/uxntal_scope.html
+- https://wiki.xxiivv.com/site/uxntal_notation.html
+- https://wiki.xxiivv.com/site/uxntal_lambdas.html
+- https://wiki.xxiivv.com/site/uxntal_doors.html
+- https://wiki.xxiivv.com/site/uxntal_signed.html
+- https://wiki.xxiivv.com/site/uxntal_library.html
+- https://wiki.xxiivv.com/site/uxntal_cons.html
+- https://wiki.xxiivv.com/site/uxntal_reference.html
+- https://wiki.xxiivv.com/site/uxntal_alphabet.html
+- https://wiki.xxiivv.com/site/uxntal_signs.html
+- https://wiki.xxiivv.com/site/uxntal_localization.html

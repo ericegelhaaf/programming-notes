@@ -1,3 +1,8 @@
+- https://zwischenzugs.com/2023/06/27/learn-jq-the-hard-way-part-i-json/
+  https://zwischenzugs.com/2023/06/27/learn-jq-the-hard-way-part-ii-the-jq-command/
+  https://zwischenzugs.com/2023/06/27/learn-jq-the-hard-waypart-iii-filters/
+  https://zwischenzugs.com/2023/07/13/learn-jq-the-hard-waypart-iv-pipes/
+- book https://amberpenguin.gumroad.com/l/pOYe
 - https://remysharp.com/drafts/jq-recipes
 - JQ Cookbook Examples by Noah Sussman
   https://github.com/textarcana/jq-cookbook/blob/master/recipes.sh

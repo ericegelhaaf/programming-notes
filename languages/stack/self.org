@@ -1,4 +1,5 @@
 - wiki https://en.wikipedia.org/wiki/Concatenative_programming_language
+  - term born with Joy (2001) and Manfred von Thun
 - wiki https://en.wikipedia.org/wiki/Stack-oriented_programming
 - no stinking loops http://www.nsl.com/
 - https://docs.factorcode.org/content/article-tour-concatenative.html
@@ -15,6 +16,10 @@
     - Ethereum EVM
 
 - list of programming languages https://concatenative.org/wiki/view/Front%20Page
+  - postscript (82)
+  - cpython    (91)
+  - jvm        (95)
+  - factor     (03)
 - https://github.com/JohnEarnest/Mako
   - language: maker
   - vm
