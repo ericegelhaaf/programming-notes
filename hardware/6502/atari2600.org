@@ -48,6 +48,8 @@ https://www.atariage.com/2600/archives/schematics/index.html
 
 source: https://github.com/gustavopezzi/atari2600course
 
+18h12m
+
 ** 2 Hardware Architecture
 
 - Atari

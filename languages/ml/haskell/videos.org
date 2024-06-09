@@ -1,3 +1,4 @@
+- Livestreams Learning Haskell https://www.youtube.com/@JohnCinnamond/streams
 - Haskell Adventures - A Calculator
   https://www.youtube.com/playlist?list=PL_xuff3BkASMOzBr0hKVKLuSnU4UIinKx
 - The Haskell Unfolder

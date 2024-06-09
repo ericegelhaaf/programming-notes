@@ -1,0 +1,8 @@
+- fictional CPU architecture made for the game 0x10c
+  - 2012
+  - https://en.wikipedia.org/wiki/0x10c
+
+- https://fail0verflow.com/blog/2012/dcpu-16-review/
+- https://www.michaelfogleman.com/projects/dcpu-16/
+- specifications https://gist.github.com/metaphox/3888117
+- forth https://github.com/bshepherdson/fcc

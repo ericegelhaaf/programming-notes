@@ -13,6 +13,9 @@
 - video Advent of Code 2019/6 https://vimeo.com/378152632
 - video https://brightonruby.com/2016/the-point-of-objects-john-cinnamond/?utm_source=rubyweekly&utm_medium=email
 
+- tool https://github.com/JoshCheek/seeing_is_believing
+  emacs https://github.com/jcinnamond/seeing-is-believing
+
 - codebases
   - http://ratfactor.com/repos/
     - static site generator http://ratfactor.com/repos/reporat/
@@ -119,3 +122,11 @@ http://poignant.guide/book/chapter-3.html
 - ="Ruby is built from sentences. They aren't exactly English sentences. They are short collections of words and punctuation which emcompass a single thought. These sentences can form books. They can form pages. They can form entire novels, when trung together. Novels that can be read by humans, but also by computers."=
 
 - "Punctuation and capitalization will help your brain to see bits of code and feel intense recognition."
+
+* Snippets
+
+#+begin_src ruby
+  width, height = `xrandr`.scan(/current (\d+) x (\d+)/)
+                    .flatten
+                    .map(&:to_i)
+#+end_src
