@@ -13,6 +13,7 @@
   https://www.ele.uva.es/~jesus/lpcVT100/term.html
 - https://github.com/dylanaraps/writing-a-tui-in-bash
 
+- article 18 http://ratfactor.com/slackware/pkgblog/bash
 - article 24
   https://mtlynch.io/zig-extraneous-build/#my-mental-model-of-bash-pipelines-is-wrong
   https://hackaday.com/2024/03/28/is-your-mental-model-of-bash-pipelines-wrong/

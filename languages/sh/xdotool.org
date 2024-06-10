@@ -1,0 +1,48 @@
+- source (C) https://github.com/jordansissel/xdotool
+- keys: F2, ctrl+c, BackSpace, Down, Left, Aacute
+
+* commands
+|--------------------+---|
+| key                |   |
+| keydown            |   |
+| keyup              |   |
+| type               |   |
+|--------------------+---|
+| mousemove          |   |
+| mousemove_relative |   |
+| click              |   |
+| mousedown          |   |
+| mouseup            |   |
+| getmouselocation   |   |
+| behave_screen_edge |   |
+|--------------------+---|
+| search             |   |
+| selectwindow       |   |
+| behave             |   |
+| getwindowpid       |   |
+| getwindowname      |   |
+| getwindowgeometry  |   |
+| getwindowfocus     |   |
+| windowsize         |   |
+| windowmove         |   |
+| windowfocus        |   |
+| windowmap          |   |
+| windowminimize     |   |
+| windowraise        |   |
+| windowreparent     |   |
+| windowclose        |   |
+| windowkill         |   |
+| windowunmap        |   |
+| set_window         |   |
+|--------------------+---|
+| exec               |   |
+| sleep              |   |
+|--------------------+---|
+* script
+
+#+begin_src sh
+  #!/usr/bin/env xdotool
+  search --onlyvisible --classname $1
+  windowsize %@ $2 $3
+  windowraise %@
+#+end_src

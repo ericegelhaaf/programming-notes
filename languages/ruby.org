@@ -15,12 +15,16 @@
 
 - tool https://github.com/JoshCheek/seeing_is_believing
   emacs https://github.com/jcinnamond/seeing-is-believing
+- tool: linter https://github.com/rubocop/rubocop/
 
 - codebases
   - http://ratfactor.com/repos/
     - static site generator http://ratfactor.com/repos/reporat/
     - crawler http://ratfactor.com/repos/chklnks.rb/
     - http://ratfactor.com/repos/rubylit/
+    - vim+bookmarks
+      - http://ratfactor.com/repos/rat-tools/html/new-book.html
+      - http://ratfactor.com/cards/interactive-vim
 
 * Language
 
@@ -97,6 +101,11 @@
 
 - Class Methods (::)
   - attached after variables and constants by a double colon
+
+** stdlib
+
+- new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
+- old format https://ruby-doc.org/stdlib-3.0.4/
 
 * Book: why's (poignant) guide to Ruby
 
