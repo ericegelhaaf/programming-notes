@@ -10,6 +10,7 @@
     - PS1='%(?.%(!.#.;).%F{6}%B;%b%f) '
 
 - https://en.wikipedia.org/wiki/ANSI_escape_code
+  https://www.ele.uva.es/~jesus/lpcVT100/term.html
 - https://github.com/dylanaraps/writing-a-tui-in-bash
 
 - article 24

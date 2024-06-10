@@ -1,6 +1,18 @@
+- wiki https://en.wikipedia.org/wiki/CHIP-8
+  - an interpreted programming language (?
+  - Author: Joseph Weisbecker
+  - ~1978
+  - runs on a 1802 CPU https://en.wikipedia.org/wiki/RCA_1802
+    - 8-bit
+    - Ran on personal computers:
+      - COSMAC VIP
+      - Telmac 1800
+
 - Chip-8: Technical Reference v1.0
   http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
+
 * Videos
+
 - (Code Cap) 2h - Javascript - Building and understanding a Virtual Machine in 2hrs (CHIP-8 Emulator)
   https://wwwa.youtube.com/watch?v=jWpbHC6DtnU
 - (GynvaelEn) Hacking Livestream #34: CHIP-8 VM
