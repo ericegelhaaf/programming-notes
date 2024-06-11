@@ -1,0 +1,4 @@
+- 23 | APL vs BQN vs J vs Q vs NumPy vs Julia vs R
+  - https://www.youtube.com/watch?v=8ynsN4nJxzU
+  - slides https://github.com/codereport/Content/tree/main/Talks/2022-09-APL-Meetups
+  - examples https://github.com/codereport/array-language-comparisons

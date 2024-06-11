@@ -1,3 +1,4 @@
+- docs https://docs.ruby-lang.org/en/
 - home https://www.ruby-lang.org/en/
 - https://en.wikibooks.org/wiki/Ruby_Programming
 - https://en.wikipedia.org/wiki/Ruby_on_Rails
@@ -8,14 +9,39 @@
   - Author wanted an OO language.
     Didn't like Python, because it wasn't true OO.
 
+- #!/usr/bin/env ruby
+
+- implementations
+  - mobile http://www.rubymotion.com/
+  - java https://www.jruby.org
+  - speed? https://github.com/oracle/truffleruby
+
 - books https://github.com/manjunath5496/Ruby-Programming-Books
 - book: https://learnbyexample.github.io/learn_ruby_oneliners/
 - video Advent of Code 2019/6 https://vimeo.com/378152632
 - video https://brightonruby.com/2016/the-point-of-objects-john-cinnamond/?utm_source=rubyweekly&utm_medium=email
 
+- libraries
+  - https://rubygems.org/
+  - docs 3rd party libs https://rubydoc.info/
+
+- tool: ri (Ruby API reference frontend)
+- tool: version managers
+  - https://github.com/rbenv/rbenv
+    - /.ruby-version
+    - ~/.rbenv/versions/
+    - commands
+      - rbenv init
+      - eval "$(rbenv init - zsh)"
+      - rbenv install -l
+      - rbenv install 3.3.0
+      - rbenv versions
+      - rbenv rehash
+  - https://rvm.io/
+  - https://github.com/postmodern/chruby
+
 - tool https://github.com/JoshCheek/seeing_is_believing
   emacs https://github.com/jcinnamond/seeing-is-believing
-- tool: linter https://github.com/rubocop/rubocop/
 
 - codebases
   - http://ratfactor.com/repos/
@@ -31,12 +57,22 @@
 - Typing: duck, dynamic, strong
 - Everything is an object (including primitive data types)
 - Optional () on function calls
+- puts = short for "outPUT String"
+- operators
+  - + works for sum /numbers/ and concatenate /strings/
+
+** Style
+
+- tool: linter/formatter https://github.com/standardrb/standard
+- tool: linter/formatter https://github.com/rubocop/rubocop/
 
 - variable
 - CONSTANT
 - $global
 
 ** Changelog
+
+https://rubyreferences.github.io/rubychanges/evolution.html
 
 *** 1.0 - 1996
 
@@ -106,6 +142,23 @@
 
 - new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
 - old format https://ruby-doc.org/stdlib-3.0.4/
+
+* Book: Programming Ruby 3.3
+
+- Authors:
+  - Dave Thomas
+  - Andy Hunt
+  - Chad Fowler
+  - Noel Rappin
+
+- home https://pragprog.com/titles/ruby5/programming-ruby-3-3-5th-edition/
+- errata https://devtalk.com/books/programming-ruby-3-2-5th-edition/
+
+** 2
+
+- Ruby is an OOP, in programming terms, an object is
+  a thing that combines data with the logic that
+  manipulates that data.
 
 * Book: why's (poignant) guide to Ruby
 

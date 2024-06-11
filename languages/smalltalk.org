@@ -1,6 +1,7 @@
 - wiki https://en.wikipedia.org/wiki/Smalltalk
   - 1972-
   - Authors: Adele Goldberg, Dan Ingalls, Alan Kay
+- video 81: https://archive.org/details/xerox-parc_V-141_2
 - https://wiki.xxiivv.com/site/smalltalk.html
 - By the Bluebook implementation of Smalltalk-80  https://github.com/dbanay/Smalltalk
 - Libraries https://github.com/pharo-open-documentation/awesome-pharo

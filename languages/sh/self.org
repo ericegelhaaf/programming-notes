@@ -41,3 +41,8 @@
 - article 06 | https://ridiculousfish.com/blog/posts/old-age-and-treachery.html
 - article 17 | http://www.pixelbeat.org/docs/unix-parallel-tools.html
 - article 23 | https://muhammadraza.me/2023/webscraping-in-bash/
+
+
+- language:
+  - Sleep until host is up:
+    until ssh root@10.10.10.10; do sleep 3; done

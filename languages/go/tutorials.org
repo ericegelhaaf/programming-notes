@@ -12,7 +12,7 @@
 - functions naming:
   - public functions start with CAPITAL letter
   - private functions start with a lowercase letter
-   * TODO Tutorial: Effective Go
+* TODO Tutorial: Effective Go
   https://golang.org/doc/effective_go.html
 - "go fmt" uses tabs
 - Unlike C, is OK return the address of a local variable (!

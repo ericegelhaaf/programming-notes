@@ -1,15 +1,29 @@
-|-----------+-------------------------------------------------------------------------------|
-| book      | https://www.awk.dev/                                                          |
-| wiki      | https://en.wikipedia.org/wiki/AWK                                             |
-| wikibooks | https://en.wikibooks.org/wiki/AWK                                             |
-| web repl  | https://awk.js.org/                                                           |
-|-----------+-------------------------------------------------------------------------------|
-| gawk      | https://www.gnu.org/software/gawk/                                            |
-| mawk      | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
-| nawk      | https://github.com/onetrueawk/awk                                             |
-| goawk     | https://github.com/benhoyt/goawk                                              |
-| bioawk    | https://github.com/lh3/bioawk                                                 |
-|-----------+-------------------------------------------------------------------------------|
+|-----------+------+-------------------------------------------------------------------------------|
+| book      |      | https://www.awk.dev/                                                          |
+| wiki      |      | https://en.wikipedia.org/wiki/AWK                                             |
+| wikibooks |      | https://en.wikibooks.org/wiki/AWK                                             |
+| web repl  |      | https://awk.js.org/                                                           |
+|-----------+------+-------------------------------------------------------------------------------|
+| gawk      | 689K | https://www.gnu.org/software/gawk/                                            |
+| mawk      | 155K | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
+| nawk      |      | https://github.com/onetrueawk/awk                                             |
+| goawk     |      | https://github.com/benhoyt/goawk                                              |
+| bioawk    |      | https://github.com/lh3/bioawk                                                 |
+|-----------+------+-------------------------------------------------------------------------------|
+
+#+begin_src
+$ readelf -d /usr/bin/gawk | grep Shared
+ 0x0000000000000001 (NEEDED)             Shared library: [libsigsegv.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libreadline.so.8]
+ 0x0000000000000001 (NEEDED)             Shared library: [libmpfr.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgmp.so.10]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+$ readelf -d /usr/bin/mawk | grep Shared
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+#+end_src
 
 - #!/usr/bin/awk -f
 
