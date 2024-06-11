@@ -21,18 +21,31 @@
 - Typing: duck, dynamic, strong
 - Everything is an object (including primitive data types)
 - Optional () on function calls
-- puts = short for "outPUT String"
+- puts
+  - short for "outPUT String"
+  - available to all objects
+  - often written without parentheses
 - operators
   - + works for sum /numbers/ and concatenate /strings/
+- indentation isn't significant
+- most lines that look like *statements* in Ruby are actually *expression* that return a value
 
 ** Style
 
+- guide https://github.com/airbnb/ruby
+- guide https://github.com/rubocop/ruby-style-guide
 - tool: linter/formatter https://github.com/standardrb/standard
 - tool: linter/formatter https://github.com/rubocop/rubocop/
 
-- variable
-- CONSTANT
-- $global
+- 2 spaces for indentation
+
+- variable/parameters/methods
+- @instance_var @X @_
+- @@class_var @@N @@x_pos @@SINGLE
+- $global $CUSTOMER $_ $plan9 $Global
+- ClassName
+- ModuleName
+- CONSTANT_NAME
 
 ** Changelog
 
@@ -74,33 +87,71 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - new parser: Prism
   - introduces RJIT
 
+** Control Flow
+
+- if/elsif/else/end
+- while/end
+- =statement modifiers=
+  #+begin_src ruby
+    return nil if user.nil? # guards clause, usually at the beginning of a method
+
+    puts "Danger" if radiation > 3000
+
+    square = 4
+    square = square * square while square < 1000
+  #+end_src
+
+
 ** Types
+
+- nil
+  - is an object, just like any other
+  - represents the concept of nothing
+
+- Array [] [0,2,nil][1]
+  - Linear list, accessed by index
+  - mixed type of objects
+
+- Hash {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
+  - key/value
+  - An association by an arbitrary key type
+  - Hash.new(0) # where 0 is the default value
 
 - Variables
   - nouns of Ruby
-  - global if they begin with ($)
-  - instance variables with (@) (think "at"-ttribute)
-  - class variables with (@@)
 
 - Strings
+  - "",'' are string literals, from more to less work done
+    - "" checks for escape sequences (\) and expression interpolation (#{})
   - Both single and double quotes are used to create strings
 
-- Symbols
-  - start with a colon
+- Symbols :foo
   - like lightweight strings
-  - used when you need a string but you won't be printing it
+  - immutable
+  - used
+    - as keys and identifiers
+    - when you need a string but you won't be printing it
+    - when you need to use the same string over and over
 
 - Constants
   - capitalized
   - proper nouns of Ruby
 
 - Methods (.)
-  - the verbs of ybru
+  - the verbs of ruby
   - attached at the end of variables with by a dot
   - some methods (such as =print=) are kernel methods, won't use the dot
 
 - Class Methods (::)
   - attached after variables and constants by a double colon
+  - created with NAME.new
+  - has/can have
+    - each instance has an ~object_id~ /property/
+    - instance variables
+    - instance methods
+      - called by RECEIVER.METHODNAME
+      - a *message* is being send to the object,
+        which contains the method name along with arguments
 
 ** stdlib
 

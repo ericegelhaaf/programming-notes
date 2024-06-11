@@ -1,0 +1,9 @@
+- Author: Roberto Gudiño, Pablo Cayuela
+- a super cool post-apocalyptic computer built
+  from scratch using recycled TTL chips.
+- PDC8, PDC32
+
+
+- Talk https://www.institucional.frc.utn.edu.ar/sistemas/Areas/noticias/Detalle.asp?2326
+- Microinstruction-level emulator for PDC32
+  https://github.com/pdc32/pdc32-emu

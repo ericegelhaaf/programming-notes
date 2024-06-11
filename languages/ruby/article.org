@@ -1,0 +1,9 @@
+- https://zverok.space/blog/2023-10-02-syntax-sugar.html
+- https://zverok.space/blog/2023-10-11-syntax-sugar1-numeric-block-args.html
+- https://zverok.space/blog/2023-10-20-syntax-sugar2-pattern-matching.html
+- https://zverok.space/blog/2023-10-27-syntax-sugar2-pattern-matching-cont.html
+- https://zverok.space/blog/2023-11-03-syntax-sugar2-pattern-matching-fin.html
+- https://zverok.space/blog/2023-11-10-syntax-sugar3-hash-values-omission.html
+- https://zverok.space/blog/2023-11-24-syntax-sugar4-argument-forwarding.html
+- https://zverok.space/blog/2023-12-01-syntax-sugar5-endless-methods.html
+- https://zverok.space/blog/2024-01-23-syntax-sugar-fin.html
