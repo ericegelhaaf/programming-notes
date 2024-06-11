@@ -16,42 +16,6 @@
   - java https://www.jruby.org
   - speed? https://github.com/oracle/truffleruby
 
-- books https://github.com/manjunath5496/Ruby-Programming-Books
-- book: https://learnbyexample.github.io/learn_ruby_oneliners/
-- video Advent of Code 2019/6 https://vimeo.com/378152632
-- video https://brightonruby.com/2016/the-point-of-objects-john-cinnamond/?utm_source=rubyweekly&utm_medium=email
-
-- libraries
-  - https://rubygems.org/
-  - docs 3rd party libs https://rubydoc.info/
-
-- tool: ri (Ruby API reference frontend)
-- tool: version managers
-  - https://github.com/rbenv/rbenv
-    - /.ruby-version
-    - ~/.rbenv/versions/
-    - commands
-      - rbenv init
-      - eval "$(rbenv init - zsh)"
-      - rbenv install -l
-      - rbenv install 3.3.0
-      - rbenv versions
-      - rbenv rehash
-  - https://rvm.io/
-  - https://github.com/postmodern/chruby
-
-- tool https://github.com/JoshCheek/seeing_is_believing
-  emacs https://github.com/jcinnamond/seeing-is-believing
-
-- codebases
-  - http://ratfactor.com/repos/
-    - static site generator http://ratfactor.com/repos/reporat/
-    - crawler http://ratfactor.com/repos/chklnks.rb/
-    - http://ratfactor.com/repos/rubylit/
-    - vim+bookmarks
-      - http://ratfactor.com/repos/rat-tools/html/new-book.html
-      - http://ratfactor.com/cards/interactive-vim
-
 * Language
 
 - Typing: duck, dynamic, strong
@@ -143,52 +107,41 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 - new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
 - old format https://ruby-doc.org/stdlib-3.0.4/
 
-* Book: Programming Ruby 3.3
 
-- Authors:
-  - Dave Thomas
-  - Andy Hunt
-  - Chad Fowler
-  - Noel Rappin
+* codebases
 
-- home https://pragprog.com/titles/ruby5/programming-ruby-3-3-5th-edition/
-- errata https://devtalk.com/books/programming-ruby-3-2-5th-edition/
+- http://ratfactor.com/repos/
+  - static site generator http://ratfactor.com/repos/reporat/
+  - crawler http://ratfactor.com/repos/chklnks.rb/
+  - http://ratfactor.com/repos/rubylit/
+  - vim+bookmarks
+    - http://ratfactor.com/repos/rat-tools/html/new-book.html
+    - http://ratfactor.com/cards/interactive-vim
 
-** 2
-
-- Ruby is an OOP, in programming terms, an object is
-  a thing that combines data with the logic that
-  manipulates that data.
-
-* Book: why's (poignant) guide to Ruby
-
-** 3 A Quick Ride Through Ruby
-
-http://poignant.guide/book/chapter-3.html
-
-- ="My conscience won't let me call Ruby a computer language. That would imply that the language works primarily on the computer's terms."=
-
-- Read the following aloud to yourself.
-  - Punctuation silent.
-  - "Punctuation adds meaning to words, helps give cues as to waht the author intended by a sentence."
-  #+begin_src ruby
-    5.times { print "0delay!" }
-    exit unless "restaurant".include? "aura"
-  #+end_src
-
-- This one reads more like "shorter english"
-  #+begin_src ruby
-    ['toast', 'cheese', 'wine'].each { |food| print food.capitalize }
-  #+end_src
-
-- ="Ruby is built from sentences. They aren't exactly English sentences. They are short collections of words and punctuation which emcompass a single thought. These sentences can form books. They can form pages. They can form entire novels, when trung together. Novels that can be read by humans, but also by computers."=
-
-- "Punctuation and capitalization will help your brain to see bits of code and feel intense recognition."
-
-* Snippets
+* snippets
 
 #+begin_src ruby
   width, height = `xrandr`.scan(/current (\d+) x (\d+)/)
                     .flatten
                     .map(&:to_i)
 #+end_src
+* tools
+
+- tool: ri (Ruby API reference frontend)
+- tool: version managers
+  - https://github.com/rbenv/rbenv
+    - /.ruby-version
+    - ~/.rbenv/versions/
+    - commands
+      - rbenv init
+      - eval "$(rbenv init - zsh)"
+      - rbenv install -l
+      - rbenv install 3.3.0
+      - rbenv versions
+      - rbenv rehash
+  - https://rvm.io/
+  - https://github.com/postmodern/chruby
+
+- tool https://github.com/JoshCheek/seeing_is_believing
+  emacs https://github.com/jcinnamond/seeing-is-believing
+

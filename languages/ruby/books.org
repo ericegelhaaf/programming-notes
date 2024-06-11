@@ -1,0 +1,45 @@
+- https://github.com/manjunath5496/Ruby-Programming-Books
+- book: https://learnbyexample.github.io/learn_ruby_oneliners/
+
+* Book: Programming Ruby 3.3
+
+- Authors:
+  - Dave Thomas
+  - Andy Hunt
+  - Chad Fowler
+  - Noel Rappin
+
+- home https://pragprog.com/titles/ruby5/programming-ruby-3-3-5th-edition/
+- errata https://devtalk.com/books/programming-ruby-3-2-5th-edition/
+
+** 2
+
+- Ruby is an OOP, in programming terms, an object is
+  a thing that combines data with the logic that
+  manipulates that data.
+
+* Book: why's (poignant) guide to Ruby
+
+** 3 A Quick Ride Through Ruby
+
+http://poignant.guide/book/chapter-3.html
+
+- ="My conscience won't let me call Ruby a computer language. That would imply that the language works primarily on the computer's terms."=
+
+- Read the following aloud to yourself.
+  - Punctuation silent.
+  - "Punctuation adds meaning to words, helps give cues as to waht the author intended by a sentence."
+  #+begin_src ruby
+    5.times { print "0delay!" }
+    exit unless "restaurant".include? "aura"
+  #+end_src
+
+- This one reads more like "shorter english"
+  #+begin_src ruby
+    ['toast', 'cheese', 'wine'].each { |food| print food.capitalize }
+  #+end_src
+
+- ="Ruby is built from sentences. They aren't exactly English sentences. They are short collections of words and punctuation which emcompass a single thought. These sentences can form books. They can form pages. They can form entire novels, when trung together. Novels that can be read by humans, but also by computers."=
+
+- "Punctuation and capitalization will help your brain to see bits of code and feel intense recognition."
+
