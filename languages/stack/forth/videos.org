@@ -7,6 +7,10 @@
 - Course: Back & Forth | Hans Bezemer https://www.youtube.com/playlist?list=PLRWL7HN2PQD5QRW4voNWy6YGyFaxBEpdT
 - Course https://www.youtube.com/playlist?list=PLGY0au-Sczllm2NcYC0Ypk2CYcFAadYZa
 - Channel https://www.youtube.com/@code4th/videos
+- Channel https://www.youtube.com/@siliconvalleyforthinterest1736/videos
+- Channel https://www.youtube.com/@Forth2020/videos
+- Channel https://www.youtube.com/@ForthFreak/videos
+- Channel https://www.youtube.com/@pablohreda/videos
 - Demo(scene) https://demozoo.org/productions/310231/
 
 - 24 Forth Bitcoin miner for PC and Game Boy | Lee

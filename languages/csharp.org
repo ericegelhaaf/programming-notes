@@ -1,6 +1,5 @@
 - Course https://www.youtube.com/playlist?list=PLU8oAlHdN5BmpIQGDSHo5e1r4ZYWQ8m4B
 * Codebases
-- Advent of C# https://csadvent.christmas/archive/2023
 - Discord Bot https://gitlab.com/Kwoth/nadekobot
 * Standard Library
 - https://en.wikipedia.org/wiki/Standard_Libraries_(CLI)

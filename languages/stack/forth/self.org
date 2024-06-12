@@ -14,6 +14,13 @@
   - https://eforth.appspot.com/classic.html
   - https://www.forth.org/eforth.html
   - forth on uxn http://www.call-with-current-continuation.org/uf/uf.html
+  - r3 (colorForth inspired) https://github.com/phreda4/r3
+  - colorForth
+    - http://www.merlintec.com/download/color.html
+    - https://wiki.c2.com/?ColorForth
+    - https://concatenative.org/wiki/view/colorForth
+    - https://en.wikipedia.org/wiki/ColorForth
+    - https://colorforth.github.io/cf.htm
 
 
 - OS
@@ -129,3 +136,6 @@ P = put
 * codebases
 
 - SDL Gameboy emulator https://github.com/robertoabraham/forthboy
+- r3 SDL gamejam entries
+  - https://github.com/phreda4/r3-games/tree/main
+  - https://github.com/phreda4/r3-games/blob/main/gamejamd/velocicracia/velocicracia.r3

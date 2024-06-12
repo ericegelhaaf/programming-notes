@@ -15,6 +15,8 @@
     - day1/1.c
       - while (fgets(buf,sizeof(buf),stdin) != NULL)
       - strtol(buf,NULL,10)
+- C#
+  - Advent of C# https://csadvent.christmas/archive/2023
 - Clojure
   - Video https://www.youtube.com/playlist?list=PLbPrugU2oQ8W5qGiiiFJRlQ8vZ8AZXlG8
   - https://github.com/unclebob/AdventOfCode2022
@@ -42,11 +44,15 @@
   - https://github.com/fogleman/AdventOfCode2021/
 - ruby
   - https://github.com/JoshCheek/advent_of_code
+  - video Advent of Code 2019/6 https://vimeo.com/378152632
 - scala
   - https://scalacenter.github.io/scala-advent-of-code/
     https://github.com/scalacenter/scala-advent-of-code
 - tcl
   - https://codeberg.org/NRK/slashtmp/src/branch/master/AoC/2022
+- zig
+  - 22 https://www.huy.rocks/everyday/12-11-2022-zig-using-zig-for-advent-of-code
+  - 22 https://www.forrestthewoods.com/blog/failing-to-learn-zig-via-advent-of-code/
 
 * vis
 

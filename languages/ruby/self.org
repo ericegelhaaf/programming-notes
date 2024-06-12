@@ -20,15 +20,41 @@
 
 - Typing: duck, dynamic, strong
 - Everything is an object (including primitive data types)
+  - not variables, they hold references to an object
+    - use #dup when need a copy
+    - use #freeze to not admit modifications (numbers and symbols are by default)
 - Optional () on function calls
+- operators
+  - + works for sum /numbers/ and concatenate /strings/
+  - =~ to match a string against a regex, returns that starting position or nil
+  - %w[] to create array of strings
+  - %i[] to create array of strings
+  - <<
+    - append to an array
+- indentation isn't significant
+- most lines that look like *statements* in Ruby are actually *expression* that return a value
+
+** require
+
+require "csv"
+require_relative "book_in_stock" # for "./book_in_stock.rb"
+
+private/public/protected def
+
+** i/o
+
+- p
+  - calls #inspect
+- pp
 - puts
+  - calls #to_s, to get its string representation
   - short for "outPUT String"
   - available to all objects
   - often written without parentheses
-- operators
-  - + works for sum /numbers/ and concatenate /strings/
-- indentation isn't significant
-- most lines that look like *statements* in Ruby are actually *expression* that return a value
+
+- $stderr
+- ARGV array with command line arguments
+  ARGF??? the content of all the files whose names are passed to the command line or stdin
 
 ** Style
 
@@ -38,6 +64,7 @@
 - tool: linter/formatter https://github.com/rubocop/rubocop/
 
 - 2 spaces for indentation
+- book_in_stock.rb (file) / BookInStock (class)
 
 - variable/parameters/methods
 - @instance_var @X @_
@@ -90,6 +117,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 ** Control Flow
 
 - if/elsif/else/end
+- unless/
 - while/end
 - =statement modifiers=
   #+begin_src ruby
@@ -101,21 +129,77 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     square = square * square while square < 1000
   #+end_src
 
+- a =block= {} do/end
+  - usage: to package code to implement a later callback
+  - invoked in a method using ~yield~
+    - no argument
+      #+begin_src ruby
+        def call_block
+          puts "Start of method"
+          yield
+          yield
+          puts "End of method"
+        end
+        call_block { puts "In the block" }
+      #+end_src
+    - with arguments
+      #+begin_src ruby
+        def who_says_what
+          yield("Dave", "hello")
+          yield("Andy", "goodbye")
+        end
+        who_says_what { |person, phrase| puts "#{person} says #{phrase}" }
+      #+end_src
+  - is a chunk of code you can pass to a method, as it were another parameter
+  - you can only pass one block per method call
+    greet("dave", "loyal customer") { puts "hi" }
 
 ** Types
+
+- Ruby 2: diagram of classes
+  http://jeromedalbert.com/a-diagram-of-the-ruby-core-object-model/
+  https://farm6.staticflickr.com/5443/10075536704_84aa13676a_o.jpg
+
+- Classes
+  - attributes are just methods without arguments
+  - the "only easy" way to change an object's state is by calling onf its methods
+  - Methods
+    - public: by default (except initialize which is private) (RARE explicit)
+    - protected: can be invoked by class or subclasses (RARE!) can be used on attr_reader/w/a
+    - private: cannot be invoked without an explicit receiver
+  #+NAME: from "Programming Ruby 3.3"
+  #+begin_src ruby
+    class BookInStock
+      attr_accessor :price      # would create a attr_reader/attr_writer
+      attr_reader :isbn #, :price   # creates the reader accessor methods #isbn and #price, for @isbn and @price
+      def initialize(isbn, price) # called by BookInStock.new
+        @isbn = isbn
+        @price = Float(price)
+      end
+      # def price=(new_price) # setter
+      #   @price = new_price
+      # end
+      def price_in_cents
+        (price * 100).round # !!!! is valid to refer to it either as "price" or "@price"
+      end
+      def price_in_cents=(cents) # setter for a "virtual isntance variable", giving a "uniform access principle"
+        @price = cents / 100.0
+      end
+    end
+    book = BookInStock.new("isbn1", 33.80)
+    book.price = book.price * 0.75 # using the setter and getter
+  #+end_src
+
+- Regexp // https://ruby-doc.org/3.2.2/Regexp.html
+  - the =match operator= =~ can be used to match a string against it
+    returns that starting position or nil
+    - also through String#match? or Regex#match?
+  - Regexp#sub
+  - Regexp#gsub
 
 - nil
   - is an object, just like any other
   - represents the concept of nothing
-
-- Array [] [0,2,nil][1]
-  - Linear list, accessed by index
-  - mixed type of objects
-
-- Hash {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
-  - key/value
-  - An association by an arbitrary key type
-  - Hash.new(0) # where 0 is the default value
 
 - Variables
   - nouns of Ruby
@@ -153,6 +237,35 @@ https://rubyreferences.github.io/rubychanges/evolution.html
       - a *message* is being send to the object,
         which contains the method name along with arguments
 
+- Enumerable (module) https://ruby-doc.org/3.2.2/Enumerable.html
+  - aka a collection of object references
+  - =Array= [] [0,2,nil][1] Array.new
+    - #pop/#push      elements from the end
+    - #shift/#unshift elements from the beginning
+    - %w[] to create array of strings
+    - %i[] to create array of strings
+    - [FROM,LENGTH]
+    - [FROM..END] [FROM...ENDNOTINC]
+    - can growth by displacing elements with [?,?]= or [?..?]
+    - [] is a method .[](0) is valid
+    - #each
+    - Linear list, accessed by index
+    - mixed type of objects
+  - =Hash= {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
+    - remembers order of insertion
+    - supports "punning" for creation, if both are variable names in scope
+      {firstname:, lastname:}
+    - "=>" aka "hashrocket"
+    - key/value
+    - An association by an arbitrary key type
+    - Hash.new(0) # where 0 is the default value
+
+- Numeric https://ruby-doc.org/3.0.7/Numeric.html
+  - #positive?, #negative?, #nonzero?, #zero?
+  - =Float= https://ruby-doc.org/3.0.7/Float.html
+  - =Integer= https://ruby-doc.org/3.0.7/Integer.html
+    - #times, #upto(N)
+
 ** stdlib
 
 - new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
@@ -176,6 +289,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
                     .flatten
                     .map(&:to_i)
 #+end_src
+
 * tools
 
 - tool: ri (Ruby API reference frontend)

@@ -132,8 +132,10 @@ https://rosettacode.org/wiki/Hello_world/Web_server
 https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 
 1) Strings
+   - index start at 1
 2) Numbers
 3) Arrays
+   - index start at 0
    - 1D
    - for strings or numbers
    - no need to be declared
@@ -310,6 +312,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | "cmd" ¦& getline     | reads from a two-way pipe           | NF, RT, $0          |
 | "cmd" ¦& getline var | reads from a two-way pipe into var  | RT                  |
 |----------------------+-------------------------------------+---------------------|
+NOTE: call ~close("cmd")~ on the non two-way pipes
 ** format strings
 
 https://www.gnu.org/software/gawk/manual/html_node/Control-Letters.html

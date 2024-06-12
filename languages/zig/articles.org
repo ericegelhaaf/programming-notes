@@ -8,8 +8,6 @@
 - 21 http://msinilo.pl/blog2/post/zig-pathtracer/
 - 21 https://zig.news/kprotty/resource-efficient-thread-pools-with-zig-3291
 
-- 22 https://www.huy.rocks/everyday/12-11-2022-zig-using-zig-for-advent-of-code
-- 22 https://www.forrestthewoods.com/blog/failing-to-learn-zig-via-advent-of-code/
 - 22 https://rischmann.fr/blog/how-i-built-zig-sqlite
 - 22 https://renato.athaydes.com/posts/testing-building-c-with-zig.html
 
