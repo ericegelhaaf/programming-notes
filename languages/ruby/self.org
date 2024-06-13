@@ -23,16 +23,37 @@
   - not variables, they hold references to an object
     - use #dup when need a copy
     - use #freeze to not admit modifications (numbers and symbols are by default)
+  - ergo, everything is a reference
 - Optional () on function calls
-- operators
-  - + works for sum /numbers/ and concatenate /strings/
-  - =~ to match a string against a regex, returns that starting position or nil
-  - %w[] to create array of strings
-  - %i[] to create array of strings
-  - <<
-    - append to an array
 - indentation isn't significant
 - most lines that look like *statements* in Ruby are actually *expression* that return a value
+- #tap
+  - useful for debugging chain of method calls
+  - takes a block, pass the receiver, and then return the orignal receiver of the method
+  - a "no-op", execept that invokes a block
+
+** testing
+
+#+begin_src ruby
+  require_relative "words_from_string"
+  require "minitest/autorun"
+  class TestWordsFromString < Minitest::Test
+    def test_empty_string # methods starting with "test" automatically run
+      assert_equal([], words_from_string(""))
+      assert_equal([], words_from_string("   "))
+    end
+  end
+#+end_src
+
+** operators
+
+- + works for sum /numbers/ and concatenate /strings/
+- =~ to match a string against a regex, returns that starting position or nil
+- %w[] to create array of strings
+- %i[] to create array of strings
+- <<
+  - array << el
+  - append to an array
 
 ** require
 
@@ -56,7 +77,7 @@ private/public/protected def
 - ARGV array with command line arguments
   ARGF??? the content of all the files whose names are passed to the command line or stdin
 
-** Style
+** style
 
 - guide https://github.com/airbnb/ruby
 - guide https://github.com/rubocop/ruby-style-guide
@@ -74,7 +95,7 @@ private/public/protected def
 - ModuleName
 - CONSTANT_NAME
 
-** Changelog
+** changelog
 
 https://rubyreferences.github.io/rubychanges/evolution.html
 
@@ -114,7 +135,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - new parser: Prism
   - introduces RJIT
 
-** Control Flow
+** control flow
 
 - if/elsif/else/end
 - unless/
@@ -129,9 +150,23 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     square = square * square while square < 1000
   #+end_src
 
-- a =block= {} do/end
+** a =block= {} do/end
   - usage: to package code to implement a later callback
+  - parameters to a block are ALWAYS local to that block
+  - has access to variables outside his scope
+  - =Iterator= or =Enumerator= a method that can invoke a block of code repeatedly
   - invoked in a method using ~yield~
+    - parameters put after a ; are considered locals to that block (awk-ish) (RARE!)
+      #+begin_src ruby
+        square = "some shape"
+        sum = 0
+        [1,2,3,4].each do |value;square|
+          square = value * value
+          sum += square
+        end
+        puts sum
+        puts square
+      #+end_src
     - no argument
       #+begin_src ruby
         def call_block
@@ -154,7 +189,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - you can only pass one block per method call
     greet("dave", "loyal customer") { puts "hi" }
 
-** Types
+** types
 
 - Ruby 2: diagram of classes
   http://jeromedalbert.com/a-diagram-of-the-ruby-core-object-model/
@@ -164,9 +199,15 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - attributes are just methods without arguments
   - the "only easy" way to change an object's state is by calling onf its methods
   - Methods
-    - public: by default (except initialize which is private) (RARE explicit)
-    - protected: can be invoked by class or subclasses (RARE!) can be used on attr_reader/w/a
-    - private: cannot be invoked without an explicit receiver
+    - special
+      - to_s
+      - inspect
+      - each
+    - arguments, keyword args, *,**splats, &arguments
+    - Types
+      - public: by default (except initialize which is private) (RARE explicit)
+      - protected: can be invoked by class or subclasses (RARE!) can be used on attr_reader/w/a
+      - private: cannot be invoked without an explicit receiver
   #+NAME: from "Programming Ruby 3.3"
   #+begin_src ruby
     class BookInStock
@@ -239,6 +280,10 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 - Enumerable (module) https://ruby-doc.org/3.2.2/Enumerable.html
   - aka a collection of object references
+  - #dig: helps to dig through nested data structures
+    - Returns if not found nil, doesn't raise an exception
+    - From: data[:mcu][0][:actors][1]
+      To:   data.dig(:mcu, 0, :actors, 1)
   - =Array= [] [0,2,nil][1] Array.new
     - #pop/#push      elements from the end
     - #shift/#unshift elements from the beginning
@@ -248,9 +293,10 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     - [FROM..END] [FROM...ENDNOTINC]
     - can growth by displacing elements with [?,?]= or [?..?]
     - [] is a method .[](0) is valid
-    - #each
+    - #each #reverse_each (#with_index)
     - Linear list, accessed by index
     - mixed type of objects
+    - #tally - counts frequency of elements into a hash
   - =Hash= {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
     - remembers order of insertion
     - supports "punning" for creation, if both are variable names in scope
@@ -259,6 +305,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     - key/value
     - An association by an arbitrary key type
     - Hash.new(0) # where 0 is the default value
+    - #sort_by - returns an array of arrays of 2 elements
 
 - Numeric https://ruby-doc.org/3.0.7/Numeric.html
   - #positive?, #negative?, #nonzero?, #zero?
@@ -288,6 +335,11 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   width, height = `xrandr`.scan(/current (\d+) x (\d+)/)
                     .flatten
                     .map(&:to_i)
+#+end_src
+
+#+NAME: split into words
+#+begin_src ruby
+  "FOO Bar Foo".downcase.scan(/[\w']+/)
 #+end_src
 
 * tools

@@ -1,0 +1,20 @@
+- TUI Libraries https://charm.sh/
+
+|-------------+----+----+-------------------------+--------------------------------------------|
+| =name=      |    |  k | =description=           | =repo url=                                 |
+|-------------+----+----+-------------------------+--------------------------------------------|
+| mysql       | 23 | 13 | mysql driver            | https://github.com/go-sql-driver/mysql     |
+| goquery     | 23 | 12 | jQuery/html parser      | https://github.com/PuerkitoBio/goquery     |
+| go-colorful | 22 |  1 | colors                  | https://github.com/lucasb-eyer/go-colorful |
+| ease        | 17 |  0 | easing functions        | https://github.com/fogleman/ease           |
+|-------------+----+----+-------------------------+--------------------------------------------|
+| bubbletea   | 23 | 17 | tui framework           | https://github.com/charmbracelet/bubbletea |
+| lipgloss    | 23 |  5 | terminal style          | https://github.com/charmbracelet/lipgloss  |
+| bubbles     | 23 |  3 | tea tui components      | https://github.com/charmbracelet/bubbles   |
+| glamour     | 23 |  1 | markdown rendering      | https://github.com/charmbracelet/glamour   |
+| harmonica   | 22 |  1 | physics based animation | https://github.com/charmbracelet/harmonica |
+| termenv     | 23 |  1 | terminal style/colors   | https://github.com/muesli/termenv          |
+| reflow      | 23 |  0 | text reflow ops         | https://github.com/muesli/reflow/          |
+| go-isatty   | 23 |  0 | isatty for golang       | https://github.com/mattn/go-isatty         |
+| go-osc52    | 23 |  0 | clipboard               | https://github.com/aymanbagabas/go-osc52/  |
+|-------------+----+----+-------------------------+--------------------------------------------|
