@@ -72,6 +72,32 @@
 | ftpd  | FTP server                                     |
 | smtpd | SMTP server implementation                     |
 ** Commands
+
+- gets stdin line
+- read -nonewline stdin
+- concat
+- upvar
+- lappend
+- lassign
+- lindex
+- linsert
+- llength
+- lmap
+- lrange
+- lrepeat
+- lreplace
+- lsearch
+- lsort
+- regexp
+- split
+- join
+- scan
+- list
+- array
+- string
+- if/else
+- foreach
+
 |-----------+-----------------------------------------------------------------------------|
 | apply     | applies an anonymous function                                               |
 | array     |                                                                             |
@@ -90,6 +116,16 @@
 | yieldto   | ditto                                                                       |
 | zlib      | zlib library                                                                |
 |-----------+-----------------------------------------------------------------------------|
+** Tk
+
+- #!/usr/bin/env wish
+
+- button .? -text ""|0 -command {}
+  - https://wiki.tcl-lang.org/page/button
+- pack .?
+  - causes a widget to appear on screen
+  - https://wiki.tcl-lang.org/page/pack
+
 * Libraries
 - web - uses noVNC to run x11 on browser https://wiki.tcl-lang.org/page/CloudTk
 - GUTTER - Great Unified Tcl/Tk Extension Repository

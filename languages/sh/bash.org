@@ -68,7 +68,9 @@
 - https://zwischenzugs.com/2018/10/12/eleven-bash-tips-you-might-want-to-know/
   https://zwischenzugs.com/2020/05/09/some-relatively-obscure-bash-tips/
 
-- Bash does NOT support natively floating point.
+- Bash does NOT support natively floating point numbers
+
+- jobs/bg/fg/%N
 
 ** Coproc
 

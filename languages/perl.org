@@ -6,3 +6,5 @@
 - Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
 - codebase https://github.com/trizen/youtube-viewer
 - codebase https://github.com/prsquee/irssi-scripts
+- community:
+  - foro español http://perlenespanol.com/foro/

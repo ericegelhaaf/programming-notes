@@ -1,3 +1,27 @@
+- 01 http://ruby-doc.com/docs/ProgrammingRuby/
+- 04 1.7 http://ruby-hacking-guide.github.io/
+- 06 https://rubylearning.github.io/satishtalim/tutorial.html
+- 13 http://jasonkim.ca/projects/just_enough_ruby_to_get_by/
+- 17 https://essenceofchaos.gitbooks.io/learn-ruby-first/content/
+- ? https://web.archive.org/web/20180321101922/http://www.humblelittlerubybook.com/book/html/index.html
+- 22 https://i-love-ruby.gitlab.io/book.html
+- https://learnxinyminutes.com/docs/ruby/
+- https://fiachetti.gitlab.io/mastering-roda/
+- https://pine.fm/LearnToProgram/
+- https://learnrubythehardway.org/book/
+- https://www.programming-books.io/essential/ruby/
+- https://launchschool.com/books/core_ruby_tools
+- https://launchschool.com/books/ruby
+- https://launchschool.com/books/oo_ruby
+- https://www.ruby-lang.org/en/documentation/quickstart/
+- https://learnbyexample.github.io/learn_ruby_oneliners/
+- https://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/index.html
+- https://leanpub.com/rwdtow/read
+- https://github.com/elm-city-craftworks/practicing-ruby-manuscripts
+- for security https://rubyfu.net/
+- http://ruby.bastardsbook.com/
+- https://caliban.org/ruby/rubyguide.shtml
+- 2.7 https://rubyreferences.github.io/rubyref/
 - https://github.com/manjunath5496/Ruby-Programming-Books
 - book: https://learnbyexample.github.io/learn_ruby_oneliners/
 
@@ -17,6 +41,33 @@
 - Ruby is an OOP, in programming terms, an object is
   a thing that combines data with the logic that
   manipulates that data.
+
+** 4
+
+#+begin_src ruby
+  def my_while(cond, &body)
+    while cond.call
+      body.call
+    end
+  end
+
+  a = 0
+  my_while(-> { a < 3 }) do
+    puts a
+    a += 1
+  end
+#+end_src
+
+- blocks taking different type of arguments
+  #+begin_src ruby
+    #proc1 = -> (a, *b, &block) do
+    proc1 = lambda do |a, *b, &block|
+      puts "a = #{a.inspect}"
+      puts "b = #{b.inspect}"
+      block.call
+    end
+    proc1.call(1,2,3,4) { puts "in block1" } # a = 1 ; b = [2,3,4]
+  #+end_src
 
 * Book: why's (poignant) guide to Ruby
 

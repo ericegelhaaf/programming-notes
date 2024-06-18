@@ -1,3 +1,7 @@
+- https://wiki.tcl-lang.org/page/Articles
+- TCL/Tk Hello world https://wiki.tcl-lang.org/page/The+Hello+World+program+as+implemented+in+Tcl%2FTk
+- TCL/Ruby/Perl/Python https://tkdocs.com/tutorial/firstexample.html
+- 23 | https://gist.github.com/nat-418/bdccb2428cde750c9f42bf9bbc1a50d3
 - 24 | https://cohost.org/sakiamu/post/177439-tcl-on-the-brain
 - 23 | https://forum.exercism.org/t/tcl-some-notes/5567
 - 04 | 10 Things I Hate About Tcl
@@ -13,7 +17,6 @@
 - https://www.magicsplat.com/articles/tdbc.html
 - 2020 | Building Tcl 8.6 single file applications - a step-by-step guide
   https://www.magicsplat.com/blog/starpack-example/
-- https://wiki.tcl-lang.org/page/Articles
 - Style https://wiki.tcl-lang.org/page/Tcl+Style+Guide
 - Style https://wiki.tcl-lang.org/page/Best+Practices
 

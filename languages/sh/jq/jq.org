@@ -12,6 +12,7 @@
 * language
 
 - #!/usr/bin/jq -f
+- jq -n # to quickly test snippets without input
 - jq sources ~/.jq automatically
 - First written in Haskell, but early rewritten in C for performance (?)
 - Created by Stephen Dolan in 2012
@@ -145,6 +146,7 @@
 | 1 | while(.<30; .*2)                                | [1,2,4,8,16] |                                      |
 | 1 | repeat(.*2; error)?                             | [2]          | repeats filter until error is raised |
 | 4 | [.,1]¦until(.[0] < 1; [.[0]-1, .[1]*.[0]])¦.[1] | 24           |                                      |
+|   | recurse???                                      |              |                                      |
 |---+-------------------------------------------------+--------------+--------------------------------------|
 
 ** format & escape strings
@@ -244,6 +246,7 @@
 |-------------------+----------------------------------------------|
 | debug             | like (.) but it prints to stderr too         |
 | range(TO)         |                                              |
+| range(FROM;TO)    |                                              |
 | range(FROM;TO;BY) | produces a stream of numbers                 |
 | empty             | returns empty                                |
 |-------------------+----------------------------------------------|
