@@ -1,3 +1,8 @@
+- generics https://markkarpov.com/tutorial/generics
+- exceptions https://markkarpov.com/tutorial/exceptions
+- template haskell https://markkarpov.com/tutorial/th.html
+- megaparsec https://markkarpov.com/tutorial/megaparsec
+
 - rio https://www.fpcomplete.com/haskell/library/rio/
 - terminfo https://github.com/tanakh/cless/blob/master/src/Main.hs
 - euterpea
@@ -56,6 +61,7 @@
 | formatting  | 22 | 0.2 | text formatting                    | https://github.com/AJChapman/formatting                                 |
 | printf      |    |     | text formatting (slow)             | https://hackage.haskell.org/package/base-4.19.1.0/docs/Text-Printf.html |
 |-------------+----+-----+------------------------------------+-------------------------------------------------------------------------|
+- optparse https://github.com/pcapriotti/optparse-applicative/blob/master/README.md
 * database
 |-----------------+----+-----+--------------------+-------------------------------------------------|
 | opaleye         | 24 | 0.6 | postgres SQL's DSL | https://github.com/tomjaguarpaw/haskell-opaleye |
@@ -95,3 +101,11 @@
 | http              | 24 | 0.3 | http client           | https://github.com/mrkkrp/req                |
 | blaze-html        | 24 | 0.2 | html DSL              | https://github.com/jaspervdj/blaze-html      |
 |-------------------+----+-----+-----------------------+----------------------------------------------|
+- aeson
+  - https://www.fpcomplete.com/haskell/library/aeson/
+  - 19 https://williamyaoh.com/posts/2019-10-19-a-cheatsheet-to-json-handling.html
+  - 19 https://dev.to/piq9117/haskell-encoding-and-decoding-json-with-aeson-5d7n
+  - 18 https://github.com/neongreen/artyom.me/blob/master/posts/aeson.md
+  - 17 https://mmhaskell.com/blog/2017/6/5/flexible-data-with-aeson
+  - 15 https://web.archive.org/web/20201121162141mp_/https://artyom.me/aeson
+  - 15 https://www.schoolofhaskell.com/school/starting-with-haskell/libraries-and-frameworks/text-manipulation/json

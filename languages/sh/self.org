@@ -5,6 +5,9 @@
     - 2 for  dentries + inodes
     - 3 for  pagecache + dentries + inodes
 
+- man
+  - improvement https://gist.github.com/alphapapa/3cba3ff196147ad42bac
+
 - find
   - -ok, is like -exec, but ask user before running
 

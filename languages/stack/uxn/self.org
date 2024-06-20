@@ -7,6 +7,29 @@
 - Using:
   - .label/sublabel
 - memory is big endian
+- Booleans: 01 = True | 00 = False
+- Opcodes (30)
+  |------------+---------------------------------|
+  | memory     | LDZ STZ LDR STR LDA STA DEI DEO |
+  | arithmetic | ADD SUB MUL DIV                 |
+  | bitwise    | AND ORA EOR SFT                 |
+  | stack      | POP DUP NIP SWP OVR ROT LIT     |
+  | logic      | EQU NEQ GTH LTH                 |
+  | jump       | JMP JCN JSR                     |
+  | -          | BRK                             |
+  |------------+---------------------------------|
+
+- cheatsheet https://gist.github.com/neauoire/80a5d013d631c618aff40e4769dc6156
+  #+begin_src forth
+    ( A label is equal to a POSITION in the program )
+    @parent ( defines a label "parent" )
+    &child  ( defines a sublabel "parent/child" )
+
+    ( Label positions can be PUSHED on stack )
+    ;parent ( push the absolute  position, 2 bytes )
+    ,parent ( push the relative  position, 1 byte )
+    .parent ( push the zero-page position, 1 byte )
+  #+end_src
 
 - discussion https://llllllll.co/t/uxn-virtual-computer/46103/466
 - uxn source https://git.sr.ht/~rabbits/uxn

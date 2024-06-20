@@ -1,6 +1,9 @@
 - http://skilldrick.github.io/easy6502/
 - http://visual6502.org/
 - https://chotrin.org/notes/6502.html
+- opcodes http://www.6502.org/tutorials/6502opcodes.html
+- web emulator https://github.com/skilldrick/6502js
+- game: snake https://gist.github.com/wkjagt/9043907
 
 - Products
   - Apple IIe

@@ -1,3 +1,5 @@
 - wiki https://en.wikipedia.org/wiki/APL_(programming_language)
 - talks, pure functional https://github.com/Co-dfns/Co-dfns
 - reference https://github.com/jpellegrini/gnu-apl-refcard
+- 74 video | The Origins of APL https://www.youtube.com/watch?v=8kUQWuK1L4w
+- 75 video | APL demostration https://www.youtube.com/watch?v=_DTpQ4Kk2wA

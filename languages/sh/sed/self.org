@@ -20,21 +20,35 @@
 - https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome
   aka when a quoted expresion becomes unreadable
   because it contains a large number of escape characters
-- can separate commands with "cmd1;cmd2" or "-e cmd2 -e cmd2"
+- can separate commands with either
+  - cmd1;cmd2
+  - -e cmd2 -e cmd2
 
 - [address]command
   address { cmd1; cmd2; } # cannot have a space before ";"
 
-** script
-- a series of operations/actions
-- the "body of a loop" that iterates through lines
-- each line of a script is a pattern-action pair
-  aka a conditional statement
-** operations
-- of a command
-- applied over the /pattern space/
-- by default, after run, sed output the /pattern space/
-- and begins the /cycle/ again with the next line
+** addresses
+
+- If
+  - NO  address, command is applied to each line
+  - has address, applies to the line matching
+    - address is followed by a (!), inverse the address match
+
+- Can be
+  - 1,2  where 1=startline and 2=endline
+    a comma separated tuple, command is applied from and upto including the matched line
+    "You can think of the 1st address as enabling the action and the second address as disabling it."
+  - 1~2  where 1=startline and  2=step
+  - 1,+2 where 1=startline and +2=distance/length
+  - /aregex/
+    - also supports arbitrary characters as delimitators, with a backslash for the left one
+    - \:aregex:
+  - NUMBER of line (not reset by different files)
+  - $ represents the last line
+  - {} to group different commands to the same OR different address
+  - line addressing symbol
+  - can mix up line number and regex
+
 ** commands
 - Might take an additional (1 or 2) =address=
 - 25 commands
@@ -75,30 +89,17 @@
 |       x | exchange | aka swap content between /hold space/ and /pattern space/                       |
 |---------+----------+---------------------------------------------------------------------------------|
 
-** addresses
-
-- If
-  - NO  address, command is applied to each line
-  - has address, applies to the line matching
-    - address is followed by a (!), inverse the address match
-
-- Can be
-  - 1,2  where 1=startline and 2=endline
-    a comma separated tuple, command is applied from and upto including the matched line
-    "You can think of the 1st address as enabling the action and the second address as disabling it."
-  - 1~2  where 1=startline and  2=step
-  - 1,+2 where 1=startline and +2=distance/length
-  - /aregex/
-    - also supports arbitrary characters as delimitators, with a backslash for the left one
-    - \:aregex:
-  - NUMBER of line (not reset by different files)
-  - $ represents the last line
-  - {} to group different commands to the same OR different address
-  - line addressing symbol
-  - can mix up line number and regex
-
+** script
+- a series of operations/actions
+- the "body of a loop" that iterates through lines
+- each line of a script is a pattern-action pair
+  aka a conditional statement
+** operations
+- of a command
+- applied over the /pattern space/
+- by default, after run, sed output the /pattern space/
+- and begins the /cycle/ again with the next line
 ** flags
-
 |----------------+---------------------------------------------------------|
 | -e script      | inline script                                           |
 | -f script-file | path to script-file                                     |
