@@ -11,6 +11,7 @@
 | gawk      | https://www.gnu.org/software/gawk/                                            |
 | mawk      | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
 | nawk      | https://github.com/onetrueawk/awk                                             |
+|           | https://justine.lol/awk/                                                      |
 | goawk     | https://github.com/benhoyt/goawk                                              |
 | bioawk    | https://github.com/lh3/bioawk                                                 |
 |-----------+-------------------------------------------------------------------------------|
@@ -50,6 +51,11 @@ $ readelf -d /usr/bin/mawk | grep Shared # 155K
 
 - 2023
   - --csv, supports fields surrounded by double quotes
+
+- Authors
+  - Aho A. V.
+  - Weinberger P. J.
+  - Kernighan B. W.
 
 * language
 
