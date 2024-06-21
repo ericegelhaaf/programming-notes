@@ -1,0 +1,17 @@
+- wiki https://en.wikipedia.org/wiki/Altair_8800
+  - 1975-
+  - Microcomputer
+  - by MITS
+  - CPU: Intel 8080
+
+- Playlist: Altair 8800 Instructional Videos https://www.youtube.com/playlist?list=PLB3mwSROoJ4KLWM8KwK0cD1dhX35wILBj
+- https://www.youtube.com/watch?v=2yyBfw3CARc
+- https://www.youtube.com/watch?v=NXTZ-JNBfeQ
+- https://www.youtube.com/watch?v=cwEmnfy2BhI
+- Altair 8800 - Front Panel Programming Tutorial
+  - #1 https://www.youtube.com/watch?v=7nDcTRqZu8E
+  - #2 https://www.youtube.com/watch?v=f9Tr5pWMy8E
+  - #3 https://www.youtube.com/watch?v=2u6yGWK0cZE
+  - #4
+    https://www.youtube.com/watch?v=eZkUkVIwxTU
+    https://www.youtube.com/watch?v=EvA3NeXkrn4

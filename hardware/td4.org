@@ -1,0 +1,21 @@
+- Made in Japan?
+- No RAM (1 bus)
+- Sold in alienexpress
+  - Comes with switches to program steps
+- Instructions
+  - NOP
+  - ADD
+  - MOV
+  - IN
+  - OUT
+  - AND
+  - JZ
+  - JMP
+
+- https://amane-uehara.github.io/cpubook/
+- https://hackaday.io/project/8442-ttl-based-4-bit-cpu
+- https://hackaday.io/project/26215-td4-cpu
+- http://kamakurium.com/wp-content/uploads/2016/01/cpu_td4
+- https://www.amazon.com/Shi-x304-No-Tsukurikata-Dejitaru/dp/4839909865/ref=sr_1_1?ie=UTF8&qid=1447595397&sr=8-1&keywords=4839909865
+- J https://github.com/wuxx/TD4-4BIT-CPU
+- J https://blog.wadackel.me/2019/rust-td4/

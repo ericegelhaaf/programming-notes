@@ -13,6 +13,10 @@
 - Channel https://www.youtube.com/@pablohreda/videos
 - Demo(scene) https://demozoo.org/productions/310231/
 
+- 08 Bootstrap yourself into conviviality by writing your own Forth
+  - by David Frech
+  - video https://vimeo.com/859408
+  - author of muForth https://muforth.dev/
 - 24 Forth Bitcoin miner for PC and Game Boy | Lee
   video https://www.youtube.com/watch?v=QGpZl23vXbw
   source https://github.com/lf94/gbforth/blob/main/examples/sha256/sha256.fs

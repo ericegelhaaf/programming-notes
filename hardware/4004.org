@@ -1,0 +1,11 @@
+- wiki https://en.wikipedia.org/wiki/Intel_4004
+  - 1971-1981
+  - ~745KHz
+  - DIP16
+  - 2.3k transistors
+  - Width in bits
+    - Data: 4
+    - Address: 12
+  - First comercially produced microprocessor
+
+- Intel https://www.4004.com/
