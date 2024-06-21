@@ -1,3 +1,6 @@
+#+TITLE: JQ
+#+AUTHOR: azimut
+
 |--------------+---------------------------------------------------------|
 | wiki         | https://en.wikipedia.org/wiki/Jq_(programming_language) |
 | source (C)   | https://github.com/jqlang/jq/                           |
@@ -119,6 +122,8 @@
 
 ** operators
 |----------+------------------------------------------------------------|
+| operator | description                                                |
+|----------+------------------------------------------------------------|
 | +        | addition, concatenation([]), merge({})                     |
 | -        | subtraction                                                |
 | ¦        | pipe operator                                              |
@@ -205,6 +210,8 @@
   - x: extend regex format, ignores whitespaces and comments (#)
 
 |------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
+| input            | filter                                         | output                                             | description                                |
+|------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
 | "Hello World!"   | test("W")                                      | true                                               | to know if a substring matches the pattern |
 | "Goodbye Mars"   | test("W")                                      | false                                              |                                            |
 |                  | test(REGEX;FLAGS)                              |                                                    |                                            |
@@ -238,11 +245,13 @@
 |                  | sub(REGEX; REPLACEMENT; FLAGS)                 |                                                    |                                            |
 |                  | gsub(REGEX; REPLACEMENT)                       |                                                    |                                            |
 |                  | gsub(REGEX; REPLACEMENT; FLAGS)                |                                                    |                                            |
-| "this: gnu, csv" | gsub("\\b(?<tla>[[:alpha:]]{3})\\b")               | "this: GNU, CSV"                                   |                                            |
+| "this: gnu, csv" | gsub("\\b(?<tla>[[:alpha:]{3})\\b")            | "this: GNU, CSV"                                   |                                            |
 |                  | ;    "\(.tla ¦ ascii_upcase)")                 |                                                    |                                            |
 |------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
 
 ** general functions
+|-------------------+----------------------------------------------|
+| filter            | description                                  |
 |-------------------+----------------------------------------------|
 | debug             | like (.) but it prints to stderr too         |
 | range(TO)         |                                              |
@@ -415,7 +424,7 @@ https://jqlang.github.io/jq/manual/v1.7/#math
   to_entries | map(filter) | from_entries
 
 
-* command
+* flags
 
 |------+----------------------+-------------------------------------------------|
 |      |                      | description                                     |

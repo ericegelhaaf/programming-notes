@@ -1,0 +1,16 @@
+- wiki https://en.wikipedia.org/wiki/Intel_8008
+  - 1972-1983
+  - 500 - 800 kHz
+  - DIP18
+  - 3.5k transistors (10um)
+  - width in bits
+    - data: 8
+    - address: 14
+
+- microcomputers
+  - https://en.wikipedia.org/wiki/MCM/70
+    - 1974-
+    - OS in APL
+    - Had a cassete tape
+  - https://en.wikipedia.org/wiki/Mark-8
+    - diy kit

@@ -2,7 +2,7 @@
   - 1971-1981
   - ~745KHz
   - DIP16
-  - 2.3k transistors
+  - 2.3k transistors (10um)
   - Width in bits
     - Data: 4
     - Address: 12

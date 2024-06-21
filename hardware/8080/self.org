@@ -3,6 +3,7 @@
   - 1974-1990
   - 2 - 3.125 MHz
   - DIP40
+  - 4.5k - 6k transistors (6um)
   - width in bits
     - Data: 8
     - Address: 16

@@ -4,6 +4,20 @@
   - by MITS
   - CPU: Intel 8080
 
+* Images
+
+- leds
+  - 8 for data
+  - 16 for address
+- switches
+  - 16 for the data bus
+  - single step
+
+#+CAPTION: Frontpanel
+#+ATTR_ORG: :width 1500
+[[./Living_Computers_-_Altair_8800_(39802981903).50.jpg]]
+
+* Videos
 - Playlist: Altair 8800 Instructional Videos https://www.youtube.com/playlist?list=PLB3mwSROoJ4KLWM8KwK0cD1dhX35wILBj
 - https://www.youtube.com/watch?v=2yyBfw3CARc
 - https://www.youtube.com/watch?v=NXTZ-JNBfeQ
