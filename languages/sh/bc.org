@@ -1,16 +1,21 @@
-- man gnu https://www.gnu.org/software/bc/manual/html_mono/bc.html
-- man posix https://web.archive.org/web/20090501204511/http://manpages.ubuntu.com/manpages/jaunty/en/man1/bc.1posix.html
-- source (C) https://github.com/fivepiece/gnu-bc/
-- wiki https://en.wikipedia.org/wiki/Bc_%28programming_language%29
-  - "basic calculator"
-  - Authors:
-    - Robert Morris
-    - Lorinda Cherry
-      - https://ncwit.org/profile/lorinda-cherry/
-      - https://news.ycombinator.com/item?id=30354391
+#+TITLE: bc
+#+OPTIONS: ^:nil
+|------------+--------------------------------------------------------------------------------------------------------------|
+| man gnu    | https://www.gnu.org/software/bc/manual/html_mono/bc.html                                                     |
+| man posix  | https://web.archive.org/web/20090501204511/http://manpages.ubuntu.com/manpages/jaunty/en/man1/bc.1posix.html |
+| source (C) | https://github.com/fivepiece/gnu-bc/                                                                         |
+| faq        | http://phodd.net/gnu-bc/bcfaq.html                                                                           |
+| tutorial   | https://org.coloradomesa.edu/~mapierce2/bc/                                                                  |
+| wiki       | https://en.wikipedia.org/wiki/Bc_%28programming_language%29                                                  |
+|------------+--------------------------------------------------------------------------------------------------------------|
 
-- faq http://phodd.net/gnu-bc/bcfaq.html
-- tutorial https://org.coloradomesa.edu/~mapierce2/bc/
+- "Basic Calculator"
+- started as a frontend of =dc=
+- Authors:
+  - Robert Morris
+  - Lorinda Cherry
+    - https://ncwit.org/profile/lorinda-cherry/
+    - https://news.ycombinator.com/item?id=30354391
 
 * Language
 
@@ -29,6 +34,8 @@ define foo(x) {
 }
 #+end_src
 
+|-------------+--------------------------------------------|
+| fn          | returns                                    |
 |-------------+--------------------------------------------|
 | length(n)   | length in digits of n, including decimals  |
 | s(n)        | sine                                       |

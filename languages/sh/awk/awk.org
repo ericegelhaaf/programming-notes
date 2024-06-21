@@ -1,18 +1,22 @@
-|-----------+------+-------------------------------------------------------------------------------|
-| book      |      | https://www.awk.dev/                                                          |
-| wiki      |      | https://en.wikipedia.org/wiki/AWK                                             |
-| wikibooks |      | https://en.wikibooks.org/wiki/AWK                                             |
-| web repl  |      | https://awk.js.org/                                                           |
-|-----------+------+-------------------------------------------------------------------------------|
-| gawk      | 689K | https://www.gnu.org/software/gawk/                                            |
-| mawk      | 155K | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
-| nawk      |      | https://github.com/onetrueawk/awk                                             |
-| goawk     |      | https://github.com/benhoyt/goawk                                              |
-| bioawk    |      | https://github.com/lh3/bioawk                                                 |
-|-----------+------+-------------------------------------------------------------------------------|
+#+TITLE: AWK
+#+OPTIONS: ^:nil
+|-----------+-------------------------------------------------------------------------------|
+|           | url                                                                           |
+|-----------+-------------------------------------------------------------------------------|
+| book      | https://www.awk.dev/                                                          |
+| wiki      | https://en.wikipedia.org/wiki/AWK                                             |
+| wikibooks | https://en.wikibooks.org/wiki/AWK                                             |
+| web repl  | https://awk.js.org/                                                           |
+|-----------+-------------------------------------------------------------------------------|
+| gawk      | https://www.gnu.org/software/gawk/                                            |
+| mawk      | https://web.archive.org/web/20240202023335/https://invisible-island.net/mawk/ |
+| nawk      | https://github.com/onetrueawk/awk                                             |
+| goawk     | https://github.com/benhoyt/goawk                                              |
+| bioawk    | https://github.com/lh3/bioawk                                                 |
+|-----------+-------------------------------------------------------------------------------|
 
 #+begin_src
-$ readelf -d /usr/bin/gawk | grep Shared
+$ readelf -d /usr/bin/gawk | grep Shared # 689K
  0x0000000000000001 (NEEDED)             Shared library: [libsigsegv.so.2]
  0x0000000000000001 (NEEDED)             Shared library: [libreadline.so.8]
  0x0000000000000001 (NEEDED)             Shared library: [libmpfr.so.6]
@@ -20,7 +24,7 @@ $ readelf -d /usr/bin/gawk | grep Shared
  0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
 
-$ readelf -d /usr/bin/mawk | grep Shared
+$ readelf -d /usr/bin/mawk | grep Shared # 155K
  0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
 #+end_src
@@ -144,21 +148,20 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
    - delete array[subscript]
    - use this to coerce into an array in a body's function
      "" in arr
-
-- Set the order an already created array would be presented on a forIn
-  https://www.gnu.org/software/gawk/manual/html_node/Controlling-Array-Traversal.html
-  # comp_func(i1, v1, i2, v2) < 0  Index i1 comes before index i2
-  # comp_func(i1, v1, i2, v2) == 0 Indices i1 and i2 come together
-  # comp_func(i1, v1, i2, v2) > 0  Index i1 comes after in2
-  PROCINFO["sorted_in"] = "afunctionname" like comp_func(index1, value1, index2, value2)
-  PROCINFO["sorted_in"] = "@val_num_asc"
-  PROCINFO["sorted_in"] = "@val_num_desc"
-  PROCINFO["sorted_in"] = "@val_str_asc"
-  PROCINFO["sorted_in"] = "@val_str_desc"
-  PROCINFO["sorted_in"] = "@ind_num_asc"
-  PROCINFO["sorted_in"] = "@ind_num_desc"
-  PROCINFO["sorted_in"] = "@ind_str_asc"
-  PROCINFO["sorted_in"] = "@ind_str_desc"
+   - Set the order an already created array would be presented on a forIn
+     https://www.gnu.org/software/gawk/manual/html_node/Controlling-Array-Traversal.html
+     - comp_func(i1, v1, i2, v2) < 0  Index i1 comes before index i2
+     - comp_func(i1, v1, i2, v2) == 0 Indices i1 and i2 come together
+     - comp_func(i1, v1, i2, v2) > 0  Index i1 comes after in2
+     - PROCINFO["sorted_in"] = "afunctionname" like comp_func(index1, value1, index2, value2)
+     - PROCINFO["sorted_in"] = "@val_num_asc"
+     - PROCINFO["sorted_in"] = "@val_num_desc"
+     - PROCINFO["sorted_in"] = "@val_str_asc"
+     - PROCINFO["sorted_in"] = "@val_str_desc"
+     - PROCINFO["sorted_in"] = "@ind_num_asc"
+     - PROCINFO["sorted_in"] = "@ind_num_desc"
+     - PROCINFO["sorted_in"] = "@ind_str_asc"
+     - PROCINFO["sorted_in"] = "@ind_str_desc"
 
 ** built-in variables
 
@@ -195,15 +198,16 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 |----------+----------------------------------------------+-----------|
 ** built-in functions
 https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din
-*** TIME https://www.gnu.org/software/gawk/manual/html_node/Time-Functions.html
-
+*** TIME
+https://www.gnu.org/software/gawk/manual/html_node/Time-Functions.html
 |----------+----------------------+-------------------------------------------------|
 | mktime   | DATESTR, UTC?        | given DATESTR, timestamp in seconds since epoch |
 | strftime | FMT, TIMESTAMP, UTC? |                                                 |
 | systime  | -                    | now, timestamp in seconds since epoch           |
 |----------+----------------------+-------------------------------------------------|
 
-*** BITWISE https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
+*** BITWISE
+https://www.gnu.org/software/gawk/manual/html_node/Bitwise-Functions.html
 |--------------------+-------------------------------------|
 |                <r> | returns                             |
 |--------------------+-------------------------------------|
@@ -227,7 +231,10 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 |    isarray(arr) | boolean                   |                                                  |
 |-----------------+---------------------------+--------------------------------------------------|
 
-*** MATH https://www.gnu.org/software/gawk/manual/html_node/Numeric-Functions.html
+*** MATH
+https://www.gnu.org/software/gawk/manual/html_node/Numeric-Functions.html
+|------------+------------------------------------|
+|            | returns                            |
 |------------+------------------------------------|
 | atan2(y,x) | arctangent of y/x in -x to x range |
 | cos(x)     | cosine of x, with x in radians     |
@@ -241,7 +248,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | rand()     | random nuber r, 0 <= r < 1         |
 | srand(x)   | x is new seed for rand()           |
 |------------+------------------------------------|
-*** STRING https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html
+*** STRING
+https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html
 |---------------------+---------------------------+-----------------------------------------------|
 |                     | returns                   | does                                          |
 |---------------------+---------------------------+-----------------------------------------------|
@@ -301,7 +309,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | close(command)  | break connection between print and command  |
 | system(command) | execute command                             |
 |-----------------+---------------------------------------------|
-*** getline https://www.gnu.org/software/gawk/manual/html_node/Getline.html
+*** getline
+https://www.gnu.org/software/gawk/manual/html_node/Getline.html
 |----------------------+-------------------------------------+---------------------|
 | getline              | reads next input record             | NF, NR, FNR, RT, $0 |
 | getline var          | reads n.i.r. into var               | NR, FNR, RT         |
@@ -313,13 +322,15 @@ https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002di
 | "cmd" ¦& getline var | reads from a two-way pipe into var  | RT                  |
 |----------------------+-------------------------------------+---------------------|
 NOTE: call ~close("cmd")~ on the non two-way pipes
+
 ** format strings
 
 https://www.gnu.org/software/gawk/manual/html_node/Control-Letters.html
 https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 
 - %+-width.prec(?)
-
+|--------+------------------------------|
+|        | description                  |
 |--------+------------------------------|
 | %f, %F | float                        |
 | %a, %A | float hexa                   |
@@ -350,6 +361,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 
 * codebases
 |---------------------+----------------------------------------------------------------|
+|                     | url                                                            |
+|---------------------+----------------------------------------------------------------|
 | graphics demo       | https://github.com/patsie75/awk-demo                           |
 | graphics libs       | https://github.com/patsie75/awk-glib                           |
 | CHIP-8              | https://github.com/patsie75/awk-chip8                          |
@@ -364,7 +377,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 | toy lang compiler   | https://cowlark.com/mercat/com.awk.txt                         |
 | plot.awk (to svg)   | https://gist.github.com/katef/fb4cb6d47decd8052bd0e8d88c03a102 |
 | gemini client       | http://git.vgx.fr/gem.awk/file/gem.awk.html                    |
-| gopher client       | https://git.sr.ht/~akarle/gc/tree/main/item/gc                                                               |
+| gopher client       | https://git.sr.ht/~akarle/gc/tree/main/item/gc                 |
 |---------------------+----------------------------------------------------------------|
 | libs                | https://github.com/e36freak/awk-libs                           |
 | libs                | https://github.com/dubiousjim/awkenough                        |

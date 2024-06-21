@@ -1,15 +1,18 @@
-- source (C) https://git.savannah.gnu.org/gitweb/?p=sed.git https://github.com/mirror/sed
-- home https://www.gnu.org/software/sed/
-- manual https://www.gnu.org/software/sed/manual/sed.html
-- wiki https://en.wikipedia.org/wiki/Sed
-  - "Stream EDitor"
-  - frontend for "dc"
-  - Author: Lee E. McMahon
-  - 1974-
-  - _line-oriented_ text processing utility
-  - #!/bin/sed -f
+#+TITLE: sed
+#+OPTIONS: ^:nil
+|------------+--------------------------------------------------|
+| source (C) | https://github.com/mirror/sed                    |
+| home       | https://www.gnu.org/software/sed/                |
+| manual     | https://www.gnu.org/software/sed/manual/sed.html |
+| wiki       | https://en.wikibooks.org/wiki/Sed                |
+| wiki       | https://en.wikipedia.org/wiki/Sed                |
+|------------+--------------------------------------------------|
 
-- https://en.wikibooks.org/wiki/Sed
+- "Stream EDitor"
+- Author: Lee E. McMahon
+- 1974-
+- _line-oriented_ text processing utility
+- #!/bin/sed -f
 
 * language
 
@@ -112,6 +115,8 @@
 * snippets
 https://sed.sourceforge.io/#scripts
 |-----------------------+---------------+-------------------------------------------------------------------------|
+|                       | flag          | description                                                             |
+|-----------------------+---------------+-------------------------------------------------------------------------|
 | p                     |               | prints every line twice                                                 |
 | p                     | -n            | prints every line                                                       |
 | 1p                    | -n            | prints first line                                                       |
@@ -149,8 +154,10 @@ https://sed.sourceforge.io/#scripts
 - https://literateprograms.org/category_programming_language_sed.html
   - rot13 https://literateprograms.org/rot13__sed_.html
 ** remove the last 10 lines of a file
+
   https://stackoverflow.com/questions/13380607/how-to-use-sed-to-remove-the-last-n-lines-of-a-file/13380679
   sed -i -n -e :a -e '1,10!{P;N;D;};N;ba' file.txt
+
 * codebases
 
 - debugger https://github.com/aureliojargas/sedsed
