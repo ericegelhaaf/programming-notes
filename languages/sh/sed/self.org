@@ -1,4 +1,5 @@
 #+TITLE: sed
+#+DATE: <2023-09-04 lun>
 #+OPTIONS: ^:nil
 |------------+--------------------------------------------------|
 | source (C) | https://github.com/mirror/sed                    |
