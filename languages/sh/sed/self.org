@@ -102,7 +102,7 @@
 - applied over the /pattern space/
 - by default, after run, sed output the /pattern space/
 - and begins the /cycle/ again with the next line
-** flags
+* flags
 |----------------+---------------------------------------------------------|
 | -e script      | inline script                                           |
 | -f script-file | path to script-file                                     |

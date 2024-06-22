@@ -73,6 +73,7 @@
 
 - Bash does NOT support natively floating point numbers
 
+- CTRL+z = sends a SIGTSTP aka suspends program
 - jobs/bg/fg/%N
 
 ** Coproc
@@ -100,6 +101,9 @@
   - classic solutions won't because =command substitution= $() runs in a subshell
 
 ** Types
+
+- reserved words
+- shell builtin
 
 - array ops
   ${arr[0]}
