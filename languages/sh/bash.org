@@ -53,6 +53,9 @@
 - Process substitution
   - careful of not forgetting an "<" in "cmd < <(cmd2)"
   - "cmd | tee >(cmd2) >(cmd3)" - sends "cmd" output to both "cmd2" and "cmd3" stdin https://tecadmin.net/bash-process-substitution/
+  - bash won't wait for cmd2 or cmd3 to finish to exit
+    - detailed explaination https://unix.stackexchange.com/questions/403783/the-process-substitution-output-is-out-of-the-order
+    - you can hack together a ~work group~ type of thing with ~mkfifo~ https://unix.stackexchange.com/questions/351780/wait-for-bash-process-substitution-subshells
 
 - Brace Expansion
   - support integer zero padding

@@ -1,13 +1,13 @@
 #+TITLE: bc
 #+OPTIONS: ^:nil
-|------------+--------------------------------------------------------------------------------------------------------------|
-| man gnu    | https://www.gnu.org/software/bc/manual/html_mono/bc.html                                                     |
-| man posix  | https://web.archive.org/web/20090501204511/http://manpages.ubuntu.com/manpages/jaunty/en/man1/bc.1posix.html |
-| source (C) | https://github.com/fivepiece/gnu-bc/                                                                         |
-| faq        | http://phodd.net/gnu-bc/bcfaq.html                                                                           |
-| tutorial   | https://org.coloradomesa.edu/~mapierce2/bc/                                                                  |
-| wiki       | https://en.wikipedia.org/wiki/Bc_%28programming_language%29                                                  |
-|------------+--------------------------------------------------------------------------------------------------------------|
+|------------+--------------------------------------------------------------------|
+| man gnu    | https://www.gnu.org/software/bc/manual/html_mono/bc.html           |
+| man posix  | https://pubs.opengroup.org/onlinepubs/9699919799/utilities/bc.html |
+| source (C) | https://github.com/fivepiece/gnu-bc/                               |
+| faq        | http://phodd.net/gnu-bc/bcfaq.html                                 |
+| tutorial   | https://org.coloradomesa.edu/~mapierce2/bc/                        |
+| wiki       | https://en.wikipedia.org/wiki/Bc_%28programming_language%29        |
+|------------+--------------------------------------------------------------------|
 
 - "Basic Calculator"
 - started as a frontend of =dc=
@@ -68,7 +68,7 @@ define foo(x) {
 
 - Bc: Deep Dive Into The POSIX Calculator Language | Broodie Robertson
   https://www.youtube.com/watch?v=JascI_29sks
-- Linux in the Shell Ep 25 - bcNot Yet Rated
+- Linux in the Shell Ep 25 - bc
   https://vimeo.com/101977655
 
 * Libraries
