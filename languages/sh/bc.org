@@ -11,6 +11,7 @@
 
 - "Basic Calculator"
 - started as a frontend of =dc=
+- 1975-
 - Authors:
   - Robert Morris
   - Lorinda Cherry
@@ -49,7 +50,7 @@ define foo(x) {
 | ibase       | "input base"                               |
 |-------------+--------------------------------------------|
 
-** Flags
+* Flags
 
 |----+-----------+------------------------------------------------|
 | -q | --quiet   | suppreses welcome message                      |
