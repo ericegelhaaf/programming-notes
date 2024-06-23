@@ -1,4 +1,4 @@
-#+TITLE: AWK
+#+TITLE: AWK's reference
 #+DATE: <2023-09-04 lun>
 #+OPTIONS: ^:nil
 |-----------+-------------------------------------------------------------------------------|
@@ -54,9 +54,9 @@ $ readelf -d /usr/bin/mawk | grep Shared # 155K
   - --csv, supports fields surrounded by double quotes
 
 - Authors
-  - Aho A. V.
-  - Weinberger P. J.
-  - Kernighan B. W.
+  - Aho Alfred Vaino
+  - Weinberger Peter Jay
+  - Kernighan Brian Wilson
 
 * language
 
