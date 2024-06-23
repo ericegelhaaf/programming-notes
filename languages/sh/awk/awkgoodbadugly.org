@@ -1,0 +1,35 @@
+#+TITLE: AWK: The Good, The Bad & The Ugly
+#+DATE: <2024-02-27 mar>
+#+OPTIONS: ^:nil num:nil toc:nil
+
+Inspired in a similar [[https://forum.exercism.org/t/tcl-some-notes/5567][post]] on exercism. I though I would share my notes on Awk that I took while [[https://github.com/azimut/challenges/tree/master/adventofcode/23][I was doing adventofcode]] last year.
+
+Here “Bad” are things that will cause bugs on your code. And “Ugly” are annoying things that once your accept them might make you think different approaches to your problem.
+
+* The Good
+
+- a regex pattern matching for each line can carry you longer that I though possible
+- shines when parsing text files
+- if you have been playing around with pattern matching and guards on a functional programming language, you might feel oddly at home. Either with line matching or by using switch/case which also supports regexes.
+- Ternary operators might also become your best friend (which might make you reflect on the shape they take in other programming languages)
+
+* The Bad
+
+- at the end of the day it is a weakly typed language, so even if it looks like number and you can operate on it like a number, if you compare it with something else it might act like a string!!!
+- typos on variable names are painful due awk’s behavior of defaulting uninitialized variables to 0 or “”
+- add it to the fact that if you even touch (reference) a element that doesn’t exists on an array it will be created.
+- per above point, you might want to create an “getter” for arrays
+  #+begin_src awk
+    function map_at(    x,y) {
+      return (x in map && y in map[x]) ? map[x][y] : "?"
+    }
+  #+end_src
+
+* The Ugly
+
+- lack of a extensive stdlib is also a pain, especially with arrays and strings
+- conditions on for loops get evaluated each iteration (this is not awk’s fault, I am just too functionally immutable poisoned)
+- lack of another data type besides associative arrays makes is so you have to get creative and create wacky indexes to imitate complex dictionaries, like:
+  #+begin_src awk
+    mapping["seeds"][2]["distance"] = 42
+  #+end_src
