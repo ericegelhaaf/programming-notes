@@ -2,7 +2,7 @@
 #+DATE: <2024-02-27 mar>
 #+OPTIONS: ^:nil num:nil toc:nil
 
-Inspired in a similar [[https://forum.exercism.org/t/tcl-some-notes/5567][post]] on exercism. I though I would share my notes on Awk that I took while [[https://github.com/azimut/challenges/tree/master/adventofcode/23][I was doing adventofcode]] last year.
+Inspired in a similar [[https://forum.exercism.org/t/tcl-some-notes/5567][post]] on exercism. I though I would share my notes on Awk that I took while [[https://github.com/azimut/challenges/blob/master/adventofcode/23/README.md][I was doing adventofcode]] last year.
 
 Here “Bad” are things that will cause bugs on your code. And “Ugly” are annoying things that once your accept them might make you think different approaches to your problem.
 
