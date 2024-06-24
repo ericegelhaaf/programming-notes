@@ -39,6 +39,7 @@
 - when we call a method without putting a receiver object before it
   it refers to the object named "self"
   aka "puts == self.puts"
+- $? has the exit code of the last run command (like sh)
 
 ** testing
 
@@ -72,6 +73,12 @@ private/public/protected def
 
 ** i/o
 
+- https://docs.ruby-lang.org/en/2.4.0/Open3.html
+  - child process stdin/stdout/stderr and a thread for it
+- https://ruby-doc.org/stdlib-2.6.3/libdoc/pathname/rdoc/Pathname.html
+  - wrapper around File class, crossplatform
+- popen - for r/w from/to a process
+- system - if you don't care about the output just stdout
 - p
   - calls #inspect
 - pp
@@ -80,7 +87,6 @@ private/public/protected def
   - short for "outPUT String"
   - available to all objects
   - often written without parentheses
-
 - $stderr
 - ARGV array with command line arguments
   ARGF??? the content of all the files whose names are passed to the command line or stdin
@@ -299,33 +305,34 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - the "only easy" way to change an object's state is by calling onf its methods
 
 ** Methods (.)
-  - can be redefining (just warns about it)
-  - the verbs of ruby
-  - attached at the end of variables with by a dot
-  - some methods (such as =print=) are kernel methods, won't use the dot
-  - parameters
-    - =positional= foo
-    - =keyword= rank: 10
-      needs the keyword to be passed
-    - =default= rank = 10
-      with a possible computed default
-      (ME: aka &optional)
-  - kinds
-    - Class Methods (::)
-      - attached after variables and constants by a double colon
-    - instance methods (.)
-      - called by RECEIVER.METHODNAME
-      - a *message* is being send to the object,
-        which contains the method name along with arguments
-  - special
-    - to_s
-    - inspect
-    - each
-  - arguments, keyword args, *,**splats, &arguments
-  - Types
-    - public: by default (except initialize which is private) (RARE explicit)
-    - protected: can be invoked by class or subclasses (RARE!) can be used on attr_reader/w/a
-    - private: cannot be invoked without an explicit receiver
+
+- can be redefining (just warns about it)
+- the verbs of ruby
+- attached at the end of variables with by a dot
+- some methods (such as =print=) are kernel methods, won't use the dot
+- parameters
+  - =positional= foo
+  - =keyword= rank: 10
+    needs the keyword to be passed
+  - =default= rank = 10
+    with a possible computed default
+    (ME: aka &optional)
+- kinds
+  - Class Methods (::)
+    - attached after variables and constants by a double colon
+  - instance methods (.)
+    - called by RECEIVER.METHODNAME
+    - a *message* is being send to the object,
+      which contains the method name along with arguments
+- special
+  - to_s
+  - inspect
+  - each
+- arguments, keyword args, *,**splats, &arguments
+- Types
+  - public: by default (except initialize which is private) (RARE explicit)
+  - protected: can be invoked by class or subclasses (RARE!) can be used on attr_reader/w/a
+  - private: cannot be invoked without an explicit receiver
 
 ** types
 
@@ -476,6 +483,16 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 - new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
 - old format https://ruby-doc.org/stdlib-3.0.4/
 - rand(1..6)
+
+** concurrency - threads
+
+#+begin_src ruby
+  (1..10).map do |i|
+    Thread.new do
+      `wget http://example.com/file_00#{i}`
+    end
+  end.each { |thread| thread.join }
+#+end_src
 
 
 * codebases

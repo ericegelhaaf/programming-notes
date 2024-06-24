@@ -124,7 +124,8 @@ https://tldp.org/LDP/abs/html/io-redirection.html
 
 - append output also to file
   - exec &>> file.txt
-  - exec > <(tee file.txt) 2>&1
+  - exec > >(tee file.txt) 2>&1
+  - exec 2> >(tee -a file.txt)
 
 - <filename cmd1              - alternative to cat pipe
   <filename >outfile cmd1

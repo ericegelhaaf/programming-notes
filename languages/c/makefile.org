@@ -24,15 +24,15 @@
 
 * Language
 ** Variables
-|----+-------------------------------------|
-| $@ | target name                         |
-| $< | 1st prerequisite                    |
-| $^ | all prerequisites                   |
+|-----+-------------------------------------|
+| $@  | target name                         |
+| $<  | 1st prerequisite                    |
+| $^  | all prerequisites                   |
 | j$+ | all prerequisites, with repetitions |
-|----+-------------------------------------|
-| $? | invalid - empty string              |
-| $* | invalid - empty string              |
-|----+-------------------------------------|
+|-----+-------------------------------------|
+| $?  | invalid - empty string              |
+| $*  | invalid - empty string              |
+|-----+-------------------------------------|
 * Example: some anon makefile - DEBUG flag
 - src/program.c
   #+begin_src c

@@ -1,17 +1,35 @@
-- https://github.com/ocaml-flambda/ocaml-jst/blob/main/jane/doc/proposals/data-race-freedom.md
-- 2013 https://roscidus.com/blog/blog/2013/06/20/replacing-python-round-2/
-- 2014 https://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/
-- 2019 https://markkarpov.com/post/haskell-vs-ocaml.html
-- 2019 https://tarides.com/blog/2019-05-09-an-introduction-to-ocaml-ppx-ecosystem
-- 2020 https://medium.com/darklang/leaving-ocaml-fce7049a2a40
-- 2021 https://discuss.ocaml.org/t/plans-to-choose-an-official-package-project-manager/8620
-- 2022 Roguelike with effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
-- 2022 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
-- 2022 https://justabluddyblog.wordpress.com/2022/05/01/remaking-an-old-game-in-ocaml/
-- 2022 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
-- 2023 https://borretti.me/article/two-years-ocaml
-- 2023 https://gopiandcode.uk/logs/log-writing-activitypub.html
-- https://osa1.net/posts/2023-04-24-ocaml-thoughts.html
+- course https://www.cl.cam.ac.uk/teaching/1617/L28/materials.html
+- Tutorial:
+  https://o1-labs.github.io/ocamlbyexample/
+  https://github.com/o1-labs/ocamlbyexample
+- Tutorial: https://ocaml.org/learn/tutorials/up_and_running.html
+- Tutorial: https://web.archive.org/web/20091214115026/http://www.ocaml-tutorial.org/streams
+- Tutorial: http://xahlee.info/ocaml/ocaml_basics.html
+- Tutorial: https://lambdafoo.com/posts/2021-10-29-getting-started-with-ocaml.html
+- Tutorial: Cheatsheet https://github.com/OCamlPro/ocaml-cheat-sheets
+- Tutorial: 2006 - OCaml for the Skeptical https://www2.lib.uchicago.edu/keith/ocaml-class/class-01.html
+- Tutorial: 2016 https://github.com/caiorss/Functional-Programming/tree/master/ocaml
+- Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
+- Tutorial: 2019 https://github.com/lindig/ocaml-style
+
+- optimizing http://ocamlverse.net/content/optimizing_performance.html
+- Promises https://cs3110.github.io/textbook/chapters/ds/promises.html?highlight=async
+- https://batsov.com/articles/2022/08/29/ocaml-at-first-glance/
+  https://lobste.rs/s/dwt32y/ocaml_at_first_glance
+- 13 https://roscidus.com/blog/blog/2013/06/20/replacing-python-round-2/
+- 14 https://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/
+- 19 https://markkarpov.com/post/haskell-vs-ocaml.html
+- 19 https://tarides.com/blog/2019-05-09-an-introduction-to-ocaml-ppx-ecosystem
+- 20 https://medium.com/darklang/leaving-ocaml-fce7049a2a40
+- 21 https://discuss.ocaml.org/t/plans-to-choose-an-official-package-project-manager/8620
+- 22 Roguelike with effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
+- 22 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
+- 22 https://justabluddyblog.wordpress.com/2022/05/01/remaking-an-old-game-in-ocaml/
+- 22 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
+- 23 https://borretti.me/article/two-years-ocaml
+- 23 https://gopiandcode.uk/logs/log-writing-activitypub.html
+- 23 https://github.com/ocaml-flambda/ocaml-jst/blob/main/jane/doc/proposals/data-race-freedom.md
+- 23 https://osa1.net/posts/2023-04-24-ocaml-thoughts.html
   https://github.com/sidkshatriya/me/blob/master/007-My-Thoughts-on-OCaml-vs-Haskell-Rust-2023.md
 * LWT
 - Lwt in 5 minutes https://ocsigen.org/tuto/latest/manual/lwt
@@ -356,3 +374,4 @@ https://dev.to/yawaramin/practical-ocaml-multicore-edition-3gf2
 (executable
     (name ocaml_statsd_filter)
     (libraries str eio_main))
+    

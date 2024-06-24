@@ -1,3 +1,4 @@
+- https://lucasoshiro.github.io/posts-en/2024-06-17-ruby-shellscript/
 - https://zverok.space/blog/2023-10-02-syntax-sugar.html
 - https://zverok.space/blog/2023-10-11-syntax-sugar1-numeric-block-args.html
 - https://zverok.space/blog/2023-10-20-syntax-sugar2-pattern-matching.html

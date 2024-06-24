@@ -1,38 +1,151 @@
-- https://github.com/ocaml-multicore/awesome-multicore-ocaml
-  https://v2.ocaml.org/releases/5.0/manual/parallelism.html
-  https://v2.ocaml.org/releases/5.0/manual/effects.html
-- editor https://tarides.com/blog/2022-12-21-advanced-merlin-features-destruct-and-construct
-- profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
-- optimizing http://ocamlverse.net/content/optimizing_performance.html
-- https://batsov.com/articles/2022/08/29/ocaml-at-first-glance/
-  https://lobste.rs/s/dwt32y/ocaml_at_first_glance
-- https://www.cl.cam.ac.uk/teaching/1617/L28/materials.html
-- Promises https://cs3110.github.io/textbook/chapters/ds/promises.html?highlight=async
-- https://smlfamily.github.io/
-- Style guide https://www.cs.cornell.edu/courses/cs3110/2016fa/handouts/style.html
-- Github Action: build docs
-  https://github.com/smimram/monadic-synth/blob/master/.github/workflows/build.yml
-- Manual https://ocaml.org/manual/index.html
-- Manual https://caml.inria.fr/pub/old_caml_site/ocaml/htmlman/index.html
-- Tutorial:
-  https://o1-labs.github.io/ocamlbyexample/
-  https://github.com/o1-labs/ocamlbyexample
-- Tutorial: https://ocaml.org/learn/tutorials/up_and_running.html
-- Tutorial: https://web.archive.org/web/20091214115026/http://www.ocaml-tutorial.org/streams
-- Tutorial: http://xahlee.info/ocaml/ocaml_basics.html
-- Tutorial: https://lambdafoo.com/posts/2021-10-29-getting-started-with-ocaml.html
-- Tutorial: Cheatsheet https://github.com/OCamlPro/ocaml-cheat-sheets
-- Tutorial: 2006 - OCaml for the Skeptical https://www2.lib.uchicago.edu/keith/ocaml-class/class-01.html
-- Tutorial: 2016 https://github.com/caiorss/Functional-Programming/tree/master/ocaml
-- Tutorial: 2019 https://github.com/alhassy/OCamlCheatSheet
-- Tutorial: 2019 https://github.com/lindig/ocaml-style
-- https://github.com/imandra-ai/ocaml-tracy
-- exercises (based on "Perl Cookbook") https://pleac.sourceforge.net/pleac_ocaml/index.html
+#+TITLE: OCaml's reference
+#+DATE: <2020-11-24 mar>
+
+|-------------+------------------------------------------------------------------|
+| wiki        | https://en.wikipedia.org/wiki/OCaml                              |
+| manual      | https://ocaml.org/manual/index.html                              |
+| manual (04) | https://caml.inria.fr/pub/old_caml_site/ocaml/htmlman/index.html |
+|-------------+------------------------------------------------------------------|
+
+- 1996-
+- Authors:
+  - Xavier Leroy, Jerome Voiullon, Damien Doligez, Didier Remy, Ascander Suarez
 
 * Language
+- there are mutable values, but NOT mutable variables
+** Types
+*** simple
+- Int
+- Float
+- String
+*** complex
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| Type       | Init                   | Access  | Modifying | Pattern Matching                | Adding | Appending      |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| ~Unit~     | ()                     |         |           |                                 |        |                |
+| ~Bool~     | x = true,false         |         |           |                                 | &&,¦¦  |                |
+| ~Option~   | Some a, None           |         |           |                                 |        |                |
+| ~String~   | "abcd"                 | .[2]    | <-        |                                 |        | ^              |
+| variant    |                        |         |           |                                 |        |                |
+| mutable    |                        |         | <-        |                                 |        |                |
+| refs       | ref <expr>             | !x      | :=        |                                 |        |                |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| ~Array~    | [¦ a ; b ¦]            | .(2)    | <-        | let [¦ a ; b ¦] = some_array    |        |                |
+| ~Bigarray~ |                        | .{2}    | <-        |                                 |        |                |
+| tuples     | (a , b)                |         |           | let (x , y)  =                  |        |                |
+| ~List~     | [a ; a]                | List.hd |           | let (x :: y) =                  | ::     | @, List.append |
+| struct     | struct let foo = 3 end |         |           |                                 |        |                |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+| record     | {a = VAL ; b = VAL}    | .a      |           | let { x = x_pos ; y = y_pos } = |        |                |
+|            | a=VAL; B=VAL; {a ; b}  |         |           | let { x ; y } =                 |        |                |
+|            |                        |         |           | let v1 = v1.x + v2.y            |        |                |
+|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+** Modules
+- capitalized
+- can be ~open~
+|----------------------------+--------------------------------|
+|                            | code                           |
+|----------------------------+--------------------------------|
+| new                        | module M = struct              |
+|                            | ..let x = 3                    |
+|                            | end                            |
+|----------------------------+--------------------------------|
+| type                       | module type MT = sig           |
+|                            | ..type t                       |
+|                            | ..val is_empty : t -> bool     |
+|                            | end                            |
+|----------------------------+--------------------------------|
+| type+new                   | module M : sig                 |
+|                            | ..type t                       |
+|                            | end = struct                   |
+|                            | ..type t = string              |
+|                            | end                            |
+|----------------------------+--------------------------------|
+|                            | module newM : MT = M           |
+|----------------------------+--------------------------------|
+| new functor                | module fM (M:MT) : MT = struct |
+|                            | ..let x = M.x + 1              |
+|                            | ..let f i = M.g i              |
+|                            | end                            |
+|----------------------------+--------------------------------|
+| instance/use functor       | module newM = functorM(M)      |
+|----------------------------+--------------------------------|
+| instance functor           | module newM =                  |
+| +                          | ..functorM(struct              |
+| anonymous module           | ..type t = int                 |
+|                            | ..let compare = Int.compare    |
+|                            | end)                           |
+|----------------------------+--------------------------------|
+| include                    | module newM = struct           |
+|                            | ..include M                    |
+|                            | ..let f x = x                  |
+|                            | end                            |
+|----------------------------+--------------------------------|
+| include with type          | module newM = sig              |
+| (multiple)                 | ..type t                       |
+|                            | ..include M1 with type t := t  |
+|                            | ..include M2 with type t := t  |
+|                            | end                            |
+|----------------------------+--------------------------------|
+| new module with type       | module type MT =               |
+| "sharing constraint"       | ..MT with type T1 = T2         |
+|----------------------------+--------------------------------|
+| new functor with type      | module fM(M:MT1)               |
+| "sharing constraint"       | ..: (MT2 with type T1 = M.t)   |
+|                            | = struct                       |
+|                            | ..type T1 = M.t                |
+|                            | end                            |
+|----------------------------+--------------------------------|
+| new module with type :=    | module type MT =               |
+| "destructive substitution" | ..MT with type T1 := T2        |
+|----------------------------+--------------------------------|
+| new functor with type :=   | module fM(M:MT1)               |
+| "destructive substitution" | ..: MT2 with type T1 := T2 =   |
+|                            | struct                         |
+|                            | end                            |
+|----------------------------+--------------------------------|
+  #+TBLFM: $2=struct
+** Style
+- guide https://www.cs.cornell.edu/courses/cs3110/2016fa/handouts/style.html
+- Modules
+- variables, functions
+** Functions
+
+#+begin_src ocaml
+  let plusone = (fun x -> x + 1) ;;
+  let plusone x = x + 1 ;;
+#+end_src
+
+- =assert false= can be used on a branch that isn't suppose to happen
+- optional type annotation
+- type variables support for parametric polymorphism
+- implicit =match= of an invisible last argument when using =function=
+- lexically scoped (with let)
+- optional arguments
+  - begin with ?
+    - ?sep ?(sep="")
+    - ~sep:":"
+  - passed as =Option=
+  - useful when is a wrapper to another function that takes an optional
+- labeled arguments (ME: aka keyword args)
+  - at any position of arguments
+  - ~num
+  - ~num:3
+  - ~num   - with label punning if a variable with the same name exists
+  - ~f:String:Length
+  - when is unclear just from the type signature
+    - booleans
+    - more than one value of the same type
+** Operators
+- default polymorphic operators considered problematic
+|----+----------------------|
+| ^  | concatenate strings  |
+| ¦> | pipeline, left assoc |
+| ^> | pipeline, right assoc |
+|----+----------------------|
 ** Standard Library
 - https://v2.ocaml.org/manual/stdlib.html
-  example module url https://v2.ocaml.org/api/Seq.html
+- example module url https://v2.ocaml.org/api/Seq.html
 |----------------+------------------------------------------------------------|
 | =Module=       | =Description=                                              |
 |----------------+------------------------------------------------------------|
@@ -96,33 +209,22 @@
 | Unit           | unit values                                                |
 | Weak           | arrays of weak pointers                                    |
 |----------------+------------------------------------------------------------|
-** Types
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| Type       | Init                   | Access  | Modifying | Pattern Matching                | Adding | Appending      |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| ~Unit~     | ()                     |         |           |                                 |        |                |
-| ~Bool~     | x = true,false         |         |           |                                 | &&,¦¦  |                |
-| ~Option~   | Some a                 |         |           |                                 |        |                |
-| ~String~   | "abcd"                 | .[2]    | <-        |                                 |        | ^              |
-| variant    |                        |         |           |                                 |        |                |
-| mutable    |                        |         | <-        |                                 |        |                |
-| refs       | ref <expr>             | !x      | :=        |                                 |        |                |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| ~Array~    | [¦ a ; b ¦]            | .(2)    | <-        | let [¦ a ; b ¦] = some_array    |        |                |
-| ~Bigarray~ |                        | .{2}    | <-        |                                 |        |                |
-| tuples     | (a , b)                |         |           | let (x , y)  =                  |        |                |
-| ~List~     | [a ; a]                | List.hd |           | let (x :: y) =                  | ::     | @, List.append |
-| struct     | struct let foo = 3 end |         |           |                                 |        |                |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| record     | {a = VAL ; b = VAL}    | .a      |           | let { x = x_pos ; y = y_pos } = |        |                |
-|            | a=VAL; B=VAL; {a ; b}  |         |           | let { x ; y } =                 |        |                |
-|            |                        |         |           | let v1 = v1.x + v2.y            |        |                |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+** Changelog
+- https://github.com/ocaml-multicore/awesome-multicore-ocaml
+  https://v2.ocaml.org/releases/5.0/manual/parallelism.html
+  https://v2.ocaml.org/releases/5.0/manual/effects.html
+* Tools
 
-* Editor
+- profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
+- profiler https://github.com/imandra-ai/ocaml-tracy
+- Github Action: build docs
+  https://github.com/smimram/monadic-synth/blob/master/.github/workflows/build.yml
+
+** Editor
+- editor https://tarides.com/blog/2022-12-21-advanced-merlin-features-destruct-and-construct
 - https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
 - https://github.com/Gopiandcode/gopcaml-mode
   https://www.youtube.com/watch?v=vy6oGSk7A3s
   - needs emacs packages: merlin, ocp-indent, and tuareg
-* Codebase
+* Codebases
 - https://soap.coffee/~lthms/news/CFTSpatialShell.html

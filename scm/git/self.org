@@ -43,6 +43,25 @@
     $ git push --force --all
 
 
+* folder into new repo     (filter-repo)
+
+https://docs.github.com/en/get-started/using-git/splitting-a-subfolder-out-into-a-new-repository
+
+#+begin_src sh
+  $ git clone URL
+  $ cd URLDIR
+  $ git filter-repo --path path/to/folder/ # OR
+  $ git filter-repo --subdirectory-filter path/to/folder # to be the new rootdir
+#+end_src
+
+* remove file from history (filter-repo)
+
+https://stackoverflow.com/questions/43762338/how-to-remove-file-from-git-history
+
+#+begin_src sh
+$ git filter-repo --invert-paths --path dir/subdir/file
+#+end_src
+
 * .git/
 
 index

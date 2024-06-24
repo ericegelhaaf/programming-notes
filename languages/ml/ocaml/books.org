@@ -9,118 +9,33 @@
 - Book:
   https://dev.realworldocaml.org/toc.html
   https://github.com/realworldocaml/book/
-- library
-  | html scraping          | 0.3 | https://aantron.github.io/lambdasoup/         |
-  | bundled of ppx's       | 0.1 | https://github.com/janestreet/ppx_jane        |
-  | autogenerate accessors | 0.1 | https://github.com/janestreet/ppx_fields_conv |
-  | autogenerate accessors | 0.1 | https://github.com/janestreet/fieldslib       |
 ** Types
 - ME: see ocaml.org
 - ^ provided by Pervasives module
-- Ref shorthands probided by Base
-- ¦ used in place of |
-** Modules
-  |----------------------------+--------------------------------|
-  | new                        | module M = struct              |
-  |                            | ..let x = 3                    |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  | type                       | module type MT = sig           |
-  |                            | ..type t                       |
-  |                            | ..val is_empty : t -> bool     |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  | type+new                   | module M : sig                 |
-  |                            | ..type t                       |
-  |                            | end = struct                   |
-  |                            | ..type t = string              |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  |                            | module newM : MT = M           |
-  |----------------------------+--------------------------------|
-  | new functor                | module fM (M:MT) : MT = struct |
-  |                            | ..let x = M.x + 1              |
-  |                            | ..let f i = M.g i              |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  | instance/use functor       | module newM = functorM(M)      |
-  |----------------------------+--------------------------------|
-  | instance functor           | module newM =                  |
-  | +                          | ..functorM(struct              |
-  | anonymous module           | ..type t = int                 |
-  |                            | ..let compare = Int.compare    |
-  |                            | end)                           |
-  |----------------------------+--------------------------------|
-  | include                    | module newM = struct           |
-  |                            | ..include M                    |
-  |                            | ..let f x = x                  |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  | include with type          | module newM = sig              |
-  | (multiple)                 | ..type t                       |
-  |                            | ..include M1 with type t := t  |
-  |                            | ..include M2 with type t := t  |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  | new module with type       | module type MT =               |
-  | "sharing constraint"       | ..MT with type T1 = T2         |
-  |----------------------------+--------------------------------|
-  | new functor with type      | module fM(M:MT1)               |
-  | "sharing constraint"       | ..: (MT2 with type T1 = M.t)   |
-  |                            | = struct                       |
-  |                            | ..type T1 = M.t                |
-  |                            | end                            |
-  |----------------------------+--------------------------------|
-  | new module with type :=    | module type MT =               |
-  | "destructive substitution" | ..MT with type T1 := T2        |
-  |----------------------------+--------------------------------|
-  | new functor with type :=   | module fM(M:MT1)               |
-  | "destructive substitution" | ..: MT2 with type T1 := T2 =   |
-  |                            | struct                         |
-  |                            | end                            |
-  #+TBLFM: $2=struct
+- Ref shorthands prohibited by Base
 ** Functions
-- List
-  (_exn for exception is possible)
+
+- *_exn denotes functions that return an exception
+
 - In_channel.fold_lines
   In_channel.stdin
+
 - Core.Sys.is_file_exn
   Core.Sys.ls_dir
   Core.Filename.concat
-- Time.now
-  Time.diff
-  Time.Span.to_ms
-- https://ocaml.janestreet.com/ocaml-core/latest/doc/base/Base/List/index.html
-  List.append
-  List.concat (like flatten)
-  List.concat_map (like flatten-map)
-  List.dedup_and_sort
-  List.filter
-  List.filter_map (filter and transform, takes a function that returns Option)
-  List.fold
-  List.hd_exn
-  List.iter
-  List.is_empty
-  List.map
-  List.map2_exn
-  List.partition_tf (returns 2 lists, _tf for one list has the true arguments and the other the false ones)
-  List.range
-  List.reduce (special case of .fold, with no initial value and 'a -> 'a -> 'a function, and Option return)
-  List.sort
-  List.tl_exn
-- List.Assoc.find
-  List.Assoc.add
-- String.make
-  String.concat
-  String.length
-  String.comparator_witness
+
+- Time.[now,diff]
+  - Time.Span.to_ms
+
+- List https://ocaml.janestreet.com/ocaml-core/latest/doc/base/Base/List/index.html
+  - List.Assoc.find
+    List.Assoc.add
+
+- String.comparator_witness
+
 ** 1 Guided Tour
 - Modules are Capitalized
-  #+begin_src ocaml
-    let ratio x y =
-      Float.of_int x /. Float.of_int y ;;
-  #+end_src
-- Modules can be *opened* locally
+- Modules can be *open* locally
   #+begin_src ocaml
     let ratio x y =
       let open Float.O in
@@ -130,11 +45,7 @@
       Float.O.(of_int x / of_int y) ;;
   #+end_src
 - (=) operator works as both an assigment and a comparison
-  #+begin_src ocaml
-    let even x =
-      x % 2 = 0 ;;
-  #+end_src
-- Optional =type annotation=
+- optional =type annotation=
   #+begin_src ocaml
     let sum_if_true (test : int -> bool) (x : int) (y : int) : int =
       (if test x then x else 0)
@@ -150,10 +61,10 @@
   #+end_src
 - =Type Errors= (at compile time) vs =Exceptions= (at runtime)
 - =Tuples=
-  1) can have different type
+  1) can have different types
   2) * is used for cartesian product, between the sets
-- Lists, same type, immutable (?)
-- Base vs stdlib
+- Lists, same type, immutable
+- Base vs stdlib (?)
   - Base has **. and **, while stdlib has only **, but as a float
 - =Labeled Argument= (like Common Lisp keyword arguments)
   - Can happen at ANY position, even before mandatory arguments
@@ -169,9 +80,9 @@
   #+begin_src ocaml
     let rec remove_sequential_duplicates list =
       match list with
-      | [] -> []
+      | [] -> [] (* base case *)
       | [hd] -> [hd]
-      | hd1 :: hd2 :: tl ->
+      | hd1 :: hd2 :: tl -> (* inductive case *)
         let new_tl = remove_sequential_duplicates (h2 :: tl) in
         if hd1 = hd2 then new_tl else hd1 :: new_tl
   #+end_src
@@ -299,7 +210,8 @@
   let plusone = (fun x -> x + 1) ;;
   let plusone x = x + 1 ;;
   #+end_src
-- The parameter to a function as a variable *VS* a variable bound to the value being passed by the caller
+- The parameter to a function
+  as a variable *VS* a variable bound to the value being passed by the caller.
   Are equivalent.
   #+begin_src ocaml
   (fun x -> x + 1) 7 ;;
@@ -367,7 +279,7 @@
   let uppercase_concat ?sep a b = concat ?sep (String.concat a) b
   #+end_src
 ** 3 Lists and Patterns
-- match pattern matching will cause shadowing of reuse variables NOT a equality test (like in Erlang)
+- matches in pattern matching will cause shadowing of reused variables NOT an equality test (like in Erlang)
   - instead use a *if* for those cases
   - generated bytecode for match, usually jump directly to the matching condition (not just checking each one)
   - can take care of redundancy and completness in the compilation
@@ -1209,11 +1121,13 @@ type details =
   val extended_color_to_int : extended_color -> int
 #+end_src
 ** 7 Error Handling
-- "Use exceptions for exceptional conditions", if the error is rare
+"Use exceptions for exceptional conditions", if the error is rare
+|--------------------+-------------+------------+-------------|
 | Errors             | Omnipresent | Acceptable | Foreseeable |
 |--------------------+-------------+------------+-------------|
 | Exceptions         |             | Yes        |             |
 | Error-aware return | No          |            | Yes         |
+|--------------------+-------------+------------+-------------|
 *** Error-aware return type
 **** =Option=
 1) propagate error

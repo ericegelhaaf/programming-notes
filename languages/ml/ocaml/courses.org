@@ -1,3 +1,4 @@
+- exercises solutions (based on "Perl Cookbook")
 - Course: Dan Ghica's Foundations of Computer Science https://vimeo.com/user8856528/videos
 - Course: John Whitington’s Videos https://vimeo.com/user20888710/videos
 - Course: 2013 - Washington University https://homes.cs.washington.edu/~djg/teachingMaterials/gpl/lectures/
