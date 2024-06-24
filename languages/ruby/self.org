@@ -1,13 +1,19 @@
-- docs https://docs.ruby-lang.org/en/
-- home https://www.ruby-lang.org/en/
-- https://en.wikibooks.org/wiki/Ruby_Programming
-- https://en.wikipedia.org/wiki/Ruby_on_Rails
-- https://en.wikipedia.org/wiki/Ruby_(programming_language)
-  - Author: Yukihiro Matsumoto (matz)
-  - 1995-
-  - Written in C
-  - Author wanted an OO language.
-    Didn't like Python, because it wasn't true OO.
+#+TITLE: Ruby's reference
+#+DATE: <2024-06-11 mar>
+
+|------+-----------------------------------------------------------|
+| docs | https://docs.ruby-lang.org/en/                            |
+| home | https://www.ruby-lang.org/en/                             |
+| wiki | https://en.wikipedia.org/wiki/Ruby_on_Rails               |
+| wiki | https://en.wikipedia.org/wiki/Ruby_(programming_language) |
+| wiki | https://en.wikibooks.org/wiki/Ruby_Programming            |
+|------+-----------------------------------------------------------|
+
+- Author: Yukihiro Matsumoto (matz)
+- 1995-
+- Written in C
+- Author wanted an OO language.
+  Didn't like Python, because it wasn't true OO.
 
 - #!/usr/bin/env ruby
 
