@@ -47,13 +47,19 @@
   aka "puts == self.puts"
 
 - lib/<gemname>/<class>.rb
+- test/<gemname>/all_tests.rb # require_relative other .rbs
 - test/<gemname>/<class>_test.rb
 
 ** variables
-
-- $? has the exit code of the last run command (like sh)
-- __FILE__ has the name of the file being run
-
+- the "nouns" of Ruby
+|----------+------------------------------------------------------|
+| $?       | has the exit code of the last run command (like sh)  |
+| __FILE__ | has the name of the file being run                   |
+| $stdout  | standard output                                      |
+| $stderr  | standard error                                       |
+| ARGV     | array with command line arguments                    |
+| ARGF     | the content of all the files whose names were passed |
+|----------+------------------------------------------------------|
 ** testing
 
 - "do NOT mind code duplication in tests" - PragmaticRuby
@@ -67,6 +73,7 @@
       @playlist = Playlist.new("Gonzo")
       @movie1 = Movie.new("A", 10)
       @movie2 = Movie.new("B", 9)
+      $stdout = StringIO.new # supress stdout
     end
     def test_high_number
       @playlist.stub(:roll_die, 6) do  # override method to return a constant value
@@ -89,6 +96,8 @@
 | %w() | "                                                 |
 | %i[] | "                                                 |
 | <<   | appends an element to an array                    |
+| ::   | scope resolution operator                         |
+| #{}  | string interpolation                              |
 |------+---------------------------------------------------|
 ** require
 
@@ -113,9 +122,6 @@
   - short for "outPUT String"
   - available to all objects
   - often written without parentheses
-- $stderr
-- ARGV array with command line arguments
-  ARGF??? the content of all the files whose names are passed to the command line or stdin
 
 ** style
 
@@ -242,7 +248,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     #+begin_src ruby
       square = "some shape"
       sum = 0
-      [1,2,3,4].each do |value;square|
+      [1,2,3,4].each do |value;square| # 2 block parameters
         square = value * value
         sum += square
       end
@@ -285,6 +291,8 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     #+end_src
 
 ** Classes
+
+- templates for creating objectss
 
 #+NAME: from "Programming Ruby 3.3"
 #+begin_src ruby
@@ -345,7 +353,8 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     with a possible computed default
     (ME: aka &optional)
 - kinds
-  - Class Methods (::)
+  - module methods (::) self.
+  - Class Methods (::) self.
     - attached after variables and constants by a double colon
   - instance methods (.)
     - called by RECEIVER.METHODNAME
@@ -361,14 +370,33 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - protected: can be invoked by class or subclasses (RARE!) can be used on attr_reader/w/a
   - private: cannot be invoked without an explicit receiver
 
+** modules
+
+- to group related constants, for mixins or namespaces
+
+#+begin_src ruby
+  module Snackbar
+    Snack = Data.define(:name, :price)
+    SNACKS = [
+      Snack.new("popcorn", 3),
+      Snack.new("candy", 1)
+    ]
+    def self.random_snack # self. declares a "module method"
+      SNACKS.sample
+    end
+  end
+#+end_src
+
+#+begin_src ruby
+  require_relative "snackbar"
+  Snackbar::SNACKS.each do { |snack| puts snack.name }
+#+end_src
+
 ** types
 
 - Ruby 2: diagram of classes
   http://jeromedalbert.com/a-diagram-of-the-ruby-core-object-model/
   https://farm6.staticflickr.com/5443/10075536704_84aa13676a_o.jpg
-
-- Variables
-  - nouns of Ruby
 
 - Constants
   - capitalized
@@ -408,102 +436,124 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     - when you need a string but you won't be printing it
     - when you need to use the same string over and over
 
-- Enumerator (class)
-  - as objects they are =Enumerable=
-  - implements *external iterators*, where you control the iteration behavior
-  - Creating
-    - what an iterator method returns if you don't pass it a block
-    - #to_enum -> #next
-    - #enum_for(:each_slice, 3) - in the case the method used for the enumerator takes params
-    - Enumerator.produce - takes an initial value and a block
-      #+begin_src ruby
-        triangular_numbers = Enumerator.produce([1,2]) do |number,count|
-          [number + count, count + 1]
-        end
-        5.times { print triangular_numbers.next.first, " " } # => 1 3 6 10 15
-        p triangular_numbers.first(5).map { _.first } # => [1,3,6,10,15]
-      #+end_src
-    - Enumerator.new {|x| ...}
-      #+begin_src ruby
-        triangular_numbers = Enumerator.new do |yielder| # called when #next
-          number = 0
-          count = 1
-          loop do
-            number += count
-            count += 1
-            yielder.yield(number) # pausing point
-          end
-        end
-        5.times { print triangular_numbers.next, " " } # 1 3 6 10 15
-      #+end_src
+- Struct
+  #+begin_src ruby
+    Snack = Struct.new(:name, :price)
+  #+end_src
+  - when you have date and no behaviour
+  - it creates accessors (r/w) automatically
 
-- Enumerable (module/mixin) https://ruby-doc.org/3.2.2/Enumerable.html
-  - #lazy => Enumerator::Lazy
-    reimplements select/map/... to work with infinite sequences
+- Data
+  #+begin_src ruby
+    Snack = Data.define(:name, :price)
+  #+end_src
+  - when you have date and no behaviour
+  - it creates readers automatically
+    - immutable
+
+*** Enumerator (class)
+
+- as objects they are =Enumerable=
+- implements *external iterators*, where you control the iteration behavior
+- Creating
+  - what an iterator method returns if you don't pass it a block
+  - #to_enum -> #next
+  - #enum_for(:each_slice, 3) - in the case the method used for the enumerator takes params
+  - Enumerator.produce - takes an initial value and a block
     #+begin_src ruby
-      class InfiniteStream
-        def all
-          Enumerator.produce(0) do |number|
-            number += 1
-          end.lazy
+      triangular_numbers = Enumerator.produce([1,2]) do |number,count|
+        [number + count, count + 1]
+      end
+      5.times { print triangular_numbers.next.first, " " } # => 1 3 6 10 15
+      p triangular_numbers.first(5).map { _.first } # => [1,3,6,10,15]
+    #+end_src
+  - Enumerator.new {|x| ...}
+    #+begin_src ruby
+      triangular_numbers = Enumerator.new do |yielder| # called when #next
+        number = 0
+        count = 1
+        loop do
+          number += count
+          count += 1
+          yielder.yield(number) # pausing point
         end
       end
-      p InfiniteStream.new.all.first(10)
-      p InfiniteStream.new.select { (_1 % 3).zero? }.first(10)
-      # Example:
-      def palindrome(n)
-        n = n.to_s
-        n == n.reverse
-      end
-      p InfiniteStream.new
-        .select { (_1 % 3).zero? }
-        .select { palindrome?(_1) }
-        .first(10)
-      # Example: alternative syntax
-      multiple_of_three = InfiniteStream.new.all.select { (_1 % 3).zero? }
-      p multiple_of_three.first(10)
-      m3_palindrome = multiple_of_three.select { palindrome?(_1) }
-      p m3_palindrome.first(10)
-      # Example: alternative syntax
-      multiple_of_three = -> n { (n % 3).zero? }
-      palindrome = -> n { n = n.to_s; n == n.reverse }
-      p InfiniteStream.new.all
-        .select(&multiple_of_three)
-        .select(&palindrome)
-        .first(10)
+      5.times { print triangular_numbers.next, " " } # 1 3 6 10 15
     #+end_src
-  - aka a collection of object references
-  - #reduce(0) { |sum,ele| sum + ele }
-    #reduce { |sum,ele| sum + ele }
-    #reduce(:+)
-  - #dig: helps to dig through nested data structures
-    - Returns if not found nil, doesn't raise an exception
-    - From: data[:mcu][0][:actors][1]
-      To:   data.dig(:mcu, 0, :actors, 1)
-  - =Array= [] [0,2,nil][1] Array.new
-    - #pop/#push      elements from the end
-    - #shift/#unshift elements from the beginning
-    - #compact        remove nil
-    - #sample         get random element
-    - %w[] to create array of strings
-    - %i[] to create array of strings
-    - [FROM,LENGTH]
-    - [FROM..END] [FROM...ENDNOTINC]
-    - can growth by displacing elements with [?,?]= or [?..?]
-    - [] is a method .[](0) is valid
-    - #each #reverse_each (#with_index)
-    - Linear list, accessed by index
-    - mixed type of objects
-    - #tally - counts frequency of elements into a hash
-  - =Hash= {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
-    - remembers order of insertion
-    - supports "punning" for creation, if both are variable names in scope
-      {firstname:, lastname:}
-    - "=>" aka "hashrocket"
-    - key/value
-    - An association by an arbitrary key type
-    - Hash.new(0) # where 0 is the default value
-    - #sort_by - returns an array of arrays of 2 elements
+
+*** Enumerable (module/mixin)
+- https://ruby-doc.org/3.2.2/Enumerable.html
+- #lazy => Enumerator::Lazy
+  reimplements select/map/... to work with infinite sequences
+  #+begin_src ruby
+    class InfiniteStream
+      def all
+        Enumerator.produce(0) do |number|
+          number += 1
+        end.lazy
+      end
+    end
+    p InfiniteStream.new.all.first(10)
+    p InfiniteStream.new.select { (_1 % 3).zero? }.first(10)
+    # Example:
+    def palindrome(n)
+      n = n.to_s
+      n == n.reverse
+    end
+    p InfiniteStream.new
+      .select { (_1 % 3).zero? }
+      .select { palindrome?(_1) }
+      .first(10)
+    # Example: alternative syntax
+    multiple_of_three = InfiniteStream.new.all.select { (_1 % 3).zero? }
+    p multiple_of_three.first(10)
+    m3_palindrome = multiple_of_three.select { palindrome?(_1) }
+    p m3_palindrome.first(10)
+    # Example: alternative syntax
+    multiple_of_three = -> n { (n % 3).zero? }
+    palindrome = -> n { n = n.to_s; n == n.reverse }
+    p InfiniteStream.new.all
+      .select(&multiple_of_three)
+      .select(&palindrome)
+      .first(10)
+  #+end_src
+- aka a collection of object references
+- #reduce(0) { |sum,ele| sum + ele }
+  #reduce { |sum,ele| sum + ele }
+  #reduce(:+)
+- #dig: helps to dig through nested data structures
+  - Returns if not found nil, doesn't raise an exception
+  - From: data[:mcu][0][:actors][1]
+    To:   data.dig(:mcu, 0, :actors, 1)
+**** Array []
+
+- [0,2,nil][1] Array.new
+- #pop/#push      elements from the end
+- #shift/#unshift elements from the beginning
+- #compact        remove nil
+- #sample         get random element
+- %w[] to create array of strings
+- %i[] to create array of strings
+- [FROM,LENGTH]
+- [FROM..END] [FROM...ENDNOTINC]
+- can growth by displacing elements with [?,?]= or [?..?]
+- [] is a method .[](0) is valid
+- #each #reverse_each (#with_index)
+- Linear list, accessed by index
+- mixed type of objects
+- #tally - counts frequency of elements into a hash
+
+**** Hash {}
+
+- {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
+- remembers order of insertion
+- supports "punning" for creation, if both are variable names in scope
+  {firstname:, lastname:}
+- "=>" aka "hashrocket"
+- key/value
+- An association by an arbitrary key type
+- Hash.new(0) # where 0 is the default value
+- #sort_by - returns an array of arrays of 2 elements
 
 ** stdlib
 
