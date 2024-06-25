@@ -10,6 +10,7 @@
 | impl | https://github.com/oracle/truffleruby                     |
 | impl | https://www.jruby.org                                     |
 | impl | http://www.rubymotion.com/                                |
+| impl | https://mruby.org/                                        |
 |------+-----------------------------------------------------------|
 
 - Author: Yukihiro Matsumoto (matz)
@@ -31,6 +32,7 @@
     - use #dup when need a copy
     - use #freeze to not admit modifications (numbers and symbols are by default)
   - ergo, everything is a reference
+  - arguments are passed as references to functions
 - Optional () on function calls
 - indentation isn't significant
 - most lines that look like *statements* in Ruby are actually *expression* that return a value
@@ -43,14 +45,35 @@
 - when we call a method without putting a receiver object before it
   it refers to the object named "self"
   aka "puts == self.puts"
+
+- lib/<gemname>/<class>.rb
+- test/<gemname>/<class>_test.rb
+
+** variables
+
 - $? has the exit code of the last run command (like sh)
+- __FILE__ has the name of the file being run
 
 ** testing
 
+- "do NOT mind code duplication in tests" - PragmaticRuby
+- assert_, refute_
+- _equal, _empty
 #+begin_src ruby
   require_relative "words_from_string"
-  require "minitest/autorun"
+  require "minitest/autorun" # runs all the test_*
   class TestWordsFromString < Minitest::Test
+    def setup # called before each test_ method in class
+      @playlist = Playlist.new("Gonzo")
+      @movie1 = Movie.new("A", 10)
+      @movie2 = Movie.new("B", 9)
+    end
+    def test_high_number
+      @playlist.stub(:roll_die, 6) do  # override method to return a constant value
+        @playlist.play()
+        assert_equal 11, @movie1.rank
+      end
+    end
     def test_empty_string # methods starting with "test" automatically run
       assert_equal([], words_from_string(""))
       assert_equal([], words_from_string("   "))
@@ -59,15 +82,14 @@
 #+end_src
 
 ** operators
-
-- + works for sum /numbers/ and concatenate /strings/
-- =~ to match a string against a regex, returns that starting position or nil
-- %w[] to create array of strings
-- %i[] to create array of strings
-- <<
-  - array << el
-  - #append el to array
-
+|------+---------------------------------------------------|
+| +    | sums, concatenate                                 |
+| =~   | match string against regex, returns start pos/nil |
+| %w[] | create an array of strings                        |
+| %w() | "                                                 |
+| %i[] | "                                                 |
+| <<   | appends an element to an array                    |
+|------+---------------------------------------------------|
 ** require
 
 #+begin_src ruby
