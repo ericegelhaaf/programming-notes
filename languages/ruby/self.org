@@ -7,10 +7,6 @@
 | wiki | https://en.wikipedia.org/wiki/Ruby_on_Rails               |
 | wiki | https://en.wikipedia.org/wiki/Ruby_(programming_language) |
 | wiki | https://en.wikibooks.org/wiki/Ruby_Programming            |
-| impl | https://github.com/oracle/truffleruby                     |
-| impl | https://www.jruby.org                                     |
-| impl | http://www.rubymotion.com/                                |
-| impl | https://mruby.org/                                        |
 |------+-----------------------------------------------------------|
 
 - Author: Yukihiro Matsumoto (matz)
@@ -292,6 +288,12 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 ** Classes
 
+- created with NAME.new
+- has/can have
+  - each instance has an ~object_id~ /property/
+  - instance variables
+- attributes are just methods without arguments
+- the "only easy" way to change an object's state is by calling onf its methods
 - templates for creating objectss
 
 #+NAME: from "Programming Ruby 3.3"
@@ -329,14 +331,6 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     end
   end
 #+end_src
-
-- Classes
-  - created with NAME.new
-  - has/can have
-    - each instance has an ~object_id~ /property/
-    - instance variables
-  - attributes are just methods without arguments
-  - the "only easy" way to change an object's state is by calling onf its methods
 
 ** Methods (.)
 
@@ -525,8 +519,9 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   - Returns if not found nil, doesn't raise an exception
   - From: data[:mcu][0][:actors][1]
     To:   data.dig(:mcu, 0, :actors, 1)
-**** Array []
+*** Array []
 
+- Enumerable
 - [0,2,nil][1] Array.new
 - #pop/#push      elements from the end
 - #shift/#unshift elements from the beginning
@@ -543,8 +538,9 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 - mixed type of objects
 - #tally - counts frequency of elements into a hash
 
-**** Hash {}
+*** Hash {}
 
+- Enumerable
 - {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
 - remembers order of insertion
 - supports "punning" for creation, if both are variable names in scope
@@ -624,3 +620,11 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 - tool https://github.com/JoshCheek/seeing_is_believing
   emacs https://github.com/jcinnamond/seeing-is-believing
+
+* implementations
+|----------+---------------------------------------|
+| graalvm  | https://github.com/oracle/truffleruby |
+| jvm      | https://www.jruby.org                 |
+| mobile   | http://www.rubymotion.com/            |
+| embedded | https://mruby.org/                    |
+|----------+---------------------------------------|
