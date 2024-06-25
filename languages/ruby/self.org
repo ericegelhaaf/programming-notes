@@ -7,6 +7,9 @@
 | wiki | https://en.wikipedia.org/wiki/Ruby_on_Rails               |
 | wiki | https://en.wikipedia.org/wiki/Ruby_(programming_language) |
 | wiki | https://en.wikibooks.org/wiki/Ruby_Programming            |
+| impl | https://github.com/oracle/truffleruby                     |
+| impl | https://www.jruby.org                                     |
+| impl | http://www.rubymotion.com/                                |
 |------+-----------------------------------------------------------|
 
 - Author: Yukihiro Matsumoto (matz)
@@ -19,11 +22,6 @@
 
 - challenges
   - https://www.rubykoans.com/
-
-- implementations
-  - mobile http://www.rubymotion.com/
-  - java https://www.jruby.org
-  - speed? https://github.com/oracle/truffleruby
 
 * Language
 
@@ -72,10 +70,10 @@
 
 ** require
 
-require "csv"
-require_relative "book_in_stock" # for "./book_in_stock.rb"
-
-private/public/protected def
+#+begin_src ruby
+  require "csv"
+  require_relative "book_in_stock" # for "./book_in_stock.rb"
+#+end_src
 
 ** i/o
 
@@ -312,6 +310,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 ** Methods (.)
 
+- private/public/protected def
 - can be redefining (just warns about it)
 - the verbs of ruby
 - attached at the end of variables with by a dot
@@ -346,19 +345,22 @@ https://rubyreferences.github.io/rubychanges/evolution.html
   http://jeromedalbert.com/a-diagram-of-the-ruby-core-object-model/
   https://farm6.staticflickr.com/5443/10075536704_84aa13676a_o.jpg
 
-- Regexp // https://ruby-doc.org/3.2.2/Regexp.html
-  - the =match operator= =~ can be used to match a string against it
-    returns that starting position or nil
-    - also through String#match? or Regex#match?
-  - Regexp#sub
-  - Regexp#gsub
+- Variables
+  - nouns of Ruby
+
+- Constants
+  - capitalized
+  - proper nouns of Ruby
 
 - nil
   - is an object, just like any other
   - represents the concept of nothing
 
-- Variables
-  - nouns of Ruby
+- Numeric https://ruby-doc.org/3.0.7/Numeric.html
+  - #positive?, #negative?, #nonzero?, #zero?
+  - =Float= https://ruby-doc.org/3.0.7/Float.html
+  - =Integer= https://ruby-doc.org/3.0.7/Integer.html
+    - #times, #upto(N)
 
 - Strings
   - "",%{},'',%q{} are string literals, from more to less work done
@@ -368,6 +370,13 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     you can call .each_with_index on it
   - alternatively #each_char.with_index
 
+- Regexp // https://ruby-doc.org/3.2.2/Regexp.html
+  - the =match operator= =~ can be used to match a string against it
+    returns that starting position or nil
+    - also through String#match? or Regex#match?
+  - Regexp#sub
+  - Regexp#gsub
+
 - Symbols :foo
   - like lightweight strings
   - immutable
@@ -376,10 +385,6 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     - as keys and identifiers
     - when you need a string but you won't be printing it
     - when you need to use the same string over and over
-
-- Constants
-  - capitalized
-  - proper nouns of Ruby
 
 - Enumerator (class)
   - as objects they are =Enumerable=
@@ -478,12 +483,6 @@ https://rubyreferences.github.io/rubychanges/evolution.html
     - Hash.new(0) # where 0 is the default value
     - #sort_by - returns an array of arrays of 2 elements
 
-- Numeric https://ruby-doc.org/3.0.7/Numeric.html
-  - #positive?, #negative?, #nonzero?, #zero?
-  - =Float= https://ruby-doc.org/3.0.7/Float.html
-  - =Integer= https://ruby-doc.org/3.0.7/Integer.html
-    - #times, #upto(N)
-
 ** stdlib
 
 - new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
@@ -517,16 +516,22 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 * snippets
 
-#+begin_src ruby
-  width, height = `xrandr`.scan(/current (\d+) x (\d+)/)
-                    .flatten
-                    .map(&:to_i)
+#+begin_src ruby :exports both
+  `xrandr`.scan(/current (\d+) x (\d+)/)
+    .flatten
+    .map(&:to_i)
 #+end_src
 
+#+RESULTS:
+| 1600 | 900 |
+
 #+NAME: split into words
-#+begin_src ruby
+#+begin_src ruby :exports both
   "FOO Bar Foo".downcase.scan(/[\w']+/)
 #+end_src
+
+#+RESULTS: split into words
+| foo | bar | foo |
 
 * tools
 
@@ -547,4 +552,3 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 - tool https://github.com/JoshCheek/seeing_is_believing
   emacs https://github.com/jcinnamond/seeing-is-believing
-

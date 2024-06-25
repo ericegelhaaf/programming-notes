@@ -1,6 +1,5 @@
 #+TITLE: JQ's reference
 #+DATE: <2023-11-27 lun>
-#+OPTIONS: ^:nil
 
 |--------------+---------------------------------------------------------|
 | wiki         | https://en.wikipedia.org/wiki/Jq_(programming_language) |

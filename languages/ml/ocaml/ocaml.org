@@ -38,7 +38,7 @@
 |------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
 | record     | {a = VAL ; b = VAL}    | .a      |           | let { x = x_pos ; y = y_pos } = |        |                |
 |            | a=VAL; B=VAL; {a ; b}  |         |           | let { x ; y } =                 |        |                |
-|            |                        |         |           | let v1 = v1.x + v2.y            |        |                |
+|            | type foo = { a: int }  |         |           | let v1 = v1.x + v2.y            |        |                |
 |------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
 ** Modules
 - capitalized
@@ -108,7 +108,7 @@
 ** Style
 - guide https://www.cs.cornell.edu/courses/cs3110/2016fa/handouts/style.html
 - Modules
-- variables, functions
+- variables, functions, recordtypes
 ** Functions
 
 #+begin_src ocaml

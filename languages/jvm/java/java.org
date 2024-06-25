@@ -27,10 +27,13 @@
 - java style guide https://google.github.io/styleguide/javaguide.html
 
 * Standard Library
+
 - JCL - Java Class/Core Libraries
 - https://docs.oracle.com/en/java/javase/19/core/java-core-libraries1.html
 - https://en.wikipedia.org/wiki/Java_Class_Library
+
 * Types
+|--------+--------+---------------------------+-----------|
 | name   | type   | declaration               | access    |
 |--------+--------+---------------------------+-----------|
 | Arrays | int[]  | new int[3]                | arr[0]    |
@@ -38,7 +41,6 @@
 |--------+--------+---------------------------+-----------|
 | Enums  | Gender | enum Gender {MALE,FEMALE} | enum.MALE |
 |--------+--------+---------------------------+-----------|
-|        |        |                           |           |
 * Native Game
 - JavaFX https://openjfx.io/
 - Gluon:
