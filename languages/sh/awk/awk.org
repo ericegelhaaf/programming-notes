@@ -88,10 +88,9 @@
 
 ** network
 
-- Manual network features
-  https://www.gnu.org/software/gawk/manual/html_node/TCP_002fIP-Networking.html
-  https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
-  https://www.gnu.org/software/gawk/manual/gawkinet/gawkinet.html#Primitive-Service
+- https://www.gnu.org/software/gawk/manual/html_node/TCP_002fIP-Networking.html
+- https://www.gnu.org/software/gawk/manual/gawkinet/html_node/index.html
+- https://www.gnu.org/software/gawk/manual/gawkinet/gawkinet.html#Primitive-Service
 
 *** rossetta - web server
 
@@ -132,11 +131,11 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
    - delete array[subscript]
    - use this to coerce into an array in a body's function
      "" in arr
-   - Set the order an already created array would be presented on a forIn
-     https://www.gnu.org/software/gawk/manual/html_node/Controlling-Array-Traversal.html
+   - https://www.gnu.org/software/gawk/manual/html_node/Controlling-Array-Traversal.html
      - comp_func(i1, v1, i2, v2) < 0  Index i1 comes before index i2
      - comp_func(i1, v1, i2, v2) == 0 Indices i1 and i2 come together
      - comp_func(i1, v1, i2, v2) > 0  Index i1 comes after in2
+   - Set the order an already created array would be presented on a forIn
      - PROCINFO["sorted_in"] = "afunctionname" like comp_func(index1, value1, index2, value2)
      - PROCINFO["sorted_in"] = "@val_num_asc"
      - PROCINFO["sorted_in"] = "@val_num_desc"
@@ -150,9 +149,9 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 ** built-in variables
 
 - FPAT https://www.gnu.org/software/gawk/manual/html_node/Splitting-By-Content.html
-  For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
-  Instead of using FS to specify what the fields are *not*
-  We use this to specify what are the fields, in the form of a regular expression.
+  - For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
+  - Instead of using FS to specify what the fields are *not*
+  - We use this to specify what are the fields, in the form of a regular expression.
 
 |----------+----------------------------------------------+-----------|
 |          | =meaning=                                    | =default= |
@@ -309,10 +308,10 @@ NOTE: call ~close("cmd")~ on the non two-way pipes
 
 ** format strings
 
-https://www.gnu.org/software/gawk/manual/html_node/Control-Letters.html
-https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
-
+- https://www.gnu.org/software/gawk/manual/html_node/Control-Letters.html
+- https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
 - %+-width.prec(?)
+
 |--------+------------------------------|
 |        | description                  |
 |--------+------------------------------|
@@ -339,8 +338,8 @@ https://www.gnu.org/software/gawk/manual/html_node/Format-Modifiers.html
   assert(BOOLEAN, "Reason of failure HERE")
 
 - @include "ord" OR @load "ordchr" https://www.gnu.org/software/gawk/manual/html_node/Extension-Sample-Ord.html
-  ord(STRING) -> NUMBER
-  chr(NUMBER) -> STRING
+  - ord(STRING) -> NUMBER
+  - chr(NUMBER) -> STRING
 
 
 * codebases
