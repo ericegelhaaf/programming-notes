@@ -370,18 +370,18 @@
 
 https://jqlang.github.io/jq/manual/v1.7/#math
 
-- 1-input C math functions:
+- 1-input:
   - acos acosh asin asinh atan atanh cbrt ceil cos cosh erf erfc exp exp10 exp2 expm1 fabs floor gamma j0 j1 lgamma log log10 log1p log2 logb nearbyint pow10 rint round significand sin sinh sqrt tan tanh tgamma trunc y0 y1
   - pipe the input to the function
   - 1 | atan
 
-- 2-input C math functions:
+- 2-input:
   - atan2 copysign drem fdim fmax fmin fmod frexp hypot jn ldexp modf nextafter nexttoward pow remainder scalb scalbln yn
   - they ignore input
   - uses (;) to separate parameters
   - pow(2;10)
 
-- 3-input C math functions:
+- 3-input:
   - fma
 
 **  object functions

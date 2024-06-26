@@ -105,7 +105,10 @@ https://www.fastruby.io/blog/exploring-global-constants-and-variables.html
 | <<   | appends an element to an array                    |
 | ::   | scope resolution operator                         |
 | #{}  | string interpolation                              |
+| ¦¦=  | if LS is falsey, eval RS and assign it to LS      |
+| =>   | "hashrocket", associates k/v in a Hash            |
 |------+---------------------------------------------------|
+#+TBLFM: $1=>
 ** require
 
 #+begin_src ruby
@@ -377,7 +380,7 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 ** modules
 
-- to group related constants, for mixins or namespaces
+- to group related constants/methods, or for mixins or namespaces
 
 #+begin_src ruby
   module Snackbar
@@ -551,12 +554,12 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 *** Hash {}
 
-- Enumerable
 - {} {"foo" => "bar"}["foo"] { foo: "bar"}[:foo]
+- an indexed collection of key/valuep pairs
+- Enumerable
 - remembers order of insertion
 - supports "punning" for creation, if both are variable names in scope
   {firstname:, lastname:}
-- "=>" aka "hashrocket"
 - key/value
 - An association by an arbitrary key type
 - Hash.new(0) # where 0 is the default value

@@ -1,3 +1,4 @@
+#+DATE: <2022-12-23 vie>
 |-----------+----------------------------------------------------------|
 | home      | https://nim-lang.org/                                    |
 | source    | https://github.com/nim-lang/Nim                          |
