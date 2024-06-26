@@ -1,9 +1,14 @@
-- Libraries https://github.com/nim-lang/Nim/wiki/Curated-Packages
-- Libraries https://github.com/ringabout/awesome-nim
-- pre builds https://github.com/nim-lang/nightlies/
-- https://nim-lang.org/docs/manual.html#types-tuples-and-object-types
-- exercises https://github.com/sergiotapia/nimlings
-- Tutorial: Nim for awk programmers https://github.com/greencardamom/awk
+|-----------+----------------------------------------------------------|
+| home      | https://nim-lang.org/                                    |
+| source    | https://github.com/nim-lang/Nim                          |
+| doc       | https://nim-lang.org/docs/manual.html                    |
+| doc       | https://nim-lang.github.io/Nim/                          |
+| wiki      | https://en.wikipedia.org/wiki/Nim_(programming_language) |
+| exercises | https://github.com/sergiotapia/nimlings                  |
+|-----------+----------------------------------------------------------|
+
+- Author: Andreas Rumpf
+- 2008-
 
 * Language
 ** Types
@@ -296,3 +301,6 @@
 - library: glsl https://github.com/treeform/shady
 - tool: paint-like https://github.com/mrgaturus/npainter
 - tool: zoom https://github.com/tsoding/boomer
+* Libraries
+- https://github.com/nim-lang/Nim/wiki/Curated-Packages
+- https://github.com/ringabout/awesome-nim

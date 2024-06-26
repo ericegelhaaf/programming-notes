@@ -3,3 +3,4 @@
   https://forum.nim-lang.org/t/7983
   https://news.ycombinator.com/item?id=27165366
 - https://github.com/nim-lang/Nim/wiki/Nim-for-Python-Programmers
+- Tutorial: Nim for awk programmers https://github.com/greencardamom/awk

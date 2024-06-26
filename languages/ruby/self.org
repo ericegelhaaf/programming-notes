@@ -48,13 +48,24 @@
 
 ** variables
 - the "nouns" of Ruby
+*** global variables
+https://www.fastruby.io/blog/exploring-global-constants-and-variables.html
 |----------+------------------------------------------------------|
-| $?       | has the exit code of the last run command (like sh)  |
 | __FILE__ | has the name of the file being run                   |
+| $stdin   | standard input                                       |
 | $stdout  | standard output                                      |
 | $stderr  | standard error                                       |
 | ARGV     | array with command line arguments                    |
 | ARGF     | the content of all the files whose names were passed |
+| $*       | alias of "ARGV"                                      |
+| $<       | alias of "ARGF"                                      |
+| $?       | exit code of the last child command ran              |
+| ENV      | Hash that contains environment variables             |
+| $&       | regex op, the match (all between //)                 |
+| $`       | regex op, to the left of last match                  |
+| $'       | regex op, to the right of last match                 |
+| $+       | regex op, the last group                             |
+| $N       | regex op, where N is a number of the nth match       |
 |----------+------------------------------------------------------|
 ** testing
 

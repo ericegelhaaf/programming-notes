@@ -49,11 +49,11 @@ Source: https://github.com/tsoding/boomer
 ** https://www.twitch.tv/videos/489880649
 ** https://www.twitch.tv/videos/492671715
 * 21 | Nim Lang for pentersters
-** I - Bypass antivirus using platform independent reverse shell https://www.youtube.com/watch?v=JhpUALY4o8U
-** II - Classic Shellcode Injection using Nim  https://www.youtube.com/watch?v=QuhYARcuW6I
+**   I - Bypass antivirus using platform independent reverse shell https://www.youtube.com/watch?v=JhpUALY4o8U
+**  II - Classic Shellcode Injection using Nim  https://www.youtube.com/watch?v=QuhYARcuW6I
 ** III - Antivirus assessment using PS reverse shell without PowerShell.exe  https://www.youtube.com/watch?v=DR6wZbCKnOA
-** IV - Automate Macro Embedded Excel and assessment of anti virus  https://www.youtube.com/watch?v=SBjaCYNlj2A
-** V - Create Undetectable Payload by loading your exe to memory  https://www.youtube.com/watch?v=jhHmdfXXOHI
+**  IV - Automate Macro Embedded Excel and assessment of anti virus  https://www.youtube.com/watch?v=SBjaCYNlj2A
+**   V - Create Undetectable Payload by loading your exe to memory  https://www.youtube.com/watch?v=jhHmdfXXOHI
 * 21 | Wang Tiles 01             | Tsoding
 https://www.youtube.com/watch?v=IGTuv_KKLFs
 * 22 | Nim in 100 Seconds
