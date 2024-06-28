@@ -1054,12 +1054,12 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
   #+end_src
 ** 08 Responsive Design
 - Popularized by Ethan Marcotte
-- Three key principles to responsive design
+- Key principles
   1) A mobile first approach to design, build the mobile version before
   2) @media at-rule
-  3) use fluid layouts, allows continers to scale to different sizes
+  3) use fluid layouts, allows containers to scale to different sizes
 *** Mobile first
-- A mobile layout is mostly no-frills design, highly focused on the content
+- A mobile layout is mostly no-frills design, highly focused on the content.
 - *breakpoint*: a particular point at which the page styles change to provie the best possible layout for the screen size
 - Font size that changes depending on the size of the viewport
   #+begin_src css
@@ -1067,8 +1067,12 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
       font-size: calc(1vw + 0.6em); /* might be add a media query to add an upper limit */
     }
   #+end_src
-- meta viewport to tell mobile browsers to NOT emulate desktop browsers, can also use "user-scalable=no" to disallow pinch zoom
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+- use meta viewport
+  #+begin_src html
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  #+end_src
+  - to tell mobile browsers to NOT emulate desktop browsers,
+  - or use "user-scalable=no" to disallow pinch zoom
 *** media queries
 - if a style is too complex, a @media max-width can contain them, they should be an exception, no a rule
 - can also add media queries on <link rel="stylesheet">
@@ -1083,7 +1087,7 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
   it's the only unit that performs consistently in all major browsers should the user zoom the page or change the default font-size
   px and rem are less reliable in Safari
   560px use 35em (560/16)
-- "The feature manyd evelopers would like to see are *container queries* (aka element queries)
+- "The feature many developers would like to see are *container queries* (aka element queries)
   intesd of responding to the viewport, would respond to the size of the element container."
 **** combining media queries (and ,)
   @media (min-width: 20em) and (max-width: 35em) /// targets when both are satisfied
@@ -1148,9 +1152,13 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
        }
      }
    #+end_src
-*** responsive imagesj
+
+*** responsive images
 - css: always ensure images don't overflow their container width.
-  img { max-width: 100%; }
+  #+begin_src css
+    img { max-width: 100%; }
+  #+end_src
+
 - serve different image sizes for different viewport sizes
   - css: background-image on a @media query
   - html: <img> srcset
@@ -1161,6 +1169,7 @@ n   - Those that are "lengths" can cause issue if calculated with a unit and inh
                    coffe-beans-medium.jpg 800w,
                    coffe-beans.jog 1280w" />
     #+end_src
+
 ** > Part 3 - CSS at scale
 ** > Part 4 - Advanced topics
 ** 11 Backgrounds, shadows, and blend modes

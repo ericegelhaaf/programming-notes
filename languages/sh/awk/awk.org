@@ -111,7 +111,6 @@ https://rosettacode.org/wiki/Hello_world/Web_server
           continue;
       close(HttpService)
   }
-
 #+end_src
 
 ** Types (will be automaticaly coerced when needed)
