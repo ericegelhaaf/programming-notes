@@ -248,10 +248,10 @@ type 'a tree =
 ** Chapter 4
 - Partial application: You can leave off the argument of a function,
   #+begin_src ocaml
-let double x = 2 * x
-let twice f x = f (f x)
-let quad x = twice double x
-let quad = twice double
+    let double x = 2 * x
+    let twice f x = f (f x)
+    let quad x = twice double x
+    let quad = twice double
   #+end_src
 - fold       init op
   fold_right f    acc
@@ -268,6 +268,7 @@ let quad = twice double
   | Encapsulation | Abstract Types     | Public, private        |
   | Code reuse    | Functors, includes | Subtyping, inheritance |
   |---------------+--------------------+------------------------|
+
 - Structures give us hierarchical namespaces
   - Can help to have the same function work with different types
     Just put the function and type in a *module/struct*
@@ -279,8 +280,10 @@ let quad = twice double
   1) define a queue as a record of 2 lists a `front` and a `back`
   2) front is a normal list
   3) back is a list reversed
+
 - *Exceptions* makes it easier to pipeline (|>) operations
 - *Options* makes it a little bit harder (except with bind)
+
 - ( >>| ), Option.map
   applies the function to an Option element
   #+begin_src ocaml
@@ -289,6 +292,7 @@ let quad = twice double
     | None -> None
     | Some x -> Some (f x)
   #+end_src
+
 - ( >>= ), Option.bind
   it takes an option, but it does NOT add an extra level of option around
   #+begin_src ocaml
@@ -297,6 +301,7 @@ let quad = twice double
     | None -> None
     | Some x -> f x
   #+end_src
+
 - =sig= and =val= for defining interfaces/signatures
   we define a =module type= since is the type of a module NOT the value
   functions NOT defined in the *sig* but present on the *struct* will be unaccesible (private)
@@ -402,8 +407,6 @@ module DayMap = Map.Make(DayKey)
 val f : t -> u
   #+end_src
 - You do NOT need to assert the precondition
-- .ml  = Data Structure
-  .mli = Data Abstraction
 - When documenting the type .t of the =struct= implementation
   - AF =Abstraction Function=, how to *interpret* the abstracted data
     Implementation: Generally no, but a mathemathical idea.
@@ -420,11 +423,13 @@ val f : t -> u
       if (* check RI *) then t
       else failwith "RI"
     #+end_src
+
 - Validation
   1) Validation: social, methodogical, technological, mathematical
   2) Testing
   3) Debugging
   4) Defensive Programming
+
 - Testing vs Verification
   - Verification, can demostrate that it will work with ALL inputs
 - Human Error -> Fault -> Failure (something goes wrong)
@@ -544,10 +549,6 @@ clean:
   e1;e2
   ignore e1; e2
 - aliasing, when having a second variable point to the same location of another ref
-- (==) physical equality
-  (!=)
-- (=) structural equality, contents (aka structure)
-  (<>)
 - Example: counter, lambda
   #+begin_src ocaml
   let next =

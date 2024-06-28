@@ -15,10 +15,13 @@
 - Ref shorthands prohibited by Base
 ** Functions
 
-- *_exn denotes functions that return an exception
-
-- In_channel.fold_lines
-  In_channel.stdin
+- Stdlib
+  1) In_channel.fold_lines
+     In_channel.stdin
+  2) List https://ocaml.janestreet.com/ocaml-core/latest/doc/base/Base/List/index.html
+     - List.Assoc.find
+       List.Assoc.add
+  3) String.comparator_witness
 
 - Core.Sys.is_file_exn
   Core.Sys.ls_dir
@@ -27,14 +30,7 @@
 - Time.[now,diff]
   - Time.Span.to_ms
 
-- List https://ocaml.janestreet.com/ocaml-core/latest/doc/base/Base/List/index.html
-  - List.Assoc.find
-    List.Assoc.add
-
-- String.comparator_witness
-
 ** 1 Guided Tour
-- Modules are Capitalized
 - Modules can be *open* locally
   #+begin_src ocaml
     let ratio x y =
@@ -44,7 +40,6 @@
     let ratio x y =
       Float.O.(of_int x / of_int y) ;;
   #+end_src
-- (=) operator works as both an assigment and a comparison
 - optional =type annotation=
   #+begin_src ocaml
     let sum_if_true (test : int -> bool) (x : int) (y : int) : int =
@@ -63,12 +58,8 @@
 - =Tuples=
   1) can have different types
   2) * is used for cartesian product, between the sets
-- Lists, same type, immutable
 - Base vs stdlib (?)
   - Base has **. and **, while stdlib has only **, but as a float
-- =Labeled Argument= (like Common Lisp keyword arguments)
-  - Can happen at ANY position, even before mandatory arguments
-    ~f:String:Length
 - Use =match= for lists
   #+begin_src ocaml
     let my_favorite_language languages =
@@ -97,9 +88,6 @@
       | None            -> filename
       | Some (base,ext) -> base ^ "." ^ String.lowercase ext;;
   #+end_src
-- ^ operator to concatenate String
-- OCAML default polymorphics operators are know the *problematic*
-- ";" semi-colons are necessary when dealing with Imperative code
 *** Declaring =Records=
 #+begin_src ocaml
   type point2d = { x : float ; y : float}
@@ -225,11 +213,6 @@
 - Infix vs Prefix functions, using parens to make infix into prefix
   - You need a space before and after any operator that begins and ends with =*=
   - You need to use parentheses for negation. Negation has lower precedence than function application.
-- Pipeline Operators
-  #+begin_src ocaml
-  let (|>) x f = f x (* left  asocciative *)
-  let (^>) x f = f x (* right asocciative *)
-  #+end_src
 - Declaring a function with =function=, has implicit match
   #+begin_src ocaml
   let some_or_zero = function
@@ -244,21 +227,6 @@
   let some_or_default default = function
     | Some x -> x
     | None -> default
-  #+end_src
-- Defining =Labeled Argument= function
-  - when is unclear just based on the type signature
-  - like with boolean values
-  - or when there are more than 1 value of the same type
-  - gives flexible order of passed arguments
-    - except when the function is being passed
-  #+begin_src ocaml
-  let ratio ~num ~denom = Float.of_int num /. Float.of_int denom ;;
-  (* using *)
-  ratio ~num:3 ~denom:4
-  (* or using LABEL PUNNING *)
-  let num = 3 in
-  let denom = 4 in
-  ratio ~num ~denom
   #+end_src
 - Defining =Optional Argument= function, beginning with ? the argument is marked as an *Option*
   Concision VS Explicitness
@@ -555,7 +523,9 @@ let () =
   end
   #+end_src
 - dune might detect cyclical module dependencies
+
 *** Designing with modulesp
+
 1) Expose Concrete Types Rarely:
    - Abstract Type
      allow *flexibity* of design,
@@ -583,7 +553,7 @@ let () =
       ...
     }
 #+end_src
-- Core provies a Unix API
+- Core provides a Unix API
 - Record parametrized by a =polymorphic type=
   #+begin_src ocaml
     type 'a with_line_num = { item: 'a ; line_num: int }
@@ -598,27 +568,28 @@ let () =
           })
   #+end_src
 *** Example: using records with Re(gular expressions)
-- let ssh = service_info_of_string "ssh 22/udp"
-  ssh.port
   #+begin_src ocaml
     open Core
+
     type service_info =
-      { service_name : string;
-        port         : int;
-        protocol     : string;
+      { service_name : string
+      ; port         : int
+      ; protocol     : string
       }
+
     let service_info_of_string line =
-      let metches =
+      let matches =
         let pat = "([a-zA-Z]+)[ \t]+([0-9]+)/([a-zA-Z]+)" in
-        Re.exec (Re.Posix.compile_pat) line
+        Re.exec (Re.Posix.compile pat) line
       in
-      {
-        service_name = Re.Group.get matches 1;
-        port = Int.of_string (Re.Group.get matches 2);
-        protocol = Re.Group.get matches 3;
+      { service_name = Re.Group.get matches 1
+      ; port         = Re.Group.get matches 2 |> Int.of_string
+      ; protocol     = Re.Group.get matches 3
       }
+
     parse_lines service_info_of_string "rtmp 1/ddp # Routing......."
 #+end_src
+
 *** Patterns and Exhaustiveness (when destructuring)
 #+begin_src ocaml
   let service_info_to_string { service_name = name; port = port; protocol = prot } =
@@ -850,11 +821,13 @@ type <variant> =
   | <TagOrConstructor> [of <type> [* <type>]...]
   | ...
 #+end_src
+
 - Simple, no data, like enums
   #+begin_src ocaml
   type basic_color =
     | Black | Red | Green | Yellow | Blue | Magenta | Cyan
   #+end_src
+
 - With data
   #+begin_src ocaml
   type weight = Regular | Bold
@@ -863,6 +836,7 @@ type <variant> =
     | RGB   of int * int * int (* 6x6x6 color cube *)
     | Gray  of int (* 24 grayscale levels *)
   #+end_src
+
 - We are NOT sending a tuple, it might look like
   RGB (200,0,200)
 - Multiple Argument Variant ~vs~ Variant Containing a Tuple
@@ -872,16 +846,19 @@ type <variant> =
   type color1 = RGB of int * int   (* cannot take a tuple *)
   type color2 = RGB of (int * int) (* can take a tuple *)
   #+end_src
+
 - =Avoid catch-all cases in pattern matches=,
   to have the compiler help on refactoring
   they supress compiler exhaustive checks
   aka the | _ ->
-- we can *use the type* name when matching for variant types, in this case "color" is the type name
+
+- We can *use the type* name when matching for variant types, in this case "color" is the type name
   #+begin_src ocaml
     let extended_color_to_int : extended_color -> int = function
       | `RGBA (r,g,b,a) -> 256 + a + (b * 6) + (g * 36) + (r * 216)
       | #color as color -> color_to_int color
   #+end_src
+
 *** ADT =Algebraic Data Types= (Variant/Record/Tuples)
 1) Product types:
    - record and tuples

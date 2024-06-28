@@ -13,7 +13,35 @@
 
 * Language
 - there are mutable values, but NOT mutable variables
+- .ml  = Data Structure
+- .mli = Data Abstraction
 ** Types
+*** record
+
+#+begin_src
+  type [type param] <record-name> =
+    { <field> : <type>;
+      <field> : <type>;
+      ...
+    }
+#+end_src
+
+*** variant (sum type)
+
+#+begin_src
+type <variant> =
+  | <TagOrConstructor> [of <type> [* <type>]...]
+  | <TagOrConstructor> [of <type> [* <type>]...]
+  | ...
+#+end_src
+
+- We can also *use the type* name when matching for variant types, in this case "color" is the type name
+  #+begin_src ocaml
+    let extended_color_to_int : extended_color -> int = function
+      | `RGBA (r,g,b,a) -> 256 + a + (b * 6) + (g * 36) + (r * 216)
+      | #color as color -> color_to_int color
+  #+end_src
+
 *** simple
 - Int
 - Float
@@ -32,7 +60,7 @@
 |------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
 | ~Array~    | [¦ a ; b ¦]            | .(2)    | <-        | let [¦ a ; b ¦] = some_array    |        |                |
 | ~Bigarray~ |                        | .{2}    | <-        |                                 |        |                |
-| tuples     | (a , b)                |         |           | let (x , y)  =                  |        |                |
+| tuples     | (a , b)                | fst snd |           | let (x , y)  =                  |        |                |
 | ~List~     | [a ; a]                | List.hd |           | let (x :: y) =                  | ::     | @, List.append |
 | struct     | struct let foo = 3 end |         |           |                                 |        |                |
 |------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
@@ -42,7 +70,7 @@
 |------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
 ** Modules
 - capitalized
-- can be ~open~
+- can be ~open~ locally
 |----------------------------+--------------------------------|
 |                            | code                           |
 |----------------------------+--------------------------------|
@@ -116,6 +144,7 @@
   let plusone x = x + 1 ;;
 #+end_src
 
+- _exn denotes functions that return an exception
 - =assert false= can be used on a branch that isn't suppose to happen
 - optional type annotation
 - type variables support for parametric polymorphism
@@ -129,20 +158,28 @@
   - useful when is a wrapper to another function that takes an optional
 - labeled arguments (ME: aka keyword args)
   - at any position of arguments
-  - ~num
-  - ~num:3
-  - ~num   - with label punning if a variable with the same name exists
-  - ~f:String:Length
+  - defining: ~num
+  - passing arguments
+    - ~num:3
+    - ~num   - with label punning if a variable with the same name exists
+    - ~f:String:Length
   - when is unclear just from the type signature
     - booleans
     - more than one value of the same type
 ** Operators
 - default polymorphic operators considered problematic
-|----+----------------------|
-| ^  | concatenate strings  |
-| ¦> | pipeline, left assoc |
-| ^> | pipeline, right assoc |
-|----+----------------------|
+|-----+---------------------------------------------------|
+| ^   | concatenate strings                               |
+| ¦>  | pipeline, left assoc                              |
+| ^>  | pipeline, right assoc                             |
+| ==  | physical equality                                 |
+| !=  | physical inequality                               |
+| =   | structural equality (aka contents), or assignment |
+| <>  | structural inequality                             |
+| >>= | Option.bind                                       |
+| >>¦ | Option.map                                        |
+| ;   | to sequence imperative code                       |
+|-----+---------------------------------------------------|
 ** Standard Library
 - https://v2.ocaml.org/manual/stdlib.html
 - example module url https://v2.ocaml.org/api/Seq.html

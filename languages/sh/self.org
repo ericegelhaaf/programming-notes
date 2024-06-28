@@ -5,6 +5,8 @@
     - 2 for  dentries + inodes
     - 3 for  pagecache + dentries + inodes
 
+- error codes https://chromium.googlesource.com/chromiumos/docs/+/master/constants/errnos.md
+
 - man
   - improvement https://gist.github.com/alphapapa/3cba3ff196147ad42bac
 
