@@ -300,7 +300,6 @@
 
 ** 4 Files, Modules, and Programs
 - files correspond to modules
-- List.Assoc, module for associative lists [(aka list; of tuples)]
 - freq.ml
   #+begin_src ocaml
     open Base
@@ -310,7 +309,7 @@
       In_channel.fold_lines In_channel.stdin ~init:[] ~f:(fun counts line ->
         let count =
           match List.Assoc.find ~equal:String.equal counts line with
-          | None -> 0
+          | None   -> 0
           | Some x -> x
         in
         List.Assoc.add ~equal:String.equal counts line (count + 1)
@@ -324,10 +323,10 @@
   #+end_src
 
 - Declaring an =Signature= Interface for a module, in a .mli file, using =val=
-  val <identifier> : <type>
   #+begin_src ocaml
   open Base
   (* bump the frequency count for a given list *)
+  (*   val <identifier> : <type> *)
   val touch : (string * int) list -> string -> (string * int) list
   #+end_src
 
@@ -379,35 +378,35 @@
 - Refactor counter.ml, with a different datatype, Map.t
   #+begin_src ocaml
   open Base
-  type t = (string,int,String.comparator_witness) Map.t
+  type t = (string, int, String.comparator_witness) Map.t
   let empty = Map.empty (module string)
   let to_list t = Map.to_alist t
   let touch t s =
     let count =
       match Map.find t s with
-      | None -> 0
+      | None   -> 0
       | Some x -> x
     in
     Map.set t ~key:s ~data:(count + 1)
-  #+end_src-
+  #+end_src
  =Concrete Types=, we define a custom type for the 2 possible return values
   "Let you expose more detail and structure to the *client*,
   in a lightweight way."
   #+Name: counter.ml
   #+begin_src ocaml
-  type median = | Median of string
-                | Before_and_after of string * string
-  let median t =
-    let sorted_string =
-      List.sort (Map.to_alist t)
-        ~compare(fun (_,x) (_,y) -> Int.descending x y)
-    in
-    let len = List.length sorted_strings in
-    if len = 0 then failwith "median: empty frequency count";
-    let nth n = fst (List.nth_exn sorted_strings n) in
-    if len % 2 = 1
-    then Median (nth (len/2))
-    else Before_and_after (nth (len/2 - 1), nth(len/2))
+    type median = | Median of string
+                  | Before_and_after of string * string
+    let median t =
+      let sorted_string =
+        List.sort (Map.to_alist t)
+          ~compare(fun (_,x) (_,y) -> Int.descending x y)
+      in
+      let len = List.length sorted_strings in
+      if len = 0 then failwith "median: empty frequency count";
+      let nth n = fst (List.nth_exn sorted_strings n) in
+      if len % 2 = 1
+      then Median (nth (len/2))
+      else Before_and_after (nth (len/2 - 1), nth(len/2))
   #+end_src
   #+Name: counter.mli
   #+begin_src ocaml
@@ -446,7 +445,7 @@
     type t
     val of_string : string -> t
     val to_string : t -> string
-    val (=) :t -> t -> bool
+    val (=) : t -> t -> bool
   end
 
   module String_id = struct
@@ -467,11 +466,14 @@
   let sessions_have_same_user s1 s2 =
     Username.(=) s1.user s2.user
   #+end_src
+
 - =open= (aka :use)
   - is a trade-off between terseness and explicitness (like CL's :use)
   - open sparingly, only those designed to be opened
   - open locally
+
 - =let module <ALIAS> = <MODULE> in= (aka :local-nicknames)
+
 - =include= (aka extending a "class"), to add new identifies to it
   #+NAME: interval.ml
   #+begin_src ocaml
@@ -1268,6 +1270,7 @@ For smaller examples (like the ones showed here, direct match of Option is gener
   - Core_bench
     $ dune exec -- ./exn_cost.exe -ascii -quota 1 -clear-columns time cycles
 ** TODO 8 Imperative Programming
+
 - There are many algorithms that can only be implemented efficiently
   using imperative techniques.
 *** Example: Imperative Dictionaries
@@ -1491,12 +1494,15 @@ For smaller examples (like the ones showed here, direct match of Option is gener
 *** Side Effects and Weal Polymorphism
 *** Summary
 ** TODO 9 GADT (Generalized Algebraic Data Types)
+
 - Extension of variants
   1) more expresive
   2) harder to use and less intuitive
+
 - Features
   1) They let the compiler know more type information when you pattern match
   2) Easier to work with ~Existential Types~, of a specific but unknown type
+
 - Con:
   - Code using them (like functions) NEEDs extra type annotation when used
     Because OCaml does NOT instantiate ordinary type variables in different ways in the body of the same function.

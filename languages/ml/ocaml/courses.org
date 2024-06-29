@@ -170,14 +170,6 @@ if we didn't use exception the unwind of the stack would still happen
   Application (@@) (like $ in Haskell, to avoid parens, it changes the precedence rules)
   Reverse Application (|>)
 ** Chapter 3
-- types are best read, right to left
-  int list list, a list of list of integers
-- utop, is not a good practice to repeatedly "#use" the same file
-  close utop and #use it again
-- =with= for record copy, cannot add new fields
-  { e with f1 = e1 }
-- =fst= only works with tuples, if we want to work with triplets we need to define our own
-- =#trace <function>=, shows you the calls of a function
 - =ABC= always be compiling
   1) use dummy values
   2) or raise and exception
@@ -186,9 +178,9 @@ if we didn't use exception the unwind of the stack would still happen
 - =match=, an exception *Match_failure* is raised if no patterns match
 - =function= syntax-sugar for match, it will take the last argument of the function
   #+begin_src ocaml
-let f x y = function
-  | p1 -> e1
-  | p2 -> e2
+    let f x y = function
+      | p1 -> e1
+      | p2 -> e2
   #+end_src
 *** =Variants=
 - Constant if it carries NO data, Non-Constant if it carries data
@@ -235,10 +227,12 @@ let f x y = function
 - exn is a built-in *extensible* variant,
   meaning that his constructs can be define later by us
 - Predefined exceptions
+  |-----------------+--------+-------------+--------+---|
   | exception       | of     | helper      | return |   |
   |-----------------+--------+-------------+--------+---|
   | Failure         | string | failwith    | 'a     |   |
   | InvalidArgument | string | invalid_arg | 'a     |   |
+  |-----------------+--------+-------------+--------+---|
 *** Variant Example: Binary Trees
 Binary Tree VS List, they have an extra child
 #+begin_src ocaml
@@ -250,6 +244,7 @@ type 'a tree =
   | Node of 'a * 'a tree * 'a tree
 #+end_src
 ** Chapter 4
+
 - Partial application: You can leave off the argument of a function,
   #+begin_src ocaml
     let double x = 2 * x
@@ -257,11 +252,9 @@ type 'a tree =
     let quad x = twice double x
     let quad = twice double
   #+end_src
-- fold       init op
-  fold_right f    acc
-  fold_left  acc  f
-- fold_left is tail-recursive
+
 ** Chapter 5
+
 - https://informationisbeautiful.net/visualizations/million-lines-of-code/
 - Features for modularity
   |---------------+--------------------+------------------------|
@@ -396,19 +389,20 @@ module DayMap = Map.Make(DayKey)
       1) that has a type for the keys
       2) compare functions for the keys
 ** Chapter 6
+
 - Client/Implementer, people who deal with the the *spec*
   - Agree on *Precondition and Postconditions* in a specification comment
   - Notes on performance (?
 - (Docstring) specification format example
   #+begin_src ocaml
-(** [f x] is ... aka one line summary, sometimes the postcondition
-    Examples: ... boundary cases
-    - [sort [1;3;2;3]] is [[1;2;3;3]].
-    - [sort []] is [[]].
-    Requires: ... aka precondition
-    Raises: [Failure "hd"] if [lst] .. also a postcondition
-      is empty. *)
-val f : t -> u
+    (** [f x] is ... aka one line summary, sometimes the postcondition
+        Examples: ... boundary cases
+        - [sort [1;3;2;3]] is [[1;2;3;3]].
+        - [sort []] is [[]].
+        Requires: ... aka precondition
+        Raises: [Failure "hd"] if [lst] .. also a postcondition
+          is empty. *)
+    val f : t -> u
   #+end_src
 - You do NOT need to assert the precondition
 - When documenting the type .t of the =struct= implementation

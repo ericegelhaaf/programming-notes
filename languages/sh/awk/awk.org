@@ -1,39 +1,21 @@
 #+TITLE: AWK's reference
 #+DATE: <2023-09-04 lun>
 
-|-----------+-----------------------------------|
-| book      | https://www.awk.dev/              |
-| wiki      | https://en.wikipedia.org/wiki/AWK |
-| wikibooks | https://en.wikibooks.org/wiki/AWK |
-| web repl  | https://awk.js.org/               |
-|-----------+-----------------------------------|
+|-----------+---------------------------------------------------------------|
+| book      | https://www.awk.dev/                                          |
+| wiki      | https://en.wikipedia.org/wiki/AWK                             |
+| wikibooks | https://en.wikibooks.org/wiki/AWK                             |
+| web repl  | https://awk.js.org/                                           |
+| doc       | https://www.gnu.org/software/gawk/manual/html_node/index.html |
+|-----------+---------------------------------------------------------------|
 
 - #!/usr/bin/awk -f
-
-- coverage
-  https://benhoyt.com/writings/goawk-coverage/
-
-- editor
-  https://github.com/Beaglefoot/awk-language-server
-  https://emacs-lsp.github.io/lsp-mode/page/lsp-awk/
-
-- style https://github.com/soimort/translate-shell/wiki/AWK-Style-Guide
-  - CamelCase, variables
-  - lowercase, functions
-  - 4 spaces or 4 #### for local variables in a function
-  - case have a *default* branch
-  - use "IF" and not "ELSE IF" if the previous branch uses a "RETURN"
-  - use () before pipes |
-
-- Manual https://www.gnu.org/software/gawk/manual/html_node/index.html
-
-- 2023
-  - --csv, supports fields surrounded by double quotes
-
 - Authors
   - Aho Alfred Vaino
   - Weinberger Peter Jay
   - Kernighan Brian Wilson
+- 2023
+  - --csv, supports fields surrounded by double quotes
 
 * language
 
@@ -61,8 +43,6 @@
         return numbers[middle] == target
     }
   #+end_src
-
-- RS="^$" reads the whole file as a single record
 
 - length($0) == 0 { print "this is an empty record==" }
   END { if (NR == 0) print "means that we didn't process any record" }
@@ -113,6 +93,16 @@ https://rosettacode.org/wiki/Hello_world/Web_server
   }
 #+end_src
 
+** style
+
+- guide https://github.com/soimort/translate-shell/wiki/AWK-Style-Guide
+  - CamelCase, variables
+  - lowercase, functions
+  - 4 spaces or 4 #### for local variables in a function
+  - case have a *default* branch
+  - use "IF" and not "ELSE IF" if the previous branch uses a "RETURN"
+  - use () before pipes |
+
 ** Types (will be automaticaly coerced when needed)
 
 https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
@@ -147,6 +137,7 @@ https://www.gnu.org/software/gawk/manual/html_node/Variable-Typing.html
 
 ** built-in variables
 
+- RS="^$" reads the whole file as a single record
 - FPAT https://www.gnu.org/software/gawk/manual/html_node/Splitting-By-Content.html
   - For csv, FPAT = "([^,]+)|(\"[^\"]+\")"
   - Instead of using FS to specify what the fields are *not*
@@ -450,3 +441,10 @@ $ readelf -d /usr/bin/mawk | grep Shared # 155K
  0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
 #+end_src
+
+* tools
+- editor tools
+  - https://github.com/Beaglefoot/awk-language-server
+  - https://emacs-lsp.github.io/lsp-mode/page/lsp-awk/
+- coverage
+  - https://benhoyt.com/writings/goawk-coverage/

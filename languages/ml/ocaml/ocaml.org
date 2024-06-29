@@ -37,6 +37,12 @@
     }
 #+end_src
 
+=with= for record copy, CANNOT add new fields
+
+#+begin_src ocaml
+{ e with f1 = e1 }
+#+end_src
+
 *** variant (sum type)
 
 #+begin_src
@@ -46,12 +52,13 @@ type <variant> =
   | ...
 #+end_src
 
-- We can also *use the type* name when matching for variant types, in this case "color" is the type name
-  #+begin_src ocaml
-    let extended_color_to_int : extended_color -> int = function
-      | `RGBA (r,g,b,a) -> 256 + a + (b * 6) + (g * 36) + (r * 216)
-      | #color as color -> color_to_int color
-  #+end_src
+We can also *use the type* name when matching for variant types, in this case "color" is the type name
+
+#+begin_src ocaml
+  let extended_color_to_int : extended_color -> int = function
+    | `RGBA (r,g,b,a) -> 256 + a + (b * 6) + (g * 36) + (r * 216)
+    | #color as color -> color_to_int color
+#+end_src
 
 *** simple
 - Int
@@ -60,6 +67,8 @@ type <variant> =
 *** complex
 - List []
   - single linked list
+  - List.Assoc, module for associative lists
+    [(aka list; of tuples)]
 |------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
 | Type       | Init                   | Access  | Modifying | Pattern Matching              | Adding | Appending       |
 |------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
@@ -83,23 +92,37 @@ type <variant> =
 ** Modules
 
 - can be ~open~ locally
-
-- new struct
   #+begin_src ocaml
-    module M = struct
-        let x = 3
-    end
+    let average x y = let open Int64 in (x + y) / of_int 2
+    let average x y = Int64((x + y) / of_int 2)
+  #+end_src
+
+- local let module shortcut
+  #+begin_src ocaml
+    let print_median m =
+      let module C = Counter in
+      match m with
+      | C.Median string -> printf "%s" string
+      | C.Before_and_after (before, after) -> printf "%s %s\n" before after
   #+end_src
 
 - new type
   #+begin_src ocaml
-    module type MT = sig
+    module type ID = sig
       type t
-      val is_empty : t -> bool
+      val of_string : string -> t
     end
   #+end_src
 
-- new type+struct
+- new struct
+  #+begin_src ocaml
+    module String_id = struct
+      type t = string
+      let of_string x = x
+    end
+  #+end_src
+
+- join?? type+struct into one type
   #+begin_src ocaml
     module M : sig
       type t
@@ -108,8 +131,20 @@ type <variant> =
     end
   #+end_src
 
-|----------------------------+--------------------------------|
-|                            | module newM : MT = M           |
+- join?? type+struct into a several types
+  #+begin_src ocaml
+    module Username : ID = String_id
+    module Hostname : ID = String_id
+  #+end_src
+
+- include
+  #+begin_src ocaml
+    module newM = struct
+      include otherM
+      let f x = m
+    end
+  #+end_src
+
 |----------------------------+--------------------------------|
 | new functor                | module fM (M:MT) : MT = struct |
 |                            | ..let x = M.x + 1              |
@@ -123,11 +158,6 @@ type <variant> =
 | anonymous module           | ..type t = int                 |
 |                            | ..let compare = Int.compare    |
 |                            | end)                           |
-|----------------------------+--------------------------------|
-| include                    | module newM = struct           |
-|                            | ..include M                    |
-|                            | ..let f x = x                  |
-|                            | end                            |
 |----------------------------+--------------------------------|
 | include with type          | module newM = sig              |
 | (multiple)                 | ..type t                       |
@@ -159,28 +189,56 @@ type <variant> =
 - variables, functions, recordtypes
 ** Functions
 
-- lambda
-  #+begin_src ocaml
-  let plusone = (fun x -> x + 1) ;;
-  let plusone x = x + 1 ;;
-  #+end_src
+#+begin_src ocaml
+  let plusone x = x + 1
+  let plusone = (fun x -> x + 1) (* lambda *)
+  let plusone = ( + ) 1 (* partial application *)
+#+end_src
 
-- rec + function + as + when (guard)
-  #+begin_src ocaml
+signatures (.mli)
+
+#+begin_src ocaml
+  open Base
+  type t
+  val empty : t
+  val to_list : t -> (string * int) list
+  type touch : t -> string -> t
+#+end_src
+
+one of the possible implementations for that signature
+
+#+begin_src ocaml
+  open Base
+  type t = (string * int) list
+  let empty = []
+  let to_list x = x
+  let touch counts line =
+    let count =
+      match List.Assoc.find ~equal:String.equal counts line with
+      | None   -> 0
+      | Some x -> x
+    in
+    List.Assoc.add ~equal:String.equal counts line (count + 1)
+#+end_src
+
+rec + function + as + when (guard)
+
+#+begin_src ocaml
   let rec destutter list = function
     | [] | [_] as l -> l
     | hd :: (hd' :: _ as tl) when hd = hd' -> destutter tl
     | hd :: tl -> hd :: destutter tl
-  #+end_src
+#+end_src
 
-- Function parameters are patterns too
-  #+begin_src ocaml
+Function parameters are patterns too
+
+#+begin_src ocaml
   type point = float * float
 
   let distance ((x1,y1):point) ((x2,y2):point) : float =
     let square x = x *. x in
     sqrt (square (x -. x1) +. square (y2 -. y1))
-  #+end_src
+#+end_src
 
 - _exn denotes functions that return an exception
 - =assert false= can be used on a branch that isn't suppose to happen
@@ -234,7 +292,7 @@ type <variant> =
 | ::  | "cons"                                            |
 |-----+---------------------------------------------------|
 ** Standard Library
-- https://v2.ocaml.org/manual/stdlib.html
+https://v2.ocaml.org/manual/stdlib.html
 |----------------+------------------------------------------------------------|
 | =Module=       | =Description=                                              |
 |----------------+------------------------------------------------------------|
@@ -299,8 +357,9 @@ type <variant> =
 | [[https://v2.ocaml.org/api/Weak.html][Weak]]           | arrays of weak pointers                                    |
 |----------------+------------------------------------------------------------|
 ** Changelog
-- https://github.com/ocaml-multicore/awesome-multicore-ocaml
-  https://v2.ocaml.org/releases/5.0/manual/parallelism.html
-  https://v2.ocaml.org/releases/5.0/manual/effects.html
+- 5.0 (2022)
+  - https://github.com/ocaml-multicore/awesome-multicore-ocaml
+  - https://v2.ocaml.org/releases/5.0/manual/parallelism.html
+  - https://v2.ocaml.org/releases/5.0/manual/effects.html
 * Codebases
 - https://soap.coffee/~lthms/news/CFTSpatialShell.html

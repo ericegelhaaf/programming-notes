@@ -31,6 +31,9 @@
 - 23 https://github.com/ocaml-flambda/ocaml-jst/blob/main/jane/doc/proposals/data-race-freedom.md
 - 23 https://osa1.net/posts/2023-04-24-ocaml-thoughts.html
   https://github.com/sidkshatriya/me/blob/master/007-My-Thoughts-on-OCaml-vs-Haskell-Rust-2023.md
+- 23 https://dev.to/chshersh/8-months-of-ocaml-after-8-years-of-haskell-in-production-h96
+- 24 https://dev.to/chshersh/7-ocaml-gotchas-207e
+- 24 https://hypirion.com/musings/getting-ocaml-through-the-eye-of-a-needle
 * LWT
 - Lwt in 5 minutes https://ocsigen.org/tuto/latest/manual/lwt
 - 2013 https://mirage.io/docs/tutorial-lwt
