@@ -1,3 +1,5 @@
+- dune might detect cyclical module dependencies
+
 - tool: dependency graph https://github.com/mjambon/dune-deps
 
 - https://dune.readthedocs.io/en/stable/quick-start.html#building-a-hello-world-program-in-bytecode
@@ -12,22 +14,23 @@
   "dune will add -g flag for you by default"
 
 * dune commands
-|---------------------------------+---------------------------------------|
-| init project NAME               | creates project on NAME/              |
-| init executable NAME            | on current dir, creates NAME project  |
-|---------------------------------+---------------------------------------|
-| build                           | --profile PROF --build-dir _build     |
-| build NAME.exe                  | where NAME is the "name" in dune      |
-| clean                           |                                       |
-| runtest                         |                                       |
-| promote                         | aka "promotion apply"                 |
-| promotion ?                     | ???                                   |
-|---------------------------------+---------------------------------------|
-| OCAMLRUNPARAM=b exec ./NAME.exe | to run printing full backtrace        |
-| exec NAME                       |                                       |
-| exec ./src/NAME.exe             |                                       |
-| exec -- ./src/NAME.exe -arg foo | to pass arguments to the final binary |
-|---------------------------------+---------------------------------------|
+|--------------------------------------+---------------------------------------|
+| init project NAME                    | creates project on NAME/              |
+| init executable NAME                 | on current dir, creates NAME project  |
+|--------------------------------------+---------------------------------------|
+| build                                | --profile PROF --build-dir _build     |
+| build NAME.exe                       | where NAME is the "name" in dune      |
+| clean                                |                                       |
+| runtest                              |                                       |
+| promote                              | aka "promotion apply"                 |
+| promotion ?                          | ???                                   |
+|--------------------------------------+---------------------------------------|
+| OCAMLRUNPARAM=b=0 exec -- ./NAME.exe | turn off backtraces                   |
+| OCAMLRUNPARAM=b exec ./NAME.exe      | to run printing full backtrace        |
+| exec NAME                            |                                       |
+| exec ./src/NAME.exe                  |                                       |
+| exec -- ./src/NAME.exe -arg foo      | to pass arguments to the final binary |
+|--------------------------------------+---------------------------------------|
 * dune on project (+static)
 
 #+begin_src lisp

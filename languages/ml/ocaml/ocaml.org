@@ -12,15 +12,26 @@
   - Xavier Leroy, Jerome Voiullon, Damien Doligez, Didier Remy, Ascander Suarez
 
 * Language
+
 - there are mutable values, but NOT mutable variables
 - .ml  = Data Structure
 - .mli = Data Abstraction
+- let () =, takes the role of the main function
+- The =let= definition is not an expression in itself
+- The =let in= is an expression
+
 ** Types
+
+- best read from right to left
+  #+begin_src ocaml
+    int list list (* "a list of list of integers" *)
+  #+end_src
+
 *** record
 
 #+begin_src
-  type [type param] <record-name> =
-    { <field> : <type>;
+  type [typeparam] <record-name> =
+    { <field> : <type-or-typeparam>;
       <field> : <type>;
       ...
     }
@@ -47,47 +58,56 @@ type <variant> =
 - Float
 - String
 *** complex
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| Type       | Init                   | Access  | Modifying | Pattern Matching                | Adding | Appending      |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| ~Unit~     | ()                     |         |           |                                 |        |                |
-| ~Bool~     | x = true,false         |         |           |                                 | &&,¦¦  |                |
-| ~Option~   | Some a, None           |         |           |                                 |        |                |
-| ~String~   | "abcd"                 | .[2]    | <-        |                                 |        | ^              |
-| variant    |                        |         |           |                                 |        |                |
-| mutable    |                        |         | <-        |                                 |        |                |
-| refs       | ref <expr>             | !x      | :=        |                                 |        |                |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| ~Array~    | [¦ a ; b ¦]            | .(2)    | <-        | let [¦ a ; b ¦] = some_array    |        |                |
-| ~Bigarray~ |                        | .{2}    | <-        |                                 |        |                |
-| tuples     | (a , b)                | fst snd |           | let (x , y)  =                  |        |                |
-| ~List~     | [a ; a]                | List.hd |           | let (x :: y) =                  | ::     | @, List.append |
-| struct     | struct let foo = 3 end |         |           |                                 |        |                |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
-| record     | {a = VAL ; b = VAL}    | .a      |           | let { x = x_pos ; y = y_pos } = |        |                |
-|            | a=VAL; B=VAL; {a ; b}  |         |           | let { x ; y } =                 |        |                |
-|            | type foo = { a: int }  |         |           | let v1 = v1.x + v2.y            |        |                |
-|------------+------------------------+---------+-----------+---------------------------------+--------+----------------|
+- List []
+  - single linked list
+|------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
+| Type       | Init                   | Access  | Modifying | Pattern Matching              | Adding | Appending       |
+|------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
+| ~Unit~     | ()                     |         |           |                               |        |                 |
+| ~Bool~     | x = true,false         |         |           |                               | && ¦¦  |                 |
+| ~Option~   | Some a, None           |         |           |                               |        |                 |
+| ~String~   | "abcd"                 | .[2]    | <-        |                               |        | ^ String.concat |
+| mutable    |                        |         | <-        |                               |        |                 |
+| refs       | ref <expr>             | !x      | :=        |                               |        |                 |
+|------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
+| ~Array~    | [¦ a ; b ¦]            | .(2)    | <-        | let [¦ a ; b ¦] = some_array  |        |                 |
+| ~Bigarray~ |                        | .{2}    | <-        |                               |        |                 |
+| tuples     | (a , b)                | fst snd |           | let (x , y)  =                |        |                 |
+| ~List~     | [a ; a]                | List.hd |           | let (x :: y) =                | ::     | @ List.append   |
+| struct     | struct let foo = 3 end |         |           |                               |        |                 |
+|------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
+| record     | {a = VAL ; b = VAL}    | .a      |           | let { x = xpos ; y = ypos } = |        |                 |
+|            | a=VAL; B=VAL; {a ; b}  |         |           | let { x ; y } =               |        |                 |
+|            | type foo = { a: int }  |         |           | let v1 = v1.x + v2.y          |        |                 |
+|------------+------------------------+---------+-----------+-------------------------------+--------+-----------------|
 ** Modules
-- capitalized
+
 - can be ~open~ locally
-|----------------------------+--------------------------------|
-|                            | code                           |
-|----------------------------+--------------------------------|
-| new                        | module M = struct              |
-|                            | ..let x = 3                    |
-|                            | end                            |
-|----------------------------+--------------------------------|
-| type                       | module type MT = sig           |
-|                            | ..type t                       |
-|                            | ..val is_empty : t -> bool     |
-|                            | end                            |
-|----------------------------+--------------------------------|
-| type+new                   | module M : sig                 |
-|                            | ..type t                       |
-|                            | end = struct                   |
-|                            | ..type t = string              |
-|                            | end                            |
+
+- new struct
+  #+begin_src ocaml
+    module M = struct
+        let x = 3
+    end
+  #+end_src
+
+- new type
+  #+begin_src ocaml
+    module type MT = sig
+      type t
+      val is_empty : t -> bool
+    end
+  #+end_src
+
+- new type+struct
+  #+begin_src ocaml
+    module M : sig
+      type t
+    end = struct
+      type t = string
+    end
+  #+end_src
+
 |----------------------------+--------------------------------|
 |                            | module newM : MT = M           |
 |----------------------------+--------------------------------|
@@ -139,10 +159,28 @@ type <variant> =
 - variables, functions, recordtypes
 ** Functions
 
-#+begin_src ocaml
+- lambda
+  #+begin_src ocaml
   let plusone = (fun x -> x + 1) ;;
   let plusone x = x + 1 ;;
-#+end_src
+  #+end_src
+
+- rec + function + as + when (guard)
+  #+begin_src ocaml
+  let rec destutter list = function
+    | [] | [_] as l -> l
+    | hd :: (hd' :: _ as tl) when hd = hd' -> destutter tl
+    | hd :: tl -> hd :: destutter tl
+  #+end_src
+
+- Function parameters are patterns too
+  #+begin_src ocaml
+  type point = float * float
+
+  let distance ((x1,y1):point) ((x2,y2):point) : float =
+    let square x = x *. x in
+    sqrt (square (x -. x1) +. square (y2 -. y1))
+  #+end_src
 
 - _exn denotes functions that return an exception
 - =assert false= can be used on a branch that isn't suppose to happen
@@ -150,12 +188,14 @@ type <variant> =
 - type variables support for parametric polymorphism
 - implicit =match= of an invisible last argument when using =function=
 - lexically scoped (with let)
+
 - optional arguments
   - begin with ?
     - ?sep ?(sep="")
     - ~sep:":"
   - passed as =Option=
   - useful when is a wrapper to another function that takes an optional
+
 - labeled arguments (ME: aka keyword args)
   - at any position of arguments
   - defining: ~num
@@ -166,11 +206,22 @@ type <variant> =
   - when is unclear just from the type signature
     - booleans
     - more than one value of the same type
+
 ** Operators
+- Declaring an infix operator
+  #+begin_src ocaml
+    let ( <^> ) x y = max x y
+        in 1 <^> 2
+  #+end_src
 - default polymorphic operators considered problematic
+- String.concat vs ^
+  - .concat allocates 1 string
+  - ^ allocates a new string every time it runs
+- ( * ) is preferred over (*) for writting operators as functions
 |-----+---------------------------------------------------|
 | ^   | concatenate strings                               |
-| ¦>  | pipeline, left assoc                              |
+| @@  | application (like $ in Haskell)                   |
+| ¦>  | pipeline, left assoc (aka rev application)        |
 | ^>  | pipeline, right assoc                             |
 | ==  | physical equality                                 |
 | !=  | physical inequality                               |
@@ -179,89 +230,77 @@ type <variant> =
 | >>= | Option.bind                                       |
 | >>¦ | Option.map                                        |
 | ;   | to sequence imperative code                       |
+| []  | "list"                                            |
+| ::  | "cons"                                            |
 |-----+---------------------------------------------------|
 ** Standard Library
 - https://v2.ocaml.org/manual/stdlib.html
-- example module url https://v2.ocaml.org/api/Seq.html
 |----------------+------------------------------------------------------------|
 | =Module=       | =Description=                                              |
 |----------------+------------------------------------------------------------|
-| Arg            | parsing of command line arguments                          |
-| Array          | array operations                                           |
-| ArrayLabels    | array operations (with labels)                             |
-| Atomic         | atomic references                                          |
-| Bigarray       | large, multi-dimensional, numerical arrays                 |
-| Bool           | boolean values                                             |
-| Buffer         | extensible buffers                                         |
-| Bytes          | byte sequences                                             |
-| BytesLabels    | byte sequences (with labels)                               |
-| Callback       | registering OCaml values with the C runtime                |
-| Char           | character operations                                       |
-| Complex        | complex numbers                                            |
-| Condition      | condition variables to synchronize between threads         |
-| Domain         | Domain spawn/join and domain local variables               |
-| Digest         | MD5 message digest                                         |
-| Effect         | deep and shallow effect handlers                           |
-| Either         | either values                                              |
-| Ephemeron      | Ephemerons and weak hash table                             |
-| Filename       | operations on file names                                   |
-| Float          | floating-point numbers                                     |
-| Format         | pretty printing                                            |
-| Fun            | function values                                            |
-| Gc             | memory management control and statistics; finalized values |
-| Hashtbl        | hash tables and hash functions                             |
-| In_channel     | input channels                                             |
-| Int            | integers                                                   |
-| Int32          | 32-bit integers                                            |
-| Int64          | 64-bit integers                                            |
-| Lazy           | deferred computations                                      |
-| Lexing         | the run-time library for lexers generated by ocamllex      |
-| List           | list operations                                            |
-| ListLabels     | list operations (with labels)                              |
-| Map            | association tables over ordered types                      |
-| Marshal        | marshaling of data structures                              |
-| MoreLabels     | include modules Hashtbl, Map and Set with labels           |
-| Mutex          | locks for mutual exclusion                                 |
-| Nativeint      | processor-native integers                                  |
-| Oo             | object-oriented extension                                  |
-| Option         | option values                                              |
-| Out_channel    | output channels                                            |
-| Parsing        | the run-time library for parsers generated by ocamlyacc    |
-| Printexc       | facilities for printing exceptions                         |
-| Printf         | formatting printing functions                              |
-| Queue          | first-in first-out queues                                  |
-| Random         | pseudo-random number generator (PRNG)                      |
-| Result         | result values                                              |
-| Runtime_events | Runtime event tracing                                      |
-| Scanf          | formatted input functions                                  |
-| Seq            | functional iterators                                       |
-| Set            | sets over ordered types                                    |
-| Semaphore      | semaphores, another thread synchronization mechanism       |
-| Stack          | last-in first-out stacks                                   |
-| StdLabels      | include modules Array, List and String with labels         |
-| String         | string operations                                          |
-| StringLabels   | string operations (with labels)                            |
-| Sys            | system interface                                           |
-| Uchar          | Unicode characters                                         |
-| Unit           | unit values                                                |
-| Weak           | arrays of weak pointers                                    |
+| [[https://v2.ocaml.org/api/Arg.html][Arg]]            | parsing of command line arguments                          |
+| [[https://v2.ocaml.org/api/Array.html][Array]]          | array operations                                           |
+| [[https://v2.ocaml.org/api/ArrayLabels.html][ArrayLabels]]    | array operations (with labels)                             |
+| [[https://v2.ocaml.org/api/Atomic.html][Atomic]]         | atomic references                                          |
+| [[https://v2.ocaml.org/api/Bigarray.html][Bigarray]]       | large, multi-dimensional, numerical arrays                 |
+| [[https://v2.ocaml.org/api/Bool.html][Bool]]           | boolean values                                             |
+| [[https://v2.ocaml.org/api/Buffer.html][Buffer]]         | extensible buffers                                         |
+| [[https://v2.ocaml.org/api/Bytes.html][Bytes]]          | byte sequences                                             |
+| [[https://v2.ocaml.org/api/BytesLabels.html][BytesLabels]]    | byte sequences (with labels)                               |
+| [[https://v2.ocaml.org/api/Callback.html][Callback]]       | registering OCaml values with the C runtime                |
+| [[https://v2.ocaml.org/api/Char.html][Char]]           | character operations                                       |
+| [[https://v2.ocaml.org/api/Complex.html][Complex]]        | complex numbers                                            |
+| [[https://v2.ocaml.org/api/Condition.html][Condition]]      | condition variables to synchronize between threads         |
+| [[https://v2.ocaml.org/api/Domain.html][Domain]]         | Domain spawn/join and domain local variables               |
+| [[https://v2.ocaml.org/api/Digest.html][Digest]]         | MD5 message digest                                         |
+| [[https://v2.ocaml.org/api/Effect.html][Effect]]         | deep and shallow effect handlers                           |
+| [[https://v2.ocaml.org/api/Either.html][Either]]         | either values                                              |
+| [[https://v2.ocaml.org/api/Ephemeron.html][Ephemeron]]      | Ephemerons and weak hash table                             |
+| [[https://v2.ocaml.org/api/Filename.html][Filename]]       | operations on file names                                   |
+| [[https://v2.ocaml.org/api/Float.html][Float]]          | floating-point numbers                                     |
+| [[https://v2.ocaml.org/api/Format.html][Format]]         | pretty printing                                            |
+| [[https://v2.ocaml.org/api/Fun.html][Fun]]            | function values                                            |
+| [[https://v2.ocaml.org/api/Gc.html][Gc]]             | memory management control and statistics; finalized values |
+| [[https://v2.ocaml.org/api/Hashtbl.html][Hashtbl]]        | hash tables and hash functions                             |
+| [[https://v2.ocaml.org/api/In_channel.html][In_channel]]     | input channels                                             |
+| [[https://v2.ocaml.org/api/Int.html][Int]]            | integers                                                   |
+| [[https://v2.ocaml.org/api/Int32.html][Int32]]          | 32-bit integers                                            |
+| [[https://v2.ocaml.org/api/Int64.html][Int64]]          | 64-bit integers                                            |
+| [[https://v2.ocaml.org/api/Lazy.html][Lazy]]           | deferred computations                                      |
+| [[https://v2.ocaml.org/api/Lexing.html][Lexing]]         | the run-time library for lexers generated by ocamllex      |
+| [[https://v2.ocaml.org/api/List.html][List]]           | list operations                                            |
+| [[https://v2.ocaml.org/api/ListLabels.html][ListLabels]]     | list operations (with labels)                              |
+| [[https://v2.ocaml.org/api/Map.html][Map]]            | association tables over ordered types                      |
+| [[https://v2.ocaml.org/api/Marshal.html][Marshal]]        | marshaling of data structures                              |
+| [[https://v2.ocaml.org/api/MoreLabels.html][MoreLabels]]     | include modules Hashtbl, Map and Set with labels           |
+| [[https://v2.ocaml.org/api/Mutex.html][Mutex]]          | locks for mutual exclusion                                 |
+| [[https://v2.ocaml.org/api/Nativeint.html][Nativeint]]      | processor-native integers                                  |
+| [[https://v2.ocaml.org/api/Oo.html][Oo]]             | object-oriented extension                                  |
+| [[https://v2.ocaml.org/api/Option.html][Option]]         | option values                                              |
+| [[https://v2.ocaml.org/api/Out_channel.html][Out_channel]]    | output channels                                            |
+| [[https://v2.ocaml.org/api/Parsing.html][Parsing]]        | the run-time library for parsers generated by ocamlyacc    |
+| [[https://v2.ocaml.org/api/Printexc.html][Printexc]]       | facilities for printing exceptions                         |
+| [[https://v2.ocaml.org/api/Printf.html][Printf]]         | formatting printing functions                              |
+| [[https://v2.ocaml.org/api/Queue.html][Queue]]          | first-in first-out queues                                  |
+| [[https://v2.ocaml.org/api/Random.html][Random]]         | pseudo-random number generator (PRNG)                      |
+| [[https://v2.ocaml.org/api/Result.html][Result]]         | result values                                              |
+| [[https://v2.ocaml.org/api/Runtime_events.html][Runtime_events]] | Runtime event tracing                                      |
+| [[https://v2.ocaml.org/api/Scanf.html][Scanf]]          | formatted input functions                                  |
+| [[https://v2.ocaml.org/api/Seq.html][Seq]]            | functional iterators                                       |
+| [[https://v2.ocaml.org/api/Set.html][Set]]            | sets over ordered types                                    |
+| [[https://v2.ocaml.org/api/Semaphore.html][Semaphore]]      | semaphores, another thread synchronization mechanism       |
+| [[https://v2.ocaml.org/api/Stack.html][Stack]]          | last-in first-out stacks                                   |
+| [[https://v2.ocaml.org/api/StdLabels.html][StdLabels]]      | include modules Array, List and String with labels         |
+| [[https://v2.ocaml.org/api/String.html][String]]         | string operations                                          |
+| [[https://v2.ocaml.org/api/StringLabels.html][StringLabels]]   | string operations (with labels)                            |
+| [[https://v2.ocaml.org/api/Sys.html][Sys]]            | system interface                                           |
+| [[https://v2.ocaml.org/api/Uchar.html][Uchar]]          | Unicode characters                                         |
+| [[https://v2.ocaml.org/api/Unit.html][Unit]]           | unit values                                                |
+| [[https://v2.ocaml.org/api/Weak.html][Weak]]           | arrays of weak pointers                                    |
 |----------------+------------------------------------------------------------|
 ** Changelog
 - https://github.com/ocaml-multicore/awesome-multicore-ocaml
   https://v2.ocaml.org/releases/5.0/manual/parallelism.html
   https://v2.ocaml.org/releases/5.0/manual/effects.html
-* Tools
-
-- profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
-- profiler https://github.com/imandra-ai/ocaml-tracy
-- Github Action: build docs
-  https://github.com/smimram/monadic-synth/blob/master/.github/workflows/build.yml
-
-** Editor
-- editor https://tarides.com/blog/2022-12-21-advanced-merlin-features-destruct-and-construct
-- https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
-- https://github.com/Gopiandcode/gopcaml-mode
-  https://www.youtube.com/watch?v=vy6oGSk7A3s
-  - needs emacs packages: merlin, ocp-indent, and tuareg
 * Codebases
 - https://soap.coffee/~lthms/news/CFTSpatialShell.html

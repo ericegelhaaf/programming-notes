@@ -1,15 +1,6 @@
 - https://google.github.io/comprehensive-rust/welcome.html
 * Tutorial: EasyRust
 https://github.com/Dhghomon/easy_rust
-|----------------+----------------+------------|
-|                | UpperCamelCase | snake_case |
-|----------------+----------------+------------|
-| Implementation | YES            |            |
-| Struct         | YES            |            |
-| Enum           | YES            |            |
-| Variables      |                | YES        |
-| Functions      |                | YES        |
-|----------------+----------------+------------|
 ** Comments
 
 #+begin_src rust
@@ -57,12 +48,13 @@ let d = 1u8;     // uses type u8
 ** Display and debug
 - {} and ~pretty printers~ {:?} {:#?}
 - std::i8::MIN
-  std::i8::MAX
+- std::i8::MAX
 ** Mutability
 - let mut x = 10; - ~mutability~, when a variable can be changed
 - let x = 2;      - ~shadowing~, if are the same type, although effectively are different variables
   let x = 10;
 ** The Stack, Heap and Pointers
+|-------+---------+---------------------|
 |       | Speed   | Size at compilation |
 |-------+---------+---------------------|
 | Stack | Fastest | yes                 |
@@ -75,6 +67,7 @@ let d = 1u8;     // uses type u8
               // b has type &isize
 #+end_src
 ** More about printing
+|-------------------------------+-------------------------|
 | r#""raw"\tlines\n"#           |                         |
 | b"this string of ASCII bytes" |                         |
 | \u{D589}                      | unicode printing        |
@@ -82,11 +75,13 @@ let d = 1u8;     // uses type u8
 | {:b} {:x} {:o}                | binary, hexa, and octal |
 | {0} {1}                       | order of arguments      |
 | {foo} {bar}                   | name of arguments       |
+|-------------------------------+-------------------------|
 - {variable:padding alignment minimum.maximum}
   - no spaced ({:0^10})
   - can ommit variable name
   - alignment <>^ (left/right/middle)
 ** Strings
+|--------+--------------------------------+-----------+--------+---------|
 | type   | initialization                 | ownership | alloc? | speed   |
 |--------+--------------------------------+-----------+--------+---------|
 | &str   | let a = "hello";               | borrowed  | data?  | fastest |
@@ -194,9 +189,6 @@ enum ThingsInSky {
     Sun = 10,
     Stars = 100,
 }
-#+end_src
-- can add content to each
-#+begin_src rust
 enum ThingsInSky {
     Sun(String),
     Stars(String),

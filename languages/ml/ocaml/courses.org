@@ -19,8 +19,10 @@
   https://github.com/VictorNicollet/99-Problems-OCaml
   https://github.com/janestreet/learn-ocaml-workshop
 ** 5.1 Exceptions
-- using exceptions to exit early of a "reduce-type" operation
-  if we didn't use exception the unwind of the stack would still happen
+
+Using exceptions to exit early of a "reduce-type" operation
+if we didn't use exception the unwind of the stack would still happen
+
 - Without exception
   #+begin_src ocaml
     let rec multl = function
@@ -37,11 +39,13 @@
        in
        try aux l with Zero -> 0
   #+end_src
+
 * Course: 2020 | COS326 | Princeton - Functional Programming
   2012 https://www.cs.princeton.edu/~dpw/courses/cos326-12/lectures.php
   2021 https://www.cs.princeton.edu/courses/archive/fall21/cos326/schedule.php
   2020 Video https://mediacentral.princeton.edu/channel/COS+326+Functional+Programming/174748251
 ** 03
+
 - Function parameters are patterns too
   #+begin_src ocaml
   type point = float * float
@@ -50,17 +54,22 @@
     let square x = x *. x in
     sqrt (square (x -. x1) +. square (y2 -. y1))
   #+end_src
+
 ** 12 Modules
 *** 1
+
 - Signature = an inteface
   Structure = an implementation
   Function  = a parametrized module
-- Murphy's Law: "When is not enforced is broken"
+- Murphy's Law: /When is not enforced is broken/
+- =Sealing= a structure by a signature, limits visibility
 - Types of operations on a data type
+ |-------------+--------------------------------------------------|
  | Constructor | return a value of the type                       |
  | Observer    | reveals information about the status of the type |
  | Mutator     | takes t and returns a new t                      |
-- "Sealing" a structure by a signature, limits visibility
+ |-------------+--------------------------------------------------|
+
 *** 2
 - Principles:
   1) Fail as early as possible (ex: return irregular data)
@@ -163,11 +172,6 @@
 ** Chapter 3
 - types are best read, right to left
   int list list, a list of list of integers
-- List is single linked list
-- [] is pronounced list (here too)
-- :: is pronounced cons
-- utop
-  #use "file.ml";;
 - utop, is not a good practice to repeatedly "#use" the same file
   close utop and #use it again
 - =with= for record copy, cannot add new fields

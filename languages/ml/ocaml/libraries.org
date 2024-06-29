@@ -26,6 +26,28 @@
 - Project: Synth https://github.com/smimram/monadic-synth
 - https://janmidtgaard.dk/quickcheck/index.html
 - RPI https://github.com/dinosaure/gilbraltar
+* benchmarking
+
+- corebench
+  #+begin_src ocaml
+    #require "core_bench"
+    open Core_bench
+
+    let rec sum l =
+      match l with
+      | [] -> 0
+      | hd :: tl -> hd + sum tl
+
+    let rec sum_if l =
+      if List.is_empty l then 0
+      else List.hd_exn l + sum_if (list.tl_exn 1)
+
+    let numbers = List.range 0 1000 in
+    [ Bench.Test.create ~name:"sum_if" (fun () -> sum_if numbers)
+    ; Bench.Test.create ~name:"sum" (fun () -> sum numbers)]
+    |> Bench.bench
+  #+end_src
+
 * utils
 - batteries https://ocaml-batteries-team.github.io/batteries-included/hdoc2/
 |------------+-----|

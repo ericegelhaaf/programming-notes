@@ -1,3 +1,27 @@
+- profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
+- profiler https://github.com/imandra-ai/ocaml-tracy
+- Github Action: build docs
+  https://github.com/smimram/monadic-synth/blob/master/.github/workflows/build.yml
+
+- Compilers
+  |------------+------------|
+  | ocamlopt   | ocamlc     |
+  |------------+------------|
+  | nativecode | bytecode   |
+  | .exe       | .bc        |
+  |            | +vm        |
+  |            | +multiarch |
+  |            | +debugging |
+  | slower     | quicker    |
+  | production | dev        |
+  |------------+------------|
+
+- ocamlc bytecode needs *-custom* flag to embeed the runtime
+- Building, =ocamlfind= is like /pkgconf/ for ocaml
+  #+begin_src shell
+    $ ocamlfind ocamlopt -linkpkg -package base -package stdio freq.ml -o freq
+  #+end_src
+
 - static
   - 21 https://ocamlpro.com/blog/2021_09_02_generating_static_and_portable_executables_with_ocaml/
   - 21 https://github.com/rbjorklin/throttle-fstrim
@@ -21,3 +45,11 @@
         RUN make deps
       #+end_src
   - 17 http://rgrinberg.com/posts/static-binaries-tutorial/
+
+** Editor
+
+- https://tarides.com/blog/2022-12-21-advanced-merlin-features-destruct-and-construct
+- https://github.com/ocaml-ppx/ocamlformat/blob/main/doc/editor_setup.mld
+- https://github.com/Gopiandcode/gopcaml-mode
+  https://www.youtube.com/watch?v=vy6oGSk7A3s
+  - needs emacs packages: merlin, ocp-indent, and tuareg

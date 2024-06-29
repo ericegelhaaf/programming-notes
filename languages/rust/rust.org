@@ -41,17 +41,104 @@
 - https://research.mozilla.org/rust/
 
 * Language
+** variables
+#+begin_src rust
+  let x: u8 = 1;
+  let mut x = 10; // ~mutability~, when a variable can be changed
+  let x = 2;  //    - ~shadowing~, if are the same type, although effectively are different variables
+  let x = 10;
+#+end_src
+
+** format
+|-------------------------------+-------------------------|
+| r#""raw"\tlines\n"#           |                         |
+| b"this string of ASCII bytes" |                         |
+| \u{D589}                      | unicode printing        |
+| {:p}                          | pointer                 |
+| {:b} {:x} {:o}                | binary, hexa, and octal |
+| {0} {1}                       | order of arguments      |
+| {foo} {bar}                   | name of arguments       |
+| {} {:?} {:#?}                 | pretty printer          |
+| {var:pad align min.max}       |                         |
+|-------------------------------+-------------------------|
+** operator
+|----+---------------------------------|
+| -> | skinny arrow, on fn definitions |
+| {} | code blocks, return a value     |
+| !  | denote macro names              |
+|----+---------------------------------|
+** attributes #[]
+- derive(Debug)
+** functions
+- implicit return
+  #+begin_src rust
+    fn beta() -> i32 {
+      8 // without a ; it can be used like this, otherwise it would return ()
+      // return 8;  // Same but less idiomatic
+      // 8;         // It will return ()
+    }
+  #+end_src
+
+** Style
+|----------------+----------------+------------|
+|                | UpperCamelCase | snake_case |
+|----------------+----------------+------------|
+| Implementation | YES            |            |
+| Struct         | YES            |            |
+| Enum           | YES            |            |
+|----------------+----------------+------------|
+| Variables      |                | YES        |
+| Functions      |                | YES        |
+|----------------+----------------+------------|
 ** Types
+*** struct
+
+#+begin_src rust
+struct AUnit;         // "unit struct"
+struct ATuple(i8,i8); // "tuple struct" or "unnamed struct"
+struct ANamed {       // "named struct"
+    size: u32,
+    color: ATuple,
+} // DO NOT add a semicolon after, "there is whole block of code after it"
+#+end_src
+
+*** enum
+
+- each member gets a number from 0 to 10 (can be given different numbers)
+- can be imported with ~use ENUMNAME::*~
+
+#+begin_src rust
+  enum ThingsInSky {
+      Sun,
+      Stars,
+  }
+  enum ThingsInSky {
+      Sun = 10,
+      Stars = 100,
+  }
+  enum ThingsInSky {
+      Sun(String),
+      Stars(String),
+  }
+#+end_src
+
 *** Primitive
-|-------+-----|
-| u8    | 1u8 |
-| i32   |  10 |
-| i64   |   ? |
-| f64   |  5. |
-| isize |  10 |
-| usize |  10 |
-| char  | 'a' |
-|-------+-----|
+- =as= used for casting
+- usize used for indexing
+- std::i8::MIN
+- std::i8::MAX
+|-------+-------+---------------|
+|       |   <r> | size          |
+|-------+-------+---------------|
+| u8    |   1u8 |               |
+| i32   | 1_000 |               |
+| i64   |     ? |               |
+| f32   |     ? |               |
+| f64   |    5. |               |
+| isize |    10 | arq dep       |
+| usize |    10 | arq dep       |
+| char  |   'a' | up to 4 bytes |
+|-------+-------+---------------|
 *** Compound
 |---------+----------------+-----------+--------------+-------------------|
 |         | create         | access    | match        | insert            |
@@ -80,6 +167,7 @@ https://doc.rust-lang.org/std/#modules
     Err(E),
   }
 #+end_src
+
 
 * Codebases
 - https://github.com/pop-os/system76-power

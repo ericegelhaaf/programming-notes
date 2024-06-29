@@ -1,6 +1,10 @@
-- #show FN
+- #use "FILE.ML";;
+- #show FN;;
+- #trace FN;;
 - #require "module_name";;
 - larger default prints
   https://www.reddit.com/r/ocaml/comments/72nlch/utop_disable_truncation/
   #print_lengh N;;
   #print_depth N;,
+- <> tells us is an unprintable value
+- when writting a *let*, a *let in* is implied

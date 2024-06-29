@@ -63,7 +63,7 @@
         then Printf.printf "Touching %s\n"  annotation;
              sum_t' data
     (* effectively are 2 functions *)
-    (* val sum_t' : t' -> int = <fun> *)h 
+    (* val sum_t' : t' -> int = <fun> *)
   #+end_src
 - =Option.map=
   #+begin_src ocaml
