@@ -50,23 +50,34 @@
 - the "nouns" of Ruby
 *** global variables
 https://www.fastruby.io/blog/exploring-global-constants-and-variables.html
-|----------+------------------------------------------------------|
-| __FILE__ | has the name of the file being run                   |
-| $stdin   | standard input                                       |
-| $stdout  | standard output                                      |
-| $stderr  | standard error                                       |
-| ARGV     | array with command line arguments                    |
-| ARGF     | the content of all the files whose names were passed |
-| $*       | alias of "ARGV"                                      |
-| $<       | alias of "ARGF"                                      |
-| $?       | exit code of the last child command ran              |
-| ENV      | Hash that contains environment variables             |
-| $&       | regex op, the match (all between //)                 |
-| $`       | regex op, to the left of last match                  |
-| $'       | regex op, to the right of last match                 |
-| $+       | regex op, the last group                             |
-| $N       | regex op, where N is a number of the nth match       |
-|----------+------------------------------------------------------|
+https://rubyapi.org/o/english
+|--------------------------+----+------------------------------------------------------|
+|                          |    | description                                          |
+|--------------------------+----+------------------------------------------------------|
+| __FILE__                 |    | has the name of the file being run                   |
+| $stdin                   |    | standard input                                       |
+| $stdout                  |    | standard output                                      |
+| $stderr                  |    | standard error                                       |
+| $ARGV                    | $* | array with command line arguments                    |
+| $ARGF                    | $< | the content of all the files whose names were passed |
+| $DEFAULT_OUTPUT          | $> |                                                      |
+| $ENV                     |    | Hash that contains environment variables             |
+| $ERROR_INFO              | $! |                                                      |
+| $ERROR_POSITION          | $@ |                                                      |
+| $FIELD_SEPARATOR         | $; | FS                                                   |
+| $OUTPUT_FIELD_SEPARATOR  | $, | OFS                                                  |
+| $INPUT_RECORD_SEPARATOR  | $/ | RS                                                   |
+| $OUTPUT_RECORD_SEPARATOR | $\ | ORS                                                  |
+| $INPUT_LINE_NUMBER       | $. | NR                                                   |
+| $LAST_READ_LINE          | $_ |                                                      |
+| $PROCESS_ID              | $$ | PID                                                  |
+| $CHILD_STATUS            | $? |                                                      |
+| $MATCH                   | $& | regex op, the match (all between //)                 |
+| PREMATCH                 | $` | regex op, to the left of last match                  |
+| POSTMATCH                | $' | regex op, to the right of last match                 |
+| $LAST_PAREN_MATCH        | $+ | regex op, the last group                             |
+| N                        |    | regex op, where N is a number of the nth match       |
+|--------------------------+----+------------------------------------------------------|
 ** testing
 
 - "do NOT mind code duplication in tests" - PragmaticRuby
@@ -589,28 +600,26 @@ Script ran, to generate valid markdown from site's json. Then converted with  pa
 #+end_comment
 
 *** Default Gems in Ruby 3.3.3
-|----------------+------------------------------------------------------------------------------------------------------------------|
-| name           | description                                                                                                      |
-|----------------+------------------------------------------------------------------------------------------------------------------|
-| [[https://rubyapi.org/o/timeout][timeout]]        | Auto-terminates code blocks after the time limit is reached                                                      |
-| [[https://rubyapi.org/o/drb][drb]]            | Distributed object system for Ruby                                                                               |
-| [[https://rubyapi.org/o/nkf][nkf]]            | [[https://en.wikipedia.org/wiki/Kanji][Kanji]] encoding converter. Can also be used via the [[https://github.com/ruby/nkf/blob/master/lib/kconv.rb][Kconv.kconv method]].                                           |
-| [[https://rubyapi.org/o/stringscanner][strscan]]        | Lexical string scanning                                                                                          |
-| [[https://rubyapi.org/o/win32ole][win32ole]]       | Windows [[https://en.wikipedia.org/wiki/OLE_Automation][OLE automation]] interface                                                                                 |
-| [[https://rubyapi.org/o/forwardable][forwardable]]    | Provides a way to [[https://en.wikipedia.org/wiki/Delegation_pattern][delegate]] method calls. Also see [[http://radar.oreilly.com/2014/02/delegation-patterns-in-ruby.html][this overview of delegation in Ruby]], which contains an example |
-| [[https://rubyapi.org/o/securerandom][securerandom]]   | Provides cryptographical randomness from openssl or the OS                                                       |
-| [[https://rubyapi.org/o/delegator][delegate]]       | Provides three ways to [[https://en.wikipedia.org/wiki/Delegation_pattern][delegate]] method calls                                                                     |
-| [[https://rubyapi.org/o/english][english]]        | [[https://idiosyncratic-ruby.com/9-globalization.html][Readable aliases for special global variables]]                                                                    |
-| [[https://rubyapi.org/o/fiddle][fiddle]]         | Support for FFI ([[https://sourceware.org/libffi/][Foreign Function Interface]])                                                                     |
-| [[https://rubyapi.org/o/erb][erb]]            | Templating engine for Ruby                                                                                       |
-| [[https://rubyapi.org/o/tsort][tsort]]          | Topological sorting using [[https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm][Tarjan's algorithm]], which finds [[https://en.wikipedia.org/wiki/Strongly_connected_component][strongly connected components]] in [[https://en.wikipedia.org/wiki/Graph_%28abstract_data_type%29][graphs]]                |
-| [[https://rubyapi.org/o/pstore][pstore]]         | Transactional file storage for Ruby objects                                                                      |
-| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/cmath/rdoc/CMath.html][cmath]] ​         | Trigonometric and transcendental functions for complex numbers                                                   |
-| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/scanf/rdoc/Scanf.html][scanf]]          | Pure-Ruby [[https://en.wikipedia.org/wiki/Scanf_format_string][scanf]] implementation                                                                                   |
-| [[https://gemdocs.org/gems/prism/0.19.0/][prism]]          | Prism is a portable, error tolerant, and maintainable recursive descent parser for the Ruby language             |
-| [[https://rubyapi.org/o/date][date]]           | The [[https://rubyapi.org/o/date][Date]] and [[https://rubyapi.org/o/datetime][DateTime]] classes                                                                                    |
-| [[https://www.rubydoc.info/stdlib/time/Time][time]]           | Adds more methods to =Time=                                                                                      |
-|----------------+------------------------------------------------------------------------------------------------------------------|
+|--------------+------------------------------------------------------------------------------------------------------|
+| name         | description                                                                                          |
+|--------------+------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/timeout][timeout]]      | Auto-terminates code blocks after the time limit is reached                                          |
+| [[https://rubyapi.org/o/drb][drb]]          | Distributed object system for Ruby                                                                   |
+| [[https://rubyapi.org/o/nkf][nkf]]          | [[https://en.wikipedia.org/wiki/Kanji][Kanji]] encoding converter. Can also be used via the [[https://github.com/ruby/nkf/blob/master/lib/kconv.rb][Kconv.kconv method]].                               |
+| [[https://rubyapi.org/o/stringscanner][strscan]]      | Lexical string scanning                                                                              |
+| [[https://rubyapi.org/o/win32ole][win32ole]]     | Windows [[https://en.wikipedia.org/wiki/OLE_Automation][OLE automation]] interface                                                                     |
+| [[https://rubyapi.org/o/securerandom][securerandom]] | Provides cryptographical randomness from openssl or the OS                                           |
+| [[https://rubyapi.org/o/english][english]]      | [[https://idiosyncratic-ruby.com/9-globalization.html][Readable aliases for special global variables]]                                                        |
+| [[https://rubyapi.org/o/fiddle][fiddle]]       | Support for FFI ([[https://sourceware.org/libffi/][Foreign Function Interface]])                                                         |
+| [[https://rubyapi.org/o/erb][erb]]          | Templating engine for Ruby                                                                           |
+| [[https://rubyapi.org/o/tsort][tsort]]        | Topological sorting using [[https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm][Tarjan's algorithm]], which finds [[https://en.wikipedia.org/wiki/Strongly_connected_component][strongly connected components]] in [[https://en.wikipedia.org/wiki/Graph_%28abstract_data_type%29][graphs]]    |
+| [[https://rubyapi.org/o/pstore][pstore]]       | Transactional file storage for Ruby objects                                                          |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/cmath/rdoc/CMath.html][cmath]] ​       | Trigonometric and transcendental functions for complex numbers                                       |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/scanf/rdoc/Scanf.html][scanf]]        | Pure-Ruby [[https://en.wikipedia.org/wiki/Scanf_format_string][scanf]] implementation                                                                       |
+| [[https://gemdocs.org/gems/prism/0.19.0/][prism]]        | Prism is a portable, error tolerant, and maintainable recursive descent parser for the Ruby language |
+| [[https://rubyapi.org/o/date][date]]         | The [[https://rubyapi.org/o/date][Date]] and [[https://rubyapi.org/o/datetime][DateTime]] classes                                                                        |
+| [[https://www.rubydoc.info/stdlib/time/Time][time]]         | Adds more methods to =Time=                                                                          |
+|--------------+------------------------------------------------------------------------------------------------------|
 **** concurrency
 |-------------+------------------------------------------------------------------------|
 | [[https://rubyapi.org/o/mutex_m][mutex_m]]     | A mixin that makes any object behave like a [[https://ruby-doc.org/core/Mutex.html][mutex]]                      |
@@ -636,15 +645,17 @@ Script ran, to generate valid markdown from site's json. Then converted with  pa
 | [[https://ruby-doc.org/stdlib-3.0.2/libdoc/tracer/rdoc/Tracer.html][tracer]]          | Outputs the [[https://en.wikipedia.org/wiki/Tracing_%28software%29][code execution trace]] via [[https://ruby-doc.org/core/Kernel.html#method-i-set_trace_func][Kernel#set_trace_func]]                                                 |
 |-----------------+------------------------------------------------------------------------------------------------------------|
 **** datastructures
-|------------+---------------------------------------------------------------------------------------------------------|
-| [[https://rubyapi.org/o/bigdecimal][bigdecimal]] | Support for arbitrary-precision floating point decimal arithmetic                                       |
-| [[https://rubyapi.org/o/set][set]]        | Data structure for unordered collections without duplicates. Implemented on top of Hash.                |
-| [[https://rubyapi.org/o/openstruct][ostruct]]    | Wrapper around [[https://ruby-doc.org/core/Hash.html][Hash]] which lets you read and set attributes with a method-based API                      |
-| [[https://rubyapi.org/o/observable][observer]]   | Implementation of the [[https://en.wikipedia.org/wiki/Observer_pattern][observer pattern]], away to let interested other objects know o an objetc's updates |
-| [[https://rubyapi.org/o/weakref][weakref]]    | Explicitly allow objects to be garbage collected                                                        |
-| [[https://rubyapi.org/o/stringio][stringio]]   | Makes strings behave like IO objects                                                                    |
-| [[https://rubyapi.org/o/singleton][singleton]]  | Mixin for Ruby classes that should only have one instance                                               |
-|------------+---------------------------------------------------------------------------------------------------------|
+|-------------+------------------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/bigdecimal][bigdecimal]]  | Support for arbitrary-precision floating point decimal arithmetic                                                |
+| [[https://rubyapi.org/o/delegator][delegate]]    | Provides three ways to [[https://en.wikipedia.org/wiki/Delegation_pattern][delegate]] method calls                                                                     |
+| [[https://rubyapi.org/o/forwardable][forwardable]] | Provides a way to [[https://en.wikipedia.org/wiki/Delegation_pattern][delegate]] method calls. Also see [[http://radar.oreilly.com/2014/02/delegation-patterns-in-ruby.html][this overview of delegation in Ruby]], which contains an example |
+| [[https://rubyapi.org/o/set][set]]         | Data structure for unordered collections without duplicates. Implemented on top of Hash.                         |
+| [[https://rubyapi.org/o/openstruct][ostruct]]     | Wrapper around [[https://ruby-doc.org/core/Hash.html][Hash]] which lets you read and set attributes with a method-based API                               |
+| [[https://rubyapi.org/o/observable][observer]]    | Implementation of the [[https://en.wikipedia.org/wiki/Observer_pattern][observer pattern]], away to let interested other objects know o an objetc's updates          |
+| [[https://rubyapi.org/o/weakref][weakref]]     | Explicitly allow objects to be garbage collected                                                                 |
+| [[https://rubyapi.org/o/stringio][stringio]]    | Makes strings behave like IO objects                                                                             |
+| [[https://rubyapi.org/o/singleton][singleton]]   | Mixin for Ruby classes that should only have one instance                                                        |
+|-------------+------------------------------------------------------------------------------------------------------------------|
 **** os
 |-----------------+-------------------------------------------------------------------------------------------------------------------------------------|
 | [[https://rubyapi.org/o/etc][etc]]             | Access UNIX info from =/etc=                                                                                                        |
