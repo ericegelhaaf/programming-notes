@@ -1,0 +1,13 @@
+- wiki https://en.wikipedia.org/wiki/Amstrad_CPC
+  - 1984-1990
+  - 3M sold
+  - 64/128KB of RAM
+  - Sound: AY-3-8912
+    - 3 voices
+    - 8 octaves
+  - Graphics:
+    - Motorola 6845
+    - Display
+      - 160x200 16 colors
+      - 320x200  4 colors
+      - 640x200  2 colors

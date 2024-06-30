@@ -1,0 +1,16 @@
+- https://en.wikipedia.org/wiki/Zilog_Z80
+  - Z80
+  - 1976-2024
+  - Creators:
+    - Federico Faggin
+    - Masatoshi Shima
+    - Ralph Ungermann
+  - 14 registers
+  - width in bits
+    - data: 8
+    - address: 16
+  - 2.5 to 8 MHz
+  - 4um
+  - 40DIP / 40 PLCC / 44QFP
+
+- https://www.metsuke.com/la-academia/juguemos-al-z80/

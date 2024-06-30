@@ -1,7 +1,11 @@
 - wiki https://en.wikipedia.org/wiki/Altair_8800
   - 1975-
   - Microcomputer
+  - A computer kit
   - by MITS
+    - Creators:
+      - Ed Roberts
+      - Bill Yates
   - CPU: Intel 8080
 
 * Images

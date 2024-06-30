@@ -40,7 +40,7 @@
 |   <c>   | description                                           |
 |---------+-------------------------------------------------------|
 |   $a    | returns string version of a                           |
-|    &    | string concatenation                                  |
+|    &    | sequtils: seq/string concatenation                    |
 |   ..    | iterator?                                             |
 |   `/`   | returns a floating-point result                       |
 |   div   | returns a integer division result                     |
@@ -49,6 +49,9 @@
 |  fmt""  | strformat: interpolate raw string with {variable}     |
 |   &""   | strformat: interpolate non-raw string with {variable} |
 |   !$    | hashes: finalizes a hash, ensuring is not repeated    |
+|    @    | sequtils: array/string -> sequences                   |
+|   in    | sequtils: check item in container                     |
+|  notin  | sequtils: check item NOT in container                 |
 |---------+-------------------------------------------------------|
 ** pragmas
 |--------------------+--------+--------------------------------------------------|
@@ -59,7 +62,6 @@
 | {. base .}         | method |                                                  |
 | {. pure .}         | enum   | requires all ambiguos references to be qualified |
 |--------------------+--------+--------------------------------------------------|
-
 ** stdlib modules
 - https://nim-lang.org/docs/lib.html
 ***   Pure Libraries

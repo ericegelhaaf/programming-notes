@@ -1,3 +1,6 @@
+- wiki https://en.wikipedia.org/wiki/Apple_II
+  - 1977-1993
+
 - The cursor blinking is a 555
 - Modes
   1) Text Mode
