@@ -1,11 +1,13 @@
-|------------------------+----------------------------|
-| #use "FILE.ML"         |                            |
-| #show FN               |                            |
-| #trace FN              | prints calls of a function |
-| #require "module_name" |                            |
-| #print_length N        |                            |
-| #print_depth N         |                            |
-|------------------------+----------------------------|
+|------------------------+---------------------------------------------------------|
+| #use "FILE.ML"         |                                                         |
+| #show FN               |                                                         |
+| #trace FN              | prints calls of a function                              |
+| #require "module_name" |                                                         |
+| #print_length N        |                                                         |
+| #print_depth N         |                                                         |
+| #warning "+9"          | enable warn for non-exhaustive pattern match of records |
+|------------------------+---------------------------------------------------------|
 - #use is not a good practice to do it repeatedly on the same file
 - <> tells us is an unprintable value
 - when writting a *let*, a *let in* is implied
+

@@ -567,10 +567,181 @@ https://rubyreferences.github.io/rubychanges/evolution.html
 
 ** stdlib
 
-- new format https://ruby-doc.org/3.0.4/standard_library_rdoc.html#label-Default+gems
+- new format
+  - https://ruby-doc.org/3.0.4/standard_library_rdoc.html
+  - https://docs.ruby-lang.org/en/master/standard_library_rdoc.html
+    - better colors
+    - some clickable links
 - old format https://ruby-doc.org/stdlib-3.0.4/
-- rand(1..6)
+- list all versions, without descriptions https://rubydoc.info/stdlib
 
+- guide 2.7 https://rubyreferences.github.io/rubyref/stdlib.html
+
+- https://stdgems.org/
+  - Every Ruby version ships a specific set of
+    1) default gems
+    2) default libraries
+    3) and bundled gems
+
+#+begin_comment
+Script ran, to generate valid markdown from site's json. Then converted with  pandoc.
+ $ < default_gems.json jq -r '.gems[] | "|[" + .gem + "](" + (.rdocLink[0]? // .rdocLink // "?") + ") | " + .description + "|"'
+#+end_comment
+
+*** Default Gems in Ruby 3.3.3
+|----------------+------------------------------------------------------------------------------------------------------------------|
+| name           | description                                                                                                      |
+|----------------+------------------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/timeout][timeout]]        | Auto-terminates code blocks after the time limit is reached                                                      |
+| [[https://rubyapi.org/o/drb][drb]]            | Distributed object system for Ruby                                                                               |
+| [[https://rubyapi.org/o/nkf][nkf]]            | [[https://en.wikipedia.org/wiki/Kanji][Kanji]] encoding converter. Can also be used via the [[https://github.com/ruby/nkf/blob/master/lib/kconv.rb][Kconv.kconv method]].                                           |
+| [[https://rubyapi.org/o/stringscanner][strscan]]        | Lexical string scanning                                                                                          |
+| [[https://rubyapi.org/o/win32ole][win32ole]]       | Windows [[https://en.wikipedia.org/wiki/OLE_Automation][OLE automation]] interface                                                                                 |
+| [[https://rubyapi.org/o/forwardable][forwardable]]    | Provides a way to [[https://en.wikipedia.org/wiki/Delegation_pattern][delegate]] method calls. Also see [[http://radar.oreilly.com/2014/02/delegation-patterns-in-ruby.html][this overview of delegation in Ruby]], which contains an example |
+| [[https://rubyapi.org/o/securerandom][securerandom]]   | Provides cryptographical randomness from openssl or the OS                                                       |
+| [[https://rubyapi.org/o/delegator][delegate]]       | Provides three ways to [[https://en.wikipedia.org/wiki/Delegation_pattern][delegate]] method calls                                                                     |
+| [[https://rubyapi.org/o/english][english]]        | [[https://idiosyncratic-ruby.com/9-globalization.html][Readable aliases for special global variables]]                                                                    |
+| [[https://rubyapi.org/o/fiddle][fiddle]]         | Support for FFI ([[https://sourceware.org/libffi/][Foreign Function Interface]])                                                                     |
+| [[https://rubyapi.org/o/erb][erb]]            | Templating engine for Ruby                                                                                       |
+| [[https://rubyapi.org/o/tsort][tsort]]          | Topological sorting using [[https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm][Tarjan's algorithm]], which finds [[https://en.wikipedia.org/wiki/Strongly_connected_component][strongly connected components]] in [[https://en.wikipedia.org/wiki/Graph_%28abstract_data_type%29][graphs]]                |
+| [[https://rubyapi.org/o/pstore][pstore]]         | Transactional file storage for Ruby objects                                                                      |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/cmath/rdoc/CMath.html][cmath]] ​         | Trigonometric and transcendental functions for complex numbers                                                   |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/scanf/rdoc/Scanf.html][scanf]]          | Pure-Ruby [[https://en.wikipedia.org/wiki/Scanf_format_string][scanf]] implementation                                                                                   |
+| [[https://gemdocs.org/gems/prism/0.19.0/][prism]]          | Prism is a portable, error tolerant, and maintainable recursive descent parser for the Ruby language             |
+| [[https://rubyapi.org/o/date][date]]           | The [[https://rubyapi.org/o/date][Date]] and [[https://rubyapi.org/o/datetime][DateTime]] classes                                                                                    |
+| [[https://www.rubydoc.info/stdlib/time/Time][time]]           | Adds more methods to =Time=                                                                                      |
+|----------------+------------------------------------------------------------------------------------------------------------------|
+**** concurrency
+|-------------+------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/mutex_m][mutex_m]]     | A mixin that makes any object behave like a [[https://ruby-doc.org/core/Mutex.html][mutex]]                      |
+| [[https://ruby-doc.org/3.2.0/stdlibs/rinda/table_of_contents.html][rinda]]       | Support fot the [[https://en.wikipedia.org/wiki/Linda_%28coordination_language%29][Linda distributed computing paradigm]] in [[https://ruby-doc.org/stdlib/libdoc/drb/rdoc/index.html][drb]]            |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/thwait/rdoc/ThWait.html][thwait]]      | Waits for threads to finish                                            |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/sync/rdoc/Sync_m.html][sync]]        | [[https://en.wikipedia.org/wiki/Two-phase_locking][Two-phase lock]] with a counter for multi-threaded code                  |
+| [[https://www.rubydoc.info/gems/io-wait][io-wait]]     | Adds methods to wait until an =IO= stream becomes readable or writable |
+| [[https://www.rubydoc.info/gems/io-nonblock][io-nonblock]] | Allows to work with =IO= streams in a non-blocking way                 |
+|-------------+------------------------------------------------------------------------|
+**** dev / debug
+|-----------------+------------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/benchmark][benchmark]]       | Benchmark utility: Measures and reports the time used to execute code                                      |
+| [[https://www.rubydoc.info/gems/bundler][bundler]]         | [[https://bundler.io][Bundler]] is the local package manager for Ruby applications                                                 |
+| [[https://ruby-doc.org/stdlib-2.6.8/libdoc/e2mmap/rdoc/Exception2MessageMapper.html][e2mmap]] ​         | Abstraction around exception handling                                                                      |
+| [[https://www.rubydoc.info/gems/error_highlight][error_highlight]] | Improves error messages with additional debug info                                                         |
+| [[https://www.rubydoc.info/gems/irb][irb]]             | Interactive Ruby Console ([[https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop][REPL]])                                                                            |
+| [[https://rubyapi.org/o/prettyprint][prettyprint]] ​    | Better object formatting and inspection. Also see the [[/pp/][pp gem]].                                              |
+| [[https://rubyapi.org/o/pp][pp]]              | The =pp= print debugging helper via =require 'pp'=. It will format the result object in more readable way. |
+| [[https://www.rubydoc.info/gems/ruby2_keywords][ruby2_keywords]]  | A shim gemspec to indicate that the Ruby implementation includes the =ruby2_keywords= method               |
+| [[https://rubyapi.org/o/gem][rubygems]]        | [[https://rubygems.org][RubyGems]] allows you to download, install, and use Ruby software packages on your system                    |
+| [[https://ruby.github.io/rdoc/][rdoc]]            | Ruby documentation generator                                                                               |
+| [[https://rubyapi.org/o/syntaxsuggest][syntax_suggest]]  | Assists with code recommendation to resolve Ruby syntax errors                                             |
+| [[https://ruby-doc.org/stdlib-3.0.2/libdoc/tracer/rdoc/Tracer.html][tracer]]          | Outputs the [[https://en.wikipedia.org/wiki/Tracing_%28software%29][code execution trace]] via [[https://ruby-doc.org/core/Kernel.html#method-i-set_trace_func][Kernel#set_trace_func]]                                                 |
+|-----------------+------------------------------------------------------------------------------------------------------------|
+**** datastructures
+|------------+---------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/bigdecimal][bigdecimal]] | Support for arbitrary-precision floating point decimal arithmetic                                       |
+| [[https://rubyapi.org/o/set][set]]        | Data structure for unordered collections without duplicates. Implemented on top of Hash.                |
+| [[https://rubyapi.org/o/openstruct][ostruct]]    | Wrapper around [[https://ruby-doc.org/core/Hash.html][Hash]] which lets you read and set attributes with a method-based API                      |
+| [[https://rubyapi.org/o/observable][observer]]   | Implementation of the [[https://en.wikipedia.org/wiki/Observer_pattern][observer pattern]], away to let interested other objects know o an objetc's updates |
+| [[https://rubyapi.org/o/weakref][weakref]]    | Explicitly allow objects to be garbage collected                                                        |
+| [[https://rubyapi.org/o/stringio][stringio]]   | Makes strings behave like IO objects                                                                    |
+| [[https://rubyapi.org/o/singleton][singleton]]  | Mixin for Ruby classes that should only have one instance                                               |
+|------------+---------------------------------------------------------------------------------------------------------|
+**** os
+|-----------------+-------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/etc][etc]]             | Access UNIX info from =/etc=                                                                                                        |
+| [[https://rubyapi.org/o/fcntl][fcntl]]           | Loads values from the OS' =fcntl.h= to be used for low-level [[https://en.wikipedia.org/wiki/File_descriptor][file descriptor manipulation]] system calls with [[https://ruby-doc.org/core/IO.html#method-i-fcntl][IO#fcntl]] and [[https://ruby-doc.org/core/IO.html#method-c-sysopen][IO.sysopen]] |
+| [[https://rubyapi.org/o/find][find]]            | Finds all files in a given directory and its sub-directories                                                                        |
+| [[https://rubyapi.org/o/fileutils][fileutils]]       | Utilities for working with the file system, such as copying, moving, or deleting files                                              |
+| [[https://rubyapi.org/o/open3][open3]]           | Simple spawning of child processes                                                                                                  |
+| [[https://rubyapi.org/o/pathname][pathname]]        | Wraps =File=, =FileTest=, =Dir=, and =FileUtils= to ease working with file system paths                                             |
+| [[https://rubyapi.org/o/logger][logger]]          | [[https://ruby.janlelis.de/50-exploring-the-stdlib-logger][Logging utility]]                                                                                                                     |
+| [[https://rubyapi.org/o/syslog][syslog]]          | Interface to the low-level [[https://en.wikipedia.org/wiki/Syslog][syslog]] logger                                                                                            |
+| [[https://rubyapi.org/o/tempfile][tempfile]]        | Simplifies OS independent creation of temporary files                                                                               |
+| [[https://www.rubydoc.info/stdlib/tmpdir/Dir][tmpdir]]          | Adds a =Dir.mktmpdir= method for creating temporary directories OS independently                                                    |
+| [[https://www.rubydoc.info/stdlib/un][un]]              | [[https://idiosyncratic-ruby.com/6-run-ruby-run.html][Utilities to replace common UNIX commands]]                                                                                           |
+|-----------------+-------------------------------------------------------------------------------------------------------------------------------------|
+**** cli
+|-----------------+-------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/optionparser][optparse]]        | Command-line option parser                                                                                                          |
+| [[https://rubyapi.org/o/getoptlong][getoptlong]]      | [[https://linux.die.net/man/3/getopt_long][GNU getopt_long()]] style command-line option parsing                                                                                 |
+| [[https://www.rubydoc.info/gems/io-console][io-console]]      | Patches =IO= for simple and portable access to the console                                                                          |
+| [[https://rubyapi.org/o/reline][reline]]          | Ruby-only implementation of [[https://directory.fsf.org/wiki/Readline][GNU Readline]] / [[https://thrysoee.dk/editline/][NetBSD Editline]]                                                                          |
+| [[https://rubyapi.org/o/readline][readline]]        | If available, [[https://stdgems.org/readline-ext][readline-ext]] will be loaded, or (Ruby-only) default gem [[https://stdgems.org/reline][reline]] will be used.                                          |
+| [[https://rubyapi.org/o/readline][readline-ext]]    | Interface to [[https://directory.fsf.org/wiki/Readline][GNU Readline]] and [[https://thrysoee.dk/editline/][NetBSD Editline]]                                                                                       |
+| [[https://rubyapi.org/o/shellwords][shellwords]]      | Escape and manipulate commands to be run in the [[https://en.wikipedia.org/wiki/Bourne_shell][shell]]                                                                               |
+| +[[https://ruby-doc.org/stdlib-2.6.8/libdoc/shell/rdoc/Shell.html][shell]]+         | +Provides a Ruby interface for interacting with the [[https://en.wikipedia.org/wiki/Bourne_shell][shell]]+                                                                          |
+|-----------------+-------------------------------------------------------------------------------------------------------------------------------------|
+**** net/http
+|----------+------------------------------------------------------------------------------------|
+| [[https://rubyapi.org/o/cgi][cgi]]      | Support for CGI ([[https://en.wikipedia.org/wiki/Common_Gateway_Interface][Common Gateway Interface]])                                         |
+| [[https://rubyapi.org/o/digest][digest]]   | Provides common [[https://en.wikipedia.org/wiki/Hash_function][hash functions]] like MD5, SHA1, SHA2, or RIPEMD-160                 |
+| [[https://rubyapi.org/o/net/http][net-http]] | Support for HTTP ([[https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol][Hypertext Transfer Protocol]])                                     |
+| [[https://rubyapi.org/o/openuri][open-uri]] | Monkeypatches [[https://ruby-doc.org/core/Kernel.html#method-i-open][Kernel#open]] to support remote endpoints via =net/http= and =net/ftp= |
+| [[https://ruby.github.io/openssl/][openssl]]  | Wraps [[https://www.openssl.org/][OpenSSL]] for cryptographic functionality                                      |
+| [[https://rubyapi.org/o/uri][uri]]      | [[https://en.wikipedia.org/wiki/Uniform_resource_identifier][URI]]/URL manipulation                                                               |
+| [[https://ruby-doc.org/stdlib-2.7.4/libdoc/webrick/rdoc/WEBrick.html][webrick]]  | HTTP Server                                                                        |
+|----------+------------------------------------------------------------------------------------|
+**** net
+|----------------+----------------------------------------------|
+| [[https://ruby-doc.org/stdlib-3.0.2/libdoc/net/protocol/rdoc/index.html][net-protocol]] ​  | Internal class for the other net-* libraries |
+| [[https://rubyapi.org/o/ipaddr][ipaddr]]         | [[https://en.wikipedia.org/wiki/IP_address][IP address]] manipulation (IPv4 and IPv6)      |
+| [[https://rubyapi.org/o/resolv][resolv]]         | Thread-aware [[https://en.wikipedia.org/wiki/Domain_Name_System][DNS]] resolver                    |
+| [[https://rubyapi.org/o/resolv][resolv-replace]] | Will replace [[https://ruby-doc.org/stdlib/libdoc/socket/rdoc/Socket.html][Socket]]'s DNS with [[https://stdgems.org/resolv][resolv]]        |
+|----------------+----------------------------------------------|
+**** file formats
+|-------+--------------------------------------------------------------|
+| [[https://rubyapi.org/o/csv][csv]]   | Support for CSV ([[https://en.wikipedia.org/wiki/Comma-separated_values][Comma-separated Values]])                     |
+| [[https://ruby-doc.org/stdlib-3.0.2/libdoc/dbm/rdoc/DBM.html][dbm]]   | Support for [[https://en.wikipedia.org/wiki/DBM_(computing)][DBM databases]]                                    |
+| [[https://ruby-doc.org/stdlib-3.0.2/libdoc/gdbm/rdoc/GDBM.html][gdbm]] ​ | Support for [[https://en.wikipedia.org/wiki/Dbm][GDBM databases]]                                   |
+| [[https://rubyapi.org/o/json][json]]  | Support for JSON ([[https://en.wikipedia.org/wiki/JSON][JavaScript Object Notation]])                |
+| [[https://ruby-doc.org/stdlib-2.7.4/libdoc/sdbm/rdoc/SDBM.html][sdbm]]  | Support for [[https://en.wikipedia.org/wiki/Dbm][SDBM databases]]                                   |
+| [[https://rubyapi.org/o/psych][psych]] | Support for YAML ([[https://en.wikipedia.org/wiki/YAML][YAML Ain't Markup Language]])                |
+| [[https://rubyapi.org/o/yaml][yaml]]  | *yaml* will load the [[https://stdgems.org/psych/][psych default gem]]                       |
+| -     | *yaml/dbm* is a wrapper around [[https://stdgems.org/dbm/][DBM]] using YAML serialization, |
+| -     | *yaml/store* lets you use [[https://stdgems.org/pstore/][pstore]] with YAML                   |
+| [[https://rubyapi.org/o/zlib][zlib]]  | Interface to the [[https://en.wikipedia.org/wiki/Zlib][zlib compression library]]                    |
+|-------+--------------------------------------------------------------|
+*** Default Libraries
+|-------------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://ruby-doc.org/core/Continuation.html][continuation]]      | Adds the [[https://idiosyncratic-ruby.com/24-goto-fail.html][goto]]-like [[https://ruby-doc.org/core/Kernel.html#method-i-callcc][Kernel#callcc]]                                                                                                                  |
+| [[https://rubyapi.org/o/coverage][coverage]]          | Measures [[https://en.wikipedia.org/wiki/Code_coverage][code coverage]]                                                                                                                            |
+| [[https://rubyapi.org/o/makemakefile][mkmf]]              | Generates [[https://en.wikipedia.org/wiki/Makefile][Makefiles]] for native [[https://github.com/ruby/ruby/blob/master/doc/extension.rdoc][C extensions]]                                                                                                       |
+| [[https://rubyapi.org/o/monitor][monitor]]           | [[https://en.wikipedia.org/wiki/Monitor_%28synchronization%29][Monitors]] for multi-threaded code                                                                                                                  |
+| [[https://www.rubydoc.info/stdlib/objspace/ObjectSpace][objspace]]          | Adds more statistics methods to `ObjectSpace`. Since Ruby 3.1, it also includes the `objspace/trace` debug utility.                               |
+| [[https://rubyapi.org/o/pty][pty]]               | Manages [[https://en.wikipedia.org/wiki/Pseudo_terminal][pseudo terminals]]. Also includes the [[https://ruby-doc.org/stdlib-3.0.2/libdoc/pty/rdoc/IO.html#method-i-expect][IO#expect method]] via `require 'expect'`, which can be used to wait for a specific pattern to be read. |
+| rbconfig          | `RbConfig` is a [[https://idiosyncratic-ruby.com/42-ruby-config.html][Ruby constant that contains compile time information]]                                                                              |
+| [[https://rubyapi.org/o/ripper][ripper]]            | Ruby parser that creates a [[https://en.wikipedia.org/wiki/S-expression][symbolic expression tree]]                                                                                               |
+| [[https://rubyapi.org/o/socket][socket]]            | Support for [[https://en.wikipedia.org/wiki/Unix_domain_socket][unix-]] and [[https://en.wikipedia.org/wiki/Network_socket][network sockets]]                                                                                                             |
+| [[https://www.rubydoc.info/stdlib/unicode_normalize/UnicodeNormalize][unicode_normalize]] | Adds a [[https://rubyapi.org/o/string#method-i-unicode_normalize][String#unicode_normalize]] method which [[https://unicode.org/reports/tr15/][normalizes unicode strings]]                                                                           |
+| [[https://rubyapi.org/o/win32][win32]]             | Let's you use Windows APIs, e.g. call functions in DLLs                                                                                           |
+|-------------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+*** Bundled Gems in Ruby 3.3.3
+|--------------+------------------------------------------------------------------------------------------------------------|
+| name         | description                                                                                                |
+|--------------+------------------------------------------------------------------------------------------------------------|
+| [[https://www.rubydoc.info/gems/did_you_mean][did_you_mean]] | Patches error messages to suggest correct spelling of methods/classes/variables                            |
+| [[https://rubyapi.org/o/racc][racc]]         | Bindings for Racc, a [[https://en.wikipedia.org/wiki/Yacc][YACC]]-like [[https://en.wikipedia.org/wiki/LALR_parser_generator][LALR(1) parser generator]]                                                    |
+| [[https://www.rubydoc.info/gems/rake][rake]]         | A Ruby task runner, inspired by [[https://en.wikipedia.org/wiki/Make_%28software%29][make]]                                                                       |
+| [[https://www.rubydoc.info/gems/debug][debug]]        | Command-line [debugger](https://en.wikipedia.org/wiki/Debugger)                                            |
+| [[https://www.rubydoc.info/gems/power_assert][power_assert]] | Debug tool that displays intermediate results of a method chain                                            |
+| [[https://www.rubydoc.info/gems/test-unit][test-unit]]    | A xUnit family unit testing framework (compatibility layer for minitest)                                   |
+| [[https://www.rubydoc.info/gems/minitest][minitest]]     | Test/spec framework, comes with mocking and benchmark capabilities                                         |
+|--------------+------------------------------------------------------------------------------------------------------------|
+| [[https://www.rubydoc.info/gems/rbs][rbs]]          | Released with Ruby 3.0, RBS is a way to declare types in Ruby. parsing and processing RBS type definitions |
+| [[https://www.rubydoc.info/gems/typeprof][typeprof]]     | Released with Ruby 3.0, typeprof allows you to [[https://github.com/ruby/typeprof/blob/master/doc/doc.md][automatically generate RBS type annotations]]                 |
+|--------------+------------------------------------------------------------------------------------------------------------|
+| [[https://www.rubydoc.info/gems/matrix][matrix]]       | Support for [matrices](https://en.wikipedia.org/wiki/Matrix_%28mathematics%29)                             |
+| [[https://www.rubydoc.info/gems/prime][prime]]        | Access to prime numbers and prime factorization                                                            |
+|--------------+------------------------------------------------------------------------------------------------------------|
+| [[https://www.rubydoc.info/gems/rss][rss]]          | Support for RSS ([[https://en.wikipedia.org/wiki/RSS][Rich Site Summary]]) and [[https://en.wikipedia.org/wiki/Atom_%28standard%29][Atom]]                                                               |
+| [[https://www.rubydoc.info/gems/rexml][rexml]]        | Support for XML ([[https://en.wikipedia.org/wiki/XML][Extensible Markup Language]])                                                               |
+|--------------+------------------------------------------------------------------------------------------------------------|
+| [[https://www.rubydoc.info/gems/xmlrpc][xmlrpc]]       | [[https://en.wikipedia.org/wiki/XML-RPC][Remote Procedure Calls via XML and HTTP]]                                                                    |
+| [[https://www.rubydoc.info/gems/net-ftp][net-ftp]]      | Support for FTP ([[https://en.wikipedia.org/wiki/File_Transfer_Protocol][File Transfer Protocol]])                                                                   |
+| [[https://www.rubydoc.info/gems/net-imap][net-imap]]     | Support for IMAP ([[https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol][Internet Message Access Protocol]])                                                        |
+| [[https://www.rubydoc.info/gems/net-pop][net-pop]]      | Support for POP3 ([[https://en.wikipedia.org/wiki/Post_Office_Protocol][Post Office Protocol]])                                                                    |
+| [[https://www.rubydoc.info/gems/net-smtp][net-smtp]]     | Support for SMTP ([[https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol][Simple Mail Transfer Protocol]])                                                           |
+| [[https://www.rubydoc.info/gems/net-telnet][net-telnet]]   | Support for [[https://en.wikipedia.org/wiki/Telnet][Telnet]]                                                                                         |
+|--------------+------------------------------------------------------------------------------------------------------------|
 ** concurrency - threads
 
 #+begin_src ruby

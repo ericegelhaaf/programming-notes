@@ -37,10 +37,55 @@
     }
 #+end_src
 
-=with= for record copy, CANNOT add new fields
+=with= aka functional update of field(s), CANNOT add new fields (?
 
 #+begin_src ocaml
-{ e with f1 = e1 }
+  { e with f1 = e1 }
+#+end_src
+
+destructuring
+
+#+begin_src ocaml
+  type service_info = { service_name : string ; port : int ; protocol : string }
+  let service_info_to_string { service_name = name; port = port; protocol = prot } =
+    sprintf "%s %i/%s" name port prot
+#+end_src
+
+=Fields punning= is when the name of a variable coincides with the name of a record field.
+Works both for destructuring and constructing.
+
+#+begin_src ocaml
+  let service_info_to_string { service_name ; port ; protocol} =
+    sprintf "%s %i/%s" service_name port protocol
+#+end_src
+
+a default accessor function is created for each record field, different records having the same name for a field might be a problem and confuse the type inference. A solution can wrap each records in different modules.
+
+#+begin_src ocaml
+  (* defining *)
+  module Log_entry = struct
+    type t =
+      { session_id : string
+      ; time       : Time_ns.t
+      ; important  : bool
+      ; message    : string
+      }
+  end
+  (* instantiation *)
+  let create_log_entry ~session_id ~important message =
+    { Log_entry.
+      time = Time_ns.now (); session_id; important; message;
+    }
+  let create_log_entry ~session_id ~important message : Log_entry.t = (* signature *)
+    { time = Time_ns.now (); session_id; important; message; }
+  (* pattern matching / destructuring *)
+  let message_to_string { Log_entry.important; message; _ } = (* module qualification *)
+    if important then String.uppercase message else message
+  let message_to_string ({ important; message; _} : Log_entry.t) = (* type annotation *)
+    if important then String.uppercase message else message
+  (* field access *)
+  let is_important t = t.Log_entry.important (* module qualification *)
+  let is_important (t:Log_entry.t) = t.important (* type annotation *)
 #+end_src
 
 *** variant (sum type)
@@ -137,7 +182,7 @@ We can also *use the type* name when matching for variant types, in this case "c
     module Hostname : ID = String_id
   #+end_src
 
-- include
+- include, to extend a "class" adding new values on a new module type
   #+begin_src ocaml
     module newM = struct
       include otherM
@@ -259,7 +304,7 @@ Function parameters are patterns too
   - defining: ~num
   - passing arguments
     - ~num:3
-    - ~num   - with label punning if a variable with the same name exists
+    - ~num   - with =label punning= if a variable with the same name exists
     - ~f:String:Length
   - when is unclear just from the type signature
     - booleans

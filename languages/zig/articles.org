@@ -1,3 +1,4 @@
+- https://ludwigabap.bearblog.dev/2024-collection-of-zig-resources/
 - https://ziglang.org/learn/why_zig_rust_d_cpp/
 
 - 20 https://www.scattered-thoughts.net/writing/assorted-thoughts-on-zig-and-rust/

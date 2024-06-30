@@ -49,6 +49,7 @@
   #+end_src
 
 * utils
+- Core provides a Unix API
 - batteries https://ocaml-batteries-team.github.io/batteries-included/hdoc2/
 |------------+-----|
 | [[https://github.com/ocaml-batteries-team/batteries-included][batteries]]  | 0.4 |

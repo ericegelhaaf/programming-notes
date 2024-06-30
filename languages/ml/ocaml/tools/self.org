@@ -16,6 +16,16 @@
   | production | dev        |
   |------------+------------|
 
+- warnings
+  - Help
+    $ ocaml -warn-help
+  - Enable warnings as errors
+    -w @A-4-33-40-41-42-43-34-44
+  - Default warnings as errors
+    -warn-error -a+31 (only warning 31 is fatal).
+  - Default warnings
+    -w +a-4-7-9-27-29-30-32..42-44-45-48-50-60-66..70.
+
 - ocamlc bytecode needs *-custom* flag to embeed the runtime
 - Building, =ocamlfind= is like /pkgconf/ for ocaml
   #+begin_src shell
