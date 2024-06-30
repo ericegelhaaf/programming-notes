@@ -1,23 +1,54 @@
-- Code: 2022 htmx hiccup server example https://github.com/babashka/babashka/blob/master/examples/htmx_todoapp.clj
+- Doc https://book.babashka.org/
 - differences https://github.com/babashka/babashka#differences-with-clojure
+
 - Libraries
-  https://babashka.org/toolbox/
-  https://github.com/babashka/babashka/blob/master/doc/projects.md#libraries
-- Pods
-  https://github.com/babashka/pod-registry
-  https://book.babashka.org/#pods
+  - https://babashka.org/toolbox/
+  - https://github.com/babashka/babashka/blob/master/doc/projects.md#libraries
+  - https://github.com/babashka/pod-registry
+  - https://book.babashka.org/#pods
 - Edit Conf https://github.com/exercism/babashka/blob/main/docs/editors.md
   > bb --nrepl-server
-- Doc https://book.babashka.org/
-- Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
-  - As such the code is NOT compiled.
 
 - Article: https://rattlin.blog/bbgum.html
 - Channel: https://www.youtube.com/@babashkatv/videos
+- Codebase: 2022 htmx hiccup server example https://github.com/babashka/babashka/blob/master/examples/htmx_todoapp.clj
 - tool: cli json/yaml/edn convert https://github.com/borkdude/jet
 
-* flags
+* stdlib
+https://book.babashka.org/
+|-----------------------+------------------------------------+-----------|
+| library               | description                        | aliased   |
+|-----------------------+------------------------------------+-----------|
+| [[https://github.com/clojure/test.check][clojure.test.check]]    | quickcheck for clojure             |           |
+| [[https://github.com/clojure/core.rrb-vector][core.rrb-vector]]       | vector fast appending              |           |
+| [[https://clojure.github.io/core.async/][clojure.core.async]]    | async                              | async     |
+| [[https://github.com/clojure/core.match][clojure.core.match]]    | pattern matching                   |           |
+| [[https://github.com/nrepl/bencode][bencode.core]]          | a data format                      | bencode   |
+| [[https://github.com/cognitect/transit-clj][cognitect.transit]]     | a data format                      | transit   |
+| [[https://github.com/clojure/tools.logging][clojure.tools.logging]] | logging                            |           |
+| [[https://github.com/taoensso/timbre][timbre]]                | logging                            |           |
+|-----------------------+------------------------------------+-----------|
+| [[https://github.com/babashka/cli][babashka.cli]]          | CLI arg parsing                    |           |
+| [[https://github.com/babashka/fs][babashka.fs]]           | file system manipulation           |           |
+| [[https://github.com/babashka/process][babashka.process]]      | shelling out to external processes |           |
+| [[https://github.com/clojure/tools.cli][clojure.tools.cli]]     | Command-line processing            | tools.cli |
+|-----------------------+------------------------------------+-----------|
+| [[https://github.com/clojure/data.xml][clojure.data.xml]]      | xml                                | xml       |
+| [[https://github.com/clojure/data.csv][clojure.data.csv]]      | csv                                | csv       |
+| [[https://github.com/clj-commons/clj-yaml][clj-yaml.core]]         | yaml                               | yaml      |
+| [[https://github.com/dakrone/cheshire][cheshire.core]]         | json                               | json      |
+|-----------------------+------------------------------------+-----------|
+| [[https://github.com/yogthos/Selmer][Selmer]]                | text templating                    |           |
+| [[https://github.com/weavejester/hiccup/][hiccup[2].core]]        | html rendering                     |           |
+| [[https://github.com/babashka/http-client][babashka.http-client]]  | http client                        |           |
+| [[https://github.com/http-kit/http-kit][org.httpkit.client]]    | http client                        |           |
+| [[https://github.com/http-kit/http-kit][org.httpkit.server]]    | http server                        |           |
+|-----------------------+------------------------------------+-----------|
+| [[https://github.com/clj-commons/rewrite-clj][rewrite-clj]]           | metaprogramming                    |           |
+| [[https://github.com/borkdude/edamame][edamame]]               | metaprogramming                    |           |
+|-----------------------+------------------------------------+-----------|
 
+* flags
 |----------+--------------------------------------------------------------|
 | --stream | from lazy seq, to each element by itself (aka no map needed) |
 | -i       | *input* becomes a lazy seq of strings from stdin             |
@@ -25,7 +56,6 @@
 | -o       | stdout one entry per line                                    |
 | -O       | stdout one entry per line, as EDN                            |
 |----------+--------------------------------------------------------------|
-
 * Native Image Building
 
 - you could get a smaller bb binary size by building bb yourself (?

@@ -1,3 +1,6 @@
+- Implementation: Uses this to interpret a (large) subset of clojure https://github.com/babashka/SCI
+  - As such the code is NOT compiled.
+
 - 22 video: ClojureScript reimagined - Michiel Borkent
   https://www.youtube.com/watch?v=oCd74TQ-gf4
   - while ~clojurescript~ is used to make SPAs

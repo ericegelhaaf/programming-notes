@@ -1,0 +1,39 @@
+- https://github.com/uhub/awesome-erlang (unsorted)
+- https://github.com/duomark/epocxy
+- cowboy setup https://gist.github.com/flbuddymooreiv/ce1d7a47b12c27bf1616
+  1) create a new app
+  2) add cowboy on *deps*         in rebar3.config
+  3) add cowboy on *applications* in .app.src
+  4) add cowboy:start_http()      in _app.erl
+  5) create a handler module
+
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| lager       | 1.1 | 22 | Logging framework                 | https://github.com/erlang-lager/lager   |
+| recon       | 1.1 |    | for inspecting prod nodes         | https://github.com/ferd/recon           |
+| elixir-uuid |  .3 |    | ELIXIR uuid()                     | https://github.com/zyro/elixir-uuid     |
+| grpcbox     |  .1 |    | gprc                              | https://github.com/tsloughter/grpcbox   |
+| locus       |  .1 |    | ASN                               | https://github.com/g-andrade/locus      |
+| grapherl    |  .1 |    | graph otp system                  | https://github.com/eproxus/grapherl     |
+| dns_erlang  |  .1 |    | DNS + TSIG + EDNS0 + DNSSEC       | https://github.com/dnsimple/dns_erlang  |
+| agent       |  .0 |    | otp agent implementation          | https://github.com/savonarola/agent     |
+| gen_cycle   |  .0 |    | otp recurring task                | https://github.com/aerosol/gen_cycle    |
+| erlexec     | 0.4 | 23 | exec/control OS processes         | https://github.com/saleyn/erlexec       |
+| poolboy     | 1.5 | 18 | distributes work in a worker pool | https://github.com/devinus/poolboy      |
+| pooler      | 0.2 | 23 | process pool                      | https://github.com/epgsql/pooler        |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| pgo         |  .1 |    | pSQL connection pool              | https://github.com/erleans/pgo          |
+| eql         |  .1 |    | SQL ORM                           | https://github.com/artemeff/eql         |
+| epgsql      |  .3 | 23 | pSQL client                       | https://github.com/epgsql/epgsql        |
+| eredisk     |  .6 | 19 | redis client                      | https://github.com/wooga/eredisk        |
+| mysql-top   |  .3 | 22 | mysql client                      | https://github.com/mysql-otp/mysql-otp  |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| fast_yaml   |  .0 | 23 | C's libyaml wrapper               | https://github.com/processone/fast_yaml |
+| jerg        |  .0 | 13 | .json scheme to records           | https://github.com/ddossot/jerg         |
+| jsx         |  .6 |    | .json parser                      | https://github.com/talentdeficit/jsx    |
+| feeder      |  .0 | 19 | .rss parser                       | https://github.com/michaelnisi/feeder   |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|
+| cowboy      | 6.9 | 23 | HTTP webserver                    | https://github.com/ninenines/cowboy     |
+| elli        |  .2 | 21 | HTTP webserver                    | https://github.com/elli-lib/elli        |
+| hackney     | 1.3 | 23 | HTTP client                       | https://github.com/benoitc/hackney      |
+| ibrowse     |  .5 | 21 | HTTP client                       | https://github.com/cmullaparthi/ibrowse |
+|-------------+-----+----+-----------------------------------+-----------------------------------------|

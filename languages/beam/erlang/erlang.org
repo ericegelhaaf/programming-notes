@@ -1,18 +1,17 @@
-- https://github.com/duomark/epocxy
 - https://github.com/Telichkin/otp_cheatsheet
-- examples https://rosettacode.org/wiki/Category:Erlang
-- build tool https://github.com/erlang/rebar3
-- build tool https://erlware.github.io/relx/
-- build tool https://erlang.mk/
 - mailing list https://erlang.org/mailman/listinfo
 - doc https://erlang.org/doc/reference_manual/users_guide.html
-- doc https://erlang.org/doc/apps/stdlib/index.html
-- cowboy setup https://gist.github.com/flbuddymooreiv/ce1d7a47b12c27bf1616
-  1) create a new app
-  2) add cowboy on *deps*         in rebar3.config
-  3) add cowboy on *applications* in .app.src
-  4) add cowboy:start_http()      in _app.erl
-  5) create a handler module
+- doc https://www.erlang.org/doc/readme.html
+- wiki https://en.wikipedia.org/wiki/Erlang_(programming_language)
+
+- 1986- (opensourced in 1998)
+  - @Ericsson
+- Authors:
+  - Joe Armstrong
+  - Robert Virding
+  - Mike Williams
+- OTP (Open Telecom Platform)
+
 * Language
 https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
 ** Types
@@ -70,69 +69,69 @@ https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
 
 *** Built-in Types
 
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
-| spec                           | create                        |                                                                  |
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
-| any()                          |                               |                                                                  |
-| none()                         |                               |                                                                  |
-| pid()                          | self() or spawn()             |                                                                  |
-| port()                         | open_port()                   |                                                                  |
-| reference()                    | make_ref()                    |                                                                  |
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
-| binary()                       | <<10,20>>                     |                                                                  |
-| <<_:Integer>>                  |                               | a binary of known length                                         |
-| <<_:_*Integer>>                |                               | a binary with *unit size* but unspecified length                 |
-| <<_:Integer,_:_*OtherInteger>> |                               | a binary that can have a minimum length                          |
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
-| integer()                      | 23 or 1_337 or 2#101 or 16#1f |                                                                  |
-| 1..12                          | 3                             |                                                                  |
-| non_neg_integer()              | 0                             | integers >= 0                                                    |
-| pos_integer()                  | 2                             | integers >  0                                                    |
-| neg_integer()                  | -2                            | integers <  0                                                    |
-| float()                        | 3.14                          |                                                                  |
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
-| fun()                          |                               | any kind of function                                             |
-| fun(() -> Type)                |                               | an anonymous function that takes no arguments, that returns Type |
-| fun((...) -> Type)             |                               | an anonymous function of any arity, that returns Type            |
-| fun((TypeA,TypeB) -> Type)     |                               | an anonymous function                                            |
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
-| term()                         |                               | equivalent to any()                                              |
-| boolean()                      | 'false'                       | 'true' ¦ 'false'                                                 |
-| byte()                         | 42                            | 0..255                                                           |
-| char()                         | $A or $\n                     | 0..16#10ffff                                                     |
-| number()                       | 23 or 3.14                    | integer() ¦ float()                                              |
-| string()                       | "foo"                         | [char()]                                                         |
-| non_empty_string()             |                               | [char(),...]                                                     |
-| bitstring()                    | <<"ABC">>                     |                                                                  |
-| atom()                         | foo or 'foo'                  |                                                                  |
-| nil or []                      | []                            |                                                                  |
-| timeout()                      |                               | non_neg_integer() ¦ 'infinity'                                   |
-| node()                         |                               | erlang node name                                                 |
-| no_return()                    |                               | equivalent to none(), things that loop forever                   |
-|--------------------------------+-------------------------------+------------------------------------------------------------------|
+|--------------------------------+----------------------+------------------------------------------------------------------|
+| spec                           | create               |                                                                  |
+|--------------------------------+----------------------+------------------------------------------------------------------|
+| any()                          |                      |                                                                  |
+| none()                         |                      |                                                                  |
+| pid()                          | self()  spawn()      |                                                                  |
+| port()                         | open_port()          |                                                                  |
+| reference()                    | make_ref()           |                                                                  |
+|--------------------------------+----------------------+------------------------------------------------------------------|
+| binary()                       | <<10,20>>            |                                                                  |
+| <<_:Integer>>                  |                      | a binary of known length                                         |
+| <<_:_*Integer>>                |                      | a binary with *unit size* but unspecified length                 |
+| <<_:Integer,_:_*OtherInteger>> |                      | a binary that can have a minimum length                          |
+|--------------------------------+----------------------+------------------------------------------------------------------|
+| integer()                      | 23 1_337 2#101 16#1f |                                                                  |
+| 1..12                          | 3                    |                                                                  |
+| non_neg_integer()              | 0                    | integers >= 0                                                    |
+| pos_integer()                  | 2                    | integers >  0                                                    |
+| neg_integer()                  | -2                   | integers <  0                                                    |
+| float()                        | 3.14                 |                                                                  |
+|--------------------------------+----------------------+------------------------------------------------------------------|
+| fun()                          |                      | any kind of function                                             |
+| fun(() -> Type)                |                      | an anonymous function that takes no arguments, that returns Type |
+| fun((...) -> Type)             |                      | an anonymous function of any arity, that returns Type            |
+| fun((TypeA,TypeB) -> Type)     |                      | an anonymous function                                            |
+|--------------------------------+----------------------+------------------------------------------------------------------|
+| term()                         |                      | equivalent to any()                                              |
+| boolean()                      | 'false'              | 'true' ¦ 'false'                                                 |
+| byte()                         | 42                   | 0..255                                                           |
+| char()                         | $A  $\n              | 0..16#10ffff                                                     |
+| number()                       | 23  3.14             | integer() ¦ float()                                              |
+| string()                       | "foo"                | [char()]                                                         |
+| non_empty_string()             |                      | [char(),...]                                                     |
+| bitstring()                    | <<"ABC">>            |                                                                  |
+| atom()                         | foo 'foo'            |                                                                  |
+| nil or []                      | []                   |                                                                  |
+| timeout()                      |                      | non_neg_integer() ¦ 'infinity'                                   |
+| node()                         |                      | erlang node name                                                 |
+| no_return()                    |                      | equivalent to none(), things that loop forever                   |
+|--------------------------------+----------------------+------------------------------------------------------------------|
 
 *** Compound types
-|-----------------------------+-------------+----------------+----------------------------+--------------------------+---------|
-| type                        | creating    | p.matching     | accessing                  | updating                 | spec    |
-|-----------------------------+-------------+----------------+----------------------------+--------------------------+---------|
-| map #{TList}                | #{a => 1}   | #{a := Value}  | maps:get(K,M)              | maps:update(K,V,M)       | map()   |
-|                             |             |                |                            | M#{key => 1}             |         |
-|                             |             |                |                            | M#{key := 1}             |         |
-|-----------------------------+-------------+----------------+----------------------------+--------------------------+---------|
-| list(Type)                  | [], [1]     | [A,B¦C]        | lists:nth(N,L)             |                          | list()  |
-| [Type]                      |             |                |                            |                          |         |
-| [Type,...]                  | [1]         |                |                            |                          |         |
-| improper_list(Type,TypeEnd) |             |                |                            |                          |         |
-| maybe_improper_list()       |             |                |                            |                          |         |
-| maybe_improper_list(T)      |             |                |                            |                          |         |
-| maybe_improper_list(T,T)    |             |                |                            |                          |         |
-|-----------------------------+-------------+----------------+----------------------------+--------------------------+---------|
-| tuple(TList?)               | {a,1}       | {A,B}          | erlang:element(K,T)        | erlang:setelement(K,V,T) | {T1,T2} |
-| tuple()                     |             |                |                            |                          |         |
-|-----------------------------+-------------+----------------+----------------------------+--------------------------+---------|
-| record                      | #name{a=23} | #name{a=Value} | Rec#r1.field               | Rec#name{field = 23}     | #name{} |
-|                             |             |                | Record#r1.field1#r2.field2 |                          |         |
-|-----------------------------+-------------+----------------+----------------------------+--------------------------+---------|
+|--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
+| type                     | creating    | p.matching     | accessing               | updating                 | spec    |
+|--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
+| map #{TList}             | #{a => 1}   | #{a := Value}  | maps:get(K,M)           | maps:update(K,V,M)       | map()   |
+|                          |             |                |                         | M#{key => 1}             |         |
+|                          |             |                |                         | M#{key := 1}             |         |
+|--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
+| list(Type)               | [], [1]     | [A,B¦C]        | lists:nth(N,L)          |                          | list()  |
+| [Type]                   |             |                |                         |                          |         |
+| [Type,...]               | [1]         |                |                         |                          |         |
+| improper_list(T,TEnd)    |             |                |                         |                          |         |
+| maybe_improper_list()    |             |                |                         |                          |         |
+| maybe_improper_list(T)   |             |                |                         |                          |         |
+| maybe_improper_list(T,T) |             |                |                         |                          |         |
+|--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
+| tuple(TList?)            | {a,1}       | {A,B}          | erlang:element(K,T)     | erlang:setelement(K,V,T) | {T1,T2} |
+| tuple()                  |             |                |                         |                          |         |
+|--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
+| record                   | #name{a=23} | #name{a=Value} | Rec#r1.field            | Rec#name{field = 23}     | #name{} |
+|                          |             |                | Rec#r1.field1#r2.field2 |                          |         |
+|--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
 - List ops
   | [1,2] ++ [1] | append lists | [1,2,1] |
   | [1,2] -- [1] | remove       | [2]     |
@@ -162,6 +161,9 @@ https://www.erlang.org/faq/libraries.html
 | sets     | sets, i.e. a collection of unique elements.                      |
 |----------+------------------------------------------------------------------|
 ** Standard Library (things on the lib/ directory)
+
+https://erlang.org/doc/apps/stdlib/index.html
+
 asn1
 compiler
 crypto
@@ -182,25 +184,31 @@ syntax_tools
 tools
 wx
 *** Developer Tool
-common_test
-debugger
-dialyzer
-edoc
-et
-eunit
-observer
+|-------------+------------------|
+| [[https://www.erlang.org/doc/common_test.html][common_test]] | coverage testing |
+| [[https://www.erlang.org/doc/eunit.html][eunit]]       | unit testing     |
+| [[https://www.erlang.org/doc/debugger.html][debugger]]    |                  |
+| [[https://www.erlang.org/doc/dialyzer.html][dialyzer]]    |                  |
+| [[https://www.erlang.org/doc/edoc.html][edoc]]        |                  |
+| [[https://www.erlang.org/doc/et.html][et]]          | event trace      |
+| [[https://www.erlang.org/doc/observer.html][observer]]    |                  |
+|-------------+------------------|
 *** File Formats
-parsetools
-xmerl
+|------------+-----------|
+| [[https://www.erlang.org/doc/parsetools.html][parsetools]] | leex+yecc |
+| [[https://www.erlang.org/doc/xmerl.html][xmerl]]      |           |
+|------------+-----------|
 *** Protocols
-eldap
-ftp
-inets
-megaco
-snmp
-ssh
-ssl
-tftp
+|--------+---------------------------------------------|
+| [[https://www.erlang.org/doc/eldap.html][eldap]]  |                                             |
+| [[https://www.erlang.org/doc/ftp.html][ftp]]    |                                             |
+| [[https://www.erlang.org/doc/inets.html][inets]]  |                                             |
+| [[https://www.erlang.org/doc/megaco.html][megaco]] | h.248 / multimedia gateway controller (MGC) |
+| [[https://www.erlang.org/doc/snmp.html][snmp]]   |                                             |
+| [[https://www.erlang.org/doc/ssh.html][ssh]]    |                                             |
+| [[https://www.erlang.org/doc/ssl.html][ssl]]    |                                             |
+| [[https://www.erlang.org/doc/tftp.html][tftp]]   | trivial ftp protocol                        |
+|--------+---------------------------------------------|
 ** io:format
 |----+-----------------------------------------------|
 | ~~ | literal ~                                     |
@@ -221,73 +229,8 @@ tftp
 | ~n | newline                                       |
 | ~i | ignores next term                             |
 |----+-----------------------------------------------|
-* Libraries
-- https://github.com/uhub/awesome-erlang (unsorted)
-|-------------+-----+----+-----------------------------------+-----------------------------------------|
-| lager       | 1.1 | 22 | Logging framework                 | https://github.com/erlang-lager/lager   |
-| recon       | 1.1 |    | for inspecting prod nodes         | https://github.com/ferd/recon           |
-| elixir-uuid |  .3 |    | ELIXIR uuid()                     | https://github.com/zyro/elixir-uuid     |
-| grpcbox     |  .1 |    | gprc                              | https://github.com/tsloughter/grpcbox   |
-| locus       |  .1 |    | ASN                               | https://github.com/g-andrade/locus      |
-| grapherl    |  .1 |    | graph otp system                  | https://github.com/eproxus/grapherl     |
-| dns_erlang  |  .1 |    | DNS + TSIG + EDNS0 + DNSSEC       | https://github.com/dnsimple/dns_erlang  |
-| agent       |  .0 |    | otp agent implementation          | https://github.com/savonarola/agent     |
-| gen_cycle   |  .0 |    | otp recurring task                | https://github.com/aerosol/gen_cycle    |
-| erlexec     | 0.4 | 23 | exec/control OS processes         | https://github.com/saleyn/erlexec       |
-| poolboy     | 1.5 | 18 | distributes work in a worker pool | https://github.com/devinus/poolboy      |
-| pooler      | 0.2 | 23 | process pool                      | https://github.com/epgsql/pooler        |
-|-------------+-----+----+-----------------------------------+-----------------------------------------|
-| pgo         |  .1 |    | pSQL connection pool              | https://github.com/erleans/pgo          |
-| eql         |  .1 |    | SQL ORM                           | https://github.com/artemeff/eql         |
-| epgsql      |  .3 | 23 | pSQL client                       | https://github.com/epgsql/epgsql        |
-| eredisk     |  .6 | 19 | redis client                      | https://github.com/wooga/eredisk        |
-| mysql-top   |  .3 | 22 | mysql client                      | https://github.com/mysql-otp/mysql-otp  |
-|-------------+-----+----+-----------------------------------+-----------------------------------------|
-| fast_yaml   |  .0 | 23 | C's libyaml wrapper               | https://github.com/processone/fast_yaml |
-| jerg        |  .0 | 13 | .json scheme to records           | https://github.com/ddossot/jerg         |
-| jsx         |  .6 |    | .json parser                      | https://github.com/talentdeficit/jsx    |
-| feeder      |  .0 | 19 | .rss parser                       | https://github.com/michaelnisi/feeder   |
-|-------------+-----+----+-----------------------------------+-----------------------------------------|
-| cowboy      | 6.9 | 23 | HTTP webserver                    | https://github.com/ninenines/cowboy     |
-| elli        |  .2 | 21 | HTTP webserver                    | https://github.com/elli-lib/elli        |
-| hackney     | 1.3 | 23 | HTTP client                       | https://github.com/benoitc/hackney      |
-| ibrowse     |  .5 | 21 | HTTP client                       | https://github.com/cmullaparthi/ibrowse |
-|-------------+-----+----+-----------------------------------+-----------------------------------------|
-* rebar3
-- Docs https://rebar3.org/docs/
-- Dependencies https://hex.pm/
-- rebar_mix (for elixir in erlang) https://github.com/Supersonido/rebar_mix
-** new
-rebar.config
-.gitignore
- LICENSE
- README.md
-*** lib     (built-in): Complete OTP Library application (no processes) structure
-#+begin_src
-> rebar3 new lib <NAME>
- src/<NAME>.erl
- src/<NAME>.app.src
-#+end_src
-*** app     (built-in): Complete OTP Application structure.
-#+begin_src
-> rebar3 new app <NAME>
- src/<NAME>_app.erl
- src/<NAME>_sup.erl
- src/<NAME>.app.src
-#+end_src
-*** release (built-in): OTP Release structure for executable programs
-#+begin_src
-> rebar3 new release <NAME>
- apps/<NAME>/src/<NAME>_app.erl
- apps/<NAME>/src/<NAME>_sup.erl
- apps/<NAME>/src/<NAME>.app.src
- config/sys.config
- config/vm.args
-#+end_src
-* Editor
-- Formatter https://github.com/whatsapp/erlfmt
-- LSP https://github.com/erlang-ls/erlang_ls
 * CodeBases
+- examples https://rosettacode.org/wiki/Category:Erlang
 - Chat Bot by Tsoding https://github.com/tsoding/tsoder
 - Fly.io App
   - https://github.com/baden/flyio-erlang

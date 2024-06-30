@@ -1,0 +1,45 @@
+- build tool
+  - https://github.com/erlang/rebar3
+  - https://erlware.github.io/relx/
+  - https://erlang.mk/
+- Editor
+  - Formatter https://github.com/whatsapp/erlfmt
+  - LSP https://github.com/erlang-ls/erlang_ls
+
+* rebar3
+- Docs https://rebar3.org/docs/
+- Dependencies https://hex.pm/
+- rebar_mix (for elixir in erlang) https://github.com/Supersonido/rebar_mix
+** new
+rebar.config
+.gitignore
+ LICENSE
+ README.md
+*** lib     (built-in): Complete OTP Library application (no processes) structure
+
+#+begin_src
+> rebar3 new lib <NAME>
+ src/<NAME>.erl
+ src/<NAME>.app.src
+#+end_src
+
+*** app     (built-in): Complete OTP Application structure.
+
+#+begin_src
+> rebar3 new app <NAME>
+ src/<NAME>_app.erl
+ src/<NAME>_sup.erl
+ src/<NAME>.app.src
+#+end_src
+
+*** release (built-in): OTP Release structure for executable programs
+
+#+begin_src
+> rebar3 new release <NAME>
+ apps/<NAME>/src/<NAME>_app.erl
+ apps/<NAME>/src/<NAME>_sup.erl
+ apps/<NAME>/src/<NAME>.app.src
+ config/sys.config
+ config/vm.args
+#+end_src
+
