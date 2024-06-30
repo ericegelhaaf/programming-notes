@@ -69,6 +69,52 @@
 |      |      | LiteralString type                               | 0675 | raises and error if the string is not static |
 |      |      | .add_not() to all exceptions                     | 0678 | to enrich exceptions without *raise* another |
 |------+------+--------------------------------------------------+------+----------------------------------------------|
+** Decorators (@)
+ | @classmethod | def   |
+ | @dataclass   | class |
+** Special Methods
+https://docs.python.org/3/reference/datamodel.html#object.__setitem__
+|                    | *2nd*    | *3rd*     | *4th*     | *Description*                  |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __init__()         |          |           |           | constructor                    |
+| __call__()         | x        |           |           |                                |
+| __bool__()         |          |           |           |                                |
+| __hash__()         |          |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __enter__()        |          |           |           | with statement context manager |
+| __exit__()         | exc_type | exc_value | traceback |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __eq__()           | other    |           |           |                                |
+| __lt__()           | other    |           |           |                                |
+| __gt__()           | other    |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __repr__()         |          |           |           | unambiguous representation     |
+| __str__()          |          |           |           | readable representation        |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __len__()          |          |           |           | len(a)                         |
+| __getitem__()      | index    |           |           | a[n]                           |
+| __setitem__()      | index    | element   |           |                                |
+| __contains__()     | element  |           |           |                                |
+| __reversed__()     |          |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __getattribute__() | name     |           |           |                                |
+| __getattr__()      | name     |           |           |                                |
+| __setattr__()      | name     | value     |           |                                |
+| __delattr__()      | name     |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __iter__()         |          |           |           | iterator                       |
+| __next__()         |          |           |           | iterator                       |
+|--------------------+----------+-----------+-----------+--------------------------------|
+| __add__()          | other    |           |           | emulating numeric types        |
+| __sub__()          | other    |           |           |                                |
+|--------------------+----------+-----------+-----------+--------------------------------|
+** Style
+- https://google.github.io/styleguide/pyguide.html
+- https://peps.python.org/pep-0008/
+** Type Hints
+- PEP 484 – Type Hints https://peps.python.org/pep-0484/
+- PEP 483 – The Theory of Type Hints https://peps.python.org/pep-0483/
+- PEP 482 – Literature Overview for Type Hints https://peps.python.org/pep-0482/
 ** Standard Library
 - https://docs.python.org/3/library/
 - https://docs.python.org/3/py-modindex.html
@@ -412,49 +458,3 @@
 | [[https://docs.python.org/3/library/venv.html][venv]]      | Creation of virtual environments       |
 | [[https://docs.python.org/3/library/zipapp.html][zipapp]]    | Manage executable Python zip archives  |
 
-** Decorators (@)
- | @classmethod | def   |
- | @dataclass   | class |
-** Special Methods
-https://docs.python.org/3/reference/datamodel.html#object.__setitem__
-|                    | *2nd*    | *3rd*     | *4th*     | *Description*                  |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __init__()         |          |           |           | constructor                    |
-| __call__()         | x        |           |           |                                |
-| __bool__()         |          |           |           |                                |
-| __hash__()         |          |           |           |                                |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __enter__()        |          |           |           | with statement context manager |
-| __exit__()         | exc_type | exc_value | traceback |                                |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __eq__()           | other    |           |           |                                |
-| __lt__()           | other    |           |           |                                |
-| __gt__()           | other    |           |           |                                |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __repr__()         |          |           |           | unambiguous representation     |
-| __str__()          |          |           |           | readable representation        |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __len__()          |          |           |           | len(a)                         |
-| __getitem__()      | index    |           |           | a[n]                           |
-| __setitem__()      | index    | element   |           |                                |
-| __contains__()     | element  |           |           |                                |
-| __reversed__()     |          |           |           |                                |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __getattribute__() | name     |           |           |                                |
-| __getattr__()      | name     |           |           |                                |
-| __setattr__()      | name     | value     |           |                                |
-| __delattr__()      | name     |           |           |                                |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __iter__()         |          |           |           | iterator                       |
-| __next__()         |          |           |           | iterator                       |
-|--------------------+----------+-----------+-----------+--------------------------------|
-| __add__()          | other    |           |           | emulating numeric types        |
-| __sub__()          | other    |           |           |                                |
-|--------------------+----------+-----------+-----------+--------------------------------|
-** Style
-- https://google.github.io/styleguide/pyguide.html
-- https://peps.python.org/pep-0008/
-** Type Hints
-- PEP 484 – Type Hints https://peps.python.org/pep-0484/
-- PEP 483 – The Theory of Type Hints https://peps.python.org/pep-0483/
-- PEP 482 – Literature Overview for Type Hints https://peps.python.org/pep-0482/
