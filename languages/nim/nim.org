@@ -1,3 +1,4 @@
+#+TITLE: Nim's reference
 #+DATE: <2022-12-23 vie>
 |-----------+----------------------------------------------------------|
 | home      | https://nim-lang.org/                                    |
@@ -22,10 +23,6 @@
 | bitset     | {'a'..'b'}                         | bitset[T]                        |
 | seq(uence) | @[], newSeq[char](10)              | seq[T]                           |
 |------------+------------------------------------+----------------------------------|
-| table      | initTable[T,T]() toTable[T,T]({})  |                                  |
-|            | initCountTable[T] toCountTable({}) |                                  |
-|            | toOrderedTable({})                 |                                  |
-|------------+------------------------------------+----------------------------------|
 | hashset    | toSet([])                          | HashSet[T]                       |
 | orderedset |                                    | OrderedSet[]                     |
 | channel    |                                    | Channel[T]                       |
@@ -34,246 +31,10 @@
 | ref object | Name(a: "foo")                     |                                  |
 | thread     | createThread(thread, fn, arg)      | Thread[T]                        |
 |------------+------------------------------------+----------------------------------|
-** std(lib) modules
-- https://nim-lang.org/docs/lib.html
-***   Pure Libraries
-- do NOT depend on any external *.dll or *.so binary
-**** Algorithms
-
-| algorithm | some common generic algorithms like sort or binary search.                                    |
-| enumutils | adds functionality for the built-in enum type.                                                |
-| sequtils  | operations for the built-in seq type which were inspired by functional programming languages. |
-| setutils  | adds functionality for the built-in set type.                                                 |
-
-**** Automatic imports
-
-| system           | Basic procs and operators that every program needs.                           |
-|                  | It also provides IO facilities for reading and writing text and binary files. |
-|                  | It is imported implicitly by the compiler.                                    |
-|                  | Do not import it directly. It relies on compiler magic to work.               |
-|------------------+-------------------------------------------------------------------------------|
-| threads          | Basic Nim thread support. Note: This is part of the system module.            |
-|                  | Do not import it explicitly. Enabled with --threads:on.                       |
-|------------------+-------------------------------------------------------------------------------|
-| channels_builtin | Nim message passing support for threads.                                      |
-|                  | Note: This is part of the system module.                                      |
-|                  | Do not import it explicitly. Enabled with --threads:on.                       |
-
-**** Core
-
-| atomics    | Types and operations for atomic operations and lockless algorithms.                                           |
-| bitops     | Provides a series of low-level methods for bit manipulation.                                                  |
-| cpuinfo    | procs to determine the number of CPUs / cores.                                                                |
-| endians    | contains helpers that deal with different byte orders.                                                        |
-| lenientops | Provides binary operators for mixed integer/float expressions for convenience.                                |
-| locks      | Locks and condition variables for Nim.                                                                        |
-| macrocache | Provides an API for macros to collect compile-time information across modules.                                |
-| macros     | Contains the AST API and documentation of Nim for writing macros.                                             |
-| rlocks     | Reentrant locks for Nim.                                                                                      |
-| typeinfo   | Provides (unsafe) access to Nim's run-time type information.                                                  |
-| typetraits | defines compile-time reflection procs for working with types.                                                 |
-| volatile   | contains code for generating volatile loads and stores, which are useful in embedded and systems programming. |
-
-**** Collections
-
-| critbits     | a crit bit tree which is an efficient container for a sorted set of strings, or a sorted mapping of strings. |
-| deques       | Implementation of a double-ended queue. The underlying implementation uses a seq.                            |
-| heapqueue    | Implementation of a binary heap data structure that can be used as a priority queue.                         |
-| intsets      | Efficient implementation of a set of ints as a sparse bit set.                                               |
-| lists        | Nim linked list support. Contains singly and doubly linked lists and circular lists ("rings").               |
-| options      | The option type encapsulates an optional value.                                                              |
-| packedsets   | Efficient implementation of a set of ordinals as a sparse bit set.                                           |
-| sets         | Nim hash set support.                                                                                        |
-| sharedlist   | Nim shared linked list support. Contains a shared singly-linked list.                                        |
-| sharedtables | Nim shared hash table support. Contains shared tables.                                                       |
-| tables       | Nim hash table support. Contains tables, ordered tables, and count tables.                                   |
-
-**** Docutils
-
-| packages/docutils/highlite | Source highlighter for programming or markup languages. Currently, only a few languages are supported, other languages may be added. The interface supports one language nested in another. |
-| packages/docutils/rst      | a reStructuredText parser. A large subset is implemented. Some features of the markdown wiki syntax are also supported.                                              |
-| packages/docutils/rstast   | an AST for the reStructuredText parser.                                                                                                                              |
-| packages/docutils/rstgen   | a generator of HTML/Latex from reStructuredText.                                                                                                                     |
-
-**** Generic Operating System Services
-
-| distros  | the basics for OS distribution ("distro") detection and the OS's native package manager.                          |
-|          | Its primary purpose is to produce output for Nimble packages,                                                     |
-|          | but it also contains the widely used Distribution enum that is useful for writing platform-specific code.         |
-|          | See packaging for hints on distributing Nim using OS packages.                                                    |
-|----------+-------------------------------------------------------------------------------------------------------------------|
-| dynlib   | the ability to access symbols from shared libraries.                                                              |
-| marshal  | Contains procs for serialization and deserialization of arbitrary Nim data structures.                            |
-| memfiles | provides support for memory-mapped files (Posix's mmap) on the different operating systems.                       |
-|----------+-------------------------------------------------------------------------------------------------------------------|
-| os       | Basic OS facilities like retrieving environment variables,                                                        |
-|          | reading command line arguments, working with directories, running shell commands, etc.                            |
-|----------+-------------------------------------------------------------------------------------------------------------------|
-| osproc   | Module for process communication beyond os.execShellCmd.                                                          |
-| streams  | provides a stream interface and two implementations thereof:                                                      |
-|          | the FileStream and the StringStream which implement the stream interface for Nim file objects (File) and strings. |
-|          | Other modules may provide other implementations for this standard stream interface.                               |
-| terminal | contains a few procedures to control the terminal (also called console).                                          |
-|          | The implementation simply uses ANSI escape sequences and does not depend on any other module.                     |
-
-**** Generators
-
-| htmlgen | a simple XML and HTML code generator. Each commonly used HTML tag has a corresponding macro that generates a string with its HTML representation. |
-
-**** Hashing
-
-| base64 | a Base64 encoder and decoder.                                                                                                                                                                                                                                  |
-| hashes | efficient computations of hash values for diverse Nim types.                                                                                                                                                                                                   |
-| md5    | the MD5 checksum algorithm.                                                                                                                                                                                                                                    |
-| oids   | An OID is a global ID that consists of a timestamp, a unique counter, and a random value. This combination should suffice to produce a globally distributed unique ID. This implementation was extracted from the MongoDB interface and it thus binary compatible with a MongoDB OID. |
-| sha1   | a sha1 encoder and decoder.                                                                                                                                                                                                                                    |
-
-**** Internet Protocols and Support
-
-| asyncdispatch   | an asynchronous dispatcher for IO operations.                                                                      |
-| asyncfile       | asynchronous file reading and writing using asyncdispatch.                                                         |
-| asyncftpclient  | an asynchronous FTP client using the asyncnet module.                                                              |
-| asynchttpserver | an asynchronous HTTP server using the asyncnet module.                                                             |
-| asyncnet        | asynchronous sockets based on the asyncdispatch module.                                                            |
-| asyncstreams    | provides FutureStream - a future that acts as a queue.                                                                        |
-| cgi             | helpers for CGI applications.                                                                                      |
-| cookies         | contains helper procs for parsing and generating cookies.                                                                     |
-| httpclient      | a simple HTTP client which supports both synchronous and asynchronous retrieval of web pages.                      |
-| mimetypes       | a mimetypes database.                                                                                              |
-| nativesockets   | a low-level sockets API.                                                                                           |
-| net             | a high-level sockets API. It replaces the sockets module.                                                          |
-| selectors       | a selector API with backends specific to each OS. Currently, epoll on Linux and select on other operating systems. |
-| smtp            | a simple SMTP client.                                                                                              |
-| uri             | provides functions for working with URIs.                                                                                     |
-
-**** Math libraries
-
-| complex   | complex numbers and relevant mathematical operations.                                                         |
-| fenv      | Floating-point environment. Handling of floating-point rounding and exceptions (overflow, zero-divide, etc.). |
-| math      | Mathematical operations like cosine, square root.                                                             |
-| random    | Fast and tiny random number generator.                                                                        |
-| rationals | rational numbers and relevant mathematical operations.                                                        |
-| stats     | Statistical analysis.                                                                                         |
-| sums      | Accurate summation functions.                                                                                 |
-| sysrand   | Cryptographically secure pseudorandom number generator.                                                       |
-
-**** Miscellaneous
-
-| browsers  | procs for opening URLs with the user's default browser.                |
-| colors    | color handling for Nim.                                                |
-| coro      | experimental coroutines in Nim.                                        |
-| enumerate | enumerate syntactic sugar based on Nim's macro system.                 |
-| logging   | a simple logger.                                                       |
-| segfaults | Turns access violations or segfaults into a NilAccessDefect exception. |
-| sugar     | nice syntactic sugar based on Nim's macro system.                      |
-| unittest  | a Unit testing DSL.                                                    |
-| varints   | Decode variable-length integers that are compatible with SQLite.       |
-| with      | the with macro for easy function chaining.                             |
-
-**** Modules for the JS backend
-
-| asyncjs   | Types and macros for writing asynchronous procedures in JavaScript.                                                                               |
-| dom       | Declaration of the Document Object Model for the JS backend.                                                                                      |
-| jsbigints | Arbitrary precision integers.                                                                                                                     |
-| jsconsole | Wrapper for the console object.                                                                                                                   |
-| jscore    | The wrapper of core JavaScript functions. For most purposes, you should be using the math, json, and times stdlib modules instead of this module. |
-| jsffi     | Types and macros for easier interaction with JavaScript.                                                                                          |
-**** Parsers
-
-| htmlparser | parses an HTML document and creates its XML tree representation.                                                                                                                                                                                                                                                                       |
-| json       | High-performance JSON parser.                                                                                                                                                                                                                                                                                                          |
-| jsonutils  | a hookable (de)serialization for arbitrary types.                                                                                                                                                                                                                                                                                      |
-| lexbase    | This is a low-level module that implements an extremely efficient buffering scheme for lexers and parsers. This is used by the diverse parsing modules.                                                                                                                                                                                |
-| parsecfg   | The parsecfg module implements a high-performance configuration file parser. The configuration file's syntax is similar to the Windows .ini format, but much more powerful, as it is not a line based parser. String literals, raw string literals, and triple quote string literals are supported as in the Nim programming language. |
-| parsecsv   | The parsecsv module implements a simple high-performance CSV parser.                                                                                                                                                                                                                                                                   |
-| parsejson  | a JSON parser. It is used and exported by the json module, but can also be used in its own right.                                                                                                                                                                                                                                      |
-| parseopt   | The parseopt module implements a command line option parser.                                                                                                                                                                                                                                                                           |
-| parsesql   | The parsesql module implements a simple high-performance SQL parser.                                                                                                                                                                                                                                                                   |
-| parsexml   | The parsexml module implements a simple high performance XML/HTML parser. The only encoding that is supported is UTF-8. The parser has been designed to be somewhat error-correcting, so that even some "wild HTML" found on the web can be parsed with it.                                                                            |
-
-**** String handling
-
-| cstrutils    | Utilities for cstring handling.                                                                                   |
-| editdistance | contains an algorithm to compute the edit distance between two Unicode strings.                                   |
-| encodings    | Converts between different character encodings. On UNIX, this uses the iconv library, on Windows the Windows API. |
-| parseutils   | contains helpers for parsing tokens, numbers, identifiers, etc.                                                   |
-| pegs         | contains procedures and operators for handling PEGs.                                                              |
-| punycode     | a representation of Unicode with the limited ASCII character subset.                                              |
-|--------------+-------------------------------------------------------------------------------------------------------------------|
-| ropes        | contains support for a rope data type. Ropes can represent very long strings efficiently;                         |
-|              | in particular, concatenation is done in O(1) instead of O(n).                                                     |
-|--------------+-------------------------------------------------------------------------------------------------------------------|
-| strbasics    | provides some high performance string operations.                                                                 |
-| strformat    | Macro based standard string interpolation/formatting. Inspired by Python's f-strings.                             |
-| strmisc      | contains uncommon string handling operations that do not fit with the commonly used operations in strutils.       |
-| strscans     | contains a scanf macro for convenient parsing of mini languages.                                                  |
-|--------------+-------------------------------------------------------------------------------------------------------------------|
-| strtabs      | implements an efficient hash table that is a mapping from strings to strings.                                     |
-|              | Supports a case-sensitive, case-insensitive and style-insensitive modes.                                          |
-|--------------+-------------------------------------------------------------------------------------------------------------------|
-| strutils     | contains common string handling operations like changing case, splitting, searching, replacing.                   |
-|--------------+-------------------------------------------------------------------------------------------------------------------|
-| unicode      | provides support to handle the Unicode UTF-8 encoding.                                                            |
-| unidecode    | It provides a single proc that does Unicode to ASCII transliterations. Based on Python's Unidecode module.        |
-| wordwrap     | contains an algorithm to wordwrap a Unicode string.                                                               |
-
-**** Time handling
-
-| monotimes | implements monotonic timestamps.        |
-| times     | contains support for working with time. |
-
-**** Threading
-
-| threadpool | Nim's spawn. |
-
-**** XML Processing
-
-| xmltree   | A simple XML tree. More efficient and simpler than the DOM. It also contains a macro for XML/HTML code generation. |
-| xmlparser | parses an XML document and creates its XML tree representation.                                                    |
-
-*** Impure Libraries
-- depend on .so or .dll.
-**** Regular expressions
-
-| re | This module contains procedures and operators for handling regular expressions. The current implementation uses PCRE. |
-
-**** Database support
-
-| db_postgres | A higher level PostgreSQL database wrapper. The same interface is implemented for other databases too. |
-| db_mysql    | A higher level MySQL database wrapper. The same interface is implemented for other databases too.      |
-| db_sqlite   | A higher level SQLite database wrapper. The same interface is implemented for other databases too.     |
-
-**** Generic Operating System Services
-
-| rdstdin | This module contains code for reading from stdin. |
-
-*** Wrappers
-- a very low-level interface to a C library
-**** Database support
-
-| postgres | Contains a wrapper for the PostgreSQL API. |
-| mysql    | Contains a wrapper for the mySQL API.      |
-| sqlite3  | Contains a wrapper for the SQLite 3 API.   |
-| odbcsql  | interface to the ODBC driver.              |
-
-**** Network Programming and Internet Protocols
-
-| openssl | Wrapper for OpenSSL. |
-
-**** Regular expressions
-
-| pcre | Wrapper for the PCRE library. |
-
-**** UNIX specific
-
-| posix       | Contains a wrapper for the POSIX standard.                                 |
-| posix_utils | Contains helpers for the POSIX standard or specialized for Linux and BSDs. |
-
-**** Windows-specific
-
-| winlean  | Contains a wrapper for a small subset of the Win32 API. |
-| registry | Windows registry support.                               |
-
+| table      | initTable[T,T]() toTable[T,T]({})  |                                  |
+|            | initCountTable[T] toCountTable({}) |                                  |
+|            | toOrderedTable({})                 |                                  |
+|------------+------------------------------------+----------------------------------|
 ** Operators
 |---------+-------------------------------------------------------|
 |   <c>   | description                                           |
@@ -298,6 +59,254 @@
 | {. base .}         | method |                                                  |
 | {. pure .}         | enum   | requires all ambiguos references to be qualified |
 |--------------------+--------+--------------------------------------------------|
+
+** stdlib modules
+- https://nim-lang.org/docs/lib.html
+***   Pure Libraries
+- do NOT depend on any external *.dll or *.so binary
+**** Algorithms
+|-----------+-----------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/algorithm.html][algorithm]] | some common generic algorithms like sort or binary search.                                    |
+| [[https://nim-lang.org/docs/enumutils.html][enumutils]] | adds functionality for the built-in enum type.                                                |
+| [[https://nim-lang.org/docs/sequtils.html][sequtils]]  | operations for the built-in seq type which were inspired by functional programming languages. |
+| [[https://nim-lang.org/docs/setutils.html][setutils]]  | adds functionality for the built-in set type.                                                 |
+|-----------+-----------------------------------------------------------------------------------------------|
+**** Automatic imports
+|------------------+-------------------------------------------------------------------------------|
+|                  | description                                                                   |
+|------------------+-------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/system.html][system]]           | Basic procs and operators that every program needs.                           |
+|                  | It also provides IO facilities for reading and writing text and binary files. |
+|                  | It is imported implicitly by the compiler.                                    |
+|                  | Do not import it directly. It relies on compiler magic to work.               |
+|------------------+-------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/threads.html][threads]]          | Basic Nim thread support. Note: This is part of the system module.            |
+|                  | Do not import it explicitly. Enabled with --threads:on.                       |
+|------------------+-------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/channels_builtin.html][channels_builtin]] | Nim message passing support for threads.                                      |
+|                  | Note: This is part of the system module.                                      |
+|                  | Do not import it explicitly. Enabled with --threads:on.                       |
+|------------------+-------------------------------------------------------------------------------|
+**** Core
+|------------+---------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/atomics.html][atomics]]    | Types and operations for atomic operations and lockless algorithms.                                           |
+| [[https://nim-lang.org/docs/bitops.html][bitops]]     | Provides a series of low-level methods for bit manipulation.                                                  |
+| [[https://nim-lang.org/docs/cpuinfo.html][cpuinfo]]    | procs to determine the number of CPUs / cores.                                                                |
+| [[https://nim-lang.org/docs/endians.html][endians]]    | contains helpers that deal with different byte orders.                                                        |
+| [[https://nim-lang.org/docs/lenientops.html][lenientops]] | Provides binary operators for mixed integer/float expressions for convenience.                                |
+| [[https://nim-lang.org/docs/locks.html][locks]]      | Locks and condition variables for Nim.                                                                        |
+| [[https://nim-lang.org/docs/macrocache.html][macrocache]] | Provides an API for macros to collect compile-time information across modules.                                |
+| [[https://nim-lang.org/docs/macros.html][macros]]     | Contains the AST API and documentation of Nim for writing macros.                                             |
+| [[https://nim-lang.org/docs/rlocks.html][rlocks]]     | Reentrant locks for Nim.                                                                                      |
+| [[https://nim-lang.org/docs/typeinfo.html][typeinfo]]   | Provides (unsafe) access to Nim's run-time type information.                                                  |
+| [[https://nim-lang.org/docs/typetraits.html][typetraits]] | defines compile-time reflection procs for working with types.                                                 |
+| [[https://nim-lang.org/docs/volatile.html][volatile]]   | contains code for generating volatile loads and stores, which are useful in embedded and systems programming. |
+|------------+---------------------------------------------------------------------------------------------------------------|
+**** Collections
+|--------------+--------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/critbits.html][critbits]]     | a crit bit tree which is an efficient container for a sorted set of strings, or a sorted mapping of strings. |
+| [[https://nim-lang.org/docs/deques.html][deques]]       | Implementation of a double-ended queue. The underlying implementation uses a seq.                            |
+| [[https://nim-lang.org/docs/heapqueue.html][heapqueue]]    | Implementation of a binary heap data structure that can be used as a priority queue.                         |
+| [[https://nim-lang.org/docs/intsets.html][intsets]]      | Efficient implementation of a set of ints as a sparse bit set.                                               |
+| [[https://nim-lang.org/docs/lists.html][lists]]        | Nim linked list support. Contains singly and doubly linked lists and circular lists ("rings").               |
+| [[https://nim-lang.org/docs/options.html][options]]      | The option type encapsulates an optional value.                                                              |
+| [[https://nim-lang.org/docs/packedsets.html][packedsets]]   | Efficient implementation of a set of ordinals as a sparse bit set.                                           |
+| [[https://nim-lang.org/docs/sets.html][sets]]         | Nim hash set support.                                                                                        |
+| [[https://nim-lang.org/docs/sharedlist.html][sharedlist]]   | Nim shared linked list support. Contains a shared singly-linked list.                                        |
+| [[https://nim-lang.org/docs/sharedtables.html][sharedtables]] | Nim shared hash table support. Contains shared tables.                                                       |
+| [[https://nim-lang.org/docs/tables.html][tables]]       | Nim hash table support. Contains tables, ordered tables, and count tables.                                   |
+|--------------+--------------------------------------------------------------------------------------------------------------|
+**** Docutils
+|----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| packages/docutils/highlite | Source highlighter for programming or markup languages. Currently, only a few languages are supported, other languages may be added. The interface supports one language nested in another. |
+| packages/docutils/rst      | a reStructuredText parser. A large subset is implemented. Some features of the markdown wiki syntax are also supported.                                                                     |
+| packages/docutils/rstast   | an AST for the reStructuredText parser.                                                                                                                                                     |
+| packages/docutils/rstgen   | a generator of HTML/Latex from reStructuredText.                                                                                                                                            |
+|----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+**** Generic Operating System Services
+|----------+-------------------------------------------------------------------------------------------------------------------|
+|          | description                                                                                                       |
+|----------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/distros.html][distros]]  | the basics for OS distribution ("distro") detection and the OS's native package manager.                          |
+|          | Its primary purpose is to produce output for Nimble packages,                                                     |
+|          | but it also contains the widely used Distribution enum that is useful for writing platform-specific code.         |
+|          | See packaging for hints on distributing Nim using OS packages.                                                    |
+|----------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/dynlib.html][dynlib]]   | the ability to access symbols from shared libraries.                                                              |
+| [[https://nim-lang.org/docs/marshal.html][marshal]]  | Contains procs for serialization and deserialization of arbitrary Nim data structures.                            |
+| [[https://nim-lang.org/docs/memfiles.html][memfiles]] | provides support for memory-mapped files (Posix's mmap) on the different operating systems.                       |
+|----------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/os.html][os]]       | Basic OS facilities like retrieving environment variables,                                                        |
+|          | reading command line arguments, working with directories, running shell commands, etc.                            |
+|----------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/osproc.html][osproc]]   | Module for process communication beyond os.execShellCmd.                                                          |
+| [[https://nim-lang.org/docs/streams.html][streams]]  | provides a stream interface and two implementations thereof:                                                      |
+|          | the FileStream and the StringStream which implement the stream interface for Nim file objects (File) and strings. |
+|          | Other modules may provide other implementations for this standard stream interface.                               |
+| [[https://nim-lang.org/docs/terminal.html][terminal]] | contains a few procedures to control the terminal (also called console).                                          |
+|          | The implementation simply uses ANSI escape sequences and does not depend on any other module.                     |
+|----------+-------------------------------------------------------------------------------------------------------------------|
+**** Generators
+|-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/htmlgen.html][htmlgen]] | a simple XML and HTML code generator. Each commonly used HTML tag has a corresponding macro that generates a string with its HTML representation. |
+|-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+**** Hashing
+|--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/base64.html][base64]] | a Base64 encoder and decoder.                                                                                                                                                                                                                                                         |
+| [[https://nim-lang.org/docs/hashes.html][hashes]] | efficient computations of hash values for diverse Nim types.                                                                                                                                                                                                                          |
+| [[https://nim-lang.org/docs/md5.html][md5]]    | the MD5 checksum algorithm.                                                                                                                                                                                                                                                           |
+| [[https://nim-lang.org/docs/oids.html][oids]]   | An OID is a global ID that consists of a timestamp, a unique counter, and a random value. This combination should suffice to produce a globally distributed unique ID. This implementation was extracted from the MongoDB interface and it thus binary compatible with a MongoDB OID. |
+| [[https://nim-lang.org/docs/sha1.html][sha1]]   | a sha1 encoder and decoder.                                                                                                                                                                                                                                                           |
+|--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+**** Internet Protocols and Support
+|-----------------+--------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/asyncdispatch.html][asyncdispatch]]   | an asynchronous dispatcher for IO operations.                                                                      |
+| [[https://nim-lang.org/docs/asyncfile.html][asyncfile]]       | asynchronous file reading and writing using asyncdispatch.                                                         |
+| [[https://nim-lang.org/docs/asyncftpclient.html][asyncftpclient]]  | an asynchronous FTP client using the asyncnet module.                                                              |
+| [[https://nim-lang.org/docs/asynchttpserver.html][asynchttpserver]] | an asynchronous HTTP server using the asyncnet module.                                                             |
+| [[https://nim-lang.org/docs/asyncnet.html][asyncnet]]        | asynchronous sockets based on the asyncdispatch module.                                                            |
+| [[https://nim-lang.org/docs/asyncstreams.html][asyncstreams]]    | provides FutureStream - a future that acts as a queue.                                                             |
+| [[https://nim-lang.org/docs/cgi.html][cgi]]             | helpers for CGI applications.                                                                                      |
+| [[https://nim-lang.org/docs/cookies.html][cookies]]         | contains helper procs for parsing and generating cookies.                                                          |
+| [[https://nim-lang.org/docs/httpclient.html][httpclient]]      | a simple HTTP client which supports both synchronous and asynchronous retrieval of web pages.                      |
+| [[https://nim-lang.org/docs/mimetypes.html][mimetypes]]       | a mimetypes database.                                                                                              |
+| [[https://nim-lang.org/docs/nativesockets.html][nativesockets]]   | a low-level sockets API.                                                                                           |
+| [[https://nim-lang.org/docs/net.html][net]]             | a high-level sockets API. It replaces the sockets module.                                                          |
+| [[https://nim-lang.org/docs/selectors.html][selectors]]       | a selector API with backends specific to each OS. Currently, epoll on Linux and select on other operating systems. |
+| [[https://nim-lang.org/docs/smtp.html][smtp]]            | a simple SMTP client.                                                                                              |
+| [[https://nim-lang.org/docs/uri.html][uri]]             | provides functions for working with URIs.                                                                          |
+|-----------------+--------------------------------------------------------------------------------------------------------------------|
+**** Math libraries
+|-----------+---------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/complex.html][complex]]   | complex numbers and relevant mathematical operations.                                                         |
+| [[https://nim-lang.org/docs/fenv.html][fenv]]      | Floating-point environment. Handling of floating-point rounding and exceptions (overflow, zero-divide, etc.). |
+| [[https://nim-lang.org/docs/math.html][math]]      | Mathematical operations like cosine, square root.                                                             |
+| [[https://nim-lang.org/docs/random.html][random]]    | Fast and tiny random number generator.                                                                        |
+| [[https://nim-lang.org/docs/rationals.html][rationals]] | rational numbers and relevant mathematical operations.                                                        |
+| [[https://nim-lang.org/docs/stats.html][stats]]     | Statistical analysis.                                                                                         |
+| [[https://nim-lang.org/docs/sums.html][sums]]      | Accurate summation functions.                                                                                 |
+| [[https://nim-lang.org/docs/sysrand.html][sysrand]]   | Cryptographically secure pseudorandom number generator.                                                       |
+|-----------+---------------------------------------------------------------------------------------------------------------|
+**** Miscellaneous
+|-----------+------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/browsers.html][browsers]]  | procs for opening URLs with the user's default browser.                |
+| [[https://nim-lang.org/docs/colors.html][colors]]    | color handling for Nim.                                                |
+| [[https://nim-lang.org/docs/coro.html][coro]]      | experimental coroutines in Nim.                                        |
+| [[https://nim-lang.org/docs/enumerate.html][enumerate]] | enumerate syntactic sugar based on Nim's macro system.                 |
+| [[https://nim-lang.org/docs/logging.html][logging]]   | a simple logger.                                                       |
+| [[https://nim-lang.org/docs/segfaults.html][segfaults]] | Turns access violations or segfaults into a NilAccessDefect exception. |
+| [[https://nim-lang.org/docs/sugar.html][sugar]]     | nice syntactic sugar based on Nim's macro system.                      |
+| [[https://nim-lang.org/docs/unittest.html][unittest]]  | a Unit testing DSL.                                                    |
+| [[https://nim-lang.org/docs/varints.html][varints]]   | Decode variable-length integers that are compatible with SQLite.       |
+| [[https://nim-lang.org/docs/with.html][with]]      | the with macro for easy function chaining.                             |
+|-----------+------------------------------------------------------------------------|
+**** Modules for the JS backend
+|-----------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/asyncjs.html][asyncjs]]   | Types and macros for writing asynchronous procedures in JavaScript.                                                                               |
+| [[https://nim-lang.org/docs/dom.html][dom]]       | Declaration of the Document Object Model for the JS backend.                                                                                      |
+| [[https://nim-lang.org/docs/jsbigints.html][jsbigints]] | Arbitrary precision integers.                                                                                                                     |
+| [[https://nim-lang.org/docs/jsconsole.html][jsconsole]] | Wrapper for the console object.                                                                                                                   |
+| [[https://nim-lang.org/docs/jscore.html][jscore]]    | The wrapper of core JavaScript functions. For most purposes, you should be using the math, json, and times stdlib modules instead of this module. |
+| [[https://nim-lang.org/docs/jsffi.html][jsffi]]     | Types and macros for easier interaction with JavaScript.                                                                                          |
+|-----------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+**** Parsers
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/htmlparser.html][htmlparser]] | parses an HTML document and creates its XML tree representation.                                                                                                                                                                                                                                                                       |
+| [[https://nim-lang.org/docs/json.html][json]]       | High-performance JSON parser.                                                                                                                                                                                                                                                                                                          |
+| [[https://nim-lang.org/docs/jsonutils.html][jsonutils]]  | a hookable (de)serialization for arbitrary types.                                                                                                                                                                                                                                                                                      |
+| [[https://nim-lang.org/docs/lexbase.html][lexbase]]    | This is a low-level module that implements an extremely efficient buffering scheme for lexers and parsers. This is used by the diverse parsing modules.                                                                                                                                                                                |
+| [[https://nim-lang.org/docs/parsecfg.html][parsecfg]]   | The parsecfg module implements a high-performance configuration file parser. The configuration file's syntax is similar to the Windows .ini format, but much more powerful, as it is not a line based parser. String literals, raw string literals, and triple quote string literals are supported as in the Nim programming language. |
+| [[https://nim-lang.org/docs/parsecsv.html][parsecsv]]   | The parsecsv module implements a simple high-performance CSV parser.                                                                                                                                                                                                                                                                   |
+| [[https://nim-lang.org/docs/parsejson.html][parsejson]]  | a JSON parser. It is used and exported by the json module, but can also be used in its own right.                                                                                                                                                                                                                                      |
+| [[https://nim-lang.org/docs/parseopt.html][parseopt]]   | The parseopt module implements a command line option parser.                                                                                                                                                                                                                                                                           |
+| [[https://nim-lang.org/docs/parsesql.html][parsesql]]   | The parsesql module implements a simple high-performance SQL parser.                                                                                                                                                                                                                                                                   |
+| [[https://nim-lang.org/docs/parsexml.html][parsexml]]   | The parsexml module implements a simple high performance XML/HTML parser. The only encoding that is supported is UTF-8. The parser has been designed to be somewhat error-correcting, so that even some "wild HTML" found on the web can be parsed with it.                                                                            |
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+**** String handling
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/cstrutils.html][cstrutils]]    | Utilities for cstring handling.                                                                                   |
+| [[https://nim-lang.org/docs/editdistance.html][editdistance]] | contains an algorithm to compute the edit distance between two Unicode strings.                                   |
+| [[https://nim-lang.org/docs/encodings.html][encodings]]    | Converts between different character encodings. On UNIX, this uses the iconv library, on Windows the Windows API. |
+| [[https://nim-lang.org/docs/parseutils.html][parseutils]]   | contains helpers for parsing tokens, numbers, identifiers, etc.                                                   |
+| [[https://nim-lang.org/docs/pegs.html][pegs]]         | contains procedures and operators for handling PEGs.                                                              |
+| [[https://nim-lang.org/docs/punycode.html][punycode]]     | a representation of Unicode with the limited ASCII character subset.                                              |
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/ropes.html][ropes]]        | contains support for a rope data type. Ropes can represent very long strings efficiently;                         |
+|              | in particular, concatenation is done in O(1) instead of O(n).                                                     |
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/strbasics.html][strbasics]]    | provides some high performance string operations.                                                                 |
+| [[https://nim-lang.org/docs/strformat.html][strformat]]    | Macro based standard string interpolation/formatting. Inspired by Python's f-strings.                             |
+| [[https://nim-lang.org/docs/strmisc.html][strmisc]]      | contains uncommon string handling operations that do not fit with the commonly used operations in strutils.       |
+| [[https://nim-lang.org/docs/strscans.html][strscans]]     | contains a scanf macro for convenient parsing of mini languages.                                                  |
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/strtabs.html][strtabs]]      | implements an efficient hash table that is a mapping from strings to strings.                                     |
+|              | Supports a case-sensitive, case-insensitive and style-insensitive modes.                                          |
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/strutils.html][strutils]]     | contains common string handling operations like changing case, splitting, searching, replacing.                   |
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/unicode.html][unicode]]      | provides support to handle the Unicode UTF-8 encoding.                                                            |
+| [[https://nim-lang.org/docs/unidecode.html][unidecode]]    | It provides a single proc that does Unicode to ASCII transliterations. Based on Python's Unidecode module.        |
+| [[https://nim-lang.org/docs/wordwrap.html][wordwrap]]     | contains an algorithm to wordwrap a Unicode string.                                                               |
+|--------------+-------------------------------------------------------------------------------------------------------------------|
+**** Time handling
+|-----------+-----------------------------------------|
+| [[https://nim-lang.org/docs/monotimes.html][monotimes]] | implements monotonic timestamps.        |
+| [[https://nim-lang.org/docs/times.html][times]]     | contains support for working with time. |
+|-----------+-----------------------------------------|
+**** Threading
+|------------+--------------|
+| [[https://nim-lang.org/docs/threadpool.html][threadpool]] | Nim's spawn. |
+|------------+--------------|
+**** XML Processing
+|-----------+--------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/xmltree.html][xmltree]]   | A simple XML tree. More efficient and simpler than the DOM. It also contains a macro for XML/HTML code generation. |
+| [[https://nim-lang.org/docs/xmlparser.html][xmlparser]] | parses an XML document and creates its XML tree representation.                                                    |
+|-----------+--------------------------------------------------------------------------------------------------------------------|
+*** Impure Libraries
+- depend on .so or .dll.
+**** Regular expressions
+|----+-----------------------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/re.html][re]] | This module contains procedures and operators for handling regular expressions. The current implementation uses PCRE. |
+|----+-----------------------------------------------------------------------------------------------------------------------|
+**** Database support
+|-------------+--------------------------------------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/db_postgres.html][db_postgres]] | A higher level PostgreSQL database wrapper. The same interface is implemented for other databases too. |
+| [[https://nim-lang.org/docs/db_mysql.html][db_mysql]]    | A higher level MySQL database wrapper. The same interface is implemented for other databases too.      |
+| [[https://nim-lang.org/docs/db_sqlite.html][db_sqlite]]   | A higher level SQLite database wrapper. The same interface is implemented for other databases too.     |
+|-------------+--------------------------------------------------------------------------------------------------------|
+**** Generic Operating System Services
+|---------+---------------------------------------------------|
+| [[https://nim-lang.org/docs/rdstdin.html][rdstdin]] | This module contains code for reading from stdin. |
+|---------+---------------------------------------------------|
+*** Wrappers
+- a very low-level interface to a C library
+**** Database support
+|----------+--------------------------------------------|
+| [[https://nim-lang.org/docs/postgres.html][postgres]] | Contains a wrapper for the PostgreSQL API. |
+| [[https://nim-lang.org/docs/mysql.html][mysql]]    | Contains a wrapper for the mySQL API.      |
+| [[https://nim-lang.org/docs/sqlite3.html][sqlite3]]  | Contains a wrapper for the SQLite 3 API.   |
+| [[https://nim-lang.org/docs/odbcsql.html][odbcsql]]  | interface to the ODBC driver.              |
+|----------+--------------------------------------------|
+**** Network Programming and Internet Protocols
+|---------+----------------------|
+| [[https://nim-lang.org/docs/openssl.html][openssl]] | Wrapper for OpenSSL. |
+|---------+----------------------|
+**** Regular expressions
+|------+-------------------------------|
+| [[https://nim-lang.org/docs/pcre.html][pcre]] | Wrapper for the PCRE library. |
+|------+-------------------------------|
+**** UNIX specific
+|-------------+----------------------------------------------------------------------------|
+| [[https://nim-lang.org/docs/posix.html][posix]]       | Contains a wrapper for the POSIX standard.                                 |
+| [[https://nim-lang.org/docs/posix_utils.html][posix_utils]] | Contains helpers for the POSIX standard or specialized for Linux and BSDs. |
+|-------------+----------------------------------------------------------------------------|
+**** Windows-specific
+|----------+---------------------------------------------------------|
+| [[https://nim-lang.org/docs/winlean.html][winlean]]  | Contains a wrapper for a small subset of the Win32 API. |
+| [[https://nim-lang.org/docs/registry.html][registry]] | Windows registry support.                               |
+|----------+---------------------------------------------------------|
+
+
 * Codebases
 - library: glsl https://github.com/treeform/shady
 - tool: paint-like https://github.com/mrgaturus/npainter
