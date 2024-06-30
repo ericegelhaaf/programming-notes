@@ -1,34 +1,20 @@
-- Article: https://www.scrapingbee.com/blog/web-scraping-101-with-python/
+#+TITLE: Python's reference
+#+DATE: <2020-11-02 lun>
+
+|------+-------------------------------------------------------------|
+| home | https://www.python.org/                                     |
+| wiki | https://en.wikipedia.org/wiki/Python_(programming_language) |
+|------+-------------------------------------------------------------|
+
+- 1991-
+- Author: Guido van Rossum
 - PEP - Python Enhancement Proposals
-- Tutorial https://github.com/pro1code1hack/Senior-Dev-Roadmap
-- 2023 https://lukeplant.me.uk/blog/posts/pythons-disappointing-superpowers/
-- 2023 https://chriswarrick.com/blog/2023/01/15/how-to-improve-python-packaging/
-  https://lobste.rs/s/gzi3vk/how_improve_python_packaging_why_14_tools
-- python -> c compiler https://mypyc.readthedocs.io/en/latest/
-  https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html
-- https://dropbox.tech/application/our-journey-to-type-checking-4-million-lines-of-python
-- https://gto76.github.io/python-cheatsheet/
-- https://news.ycombinator.com/item?id=29582437
-- James Powell: So you want to be a Python expert? | PyData Seattle 2017
-  https://www.youtube.com/watch?v=cKPlPJyQrt4
-- https://docs.python-guide.org/
-- https://github.com/realpython/python-guide
-- https://github.com/sfermigier/awesome-functional-python
-- https://github.com/Suor/funcy
-- https://www.youtube.com/channel/UCuiPVmvqC0IBpOFhzSG7f8Q
-- https://github.com/crista/exercises-in-programming-style
-- Style
-  https://google.github.io/styleguide/pyguide.html
-  https://peps.python.org/pep-0008/
-- Modules Index https://docs.python.org/3/py-modindex.html
-- Type Hints
-  - PEP 484 – Type Hints https://peps.python.org/pep-0484/
-  - PEP 483 – The Theory of Type Hints https://peps.python.org/pep-0483/
-  - PEP 482 – Literature Overview for Type Hints https://peps.python.org/pep-0482/
 
 * Language
+
 - .format() https://pyformat.info/
 - f"string" https://fstring.help/
+
 ** Changelog
 | year | ver  | usage                                            |  PEP | description                                  |
 |------+------+--------------------------------------------------+------+----------------------------------------------|
@@ -85,344 +71,346 @@
 |------+------+--------------------------------------------------+------+----------------------------------------------|
 ** Standard Library
 - https://docs.python.org/3/library/
+- https://docs.python.org/3/py-modindex.html
 *** Binary Data Services
 
-| struct | Interpret bytes as packed binary data |
-| codecs | Codec registry and base classes       |
+| [[https://docs.python.org/3/library/struct.html][struct]] | Interpret bytes as packed binary data |
+| [[https://docs.python.org/3/library/codecs.html][codecs]] | Codec registry and base classes       |
 
 *** Concurrent Execution
 
-| concurrent                    | The concurrent package                           |
-| concurrent.futures            | Launching parallel tasks                         |
-| contextvars                   | Context Variables                                |
-| multiprocessing               | Process-based parallelism                        |
-| multiprocessing.shared_memory | Shared memory for direct access across processes |
-| queue                         | A synchronized queue class                       |
-| sched                         | Event scheduler                                  |
-| subprocess                    | Subprocess management                            |
-| _thread                       | Low-level threading API                          |
-| threading                     | Thread-based parallelism                         |
+| [[https://docs.python.org/library/concurrent.html][concurrent]]                    | The concurrent package                           |
+| [[https://docs.python.org/3/library/concurrent.futures.html][concurrent.futures]]            | Launching parallel tasks                         |
+| [[https://docs.python.org/3/library/contextvars.html][contextvars]]                   | Context Variables                                |
+| [[https://docs.python.org/3/library/multiprocessing.html][multiprocessing]]               | Process-based parallelism                        |
+| [[https://docs.python.org/3/library/multiprocessing.shared_memory.html][multiprocessing.shared_memory]] | Shared memory for direct access across processes |
+| [[https://docs.python.org/3/library/queue.html][queue]]                         | A synchronized queue class                       |
+| [[https://docs.python.org/3/library/sched.html][sched]]                         | Event scheduler                                  |
+| [[https://docs.python.org/3/library/subprocess.html][subprocess]]                    | Subprocess management                            |
+| [[https://docs.python.org/3/library/_thread.html][_thread]]                       | Low-level threading API                          |
+| [[https://docs.python.org/3/library/threading.html][threading]]                     | Thread-based parallelism                         |
 
 *** Cryptographic Services
 
-| hashlib | Secure hashes and message digests                   |
-| hmac    | Keyed-Hashing for Message Authentication            |
-| secrets | Generate secure random numbers for managing secrets |
-
-*** Custom Python Interpreters
-
-| code   | Interpreter base classes |
-| codeop | Compile Python code      |
+| [[https://docs.python.org/3/library/hashlib.html][hashlib]] | Secure hashes and message digests                   |
+| [[https://docs.python.org/3/library/hmac.html][hmac]]    | Keyed-Hashing for Message Authentication            |
+| [[https://docs.python.org/3/library/secrets.html][secrets]] | Generate secure random numbers for managing secrets |
 
 *** Data Compression and Archiving
 
-| bz2     | Support for bzip2 compression        |
-| gzip    | Support for gzip files               |
-| lzma    | Compression using the LZMA algorithm |
-| tarfile | Read and write tar archive files     |
-| zipfile | Work with ZIP archives               |
-| zlib    | Compression compatible with gzip     |
+| [[https://docs.python.org/3/library/bz2.html][bz2]]     | Support for bzip2 compression        |
+| [[https://docs.python.org/3/library/gzip.html][gzip]]    | Support for gzip files               |
+| [[https://docs.python.org/3/library/lzma.html][lzma]]    | Compression using the LZMA algorithm |
+| [[https://docs.python.org/3/library/tarfile.html][tarfile]] | Read and write tar archive files     |
+| [[https://docs.python.org/3/library/zipfile.html][zipfile]] | Work with ZIP archives               |
+| [[https://docs.python.org/3/library/zlib.html][zlib]]    | Compression compatible with gzip     |
 
 *** Data Persistence
 
-| copyreg | Register pickle support functions         |
-| dbm     | Interfaces to Unix “databases”            |
-| marshal | Internal Python object serialization      |
-| pickle  | Python object serialization               |
-| shelve  | Python object persistence                 |
-| sqlite3 | DB-API 2.0 interface for SQLite databases |
+| [[https://docs.python.org/3/library/copyreg.html][copyreg]] | Register pickle support functions         |
+| [[https://docs.python.org/3/library/dbm.html][dbm]]     | Interfaces to Unix “databases”            |
+| [[https://docs.python.org/3/library/marshal.html][marshal]] | Internal Python object serialization      |
+| [[https://docs.python.org/3/library/pickle.html][pickle]]  | Python object serialization               |
+| [[https://docs.python.org/3/library/shelve.html][shelve]]  | Python object persistence                 |
+| [[https://docs.python.org/3/library/sqlite3.html][sqlite3]] | DB-API 2.0 interface for SQLite databases |
 
 *** Data Types
 
-| array           | Efficient arrays of numeric values                  |
-| bisect          | Array bisection algorithm                           |
-| calendar        | General calendar-related functions                  |
-| collections     | Container datatypes                                 |
-| collections.abc | Abstract Base Classes for Containers                |
-| copy            | Shallow and deep copy operations                    |
-| datetime        | Basic date and time types                           |
-| enum            | Support for enumerations                            |
-| graphlib        | Functionality to operate with graph-like structures |
-| heapq           | Heap queue algorithm                                |
-| pprint          | Data pretty printer                                 |
-| reprlib         | Alternate repr() implementation                     |
-| types           | Dynamic type creation and names for built-in types  |
-| weakref         | Weak references                                     |
-| zoneinfo        | IANA time zone support                              |
-
-*** Debugging and Profiling
-
-| bdb          | Debugger framework                            |
-| faulthandler | Dump the Python traceback                     |
-| pdb          | The Python Debugger                           |
-| timeit       | Measure execution time of small code snippets |
-| trace        | Trace or track Python statement execution     |
-| tracemalloc  | Trace memory allocations                      |
-
-*** Development Tools
-
-| typing                        | Support for type hints                                |
-| pydoc                         | Documentation generator and online help system        |
-| doctest                       | Test interactive Python examples                      |
-| unittest                      | Unit testing framework                                |
-| unittest.mock                 | mock object library                                   |
-| unittest.mock                 | getting started                                       |
-| 2to3                          | Automated Python 2 to 3 code translation              |
-| test                          | Regression tests package for Python                   |
-| test.support                  | Utilities for the Python test suite                   |
-| test.support.socket_helper    | Utilities for socket tests                            |
-| test.support.script_helper    | Utilities for the Python execution tests              |
-| test.support.bytecode_helper  | Support tools for testing correct bytecode generation |
-| test.support.threading_helper | Utilities for threading tests                         |
-| test.support.os_helper        | Utilities for os tests                                |
-| test.support.import_helper    | Utilities for import tests                            |
-| test.support.warnings_helper  | Utilities for warnings tests                          |
+| [[https://docs.python.org/3/library/array.html][array]]           | Efficient arrays of numeric values                  |
+| [[https://docs.python.org/3/library/bisect.html][bisect]]          | Array bisection algorithm                           |
+| [[https://docs.python.org/3/library/calendar.html][calendar]]        | General calendar-related functions                  |
+| [[https://docs.python.org/3/library/collections.html][collections]]     | Container datatypes                                 |
+| [[https://docs.python.org/3/library/collections.abc.html][collections.abc]] | Abstract Base Classes for Containers                |
+| [[https://docs.python.org/3/library/copy.html][copy]]            | Shallow and deep copy operations                    |
+| [[https://docs.python.org/3/library/datetime.html][datetime]]        | Basic date and time types                           |
+| [[https://docs.python.org/3/library/enum.html][enum]]            | Support for enumerations                            |
+| [[https://docs.python.org/3/library/graphlib.html][graphlib]]        | Functionality to operate with graph-like structures |
+| [[https://docs.python.org/3/library/heapq.html][heapq]]           | Heap queue algorithm                                |
+| [[https://docs.python.org/3/library/pprint.html][pprint]]          | Data pretty printer                                 |
+| [[https://docs.python.org/3/library/reprlib.html][reprlib]]         | Alternate repr() implementation                     |
+| [[https://docs.python.org/3/library/types.html][types]]           | Dynamic type creation and names for built-in types  |
+| [[https://docs.python.org/3/library/weakref.html][weakref]]         | Weak references                                     |
+| [[https://docs.python.org/3/library/zoneinfo.html][zoneinfo]]        | IANA time zone support                              |
 
 *** File and Directory Access
 
-| filecmp   | File and Directory Comparisons                 |
-| fileinput | Iterate over lines from multiple input streams |
-| fnmatch   | Unix filename pattern matching                 |
-| glob      | Unix style pathname pattern expansion          |
-| linecache | Random access to text lines                    |
-| os.path   | Common pathname manipulations                  |
-| pathlib   | Object-oriented filesystem paths               |
-| shutil    | High-level file operations                     |
-| stat      | Interpreting stat() results                    |
-| tempfile  | Generate temporary files and directories       |
+| [[https://docs.python.org/3/library/filecmp.html][filecmp]]   | File and Directory Comparisons                 |
+| [[https://docs.python.org/3/library/fileinput.html][fileinput]] | Iterate over lines from multiple input streams |
+| [[https://docs.python.org/3/library/fnmatch.html][fnmatch]]   | Unix filename pattern matching                 |
+| [[https://docs.python.org/3/library/glob.html][glob]]      | Unix style pathname pattern expansion          |
+| [[https://docs.python.org/3/library/linecache.html][linecache]] | Random access to text lines                    |
+| [[https://docs.python.org/3/library/os.path.html][os.path]]   | Common pathname manipulations                  |
+| [[https://docs.python.org/3/library/pathlib.html][pathlib]]   | Object-oriented filesystem paths               |
+| [[https://docs.python.org/3/library/shutil.html][shutil]]    | High-level file operations                     |
+| [[https://docs.python.org/3/library/stat.html][stat]]      | Interpreting stat() results                    |
+| [[https://docs.python.org/3/library/tempfile.html][tempfile]]  | Generate temporary files and directories       |
 
 *** File Formats
 
-| csv          | CSV File Reading and Writing          |
-| configparser | Configuration file parser             |
-| tomllib      | Parse TOML files                      |
-| netrc        | netrc file processing                 |
-| plistlib     | Generate and parse Apple .plist files |
+| [[https://docs.python.org/3/library/csv.html][csv]]          | CSV File Reading and Writing          |
+| [[https://docs.python.org/3/library/configparser.html][configparser]] | Configuration file parser             |
+| [[https://docs.python.org/3/library/tomllib.html][tomllib]]      | Parse TOML files                      |
+| [[https://docs.python.org/3/library/netrc.html][netrc]]        | netrc file processing                 |
+| [[https://docs.python.org/3/library/plistlib.html][plistlib]]     | Generate and parse Apple .plist files |
 
 *** Functional Programming Modules
 
-| itertools | Functions creating iterators for efficient looping        |
-| functools | Higher-order functions and operations on callable objects |
-| operator  | Standard operators as functions                           |
+| [[https://docs.python.org/3/library/itertools.html][itertools]] | Functions creating iterators for efficient looping        |
+| [[https://docs.python.org/3/library/functools.html][functools]] | Higher-order functions and operations on callable objects |
+| [[https://docs.python.org/3/library/operator.html][operator]]  | Standard operators as functions                           |
 
 *** Generic Operating System Services
 
-| argparse         | Parser for command-line options, arguments and sub-commands |
-| ctypes           | A foreign function library for Python                       |
-| curses           | Terminal handling for character-cell displays               |
-| curses.ascii     | Utilities for ASCII characters                              |
-| curses.panel     | A panel stack extension for curses                          |
-| curses.textpad   | Text input widget for curses programs                       |
-| errno            | Standard errno system symbols                               |
-| getopt           | C-style parser for command line options                     |
-| getpass          | Portable password input                                     |
-| io               | Core tools for working with streams                         |
-| logging          | Logging facility for Python                                 |
-| logging.config   | Logging configuration                                       |
-| logging.handlers | Logging handlers                                            |
-| os               | Miscellaneous operating system interfaces                   |
-| platform         | Access to underlying platform’s identifying data            |
-| time             | Time access and conversions                                 |
+| [[https://docs.python.org/3/library/argparse.html][argparse]]         | Parser for command-line options, arguments and sub-commands |
+| [[https://docs.python.org/3/library/ctypes.html][ctypes]]           | A foreign function library for Python                       |
+| [[https://docs.python.org/3/library/curses.html][curses]]           | Terminal handling for character-cell displays               |
+| [[https://docs.python.org/3/library/curses.ascii.html][curses.ascii]]     | Utilities for ASCII characters                              |
+| [[https://docs.python.org/3/library/curses.panel.html][curses.panel]]     | A panel stack extension for curses                          |
+| [[https://docs.python.org/3/library/curses.textpad.html][curses.textpad]]   | Text input widget for curses programs                       |
+| [[https://docs.python.org/3/library/errno.html][errno]]            | Standard errno system symbols                               |
+| [[https://docs.python.org/3/library/getopt.html][getopt]]           | C-style parser for command line options                     |
+| [[https://docs.python.org/3/library/getpass.html][getpass]]          | Portable password input                                     |
+| [[https://docs.python.org/3/library/io.html][io]]               | Core tools for working with streams                         |
+| [[https://docs.python.org/3/library/logging.html][logging]]          | Logging facility for Python                                 |
+| [[https://docs.python.org/3/library/logging.config.html][logging.config]]   | Logging configuration                                       |
+| [[https://docs.python.org/3/library/logging.handlers.html][logging.handlers]] | Logging handlers                                            |
+| [[https://docs.python.org/3/library/os.html][os]]               | Miscellaneous operating system interfaces                   |
+| [[https://docs.python.org/3/library/platform.html][platform]]         | Access to underlying platform’s identifying data            |
+| [[https://docs.python.org/3/library/time.html][time]]             | Time access and conversions                                 |
 
 *** Graphical User Interfaces with Tk
 
-| tkinter              | Python interface to Tcl/Tk |
-| tkinter.colorchooser | Color choosing dialog      |
-| tkinter.font         | Tkinter font wrapper       |
-| tkinter.messagebox   | Tkinter message prompts    |
-| tkinter.scrolledtext | Scrolled Text Widget       |
-| tkinter.dnd          | Drag and drop support      |
-| tkinter.ttk          | Tk themed widgets          |
-| tkinter.tix          | Extension widgets for Tk   |
+| [[https://docs.python.org/3/library/tkinter.html][tkinter]]              | Python interface to Tcl/Tk |
+| [[https://docs.python.org/3/library/tkinter.colorchooser.html][tkinter.colorchooser]] | Color choosing dialog      |
+| [[https://docs.python.org/3/library/tkinter.font.html][tkinter.font]]         | Tkinter font wrapper       |
+| [[https://docs.python.org/3/library/tkinter.messagebox.html][tkinter.messagebox]]   | Tkinter message prompts    |
+| [[https://docs.python.org/3/library/tkinter.scrolledtext.html][tkinter.scrolledtext]] | Scrolled Text Widget       |
+| [[https://docs.python.org/3/library/tkinter.dnd.html][tkinter.dnd]]          | Drag and drop support      |
+| [[https://docs.python.org/3/library/tkinter.ttk.html][tkinter.ttk]]          | Tk themed widgets          |
+| [[https://docs.python.org/3/library/tkinter.tix.html][tkinter.tix]]          | Extension widgets for Tk   |
 
 *** Importing Modules
 
-| importlib    | The implementation of import          |
-| modulefinder | Find modules used by a script         |
-| pkgutil      | Package extension utility             |
-| runpy        | Locating and executing Python modules |
-| zipimport    | Import modules from Zip archives      |
+| [[https://docs.python.org/3/library/importlib.html][importlib]]    | The implementation of import          |
+| [[https://docs.python.org/3/library/modulefinder.html][modulefinder]] | Find modules used by a script         |
+| [[https://docs.python.org/3/library/pkgutil.html][pkgutil]]      | Package extension utility             |
+| [[https://docs.python.org/3/library/runpy.html][runpy]]        | Locating and executing Python modules |
+| [[https://docs.python.org/3/library/zipimport.html][zipimport]]    | Import modules from Zip archives      |
 
 *** Internationalization
 
-| gettext | Multilingual internationalization services |
-| locale  | Internationalization services              |
+| [[https://docs.python.org/3/library/gettext.html][gettext]] | Multilingual internationalization services |
+| [[https://docs.python.org/3/library/locale.html][locale]]  | Internationalization services              |
 
 *** Internet Data Handling
 
-| email     | An email and MIME handling package            |
-| json      | JSON encoder and decoder                      |
-| mailbox   | Manipulate mailboxes in various formats       |
-| mimetypes | Map filenames to MIME types                   |
-| base64    | Base16, Base32, Base64, Base85 Data Encodings |
-| binascii  | Convert between binary and ASCII              |
-| quopri    | Encode and decode MIME quoted-printable data  |
+| [[https://docs.python.org/3/library/binascii.html][binascii]]  | Convert between binary and ASCII              |
+| [[https://docs.python.org/3/library/base64.html][base64]]    | Base16, Base32, Base64, Base85 Data Encodings |
+| [[https://docs.python.org/3/library/email.html][email]]     | An email and MIME handling package            |
+| [[https://docs.python.org/3/library/json.html][json]]      | JSON encoder and decoder                      |
+| [[https://docs.python.org/3/library/mailbox.html][mailbox]]   | Manipulate mailboxes in various formats       |
+| [[https://docs.python.org/3/library/mimetypes.html][mimetypes]] | Map filenames to MIME types                   |
+| [[https://docs.python.org/3/library/quopri.html][quopri]]    | Encode and decode MIME quoted-printable data  |
 
 *** Internet Protocols and Support
 
-| ftplib             | FTP protocol client                         |
-| http               | HTTP modules                                |
-| http.client        | HTTP protocol client                        |
-| http.cookiejar     | Cookie handling for HTTP clients            |
-| http.cookies       | HTTP state management                       |
-| http.server        | HTTP servers                                |
-| imaplib            | IMAP4 protocol client                       |
-| ipaddress          | IPv4/IPv6 manipulation library              |
-| poplib             | POP3 protocol client                        |
-| smtplib            | SMTP protocol client                        |
-| socketserver       | A framework for network servers             |
-| urllib             | URL handling modules                        |
-| urllib.error       | Exception classes raised by urllib.request  |
-| urllib.parse       | Parse URLs into components                  |
-| urllib.request     | Extensible library for opening URLs         |
-| urllib.response    | Response classes used by urllib             |
-| urllib.robotparser | Parser for robots.txt                       |
-| uuid               | UUID objects according to RFC 4122          |
-| webbrowser         | Convenient web-browser controller           |
-| wsgiref            | WSGI Utilities and Reference Implementation |
-| xmlrpc             | XMLRPC server and client modules            |
-| xmlrpc.client      | XML-RPC client access                       |
-| xmlrpc.server      | Basic XML-RPC servers                       |
-
-*** MS Windows Specific Services
-
-| msvcrt   | Useful routines from the MS VC++ runtime |
-| winreg   | Windows registry access                  |
-| winsound | Sound-playing interface for Windows      |
+| [[https://docs.python.org/3/library/ftplib.html][ftplib]]             | FTP protocol client                         |
+| [[https://docs.python.org/3/library/http.html][http]]               | HTTP modules                                |
+| [[https://docs.python.org/3/library/http.client.html][http.client]]        | HTTP protocol client                        |
+| [[https://docs.python.org/3/library/http.cookiejar.html][http.cookiejar]]     | Cookie handling for HTTP clients            |
+| [[https://docs.python.org/3/library/http.cookies.html][http.cookies]]       | HTTP state management                       |
+| [[https://docs.python.org/3/library/http.server.html][http.server]]        | HTTP servers                                |
+| [[https://docs.python.org/3/library/imaplib.html][imaplib]]            | IMAP4 protocol client                       |
+| [[https://docs.python.org/3/library/ipaddress.html][ipaddress]]          | IPv4/IPv6 manipulation library              |
+| [[https://docs.python.org/3/library/poplib.html][poplib]]             | POP3 protocol client                        |
+| [[https://docs.python.org/3/library/smtplib.html][smtplib]]            | SMTP protocol client                        |
+| [[https://docs.python.org/3/library/socketserver.html][socketserver]]       | A framework for network servers             |
+| [[https://docs.python.org/3/library/urllib.html][urllib]]             | URL handling modules                        |
+| [[https://docs.python.org/3/library/urllib.error.html][urllib.error]]       | Exception classes raised by urllib.request  |
+| [[https://docs.python.org/3/library/urllib.parse.html][urllib.parse]]       | Parse URLs into components                  |
+| [[https://docs.python.org/3/library/urllib.request.html][urllib.request]]     | Extensible library for opening URLs         |
+| [[https://docs.python.org/3/library/urllib.response.html][urllib.response]]    | Response classes used by urllib             |
+| [[https://docs.python.org/3/library/urllib.robotparser.html][urllib.robotparser]] | Parser for robots.txt                       |
+| [[https://docs.python.org/3/library/uuid.html][uuid]]               | UUID objects according to RFC 4122          |
+| [[https://docs.python.org/3/library/webbrowser.html][webbrowser]]         | Convenient web-browser controller           |
+| [[https://docs.python.org/3/library/wsgiref.html][wsgiref]]            | WSGI Utilities and Reference Implementation |
+| [[https://docs.python.org/3/library/xmlrpc.html][xmlrpc]]             | XMLRPC server and client modules            |
+| [[https://docs.python.org/3/library/xmlrpc.client.html][xmlrpc.client]]      | XML-RPC client access                       |
+| [[https://docs.python.org/3/library/xmlrpc.server.html][xmlrpc.server]]      | Basic XML-RPC servers                       |
 
 *** Multimedia Services
 
-| wave     | Read and write WAV files          |
-| colorsys | Conversions between color systems |
+| [[https://docs.python.org/3/library/wave.html][wave]]     | Read and write WAV files          |
+| [[https://docs.python.org/3/library/colorsys.html][colorsys]] | Conversions between color systems |
 
 *** Networking and Interprocess Communication
 
-| asyncio   | Asynchronous I/O                     |
-| socket    | Low-level networking interface       |
-| ssl       | TLS/SSL wrapper for socket objects   |
-| select    | Waiting for I/O completion           |
-| selectors | High-level I/O multiplexing          |
-| signal    | Set handlers for asynchronous events |
-| mmap      | Memory-mapped file support           |
+| [[https://docs.python.org/3/library/asyncio.html][asyncio]]   | Asynchronous I/O                     |
+| [[https://docs.python.org/3/library/socket.html][socket]]    | Low-level networking interface       |
+| [[https://docs.python.org/3/library/ssl.html][ssl]]       | TLS/SSL wrapper for socket objects   |
+| [[https://docs.python.org/3/library/select.html][select]]    | Waiting for I/O completion           |
+| [[https://docs.python.org/3/library/selectors.html][selectors]] | High-level I/O multiplexing          |
+| [[https://docs.python.org/3/library/signal.html][signal]]    | Set handlers for asynchronous events |
+| [[https://docs.python.org/3/library/mmap.html][mmap]]      | Memory-mapped file support           |
 
 *** Numeric and Mathematical Modules
 
-| cmath      | Mathematical functions for complex numbers        |
-| decimal    | Decimal fixed point and floating point arithmetic |
-| fractions  | Rational numbers                                  |
-| math       | Mathematical functions                            |
-| numbers    | Numeric abstract base classes                     |
-| random     | Generate pseudo-random numbers                    |
-| statistics | Mathematical statistics functions                 |
+| [[https://docs.python.org/3/library/cmath.html][cmath]]      | Mathematical functions for complex numbers        |
+| [[https://docs.python.org/3/library/decimal.html][decimal]]    | Decimal fixed point and floating point arithmetic |
+| [[https://docs.python.org/3/library/fractions.html][fractions]]  | Rational numbers                                  |
+| [[https://docs.python.org/3/library/math.html][math]]       | Mathematical functions                            |
+| [[https://docs.python.org/3/library/numbers.html][numbers]]    | Numeric abstract base classes                     |
+| [[https://docs.python.org/3/library/random.html][random]]     | Generate pseudo-random numbers                    |
+| [[https://docs.python.org/3/library/statistics.html][statistics]] | Mathematical statistics functions                 |
 
 *** Program Frameworks
 
-| turtle | Turtle graphics                                |
-| cmd    | Support for line-oriented command interpreters |
-| shlex  | Simple lexical analysis                        |
-
-*** Python Language Services
-
-| ast         | Abstract Syntax Trees                  |
-| symtable    | Access to the compiler’s symbol tables |
-| token       | Constants used with Python parse trees |
-| keyword     | Testing for Python keywords            |
-| tokenize    | Tokenizer for Python source            |
-| tabnanny    | Detection of ambiguous indentation     |
-| pyclbr      | Python module browser support          |
-| py_compile  | Compile Python source files            |
-| compileall  | Byte-compile Python libraries          |
-| dis         | Disassembler for Python bytecode       |
-| pickletools | Tools for pickle developers            |
+| [[https://docs.python.org/3/library/turtle.html][turtle]] | Turtle graphics                                |
+| [[https://docs.python.org/3/library/cmd.html][cmd]]    | Support for line-oriented command interpreters |
+| [[https://docs.python.org/3/library/shlex.html][shlex]]  | Simple lexical analysis                        |
 
 *** Python Runtime Services
 
-| abc         | Abstract Base Classes                                |
-| atexit      | Exit handlers                                        |
-| builtins    | Built-in objects                                     |
-| contextlib  | Utilities for with-statement contexts                |
-| dataclasses | Data Classes                                         |
-| __future__  | Future statement definitions                         |
-| gc          | Garbage Collector interface                          |
-| inspect     | Inspect live objects                                 |
-| __main__    | Top-level code environment                           |
-| site        | Site-specific configuration hook                     |
-| sys         | System-specific parameters and functions             |
-| sysconfig   | Provide access to Python’s configuration information |
-| traceback   | Print or retrieve a stack traceback                  |
-| warnings    | Warning control                                      |
-
-*** Software Packaging and Distribution
-
-| distutils | Building and installing Python modules |
-| ensurepip | Bootstrapping the pip installer        |
-| venv      | Creation of virtual environments       |
-| zipapp    | Manage executable Python zip archives  |
+| [[https://docs.python.org/3/library/abc.html][abc]]         | Abstract Base Classes                                |
+| [[https://docs.python.org/3/library/atexit.html][atexit]]      | Exit handlers                                        |
+| [[https://docs.python.org/3/library/builtins.html][builtins]]    | Built-in objects                                     |
+| [[https://docs.python.org/3/library/contextlib.html][contextlib]]  | Utilities for with-statement contexts                |
+| [[https://docs.python.org/3/library/dataclasses.html][dataclasses]] | Data Classes                                         |
+| [[https://docs.python.org/3/library/__future__.html][__future__]]  | Future statement definitions                         |
+| [[https://docs.python.org/3/library/gc.html][gc]]          | Garbage Collector interface                          |
+| [[https://docs.python.org/3/library/inspect.html][inspect]]     | Inspect live objects                                 |
+| [[https://docs.python.org/3/library/__main__.html][__main__]]    | Top-level code environment                           |
+| [[https://docs.python.org/3/library/site.html][site]]        | Site-specific configuration hook                     |
+| [[https://docs.python.org/3/library/sys.html][sys]]         | System-specific parameters and functions             |
+| [[https://docs.python.org/3/library/sysconfig.html][sysconfig]]   | Provide access to Python’s configuration information |
+| [[https://docs.python.org/3/library/traceback.html][traceback]]   | Print or retrieve a stack traceback                  |
+| [[https://docs.python.org/3/library/warnings.html][warnings]]    | Warning control                                      |
 
 *** Structured Markup Processing Tools
 
-| html                  | HyperText Markup Language support      |
-| html.parser           | Simple HTML and XHTML parser           |
-| html.entities         | Definitions of HTML general entities   |
-| xml.etree.ElementTree | The ElementTree XML API                |
-| xml.dom               | The Document Object Model API          |
-| xml.dom.minidom       | Minimal DOM implementation             |
-| xml.dom.pulldom       | Support for building partial DOM trees |
-| xml.sax               | Support for SAX2 parsers               |
-| xml.sax.handler       | Base classes for SAX handlers          |
-| xml.sax.saxutils      | SAX Utilities                          |
-| xml.sax.xmlreader     | Interface for XML parsers              |
-| xml.parsers.expat     | Fast XML parsing using Expat           |
+| [[https://docs.python.org/3/library/html.html][html]]                  | HyperText Markup Language support      |
+| [[https://docs.python.org/3/library/html.parser.html][html.parser]]           | Simple HTML and XHTML parser           |
+| [[https://docs.python.org/3/library/html.entities.html][html.entities]]         | Definitions of HTML general entities   |
+| [[https://docs.python.org/3/library/xml.etree.ElementTree.html][xml.etree.ElementTree]] | The ElementTree XML API                |
+| [[https://docs.python.org/3/library/xml.dom.html][xml.dom]]               | The Document Object Model API          |
+| [[https://docs.python.org/3/library/xml.dom.minidom.html][xml.dom.minidom]]       | Minimal DOM implementation             |
+| [[https://docs.python.org/3/library/xml.dom.pulldom.html][xml.dom.pulldom]]       | Support for building partial DOM trees |
+| [[https://docs.python.org/3/library/xml.sax.html][xml.sax]]               | Support for SAX2 parsers               |
+| [[https://docs.python.org/3/library/xml.sax.handler.html][xml.sax.handler]]       | Base classes for SAX handlers          |
+| [[https://docs.python.org/3/library/xml.sax.saxutils.html][xml.sax.saxutils]]      | SAX Utilities                          |
+| [[https://docs.python.org/3/library/xml.sax.xmlreader.html][xml.sax.xmlreader]]     | Interface for XML parsers              |
+| [[https://docs.python.org/3/library/xml.parsers.expat.html][xml.parsers.expat]]     | Fast XML parsing using Expat           |
 
 *** Superseded Modules
 
-| aifc        | Read and write AIFF and AIFC files           |
-| asynchat    | Asynchronous socket command/response handler |
-| asyncore    | Asynchronous socket handler                  |
-| audioop     | Manipulate raw audio data                    |
-| cgi         | Common Gateway Interface support             |
-| cgitb       | Traceback manager for CGI scripts            |
-| chunk       | Read IFF chunked data                        |
-| crypt       | Function to check Unix passwords             |
-| imghdr      | Determine the type of an image               |
-| imp         | Access the import internals                  |
-| mailcap     | Mailcap file handling                        |
-| msilib      | Read and write Microsoft Installer files     |
-| nis         | Interface to Sun’s NIS (Yellow Pages)        |
-| nntplib     | NNTP protocol client                         |
-| optparse    | Parser for command line options              |
-| ossaudiodev | Access to OSS-compatible audio devices       |
-| pipes       | Interface to shell pipelines                 |
-| smtpd       | SMTP Server                                  |
-| sndhdr      | Determine type of sound file                 |
-| spwd        | The shadow password database                 |
-| sunau       | Read and write Sun AU files                  |
-| telnetlib   | Telnet client                                |
-| uu          | Encode and decode uuencode files             |
-| xdrlib      | Encode and decode XDR data                   |
+| [[https://docs.python.org/3/library/aifc.html][aifc]]        | Read and write AIFF and AIFC files           |
+| [[https://docs.python.org/3/library/asynchat.html][asynchat]]    | Asynchronous socket command/response handler |
+| [[https://docs.python.org/3/library/asyncore.html][asyncore]]    | Asynchronous socket handler                  |
+| [[https://docs.python.org/3/library/audioop.html][audioop]]     | Manipulate raw audio data                    |
+| [[https://docs.python.org/3/library/cgi.html][cgi]]         | Common Gateway Interface support             |
+| [[https://docs.python.org/3/library/cgitb.html][cgitb]]       | Traceback manager for CGI scripts            |
+| [[https://docs.python.org/3/library/chunk.html][chunk]]       | Read IFF chunked data                        |
+| [[https://docs.python.org/3/library/crypt.html][crypt]]       | Function to check Unix passwords             |
+| [[https://docs.python.org/3/library/imghdr.html][imghdr]]      | Determine the type of an image               |
+| [[https://docs.python.org/3/library/imp.html][imp]]         | Access the import internals                  |
+| [[https://docs.python.org/3/library/mailcap.html][mailcap]]     | Mailcap file handling                        |
+| [[https://docs.python.org/3/library/msilib.html][msilib]]      | Read and write Microsoft Installer files     |
+| [[https://docs.python.org/3/library/nis.html][nis]]         | Interface to Sun’s NIS (Yellow Pages)        |
+| [[https://docs.python.org/3/library/nntplib.html][nntplib]]     | NNTP protocol client                         |
+| [[https://docs.python.org/3/library/optparse.html][optparse]]    | Parser for command line options              |
+| [[https://docs.python.org/3/library/ossaudiodev.html][ossaudiodev]] | Access to OSS-compatible audio devices       |
+| [[https://docs.python.org/3/library/pipes.html][pipes]]       | Interface to shell pipelines                 |
+| [[https://docs.python.org/3/library/smtpd.html][smtpd]]       | SMTP Server                                  |
+| [[https://docs.python.org/3/library/sndhdr.html][sndhdr]]      | Determine type of sound file                 |
+| [[https://docs.python.org/3/library/spwd.html][spwd]]        | The shadow password database                 |
+| [[https://docs.python.org/3/library/sunau.html][sunau]]       | Read and write Sun AU files                  |
+| [[https://docs.python.org/3/library/telnetlib.html][telnetlib]]   | Telnet client                                |
+| [[https://docs.python.org/3/library/uu.html][uu]]          | Encode and decode uuencode files             |
+| [[https://docs.python.org/3/library/xdrlib.html][xdrlib]]      | Encode and decode XDR data                   |
 
 *** Text Processing Services
 
-| difflib     | Helpers for computing deltas         |
-| re          | Regular expression operations        |
-| readline    | GNU readline interface               |
-| rlcompleter | Completion function for GNU readline |
-| string      | Common string operations             |
-| stringprep  | Internet String Preparation          |
-| textwrap    | Text wrapping and filling            |
-| unicodedata | Unicode Database                     |
+| [[https://docs.python.org/3/library/difflib.html][difflib]]     | Helpers for computing deltas         |
+| [[https://docs.python.org/3/library/re.html][re]]          | Regular expression operations        |
+| [[https://docs.python.org/3/library/readline.html][readline]]    | GNU readline interface               |
+| [[https://docs.python.org/3/library/rlcompleter.html][rlcompleter]] | Completion function for GNU readline |
+| [[https://docs.python.org/3/library/string.html][string]]      | Common string operations             |
+| [[https://docs.python.org/3/library/stringprep.html][stringprep]]  | Internet String Preparation          |
+| [[https://docs.python.org/3/library/textwrap.html][textwrap]]    | Text wrapping and filling            |
+| [[https://docs.python.org/3/library/unicodedata.html][unicodedata]] | Unicode Database                     |
 
 *** Unix Specific Services
 
-| posix    | The most common POSIX system calls |
-| pwd      | The password database              |
-| grp      | The group database                 |
-| termios  | POSIX style tty control            |
-| tty      | Terminal control functions         |
-| pty      | Pseudo-terminal utilities          |
-| fcntl    | The fcntl and ioctl system calls   |
-| resource | Resource usage information         |
-| syslog   | Unix syslog library routines       |
+| +[[https://docs.python.org/3/library/posix.html][posix]]+  | The most common POSIX system calls |
+| [[https://docs.python.org/3/library/pwd.html][pwd]]      | The password database              |
+| [[https://docs.python.org/3/library/grp.html][grp]]      | The group database                 |
+| [[https://docs.python.org/3/library/termios.html][termios]]  | POSIX style tty control            |
+| [[https://docs.python.org/3/library/tty.html][tty]]      | Terminal control functions         |
+| [[https://docs.python.org/3/library/pty.html][pty]]      | Pseudo-terminal utilities          |
+| [[https://docs.python.org/3/library/fcntl.html][fcntl]]    | The fcntl and ioctl system calls   |
+| [[https://docs.python.org/3/library/resource.html][resource]] | Resource usage information         |
+| [[https://docs.python.org/3/library/syslog.html][syslog]]   | Unix syslog library routines       |
+
+*** MS Windows Specific Services
+
+| [[https://docs.python.org/3/library/msvcrt.html][msvcrt]]   | Useful routines from the MS VC++ runtime |
+| [[https://docs.python.org/3/library/winreg.html][winreg]]   | Windows registry access                  |
+| [[https://docs.python.org/3/library/winsound.html][winsound]] | Sound-playing interface for Windows      |
+
+*** dev / test / debug
+**** Custom Python Interpreters
+
+| [[https://docs.python.org/3/library/code.html][code]]   | Interpreter base classes |
+| [[https://docs.python.org/3/library/codeop.html][codeop]] | Compile Python code      |
+
+**** Development Tools
+
+| [[https://docs.python.org/3/library/typing.html][typing]]                        | Support for type hints                                |
+| [[https://docs.python.org/3/library/pydoc.html][pydoc]]                         | Documentation generator and online help system        |
+| [[https://docs.python.org/3/library/doctest.html][doctest]]                       | Test interactive Python examples                      |
+| [[https://docs.python.org/3/library/unittest.html][unittest]]                      | Unit testing framework                                |
+| [[https://docs.python.org/3/library/unittest.mock.html][unittest.mock]]                 | mock object library                                   |
+| [[https://docs.python.org/3/library/unittest.mock.html][unittest.mock]]                 | getting started                                       |
+| [[https://docs.python.org/3/library/2to3.html][2to3]]                          | Automated Python 2 to 3 code translation              |
+| [[https://docs.python.org/3/library/test.html][test]]                          | Regression tests package for Python                   |
+| [[https://docs.python.org/3/library/test.support.html][test.support]]                  | Utilities for the Python test suite                   |
+| [[https://docs.python.org/3/library/test.support.socket_helper.html][test.support.socket_helper]]    | Utilities for socket tests                            |
+| [[https://docs.python.org/3/library/test.support.script_helper.html][test.support.script_helper]]    | Utilities for the Python execution tests              |
+| [[https://docs.python.org/3/library/test.support.bytecode_helper.html][test.support.bytecode_helper]]  | Support tools for testing correct bytecode generation |
+| [[https://docs.python.org/3/library/test.support.threading_helper.html][test.support.threading_helper]] | Utilities for threading tests                         |
+| [[https://docs.python.org/3/library/test.support.os_helper.html][test.support.os_helper]]        | Utilities for os tests                                |
+| [[https://docs.python.org/3/library/test.support.import_helper.html][test.support.import_helper]]    | Utilities for import tests                            |
+| [[https://docs.python.org/3/library/test.support.warnings_helper.html][test.support.warnings_helper]]  | Utilities for warnings tests                          |
+
+**** Debugging and Profiling
+
+| [[https://docs.python.org/3/library/bdb.html][bdb]]          | Debugger framework                            |
+| [[https://docs.python.org/3/library/faulthandler.html][faulthandler]] | Dump the Python traceback                     |
+| [[https://docs.python.org/3/library/pdb.html][pdb]]          | The Python Debugger                           |
+| [[https://docs.python.org/3/library/timeit.html][timeit]]       | Measure execution time of small code snippets |
+| [[https://docs.python.org/3/library/trace.html][trace]]        | Trace or track Python statement execution     |
+| [[https://docs.python.org/3/library/tracemalloc.html][tracemalloc]]  | Trace memory allocations                      |
+
+**** Python Language Services
+
+| [[https://docs.python.org/3/library/ast.html][ast]]         | Abstract Syntax Trees                  |
+| [[https://docs.python.org/3/library/symtable.html][symtable]]    | Access to the compiler’s symbol tables |
+| [[https://docs.python.org/3/library/token.html][token]]       | Constants used with Python parse trees |
+| [[https://docs.python.org/3/library/keyword.html][keyword]]     | Testing for Python keywords            |
+| [[https://docs.python.org/3/library/tokenize.html][tokenize]]    | Tokenizer for Python source            |
+| [[https://docs.python.org/3/library/tabnanny.html][tabnanny]]    | Detection of ambiguous indentation     |
+| [[https://docs.python.org/3/library/pyclbr.html][pyclbr]]      | Python module browser support          |
+| [[https://docs.python.org/3/library/py_compile.html][py_compile]]  | Compile Python source files            |
+| [[https://docs.python.org/3/library/compileall.html][compileall]]  | Byte-compile Python libraries          |
+| [[https://docs.python.org/3/library/dis.html][dis]]         | Disassembler for Python bytecode       |
+| [[https://docs.python.org/3/library/pickletools.html][pickletools]] | Tools for pickle developers            |
+
+**** Software Packaging and Distribution
+
+| [[https://docs.python.org/3/library/distutils.html][distutils]] | Building and installing Python modules |
+| [[https://docs.python.org/3/library/ensurepip.html][ensurepip]] | Bootstrapping the pip installer        |
+| [[https://docs.python.org/3/library/venv.html][venv]]      | Creation of virtual environments       |
+| [[https://docs.python.org/3/library/zipapp.html][zipapp]]    | Manage executable Python zip archives  |
 
 ** Decorators (@)
  | @classmethod | def   |
@@ -463,3 +451,10 @@ https://docs.python.org/3/reference/datamodel.html#object.__setitem__
 | __add__()          | other    |           |           | emulating numeric types        |
 | __sub__()          | other    |           |           |                                |
 |--------------------+----------+-----------+-----------+--------------------------------|
+** Style
+- https://google.github.io/styleguide/pyguide.html
+- https://peps.python.org/pep-0008/
+** Type Hints
+- PEP 484 – Type Hints https://peps.python.org/pep-0484/
+- PEP 483 – The Theory of Type Hints https://peps.python.org/pep-0483/
+- PEP 482 – Literature Overview for Type Hints https://peps.python.org/pep-0482/

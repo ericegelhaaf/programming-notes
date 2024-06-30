@@ -1,3 +1,23 @@
+- https://dropbox.tech/application/our-journey-to-type-checking-4-million-lines-of-python
+- Article: https://www.scrapingbee.com/blog/web-scraping-101-with-python/
+- Tutorial https://github.com/pro1code1hack/Senior-Dev-Roadmap
+- 2023 https://lukeplant.me.uk/blog/posts/pythons-disappointing-superpowers/
+- 2023 https://chriswarrick.com/blog/2023/01/15/how-to-improve-python-packaging/
+  https://lobste.rs/s/gzi3vk/how_improve_python_packaging_why_14_tools
+- python -> c compiler https://mypyc.readthedocs.io/en/latest/
+  https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html
+- https://gto76.github.io/python-cheatsheet/
+- https://news.ycombinator.com/item?id=29582437
+- James Powell: So you want to be a Python expert? | PyData Seattle 2017
+  https://www.youtube.com/watch?v=cKPlPJyQrt4
+- https://docs.python-guide.org/
+- https://github.com/realpython/python-guide
+- https://github.com/sfermigier/awesome-functional-python
+- https://github.com/Suor/funcy
+- https://www.youtube.com/channel/UCuiPVmvqC0IBpOFhzSG7f8Q
+- https://github.com/crista/exercises-in-programming-style
+- Modules Index https://docs.python.org/3/py-modindex.html
+
 - https://github.com/satwikkansal/wtfpython
 - Packaging
   - 2022 https://usrme.xyz/posts/why-i-moved-away-from-poetry-for-python/
