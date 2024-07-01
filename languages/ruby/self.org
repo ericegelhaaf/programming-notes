@@ -49,8 +49,8 @@
 ** variables
 - the "nouns" of Ruby
 *** global variables
-https://www.fastruby.io/blog/exploring-global-constants-and-variables.html
-https://rubyapi.org/o/english
+- https://www.fastruby.io/blog/exploring-global-constants-and-variables.html
+- https://rubyapi.org/o/english
 |--------------------------+----+------------------------------------------------------|
 |                          |    | description                                          |
 |--------------------------+----+------------------------------------------------------|
@@ -73,10 +73,10 @@ https://rubyapi.org/o/english
 | $PROCESS_ID              | $$ | PID                                                  |
 | $CHILD_STATUS            | $? |                                                      |
 | $MATCH                   | $& | regex op, the match (all between //)                 |
-| PREMATCH                 | $` | regex op, to the left of last match                  |
-| POSTMATCH                | $' | regex op, to the right of last match                 |
+| $PREMATCH                | $` | regex op, to the left of last match                  |
+| $POSTMATCH               | $' | regex op, to the right of last match                 |
 | $LAST_PAREN_MATCH        | $+ | regex op, the last group                             |
-| N                        |    | regex op, where N is a number of the nth match       |
+|                          | $N | regex op, where N is a number of the nth match       |
 |--------------------------+----+------------------------------------------------------|
 ** testing
 
@@ -813,9 +813,9 @@ Script ran, to generate valid markdown from site's json. Then converted with  pa
       - rbenv rehash
   - https://rvm.io/
   - https://github.com/postmodern/chruby
-
-- tool https://github.com/JoshCheek/seeing_is_believing
-  emacs https://github.com/jcinnamond/seeing-is-believing
+- tool: seeing is believing
+  - https://github.com/JoshCheek/seeing_is_believing
+  - https://github.com/jcinnamond/seeing-is-believing
 
 * implementations
 |----------+---------------------------------------|

@@ -1,18 +1,28 @@
-- Doc https://book.babashka.org/
+- home https://babashka.org/
+- docs https://book.babashka.org/
 - differences https://github.com/babashka/babashka#differences-with-clojure
+- author's
+  - https://x.com/borkdude
+  - https://github.com/borkdude
 
 - Libraries
   - https://babashka.org/toolbox/
   - https://github.com/babashka/babashka/blob/master/doc/projects.md#libraries
   - https://github.com/babashka/pod-registry
   - https://book.babashka.org/#pods
+
 - Edit Conf https://github.com/exercism/babashka/blob/main/docs/editors.md
   > bb --nrepl-server
 
-- Article: https://rattlin.blog/bbgum.html
 - Channel: https://www.youtube.com/@babashkatv/videos
 - Codebase: 2022 htmx hiccup server example https://github.com/babashka/babashka/blob/master/examples/htmx_todoapp.clj
 - tool: cli json/yaml/edn convert https://github.com/borkdude/jet
+
+* articles
+
+- 23 https://endot.org/2023/12/30/writing-babashka-scripts/
+- https://blog.agical.se/en/posts/changing-my-mind--converting-a-script-from-bash-to-babashka/
+- https://rattlin.blog/bbgum.html
 
 * stdlib
 https://book.babashka.org/
