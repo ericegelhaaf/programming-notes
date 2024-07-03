@@ -1,0 +1,6 @@
+- 4bit registers
+- 8bit data/address
+- article: https://hackaday.io/project/167715-cambridge-1-a-4-bit-7400-series-based-cpu
+- video:
+  - https://www.youtube.com/watch?v=PxbB8vK6Imk
+  - https://www.youtube.com/watch?v=EWP2Y2VoooI
