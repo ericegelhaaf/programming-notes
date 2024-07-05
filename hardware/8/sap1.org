@@ -1,0 +1,531 @@
+- https://en.wikipedia.org/wiki/Simple-As-Possible_computer
+
+- My Ben Eater inspired homemade 8-bit CPU
+  - nby James Bates
+  - https://www.youtube.com/playlist?list=PL_i7PfWMNYobSPpg1_voiDe6qBcjvuVui
+
+* Ben Eater - Building an 8-bit breadboard computer!
+
+https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU
+
+- 22 gauge wire
+
+** 8-bit computer update
+
+https://www.youtube.com/watch?v=HyznrdDSSGM
+
+- Based on book =Digital Computer Electronics=
+  - by Albert Paul Malvino
+  - on book's ~SAP-1~ (Simple As Posible) architecture
+
+#+CAPTION: SAP-1 architecture
+#+ATTR_ORG: :width 600
+[[https://karenok.github.io/SAP-1-Computer/images/sap-1-architecture.png]]
+
+- Enhancements
+  - Decimal display instead of binary display
+  - Added "Load Immediate", "Store A" instructions
+  - Added "Jump instructions" (original didn't have?)
+
+** 8-bit computer clock
+*** Astable    555 timer
+
+https://www.youtube.com/watch?v=kRlSFm519Bo
+
+- ~Astable~: there are no stable binary state
+
+#+CAPTION: astable circuit - outside
+#+ATTR_ORG: :width 500
+[[../electro/555ast.jpg]][[../electro/555astschema.jpg]]
+
+- 555 has inside:
+  * 2 Comparators (2 inputs and 1 output, if input a<b output is on, if not is off)
+  * 1 Flip-Flip (aka RS Latch)
+  * 3 5k resitances, that made a =voltage divider=
+  * 1 Transistor (on to discharge ~pin 7~ and to GND)
+
+- rate of charging and discharging times, will depend on:
+  - charging: 1k / 100k / 1uf
+  - discharging: 100k
+    - we can swap the 100k resistor for a variable resistor (with a serial resistor to provide a floor)
+
+- Gotchas:
+  - Sheet, recommends put a 0.01uf capacitor from ~pin 5~ to GND, for no janky output (on ~pin 3~)
+  - Sheet, recommends lock/tying ~pin 4~ (RESET latch) to ~pin 5~ (Vcc)
+  - Some other overshoot/spikes of output might be due noise in our cable *impedance*, try:
+    - reducing the size of the cable
+    - or putting a 0.1uf capacitor between GND and VCC pins (the closest to the chip the better)
+      - on circuits, chips usually do have capacitor near for this reason
+
+*** Monostable 555 timer
+
+https://www.youtube.com/watch?v=81BgFhm2vz8
+
+- ~Monostable~: there is 1 binary state that is stable
+
+#+ATTR_ORG: :width 500
+[[./555mono.jpg]][[./555monoschema.jpg]]
+
+- We want to switch to a *manual control* of the clock
+  - One Tick per Button Push
+  - But, we CANNOT /just/ use a button, due it will physically bounce.
+  - To *debounce* the button we use another =555=
+    - with a very small capacitor
+    - And a button on pin 2 (trigger)
+
+- Next problem: How to switch between both?
+
+*** Bistable   555 timer
+
+https://www.youtube.com/watch?v=WCwJNnx36Rk
+
+#+ATTR_ORG: :width 400
+[[./555bis.jpg]]
+
+- We can use a switch to go output either the Astable or Monostable.
+  - BUT, we still need some *debounce* on the switch.
+  - Even when switches are either, "break before make" or "make before break"
+
+- This time ( differently from above (for fun) )
+  We would use just the internal *SR Latch*.
+
+*** Clock logic
+
+- (Just) To unify into a single output
+- We use a logic circuit.
+- 2 ANDs
+  - Astable pulse & Select
+  - Manual  pulse & NOT Select
+- 1 OR
+  - Output of ANDs
+- 1 AND
+  - OR output & NOT HLT (signal send from the computer to stop the clock)
+- 1 ~74LS04~ (Hex Inverter)
+  1 ~74LS08~ (Quad AND gate)
+  1 ~74LS32~ (Quad OR gate)
+- Alternatively, It could be repesented just with NOR or NAND gates
+  1 ~74LS00~ (4 NAND gates)
+
+** SR Latch
+- Thinking when the OUTPUT of and OR gate is connected to the INPUT of it
+  - Makes it "latch" (something that holds the value)
+- Otherwise, using 2 NOR gates, with the output inverted (feeding the other NOR gate=
+  2 inputs, 2 outputs
+** D(ata) Latch
+- Single Input, but still latch
+- We add an *enable circuit* (a switch to 2 ANDs that go to the SR latch)
+  - Plus a inverter on the decouple input
+  - Leaves 2 Inputs (enable,data)
+** D flip-flop
+- When we want to switch at particular intervals of time (a clock)
+  - Instead of the *enable input* we have a *pulse detector*
+  - With a ~edge detector~, a raising into a pulse.
+    - An AND with inputA and inputA negated.
+    We take advantage of the fact that the *invertor* takes a small amount of time to switch states
+  - Simpler yet. A resistor and a capacitor.
+    When a capacitor is fully charged, no current will go through it.
+    #+begin_src
+    ----||-----.------
+               z
+               z
+              GND
+    #+end_src
+  - 0.1uf = 0.1 * 10^-6
+    1K    = 10^3
+    0.1 * 10^-6 * 10^3 = 0.1ms
+** 8 bit register
+*** 1 - Bus architecture and how register transfers work
+
+https://www.youtube.com/watch?v=QzWW-CBugZo
+
+- Components
+  * 1x 74LS245
+  * 2x 74LS173 (the registers)
+  * Leds to show data.
+
+- The =Bus=
+  - *Registers* interface with it
+  - in this case there is only 1(one) of 8 bits
+  - is a /common connection point/ for the different components
+  - allows /bus transfers/, aka move data between components
+  - each component/module
+    - has both his inputs and outputs connected to the bus
+    - the state of their /control lines/ decides wheter to read or write to the bus
+    - has the same clock input
+
+*** 2 - Tri-state logic: Connecting multiple outputs together
+
+https://www.youtube.com/watch?v=faAjse109Q8
+
+- ONLY 1 component should be sending data to the bus at the time
+  - You need a way to *disconnect* each chip OUTPUT who isn't sending data.
+    A 0 or a 1 is not enough, as it will sink or generate current.
+  - On each chip, there is usually a *output stage*:
+    With 2 transistors. By disconnecting both we achieve it.
+  - Such gates are the ~tri-state~ gates. 0 or 1 or disabled
+
+- 74LS245 it has these gates
+
+- *enable* PIN to connect the circuit and output the data stored, we need to make sure only one of the chips has this flag set
+  *load* PIN, on the next clock will read
+
+*** 3 - Designing and building a 1-bit register
+- LOAD
+  - We use *D flip-flops* with some logic added around
+    - 1NOT, 2AND, 1OR, 1 Flip-Flop (~74LS74~: has 2)
+- ENABLE
+  - We use a tri-state buffer (~74LS245~, has support for both directions tri-state buffer, a transciver)
+- LOAD & ENABLE
+  - ~SN74LS173A~, which has 4-bit D-Type Registers
+  - Has 4 D-Flip-Flops, and logic gates above, and Tri-State outputs
+*** 4 - Building an 8-bit register
+   https://www.youtube.com/watch?v=CiMaWbz_6E8
+- By default, on ~SN74LS173A~, you can't see what is on the registers.
+  - To see it we are going to use separate Tri-State chip ~74LS245~ and put the chip always on.
+  - We and up connecting output and inputs together, as they will only do 1 thing at the time.
+  - These chips also have a REST pin
+*** 5 - Testing our computer's registers
+  https://www.youtube.com/watch?v=9WE3Obdjtv0
+- Testing the 8-bit register, with the clock and leds for the bus output.
+- Every TTL chip will default to a high input, if you don't connect the input (?
+  It has a pull-up resistor inside the chip input.
+- We are going to need 3 register
+  - 1(one) build in the opposite direction for positioning
+    AND the most significant 4 bits, won't go back into the bus (for the instruction decoder)
+** Twos complement: Negative numbers in binary
+https://www.youtube.com/watch?v=4qH4unVtJkE&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=14
+- Representing negative numbers
+  1. using a naive sign bit
+     - you have a negative 0
+     - you can not add
+  2. One's complement: complement the bits
+     - you have a negative 0
+     - you can not add (only can to his own negative)
+  3. Two's complement: complement the bits, and add 1
+     - removes the -0
+     - you can add
+** ALU
+*** 1 - Design
+https://www.youtube.com/watch?v=mOVOS9AjgFs&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=15
+- Having 2 registers
+  - Have their Input and Output signals
+  - Direct connection to the ALU
+- ALU
+  - Two custom signals
+    1) EO (sum out signal, when to output the result)
+      - We add to the OUTPUT a tri-state buffer
+    2) SU (subtraction signal)
+      - We add XOR gates to the INPUT of one register (since it negates the input if the SU signal is 1)
+      - We connect the free CARRY INPUT to the SU (since it will add the 1 for the two's complement needed)
+  - ~74LS283~ is a 4-bit adder with fast carry
+    - 2 Input number of 4 bits each
+    - 1 Output number of 4 bits
+    - 1 Carry In, 1 Carry Out (to cascade the chips for bigger numbers)
+  - We use 2(two) chips to be able to sum 8 bit numbers
+*** 2 - Building
+https://www.youtube.com/watch?v=S-3fXU3FZQc&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=16
+- 2x 74LS283 (4-bit binary full adder)
+- 2x 74LS86  (Quad XOR gate)
+- 1x 74LS245 (Octal bus transceiver) (aka for the tri-state)
+*** 3 - Troubleshooting
+https://www.youtube.com/watch?v=U7Q8-2YZTUU&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=17
+- Feeds bits into the A register until a bit stops showing on the ALU
+  - Does the same with B register
+- Uses a multimeter, one probe to GND and other to start testing voltage
+- Tries some sums
+*** 4 - Testing
+https://www.youtube.com/watch?v=4nCMDvnR2Fg&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=18
+- Connect the output of the ALU to the BUS
+- Feeds that back into register A
+  - using the manual clock and manual steps
+  - using the automatic clock and potentiometer for speed
+** 8-bit computer RAM
+*** 0 - Intro
+https://www.youtube.com/watch?v=FnxPIZR1ybs&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=19
+- Real memory uses the simplest possible representation for a bit
+  A transistor and a capacitor. Refreshing each bit to avoid capacitor to loss charge.
+  - Static vs Dynamic ram. Static being faster, the used for latches.
+- We went from 1 bit to 8 bit register using D-flip-flop
+- To go to a 16*8 memory (16bytes)
+  - We need a way to address the row of memory
+    - Naive approach might be with 4 inputs, we get the input and the negated inputs.
+    - We have different AND gates with 4 inputs that enable each *enable* row
+  - 2x 74S189/74LS189 "A 64-bit Random Access Memory"
+    - 4 Bit Wide
+    - 4 Inputs to select
+    - 4 Inputs for data
+    - 4 Outputs (negated)
+    - 1 CS (Chip Select) When we want to send data
+    - 1 WE (Write Enable) To read from bus into memory
+*** 1 - Build
+- Ties Address Inputs for both 4-bit memory chips together.
+- Inputs WON'T come from the BUS, they will come from the TIP switches (?) what programs the computer.
+*** 2 - Build
+- Uses a D-flip-flop chip for the *address register*. (~74LS245~
+  That receives the address from the BUS.
+  To then receive data from the bus to the memory OR
+     data from the memory to the bus.
+- We want to have a separate mode of operations.
+  1) Where we get addresses from the BUS
+  2) Where we can program the computer (set the address and the data by "hand")
+- To *select* between the 2 modes, we use a logic circuit. And a regular switch (no bounce protected)
+  1) 2 inputs, 1 for each, and a select, and a notselect -> 2AND -> 1OR
+  2) ~74LS157~: "Quad 2-Line to 1-Line Data Selectors/Multiplexers" (4 copies of the above circuit)
+     - 1 SELECT flag
+     - 1 STROBE flag (set it to low)
+     - 4 sets of A/B/Output
+*** 3 - Build
+https://www.youtube.com/watch?v=5rl1tEFXKt0&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=22
+- We also need 2 modes for reading data into memory
+  2x ~74LS157~ (switch selector with 4 input and 4 outputs each)
+  1) from a tip switches, manually
+  2) from the BUS
+- We also need 2 modes to actually write into memory (after reading)
+  1x ~74LS157~
+  1) toggle button activated
+  2) receive a control signal AND a clock signal (the raising edge, with a cap 0.01uf and resistor 1kO)
+     We use an NAND gate. Not and AND because the output is active low.
+     1x ~74LS00~
+*** 4 - testing and troubleshooting
+- When something is not connectes you will see a 1
+- We added the edge detector to work with the NAND for the write flag
+** Program Counter
+*** 1 - JK flip-flop
+https://www.youtube.com/watch?v=F1OC5e7Tn_o&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=24
+- From the SR Latch
+  1) Adding an enable through 2 ANDs
+  2) (SR Flip-Flop) Adding an edge detected clock through 2 ANDs
+  3) (JK Flip-Flop) As above, but with a feedback from both Q and notQ back into the AND (3inputs)
+     - Resilent when both are up (1), it will toggle
+*** 2 - JK flip-flop racing
+https://www.youtube.com/watch?v=st3mUEub99E&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=25
+- Build just as the above, enabling of both JK will toggle it too many times and too fast...
+- There is a *racing* condition happening between
+  1) the pulse width of the edge detector
+  2) the toggle that happens on a JK flip-flop when both inputs are 1
+- There are limits of how sharp pulses are going to be on a breadboard
+  - Inductance can fluctuate just from being handled
+*** 3 - JK flip-flop Master-slave Flip-Flop
+- ~74LS76~, "Dual Master-Slave J-K Flip Flops with Clear, Preset, and Complementary outputs"
+- Instead of the edge detector
+  * we chain 2 JK flip-flop together + clock input to each (one inversed)
+  * and add some feedback
+- On clock UP one flips, on clock DOWN the other flips
+*** 4 - Binary counter
+   https://www.youtube.com/watch?v=exGEmA67dNc&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=27
+- 1x ~74LS76~
+- PRESET and CLEAR are ways to set the output regardless of JK
+  - L H, sets Q high
+    H L, sets Q low
+    L L, invalid
+- The resulting toggle velocity is HALF of the input clock.
+  If we feedback the output into the clock other clock input.
+  We further HALF the clock speed.
+- If we chain another IC in the same way, we have a ~binary counter~.
+*** 4 - Design
+- We don't want the clock "counting" every clock cycle.
+  - An instruction might take multiple clocks to execute.
+- Properties
+  * Needs to be able to count
+  * It Stores a value (like a register)
+  * Needs to R/W into the BUS
+- Control Signals
+  1) CO: Program Counter Out (when to output data to the bus)
+  2) JUMP: Program Input from BUS
+  3) CE: Count Enable, will increment on each clock cycle
+- 1x ~74LS161A~ "Synchronous 4-bit binary counters"
+  It has 4 JK Flip-Flops
+  It has the CE flag, CO, and data inputs.
+  It has a carry output to be feed into other chip clock to chain.
+  4-bit I/O
+- It still need the tri-state buffer IC (~74LS245~)
+
+*** 5 - Build
+- Unused Tri-state output bits are GND
+- Tri-State buffer output is connected to both
+  1. the counter input (for JUMP)
+  2. to the BUS
+- Tri-state buffer input is connected to the output of the counter
+** Output Display
+*** 1 - Designing a 7-segment hex decoder
+https://www.youtube.com/watch?v=7zffjsXqATg&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=30
+- 3x 7-Segment LD, 1Digit, Common anode
+  - Each pin, lights up a "segment"
+  - Using 4 bits, it gives you an hexa display
+- Naive way, If we think it as:
+  "what is the circuit that satisfies the truth table for this segment?"
+   Where the truth table values are the numbers in binary
+   - 17 ORs, 33ANDs, 4NOTs (Too complex)
+*** 2 - Using an EEPROM to replace combinational logic
+     ROM - Only Read
+    PROM - Programable Once
+   EPROM - Can be ereased through UV lights
+  EEPROM - Erased programmatically
+- 1x AT28C16 - ATMEL 16K (2K x8) Parallel EEPROM
+  8x I/O, input if programming, normally output
+  11x address lines (to a tip switch)
+  WE: Write enable
+  OE: Output enable
+  CE: Chip Enable (when low, the chip is enabled)
+  No Current limiter to the output.
+- Write Protocol:
+  - OE set to high (?)
+  - Low pulse, on CE or WE (between 100ns-1000ns)
+  - Will latch the *address* first and at the end of the pulse the *data*
+- Build and RC circuit, with button switch to trigger the WE, and a tip switch to put the address
+  1nf cap and 610ohm = 610ns
+  + 10k resistor to allow capacitor to discharge
+*** 3 - Build an Arduino EEPROM programmer
+
+https://www.youtube.com/watch?v=K88pgWhEb1M&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=32
+
+- Programming the addresses (input) and data for the hex (output)
+- Arduino has 14 I/O digital pins (12 if we are using serial interface, hence using the TX and RX pins)
+  We need to control 21 pins: 11 address + 8 IO + WE + OE = 21
+
+- There is way for us to use only a couple (!!!) of pins of the Arduino
+  With a ~shift register~
+  - uses several *D flip-flops* chained, the input bit "travels" across the flip-flops
+  - It has a single input, but many outputs
+
+- 1X ~74HC595~ - "8-bit serial-in, seria or parallel-out shift register with output latches; 3-state"
+  - Reduce it to 3 signals (DATA INPUT, ST_CP, SH_CP)
+  - No current limiter on the the output
+  - We can cascade them if we want
+  - Storage resister (8-bit)
+    - ST_CP: storage register clock pulse,
+             if 1 (or unplugged) sends to output
+             if 0 holds the input without output it
+  - Shift-register pins
+    - DS: data serial input
+    - SH_CP: shift clock pulse
+    - MR: master reset (set to high to not reset)
+    - OE: output enable (set to low to enable our outputs)
+
+- Arduino Programming
+  - Set Address
+    - shiftOut() - sends the value provided (an int) to the pin provided, shifting with a clock into the target pin
+    - address >> 8
+    - (address >> 8) | (outputEnable ? 0x00 : 0x80)
+  - Reading
+    - data = (data << 1) + digitalRead()
+  - Writing
+    - Setup: We need to make sure it starts HIGH, on this order to avoid it going low
+      digitalWrite(PIN, HIGH) // Sets the pullup resistor
+      pinMode(PIN, OUTPUT)    // set the pinmode to output, which is already high
+
+#+begin_src c
+  #define SHIFT_DATA  2
+  #define SHIFT_CLK   3
+  #define SHIFT_LATCH 4
+  #define EEPROM_D0   5
+  #define EEPROM_D7  12
+
+  void setAddress(int address, bool outputEnable) {
+    shiftOut(SHIFT_DATA, SHIFT_CLK, MSBFIRST,
+             (address >> 8) | (outputEnable ? 0x00 : 0x80));
+    shiftOut(SHIFT_DATA, SHIFT_CLK, MSBFIRST,
+             address);
+    digitalWrite(SHIFT_LATCH, LOW);
+    digitalWrite(SHIFT_LATCH, HIGH);
+    digitalWrite(SHIFT_LATCH, LOW);
+  }
+#+end_src
+
+** 8-bit CPU control logic
+*** Part 0
+*** Part 1
+https://www.youtube.com/watch?v=dXdoim96v5A&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=36
+- Our custom instruction
+  - is actually made from different control signals.
+  - is made of 4 bits of operations and 4 bits of operand
+  - operand can be a memory address
+- Some common, the ~fetch operation~
+  #+begin_src
+  CO MI  // Counter Out. Memory In
+  RO II CE // Ram Out, Instruction In, Counter Enable
+  #+end_src
+- LDA 14
+  #+begin_src
+  IO MI
+  RO AI
+  #+end_src
+- ADD 15
+  #+begin_src
+  IO MI
+  RO BI
+  EO AI
+  #+end_src
+- OUT
+  #+begin_src
+  AO OI
+  #+end_src
+
+*** Part 2
+https://www.youtube.com/watch?v=X7rCxs1ppyY&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=37
+- ~microinstruction~ Each of the steps control signals done by our "ASM"
+- We need to know on which step of the microinstruction we are in.
+- We need 2 clocks. We use an inverter on the main one.
+  1) Control logic
+  2) Execution
+- 1x 74LS161A - "Synchronous 4-bit Binary Counters"
+  - CLK
+  - 4 Outputs
+  - 4 Data Inputs (not used)
+- 1x 74LS138 "Decoder/Demultiplexer"
+  - Converts the binary number into different signals
+    - From 0 to 7
+    - We can connect the rest of the counter to the demutiplexer
+    - 0001 - 0001
+      0010 - 0010
+      0011 - 0100
+      0100 - 1000
+- We can use an EEPROM to replace sequential logic, to interpret the microcode
+*** Part 3
+https://www.youtube.com/watch?v=dHWFpkGsxOs&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=38
+- Again, as we did with the EEPROM design, we build the "truth table",
+  input: with the "instruction" and "step"
+  output: the state of the control signals
+- Since we need to control 15 states, we use 2 EEPROM, with 8bit of data each
+- For the "fetch stage" we have to program
+  - the signals for any instruction at steps 0 and 1
+*** Part 4 - Reprogramming CPU microcode with an Arduino
+https://www.youtube.com/watch?v=JUVt_KYAp-I&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=40
+- Memory of the program, still being loaded manually with tips
+- We use arduino again to program the EEPROM
+- We write both halfs of memory.
+  And then let the CI address jumpers (pin 0) decide which role they take.
+- New: SUB
+*** Part 5 - Adding more machine language instructions to the CPU
+- STA, LDI, JMP
+** 8-bit CPU reset circuit and power supply tips
+*** A reset button, with a buffer
+- A separate circuit that sends a reset (and inverted reset) signal to each module.
+  Plus the step reset through an OR gate (with the rst that happens at step 5)
+  - Can be remade using NAND gates
+*** Power supply
+- Full Computer consumes 1.1-1.2 amps
+- BPS BB830 - High quality breadboard
+- Solder Pins to USB power supply
+
+** Making a computer Turing complete
+https://www.youtube.com/watch?v=AqNDk_UJW4k&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=42
+- Current:
+  - Max Clock 300Hz
+  - 16 bytes of memory
+  - "What you need in order to be able to compute anything?"
+    - Some instructions missing, AND cannot be programmed curently either: like multiply
+- Church-Turing Thesis: Something is "computable" if and only if it can be computed by a Turing machine.
+- Paper: "On Computable Numbers, With and Application to the Entscheidunosproblem" / Alan Turing
+  - Studies a "infinite tape" computer, with a state and a writable tape. Left and Write movable.
+  - Appendix: after church paper, includes lambda calculus as something his machine can solve.
+- Paper: "An Unsolvable problem of elementary number theory" -- Alonzo Church
+  - The desicion problem.
+  - Creates Lambda Calculus: It has variables and the ability to define functions.
+  - Tring to define what can be calculated
+  - Not everything computable can be solved (?)
+- On our 8-bit computer, we cannot do anything different based on data from anywhere
+  - A conditional Jump is missing
+** TODO CPU flags register
+- JZ: jump zero (if the sum is 0)
+  JC: jump carry (if it is a number that cannot be represented)

@@ -1,0 +1,15 @@
+- https://en.wikipedia.org/wiki/Von_Neumann_architecture
+  - 1945
+  - aka princeton architecture
+  - "von neumann bottleneck"
+    - An instruction to fetch something from memory to cpu. Takes 2 fetch cycles.
+
+- https://en.wikipedia.org/wiki/Harvard_architecture
+  - instructions and data do NOT share the same bus (or stored in the same place)
+    - the instruction memory can be read-only
+    - as a consequence they could have different
+      - word width (requiring wider address bus)
+      - total sizes (requiring wider data bus)a
+  - used for
+    - real time processing (DSPs)
+    - low-power applications
