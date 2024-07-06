@@ -1,6 +1,18 @@
 - https://en.wikipedia.org/wiki/Hack_computer
-- From NAND To Tetris by "Tea Leaves"  https://www.youtube.com/playlist?list=PLu6SHDdOToSdD4-c9nZX2Qu3ZXnNFocOH
-* Course: From NAND to tetris
+  - from "The Elements of Computing Systems"
+    - by Noam Nissan, Shimon Schocken
+
+#+CAPTION: General Architecture
+#+ATTR_ORG: :width 400
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Hack_Computer_Block_Diagram_2.png/600px-Hack_Computer_Block_Diagram_2.png]]
+
+#+CAPTION: CPU Architecture
+#+ATTR_ORG: :width 600
+[[https://upload.wikimedia.org/wikipedia/commons/2/2c/Hack_Computer_CPU_Block_Diagram.png]]
+
+* Video: From NAND To Tetris by "Tea Leaves"
+https://www.youtube.com/playlist?list=PLu6SHDdOToSdD4-c9nZX2Qu3ZXnNFocOH
+* Course: From NAND to Tetris
 ** Part 1
 https://www.youtube.com/playlist?list=PLrDd_kMiAuNmSb-CKWQqq9oBFN_KNMTaI
 *** 0.2

@@ -1,10 +1,20 @@
 - https://en.wikipedia.org/wiki/Simple-As-Possible_computer
+  - Simple As Posible
+  - from book's =Digital Computer Electronics=
+    - by Albert Paul Malvino, Jerald A. Brown
+  - version 2 and 3 were fully Turing-complete.,
+  - ISA are a subset of 8080/8085 instructions
 
-- My Ben Eater inspired homemade 8-bit CPU
-  - nby James Bates
-  - https://www.youtube.com/playlist?list=PL_i7PfWMNYobSPpg1_voiDe6qBcjvuVui
+#+CAPTION: SAP-1 architecture
+#+ATTR_ORG: :width 600
+[[https://karenok.github.io/SAP-1-Computer/images/sap-1-architecture.png]]
 
-* Ben Eater - Building an 8-bit breadboard computer!
+* Video: My Ben Eater inspired homemade 8-bit CPU
+- by James Bates
+- https://www.youtube.com/playlist?list=PL_i7PfWMNYobSPpg1_voiDe6qBcjvuVui
+
+* Video: Building an 8-bit breadboard computer!
+by Ben Eater
 
 https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU
 
@@ -14,15 +24,7 @@ https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU
 
 https://www.youtube.com/watch?v=HyznrdDSSGM
 
-- Based on book =Digital Computer Electronics=
-  - by Albert Paul Malvino
-  - on book's ~SAP-1~ (Simple As Posible) architecture
-
-#+CAPTION: SAP-1 architecture
-#+ATTR_ORG: :width 600
-[[https://karenok.github.io/SAP-1-Computer/images/sap-1-architecture.png]]
-
-- Enhancements
+- Enhancements over SAP-1
   - Decimal display instead of binary display
   - Added "Load Immediate", "Store A" instructions
   - Added "Jump instructions" (original didn't have?)
@@ -91,32 +93,56 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
 
 *** Clock logic
 
-- (Just) To unify into a single output
-- We use a logic circuit.
-- 2 ANDs
-  - Astable pulse & Select
-  - Manual  pulse & NOT Select
-- 1 OR
-  - Output of ANDs
-- 1 AND
-  - OR output & NOT HLT (signal send from the computer to stop the clock)
-- 1 ~74LS04~ (Hex Inverter)
-  1 ~74LS08~ (Quad AND gate)
-  1 ~74LS32~ (Quad OR gate)
-- Alternatively, It could be repesented just with NOR or NAND gates
-  1 ~74LS00~ (4 NAND gates)
+- Out of the 3 circuits we have so far.
+- We need to make it 1, with 1 output.
+- We use Logic gates
+  - 1 ~74LS04~ (Hex Inverter)
+  - 1 ~74LS08~ (Quad AND gate)
+  - 1 ~74LS32~ (Quad OR gate)
 
-** SR Latch
-- Thinking when the OUTPUT of and OR gate is connected to the INPUT of it
-  - Makes it "latch" (something that holds the value)
-- Otherwise, using 2 NOR gates, with the output inverted (feeding the other NOR gate=
-  2 inputs, 2 outputs
-** D(ata) Latch
-- Single Input, but still latch
-- We add an *enable circuit* (a switch to 2 ANDs that go to the SR latch)
-  - Plus a inverter on the decouple input
-  - Leaves 2 Inputs (enable,data)
-** D flip-flop
+#+CAPTION: select=bistable - manual=monostable
+#+ATTR_ORG: :width 550
+[[./555allclock.jpg]]
+
+- Alternatively, It could be repesented just with NOR or NAND gates
+  - 2 ~74LS00~ (4 NAND gates)
+
+#+ATTR_ORG: :width 600
+[[./555allnandclock.jpg]]
+
+** Latches
+*** S(et)R(eset) Latch
+
+- A simple OR gate can *hold/latch* an input value
+  - if one input is hooked directly to the output of it
+  - even if retriggered, it will keep holding the value
+  - Example circuit uses an ~74LS32~
+   #+ATTR_ORG: :width 700
+   [[./srlatchOR.jpg]]
+
+- If we want a way to *reset* the latch, we could use 2 NOR gates
+  - with the output inverted (feeding the other NOR gate=
+  - inputs and outputs usually labeled S/R and Q/Ǭ
+  - setting both inputs on is an "invalid state"
+  - it is completely random which gate will start with 1
+  - Example circuit uses an ~74LS02~
+   #+ATTR_ORG: :width 600
+   [[./srlatchNOR.jpg]]
+
+*** D(ata) Latch
+
+- Single INPUT, but still latches one bit of *Data*
+
+#+ATTR_ORG: :width 750
+[[./dlatch.jpg]]
+
+- Modifications before the SR-latch
+  - two *AND* gates
+  - Add an *Enable Input* signal, to only change data when signaled
+  - Add an *inverter* to decouple the input data
+
+*** D flip-flop
+
 - When we want to switch at particular intervals of time (a clock)
   - Instead of the *enable input* we have a *pulse detector*
   - With a ~edge detector~, a raising into a pulse.
@@ -133,8 +159,9 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
   - 0.1uf = 0.1 * 10^-6
     1K    = 10^3
     0.1 * 10^-6 * 10^3 = 0.1ms
+
 ** 8 bit register
-*** 1 - Bus architecture and how register transfers work
+*** Bus architecture and how register transfers work
 
 https://www.youtube.com/watch?v=QzWW-CBugZo
 
@@ -153,7 +180,7 @@ https://www.youtube.com/watch?v=QzWW-CBugZo
     - the state of their /control lines/ decides wheter to read or write to the bus
     - has the same clock input
 
-*** 2 - Tri-state logic: Connecting multiple outputs together
+*** Tri-state logic: Connecting multiple outputs together
 
 https://www.youtube.com/watch?v=faAjse109Q8
 
@@ -169,7 +196,7 @@ https://www.youtube.com/watch?v=faAjse109Q8
 - *enable* PIN to connect the circuit and output the data stored, we need to make sure only one of the chips has this flag set
   *load* PIN, on the next clock will read
 
-*** 3 - Designing and building a 1-bit register
+*** Designing and building a 1-bit register
 - LOAD
   - We use *D flip-flops* with some logic added around
     - 1NOT, 2AND, 1OR, 1 Flip-Flop (~74LS74~: has 2)
@@ -178,13 +205,13 @@ https://www.youtube.com/watch?v=faAjse109Q8
 - LOAD & ENABLE
   - ~SN74LS173A~, which has 4-bit D-Type Registers
   - Has 4 D-Flip-Flops, and logic gates above, and Tri-State outputs
-*** 4 - Building an 8-bit register
+*** Building an 8-bit register
    https://www.youtube.com/watch?v=CiMaWbz_6E8
 - By default, on ~SN74LS173A~, you can't see what is on the registers.
   - To see it we are going to use separate Tri-State chip ~74LS245~ and put the chip always on.
   - We and up connecting output and inputs together, as they will only do 1 thing at the time.
   - These chips also have a REST pin
-*** 5 - Testing our computer's registers
+*** Testing our computer's registers
   https://www.youtube.com/watch?v=9WE3Obdjtv0
 - Testing the 8-bit register, with the clock and leds for the bus output.
 - Every TTL chip will default to a high input, if you don't connect the input (?
