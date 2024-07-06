@@ -1,0 +1,8 @@
+- https://en.wikipedia.org/wiki/TMS9900
+  - 1976-
+  - CISC
+
+- Course: Building a retrocomputer by "Robert Baruch"
+  https://www.youtube.com/playlist?list=PLEeZWGE3PwbbCwgcB4JShm1cyTXF0CIY6
+- Used on:
+  - https://en.wikipedia.org/wiki/TI-990
