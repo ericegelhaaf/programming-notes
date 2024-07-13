@@ -38,7 +38,7 @@ https://www.youtube.com/watch?v=kRlSFm519Bo
 
 #+CAPTION: astable circuit - outside
 #+ATTR_ORG: :width 500
-[[../electro/555ast.jpg]][[../electro/555astschema.jpg]]
+[[./555ast.jpg]][[./555astschema.jpg]]
 
 - 555 has inside:
   * 2 Comparators (2 inputs and 1 output, if input a<b output is on, if not is off)
@@ -82,7 +82,7 @@ https://www.youtube.com/watch?v=81BgFhm2vz8
 https://www.youtube.com/watch?v=WCwJNnx36Rk
 
 #+ATTR_ORG: :width 400
-[[./555bis.jpg]]
+[[./555bis.jpg]][[./555bischema.jpg]]
 
 - We can use a switch to go output either the Astable or Monostable.
   - BUT, we still need some *debounce* on the switch.
@@ -143,19 +143,24 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
 
 *** D flip-flop
 
-- When we want to switch at particular intervals of time (a clock)
-  - Instead of the *enable input* we have a *pulse detector*
-  - With a ~edge detector~, a raising into a pulse.
+- A variation of the D-latch.
+
+- To only latch to new values at transitions of the clock from low to high.
+  - And NOT latch through the whole clock cycle
+
+- Instead of the *Enable Input* we have a *Clock Input*
+  - With an ~edge detector~, a raising into a pulse.
     - An AND with inputA and inputA negated.
-    We take advantage of the fact that the *invertor* takes a small amount of time to switch states
-  - Simpler yet. A resistor and a capacitor.
-    When a capacitor is fully charged, no current will go through it.
-    #+begin_src
-    ----||-----.------
-               z
-               z
-              GND
-    #+end_src
+    - We take advantfage of the fact that the *invertor* takes a small amount of time to switch states
+
+- Simpler yet. A resistor and a capacitor.
+  When a capacitor is fully charged, no current will go through it.
+  #+begin_src
+  ----||-----.------
+             z
+             z
+            GND
+  #+end_src
   - 0.1uf = 0.1 * 10^-6
     1K    = 10^3
     0.1 * 10^-6 * 10^3 = 0.1ms
