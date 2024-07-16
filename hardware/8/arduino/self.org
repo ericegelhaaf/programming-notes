@@ -4,6 +4,61 @@
   - 10uF capacitor between reset and gnd (or 100nF ceramic capacitor)
   - 120ohm resistor between 5v and reset pin (or 110-124)
   https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection/
+
+* language
+https://www.arduino.cc/reference/en/
+** types
+
+- [[https://www.arduino.cc/reference/en/language/variables/data-types/array][array]]
+- [[https://www.arduino.cc/reference/en/language/variables/data-types/string][string]]
+- [[https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/][String()]]
+- [[https://www.arduino.cc/reference/en/language/variables/data-types/void][void]]
+
+|-----+-----------------+----------------+---------------+---------------------------|
+| <c> |                 |            <r> |           <r> |                           |
+| bit | type / cast     |            min |           max |                           |
+|-----+-----------------+----------------+---------------+---------------------------|
+|  -  | [[https://www.arduino.cc/reference/en/language/variables/data-types/boolean][boolean]]         |              - |             - | alias of "bool"           |
+|  8  | [[https://www.arduino.cc/reference/en/language/variables/data-types/bool][bool]]            |           true |         false |                           |
+|  8  | [[https://www.arduino.cc/reference/en/language/variables/data-types/char][char()]]          |           -127 |           127 | eg: 'A', 20               |
+|  8  | [[https://www.arduino.cc/reference/en/language/variables/data-types/unsignedchar][unsigned char]]   |              0 |           255 |                           |
+|  8  | [[https://www.arduino.cc/reference/en/language/variables/data-types/byte][byte()]]          |              0 |           255 |                           |
+| 16  | [[https://www.arduino.cc/reference/en/language/variables/data-types/word][word()]]          |              0 |        65,535 |                           |
+| 16* | [[https://www.arduino.cc/reference/en/language/variables/data-types/unsignedint][(unsigned int)]]  |              0 |        65,535 |                           |
+| 16  | [[https://www.arduino.cc/reference/en/language/variables/data-types/short][short]]           |        -32,768 |        32,767 |                           |
+| 16* | [[https://www.arduino.cc/reference/en/language/variables/data-types/int][int()]]           |        -32,768 |        32,767 |                           |
+| 32  | [[https://www.arduino.cc/reference/en/language/variables/data-types/long][long()]]          | -2,147,483,648 | 2,147,483,648 |                           |
+| 32  | [[https://www.arduino.cc/reference/en/language/variables/data-types/unsignedlong][(unsigned long)]] |              0 | 4,294,967,295 |                           |
+| 32  | [[https://www.arduino.cc/reference/en/language/variables/data-types/float][float()]]         | -3.4028235E+38 | 3.4028235E+38 | 6~7 decimals of precision |
+| 64  | [[https://www.arduino.cc/reference/en/language/variables/data-types/double][double]]          |                |               |                           |
+|  ?  | [[https://www.arduino.cc/reference/en/language/variables/data-types/size_t][size_t]]          |              0 |             ? | represent size in bytes   |
+|-----+-----------------+----------------+---------------+---------------------------|
+
+** shiftOut()
+
+- docs https://www.arduino.cc/reference/en/language/functions/advanced-io/shiftout/
+- other custom versions https://forum.arduino.cc/t/anyone-know-the-code-for-the-shiftout-function/45638/13
+
+#+FILENAME: wiring_shift.c
+#+begin_src c
+  void
+  shiftOut(uint8_t dataPin,
+           uint8_t clockPin,
+           uint8_t bitOrder,
+           uint8_t val)
+  {
+    uint8_t i;
+    for (i = 0; i < 8; i++)  {
+      if (bitOrder == LSBFIRST)
+        digitalWrite(dataPin, !!(val & (1 << i)));
+      else
+        digitalWrite(dataPin, !!(val & (1 << (7 - i))));
+      digitalWrite(clockPin, HIGH);
+      digitalWrite(clockPin, LOW);
+    }
+  }
+#+end_src
+
 * qemu-avr
 
 - https://raw.githubusercontent.com/qemu/qemu/e75941331e4cdc05878119e08635ace437aae721/scripts/qemu-binfmt-conf.sh

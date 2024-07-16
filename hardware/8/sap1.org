@@ -51,13 +51,17 @@ https://www.youtube.com/watch?v=kRlSFm519Bo
   - discharging: 100k
     - we can swap the 100k resistor for a variable resistor (with a serial resistor to provide a floor)
 
-- Gotchas:
-  - Sheet, recommends put a 0.01uf capacitor from ~pin 5~ to GND, for no janky output (on ~pin 3~)
-  - Sheet, recommends lock/tying ~pin 4~ (RESET latch) to ~pin 5~ (Vcc)
+- Recommendations:
+  - Sheet, put a 0.01uf =capacitor= from ~pin 5~ (CV) to GND, for no janky OUTPUT
+  - Sheet, lock/tying ~pin 4~ (RESET latch) to VCC
   - Some other overshoot/spikes of output might be due noise in our cable *impedance*, try:
     - reducing the size of the cable
     - or putting a 0.1uf capacitor between GND and VCC pins (the closest to the chip the better)
       - on circuits, chips usually do have capacitor near for this reason
+
+#+CAPTION: with recommendations
+#+ATTR_ORG: :width 40
+[[./555asmod.jpg]]
 
 *** Monostable 555 timer
 
@@ -65,7 +69,7 @@ https://www.youtube.com/watch?v=81BgFhm2vz8
 
 - ~Monostable~: there is 1 binary state that is stable
 
-#+ATTR_ORG: :width 500
+#+ATTR_ORG: :width 400
 [[./555mono.jpg]][[./555monoschema.jpg]]
 
 - We want to switch to a *manual control* of the clock
@@ -171,19 +175,25 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
 https://www.youtube.com/watch?v=QzWW-CBugZo
 
 - Components
-  * 1x 74LS245
-  * 2x 74LS173 (the registers)
-  * Leds to show data.
+  1) 74LS245 (control direction of bus communication)
+     - "Octal Bus Transceiver, With 3-State Outputs"
+     - DIP20 (8in 8out OE DIR + -)
+  2) 74LS173 (x2) (the registers)
+     - "4-bit D-Type Registers, With 3-state Outputs"
+     - DIP16
+  3) Leds to show data.
 
 - The =Bus=
   - *Registers* interface with it
-  - in this case there is only 1(one) of 8 bits
+  - in this case there is only 1(one) bus of 8 bits
   - is a /common connection point/ for the different components
   - allows /bus transfers/, aka move data between components
-  - each component/module
+  - each component/module/part
     - has both his inputs and outputs connected to the bus
-    - the state of their /control lines/ decides wheter to read or write to the bus
-    - has the same clock input
+    - has /control lines/ signals
+      1) a LOAD signal: to (R)ead from the bus
+      2) an ENABLE signal: to (W)rite into the bus
+    - has the same CLOCK input signal
 
 *** Tri-state logic: Connecting multiple outputs together
 
@@ -196,12 +206,11 @@ https://www.youtube.com/watch?v=faAjse109Q8
     With 2 transistors. By disconnecting both we achieve it.
   - Such gates are the ~tri-state~ gates. 0 or 1 or disabled
 
-- 74LS245 it has these gates
-
-- *enable* PIN to connect the circuit and output the data stored, we need to make sure only one of the chips has this flag set
-  *load* PIN, on the next clock will read
+- *ENABLE* PIN to connect the circuit and output the data stored, we need to make sure only one of the chips has this flag set
+- *LOAD* PIN, on the next clock will read
 
 *** Designing and building a 1-bit register
+
 - LOAD
   - We use *D flip-flops* with some logic added around
     - 1NOT, 2AND, 1OR, 1 Flip-Flop (~74LS74~: has 2)
@@ -210,20 +219,25 @@ https://www.youtube.com/watch?v=faAjse109Q8
 - LOAD & ENABLE
   - ~SN74LS173A~, which has 4-bit D-Type Registers
   - Has 4 D-Flip-Flops, and logic gates above, and Tri-State outputs
+
 *** Building an 8-bit register
-   https://www.youtube.com/watch?v=CiMaWbz_6E8
+
+https://www.youtube.com/watch?v=CiMaWbz_6E8
 - By default, on ~SN74LS173A~, you can't see what is on the registers.
   - To see it we are going to use separate Tri-State chip ~74LS245~ and put the chip always on.
   - We and up connecting output and inputs together, as they will only do 1 thing at the time.
   - These chips also have a REST pin
+
 *** Testing our computer's registers
-  https://www.youtube.com/watch?v=9WE3Obdjtv0
+
+https://www.youtube.com/watch?v=9WE3Obdjtv0
 - Testing the 8-bit register, with the clock and leds for the bus output.
 - Every TTL chip will default to a high input, if you don't connect the input (?
   It has a pull-up resistor inside the chip input.
 - We are going to need 3 register
   - 1(one) build in the opposite direction for positioning
     AND the most significant 4 bits, won't go back into the bus (for the instruction decoder)
+
 ** Twos complement: Negative numbers in binary
 https://www.youtube.com/watch?v=4qH4unVtJkE&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=14
 - Representing negative numbers
