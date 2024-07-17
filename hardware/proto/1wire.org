@@ -1,0 +1,7 @@
+- https://en.wikipedia.org/wiki/1-Wire
+- https://docs.arduino.cc/learn/communication/one-wire/
+
+- Video: 1-Wire – Through the Looking Glass (Scope) and Down the Rabbit Hole (Bit Level)
+  - https://www.youtube.com/watch?v=UIx8R1LV6HM
+  - previous video https://www.youtube.com/watch?v=XUm9RPWRBx8
+  - with a DS18B20 temperature sensor
