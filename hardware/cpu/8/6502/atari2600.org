@@ -13,6 +13,7 @@
 - https://www.bigmessowires.com/2023/01/11/atari-2600-hardware-design-making-something-out-of-almost-nothing/
 
 - video 18 | Atari 2600 VCS Programming | Computerphile https://www.youtube.com/watch?v=fce39nQm9TY
+- video 20 | All About Atari 8-Bit Programming https://www.youtube.com/watch?v=HF97bRp8tKo
 - video 24 | Atari 2600 Programming is a NIGHTMARE | truttle1 https://www.youtube.com/watch?v=-l18Rwbinp8
 
 * Hardware

@@ -14,10 +14,11 @@
 - https://www.youtube.com/playlist?list=PL_i7PfWMNYobSPpg1_voiDe6qBcjvuVui
 
 * Video: Building an 8-bit breadboard computer!
-by Ben Eater
 
-https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU
-
+- by Ben Eater
+- https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU
+- https://github.com/beneater/eeprom-programmer/
+- https://eater.net/8bit
 - 22 gauge wire
 
 ** 8-bit computer update

@@ -1,0 +1,40 @@
+- http://www.tinyvga.com/vga-timing
+- https://geoffg.net/terminal.html
+- projects
+  - Home of the Low Budget, Open Source, VGA Compatible video card http://wacco.mveas.com/
+  - http://web.archive.org/web/20230608091246/https://quinndunki.com/blondihacks/?page_id=1761
+    - 8bit computer + gpu
+    - ATMega 324PA
+- vga code: https://github.com/smaffer/vgax
+
+- 21 http://www.breatharian.eu/hw/picovga/index_en.html
+- 20 https://trmm.net/Mac-SE_video/
+- 19 https://fabiensanglard.net/vquake/index.html
+- 18 http://www.righto.com/2018/03/reading-vga-monitors-configuration-data.html
+- 19 https://fabiensanglard.net/3dfx_sst1/index.html
+- 16 https://hackaday.com/2016/01/29/vga-in-memoriam/
+- 14 https://tldr.fi/2014/09/27/zc160-vga-adapter1/
+- 08 article http://little-scale.blogspot.com/2008/02/hacking-vga-lines-with-arduino.html
+- 07 article http://web.archive.org/web/20080504014117/http://vidiotsquad.com:80/?page_id=6
+- 07 ntcs https://forum.arduino.cc/t/interfacing-with-an-ntsc-tv/15513
+
+* Videos
+
+- TrackZero - DIY Video Card https://www.youtube.com/playlist?list=PLbDuNUQ4K7mz7vd0nv-ErrUkg4OeVEqEe
+- BenEater
+  1) intro https://www.youtube.com/watch?v=l7rce6IQDWs
+  2) conclusion https://www.youtube.com/watch?v=uqY3FMuMuRo
+  3) interface https://www.youtube.com/watch?v=2iURr3NBprc
+  4) troubleshooting https://www.youtube.com/watch?v=BUTHtNrpwiI
+- James Sharman https://www.youtube.com/playlist?list=PLFhc0MFC8MiD2QzxJKi_bHqwpGBZZpYCt
+- Slu4 - arduino VGA
+  - https://www.youtube.com/watch?v=jUoR5ICCepA
+  - https://www.youtube.com/watch?v=Id3VYybrcws
+  - https://www.youtube.com/watch?v=OYIEQlPotIg
+- Slu4 - DIY VideoRAM https://www.youtube.com/playlist?list=PLYlQj5cfIcBWSu-1JA0rs5Okzlj4fCNzK
+- DrMattRegan https://www.youtube.com/watch?v=seyHAFpsoP8
+- bitluni https://www.youtube.com/watch?v=muuhgrige5Q
+- jdh https://www.youtube.com/watch?v=OW1EmG7b4DU
+  - composite video (analog)
+  - on an Arduino
+  - in pure C https://github.com/jdah/jdh-8/tree/e4fad7cf43c8a23066d4a230baaa130354fbefbf/misc/avt

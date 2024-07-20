@@ -1,8 +1,4 @@
-- Video: Pony80 Construction
-  https://www.youtube.com/playlist?list=PLvxl6-mq-3dUxsxsm6NsTuf2nA3atbSOW
-
 - https://en.wikipedia.org/wiki/Zilog_Z80
-  - Z80
   - 1976-2024
   - Creators:
     - Federico Faggin
@@ -17,3 +13,27 @@
   - 40DIP / 40 PLCC / 44QFP
 
 - https://www.metsuke.com/la-academia/juguemos-al-z80/
+
+- 14 article http://www.righto.com/2014/10/how-z80s-registers-are-implemented-down.html
+- 17 article https://floooh.github.io/2017/12/10/z80-emu-evolution.html
+- 18 article https://floooh.github.io/2018/10/06/bombjack.html
+- 20 article https://bread80.com/2020/07/24/couch-to-64k-a-k-a-building-a-z80-breadboard-computer-part-1-pins/
+- 21 article https://www.thirtythreeforty.net/posts/2021/10/ti-calculator-innovation/
+- project https://hackaday.io/project/19000-a-4-4ics-z80-homemade-computer-on-breadboard/details
+
+- 17 Video | Flashing LEDs - Z80 Style
+  - https://www.youtube.com/watch?v=AZb4NLXx1aM
+
+- https://www.youtube.com/watch?v=nFIviiwPrLI
+  https://www.youtube.com/watch?v=Gj1c-hG75uA
+
+- Course: Z80 Assembly
+  - https://www.youtube.com/@ChibiAkumas/videos
+  - https://www.chibiakumas.com/z80/
+  - https://vimeo.com/chibiakumas
+  - https://www.youtube.com/playlist?list=PLp_QNRIYljFpr5X8OhaOwnQYLRfk5xu-G
+  - Amstrad
+  - WinAPE (emulator+assembler+debugger)
+
+- Video: Pony80 Construction
+  https://www.youtube.com/playlist?list=PLvxl6-mq-3dUxsxsm6NsTuf2nA3atbSOW
