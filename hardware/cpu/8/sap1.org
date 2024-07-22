@@ -61,7 +61,7 @@ https://www.youtube.com/watch?v=kRlSFm519Bo
       - on circuits, chips usually do have capacitor near for this reason
 
 #+CAPTION: with recommendations
-#+ATTR_ORG: :width 40
+#+ATTR_ORG: :width 400
 [[./555asmod.jpg]]
 
 *** Monostable 555 timer

@@ -1,17 +1,19 @@
+#+ATTR_ORG: :width 200
+[[http://www.breakintoprogram.co.uk/wp-content/uploads/2012/06/pinouts_Z80.png]]
+#+ATTR_ORG: :width 350
+[[http://sebastianmihai.com/resources/images/z80/Z80-pinout.png]]
+
 - https://en.wikipedia.org/wiki/Zilog_Z80
   - 1976-2024
   - Creators:
     - Federico Faggin
     - Masatoshi Shima
     - Ralph Ungermann
-  - 14 registers
-  - width in bits
-    - data: 8
-    - address: 16
-  - 2.5 to 8 MHz
-  - 4um
-  - 40DIP / 40 PLCC / 44QFP
+  - 2.5 to 8 MHz (4um)
+  - DATA/8 ADDRESS/16
+  - 40DIP
 
+- http://sebastianmihai.com/z80-v10.html
 - https://www.metsuke.com/la-academia/juguemos-al-z80/
 
 - 14 article http://www.righto.com/2014/10/how-z80s-registers-are-implemented-down.html
