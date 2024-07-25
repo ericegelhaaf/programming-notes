@@ -1,0 +1,65 @@
+- wiki https://en.wikipedia.org/wiki/7400-series_integrated_circuits
+- 1964
+- TI = Texas Instruments
+- logic family of TTL (Transistor-Transistor Logic) IC's
+  - "an integrated circuit made in CMOS is NOT a TTL chip, since it uses *Field-Effect Transistors* (FETs) and NOT *Bipolar Junction Transistors* (BJT)"
+
+[[https://upload.wikimedia.org/wikipedia/commons/c/c6/TexasInstruments_7400_chip%2C_view_and_element_placement.jpg]]
+
+** Numbering
+
+#+ATTR_ORG: :width 300
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/74_Series_Code.svg/1280px-74_Series_Code.svg.png]]
+
+- Prefix: manufacturer (SN,SNV,M,DM,UT,SG)
+- Temperature range: 54,64,74
+- Logic subfamily:
+  - none (bipolar TTL)
+  - LS: low speed schottky
+  - HCT: high-speed CMOS compatible with TTL
+- Device Identifier
+- Package type, quality
+
+** Device identifier
+
+https://en.wikipedia.org/wiki/List_of_7400-series_integrated_circuits
+
+- Some are revisions of previous ones with re-arranged pinouts.
+  eg: x244 to x640
+
+|-----+---+----------------------------------------+----|
+|  LS | U | description                            | O  |
+|-----+---+----------------------------------------+----|
+|   0 | 4 | 2-input NAND gate                      | -  |
+|   4 | 6 | NOT gate                               | -  |
+|   5 | 6 | NOT gate                               | OC |
+|   7 | 6 | buffer gate (ttl -> mos)               | OC |
+|   8 | 4 | 2-input AND gate                       | -  |
+|  14 | 6 | NOT gate                               | -  |
+|  16 | 6 | NOT gate                               | OC |
+|  20 | 2 | 4-input NAND gate                      | -  |
+|  30 | 1 | 8-input NAND gate                      | -  |
+|  32 | 4 | 2-input OR gate                        | -  |
+|  74 | 2 | D positive edge triggered flip-flop    |    |
+|  76 | 2 | J-K flip flops                         | -  |
+|  86 | 4 | 2-input XOR gate                       | -  |
+| 125 | 4 | bus buffer                             | 3S |
+| 138 | 1 | 3-to-8 decoder/multiplexer             | -  |
+| 139 | 2 | 2-to-4 decoder/multiplexer             | -  |
+| 151 | 1 | 8-input selector/multiplexer           | -  |
+| 157 | 4 | 2-line  selector/multiplexers          | -  |
+| 161 | 1 | 4-bit binary counters                  | -  |
+| 164 | 1 | 8-bit SIPO =shift register=            | -  |
+| 174 | 6 | D flip-flop                            | -  |
+| 189 | 1 | 64-bit RAM                             | 3S |
+| 240 | 8 | buffer                                 | 3S |
+| 244 | 8 | buffer                                 | 3S |
+| 245 | 8 | transceiver                            | 3S |
+| 251 | 2 | 8-line to 1-line selector/multiplexer  | 3S |
+| 259 | 1 | 8-bit addressable input latch with clr | -  |
+| 283 | 1 | 4-bit binary full adder, with carry    | -  |
+| 373 | 8 | transparent latch                      | 3S |
+| 374 | 8 | register                               | 3S |
+| 573 | 1 | D transparent latch                    | 3S |
+| 595 | 1 | 8-bit shift register                   | 3S |
+|-----+---+----------------------------------------+----|

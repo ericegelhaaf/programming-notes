@@ -1,0 +1,53 @@
+- https://www.nxp.com/products/processors-and-microcontrollers/legacy-mpu-mcus/8-bit-legacy-mcus:8-BIT-LEGACY-MCUS?&lang=en&lang_cd=en
+- https://en.wikipedia.org/wiki/List_of_NXP_products
+- https://www.eejournal.com/article/a-history-of-early-microcontrollers-part-5-the-motorola-6801/
+
+- (80) 68HC05 https://en.wikipedia.org/wiki/Motorola_68HC05
+  - 6805xx    HMOS
+  - 68705xx   EPROM
+  - 146805xx  CMOS
+  - 1468705xx EPROM
+  - 68HC05xx  CMOS
+  - 68HC805xx EEPROM version
+
+- 68HC08
+
+- (90) 68HC11 https://en.wikipedia.org/wiki/Motorola_68HC11
+  - M68HC11
+  - MC68HC11A8 (CMOS EEPROM)
+  - MC68HC11E9
+  - MC68HC11D0/3 ROM based
+  - http://www.hc11.demon.nl/thrsim11/68hc11/
+  - https://www.eevblog.com/forum/microcontrollers/68hc11f1-setup-questions/
+  - https://web.archive.org/web/20200202170433/http://bd.eduweb.hhs.nl/mcca1/68hc11_intro.htm
+  - https://www.brainkart.com/article/Microcontrollers---MC68HC05,--MC68HC11---Architecture_7610/
+
+** (M)6800 family
+
+https://en.wikipedia.org/wiki/Motorola_6800_family
+
+#+CAPTION: [[https://retrocomputing.stackexchange.com/questions/11911/whats-the-timeline-of-motorola-6800-family-cpus-from-1974-to-1979][source]]
+#+ATTR_ORG: :width 500
+[[https://i.sstatic.net/wZ4pc.png]]
+
+- Inspired the MOS 6502
+- 8bit microprocess and microcontrollers
+
+*** 6800   (74)
+https://en.wikipedia.org/wiki/Motorola_6800
+http://zoom.interoscitor.com/PetersonEnterprises/Consulting/WritingSkills.html
+*** 68HC05 (79)
+
+https://en.wikipedia.org/wiki/Motorola_68HC05
+https://web.archive.org/web/20160309232352/http://www.68bits.com/m68hc05evm.html
+
+- von neumann architecture
+- memory mapped I/O
+- EEPROM variants in late 80's
+- 5 registers that are not part of the memory:
+  - an 8-bit accumulator A
+  - an 8-bit index register X
+  - an 8-bit stack pointer SP with two most significant bits hardwired to 1
+  - a 13-bit program counter PC
+  - and an 8-bit condition code register CCR
+- low powered variations of 05

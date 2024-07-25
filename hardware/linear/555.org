@@ -1,0 +1,31 @@
+https://en.wikipedia.org/wiki/555_timer_IC
+
+1972
+
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Signetics_NE555N.JPG/375px-Signetics_NE555N.JPG]]
+
+- Creator: Hans Camenzind
+- based on BJT
+- DIP8
+- Used as a:
+  - timer delay
+  - pulse generator
+  - oscillator
+
+#+ATTR_ORG: :width 500
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/555_esquema.png/1024px-555_esquema.png]]
+
+** Naming
+
+NE555V
+
+- LMC, TLC, ICM7 = low power CMOS version
+- NE = commercial (0° - +70°)
+- SE = militar (-55° - +125°)
+- Variants
+  - 556: DIP14 2x555
+  - 558/9: DIP16 ~4x555
+- T = metal
+- V = epoxy
+- N = ?

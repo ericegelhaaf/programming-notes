@@ -1,0 +1,26 @@
+- wiki https://en.wikipedia.org/wiki/4000-series_integrated_circuits
+- 1968
+- logic family of CMOS
+- https://en.wikipedia.org/wiki/List_of_4000-series_integrated_circuits
+
+|-----+---+----+------+--------------------------------------------|
+|     | N | T  |      | description                                |
+|-----+---+----+------+--------------------------------------------|
+|  11 | 4 | LG |      | 2-input NAND                               |
+|  69 | 6 | LG |      | NOT                                        |
+| 106 | 6 | LG |      | NOT                                        |
+|-----+---+----+------+--------------------------------------------|
+|  52 | 2 | AS |      | 4-channel analog multiplexer/demultiplexer |
+|  66 | 4 | AS |      | analog switch (low ON)                     |
+|-----+---+----+------+--------------------------------------------|
+|  17 | 1 | C  |      | decade counter                             |
+|  94 | 1 | SR | SIPO | 8-stage shift-and-store bus                |
+|-----+---+----+------+--------------------------------------------|
+
+LG = Logic Gates
+C  = Counter
+AS = Analog Switch
+SR = Shift Register
+
+Multiplexer: many to some
+Demultiplexer: some to many

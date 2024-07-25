@@ -1,7 +1,6 @@
 - wiki https://en.wikipedia.org/wiki/Bash_(Unix_shell)
   - Author: Brian Fox
   - 1989-
-
 - article order of startup https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
 
 - PS1's
@@ -11,6 +10,7 @@
 
 - https://en.wikipedia.org/wiki/ANSI_escape_code
   https://www.ele.uva.es/~jesus/lpcVT100/term.html
+- https://github.com/onceupon/Bash-Oneliner
 - https://github.com/dylanaraps/writing-a-tui-in-bash
 
 - article 18 http://ratfactor.com/slackware/pkgblog/bash

@@ -1,0 +1,24 @@
+* EEPROM (72)
+
+https://en.wikipedia.org/wiki/EEPROM
+- Serial Electrically Erasable PROMs
+- Interfaces
+  - Serial bus
+    - Interfaces: SPI, I2C, Microwire, UNI/O, 1-Wire
+    - Protocol:
+      - Phases
+        1) op-code: 8 bits
+        2) address: 8/24 bits
+        3) data: r/w
+      - op-codes
+        - WRite ENAbLe/DIsable
+        - ReaD/WRite Status Register
+        - READ/WRITE data
+  - Paralel bus
+    - faster
+    - less popular
+
+- Hardware programmers
+  - https://www.elnec.com/en/products/specialized-programmers/memprog2/
+  - https://www.elnec.com/en/products/universal-programmers/smartprog2/
+  - https://www.elnec.com/en/products/universal-programmers/beeprog2c/

@@ -1,0 +1,62 @@
+* SRAMs  (63)
+
+- wiki https://en.wikipedia.org/wiki/Static_random-access_memory
+- by Robert Norman @Fairchild_Semiconductor
+- type of RAM that uses flip-flops (latching circuitry) to sore each bit
+- volatile: data is lost with power
+- holds data permanently, does not decay like DRAM
+  - no need to refresh it periodically
+- used for cache/registers (while DRAM is used for main memory)
+- Control pins
+  - CE Chip Enable
+  - WE Write Enable
+  - OE Output Enable
+  - CLK Clock (optional, for synchronous SRAM)
+
+- tools:
+  - 62256 tester https://github.com/Andre-Fonteles/62256-sram-tester/blob/master/62256-sram-tester.ino
+
+- video:  How to write and read data - LH5168 SRAM
+  https://www.youtube.com/watch?v=wlCNRHnKuBs
+
+** Labeling
+
+For: MC6264L-10PC
+
+|----+-------------------+-----------------|
+| MS | company           | Mosel           |
+| 62 | family code       | MoBL SRAM       |
+| 64 | density           | in Kbit         |
+| L  | Low Power ?       |                 |
+| 10 | speed grade       | in ns           |
+| P  | package           | vendor specific |
+| C  | temperature grade | in centigrades  |
+|----+-------------------+-----------------|
+
+- eg: [[https://en.wikipedia.org/wiki/6264][6264 (64Kbit 8KB)]]
+
+*** Package
+
+- C   Ceramic Side Brazed DIP, 300mil
+- CW  Ceramic Side Brazed DIP, 600mil
+- D   Ceramic DIP (CERDIP), 300mil
+- DW  Ceramic DIP (CERDIP), 600mil
+- F   CERPACK
+- J   Plastic SOJ, 300mil
+- LS  28-pin Ceramic LCC, 350x550mil - SPECIAL-PINOUT
+- L   28-pin Ceramic LCC, 350x550mil - STANDARD-PINOUT
+- L32 32-pin Ceramic LCC, 450x550mil
+- P   Plastic DIP, 300mil
+- P6  Plastic DIP, 600mil
+- SN  Plastic SOP, 300mil
+
+*** Temperature
+
+|   | name         | min | max |
+|---+--------------+-----+-----|
+| C | Commercial   |   0 | -70 |
+| I | Industrial   | -40 |  85 |
+| A | Automotive-A | -40 |  85 |
+| E | Automotive-E | -40 | 125 |
+|---+--------------+-----+-----|
+

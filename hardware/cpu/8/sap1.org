@@ -37,7 +37,6 @@ https://www.youtube.com/watch?v=kRlSFm519Bo
 
 - ~Astable~: there are no stable binary state
 
-#+CAPTION: astable circuit - outside
 #+ATTR_ORG: :width 500
 [[./555ast.jpg]][[./555astschema.jpg]]
 

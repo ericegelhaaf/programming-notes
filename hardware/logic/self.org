@@ -1,0 +1,41 @@
+- tutorial http://r-luis.xbot.es/edigital/ed_ref.html
+- https://en.wikipedia.org/wiki/Schmitt_trigger
+- https://en.wikipedia.org/wiki/Tyranny_of_numbers
+- https://en.wikipedia.org/wiki/Ring_counter
+- Flip-Flop https://en.wikipedia.org/wiki/Flip-flop_(electronics)
+  - aka latches, aka bistable multivibrator
+  - have 2 stable states
+  - can store state information
+
+* Logic Families
+
+https://en.wikipedia.org/wiki/Logic_family
+https://www.youtube.com/watch?v=1TpLYx1iZD4
+
+- Both 5v
+- Output level for high signal
+  - TTL: 2.4v-
+  - CMOS: 3.5-
+- We can combine them as long as CMOS drives TTL
+- TTL pulls his inputs high ?
+
+** TTL  (63) - Transistor Transistor Logic
+
+- Logic family build from Bipolar Junction Transistors (BJT)
+- 7400 series originally build on it
+- still used as "glue logic" interfacing between more densely integrated components
+- consumes more power than CMOS
+
+** CMOS (67) - Complementary Metal Oxide Semiconductor
+
+- A type of MOSFET that uses complementary and symetricall pairs of p-type and n-type MOSFETS.
+- 99% of ICs were made using CMOS
+- high noise immunity
+- low static power consuption
+
+** NMOS (N-type Metal Oxide Semiconductor)
+
+- uses ~n-type~ MOSFETs to implement logic gates.
+- NMOS AND-by-default logic can produce unusual glitches or buggy behaviour, such as 6502 "illegal opcodes"
+- in the 70's faster than CMOS
+- high power consumption

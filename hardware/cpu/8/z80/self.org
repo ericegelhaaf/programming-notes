@@ -25,6 +25,17 @@
 
 - 17 Video | Flashing LEDs - Z80 Style
   - https://www.youtube.com/watch?v=AZb4NLXx1aM
+  - Z80 is a NMOS which is half CMOS (?), uses MOSFETs and those gate "float", so is better to tie them low/high.
+  - Micro-processors do NOT have internal memory.
+    Unlike Micro-controllers.
+  - Micro-processors also are NOT mean to drive LEDs loads. Unlike Micro-controllers.
+  - Hooks DATA bits to zero with 1k. AKA NOP.
+    - Also tries an ADD to have an instruction that takes more cycles
+  - Hooks ADDRESS lines to leds.
+  - puts leds on other signals
+    - write,read,mreq
+
+- Z80 computer https://www.youtube.com/playlist?list=PL_u4h3aVHdhFG4UWxSSN53DidEH2ik8OT
 
 - https://www.youtube.com/watch?v=nFIviiwPrLI
   https://www.youtube.com/watch?v=Gj1c-hG75uA

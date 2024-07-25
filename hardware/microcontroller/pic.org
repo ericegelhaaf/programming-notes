@@ -1,0 +1,17 @@
+- https://en.wikipedia.org/wiki/PIC_microcontrollers
+  - 1976-
+  - Programmable
+    Intelligent
+    Computer
+  - Microcontroller
+  - design derived from PIC1640 (by [[https://en.wikipedia.org/wiki/General_Instrument][GI]])
+  - might use RTOS for task scheduling and prioritization
+  - Family
+    - 93 - 16C84 (PIC16x84) - EEPROM
+    - 98 - PIC16F84 - Flash programmable/erasable
+    - 00 - PIC18 - C become predominant
+    - 04 - dsPIC - C
+    - 07 - PIC32MX - MIPS
+    - 13 - PIC32MZ - MIPS
+    - 16 - PIC32MM - MIPS - low-power
+    - 17 - PIC32MK - MIPS - motor control, IOT...

@@ -1,0 +1,33 @@
+*  EPROM (71)
+
+https://en.wikipedia.org/wiki/EPROM
+
+- Erasable Programmable Read-Only Memory
+- Erased by strong UV light source (eg: mercury vapor lamp)
+- Programmed at higher voltages that the ones that it normally operates
+- Generations
+  1) 1702 (1971)
+     - p-MOS
+     - 256 bytes
+  2) 2704/2708 (1975)
+     - n-MOS
+     - 1KB
+  3) 2716/2716 (1977)
+     - n-MOS
+     - removed VBB and VDD pins
+  4) 27Cxx (1979)
+     - c-MOS
+     - where xx started from 32
+     - and 10 or 100 mean 1Mbit
+
+- Universal ROM Programmer build https://www.youtube.com/playlist?list=PL9Njj9WL8poFKFq03qnmonrOxVDG5TOT6
+
+- 17 Video https://www.youtube.com/watch?v=P0oJPvwca6I
+  - Data lines are noted On, because they are normally output
+  - Vpp = Voltage for programming
+    - In video are 25v for programming
+    - otherwise 5v when reading or in standby
+  - UV light creates a path to GND to discharge it
+    - which sets all in high(1)
+  - 16:20 writting/programming
+    - require pin toggle of 25v by exactly 50ms on VPP

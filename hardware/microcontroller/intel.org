@@ -1,0 +1,155 @@
+http://www.8052mcu.com/tutorial
+https://timeline.intel.com/
+
+** MCS-48 (1976)
+
+- manual https://devsaurus.github.io/mcs-48/mcs-48.pdf
+- projects https://web.archive.org/web/20140717062700/http://coprolite.com:80/8048.html
+- wiki https://en.wikipedia.org/wiki/Intel_MCS-48
+- Intel's first =Microcontroller=
+- Models: 8048, 8035, 8748
+- Manufactured in the 90's to support older designs
+- Modified Harvard architecture https://en.wikipedia.org/wiki/Modified_Harvard_architecture
+  - loose separation between code and data
+  - allows memory that contains instructions to be accesed as data
+
+- tool: AS output to binary to be written into ROM https://linux.die.net/man/1/p2bin
+- tool: assembler https://github.com/daveho/asm48
+- tool: VHDL https://github.com/devsaurus/t48
+- https://jhnbyrn.github.io/951-KLR-PAGES/reading_code.html
+- dumping ROM https://www.sbprojects.net/projects/8049spy/index.php
+- dumping ROM https://www.eevblog.com/forum/projects/intel-mcs-48-(8749-8049)-hmos-vs-cmos-differences-bus-driver-(dumping-woe)/
+- KIT: internal EPROM programmer for UV ereasable ones
+  - https://www.mattmillman.com/projects/hveprom-project/an-easy-to-build-mcs-48-8748-8749-8741-8742-8048-8049-programmer-reader/
+  - https://www.mattmillman.com/projects/an-intel-mcs-48-based-dual-temperature-sensor/
+
+- 13 article | http://www.theresistornetwork.com/2013/07/programming-vintage-intel-mcs-48.html
+  - Early Intel processors combine the address and data bits onto the same lines and use two signals:
+    1) ALE  (Address Latch Enable)
+    2) PSEN (Program Store Enable)
+  - To signal what state the bus is in.
+  - This was done to save costs and keep pin count down.
+  - Unfortunately this complicates the connection to an external PROM.
+
+- 22 article | https://www.eejournal.com/article/a-history-of-early-microcontrollers-part-4-the-intel-8048-and-8748/
+- 21 video | Intro to Intel 8048 and PIC 16f1619
+  https://www.youtube.com/watch?v=7TIBGRGaTB0
+
+*** codebases
+
+- https://github.com/marekw1986/8048/blob/main/code/ascii/ascii.asm
+- korg trident mk2 https://github.com/wohali/polysix/blob/457212866bcf8875156f871fd5cc638a6e59b143/docs/klm8048.asm#L4
+- game https://github.com/tcr/8bit-demos/
+- i2c https://github.com/retiredfeline/8042-clock/
+- pwm https://github.com/retiredfeline/8048-pwmctl
+- display https://github.com/retiredfeline/beckman-clock
+- metronome https://github.com/retiredfeline/8042-metronome
+
+*** 20 video | 8048 microcontroller experiments
+
+- https://www.youtube.com/watch?v=K83uTnW6IHU
+- https://github.com/daveho/RandomStuff/tree/master/Episode05
+  - MAX708 reset generator (?
+  - 74HC573 address latch
+  - AT28C64E-15PC
+- ROM programmed at factory
+- but if you tie EA (External Access input) pin high
+  - it can work with external ROM
+  - by using 1 address and 1 data bus pin
+
+- $ asm48 -o foo.bin foo.asm
+
+- Comment
+  - I tied EA pin 7 to ground to use internal ROM running with a 10Mhz crystal.
+  - I see what you mean with getting the CPU to reset reliably, a 2k2 resistor to VCC with a 10uf cap to gnd seems to work ok, boots reliably on power-up.
+  - The devices I have are NEC types programmed with an equally ancient Expro-60 device programmer using an ISO interface card. Indeed a lot of fun, regards.
+
+**** Example 1: infinite loop of NOPs
+  #+begin_src asm
+    .org 0x0
+    reset:
+            jmp entry
+    .org 0x10
+    entry:
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            nop
+            jmp entry
+  #+end_src
+
+**** Example 2: blink led
+
+#+begin_src asm
+  .org 0x0
+  reset:
+          jmp entry
+  .org 0x10
+  entry:
+          mov A, #255 ; set all A bits to 1
+          outl P1, A  ; output to port 1 (LED will be off)
+          call delay
+          move A, #0  ; set all A bits to 0
+          outl P1, A  ; output to port 1 (LED will be ON)
+          call delay
+          jmp entry   ; repeat main loop
+  delay:
+          mov R0, #255 ; init outer loop counter
+  delay_outer:
+          mov R1, #255 ; init inner loop counter
+  delay_inner:
+          nop
+          nop
+          nop
+          nop
+          djnz R1, delay_inner ; dec inner count, continue if not zero
+          djnz R0, delay_outer ; dec outer count, continue if not zero
+          ret                  ; return to caller
+#+end_src
+
+** MCS-85 (1976)
+
+- wiki https://en.wikipedia.org/wiki/Intel_8085
+- Intel 8085
+- 8-bit
+- https://www.youtube.com/watch?v=7PNWR2QSjjc
+  - intel:
+    - mcs-4 / 4040
+    - mcs-8 / 8008
+    - 8080
+      - multiple power supplies
+      - higher voltages
+    - mcs-85 / 8085
+
+** MCS-51 (1980)
+
+- https://en.wikipedia.org/wiki/MCS-51
+  - MCS-51 succesor of MCS-48
+  - microcontroller (mCU)
+
+- tool: as31
+- tool: C89 https://www.keil.com/c51/default.asp
+- tool: C https://sdcc.sourceforge.net/
+
+- KIT: https://www.dos4ever.com/8031board/8031board.html
+
+- tutoriales
+  - https://www.8051projects.net/wiki/
+  - https://nevonprojects.com/8051-project/ ($$$)
+  - https://circuitdigest.com/8051-microcontroller-projects
+- snippet i2c https://www.8051projects.net/wiki/I2C_Implementation_on_8051
+
+- Still manufactured and popular (2016)
+  - [[https://old.reddit.com/r/microcontrollers/comments/593xrw/why_is_the_8051_still_so_popular/][TI's bluetooth chip CC3000]]
+  - [[https://www.embedded.com/the-8051-mcu-arms-nemesis-on-the-internet-of-things/][ARM collects a tax on each part sold]]
+  - Bad achitecture (?
+  - Cheap
+
+- 19 Programming 8051
+  - https://www.youtube.com/watch?v=QEI55gpt7zM

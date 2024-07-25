@@ -1,0 +1,35 @@
+https://en.wikipedia.org/wiki/Linear_integrated_circuit
+https://en.wikipedia.org/wiki/List_of_linear_integrated_circuits
+https://en.wikipedia.org/wiki/List_of_LM-series_integrated_circuits
+
+- LM = =Linear= Monolithic
+- Analog ICs (originally by "National Semiconductor")
+
+- Types
+  1) Operational *Amplifiers*
+  2) Differential _comparators
+  3) Current-mode (Norton) *Amplifiers*
+  4) Instrumentation *Amplifiers*
+  5) Audio *Amplifiers*
+     - https://en.wikipedia.org/wiki/LM386
+       - lower power
+     - https://en.wikipedia.org/wiki/LM3875
+       - high power
+       - projects http://www.diyaudioprojects.com/Chip/chip.htm
+  6) Precision reference
+  7) Voltage regulators
+  8) Voltage-to-frequency converters
+  9) Current sources
+  10) Temperature sensors and thermostats
+  11) ?
+
+- Notation
+  - LM1xx - military-grade -55,+125
+  - LM2xx - industrial-grade -25,+85
+  - LM3xx - commercial-grade 0,70
+
+* LM391x        - Dot bar display
+
+- https://es.wikipedia.org/wiki/LM3915
+- https://es.wikipedia.org/wiki/LM3914
+- https://es.wikipedia.org/wiki/LM3916

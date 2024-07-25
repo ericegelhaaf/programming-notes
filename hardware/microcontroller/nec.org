@@ -1,0 +1,27 @@
+- https://en.wikipedia.org/wiki/NEC
+  - 1899-
+  - Japan
+
+- https://en.wikipedia.org/wiki/PC-8800_series
+
+** μCOM (1971-1984)
+
+https://en.wikipedia.org/wiki/NEC_%CE%BCCOM_series#%CE%BCCOM-87,_%CE%BCCOM-87AD
+
+- Series of microprocessors and microconctrollers
+- Initially custom designs (μCOM-4, μCOM-16)
+- Later (μCOM-8) based on other chips:
+  - Intel 8080
+  - Zilog Z80
+  - Intel 8086
+- Replaced later by NEC V20 (a intel 8088 clone)
+
+*** μCOM-8 series
+
+- https://en.wikipedia.org/wiki/NEC_%CE%BCCOM_series#%CE%BCCOM-87,_%CE%BCCOM-87AD
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Ic-photo-NEC--D7810G-%28MCU%29.png/800px-Ic-photo-NEC--D7810G-%28MCU%29.png]]
+  - μCOM-87   (μPD7800)
+  - μCOM-87AD (μPD7810)
+    - 8 bit micro
+    - "AD" because it adds a A/D converter
+    - 2 sets of 8 registers
