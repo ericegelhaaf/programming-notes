@@ -7,6 +7,32 @@
   - have 2 stable states
   - can store state information
 
+- Playlist
+  - Electronica FP - Electronica Digital https://www.youtube.com/playlist?list=PLuzS0jdNRVvpQmCxFV4S2eqfji90BnDub
+
+* 2015 Ben Eater's - Digital electronics tutorial
+
+https://www.youtube.com/playlist?list=PLowKtXNTBypETld5oX1ZMI-LYoA2LWi8D
+
+** Experimenting with LEDs (1-3)
+
+- Each LED color has
+  - different voltage range (?
+  - same current requirement (within the voltage range)
+
+- Kirchhoff’s Voltage Law (KVL)
+  - the voltage drops across every component has to be zero
+  - if we put 1 component that component has to consume 5v
+  - In the example, a 155ohm resistor would drop 3.1v of the circuit.
+    - Leaving the LED with 1.9v.
+    - In reality we use a 220ohm (RRB)
+    - If we put an 1k (BbR) it will be a bit dimmer.
+      With less current consumption.
+
+** Connecting to a Mystery signal (4-)
+
+
+
 * Logic Families
 
 https://en.wikipedia.org/wiki/Logic_family

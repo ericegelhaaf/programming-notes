@@ -1,7 +1,7 @@
 - wiki https://en.wikipedia.org/wiki/7400-series_integrated_circuits
 - 1964
 - TI = Texas Instruments
-- logic family of TTL (Transistor-Transistor Logic) IC's
+- logic family of originally TTL (Transistor-Transistor Logic) IC's
   - "an integrated circuit made in CMOS is NOT a TTL chip, since it uses *Field-Effect Transistors* (FETs) and NOT *Bipolar Junction Transistors* (BJT)"
 
 [[https://upload.wikimedia.org/wikipedia/commons/c/c6/TexasInstruments_7400_chip%2C_view_and_element_placement.jpg]]

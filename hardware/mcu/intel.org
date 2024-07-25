@@ -13,6 +13,14 @@ https://timeline.intel.com/
   - loose separation between code and data
   - allows memory that contains instructions to be accesed as data
 
+- Used in
+  - [[https://en.wikipedia.org/wiki/Magnavox_Odyssey_2][Magnavox's Oddysey 2]] video game console (1978)
+  - Korg Trident Series
+  - Korg Poly-61
+  - Roland Jupiter-4
+  - Roland Promars
+
+- tool: HSE-49: Original Dev Board https://en.wikipedia.org/wiki/Intel_system_development_kit#HSE-49
 - tool: AS output to binary to be written into ROM https://linux.die.net/man/1/p2bin
 - tool: assembler https://github.com/daveho/asm48
 - tool: VHDL https://github.com/devsaurus/t48
