@@ -3,7 +3,6 @@
   - aka princeton architecture
   - "von neumann bottleneck"
     - An instruction to fetch something from memory to cpu. Takes 2 fetch cycles.
-
 - https://en.wikipedia.org/wiki/Harvard_architecture
   - instructions and data do NOT share the same bus (or stored in the same place)
     - the instruction memory can be read-only
@@ -13,3 +12,4 @@
   - used for
     - real time processing (DSPs)
     - low-power applications
+- http://www.homebrewcpu.com/

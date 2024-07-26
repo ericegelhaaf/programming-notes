@@ -100,7 +100,7 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
 - Out of the 3 circuits we have so far.
 - We need to make it 1, with 1 output.
 - We use Logic gates
-  - 1 ~74LS04~ (Hex Inverter)
+  - 1 ~74LS04~ (Hex  NOT (Inverter))
   - 1 ~74LS08~ (Quad AND gate)
   - 1 ~74LS32~ (Quad OR gate)
 
@@ -133,43 +133,48 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
    #+ATTR_ORG: :width 600
    [[./srlatchNOR.jpg]]
 
-*** D(ata) Latch
+*** D(ata)       Latch
 
-- We want instead a single INPUT instead of SR, that still latches one bit of *Data*
+- We want instead of 2 INPUTS, a single INPUT instead, that still latches one bit of *Data*
+  - A naive approach of feeding D and Di (D inverse) would NOT latch/keep
 
 #+ATTR_ORG: :width 750
 [[./dlatch.jpg]]
 
 - Modifications before the SR-latch
-  - two *AND* gates
+  - Add 2(two) *AND* gates
   - Add an *Enable Input* signal, to only change data when signaled
   - Add an *inverter* to decouple the input data
 
-*** D flip-flop
+*** D            flip-flop
 
-- A variation of the D-latch.
+- (End of review 00:03:00)
 
+- A variation of the D-latch
 - To only latch to new values at transitions of the clock from low to high.
-  - And NOT latch through the whole clock cycle
-
-- Instead of the *Enable Input* we have a *Clock Input*
-  - With an ~edge detector~, a raising into a pulse.
-    - An AND with inputA and inputA negated.
-    - We take advantfage of the fact that the *invertor* takes a small amount of time to switch states
-
-- Simpler yet. A resistor and a capacitor.
-  When a capacitor is fully charged, no current will go through it.
-  #+begin_src
-  ----||-----.------
-             z
-             z
-            GND
-  #+end_src
-  - 0.1uf = 0.1 * 10^-6
-    1K    = 10^3
-    0.1 * 10^-6 * 10^3 = 0.1ms
+  - and NOT latch through the whole clock cycle
+  - instead of the *Enable Input* we have a *Clock Input*
+  - with an ~edge detector~, to detect a raising into a pulse
+    1) With an AND with inputA and inputA negated.
+       We take advantage of the fact that the *invertor* takes a small amount of time to switch states
+    2) Simpler yet.
+       A resistor and a capacitor.
+       When the capacitor is fully charged, no current will go through it.
+       #+begin_src
+       ----||-----o------
+                  |
+                  Z
+                  Z
+                  |
+                 GND
+       #+end_src
+       - 0.1uf = 0.1 * 10^-6
+         1K = 10^3
+         0.1 * 10^-6 * 10^3 = 0.1ms is how long the pulse will last
 
 ** 8 bit register
+- 1x 74LS245
+- 2x 74LS173
 *** Bus architecture and how register transfers work
 
 https://www.youtube.com/watch?v=QzWW-CBugZo
@@ -183,17 +188,21 @@ https://www.youtube.com/watch?v=QzWW-CBugZo
      - DIP16
   3) Leds to show data.
 
+#+CAPTION: The Bus
+#+ATTR_ORG: :width 600
+[[./thebus.jpg]]
+
 - The =Bus=
   - *Registers* interface with it
-  - in this case there is only 1(one) bus of 8 bits
+  - in this project there is only 1 bus of 8 bits (usually you have more buses)
   - is a /common connection point/ for the different components
   - allows /bus transfers/, aka move data between components
   - each component/module/part
-    - has both his inputs and outputs connected to the bus
-    - has /control lines/ signals
-      1) a LOAD signal: to (R)ead from the bus
-      2) an ENABLE signal: to (W)rite into the bus
-    - has the same CLOCK input signal
+    1) has inputs and outputs connected to the bus
+    2) has /control lines/ signals
+       1) a LOAD signal: to (R)ead from the bus
+       2) an ENABLE signal: to (W)rite into the bus
+    3) has the same CLOCK input signal
 
 *** Tri-state logic: Connecting multiple outputs together
 
@@ -223,6 +232,7 @@ https://www.youtube.com/watch?v=faAjse109Q8
 *** Building an 8-bit register
 
 https://www.youtube.com/watch?v=CiMaWbz_6E8
+
 - By default, on ~SN74LS173A~, you can't see what is on the registers.
   - To see it we are going to use separate Tri-State chip ~74LS245~ and put the chip always on.
   - We and up connecting output and inputs together, as they will only do 1 thing at the time.
@@ -231,6 +241,7 @@ https://www.youtube.com/watch?v=CiMaWbz_6E8
 *** Testing our computer's registers
 
 https://www.youtube.com/watch?v=9WE3Obdjtv0
+
 - Testing the 8-bit register, with the clock and leds for the bus output.
 - Every TTL chip will default to a high input, if you don't connect the input (?
   It has a pull-up resistor inside the chip input.

@@ -1,0 +1,9 @@
+- https://en.wikipedia.org/wiki/PICAXE
+  - 1999-
+  - are PICs with pre-programmed firmware
+  - Features
+    - bootlading code directly from PC
+      - RS-232 serial cable or USB
+    - no hardware programmer needed
+    - programmed in a "BASIC Stamp" like
+    - but using internal EEPROM

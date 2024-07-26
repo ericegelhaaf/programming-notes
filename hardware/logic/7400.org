@@ -51,11 +51,11 @@ https://en.wikipedia.org/wiki/List_of_7400-series_integrated_circuits
 | 157 | 4 | 2-line  selector/multiplexers          | -  |
 | 161 | 1 | 4-bit binary counters                  | -  |
 | 164 | 1 | 8-bit SIPO =shift register=            | -  |
-| 173 | 4 | D flip-flop                            |    |
-| 174 | 6 | D flip-flop                            | -  |
+| 173 | 4 | D register/flip-flop (+ 2 OE)          |    |
+| 174 | 6 | D register/flip-flop                   | -  |
 | 189 | 1 | 64-bit RAM                             | 3S |
-| 240 | 8 | buffer                                 | 3S |
-| 244 | 8 | buffer receiver                        | 3S |
+| [[https://learn.adafruit.com/digital-circuits-6-eprom-emulator/the-74244-octal-tristate-buffer][240]] | 8 | buffer (+ 2 OE)                        | 3S |
+| [[https://www.youtube.com/watch?v=itsdKuu7vBU][244]] | 8 | buffer (+ 2 OE)                        | 3S |
 | 245 | 8 | bus transceiver                        | 3S |
 | 251 | 2 | 8-line to 1-line selector/multiplexer  | 3S |
 | 259 | 1 | 8-bit addressable input latch with clr | -  |

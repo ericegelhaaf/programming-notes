@@ -1,7 +1,22 @@
+[[https://www.explainxkcd.com/wiki/images/9/9e/logic_gates.png]]
+
 - tutorial http://r-luis.xbot.es/edigital/ed_ref.html
 - https://en.wikipedia.org/wiki/Schmitt_trigger
 - https://en.wikipedia.org/wiki/Tyranny_of_numbers
-- https://en.wikipedia.org/wiki/Ring_counter
+- https://en.wikipedia.org/wiki/Programmer_(hardware)
+- Digital Circuits - Dave Astels
+  1) binary https://learn.adafruit.com/binary-boolean-and-logic?view=all
+  2) some digital tools https://learn.adafruit.com/some-digital-tools?view=all
+  3) combinational logic https://learn.adafruit.com/combinational-logic?view=all
+  4) sequential circuits https://learn.adafruit.com/digital-circuits-4-sequential-circuits?view=all
+  5) memories https://learn.adafruit.com/digital-circuits-5-memories?view=all
+  6) EPROM emulator https://learn.adafruit.com/digital-circuits-6-eprom-emulator?view=all
+  7) MCUs https://learn.adafruit.com/mcus-how-do-they-work?view=all
+- Counters
+  - https://en.wikipedia.org/wiki/Ring_counter
+  - https://www.electronics-tutorials.ws/counter/count_1.html
+- Combinational Logic
+  - https://www.electronics-tutorials.ws/combination/comb_1.html
 - Flip-Flop https://en.wikipedia.org/wiki/Flip-flop_(electronics)
   - aka latches, aka bistable multivibrator
   - have 2 stable states
@@ -9,6 +24,7 @@
 
 - Playlist
   - Electronica FP - Electronica Digital https://www.youtube.com/playlist?list=PLuzS0jdNRVvpQmCxFV4S2eqfji90BnDub
+  - Sebastian Lague - How Computers Work https://www.youtube.com/playlist?list=PLFt_AvWsXl0dPhqVsKt1Ni_46ARyiCGSq
 
 * 2015 Ben Eater's - Digital electronics tutorial
 
