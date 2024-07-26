@@ -25,6 +25,7 @@ https://www.youtube.com/playlist?list=PLowKtXNTBypETld5oX1ZMI-LYoA2LWi8D
   - if we put 1 component that component has to consume 5v
   - In the example, a 155ohm resistor would drop 3.1v of the circuit.
     - Leaving the LED with 1.9v.
+    - It needs 20mA
     - In reality we use a 220ohm (RRB)
     - If we put an 1k (BbR) it will be a bit dimmer.
       With less current consumption.

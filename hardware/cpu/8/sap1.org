@@ -119,15 +119,15 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
 
 - A simple OR gate can *hold/latch* an input value
   - if one input is hooked directly to the output of it
-  - even if retriggered, it will keep holding the value
+  - even if retriggered, it will keep holding the value, until poweroff
   - Example circuit uses an ~74LS32~
    #+ATTR_ORG: :width 700
    [[./srlatchOR.jpg]]
 
 - If we want a way to *reset* the latch, we could use 2 NOR gates
-  - with the output inverted (feeding the other NOR gate=
-  - inputs and outputs usually labeled S/R and Q/Ǭ
-  - setting both inputs on is an "invalid state"
+  - with the output inverted (feeding the other NOR gate)
+  - 4 I/O's usually labeled S/R and Q/Ǭ
+  - setting both inputs ON is an _invalid state_
   - it is completely random which gate will start with 1
   - Example circuit uses an ~74LS02~
    #+ATTR_ORG: :width 600
@@ -135,7 +135,7 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
 
 *** D(ata) Latch
 
-- Single INPUT, but still latches one bit of *Data*
+- We want instead a single INPUT instead of SR, that still latches one bit of *Data*
 
 #+ATTR_ORG: :width 750
 [[./dlatch.jpg]]

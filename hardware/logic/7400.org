@@ -1,5 +1,6 @@
+* 7400 (64)
+
 - wiki https://en.wikipedia.org/wiki/7400-series_integrated_circuits
-- 1964
 - TI = Texas Instruments
 - logic family of originally TTL (Transistor-Transistor Logic) IC's
   - "an integrated circuit made in CMOS is NOT a TTL chip, since it uses *Field-Effect Transistors* (FETs) and NOT *Bipolar Junction Transistors* (BJT)"
@@ -50,16 +51,17 @@ https://en.wikipedia.org/wiki/List_of_7400-series_integrated_circuits
 | 157 | 4 | 2-line  selector/multiplexers          | -  |
 | 161 | 1 | 4-bit binary counters                  | -  |
 | 164 | 1 | 8-bit SIPO =shift register=            | -  |
+| 173 | 4 | D flip-flop                            |    |
 | 174 | 6 | D flip-flop                            | -  |
 | 189 | 1 | 64-bit RAM                             | 3S |
 | 240 | 8 | buffer                                 | 3S |
-| 244 | 8 | buffer                                 | 3S |
-| 245 | 8 | transceiver                            | 3S |
+| 244 | 8 | buffer receiver                        | 3S |
+| 245 | 8 | bus transceiver                        | 3S |
 | 251 | 2 | 8-line to 1-line selector/multiplexer  | 3S |
 | 259 | 1 | 8-bit addressable input latch with clr | -  |
 | 283 | 1 | 4-bit binary full adder, with carry    | -  |
 | 373 | 8 | transparent latch                      | 3S |
-| 374 | 8 | register                               | 3S |
+| 374 | 8 | positive-edge-triggered flip-flops     | 3S |
 | 573 | 1 | D transparent latch                    | 3S |
 | 595 | 1 | 8-bit shift register                   | 3S |
 |-----+---+----------------------------------------+----|
