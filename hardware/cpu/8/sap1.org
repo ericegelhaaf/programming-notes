@@ -9,6 +9,8 @@
 #+ATTR_ORG: :width 600
 [[https://karenok.github.io/SAP-1-Computer/images/sap-1-architecture.png]]
 
+- digital https://www.youtube.com/@Kevindarrah/videos
+
 * Video: My Ben Eater inspired homemade 8-bit CPU
 - by James Bates
 - https://www.youtube.com/playlist?list=PL_i7PfWMNYobSPpg1_voiDe6qBcjvuVui
@@ -173,20 +175,21 @@ https://www.youtube.com/watch?v=WCwJNnx36Rk
          0.1 * 10^-6 * 10^3 = 0.1ms is how long the pulse will last
 
 ** 8 bit register
-- 1x 74LS245
-- 2x 74LS173
+
+- Parts needed, either:
+  1) With basic 74xx ICs
+     - 1x 74245 - transceiver
+     - 1x 7474  - 2 D-type flip-flops
+     - 1x 7404  - NOT
+     - 1x 7408  - AND
+     - 1x 7432  - OR
+  2) With more prepackaged ones
+     - 2x 74173 - 4-bit d-latch register (already has 3-state)
+     - 1x 74245 - tranceiver (to see the state of registers)
+
 *** Bus architecture and how register transfers work
 
 https://www.youtube.com/watch?v=QzWW-CBugZo
-
-- Components
-  1) 74LS245 (control direction of bus communication)
-     - "Octal Bus Transceiver, With 3-State Outputs"
-     - DIP20 (8in 8out OE DIR + -)
-  2) 74LS173 (x2) (the registers)
-     - "4-bit D-Type Registers, With 3-state Outputs"
-     - DIP16
-  3) Leds to show data.
 
 #+CAPTION: The Bus
 #+ATTR_ORG: :width 600
@@ -210,92 +213,176 @@ https://www.youtube.com/watch?v=faAjse109Q8
 
 - ONLY 1 component should be sending data to the bus at the time
   - You need a way to *disconnect* each chip OUTPUT who isn't sending data.
-    A 0 or a 1 is not enough, as it will sink or generate current.
-  - On each chip, there is usually a *output stage*:
-    With 2 transistors. By disconnecting both we achieve it.
-  - Such gates are the ~tri-state~ gates. 0 or 1 or disabled
+  - A 0 or a 1 is NOT enough, as it will sink or generate current.
+
+- On each chip, there is usually a *OUTPUT STAGE*:
+  #+ATTR_ORG: :width 150
+  [[https://i.sstatic.net/M588G.png]]
+  - It has 2 transistors.
+  - We can disconnect both to achive the desired state.
+
+- Such gates are the ~tri-state~ gates (74245 has many)
+  [[https://www.electronics-lab.com/wp-content/uploads/2023/07/Tristate-Buffer-TT.png]]
+  - 0
+  - 1
+  - disabled
 
 - *ENABLE* PIN to connect the circuit and output the data stored, we need to make sure only one of the chips has this flag set
 - *LOAD* PIN, on the next clock will read
 
 *** Designing and building a 1-bit register
 
+https://www.youtube.com/watch?v=-arYx_oVIj8
+
 - LOAD
-  - We use *D flip-flops* with some logic added around
-    - 1NOT, 2AND, 1OR, 1 Flip-Flop (~74LS74~: has 2)
+  - We could use *D flip-flops*
+    #+ATTR_ORG: :width 500
+    [[./1bitreg.jpg]]
+    - but we need to add some logic to have it either
+      1) load a new value
+      2) or load the same old vlue
+
 - ENABLE
-  - We use a tri-state buffer (~74LS245~, has support for both directions tri-state buffer, a transciver)
+  - We use a tri-state buffer, to not always send our output to BUS
+  - ~74245~, has support for both directions tri-state buffer, aka a transceiver
+  - In our case we want to data to go into 1(one) direction (LOAD)
+
 - LOAD & ENABLE
-  - ~SN74LS173A~, which has 4-bit D-Type Registers
-  - Has 4 D-Flip-Flops, and logic gates above, and Tri-State outputs
+  - Instead of all the above, we could use instead one 74173
+  - ~74173~, which has 4-bit D-Type Registers
+  - Designed to work as a register
+  - Has
+    - 4 D-type flip-flops
+    - logic gates
+    - Tri-State outputs
 
 *** Building an 8-bit register
 
 https://www.youtube.com/watch?v=CiMaWbz_6E8
 
-- By default, on ~SN74LS173A~, you can't see what is on the registers.
-  - To see it we are going to use separate Tri-State chip ~74LS245~ and put the chip always on.
+#+ATTR_ORG: :width 500
+[[./register.jpg]]
+
+- By default, with ~74173~ you cannot see what is stored on the registers.
+  - We can add a separate Tri-State chip ~74245~ and set the 173 to always output.
   - We and up connecting output and inputs together, as they will only do 1 thing at the time.
-  - These chips also have a REST pin
+  - 173 have a CLR pin, that can be used on reset
 
 *** Testing our computer's registers
 
 https://www.youtube.com/watch?v=9WE3Obdjtv0
 
-- Testing the 8-bit register, with the clock and leds for the bus output.
-- Every TTL chip will default to a high input, if you don't connect the input (?
-  It has a pull-up resistor inside the chip input.
-- We are going to need 3 register
-  - 1(one) build in the opposite direction for positioning
-    AND the most significant 4 bits, won't go back into the bus (for the instruction decoder)
+- Any TTL chip will default to a HIGH input
+  - If you don't connect to anything (aka the bus is not connected)
+  - It has a pull-up resistor inside the chip input.
+
+- For this project, we are going to need 3 registers
+  - 2 equal to above
+  - 1 build with the 4 most significant bits NOT GOING BACK into the bus
+    - for the instruction decoder
 
 ** Twos complement: Negative numbers in binary
-https://www.youtube.com/watch?v=4qH4unVtJkE&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=14
-- Representing negative numbers
-  1. using a naive sign bit
+
+https://www.youtube.com/watch?v=4qH4unVtJkE
+
+- Ways of representing negative numbers:
+  1. using the MSB fas a naive =sign bit=
      - you have a negative 0
-     - you can not add
-  2. One's complement: complement the bits
+     - you CANNOT add
+  2. =ones complement=: for negative we flip/complement the bits
      - you have a negative 0
-     - you can not add (only can to his own negative)
-  3. Two's complement: complement the bits, and add 1
-     - removes the -0
-     - you can add
-** ALU
-*** 1 - Design
-https://www.youtube.com/watch?v=mOVOS9AjgFs&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=15
-- Having 2 registers
-  - Have their Input and Output signals
-  - Direct connection to the ALU
+     - you CANNOT add (kind of works if you "add 1" to the addition)
+  3. =twos complement=: for negative we flip/complement the bits, and add 1
+     - removes the "-0" of ones complement
+     - the MSB acts like "-8"
+     - you CAN add
+
+** ALU - Arithmetic Logic Unit
+
+- Parts Needed
+  - 2x - 74283 - 4-bit adder
+  - 2x - 7486 - XOR
+  - 1x - 74245 (Octal bus transceiver) (aka for the tri-state)
+
+*** 4bit adder with gates
+
+- https://www.youtube.com/watch?v=wvJc9CZcvBc
+- (see also computerphile version https://www.youtube.com/watch?v=VPw9vPN-3ac)
+
+- Parts Needed
+  - 2x XOR 7486
+  - 2x AND 7408
+  - 1x OR  7432
+
+#+ATTR_ORG: :width 300
+[[./fulladder4bit.jpg]]
+
+- You need to build a circuit that knows how to do all the possible binary sums.
+  - The =half adder= part
+  #+begin_src
+        A   B   c(arry)  S(sum)
+        0 + 0 = 0\       0\
+        0 + 1 = 0 |<AND> 1 |<XOR>
+        1 + 0 = 0 |      1 |
+        1 + 1 = 1/       0/
+  #+end_src
+  - Plus those sums with a (c)arry bit coming IN
+  #+begin_src
+    c   A   B   c S
+    1 + 0 + 0 = 0 1\
+    1 + 0 + 1 = 1 0 |<XOR>
+    1 + 1 + 0 = 1 0 |(inverse of the above S)
+    1 + 1 + 1 = 1 1/ (so we XOR 1(carry) with above S)
+  #+end_src
+
+*** Design
+
+https://www.youtube.com/watch?v=mOVOS9AjgFs
+
+- We have 2 registers
+  - IO connected to the BUS
+  - And =directly connected= to the ALU
+
+[[./alugeneral.jpg]]
+
 - ALU
+  - 2x ~74283~ is a 4-bit adder with fast carry
+  - 1x ~74~ XOR
+    #+ATTR_ORG: :width 400
+    [[./aluzoom.jpg]]
   - Two custom signals
-    1) EO (sum out signal, when to output the result)
-      - We add to the OUTPUT a tri-state buffer
-    2) SU (subtraction signal)
-      - We add XOR gates to the INPUT of one register (since it negates the input if the SU signal is 1)
-      - We connect the free CARRY INPUT to the SU (since it will add the 1 for the two's complement needed)
-  - ~74LS283~ is a 4-bit adder with fast carry
-    - 2 Input number of 4 bits each
-    - 1 Output number of 4 bits
-    - 1 Carry In, 1 Carry Out (to cascade the chips for bigger numbers)
-  - We use 2(two) chips to be able to sum 8 bit numbers
-*** 2 - Building
-https://www.youtube.com/watch?v=S-3fXU3FZQc&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=16
-- 2x 74LS283 (4-bit binary full adder)
-- 2x 74LS86  (Quad XOR gate)
-- 1x 74LS245 (Octal bus transceiver) (aka for the tri-state)
-*** 3 - Troubleshooting
-https://www.youtube.com/watch?v=U7Q8-2YZTUU&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=17
+    1) EO (output signal, dump the result to the BUS)
+       - We add to the OUTPUT a tri-state buffer
+       - E for "sigma" as being the sum
+    2) SU (subtract signal)
+       - whether we are adding(0) or subtracting(1)
+       - We XOR the INPUT of one register
+         - since it negates the input *if the SU signal is 1*
+         - a sort of "conditional invertor"
+       - We connect the free CARRY INPUT to the SU (since it will add the 1 for the neede =twos complement=)
+
+*** Building
+
+https://www.youtube.com/watch?v=S-3fXU3FZQc
+
+*** TODO Troubleshooting
+
+https://www.youtube.com/watch?v=U7Q8-2YZTUU
+
 - Feeds bits into the A register until a bit stops showing on the ALU
   - Does the same with B register
 - Uses a multimeter, one probe to GND and other to start testing voltage
 - Tries some sums
-*** 4 - Testing
-https://www.youtube.com/watch?v=4nCMDvnR2Fg&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=18
+
+*** Testing
+
+https://www.youtube.com/watch?v=4nCMDvnR2Fg
+
 - Connect the output of the ALU to the BUS
 - Feeds that back into register A
   - using the manual clock and manual steps
   - using the automatic clock and potentiometer for speed
+
 ** 8-bit computer RAM
 *** 0 - Intro
 https://www.youtube.com/watch?v=FnxPIZR1ybs&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=19
