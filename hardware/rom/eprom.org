@@ -20,8 +20,19 @@ https://en.wikipedia.org/wiki/EPROM
      - where xx started from 32
      - and 10 or 100 mean 1Mbit
 
-- Universal ROM Programmer build https://www.youtube.com/playlist?list=PL9Njj9WL8poFKFq03qnmonrOxVDG5TOT6
+- programmer/burner
+  - https://outflux.net/software/pkgs/EPROM/mirror/
+  - http://web.archive.org/web/20010424172231/http://www.zws.com:80/products/epromr2/
+  - Universal ROM Programmer build https://www.youtube.com/playlist?list=PL9Njj9WL8poFKFq03qnmonrOxVDG5TOT6
+    - MIC2288 - 1A, 1.2MHz PWM Boost Converter
+      - switching boost regulator (not a linear regulator)
+      - "All the regulator does is PWM a MOSFET inside the IC.
+         Connected to the SW(itch) pin and either charges or floats the _external_ inductor (L1)
+         at a frequency of 1.2MHz at a variable duty cycle."
 
+- 22 Video | Emulator with RPi Pico https://www.youtube.com/watch?v=elrf1nM5nco
+  - Code in Python
+  - With a 1MHz clock is fine
 - 17 Video https://www.youtube.com/watch?v=P0oJPvwca6I
   - Data lines are noted On, because they are normally output
   - Vpp = Voltage for programming

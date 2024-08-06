@@ -3,6 +3,7 @@
 - wiki https://en.wikipedia.org/wiki/Static_random-access_memory
 - by Robert Norman @Fairchild_Semiconductor
 - type of RAM that uses flip-flops (latching circuitry) to sore each bit
+- sometimes used as L2 cache on old motherboards (?
 - volatile: data is lost with power
 - holds data permanently, does not decay like DRAM
   - no need to refresh it periodically

@@ -13,6 +13,14 @@ https://timeline.intel.com/
   - loose separation between code and data
   - allows memory that contains instructions to be accesed as data
 
+- 8042 keyboard https://wiki.osdev.org/%228042%22_PS/2_Controller
+  - CHMOS
+  - Slave microcontroller (?)
+  - OTP EPROM
+  - UPI-42 family
+    - UPI-C42
+    - UPI-L42
+
 - Used in
   - [[https://en.wikipedia.org/wiki/Magnavox_Odyssey_2][Magnavox's Oddysey 2]] video game console (1978)
   - Korg Trident Series
@@ -23,7 +31,9 @@ https://timeline.intel.com/
 - tool: HSE-49: Original Dev Board https://en.wikipedia.org/wiki/Intel_system_development_kit#HSE-49
 - tool: AS output to binary to be written into ROM https://linux.die.net/man/1/p2bin
 - tool: assembler https://github.com/daveho/asm48
+- tool: assembler fasm macros https://board.flatassembler.net/topic.php?t=18398
 - tool: VHDL https://github.com/devsaurus/t48
+- too: ROM programmer story https://laughtonelectronics.com/oldsite/lab_oem/lab_mcs48.html
 - https://jhnbyrn.github.io/951-KLR-PAGES/reading_code.html
 - dumping ROM https://www.sbprojects.net/projects/8049spy/index.php
 - dumping ROM https://www.eevblog.com/forum/projects/intel-mcs-48-(8749-8049)-hmos-vs-cmos-differences-bus-driver-(dumping-woe)/

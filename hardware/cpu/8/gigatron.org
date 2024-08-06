@@ -1,0 +1,5 @@
+- home https://gigatron.io/
+- wiki https://en.wikipedia.org/wiki/Gigatron_TTL
+  - 8-bit
+  - 6502
+- https://www.youtube.com/watch?v=rbaAmnhZAis

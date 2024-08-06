@@ -32,6 +32,7 @@
   - https://gitlab.gnome.org/GNOME/zenity
   - https://invisible-island.net/dialog/
   - https://github.com/charmbracelet/gum
+- tool: html https://github.com/TUVIMEN/reliq
 - tool: html https://github.com/ericchiang/pup
   - pup [flags] [css-selectors] [display function]
   - css-selectors, comma separated

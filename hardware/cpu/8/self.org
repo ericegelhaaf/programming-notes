@@ -1,0 +1,5 @@
+- https://en.wikipedia.org/wiki/Signetics_2650
+  - 72 designed, 75 released
+  - nMOS
+  - Company bough lated by Philips
+  - DIP40

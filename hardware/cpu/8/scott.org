@@ -1,0 +1,79 @@
+- Book: "But how do it know?" by John Clark Scott
+
+- https://www.youtube.com/playlist?list=PLYE0XunAbwfDvfabOlNWLViRcMI54M6CR
+- https://www.youtube.com/playlist?list=PLC7HwWRRD0N0Yh7Y1JvKh00Dlvq_RbThe
+
+* How computers work - Building Scott's CPU | Computer&Electronics
+
+https://www.youtube.com/playlist?list=PLnAxReCloSeTJc8ZGogzjtCtXl_eE6yzA
+
+** 1) Building logic gates
+
+- Using CMOS transistors
+  - N type: it's on with 1
+  - P type: it's on with 0
+
+- NAND = 4 = 2 N-type + 2 P-type
+- NOT  = 2 = 1 N-type + 1 P-type
+- AND  = 6 = NAND + NOT
+- NOR  = 4 = 2 N-type + 2-Ptype
+- OR   = 6 = NOR + NOT
+- XOR  = 4 = 2 N-type + 2-Ptype
+
+** 2) Latches & Memory
+
+- SR latch = 2 NAND
+  - S=0 & R=0 is an invalid combination
+  #+ATTR_ORG: :width 150
+  [[https://cdn.sparkfun.com/assets/learn_tutorials/2/1/6/34-sr-latch-nand.png]]
+
+- D-latch
+  - We can add 2 NAND extra before to change the "interface" of the latch.
+  - to an IN and SET inputs (an enable pin?)
+  [[https://i.sstatic.net/15hsT.png]]
+
+** 3) RAM memory
+
+- The Enabler
+  - Using a tri-state logic gate
+  - Using 1 transistor
+
+- Decoder: 3 to 8
+  - with each combination of A? we select only 1 of 8 outputs
+  - 3NOT + 8(3AND)
+  #+ATTR_ORG: :width 150
+  [[https://www.elprocus.com/wp-content/uploads/3-to-8-Decoder-circuit.jpg]]
+
+- Inside a RAM
+  - Uses
+    1) 2(two) "4 to 16 decoders"
+    2) A MAR (Memory Address Register) of 8 bytes
+  - Each nibble is passed a decoder to figure out memory column and row.
+    On each intersection existing an 8bit register.
+    eg: using two 4x16 decoders we will have 256bytes of memory
+    [[https://d3i71xaburhd42.cloudfront.net/cdfeaf986ef2ae1d9c37d6596e655163f146db6d/1-Figure1-1.png]]
+
+** 4) Fetch-Decode-Execute cycle
+
+- Von Neumann Architecture
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Von_Neumann_Architecture.svg/800px-Von_Neumann_Architecture.svg.png]]
+
+- Scott's cpu architecture
+  - IAR = Intruction Address Register, address of the next instruction
+  - IR  = Instruction Register, instruction we want to execute
+  - TMP = temporary byte registry, ALU input
+  - ACC = accumulator byte registry
+  - R?  = byte registries
+  #+ATTR_ORG: :width 700
+  [[./scottcpu.jpg]]
+
+- Instruction cycle
+  1) are =FETCH= from a lower memory address
+     - into the IR
+  2) =DECODE= in the control section
+     - sends the operation to the ALU
+  3) ALU then =EXECUTE= the operation
+     - put the result in the ACC
+     - update IAR
+
+** 5) The adder, shifter and the 4 operations

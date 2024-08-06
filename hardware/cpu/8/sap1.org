@@ -279,7 +279,7 @@ https://www.youtube.com/watch?v=9WE3Obdjtv0
 - For this project, we are going to need 3 registers
   - 2 equal to above
   - 1 build with the 4 most significant bits NOT GOING BACK into the bus
-    - for the instruction decoder
+    - for the =instruction registry= (aka decoder)
 
 ** Twos complement: Negative numbers in binary
 
@@ -365,108 +365,221 @@ https://www.youtube.com/watch?v=mOVOS9AjgFs
 
 https://www.youtube.com/watch?v=S-3fXU3FZQc
 
-*** TODO Troubleshooting
+#+ATTR_ORG: :width 500
+[[./alubuild.jpg]]
+
+*** Troubleshooting
 
 https://www.youtube.com/watch?v=U7Q8-2YZTUU
 
-- Feeds bits into the A register until a bit stops showing on the ALU
-  - Does the same with B register
-- Uses a multimeter, one probe to GND and other to start testing voltage
-- Tries some sums
+1) Clear both registers to 0(zero)
+
+2) Try enabling one bit at the time in the A register until the sum (with zero) stops showing on the ALU.
+   - Does the same with B register
+
+3) Uses a multimeter
+   - one probe to GND
+   - other follows the cable to test voltage
+
+4) Finally, try some sums
 
 *** Testing
 
 https://www.youtube.com/watch?v=4nCMDvnR2Fg
 
 - Connect the output of the ALU to the BUS
-- Feeds that back into register A
+- Feeds the sum back into register A
   - using the manual clock and manual steps
   - using the automatic clock and potentiometer for speed
 
 ** 8-bit computer RAM
-*** 0 - Intro
-https://www.youtube.com/watch?v=FnxPIZR1ybs&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=19
-- Real memory uses the simplest possible representation for a bit
-  A transistor and a capacitor. Refreshing each bit to avoid capacitor to loss charge.
-  - Static vs Dynamic ram. Static being faster, the used for latches.
-- We went from 1 bit to 8 bit register using D-flip-flop
-- To go to a 16*8 memory (16bytes)
-  - We need a way to address the row of memory
-    - Naive approach might be with 4 inputs, we get the input and the negated inputs.
-    - We have different AND gates with 4 inputs that enable each *enable* row
-  - 2x 74S189/74LS189 "A 64-bit Random Access Memory"
-    - 4 Bit Wide
-    - 4 Inputs to select
-    - 4 Inputs for data
-    - 4 Outputs (negated)
-    - 1 CS (Chip Select) When we want to send data
-    - 1 WE (Write Enable) To read from bus into memory
-*** 1 - Build
-- Ties Address Inputs for both 4-bit memory chips together.
-- Inputs WON'T come from the BUS, they will come from the TIP switches (?) what programs the computer.
-*** 2 - Build
-- Uses a D-flip-flop chip for the *address register*. (~74LS245~
-  That receives the address from the BUS.
-  To then receive data from the bus to the memory OR
-     data from the memory to the bus.
-- We want to have a separate mode of operations.
-  1) Where we get addresses from the BUS
-  2) Where we can program the computer (set the address and the data by "hand")
-- To *select* between the 2 modes, we use a logic circuit. And a regular switch (no bounce protected)
-  1) 2 inputs, 1 for each, and a select, and a notselect -> 2AND -> 1OR
-  2) ~74LS157~: "Quad 2-Line to 1-Line Data Selectors/Multiplexers" (4 copies of the above circuit)
-     - 1 SELECT flag
-     - 1 STROBE flag (set it to low)
-     - 4 sets of A/B/Output
-*** 3 - Build
-https://www.youtube.com/watch?v=5rl1tEFXKt0&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=22
-- We also need 2 modes for reading data into memory
-  2x ~74LS157~ (switch selector with 4 input and 4 outputs each)
-  1) from a tip switches, manually
-  2) from the BUS
-- We also need 2 modes to actually write into memory (after reading)
-  1x ~74LS157~
-  1) toggle button activated
-  2) receive a control signal AND a clock signal (the raising edge, with a cap 0.01uf and resistor 1kO)
-     We use an NAND gate. Not and AND because the output is active low.
-     1x ~74LS00~
-*** 4 - testing and troubleshooting
-- When something is not connectes you will see a 1
+
+- 2x 74189 "A 64-bit Random Access Memory, with 3-state"
+- 2x 7404 NOT gates (with 74219 RAM these won't be necessary)
+- 1x 74245 tranceiver (for ram)
+- 1x 74173 4-bit register, to store the address register
+- 4x 74157 quad 2-line to 1-line selector/multiplexor (to switch between the 2 operation modes, and control signal of WE)
+
+*** Intro
+
+https://www.youtube.com/watch?v=FnxPIZR1ybs
+
+- DRAM memory
+  - uses the simplest possible representation for a bit.
+  - A transistor and a capacitor.
+  - Refreshing each bit to avoid capacitor to loss charge.
+
+- SRAM memory
+  - More complex, more expensive
+  - Faster
+  - Built from latches
+    #+ATTR_ORG: :width 450
+    [[./memorylatchbank.jpg]]
+
+
+- For a 16*8 memory, we need an =address decoder= (aka a way to address the row of memory)
+  1) From 4 address input bits, we add the negated input.
+  2) We feed different combinations to 16 AND gates. Each in charge of an EN?(able) signal
+  3) We have similar AND gates for WR (write enable)
+  #+ATTR_ORG: :width 200
+  [[./memorydecoder1.jpg]] [[./memorydecoder2.jpg]]
+
+- 2x 74189 "A 64-bit Random Access Memory"
+  - outputs are inverted, so we are going to need to reinvert them before sending to the bus
+  #+ATTR_ORG: :width 500
+  [[./74ls189.jpg]]
+
+*** Build - Memory bank
+
+https://www.youtube.com/watch?v=uYXwCBo40iA
+
+- Address 4-bits are tied together between the 2 chips.
+  - CE is the one that determines which one will use
+
+- memories will be always CE
+  - output controlled by a ~74245~
+  - only used in 1 direction, from RAM to bus
+  - address input won't come directly from the bus
+
+#+ATTR_ORG: :width 500
+[[./memorybank.jpg]]
+
+*** Build - Address register
+
+https://www.youtube.com/watch?v=KNve2LCcSRc
+
+- We add an =address register= for the 4bit address ~74173~
+  - OE Always enabled
+  - With a control line for DE
+  - RESET connected low
+  - That receives the address from the BUS.
+  - To then receive data from the bus to the memory OR
+    - data from the memory to the bus.
+
+- We want to have 2 separate *modes of operation*
+  1) Where we get addresses from the address registry (BUS?)
+  2) Where we can program the computer manually the computer with (with dip switches)
+
+#+ATTR_ORG: :width 500
+[[./memoryaddr.jpg]]
+
+- Ways to *select/switch* between the 2 modes.
+  1) Using logic gates
+     #+CAPTION: A=A0 B=A1 SELECT=switch
+     [[./memoryselect1.jpg]]
+  2) or with a ~74157~ has 4 copies of the above circuit
+     [[./memoryselect2.jpg]]
+
+*** Build - Data lines
+
+https://www.youtube.com/watch?v=5rl1tEFXKt0
+
+- We also want the 2 modes to work with the 8 data bits
+  - we need 2 additional ~74157~ (4-bit switch selector)
+  - to either
+    - receive from the BUS
+    - receive from the dipswitches
+
+- for the write (to memory) *control signal*, we want the option to trigger it with a button
+  - we normally receive the signal from the =control unit=
+  - or manually trigger it with a button
+  - we need an additional ~74157~
+  - we then NAND ~7400~
+    - the clock WITH the control signal
+    - not an AND because the signal is active low
+
+*** Testing and Troubleshooting
+
+https://www.youtube.com/watch?v=Vw3uDOUJRGw
+
+00:03:04 OR00:16:13
+
+- When something is not connected you will see all 1's
 - We added the edge detector to work with the NAND for the write flag
+  - with a capacitor(0.01uf)+resistance(1k)
+
 ** Program Counter
-*** 1 - JK flip-flop
-https://www.youtube.com/watch?v=F1OC5e7Tn_o&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=24
-- From the SR Latch
-  1) Adding an enable through 2 ANDs
-  2) (SR Flip-Flop) Adding an edge detected clock through 2 ANDs
-  3) (JK Flip-Flop) As above, but with a feedback from both Q and notQ back into the AND (3inputs)
-     - Resilent when both are up (1), it will toggle
-*** 2 - JK flip-flop racing
-https://www.youtube.com/watch?v=st3mUEub99E&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=25
-- Build just as the above, enabling of both JK will toggle it too many times and too fast...
+
+- For a jK flipfop
+  - 1x 7402 NOR
+  - 1x 7411 AND
+
+- 1x 7476 - 2 jk flipflops
+
+*** JK flip-flop
+
+https://www.youtube.com/watch?v=F1OC5e7Tn_o
+
+- Derived from an SR Latch
+  1) Adding an *enable* through 2 ANDs
+     [[https://www.allaboutcircuits.com/uploads/articles/gated-S-R-latch-circuit-diagram.jpg]]
+  2) (SR Flip-Flop) Adding an =edge detected= *clock* through 2 ANDs, instead of the *enable*
+     [[https://www.allaboutcircuits.com/uploads/articles/sr-flip-flop-circuit.jpg]]
+  3) (JK Flip-Flop) As above, but with a *feedback* from both Q and notQ back into the ANDs
+     - "JK" has no meaning
+     - Resilent when both are up (1), it will toggle latch
+     - Unlike the undefined behaviour of SR flip-flop
+     [[https://www.allaboutcircuits.com/uploads/articles/J-K-flip-flop-diagram.jpg]]
+
+*** JK flip-flop - racing problems
+
+https://www.youtube.com/watch?v=st3mUEub99E
+
+- If we build it with gates just as abovethe above
+  - it will toggle on the raising edges
+  - too many times
+  - too fast
+  - even with the cap+res deboucer
+
 - There is a *racing* condition happening between
-  1) the pulse width of the edge detector
+  1) the pulse width of the edge detector (cap+res)
   2) the toggle that happens on a JK flip-flop when both inputs are 1
-- There are limits of how sharp pulses are going to be on a breadboard
-  - Inductance can fluctuate just from being handled
-*** 3 - JK flip-flop Master-slave Flip-Flop
-- ~74LS76~, "Dual Master-Slave J-K Flip Flops with Clear, Preset, and Complementary outputs"
+
+- We can try
+  1) reduce the ohm of the resistor
+  2) But there are limits of how sharp pulses are going to be on a breadboard
+     - *Inductance* can fluctuate just from being touched and changing the capacitance
+
+*** TODO JK flip-flop Master-slave Flip-Flop
+
+[[https://media.geeksforgeeks.org/wp-content/uploads/flipflop-1.jpg]]
+
+00:00:33
+
+- Only one of the SR-latche is active at the time
+
+- ~7476~ "Dual Master-Slave J-K Flip Flops with Clear, Preset, and Complementary outputs"
+
 - Instead of the edge detector
   * we chain 2 JK flip-flop together + clock input to each (one inversed)
   * and add some feedback
+
 - On clock UP one flips, on clock DOWN the other flips
-*** 4 - Binary counter
-   https://www.youtube.com/watch?v=exGEmA67dNc&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=27
-- 1x ~74LS76~
-- PRESET and CLEAR are ways to set the output regardless of JK
+
+*** Binary counter
+
+https://www.youtube.com/watch?v=exGEmA67dNc
+
+- 1x ~7476~ has 2 jk flipflops
+- PRESET and CLEAR pins are ways to set the output regardless of JK or CLOCK (an override)
   - L H, sets Q high
-    H L, sets Q low
-    L L, invalid
+  - H L, sets Q low
+  - L L, invalid/unstable
+
 - The resulting toggle velocity is HALF of the input clock.
-  If we feedback the output into the clock other clock input.
-  We further HALF the clock speed.
-- If we chain another IC in the same way, we have a ~binary counter~.
-*** 4 - Design
+  - aka a "divide by 2"
+  - If we feed the output of the flip flop into the clock of other flip flop.
+  - We HALF again the clock speed.
+  - We have a ~binary counter~
+
+*** Design
+
+https://www.youtube.com/watch?v=g_1HyxBzjl0
+
+#+CAPTION: SAP-1 architecture
+#+ATTR_ORG: :width 700
+[[./sapdesign.jpg]]
+
 - We don't want the clock "counting" every clock cycle.
   - An instruction might take multiple clocks to execute.
 - Properties
@@ -484,12 +597,14 @@ https://www.youtube.com/watch?v=st3mUEub99E&list=PLowKtXNTBypGqImE405J2565dvjafg
   4-bit I/O
 - It still need the tri-state buffer IC (~74LS245~)
 
-*** 5 - Build
+*** Build
+
 - Unused Tri-state output bits are GND
 - Tri-State buffer output is connected to both
   1. the counter input (for JUMP)
   2. to the BUS
 - Tri-state buffer input is connected to the output of the counter
+
 ** Output Display
 *** 1 - Designing a 7-segment hex decoder
 https://www.youtube.com/watch?v=7zffjsXqATg&list=PLowKtXNTBypGqImE405J2565dvjafglHU&index=30

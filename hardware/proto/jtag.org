@@ -1,0 +1,6 @@
+- https://en.wikipedia.org/wiki/JTAG
+  - 1990 (Intel 80486)
+  - Implemented on ICs
+  - Used to diagnosticate production issues
+  - Pins 2-5
+  - https://en.wikipedia.org/wiki/Boundary_scan_description_language

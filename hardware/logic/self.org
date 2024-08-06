@@ -1,4 +1,8 @@
-[[https://www.explainxkcd.com/wiki/images/9/9e/logic_gates.png]]
+#+CAPTION: common logic gates
+[[https://www.autodesk.com/products/fusion-360/blog/wp-content/uploads/2023/07/AdobeStock_613706823-1024x614.jpeg]]
+
+#+CAPTION: logic gates build from NAND
+[[http://hyperphysics.phy-astr.gsu.edu/hbase/Electronic/ietron/nand5.gif]]
 
 - tutorial http://r-luis.xbot.es/edigital/ed_ref.html
 - https://en.wikipedia.org/wiki/Schmitt_trigger
@@ -25,6 +29,8 @@
 - Playlist
   - Electronica FP - Electronica Digital https://www.youtube.com/playlist?list=PLuzS0jdNRVvpQmCxFV4S2eqfji90BnDub
   - Sebastian Lague - How Computers Work https://www.youtube.com/playlist?list=PLFt_AvWsXl0dPhqVsKt1Ni_46ARyiCGSq
+  - Intermation -  Computer Organization and Design Fundamentals https://www.youtube.com/playlist?list=PLxfrSxK7P38X7XfG4X8Y9cdOURvC7ObMF
+  - Zahi Haddad -  Digital Logic https://www.youtube.com/playlist?list=PL21KuaIMCPGoiDogGSxbBtnkmBMM_-6o3
 
 * 2015 Ben Eater's - Digital electronics tutorial
 

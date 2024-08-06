@@ -48,7 +48,7 @@ https://en.wikipedia.org/wiki/List_of_7400-series_integrated_circuits
 | 123 | 2 | -  | retrigger monostable multivibrator + clear |
 | 125 | 4 | 3S | bus b uffer                                |
 | 138 | 1 | -  | 3-to-8 decoder/multiplexer                 |
-| [[https://www.youtube.com/watch?v=XbjPywRIeDY][139]] | 2 | -  | 2-to-4 decoder/multiplexer       |
+| [[https://www.youtube.com/watch?v=XbjPywRIeDY][139]] | 2 | -  | 2-to-4 decoder/multiplexer                 |
 | 151 | 1 | -  | 8-input selector/multiplexer               |
 | 157 | 4 | -  | 2-line  selector/multiplexers              |
 | 161 | 1 | -  | 4-bit binary counters                      |
@@ -59,11 +59,11 @@ https://en.wikipedia.org/wiki/List_of_7400-series_integrated_circuits
 | [[https://learn.adafruit.com/digital-circuits-6-eprom-emulator/the-74244-octal-tristate-buffer][240]] | 8 | 3S | buffer                                     |
 | [[https://www.youtube.com/watch?v=itsdKuu7vBU][244]] | 8 | 3S | buffer                                     |
 | 245 | 8 | 3S | bus transceiver                            |
-| 251 | 2 | 3S | 8-line to 1-line selector/multiplexer      |
-| 259 | 1 | -  | 8-bit addressable input latch with clr     |
+| 251 | 2 | 3S | 8-to-1 selector/multiplexer                |
+| 259 | 1 | -  | 3-to-8                                     |
 | 283 | 1 | -  | 4-bit binary full adder, with carry        |
 | 373 | 8 | 3S | transparent latch                          |
-| 374 | 8 | 3S | positive-edge-triggered flip-flops         |
+| 374 | 8 | 3S | transparent latch (positive edge)          |
 | 573 | 1 | 3S | D transparent latch                        |
 | 595 | 1 | 3S | 8-bit shift register                       |
 |-----+---+----+--------------------------------------------|

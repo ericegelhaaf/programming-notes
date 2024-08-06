@@ -16,12 +16,24 @@ https://en.wikipedia.org/wiki/NEC_%CE%BCCOM_series#%CE%BCCOM-87,_%CE%BCCOM-87AD
   - Intel 8086
 - Replaced later by NEC V20 (a intel 8088 clone)
 
-*** μCOM-8 series
+*** μCOM-87 series
 
 - https://en.wikipedia.org/wiki/NEC_%CE%BCCOM_series#%CE%BCCOM-87,_%CE%BCCOM-87AD
   [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Ic-photo-NEC--D7810G-%28MCU%29.png/800px-Ic-photo-NEC--D7810G-%28MCU%29.png]]
+  - Original design (it's no a clone)
   - μCOM-87   (μPD7800)
   - μCOM-87AD (μPD7810)
     - 8 bit micro
     - "AD" because it adds a A/D converter
     - 2 sets of 8 registers
+
+- tool: mame https://github.com/mamedev/mame/blob/c0423c1bab37932244db67c3ad801a763de683c0/src/devices/cpu/upd7810/upd7810.cpp#L11
+- tool: verilog https://github.com/ika-musume/IKA87AD
+- tool: assembler - asl http://john.ccac.rwth-aachen.de:8000/as/as_EN.html
+
+- used on
+  - commodore: MPS 1230 - printer
+    - https://www.c64-wiki.com/wiki/MPS_1230
+    - https://github.com/mamedev/mame/blob/c0423c1bab37932244db67c3ad801a763de683c0/src/mame/commodore/mps1230.cpp#L54
+  - epson: lx800 / lx810l
+    - https://github.com/Robbbert/hbmame/blob/84194c56da3c7210ac7b0a485ef0531005d3543f/src/devices/bus/centronics/epson_lx800.cpp#L9

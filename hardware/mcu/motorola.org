@@ -12,15 +12,6 @@
 
 - 68HC08
 
-- (90) 68HC11 https://en.wikipedia.org/wiki/Motorola_68HC11
-  - M68HC11
-  - MC68HC11A8 (CMOS EEPROM)
-  - MC68HC11E9
-  - MC68HC11D0/3 ROM based
-  - http://www.hc11.demon.nl/thrsim11/68hc11/
-  - https://www.eevblog.com/forum/microcontrollers/68hc11f1-setup-questions/
-  - https://web.archive.org/web/20200202170433/http://bd.eduweb.hhs.nl/mcca1/68hc11_intro.htm
-  - https://www.brainkart.com/article/Microcontrollers---MC68HC05,--MC68HC11---Architecture_7610/
 
 ** (M)6800 family
 
@@ -51,3 +42,35 @@ https://web.archive.org/web/20160309232352/http://www.68bits.com/m68hc05evm.html
   - a 13-bit program counter PC
   - and an 8-bit condition code register CCR
 - low powered variations of 05
+*** 68HC11 (90)
+
+- https://en.wikipedia.org/wiki/Motorola_68HC11
+- M68HC11
+- MC68HC11A8 (CMOS EEPROM)
+- MC68HC11E9
+- MC68HC11D0/3 ROM based
+
+- fileformat? https://www.x-ways.net/winhex/kb/ff/Motorola-S3.txt
+- instructions http://dankohn.info/projects/68HC11/68HC11%20Instruction%20Set.htm
+
+- tool:
+  - asm https://github.com/Arakula/A09
+  - asm/ide https://www.axman.com/content/axide
+  - ide https://www.mgtek.com/miniide/
+  - emulator (win) http://www.hc11.demon.nl/thrsim11/thrsim11.htm
+  - binutils https://github.com/george-hopkins/s12x-build
+    - gcc's TARGET=m68hc11-elf
+- projects:
+  - board https://github.com/EtchedPixels/Mini11
+  - board https://www.axman.com/content/cme-11e9-evbu-single-chip-expanded-mode-development-system-mc68hc11e9-32k-sram-8k-eeprom
+- libraries:
+  - https://github.com/tonypdmtr/68hc11
+
+- http://www.hc11.demon.nl/thrsim11/68hc11/
+- https://www.eevblog.com/forum/microcontrollers/68hc11f1-setup-questions/
+- https://web.archive.org/web/20200202170433/http://bd.eduweb.hhs.nl/mcca1/68hc11_intro.htm
+- https://www.brainkart.com/article/Microcontrollers---MC68HC05,--MC68HC11---Architecture_7610/
+- https://www.nxp.com/products/processors-and-microcontrollers/legacy-mpu-mcus/8-bit-legacy-mcus/8-bit-microcontroller-mcu:68HC11E0
+- https://www.clear.rice.edu/elec201/Book/6811_asm.html
+- snippet: some random asm code https://gist.github.com/Reflej0/d15f87d7080c43e9461db202624182fe
+- https://community.nxp.com/t5/8-bit-Microcontrollers/68HC11-not-starting-correctly/m-p/634257/highlight/true

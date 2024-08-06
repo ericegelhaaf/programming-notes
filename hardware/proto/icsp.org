@@ -1,0 +1,10 @@
+- https://en.wikipedia.org/wiki/In-system_programming
+  - ISP  In-System Programming
+  - ISCP In-Circuit Serial Programming
+  - Is the ability to be programmed while installed in the complete system.
+  - There is =no standard=. All manufacurers implement their own protocol.
+  - Based on either SPI or JTAG
+
+#+CAPTION: AVR ICSP pin headers
+#+ATTR_ORG: :width 250
+[[https://upload.wikimedia.org/wikipedia/commons/9/9f/Isp_headers.svg]]

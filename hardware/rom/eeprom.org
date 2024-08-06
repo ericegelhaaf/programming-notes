@@ -1,4 +1,4 @@
-* EEPROM (72)
+#+TITLE: EEPROM (72)
 
 https://en.wikipedia.org/wiki/EEPROM
 - Serial Electrically Erasable PROMs
@@ -17,8 +17,59 @@ https://en.wikipedia.org/wiki/EEPROM
   - Paralel bus
     - faster
     - less popular
+- https://en.wikipedia.org/wiki/EEPROM
+  - 1972 - first fabricated?
+  - 1993 - first MCU with it
 
 - Hardware programmers
   - https://www.elnec.com/en/products/specialized-programmers/memprog2/
   - https://www.elnec.com/en/products/universal-programmers/smartprog2/
   - https://www.elnec.com/en/products/universal-programmers/beeprog2c/
+
+* Serial bus devices
+
+- common interfaces: spi, i2c, microwire, uni/o, 1-wire
+
+- protocol
+  - phases
+    1) op-code: usually the first 8bits input to the serial input pin of the device
+       |--------+-----------------------|
+       | WRENAL | Write enable          |
+       | WRDI   | Write disable         |
+       | RDSR   | Read status register  |
+       | WRSR   | Write status register |
+       | READ   | Read data             |
+       | WRITE  | Write data            |
+       |--------+-----------------------|
+    2) address: 8-24 bits
+    3) data
+
+- Video: AT24C04 EEPROM Programming using Arduino https://www.youtube.com/watch?v=urfhXmCd-uA
+
+** Example: 24C32 i2c
+
+https://en.wikipedia.org/wiki/I%C2%B2C
+- Uses two request bytes
+  - Address High
+  - Address Low
+
+** Example: i2c write - arduino
+
+#+begin_src arduino
+  Wire.beginTransmission(device_address);
+  Wire.write(word_address);
+  Wire.write(data);
+  Wire.endTransmission();
+#+end_src
+
+** Example: i2c read  - arduino
+
+#+begin_src arduino
+  Wire.beginTransmission(device_address); // select which of 4 devices
+  Wire.write(word_address); // memory location
+  Wire.endTransmission(); // !!!
+  // delay(5);
+  Wire.requestFrom(device_address, 1);
+  // if(Wire.available()) return Wire.read();
+  Wire.read();
+#+end_src

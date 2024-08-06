@@ -1,0 +1,8 @@
+- https://en.wikipedia.org/wiki/RS-232
+  - 1960
+  - Defines signal connecting between
+    - DTE = data terminal equipement
+      - eg: computer
+    - DCE = data circuit-terminating equipement
+      - eg: modem
+  - Still used in short-range, point-to-point, low-speed  wired connections.
