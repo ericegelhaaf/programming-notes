@@ -1,6 +1,10 @@
 #+TITLE: EEPROM (72)
+#+DATE: <2024-07-31 mié>
 
 https://en.wikipedia.org/wiki/EEPROM
+
+- 1972 - first fabricated?
+- 1993 - first MCU with it
 - Serial Electrically Erasable PROMs
 - Interfaces
   - Serial bus
@@ -17,14 +21,12 @@ https://en.wikipedia.org/wiki/EEPROM
   - Paralel bus
     - faster
     - less popular
-- https://en.wikipedia.org/wiki/EEPROM
-  - 1972 - first fabricated?
-  - 1993 - first MCU with it
 
-- Hardware programmers
-  - https://www.elnec.com/en/products/specialized-programmers/memprog2/
-  - https://www.elnec.com/en/products/universal-programmers/smartprog2/
-  - https://www.elnec.com/en/products/universal-programmers/beeprog2c/
+* Hardware programmers
+
+- https://www.elnec.com/en/products/specialized-programmers/memprog2/
+- https://www.elnec.com/en/products/universal-programmers/smartprog2/
+- https://www.elnec.com/en/products/universal-programmers/beeprog2c/
 
 * Serial bus devices
 

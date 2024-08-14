@@ -5,60 +5,166 @@
   - 56 Instructions
   - 40-pin DIP
   - Little-Endian
+  - Based on Motorola's 6800
   - Width in bits
     - Data: 8
     - Address: 16
 
-- http://skilldrick.github.io/easy6502/
-- http://visual6502.org/
-- https://chotrin.org/notes/6502.html
-- opcodes http://www.6502.org/tutorials/6502opcodes.html
-- web emulator https://github.com/skilldrick/6502js
+- Numbers are interpreted not by their content, but by what the status flags says it is.
+
+- links https://chotrin.org/notes/6502.html
+- images http://visual6502.org/
+- tutorials
+  - http://skilldrick.github.io/easy6502/
+  - https://www.middle-engine.com/blog/posts/2020/06/23/programming-the-nes-the-6502-in-detail
+
+* opcodes
+
+http://www.6502.org/tutorials/6502opcodes.html
+
+|-----+------+-----------------------------------------------|
+| LD? | val  | load _val_ into register                      |
+| ST? | addr | store register "?" into _addr_ (no flags mod) |
+|-----+------+-----------------------------------------------|
+| ADC | ?    | add to accumulator (with carry)               |
+| SBC | ?    | subtract from accumulator (with carry)        |
+| CMP | val  | compares accumulator with given value         |
+|-----+------+-----------------------------------------------|
+| CLC | -    | clears carry flag =use before ADC=            |
+| SEC | -    | sets carry flag =use before SBC=              |
+|-----+------+-----------------------------------------------|
+| INC | ?    | increment memory by one                       |
+| IN? | -    | increment register "?" by one                 |
+| DEC | ?    | decrement memory by one                       |
+| DE? | -    | decrement register "?" by one                 |
+|-----+------+-----------------------------------------------|
+| JMP | ?    | jump to location                              |
+| BCC |      | C=0 on (C)arry (C)lear                        |
+| BCS |      | C=1 on (C)arry (S)et                          |
+| BEQ |      | Z=1 on (EQ)ual to zero                        |
+| BNE | labl | Z=0 on (N)ot (E)qual to zero                  |
+| BMI |      | N=1 on (MI)nus                                |
+| BPL |      | N=0 on (PL)us                                 |
+| BVC |      | V=0 on o(V)erflow (C)lear                     |
+| BVS |      | V=1 on o(V)erflow (S)et                       |
+|-----+------+-----------------------------------------------|
+| T?S | -    | transfer ? to (S)tack register                |
+| T?A |      | transfer ? to A register                      |
+| TA? |      | transfer A to ? register                      |
+|-----+------+-----------------------------------------------|
+| SEG | name | creates a segment called "name"               |
+| ORG | addr | sets origin for segment?                      |
+|-----+------+-----------------------------------------------|
+| SEI | -    | disable interrupts                            |
+| CLD | -    | disable bcd decimal math mode                 |
+|-----+------+-----------------------------------------------|
+
+- cpu is little endian
+- same instruction might have different
+  - HEX opcode depending of the argument (immediate,absolute,...)
+  - timing of completion (nr of clocks)
+- INC/DEC sets ZN flags
+
+* pins
+
+ [[https://content.invisioncic.com/r322239/monthly_2021_11/MOS6502-pinout.gif.b2ac610a8ff1d566286e9428f3f2c321.gif]]
+
+|-------+-----+------------------------------------|
+| npins | <r> |                                    |
+|-------+-----+------------------------------------|
+|     8 |  IO | DATA bus (registers communication) |
+|    16 |   O | ADDRESS bus (memory addr)          |
+|-------+-----+------------------------------------|
+
+|-------+------+----+----------------------------------|
+|   pin | name | IO | description                      |
+|-------+------+----+----------------------------------|
+|     1 | Vss  |    |                                  |
+|     2 | RDY  | I  | when we want to trigger an event |
+|     3 | OUT  | O  |                                  |
+|     4 | IRQ  | I  | "interruption request"           |
+|     5 | NC   |    |                                  |
+|     6 | NMI  | I  | "interruption hint?"             |
+|     7 | SYNC | O  |                                  |
+|     8 | Vcc  |    |                                  |
+|  9-20 | A??  | O  | address bus                      |
+|    21 | Vss  |    | ????                             |
+| 22-33 | A??  | O  | address bus                      |
+| 26-33 | D?   | IO | data bus                         |
+|    34 | R/W  | O  |                                  |
+|    35 | NC   |    |                                  |
+|    36 | NC   |    |                                  |
+|    37 | IN   | I  |                                  |
+|    38 | SO   | I  |                                  |
+|    39 | OUT  | O  |                                  |
+|    40 | RES  | I  |                                  |
+|-------+------+----+----------------------------------|
+
+* registers
+
+- Status flags register https://www.nesdev.org/wiki/Status_flags
+  #+begin_src
+   7  bit  0
+   ---- ----
+   NV1B DIZC
+   |||| ||||
+   |||| |||+- Carry
+   |||| ||+-- Zero
+   |||| |+--- Interrupt Disable (disabled on 6507)
+   |||| +---- Decimal (mode) (BCD?)
+   |||+------ (No CPU effect; see: the B flag)
+   ||+------- (No CPU effect; always pushed as 1)
+   |+-------- Overflow
+   +--------- Negative
+  #+end_src
+
+* codebases
+
 - game: snake https://gist.github.com/wkjagt/9043907
-- assembler http://sun.hasenbraten.de/vasm/
 
-- Products
-  - Apple IIe
-  - BBC Micro
-  - Commodore PET
-  - Commodore VIC-20
-  - Commodore 64
-  - Tamagotchi
-  - Atari 2600
-  - NES
+* products
 
-- Pinout: https://content.invisioncic.com/r322239/monthly_2021_11/MOS6502-pinout.gif.b2ac610a8ff1d566286e9428f3f2c321.gif
-  |-------------+-----+------------------------------------|
-  | n pins/bits | <r> |                                    |
-  |-------------+-----+------------------------------------|
-  |           8 |  IO | DATA bus (registers communication) |
-  |          16 |   O | ADDRESS bus (memory addr)          |
-  |-------------+-----+------------------------------------|
+- Apple IIe
+- BBC Micro
+- Commodore PET
+- Commodore VIC-20
+- Commodore 64
+- Tamagotchi
+- Atari 2600
+- NES
 
-- Pins
-  |-------+------+----+----------------------------------|
-  |   pin | name | IO | description                      |
-  |-------+------+----+----------------------------------|
-  |     1 | Vss  |    |                                  |
-  |     2 | RDY  | I  | when we want to trigger an event |
-  |     3 | OUT  | O  |                                  |
-  |     4 | IRQ  | I  | "interruption request"           |
-  |     5 | NC   |    |                                  |
-  |     6 | NMI  | I  | "interruption hint?"             |
-  |     7 | SYNC | O  |                                  |
-  |     8 | Vcc  |    |                                  |
-  |  9-20 | A??  | O  | address bus                      |
-  |    21 | Vss  |    | ????                             |
-  | 22-33 | A??  | O  | address bus                      |
-  | 26-33 | D?   | IO | data bus                         |
-  |    34 | R/W  | O  |                                  |
-  |    35 | NC   |    |                                  |
-  |    36 | NC   |    |                                  |
-  |    37 | IN   | I  |                                  |
-  |    38 | SO   | I  |                                  |
-  |    39 | OUT  | O  |                                  |
-  |    40 | RES  | I  |                                  |
-  |-------+------+----+----------------------------------|
+* CIA
+
+https://en.wikipedia.org/wiki/MOS_Technology_CIA
+
+* 6507
+
+https://en.wikipedia.org/wiki/MOS_Technology_6507
+
+- DIP-28
+- 13 address pins, 8 data pins pins
+- RDY - input, request bust wait states
+- RW  - output, read/write commands to memory
+- No IRQ or NMI
+
+#+ATTR_ORG: :width 250
+[[https://content.invisioncic.com/r322239/monthly_04_2012/post-7456-0-52371000-1334371541.gif]]
+
+* tools
+
+- emulator
+  - web https://github.com/skilldrick/6502js
+  - web atari2600 https://javatari.org/
+  - web atari2600 (uses javatari) https://8bitworkshop.com/
+  - atari2600 https://stella-emu.github.io/
+    - "`" open debugger
+    - flags: uppercase means "1"
+    - read tells us that its value changed since last execution
+
+- assemblers
+  - https://dasm-assembler.github.io/
+    - $ dasm file.asm -f3 -v0 -ocart.bin
+  - http://sun.hasenbraten.de/vasm/
 
 * Videos: Build a 65c02-based computer from scratch
 

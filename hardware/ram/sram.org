@@ -1,13 +1,14 @@
-* SRAMs  (63)
+#+TITLE: SRAMs  (63)
+#+DATE: <2024-07-31 mié>
 
-- wiki https://en.wikipedia.org/wiki/Static_random-access_memory
+- https://en.wikipedia.org/wiki/Static_random-access_memory
 - by Robert Norman @Fairchild_Semiconductor
-- type of RAM that uses flip-flops (latching circuitry) to sore each bit
-- sometimes used as L2 cache on old motherboards (?
-- volatile: data is lost with power
-- holds data permanently, does not decay like DRAM
-  - no need to refresh it periodically
+- type of RAM that uses flip-flops (latching circuitry) to store each bit
 - used for cache/registers (while DRAM is used for main memory)
+  - sometimes used as L2 cache on old motherboards (?
+- volatile: data is lost when power is lost
+- holds data permanently, does not decay like *DRAM*
+  - no need to refresh it periodically
 - Control pins
   - CE Chip Enable
   - WE Write Enable
@@ -20,7 +21,7 @@
 - video:  How to write and read data - LH5168 SRAM
   https://www.youtube.com/watch?v=wlCNRHnKuBs
 
-** Labeling
+* Labeling
 
 For: MC6264L-10PC
 
@@ -37,22 +38,24 @@ For: MC6264L-10PC
 - eg: [[https://en.wikipedia.org/wiki/6264][6264 (64Kbit 8KB)]]
 
 *** Package
-
-- C   Ceramic Side Brazed DIP, 300mil
-- CW  Ceramic Side Brazed DIP, 600mil
-- D   Ceramic DIP (CERDIP), 300mil
-- DW  Ceramic DIP (CERDIP), 600mil
-- F   CERPACK
-- J   Plastic SOJ, 300mil
-- LS  28-pin Ceramic LCC, 350x550mil - SPECIAL-PINOUT
-- L   28-pin Ceramic LCC, 350x550mil - STANDARD-PINOUT
-- L32 32-pin Ceramic LCC, 450x550mil
-- P   Plastic DIP, 300mil
-- P6  Plastic DIP, 600mil
-- SN  Plastic SOP, 300mil
-
+|-----+--------------------------------------+---------|
+|     |                                      |     mil |
+|-----+--------------------------------------+---------|
+| C   | Ceramic Side Brazed DIP              |     300 |
+| CW  | Ceramic Side Brazed DIP              |     600 |
+| D   | Ceramic DIP (CERDIP)                 |     300 |
+| DW  | Ceramic DIP (CERDIP)                 |     600 |
+| F   | CERPACK                              |         |
+| J   | Plastic SOJ                          |     300 |
+| LS  | 28-pin Ceramic LCC - SPECIAL-PINOUT  | 350x550 |
+| L   | 28-pin Ceramic LCC - STANDARD-PINOUT | 350x550 |
+| L32 | 32-pin Ceramic LCC                   | 450x550 |
+| P   | Plastic DIP                          |     300 |
+| P6  | Plastic DIP                          |     600 |
+| SN  | Plastic SOP                          |     300 |
+|-----+--------------------------------------+---------|
 *** Temperature
-
+|---+--------------+-----+-----|
 |   | name         | min | max |
 |---+--------------+-----+-----|
 | C | Commercial   |   0 | -70 |
@@ -60,4 +63,3 @@ For: MC6264L-10PC
 | A | Automotive-A | -40 |  85 |
 | E | Automotive-E | -40 | 125 |
 |---+--------------+-----+-----|
-

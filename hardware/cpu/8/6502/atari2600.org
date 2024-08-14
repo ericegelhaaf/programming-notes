@@ -1,4 +1,5 @@
 - wiki https://en.wikipedia.org/wiki/Atari_2600
+  - VCS = Video Computer System
 - wiki TIA https://en.wikipedia.org/wiki/Television_Interface_Adaptor
 - wiki hardware https://en.wikipedia.org/wiki/Atari_2600_hardware
 - pics hardware http://www.gametechwiki.com/w/index.php/Atari_2600_Hardware
@@ -15,6 +16,41 @@
 - video 18 | Atari 2600 VCS Programming | Computerphile https://www.youtube.com/watch?v=fce39nQm9TY
 - video 20 | All About Atari 8-Bit Programming https://www.youtube.com/watch?v=HF97bRp8tKo
 - video 24 | Atari 2600 Programming is a NIGHTMARE | truttle1 https://www.youtube.com/watch?v=-l18Rwbinp8
+
+* Color Pallete
+
+https://en.wikipedia.org/wiki/List_of_video_game_console_palettes
+
+- There is a limit to the number of colors per scanline :(
+- NTCS
+  - 128 color pallete
+  - Hue: most significant
+  - Luma: least significant, 8 real values
+
+* VCS memory map
+
+- PIA = Peripherical Interface Adapter = RAM
+- TIA = Television Interface Adapter
+- ROM = Read Only Memory = Cartridge
+
+- [[https://github.com/dasm-assembler/dasm/blob/master/machines/atari2600/vcs.h][vcs.h]] - defines contants for memory addresses
+- [[https://github.com/dasm-assembler/dasm/blob/master/machines/atari2600/macro.h][macro.h]] - useful macros (sleep, CLEAN_START)
+
+|------+------+-------------------|
+|  <r> |  <r> |                   |
+|------+------+-------------------|
+|   00 |   ff | zero page         |
+|   00 |   7f | TIA registers     |
+|   00 |   2c | TIA (write)       |
+|   30 |   3d | TIA (read)        |
+|   80 |   ff | RIOT/PIA (RAM)    |
+|------+------+-------------------|
+|  280 |  297 | RIOT (I/O, Timer) |
+|------+------+-------------------|
+| f000 | ffff | Cardridge (ROM)   |
+| fffc |      | reset vector      |
+| fffe |      | interrupt vector  |
+|------+------+-------------------|
 
 * Hardware
 
@@ -47,9 +83,14 @@ https://www.atariage.com/2600/archives/schematics/index.html
 
 * Course: Learn Assembly by Making games for the Atari 2600
 
-source: https://github.com/gustavopezzi/atari2600course
+- 18h12m
+- source https://github.com/gustavopezzi/atari2600course
+- asm https://dasm-assembler.github.io/
+- emulator atari2600 https://stella-emu.github.io/
+- emulator atari2600 web https://javatari.org/
+- emulator atari2600 web https://8bitworkshop.com/
+- someone's txt notes https://raw.githubusercontent.com/LASER-WOLF/NesVideoGame/main/NOTES.txt
 
-18h12m
 
 ** 2 Hardware Architecture
 
@@ -78,3 +119,235 @@ source: https://github.com/gustavopezzi/atari2600course
 
 - We used to use =base 12= to count (egyptians/babylonians)
   - why? we used the in-between phalanges on the fingers to count
+
+- 6502/6507 7(seven) main parts
+  #+ATTR_ORG: :width 600
+  [[./6502parts.jpg]]
+
+- 6 registers
+  |-----+----+--------------------------------------------------|
+  | PC  | 16 | Program Counter                                  |
+  | SP  |  8 | Stack Pointer, higher bits hardcoded to 00000001 |
+  | P   |  8 | Processor flags (Negative, Zero, Overflow,...)   |
+  | X Y |  8 |                                                  |
+  | ACC |  8 | Accumulator (aka A)                              |
+  |-----+----+--------------------------------------------------|
+
+- ALU = Arithmetic Logic Unit
+  - vshape
+  - INPUT both from _data bus_ and _ACC(umulator)_
+  - OUTPUT back to the ACC(umulator)
+
+** 3 6502 Assembly Programming
+
+- assembler: .asm => machine/op code
+
+*** example: with hex opcodes
+
+#+begin_src asm
+          LDA #2     ; a9 02
+          STA $2B    ; 85 2b
+          LDX $1234  ; ae 34 12
+          DEX        ; ca
+#+end_src
+
+*** example: simple loop
+
+#+begin_src asm
+          LDY #100 ; y=100
+  loop:
+          DEY      ; y--
+          BNE loop ; repeat until y==0
+#+end_src
+
+*** example: clean/zero-out memory from $00 to $ff
+
+#+NAME: house keeping
+#+begin_src asm
+          processor 6502 ; assembler instruction
+          seg code       ; create a segment
+          org $F000      ; set code origin
+  Start:
+          sei            ; disable interrupts (needed even on 6507)
+          cld            ; disable bcd decimal math mode
+          ldx #$ff       ; load x register with #$ff
+          txs            ; transfer x register to the (S)tack pointer
+#+end_src
+
+#+NAME: clear Page Zero region, RAM+TIA, from $FF to $00
+#+begin_src asm
+          lda #0      ; a = 0
+          ldx #$FF    ; x = #$ff
+          sta $FF     ; make sure $ff is zeroed before start
+  MemLoop:
+          dex         ; x--
+          sta $0,x    ; store "a" value into $0+x
+          bne MemLoop ; loop until x!=0 (z-flag is set)
+#+end_src
+
+#+NAME: bugged version, does not zero-out the address $00
+#+begin_src asm
+          lda #0      ; a = 0
+          ldx #$FF    ; x = #$FF
+  MemLoop:
+          sta $0,x    ; store "a" value into $0+x
+          dex         ; x--
+          bne MemLoop ; loop until x!=0 (z-flag is set)
+#+end_src
+
+#+NAME: Fill the ROM size to exactly 4KB
+#+begin_src asm
+          org $FFFC   ; end the ROM by adding required values
+          .word Start ; 2bytes reset           address at $FFFC (where the program starts)
+          .word Start ; 2bytes break/interrupt address at $FFFE (unused, still required)
+#+end_src
+
+*** example: minimal example
+
+#+begin_src asm
+        processor 6502 ; assembler instruction
+        seg code       ; create a segment
+        org $F000      ; set code origin
+Start:
+        sei            ; disable interrupts (needed even on 6507)
+        cld            ; disable bcd decimal math mode
+        ;; <=== CODE HERE
+        org $FFFC   ; end the ROM by adding required values
+        .word Start ; 2bytes reset           address at $FFFC (where the program starts)
+        .word Start ; 2bytes break/interrupt address at $FFFE (unused, still required)
+#+end_src
+
+** 4 6502 Instruction Set
+
+- =Zero page= is the range of addresses $00 to $FF
+- =Addressing modes=
+  |------------+--------------------------------+---------------------------|
+  | #80        | literal decimal value          | immediate mode            |
+  | #$80       | literal hexadecimal value      |                           |
+  | #%11111111 | literal binary value           |                           |
+  | $80        | memory address                 | absolute (zero page) mode |
+  | $80,Y      | memory address, $80 + Y offset | indexed mode              |
+  |------------+--------------------------------+---------------------------|
+
+*** Exercise 5 - load, storing and adding zero page
+
+#+begin_src asm
+  lda #$A
+  ldx #%1010
+
+  sta $80
+  stx $81
+
+  lda #10
+
+  clc
+  adc $80
+  adc $81
+
+  sta $82
+#+end_src
+
+*** Exercise 6 - registers inc/dec-rements
+
+#+begin_src asm
+        lda #1
+        ldx #2
+        ldy #3
+
+        inx
+        iny
+
+        clc
+        adc #1 ; there is no INA
+
+        dex
+        dey
+
+        sec
+        sbc #1 ; there is no DEA
+#+end_src
+
+*** Exercise 7 - zero page inc/dec-rements
+
+#+begin_src asm
+        lda #10
+        sta $80
+        inc $80
+        dec $80
+#+end_src
+
+*** Exercise 8 - countdown (10 to 0) & fill memory 80-8A with 0-A
+
+#+begin_src asm
+        ldy #10
+Loop:
+	tya
+        sta $80,y
+        dey
+        bpl Loop
+#+end_src
+
+*** Exercise 9
+
+#+begin_src asm
+  Start:
+          ldy #1
+  Loop:
+          adc #1
+          cmp #10
+          bne Loop
+
+
+          jmp Start
+#+end_src
+
+** 5 VCS Memory Map & TIA
+
+*pixels = color clocks
+
+[[https://alienbill.com/2600/101/scanlines.gif]]
+
+- TIA works at 2.8Mhz
+- there is no 1/1 memory map of memory/screen
+  - aka no "video frame buffer"
+  - instead we have =scanlines=
+    - from left to right
+    - reprogrammed each line
+    - processor is ~halted~ until a =WSYNC= signal is received from TIA
+  - we are "racing the beam"
+
+*** Example: Makefile
+
+#+begin_src makefile
+  all:
+          dasm *.asm-f3 -v0 -ocart.bin -lcart.lst -scart.sym
+  run:
+          stella cart.bin
+#+end_src
+
+*** Example: asm frame
+
+#+begin_src asm
+  NextFrame:
+          lda #2     ; same as binary #%00000010
+          sta VBLANK ; turn it on
+          sta VSYNC  ; turn it on
+
+
+          sta WSYNC  ; generate vsync line, a strobe (wait for return)
+          sta WSYNC
+          sta WSYNC
+
+          lda #0
+          sta VSYNC  ; turn off
+
+
+          ldx #37 ; output 37 VBLANK lines
+  LoopVBlank:
+          sta WSYNC
+          dex
+          bne LoopVBlank ; loop until X==0
+
+          lda #0
+          sta VBLANK     ; turn off
+#+end_src

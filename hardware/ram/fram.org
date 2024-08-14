@@ -1,0 +1,15 @@
+- https://en.wikipedia.org/wiki/Ferroelectric_RAM
+  - ~1994 comercialization
+  - FRAM, FeRAM
+  - non-volative
+  - random access
+  - needs refresh after read (like DRAM)
+  - Products
+    - 94 Sonic gamesaves
+    - 00 ps2 memorycard
+  - vs Flash
+    - (+) lower power usage
+    - (+) faster write speed
+    - (+) greater durability (r/w endurance)
+    - (-) lower storage density
+    - (-) higher cost

@@ -1,3 +1,14 @@
 - https://en.wikipedia.org/wiki/I%C2%B2C
+  - supports multiple devices on the same bus
+  - must be assigned an unique address
+  - Has no minimum CLOCK speed
+  - Open drain output
+  - you might need a =level shifter= to communicate from a 5v MCU to a 3v I2C device
+  - pins
+    - Vcc
+    - GND
+    - SCL(lock)
+    - SDA(ta)
+
 - eeprom i2c programming
   https://www.hackster.io/gatoninja236/how-to-use-i2c-eeprom-30767d

@@ -286,7 +286,7 @@ https://www.youtube.com/watch?v=9WE3Obdjtv0
 https://www.youtube.com/watch?v=4qH4unVtJkE
 
 - Ways of representing negative numbers:
-  1. using the MSB fas a naive =sign bit=
+  1. using the MSB fas a naive =sign bit= (sign & magnitude?)
      - you have a negative 0
      - you CANNOT add
   2. =ones complement=: for negative we flip/complement the bits
@@ -300,7 +300,12 @@ https://www.youtube.com/watch?v=4qH4unVtJkE
 ** ALU - Arithmetic Logic Unit
 
 - Parts Needed
-  - 2x - 74283 - 4-bit adder
+  - Adder
+    - 2x - 74283 - 4-bit adder
+    - alternative
+      - 2x XOR 7486
+      - 2x AND 7408
+      - 1x OR  7432
   - 2x - 7486 - XOR
   - 1x - 74245 (Octal bus transceiver) (aka for the tri-state)
 
@@ -309,16 +314,8 @@ https://www.youtube.com/watch?v=4qH4unVtJkE
 - https://www.youtube.com/watch?v=wvJc9CZcvBc
 - (see also computerphile version https://www.youtube.com/watch?v=VPw9vPN-3ac)
 
-- Parts Needed
-  - 2x XOR 7486
-  - 2x AND 7408
-  - 1x OR  7432
-
-#+ATTR_ORG: :width 300
-[[./fulladder4bit.jpg]]
-
 - You need to build a circuit that knows how to do all the possible binary sums.
-  - The =half adder= part
+  - The =half adder= part (doesn't account for a carry IN)
   #+begin_src
         A   B   c(arry)  S(sum)
         0 + 0 = 0\       0\
@@ -326,7 +323,7 @@ https://www.youtube.com/watch?v=4qH4unVtJkE
         1 + 0 = 0 |      1 |
         1 + 1 = 1/       0/
   #+end_src
-  - Plus those sums with a (c)arry bit coming IN
+  - Plus those sums with a (c)arry IN
   #+begin_src
     c   A   B   c S
     1 + 0 + 0 = 0 1\
@@ -334,6 +331,9 @@ https://www.youtube.com/watch?v=4qH4unVtJkE
     1 + 1 + 0 = 1 0 |(inverse of the above S)
     1 + 1 + 1 = 1 1/ (so we XOR 1(carry) with above S)
   #+end_src
+
+#+ATTR_ORG: :width 300
+[[./fulladder4bit.jpg]]
 
 *** Design
 

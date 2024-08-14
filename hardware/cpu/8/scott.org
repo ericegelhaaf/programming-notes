@@ -77,3 +77,43 @@ https://www.youtube.com/playlist?list=PLnAxReCloSeTJc8ZGogzjtCtXl_eE6yzA
      - update IAR
 
 ** 5) The adder, shifter and the 4 operations
+
+- Half adder:
+  - XOR+AND
+  - Has a carry OUT (with the AND)
+  - Doesn't account for a carry IN
+
+- Full adder:
+  - 2xXOR + 2xAND + OR
+  - Has both carry IN/OUT
+
+- (-) Subtractions
+  - by adding a negative number.
+  - We get the negative by inverting the bits and adding 1 (two complement)
+
+- (*) Multiplications
+  - by LEFT shifting we multiply by 2
+  - using 2 registers
+
+- (/) division
+  - by RIGHT shifting we divide by 2
+  - using 2 registers
+
+** 6) ALU - Arightmetic and Logic Unit
+
+- Typically has direct access to the _control section_
+
+- Inputs
+  - OP
+  - carry IN
+  - Bus (gets A and B)
+
+- Outputs
+  - ACC
+  - carry OUT
+  - a larger
+  - equal flag
+  - zero flag
+
+#+ATTR_ORG: :width 500
+[[./scottcpu.jpg]]

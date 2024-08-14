@@ -33,6 +33,7 @@ https://en.wikipedia.org/wiki/EPROM
 - 22 Video | Emulator with RPi Pico https://www.youtube.com/watch?v=elrf1nM5nco
   - Code in Python
   - With a 1MHz clock is fine
+
 - 17 Video https://www.youtube.com/watch?v=P0oJPvwca6I
   - Data lines are noted On, because they are normally output
   - Vpp = Voltage for programming
