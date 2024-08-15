@@ -325,29 +325,90 @@ Loop:
           stella cart.bin
 #+end_src
 
-*** Example: asm frame
+*** Example: (.asm) start of a frame
 
 #+begin_src asm
+  processor 6502
+  include "vcs.h"
+  include "macro.h"
+
+  seg code
+  org $F000
+
+  Start:
+        CLEAN_START  ; macro to safely clear memory and TIA
+  ;;
+  ;; Start a new frame
+  ;;
   NextFrame:
-          lda #2     ; same as binary #%00000010
-          sta VBLANK ; turn it on
-          sta VSYNC  ; turn it on
+        lda #2     ; same as binary #%00000010
+        sta VBLANK ; turn it on  <---------------
+        sta VSYNC  ; turn it on
+  ;;
+  ;; Generate wait sync line, a strobe (wait for return)
+  ;;
+        sta WSYNC
+        sta WSYNC
+        sta WSYNC
 
-
-          sta WSYNC  ; generate vsync line, a strobe (wait for return)
-          sta WSYNC
-          sta WSYNC
-
-          lda #0
-          sta VSYNC  ; turn off
-
-
-          ldx #37 ; output 37 VBLANK lines
+        lda #0
+        sta VSYNC  ; turn off
+  ;;
+  ;; Let the TIA output 37 VBLANK lines
+  ;;
+        ldx #37
   LoopVBlank:
-          sta WSYNC
-          dex
-          bne LoopVBlank ; loop until X==0
+        sta WSYNC
+        dex
+        bne LoopVBlank ; loop until X==0
 
-          lda #0
-          sta VBLANK     ; turn off
+        lda #0
+        sta VBLANK     ; turn off <--------------
+  ;;
+  ;; Draw 192 visible scanlines
+  ;;
+        ldx #192        ; counter for 192 visible scanlines
+  LoopVisible:
+        stx COLUBK      ; set the background color
+        sta WSYNC       ; wait for the next scanline
+        dex             ; X--
+        bne LoopVisible ; loop while X != 0
+  ;;
+  ;; Draw 30 overscan scanlines
+  ;;
+        lda #2
+        sta VBLANK
+
+        ldx #30          ; counter
+  LoopOverscan:
+        sta WSYNC        ; wait for the next scanline
+        dex              ; X--
+        bne LoopOverscan ; loop while X != 0
+
+        jmp NextFrame
+  ;;
+  ;; Complete ROM
+  ;;
+        org $FFFC
+        .word Start
+        .word Start
 #+end_src
+
+** 6 TIA Objects
+
+[[https://image2.slideserve.com/3631142/slide46-l.jpg]] [[https://slideplayer.com/slide/1677123/7/images/50/Background+HMOVE+Playfield+Ball+Player+0+Player+1+Missile+0+Missile+1.jpg]]
+
+- PlayField
+  - 1 color per horizontal scanline
+  - 20bit pattern, rendered over the left side of the scanline
+  - right side will either, repeat or reflect the same pattern
+  - registers
+    - PF0 (4bits), PF1(8bits), PF2(8bits)
+      [[https://content.invisioncic.com/r322239/monthly_06_2012/post-23476-0-48485200-1339583851_thumb.png]]
+    - COLUPF
+    - CTRLPF (bits from right to left)
+      - D0   = reflect
+      - D1   = score
+      - D2   = priority
+      - D3   = ?
+      - D4/5 = ball size (1,2,4,8)
