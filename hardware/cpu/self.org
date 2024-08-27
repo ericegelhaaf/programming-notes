@@ -25,3 +25,6 @@
 
 - http://www.homebrewcpu.com/
 - homebrew https://www.youtube.com/@fabianschuiki/playlists
+
+- Livestream - Digital Design and Computer Architecture - ETH Zürich (Spring 2023) https://www.youtube.com/playlist?list=PL5Q2soXY2Zi-EImKxYYY1SZuGiOAOBKaf
+- Fall 2021 - Computer Architecture - ETH Zurich https://www.youtube.com/playlist?list=PL5PHm2jkkXmiSGtFXE8IKRQyIZ1wNFknx

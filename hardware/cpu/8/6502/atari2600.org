@@ -7,15 +7,21 @@
 - zines: https://www.atarimania.com/list-atari-magazines.html
 - https://bataribasic.com/
 - https://8bitworkshop.com/docs/platforms/vcs/index.html
-- https://evoniuk.github.io/posts/pitfall.html
-- https://forums.atariage.com/topic/353031-lisp-programming-homebrew-wip/
-  https://github.com/DChristianson/vcs-lisp
-- http://www.neocomputer.org/projects/et/
-- https://www.bigmessowires.com/2023/01/11/atari-2600-hardware-design-making-something-out-of-almost-nothing/
 
-- video 18 | Atari 2600 VCS Programming | Computerphile https://www.youtube.com/watch?v=fce39nQm9TY
-- video 20 | All About Atari 8-Bit Programming https://www.youtube.com/watch?v=HF97bRp8tKo
-- video 24 | Atari 2600 Programming is a NIGHTMARE | truttle1 https://www.youtube.com/watch?v=-l18Rwbinp8
+* articles
+
+- 23 Atari 2600 Hardware Design: Making Something out of (Almost) Nothing https://www.bigmessowires.com/2023/01/11/atari-2600-hardware-design-making-something-out-of-almost-nothing/
+- 21 How Pitfall Builds its World https://evoniuk.github.io/posts/pitfall.html
+- 13 Fixing E.T. The Extra-Terrestrial for the Atari 2600 http://www.neocomputer.org/projects/et/
+- 10 Seeing the operation of code in Atari 2600 games https://benfry.com/distellamap/
+- 83 Inventing the Atari 2600 https://spectrum.ieee.org/lifi-lidar-metasurface-applications
+
+* videos
+
+- 18 Atari 2600 VCS Programming | Computerphile https://www.youtube.com/watch?v=fce39nQm9TY
+- 20 All About Atari 8-Bit Programming https://www.youtube.com/watch?v=HF97bRp8tKo
+- 21 Racing the Beam Explained - Atari 2600 CPU vs. CRT Television https://www.youtube.com/watch?v=sJFnWZH5FXc
+- 24 Atari 2600 Programming is a NIGHTMARE | truttle1 https://www.youtube.com/watch?v=-l18Rwbinp8
 
 * Color Pallete
 
@@ -394,21 +400,221 @@ Loop:
         .word Start
 #+end_src
 
-** 6 TIA Objects
+** TODO 6 TIA Objects
 
+#+CAPTION: elements of an "universal pong machine"
 [[https://image2.slideserve.com/3631142/slide46-l.jpg]] [[https://slideplayer.com/slide/1677123/7/images/50/Background+HMOVE+Playfield+Ball+Player+0+Player+1+Missile+0+Missile+1.jpg]]
 
-- PlayField
-  - 1 color per horizontal scanline
-  - 20bit pattern, rendered over the left side of the scanline
-  - right side will either, repeat or reflect the same pattern
-  - registers
-    - PF0 (4bits), PF1(8bits), PF2(8bits)
-      [[https://content.invisioncic.com/r322239/monthly_06_2012/post-23476-0-48485200-1339583851_thumb.png]]
-    - COLUPF
-    - CTRLPF (bits from right to left)
-      - D0   = reflect
-      - D1   = score
-      - D2   = priority
-      - D3   = ?
-      - D4/5 = ball size (1,2,4,8)
+*** Background
+
+- 160x192 (the whole visible screen)
+- One color per scanline
+  - register: =COLUBK=
+- Behind all other elements
+
+*** PlayField
+
+- 20bit pattern
+- rendered over the *left side* of the scanline
+- *right side* will either
+  1) repeat
+  2) or reflect the same pattern
+- registers
+  - PF0 (4bits), PF1(8bits inverted), PF2(8bits)
+    [[https://content.invisioncic.com/r322239/monthly_06_2012/post-23476-0-48485200-1339583851_thumb.png]]
+  - COLUPF
+  - CTRLPF: 8bits, from right to left
+    |------+---------------------------|
+    | D0   | reflect 0=repeat 1=mirror |
+    | D1   | score                     |
+    | D2   | priority                  |
+    | D3   | ?                         |
+    | D4/5 | ball size (1,2,4,8)       |
+    |------+---------------------------|
+
+*** Player(s)
+
+- registers: each is 8bit
+  |--------+---+-------------|
+  |    <r> | b |             |
+  |--------+---+-------------|
+  |   GRP? | 8 | pattern     |
+  | COLUP? | 8 | color       |
+  | NUSIZ? | 3 | number/size |
+  |  REFP? | 1 | reflect     |
+  |--------+---+-------------|
+
+*** Missile/Ball
+
+- positioned, no bit pattern
+- 1 pixel, stretched
+- upto 2 missiles in scanline
+- registers
+  |----+-------------------|
+  | M? | uses P? colors    |
+  | BL | uses the PF color |
+  |----+-------------------|
+*** Example: render a square made of a PlayField
+
+- scanlines: 7-7-164-7-7
+  #+begin_src asm
+             seg
+             org $F000
+
+     Reset:
+             CLEAN_START
+
+             ldx #$80
+             stx COLUBK
+
+             lda #$1C
+             sta COLUPF
+
+     StartFrame:
+             lda #02
+             sta VBLANK
+             sta VSYNC
+    ;;
+    ;; Generate 3 lines of VSYNC
+    ;;
+             REPEAT 3 # dasm - a loop macro
+                 sta WSYNC
+             REPEND
+             lda #0
+             sta VSYNC
+    ;;
+    ;; Generate 37 lines of VBLANK
+    ;;
+            REPEAT 37
+                sta WSYNC
+            REPEND
+            lda #0
+            sta VBLANK
+    ;;
+    ;; Set the CRLPF to allow playfield reflection
+    ;;
+            ldx #%00000001 ; D0 = 1 = reflect
+            stx CTRLPF
+
+    ;; Draw: skip 7 lines with no PF set
+            lda #0
+            stx PF0
+            stx PF1
+            stx PF2
+            REPEAT 7
+                sta WSYNC
+            REPEND
+    ;; Draw: 7 lines
+            ldx #%11100000
+            stx PF0
+            REPEAT 7
+                sta WSYNC
+            REPEND
+            ldx #%11111111
+            stx PF1
+            stx PF2
+            REPEAT 7
+                sta WSYNC
+            REPEND
+    ;; Draw: 164 times only PF0 3'rd bit
+            ldx #%00100000
+            stx PF0
+            ldx #0
+            stx PF1
+            stx PF2
+            REPEAT 164
+               WSYNC
+            REPEND
+    ;; Draw: 7 lines (again)
+            ldx #%11100000
+            stx PF0
+            REPEAT 7
+                sta WSYNC
+            REPEND
+            ldx #%11111111
+            stx PF1
+            stx PF2
+            REPEAT 7
+                sta WSYNC
+            REPEND
+    ;; Draw: skip 7 lines with no PF set (again)
+            lda #0
+            stx PF0
+            stx PF1
+            stx PF2
+            REPEAT 7
+                sta WSYNC
+            REPEND
+
+    ;; Overscan
+            lda #2
+            sta VBLANK
+            REPEAT 30
+                sta WSYNC
+            REPEND
+            lda #0
+            sta VBLANK
+
+    ;; Loop to the next frame
+            jmp StartFrame
+    ;; Complete ROM
+            org $fffc
+            .word Reset
+            .word Reset
+  #+end_src
+
+*** Example: Player Bitmaps (sprites) for characters and numbers
+
+#+begin_src asm
+  Reset:
+          CLEAN_START
+          ldx #$80   ; background = blue
+          stx COLUBK
+          lda #%1111 ; playfield  = white
+          sta COLUPF
+          lda #$48   ; player 0 = light red
+          sta COLUP0
+          lda #$C6   ; player 1 = light green
+          sta COLUP1
+  StartFrame:
+          ;; ...3..37..VBLANK/WSYNC
+  VisibleScanlines:
+          REPEAT 10 ;; empty lines
+                  sta WSYNC
+          REPEND
+  ;;
+  ;; 10 scoreboard number scanlines
+  ;;
+          ldy #0
+  ScoreboardLoop:
+          lda NumberBitmap,Y ; from array of bytes
+          sta PF1            ; PF0 would be too far to the left
+          sta WSYNC          ; wait render
+          iny
+          cpy #10
+          bne ScoreboardLoop
+
+          lda #0
+          sta PF1 ; disable playfield
+  ;;
+  ;; Array of bytes to draw the scoreboard number
+  ;;
+          org $FFF2
+  NumberBitmap:
+          .byte #%00001110 ; ########
+          .byte #%00001110 ; ########
+          .byte #%00000010 ;      ###
+          .byte #%00000010 ;      ###
+          .byte #%00001110 ; ########
+          .byte #%00001110 ; ########
+          .byte #%00001000 ; ###
+          .byte #%00001000 ; ###
+          .byte #%00001110 ; ########
+          .byte #%00001110 ; ########
+  ;;
+  ;; Complete ROM
+  ;;
+          org $FFFC
+          .word Reset
+          .word Reset
+#+end_src

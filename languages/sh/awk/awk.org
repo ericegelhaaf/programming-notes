@@ -442,6 +442,10 @@ $ readelf -d /usr/bin/mawk | grep Shared # 155K
  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
 #+end_src
 
+- buffering
+  - =gawk= unbuffered by default
+  - =mawk= buffers by default, needs ~-W interactive~ to disable
+
 * tools
 - editor tools
   - https://github.com/Beaglefoot/awk-language-server

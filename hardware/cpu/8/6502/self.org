@@ -15,6 +15,7 @@
 - links https://chotrin.org/notes/6502.html
 - images http://visual6502.org/
 - tutorials
+  - https://archive.md/20170120015900/http://quinndunki.com/blondihacks/?p=680
   - http://skilldrick.github.io/easy6502/
   - https://www.middle-engine.com/blog/posts/2020/06/23/programming-the-nes-the-6502-in-detail
 
