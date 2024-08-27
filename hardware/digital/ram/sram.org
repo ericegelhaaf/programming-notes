@@ -1,4 +1,3 @@
-#+TITLE: SRAMs  (63)
 #+DATE: <2024-07-31 mié>
 
 - https://en.wikipedia.org/wiki/Static_random-access_memory
