@@ -1,1 +1,95 @@
-- https://en.wikipedia.org/wiki/Operational_amplifier
+|------+-----------------------|
+| V+   | non-inverting input   |
+| V-   | invertig input        |
+| Vout | output                |
+| Vs+  | positive power supply |
+| Vs-  | negative power supply |
+|------+-----------------------|
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Op-amp_symbol.svg/375px-Op-amp_symbol.svg.png]]
+
+- wiki https://en.wikipedia.org/wiki/Operational_amplifier
+
+- 1941 with vacuum tubes
+- 1963 first IC
+
+- Amplifies the difference between the inputs
+  - aka V+ minus V-
+  - supports both DC and AC
+- High gains +100000x
+- impedance
+  - high INPUT
+  - low OUTPUT
+
+- Rules
+  1) no ~current~ flows IN or OUT of the inputs (V+, V-)
+  2) tries to keep the inputs the same ~voltage~ (only for closed loop)
+     it does it with the output feedback
+
+* power supply
+
+1) bipolar/split/dual: -12v,0v,+12v
+   - used by hifi audio amplifiers
+   - can return negative voltages
+
+2) simple: 0v,+5v
+   - Inverting
+     - Vout = (2.5-Vin)*(Rf/R1)     + 2.5
+   - Non-inverting
+     - Vout = (Vin-2.5)*(1+(Rf/R1)) + 2.5
+   - used by along digital circuits
+   - canNOT return negative voltages (chops it off)
+
+* use cases
+
+- DSP, signal conditioning
+- Dual power supply, DAC
+- Operation = they were used to peform math operations in analog computers
+  - addition
+  - subtraction?
+  - integration
+  - multiplication
+  - logarithm
+    - in rf carriers, nedded to dynamically adjust gain ans o maximize SNR over a wide dynamic range of received inputs on carriers at Mhz or GHz
+  - differentiation?
+    - it takes the difference between inputs and amplifies it?
+
+*   open loop
+
+- gain is typically around 100k (not practical)
+- it's easy for the OUTPUT to get saturated
+  - as such it can be used as comparator (poor's man)
+#+ATTR_ORG: :width 150
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Op-amp_open-loop_1.svg/255px-Op-amp_open-loop_1.svg.png]]
+
+* closed loop
+
+- We need additional circuitry because we are using them for reasons werent designed for
+- We give it a ~negative feedback~
+- The higher Rf, the higher the gain
+
+- Configurations
+
+  1) (Unity Gain) Buffer:
+     - tied Vout and V- input
+     - special case of 2) with no resistance
+
+  2) Non Inverting Amplifier: signal goes into V+
+     - GAIN = Av = Rf/Ri + 1
+       Rf feedback resistor
+       Ri   ground resistor
+     #+ATTR_ORG: :width 200
+     [[https://upload.wikimedia.org/wikipedia/commons/4/44/Op-Amp_Non-Inverting_Amplifier.svg]] [[https://pfnicholls.com/Electronics_Resources/Images/NonInvAmpAC.png]]
+
+  3) Inverting Amplifier: signal goes into V-
+     - You are NEVER going to get a negative OUTPUT voltage
+       - if you have a single supply power?
+     - Creates a ~virtual ground~ after R1
+     - GAIN = Av = -Rf/R1
+     #+ATTR_ORG: :width 200
+     [[https://upload.wikimedia.org/wikipedia/commons/4/41/Op-Amp_Inverting_Amplifier.svg]] [[https://pfnicholls.com/Electronics_Resources/Images/InvAmpAC.png]]
+
+* Videos
+
+- 14 EEVblog  | #600 - OpAmps Tutorial - What is an Operational Amplifier? https://www.youtube.com/watch?v=7FYHt5XviKc
+- 23 Dronebot |Op-Amps - Using Operational Amplifiers https://www.youtube.com/watch?v=_HHxV-7alwE
