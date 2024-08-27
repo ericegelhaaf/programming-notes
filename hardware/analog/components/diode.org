@@ -1,0 +1,7 @@
+- https://www.inventable.eu/2018/03/21/diodo-1n4148/
+- Functions
+  - [[https://en.wikipedia.org/wiki/Snubber][snubber]] / [[https://en.wikipedia.org/wiki/Flyback_diode][flyback]] / commutating / freewheeling / supressor / clamp / catch
+    - to suppress transient voltages
+    - to eliminate flyback (aka sudden voltage spikes) of an inductor/motor
+    #+ATTR_ORG: :width 250
+    [[https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flyback_Diode.svg/1280px-Flyback_Diode.svg.png]]

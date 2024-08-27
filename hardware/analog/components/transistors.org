@@ -1,0 +1,117 @@
+- https://en.wikipedia.org/wiki/Transistor
+  - 1957 (first commercially available)
+  - based on semiconductors changes of conductivity
+
+- http://r-luis.xbot.es/edigital/qnpn_pnp.html
+
+#+CAPTION: case styles, 18, 92, 220...
+[[https://midwestsurplus.net/media/case.gif]]
+
+#+ATTR_ORG: :width 200
+[[https://practicalee.com/wp-content/uploads/2019/04/symbols_bjts.jpg]]
+
+- You can think of a transistors as
+  - switches
+  - current amplifiers
+  - a variable resistors.
+    - That varies trying to match the *current* in the base
+    - With the *current* in the collectorx100 (times one hundred)
+
+- There are 2 current that could flow through a transistor
+  - Base Current (Ib)
+  - Collector Current (Ic)
+
+- States
+  - Saturation: when there is current in base
+  - Cutoff: when there is no current in base
+
+- You can build 2 types of circuits, depending where the OUTPUT is placed (before or after transitor)
+  1) emitter follower (aka buffer)
+  2) inverter
+
+- Tutorial: How to design a transistor circuit that controls low-power devices
+  https://www.youtube.com/watch?v=8DMZSxS-xVc
+
+* Classification
+** FET (Field Effect Transistor)
+
+https://en.wikipedia.org/wiki/Field-effect_transistor
+
+#+CAPTION: JFET / MOSFET
+[[https://i.ytimg.com/vi/euXR2blqlDE/maxresdefault.jpg]]
+
+- 1925/195-
+- aka "unipolar transistors"
+- Uses an electric field to control the flow of current in a semiconductor.
+- Types
+  1) JFET (Junction FET)
+  2) MOSFET (Metal-Oxide-Semiconductor FET)
+
+#+CAPTION: traversal cut
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Lateral_mosfet.svg/800px-Lateral_mosfet.svg.png]]
+
+- terminals/legs
+  1) source
+  2) gate: control the flow of current by applying voltage here, which alters the conductivity
+  3) drain
+
+** BJT (Bipolar Junction Transistors)
+
+https://en.wikipedia.org/wiki/Bipolar_junction_transistor
+
+- The most common
+- Uses both *electrons* and *electron holes* as charge carriers.
+- Packaging
+  1) SOT: Small Outline Transistor
+  2) TO: Transistor Outline
+  3) TO-3: metal semiconductor package
+- Types
+  - NPN
+  - PNP
+
+#+CAPTION: cross section NPN BJT
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/NPN_BJT_%28Planar%29_Cross-section.svg/1024px-NPN_BJT_%28Planar%29_Cross-section.svg.png]]
+
+- Legs
+  * Base      (p/n)
+  * Emitter   (n/p)
+  * Collector (p/n)
+
+* Projects
+- https://www.inventable.eu/2010/08/03/calimaro-un-robot-old-style/
+
+
+* Models
+- bc327/bc337 https://www.inventable.eu/2018/04/18/los-transistores-bc327-y-bc337/
+** BC548
+
+- https://en.wikipedia.org/wiki/BC548
+- https://www.inventable.eu/2017/07/09/transistor-bc548/
+- https://www.radiomuseum.org/tubes/tube_bc548.html
+
+- NPN BJT
+- TO-92
+- Substitute and successor of BC108/148/238
+- GainGroups: A/B/C with 180/300/600 current gains repectively
+
+** 2N2222
+
+- https://en.wikipedia.org/wiki/2N2222
+- https://www.inventable.eu/2020/11/30/transistor-2n2222/
+
+- 1960
+- NPN BJT
+- TO-92 (TO-18 antes)
+- Equivalente a BC337/BC548
+- maximo 800mA corriente de colector
+
+** 78xx / 79xx
+
+- https://en.wikipedia.org/wiki/78xx
+- https://www.inventable.eu/2023/05/17/reguladores-tension-78l/
+
+- 78xx - positive (linear) voltage regulators
+- 79xx - negative (linear) voltage regulators
+- xx = indicate the _output_ voltage

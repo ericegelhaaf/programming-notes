@@ -1,0 +1,19 @@
+- has no effect on DC
+- stores energy in magnetic form
+
+- cannot have immediate changes of current
+  [[https://eepower.com/uploads/articles/time-constant-and-energy-storage-in-dc-circuit-inductors-fig2.jpg]]
+
+- =inductance= measured in henry, the higher the more resistance
+  - nanohenry ones, will only filter high frequencies (+100Mhz)
+    - in radios
+  - microhenry ones, 50kHz-2Mhz
+    - in dc power supplies
+  - millihenry
+    - in heavy power filters
+    - in audio crossover filters
+
+- a ferrite magnetic core increases
+  - the magnetic field
+  - the energy stored
+  - the inductance
