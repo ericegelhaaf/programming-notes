@@ -1,4 +1,16 @@
+#+ATTR_ORG: :width 150
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Diode_symbol.svg/320px-Diode_symbol.svg.png]]
+
+- https://en.wikipedia.org/wiki/Diode
 - https://www.inventable.eu/2018/03/21/diodo-1n4148/
+
+- ideal diodes will
+  - acts as an _opencircuit_ any and all current in reverse
+  - acts as a _shortcircuit_ (no resistance) when current is forward
+
+#+ATTR_ORG: :width 300
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Diode_current_wiki.png/628px-Diode_current_wiki.png]]
+
 - Functions
   - [[https://en.wikipedia.org/wiki/Snubber][snubber]] / [[https://en.wikipedia.org/wiki/Flyback_diode][flyback]] / commutating / freewheeling / supressor / clamp / catch
     - to suppress transient voltages

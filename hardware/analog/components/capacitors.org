@@ -1,2 +1,14 @@
+#+CAPTION: fixed, polarized and variable capacitors
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Types_of_capacitor.svg/345px-Types_of_capacitor.svg.png]]
+
+- https://en.wikipedia.org/wiki/Capacitor
 - https://www.inventable.eu/2012/09/15/como-se-leen-los-valores-de-los-capacitores/
-- stores energy in static form
+
+- *stores* energy in static form
+- are _conductors_ separated by an _insulator_
+
+- capacitance = ratio of charge to voltage
+  1 couloumn/volt = 1 farad
+- Charge (Q) is proportional to Voltage (V)
+  Q = C*V

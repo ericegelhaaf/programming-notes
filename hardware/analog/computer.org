@@ -1,0 +1,40 @@
+- https://en.wikipedia.org/wiki/Analog_computer
+- https://www.analogmuseum.org/
+
+- 17 ARTICLE https://spectrum.ieee.org/not-your-fathers-analog-computer
+- 19 ARTICLE Analog computation, Part 1: What and why | Analog IC Tips
+  - https://www.analogictips.com/analog-computation-part-1-what-and-why/
+    - 0.1% to 1% precision
+  - https://www.analogictips.com/analog-computation-part-2-when-and-how-faq/
+
+- 14 VIDEO Computing with Analog
+  - https://www.youtube.com/watch?v=1EHjaBjRvgQ&t=230s
+
+* 13 VIDEO Will Analog Computing and Neural Nets Power Innovation after Moore's Law?
+  - https://www.youtube.com/watch?v=3tOA8Fo6b7A
+  - https://en.wikipedia.org/wiki/Dennard_scaling
+    as transistors get smaller, they =power= density stays constant
+    [[https://www.researchgate.net/publication/330893452/figure/fig1/AS:993832694992898@1613959587856/The-Dennard-scaling-failed-around-the-middle-of-the-2000s-24.png]]
+  - The more specialized you are, the more efficient you are
+    [[https://semiwiki.com/wp-content/uploads/2018/09/22341-broderson_efficiency.jpg]]
+  - good for doing fixed(?) mathematical operations
+  - less power usage for some use cases
+  - gains
+    - code       10x
+    - logic     100x customizing circuits (fpga,dsp)
+    - circuit  1000x analog circuits (not boolean gates)
+    - devices 10000x ???
+  - embrace approximation, where you can afford impresicion
+
+* 16 VIDEO Programming an Analog Computer
+  - https://www.youtube.com/watch?v=3tOA8Fo6b7A
+  - 50% TODO
+  - The *computing* elements are opams, where they were originated.
+  - GP-6
+    [[https://treasures.scss.tcd.ie/hardware/temp-Comdyna-GP6-Analog-Computer/Comdyna-GP6-PANEL_files/gp-6pan.jpg]]
+    - has 8 potentiometers, in yellow
+    - has 2 multipliers, in black
+    - has 2 opamps, that perform sum
+    - has 2 opamps, that invert
+    - has 4 opamps, that perform integrations
+      - each has the option of providing an initial condition (aka constant of integration)
