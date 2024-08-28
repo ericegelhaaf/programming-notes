@@ -1,0 +1,4 @@
+- Let’s Do The Time Warp - Tidal’s temporal combinators
+  http://www.imn.htwk-leipzig.de/~waldmann/etc/untutorial/tc/warp/
+- https://www.youtube.com/user/kindohm
+- https://github.com/XiNNiW/tidalcyclesjournal/

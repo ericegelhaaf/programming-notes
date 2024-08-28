@@ -1,0 +1,7 @@
+- https://www.youtube.com/playlist?list=PL1Zlv_e8Lv9g2NLtDb0X_VhIw9aR7mcJ7
+- https://github.com/alikthename/Musical-Design-in-Supercollider
+* Building
+https://github.com/supercollider/supercollider/blob/develop/README_LINUX.md
+cmake -DSUPERNOVA=OFF -DSC_ABLETON_LINK=OFF -DNATIVE=ON -DAUDIOAPI=portaudio -DNO_AVAHI=ON ..
+cmake -DSUPERNOVA=OFF -DSC_ABLETON_LINK=OFF -DNATIVE=ON -DAUDIOAPI=portaudio -DNO_AVAHI=ON -DCMAKE_BUILD_TYPE=Release ..
+* Book: The Supercollider Book

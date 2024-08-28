@@ -1,0 +1,347 @@
+https://news.ycombinator.com/item?id=7572920
+#+begin_src
+Each has only one designated ChucK input and/or output. This makes it
+difficult to truly experiment with modulation.
+
+You pretty quickly reach a point where you end up writing the same old
+procedural code you'd write in C or Java, explicitly manipulating
+samples instead of streams.
+
+I think the intuition behind ChucK is similar to the functional
+reactive programming of Elm
+#+end_src
+- https://ccrma.stanford.edu/~rmichon/fauck/
+- https://bitbucket.org/mariobuoninfante/biweeklychuck/src/master/drops/drops.ck
+
+- home https://chuck.stanford.edu/
+- wiki https://en.wikipedia.org/wiki/ChucK
+- source https://github.com/ccrma/chuck
+- videotutorial https://www.youtube.com/playlist?list=PL-9SSIBe1phI_r3JsylOZXZyAXuEKRJOS
+- video 2007 https://www.youtube.com/watch?v=2rpk461T6l4
+
+* Libraries
+- ChucK as a VST/AudioUnit https://github.com/mtiid/chuck-racks
+- Musical Simple Interface beta version https://github.com/essteban/CHmUsiCK
+- LiCK, Library for ChucK https://github.com/heuermh/lick
+* Performances/Songs
+- No screen - https://www.youtube.com/watch?v=aS0tZTb-rNM
+              https://mtiid.bandcamp.com/album/chuck-concert-2013
+- Robotic Pianos https://vimeo.com/277785691
+- https://www.youtube.com/watch?v=ezmpolryqUE
+- https://soundcloud.com/sigint-trax/mutation-0x1337
+* TODO Book: Programming for Musicians and Digital Artists
+** 1 Basics: Sound waves and waveforms
+- "Sound consists of high and low pressure fluctuations (waves)"
+- ~periodic oscilation~ on sounds that have a pitch
+- T period of oscilation
+1/T frequency of oscilation, cycles per second
+- "Slight deviations of pitch, and other things, are what make original sound natural."
+- ~Sawtooth~
+  - Can be a good start on a violin synthesis
+  - Sine waves at integer multiple freqs can be used to build one
+    sin(x) + sin(2x)/2 + sin(3x)/3
+- ~Square~
+  - Behaves like the lowest note of a clarinet
+- <<< "hello" >>>;
+- SinOsc is a ~unit generator~
+  SqrOsc
+  TriOsc
+  SawOsc
+- .freq range is from 0 to 20K
+- turn off (gain to zero) is needed, otherwise it would be a continuos sound
+- shorthands
+  VALUE *=> VARIABLE
+  VALUE +=> VARIABLE
+  VALUE -=> VARIABLE
+- ~types~: int, float, dur, time
+- 1.5 of a note is the ~perfect fifth~
+- ~dur~ keywords: samp, ms, second, minute, hour, day, week
+- when you try to change the value of ~now~ it has
+  the side effect of letting time pass (and letting sound generate)
+- ~control structures~: if, else, for, while
+- ~locical conditionals~: ==, !=, <, >, >=, <=, ||, &&
+- the reseved word ~true~ has value 1
+                   ~false~ has value 0
+#+begin_src chuck
+SinOsc s      => dac; // Signal chain aka patch aka "making a patch"
+0.1           => s.gain;
+220           => s.freq;
+2.0::second   => now;
+#+end_src
+** 2 Libraries: ChucK built-in tools
+- 2? ways to call a function
+  - Std.mtof(64)
+  - 64 => Std.mtof
+  OR
+  - Std.ftoi(220.5) => int myFreq
+  - 220.5 => Std.ftoi => int myFreq;
+- mtof(0) is 8.175799 aka C-1
+- at low frequencies you might hear something but not a clear pitch
+- Std: mtof(), ftom(), midi/frequency
+       ftoi(), float/int, thrown away fractional part
+       atoi(), atof(), ascii/int/float
+       itoa(), ftoa()
+- Math: random(), between 0 and Math.RANDOM_MAX
+        random2(int min,int max)
+        randomf(), between 0.0 and 1.0
+        random2f(float min, float max)
+        srandom(SEED)
+        round(FLOAT)
+- Brass>Piano>HiHat>Snare>Kick>Cymbal>Toms>Guitar>Shaker
+- Panning
+  - dac.left, dac.right
+  - dac.chan(N)
+  - Pan2 (ugen), from -1.0 to 1.0
+- You can ChucK the same value to different places.
+  0.01 => s.gain => t.gain;
+** 3 Arrays: arranging and accessing your compositional data
+- You can have arrays of ugens
+- cap() method of arrays to know the length
+#+begin_src chuck
+int a[4];
+57 => a[0];
+[57, 57, 64, 64] @=> int a[];// at-ChucK operator
+#+end_src
+** 4 Sound files and sound manipulation
+- The process of turning a sound waveform into a digital signal is called ~analog-to-digital conversion~.
+  Done by the ADC.
+- In most formats samples are represented by Integers (.wav .tiff)
+- On ChucK samples are on the -1.0 to 1.0 range
+- ~rarefactions~ is the air pressure lower than normal
+- wavetable: loaded on a program
+  sound file: stored
+  sample: individual slice or the whole slices
+- ~me.dir()~ current directory string
+- ~+~ can be used to concatenate string
+- ~Gain~ is a unit generator too
+#+begin_src chuck
+  SndBuf mySound => dac;
+  "/home/user/a.wav" => mySound.read
+  0 => mySound.pos;
+  mySound.samples() :: samp => now;
+#+end_src
+- ~SndBuf~ mono
+  ~SndBuf2~ stereo
+  - When a two-channel output is connected to a single-channel input,
+       the two-channels are mixed together to match the input.
+  - .pos(N) seeks to position N
+  - .samples() returns the ~int~ number of samples
+  - .length() returns the ~dur~ of the file
+  - .read() is costly, can cause clicks if ran on a loop
+  - .loop(Bool) repeats automatically
+  - .rate() signed playing rate
+  - you can have and array of SndBuf (or any ugen)
+** 5 Functions: Making you own tools
+#+begin_src chuck
+fun int fname(int arg, int arg2)
+{
+    int result;
+    return result;
+}
+#+end_src
+- The 5th is 7 MIDI notes higher than the root
+  A (+) 3rd is 4 MIDI notes above the root , sounding brighter
+  A (-) 3rd is 3 MIDI notes above the root , sounding darker
+- ~Mandolin~ Ugen has .freq and .noteOn
+- ~Impulse~ UGen generates a *click* (single sample) each time you tell it to
+  needs set next() method to 1.0 (?)
+- remember the 2? ways to call a function
+  addOctave(2)
+  2 => addOctave
+- Frequency: *2 is octave, *1.5 is the fifth
+- ~Granularize~: means picking random sample positions each passed "grain" time. A grain is a fixed size slice of the audio.
+   myWav.samples()/steps => int grain;
+   Math.random2(0,myWav.samples() - grain) + grain => myWav.pos;
+- ~Arguments~
+  |       | passed by | return? |
+  |-------+-----------+---------|
+  | array | reference | no      |
+  | *     | value     | yes     |
+
+** 6 Unit Generators: ChucK objects for sound synthesis and processing
+- oscilators, modulators, envelopes
+*** Special Ugens
+- Special Ugens: dac, adc, blackhole
+  - adc and dac are the only persistent UGens in all of ChucK, and once connected they
+    stay connected until explicitly disconnected (by unChucKing using =<).
+- .last() returns the last sample received by an Ugen (like Gain)
+*** The Pulse with oscillator: an ellectronic music classic
+- ~Oscilators~:
+  - Chaining OSC
+    .sync(N) tells it to use the INPUT as 2) frequency modulation
+  - SinOsc
+  - TriOsc
+  - SqrOsc
+  - PulseOsc (same as Sqr but can also control the width aka ~pulse with~ aka ~duty cycle~)
+    width (0.0 to 1.0 where 0.1 means high 10% of the time and 50% same percent high and low)
+    0.5 == SqrOsc
+    varying the with is common on electronic music
+*** Envelope (smooth slow function)
+- ~Envelope~ (clarinet)
+  .time(DUR), how long from 0.0 to TARGET (default 1.0)
+  .keyOn(BOOL) , triggers the start
+  .keyOff(BOOL), triggers the end
+  .target(0.0-1.0)- sets the end value
+  .value(0.0-1.0) - sets and holds until noteX()
+- ~ADSR~
+  .attackTime
+  .decayTime
+  .sustainLevel
+  .releaseTime
+  ex: myEnt.set(0.1, 0.1, 0.5, 0.1)
+  In the end, it depends more of how much/long it has to travel than the time set.
+*** Frequency modulation synthesis
+- ~FM synthesis~, new sine waves from 2 sine waves...
+  - Modulator, modulates the frequency of the...
+  - Carrier
+  - ~wave shaping~ family of synthesis algorithms
+  - if the frequencies are NOT related by single digit/integer ratios, they are inharmonics
+- FM Ugens: Internal ADSR, needs manual waits
+| piano        | Wurley, Rhodey     |
+| organ        | BeeThree, FMVoices |
+| orch. chimes | TubeBell           |
+| dist. guitar | HevyMetl           |
+*** Pluck string synthesis by physical modeling
+- Ugens: ~OneZero~, ~Noise~, ~DelayL~, ~DelayA~
+- Physical modeling is often called ~waveguide synthesis~
+- losses of delay      = less gain on delay (than on impulse?)
+  string (cord) length = delay time
+#+begin_src chuck
+Impulse imp => Delay str => dac; // impulse feeds a delay line
+str           => str; // loop the delay back into itself
+441.0 :: samp => str.delay; // round-trip string delay, 100 Hz At 44.1k SRATE
+0.98          => str.gain;  // set round-trip string gain to less than 1.0
+1.0           => imp.next;  // "pluck" the string
+5.0 :: second => now;
+#+end_src
+- Karplus uses Noise instead of an Impulse.
+  We manually gate the output, to replicate a similar behaviour of Impulse.
+#+begin_src chuck
+Noise pluck => Delay str => dac;
+// ...
+1.0 => pluck.gain; 441.0 :: samp => now;
+0.0 => pluck.gain; 5.0 :: second => now;
+#+end_src
+- To model the decay of the delay sound, we put a low-pass filter.
+  Since High frequencies experience more losses than low freqs.
+#+begin_src chuck
+str => OneZero filter => str; // hook string back into itself
+#+end_src
+- We add (sample) fractional delay. Which better support high frequencies.
+  Alse we can use ADSR to just use .keyOn(Bool) and not manual waits
+#+begin_src chuck
+Noise nois => ADSR pluck => DelayA str => dac; // DelayA takes arbitrary delay float value
+// ...
+pluck.set(0.002, 0.002, 0.0, 0.01); // Sets ADSR parameters to pluck rapidly and then stick at 0.0
+Math.random2f(110.0, 440.0) :: samp => str.delay;
+#+end_src
+*** Intro to filter UGens: frequency-dependent gain
+- ~OneZero~ does a moving average
+  - (thisInput + lastInput) / 2 => output
+  - The ~frequency response~ is gain/frequency:
+    - A *gain* of 1.0 for the lowest frequency 0Hz
+    - A *gain* of 0.0 for a frequency half the sample rate
+- ~ResonZ~
+  - Creates a ~resonance~ aka higher gain at given frequency.
+  - .freq(), sets the resonance frequency
+    .q(), quality factor aka emphasis on freq
+- ~LPF~ (it lets lower <freq pass), ~HPF~, ~BPF~, ~BRF~
+  - ~passband~, the frequencies that pass through the filter
+  - ~stopband~, the frequencies that get decreased gain
+  - ~cutoff frequenct~, the boundary between passband and stopband (selected by .freq)
+  - ~rolloff~, gain slope into the stopband
+*** More on delays: room acoustics and reverberation
+- Create a room reverb
+  - Allocate 3 ~Delay~
+    - Work in paralel
+    - Loop them
+    - set .max() and .delay() to the same value
+    - set .gain() of delays < than 1.0 to simulate degradation, otherwise it will never stop
+    - different value for each one
+    - if the delay values have common factors, they will resonate, pick prime values
+- ~PCRev~, ~JCRev~, ~NRev~
+  .mix() reverb/dry mixture
+*** Delay based audio effects
+- The Doppler pitch shift happens because the delay time between the source and you is changing.
+  This is the basis of the ~Chorus~ UGen
+  .modFreq(), rate of pitch shifting, 0.25Hz default
+  .modDepth(), 0.5Hz default
+  .mix
+- ~PitShift~ A chain of crossfaded delays
+  .mix
+  .shift
+- ~Dyno~: A good default
+  - Limiting: Don't let loud noises through
+  - Compression: loud noise softer AND soft noises louder. Reduces dynamic range
+  - Noise gating: Don't let soft noise through
+  - Ducking: modify signal based on another
+*** Example: fun with filter and Delay UGens
+- Uses a ResonZ to pitch an Impulse and 3 Delays spead out in the dac
+** TODO 7 Synthesis Toolkit instruments
+- UGens are called "instruments" if they work by .noteOn() and .noteOff()
+- Synthesis Toolkit is based on Perry R. Cook C++ work
+*** 1 STK Wind Instruments
+- PM
+| chuck element | piece | natural phenomen              |
+|---------------+-------+-------------------------------|
+| Delay-line    | tube  | waves going up and down       |
+| Filter        | bell  | reflections and transmissions |
+| Noise/ADSR    | reed  | non-linear spring             |
+- ~Clarinet~, reed/noise and vibration
+- ~Brass~: lip and slide
+- ~Flute~ UGen, ~BlowHole~, ~BlowBotl~, ~Saxofony~
+  - .jetDelay(), speed of air crossing the blowing hole
+*** 2 Better stringed instruments
+- Steel strings sound brighter, stiffer than Nylon ones
+  Can be modeled by adding an allpass filter on the delay.
+  ~StifKarp~
+- Non linear buzz + pitch bend ~Sitar~
+- Body size ~Mandolin~
+- Bowed strings ~Bowed~
+*** 3 Bars and other rigid things
+
+** 8 Multi-threading and concurrency: running many programs at once
+- spork(forking/spawning)
+  shreds(threads/process)
+  shreduler(scheduler)
+  virtual machine
+- A spork, needs a parent process for shreds to keep running
+#+begin_src chuck
+spork ~ foo();
+spork ~ bar();
+while (true) 1::second => now;
+#+end_src
+- foo() and bar()
+  - can create UGens
+  - can use or modify globals
+  - while loop ad infinitum
+- ~ModalBar~ UGen: .strike(FLOAT)
+- Control Flow: repeat (N) {}
+- Machine.add(FILEPATH)
+         .remove(ID)
+         .replace(ID,FILEPATH)
+** TODO 9 Objects and Classes: making your own ChucK power tools
+#+begin_src chuck
+public class testData {
+    1   => int myInt;
+    0.0 => float myFrac;
+    fun float sum() {
+        return myInt + myFrac;
+    }
+}
+testData d;
+<<< d.myInt, d.myFrac, d.sum() >>>;
+3      => d.myInt;
+0.1415 => d.myFrac;
+#+end_src
+- All UGens are objects (In fact, each variable is an object)
+- Make private properties by providing setters (?)
+- Wikipedia: "Method overloading is an example of static polimorphism."
+- .charAt(N) - String method, returns ascii int
+- to call within a method to other method of the instance use ~this~
+- you CANNOT redefine a ~public~ class
+  you can redefine a ~private~ class
+- declaring variables ~static~ makes them class allocated, instead of instance allocated
+- initialize.ck -> public classes
+                -> score.ck -> other files
+                            -> other files

@@ -1,0 +1,11 @@
+homepage https://faust.grame.fr/editor/
+mailist https://sourceforge.net/projects/faudiostream/lists/faudiostream-users
+IFC 2018 https://www.youtube.com/channel/UCAr7dIdjRWkyZfeBU1nzOQg
+https://ccrma.stanford.edu/~jos/aspf/
+* Course: CCRMA workshop
+  home https://ccrma.stanford.edu/~rmichon/faustWorkshops/course2015/#ampMod
+  extra math https://ccrma.stanford.edu/~jos/
+** 2. Introduction/What is Faust?
+- Functional programming language
+- It generates C++ code
+- Build object (lv2,vst) for mid-level languages (supercollider, csound, chuck)

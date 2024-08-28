@@ -1,0 +1,2 @@
+- https://github.com/cuinjune/PdWebParty
+- https://lucarda.com.ar/pd-tutorial/

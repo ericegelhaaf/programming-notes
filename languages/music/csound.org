@@ -1,0 +1,166 @@
+- Blue Tutorial
+  https://www.youtube.com/watch?v=ODaL3N24_Dk
+* drifter - game journal (-9) - csound hrtf
+https://sendai.itch.io/drifter/devlog/102416/-9-csound-hrtf
+
+So I tried cl-openal...and couldn't replicate the crash. I don't really remember how it was triggered. But I would assume it was an issue my other PC. Aaaanyway I wan to try this csound thing.
+
+But before that I should mention that there are more options in the same vein than Csound.
+Supercollider is also a synthesizer, multiplatform with much more nicer lisp bindings.
+
+- https://github.com/byulparan/sc-internal/
+- https://github.com/byulparan/cl-collider
+
+And I am sure things like Faust, Chuck or others libraries have the same power https://github.com/toplap/awesome-livecoding
+
+** Csound
+
+First some links (again)
+- https://github.com/csound/csound/tree/develop/interfaces (lisp bindings)
+- https://github.com/azimut/csound (lisp bindings fork)
+- https://github.com/azimut/cloud/
+- https://github.com/rorywalsh/CsoundUnity
+
+And some more reading that I might mention later:
+- https://forum.cabbageaudio.com/c/csound-for-games
+- https://forum.cabbageaudio.com/t/csoundunity-mixer-plugin/492
+- https://rorywalsh.github.io/CsoundPhaser3/
+- https://rorywalsh.github.io/CsoundUnity/docs.html
+- http://csoundjournal.com/issue9/newHRTFOpcodes.html
+- http://csoundjournal.com/issue19/InterfacingCsoundUnity.html
+
+And might be an idea for a game(?
+- https://vimeo.com/289785237
+
+I shouldn't fret too much of a perfect setup because once i start using it
+on a game i know it would change....
+
+*** An advice from the past
+
+From my experiments with "music" i know 1 thing, timing is key.
+If you have a shitty scheduler you have noise. So I would leave all time
+related stuff to the internal csound scheduler.
+
+*** SFX
+
+1) it should be able to play sounds immediatly at command
+2) it should be 3d positioned and allow changes of position
+3) possible change INITIAL pitch or volume for more variaty of sounds
+
+1) easy enough with csound instrument
+   #+begin_src
+   instr 4
+     ktrans linseg  1, 5, 2, 10, -2
+     a1     diskin2 "fox.wav", p4, p5, p6, 0, 32
+            outs    a1,a1
+   endin
+   #+end_src
+   and cloud helper, if loop is 1 it will loop for the duration provided (3 in this case) if loop is 0 it will stop either at the end of the sound or duration
+   #+begin_src
+   (make-play fox "i4" :rate 1 :skip 0 :loop 0)
+   (play-fox 3 :rate .1 :loop 0)
+   #+end_src
+2) Some opcodes that allow provide 3d audio are
+   a) hrtfmove2: moving 3d binaural audio
+   b) hrtfstat: static 3d binaural audio, azimut and elevation based (faster to compute)
+   - iAz: in degrees, +right -left
+   - iElev: +above -below (horizon)
+   Problem with these is how they take they areguments...but can be calculated with opcode
+   - http://csoundjournal.com/issue19/InterfacingCsoundUnity.html
+   - http://www.csounds.com/manual/html/hrtfearly.html
+   c) hrtfearly:
+   ksrcx, ksrcy, ksrcz, klstnrx, klstnry, klstnrz - xyz source (position) and xyz listener (camera)
+   #+begin_src
+   gasrc init 0	;global
+   
+   instr 1
+       a1     diskin2 "fox.wav", 1, 0, 0, 0, 32
+       gasrc = a1
+   endin
+   
+   instr 10	;uses output from instr1 as source
+     ;; Simple path for source
+     kx line 2, p3, 9
+     ;; Early reflections, room default 1
+     aearlyl, aearlyr, irt60low, irt60high, imfp hrtfearly  gasrc, kx, 5, 1, 5, 1, 1, "hrtf-44100-left.dat", "hrtf-44100-right.dat", 2
+     ;; Later reverb, uses outputs from above
+     arevl, arevr, idel                          hrtfreverb gasrc, irt60low, irt60high, "hrtf-44100-left.dat", "hrtf-44100-right.dat", 44100, imfp
+     ;; Delayed and scaled
+     alatel delay arevl * .1, idel
+     alater delay arevr * .1, idel
+            outs  aearlyl + alatel, aearlyr + alater
+     gasrc = 0
+   endin
+   #+end_src
+*** Fixed Music (though it could also be ambient)
+
+1) It has to play .wav files
+2) it has to loop them forever or until something tells it to stop
+3) if possible crossfade to avoid clicks (but editing should help enough..might be)
+4) it should be possible to fade in and out the loop at will
+5) in order to support layers of sound there should be beat counter so
+   some thing would happen at beat not at command.
+
+*** Generative
+
+1) trigger a sound or sequence of sounds on command, csound timed
+
+*** (Early) Results
+hrtearly along with hrtfreverb uses ~38% of my cpu for 1 sound. Albeit not linear the increase by adding a new sound
+cpu around 45% but is a bit much. hrtfmove2 alone uses 9%.
+
+I am compelled to use openal for positional audio, that is sfx and music.
+* csound hrtf
+http://www.csounds.com/journal/issue19/InterfacingCsoundUnity.html
+** Binaural sound Unity - ROOM
+
+- it has separate diskin2 insts (instr 101,102,103,104) into separate global vars
+- picks each one, adds it into gmain and separately it outputs hrtfearly of each one
+- finall a hrtfreverb (instr 10) against gmain = 0
+
+diskin2 > hrtfearly(out+) >\
+diskin2 > hrtfearly(out+) >- hrtfreverb
+diskin2 > hrtfearly(out+) >/
+diskin2 > hrtfearly(out+) >/
+
+Code used to send to hrtfearly...for some reason it is passed by a "ksmoothx port kx, .025"
+#+begin_src
+Osc.StringToOscMessage("/sourceAttributes" + soundSource.ToString() + " " +
+                       (soundObject.position.x + (roomSizeInMeters[0]/2)).ToString() + " " +
+                       (soundObject.position.z + (roomSizeInMeters[2]/2)).ToString() + " " +
+                       (soundObject.position.y + (roomSizeInMeters[1]/2)).ToString() + " " +
+                       (level).ToString());
+#+end_src
+
+** Binaural sound Unity - NO ROOM
+
+- it has separate diskin2 insts (instr 101,102,103,104) into separate global MONO vars
+- picks each one, adds it into gmain and separately it outputs hrtfmove2 of each one
+- I guess i could use `hrtfstat` for static objects (objects that follow the camera)
+
+diskin2 (gasrc1) > hrtfmove2 (out)
+diskin2 (gasrc2) > hrtfmove2 (out)
+diskin2 (gasrc3) > hrtfmove2 (out)
+diskin2 (gasrc4) > hrtfmove2 (out)
+
+Code used to calculate values sent to hrtfmove2:
+ - azimut
+ - altitude
+ - and amplitude (where "level" is a fudge factor for it) does multiply the src param by it
+#+begin_src
+Osc.StringToOscMessage(
+  "/sourceAttributes" + soundSource.ToString()
+  + " " +
+  (((Mathf.Atan2((soundObject.position.x-listener.position.x),
+                 (soundObject.position.z-listener.position.z))) *
+    (180/Mathf.PI)) - listener.rotation.eulerAngles[1]).ToString()
+  + " " +
+  (((Mathf.Atan2((soundObject.position.y-listener.position.y),
+                 (soundObject.position.z-listener.position.z))) *
+    (180/Mathf.PI)) + listener.rotation.eulerAngles[0]).ToString()
+  + " " +
+  ((1 / (((Mathf.Pow(((soundObject.position.x) - (listener.position.x)), 2) +
+           Mathf.Pow(((soundObject.position.y) - (listener.position.y)), 2) +
+           Mathf.Pow(((soundObject.position.z) - (listener.position.z)), 2) + 1))))
+   * level).ToString());
+#+end_src
