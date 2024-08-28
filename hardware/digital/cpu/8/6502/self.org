@@ -12,6 +12,7 @@
 
 - Numbers are interpreted not by their content, but by what the status flags says it is.
 
+- javidx9 - C++ NES Emulator From Scratch https://www.youtube.com/playlist?list=PLrOv9FMX8xJHqMvSGB_9G9nZZ_4IgteYf
 - links https://chotrin.org/notes/6502.html
 - images http://visual6502.org/
 - tutorials

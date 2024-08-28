@@ -17,3 +17,22 @@
     - to eliminate flyback (aka sudden voltage spikes) of an inductor/motor
     #+ATTR_ORG: :width 250
     [[https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flyback_Diode.svg/1280px-Flyback_Diode.svg.png]]
+
+* Types
+
+- 1N4002
+  - Epoxy Encapsulated
+  - one direction flow
+  - used in power supplies AC>>DC
+  - shape
+    - tiny chip of sillicon, called =DIE=
+    - with separate regions
+      1) one eltrical current is carried by electrons
+      2) another one with holes, where electrons are missing
+
+- Glass Encapsulated
+  - for low-powered applications
+  - shape of the DIE contact may vary
+  - 1N5236B
+  - 1N1100
+  - 1N740

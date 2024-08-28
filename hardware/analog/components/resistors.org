@@ -1,0 +1,36 @@
+#+ATTR_ORG: :width 100
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Resistor_symbol_America.svg/320px-Resistor_symbol_America.svg.png]]
+
+- https://en.wikipedia.org/wiki/Resistor
+
+* Types
+
+|---------------------+------------------------------+--------------------------------------------|
+|                 <r> | features                     | description                                |
+|---------------------+------------------------------+--------------------------------------------|
+|         Carbon Film | (-) precision (+) cheap      | ceramic rod, coated by carbon film         |
+| High-Stability Film | (+) precision                | same but, hermetically sealed in *glass*   |
+|     Wirewound Power | (+) power & heat dissipation | fiberglass core, wrapped by resistive wire |
+|  Surface-Mount Chip |                              | aka Thick-Film SM resistors                |
+|    Thick-Film Array | (+) multiple identical in 1  | silkscreened conductive/resistive films    |
+|     Thin-Film Array | (+) precision                | pattern on a metal-oxide or CERMENT        |
+|---------------------+------------------------------+--------------------------------------------|
+
+- Uses for arrays
+  - pull down resistors (between a IC's pin and gnd)
+  - termination resistors of a data bus
+
+** Potentiometer
+
+- can take different forms in a circuit, depending how many terminals you connect
+  - a _variable voltage divider_, if you use all the 3
+  - a _variable resistor_, if you use only 2
+
+|-----------------+---------------+---------------------------------|
+|             <r> |               |                                 |
+|-----------------+---------------+---------------------------------|
+|       Wirewound |               | resistive wire around a ceramic |
+|         Trimmer |               | aka trimpot, for calibration    |
+| 15-Turn Trimmer | (+) precision | rare adjustment                 |
+|         10-Turn | (+) prevision | common adjustments              |
+|-----------------+---------------+---------------------------------|

@@ -3,3 +3,7 @@
   - nMOS
   - Company bough lated by Philips
   - DIP40
+
+- Lets Build 8 Bit Computer
+  - by smash_that_like
+  - https://www.youtube.com/playlist?list=PLNUL7DzXzp_J4TztZYOVtayTfp0DV1z5H

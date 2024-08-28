@@ -15,6 +15,9 @@
 
 - 1 bit
   - https://laughtonelectronics.com/oldsite/arcana/One-bit%20computer.html
+  - 1-Bit Breadboard Computer
+    - by Usagi Electric
+    - https://www.youtube.com/playlist?list=PLnw98JPyObn1GUapiXLlGm8RrpQF-J_c1
 
 - Video: 486 breakout board https://www.youtube.com/watch?v=wSiDSdHS2QQ
   - 1989 Intel
@@ -28,3 +31,358 @@
 
 - Livestream - Digital Design and Computer Architecture - ETH Zürich (Spring 2023) https://www.youtube.com/playlist?list=PL5Q2soXY2Zi-EImKxYYY1SZuGiOAOBKaf
 - Fall 2021 - Computer Architecture - ETH Zurich https://www.youtube.com/playlist?list=PL5PHm2jkkXmiSGtFXE8IKRQyIZ1wNFknx
+
+* Book: The Manga Guide to Microprocessors
+Author: Michio Shibuya
+Art: Takashi Tonagi
+MC Ayumi
+MC Yuu Kano
+** Preface
+- Will cover what CPU's are, and by extension how programs work.
+  Analyze *how* the first CPU worked.
+- In the 1950's, you had to answer engne design question on your driver's license examination,
+  but no such question remain in todays's tests.
+** 1 What does the CPU do?
+- Digitalization
+- CPU is in charge of *operation*, using 1 and 0
+  * Arithmetic Operations
+  * Logic Operations
+- Five Components/Systems of a modern computer
+  - Control Unit (CPU): reads the program intructions from memory and interprets them.
+  - Arithmetic Unit (CPU)
+  - Memory System (Primary and Secondary)
+  - Input Device
+  - Output Device
+- Programs are *instructions* that people give the computer.
+  - Intructions being what data to use, and which operations to run.
+- ALU ("v" shaped):
+    Input (A)
+    Input (B)
+      Command/Input/Opcode (F)
+    Output (Y)
+    Status Output (S)
+- Information is everything in our environment that can be regisered with any of our five senses.
+- Analog vs Digital.
+  A *continous* reading of an analog thermometer.
+  A *discrete* reading from a digital one, where the value is read in steps (of 0.1)
+- 0 and 1 *primitives*
+  Illustrated with a black dot and a white one (?) respectly.
+- Digital representation of information, allow us to control noise when transmitting the data.
+** 2 Digital Operations
+- 0 and 1, are more like indicators than numbers
+- Decimal to binary conversion.
+  1011
+  1       0       1       1
+  1*2^3 + 0*2^2 + 1*2^1 + 1*2^0 =
+      8 +     0 +     2 +     1 = 11 (decimal)
+*** Fractional Numbers
+- Fixed-Point: Works for decimals (?) too where we would use 2^-1, 2^-2, 2^-3, etc
+  So they will be 0.5, 0.25, 0.125, and so on.
+- Float-Point: instead of having many zeroes for small decimals.
+  We could write them with negative potencies of 10.
+  Like: 1.23 * 10^-6 for 0.00000123
+  - We have a *significand* and a *base*
+                        1.69 * 2^n
+*** Addition
+  0 + 0 = 0
+  0 + 1 = 1
+  1 + 0 = 1
+  1 + 1 = 10 (the one is *carried* to the second position)
+*** Substraction
+- Using *two's complement* technique: adding to complements of two numbers is the same than substracting A from B.
+  To substract a number, simply add its complement instead.
+- A)
+  15 + (-15) =   0
+  15 +  (85) = 100
+  - Looking at the 2 last numbers (given this is a two-digit math) the results are the same. With and *overflow* of 1.
+  - We say that 85 is the ten's complement of 15.
+  - A number's *complement* in some base is the smallest number you have to add to the original number to make the number's digit *oveflow*.
+- B)
+  9647 - 1200 =  8447
+  9647 + 8800 = 18447
+  - We can use 8800 as the ten's complement of 1200.
+- C)
+    1010 1000
+    0101 1000
+    ---------
+  1 0000 0000
+- To find the two's complement
+  * Flip all the digits
+  * Add 1
+  - ALUs do this to add or sub, only that they add the inverted and then add 1.
+*** Logic Operations
+- Some gates can have >2 Inputs
+- 74LS08 IC as an example.
+  - IO Pines here are legs of different *logic gates*
+- Logic Gates
+  - And =|)-
+  - Or  =)>-
+  - Not -|>o-
+**** Both Venn Diagrams and logic gates:
+  - AND and Intersections
+  - OR  and Unions
+  - NOT and Complement
+**** Other Basic Gates:
+  - NAND =|)o-
+  - NOR  =)>o-
+  - XOR  =))>-
+- These gates are really just combination of AND, OR and NOT gates.
+  - NAND = AND NOT
+  - NOR  =  OR NOT
+  - XOR  = !? (Only 1 when both inputs are different)
+    - Input A, splitted (one negated) into different AND
+      Input B, ditto
+    - Output of ANDs go into a OR
+**** De Morgan's Theorem
+  - A NAND gate is the same as
+      using an OR gate on each input's (NOT) complement.
+  - A NOR gate is the same as
+      using and AND gate on each input's (NOT) complement
+  - Gives new ways to represent graphically NAND and NOR gates
+*** Circuit Adders
+**** The Half Adder
+- Only to add to single digits
+- Input A, to both XOR and AND
+  Input B, to both XOR and AND
+- Output S (the value of A+B)
+  Output C (the carry)
+- If you ~ADD~ the input values into a two-digit's sum
+  - Take the lower digit
+    - It gives you a a XOR truth table
+  - Take the upper digit
+    - It givves you the AND truth table
+**** The Full Adder
+- By using two half adders, you can make a ~full adder~
+  - Input A, to HA1
+    Input B, to HA1
+    Input C, to HA2 (an extra input for the carry)
+  - HA1 output S to HA2
+    HA1 output C to OR
+  - HA2 output S to output S
+    HA2 output C to OR
+  - OR output to C output C
+**** Ripple Carry Adder
+- Using four adders, so we can add two four digits numbers, you make a ~ripple carry adder~
+  - 8 inputs
+  - 4 outputs S(um)
+  - 1 output C(arry)
+**** The Carry Look-Ahead Adder
+- It takes a lot of time to keep moving the carry from one calculation to the next.
+  - aka ~Propagation Delay~
+  - Upper digits have to "wait" for the carry to arrive
+- Delegating the carry calculations to a different ciruit. Solves it.
+*** Circuits with Memory
+- Memory in cpu's are called ~registers~
+  - We can refer to previous calculations using them
+**** Flip-Flop: The basics of memory circuits
+- 2 Inputs
+  2 Outputs (Q and (not Q)), so one is always the opposite to the other
+- Called Latches
+***** R(eset)S(et)
+- Setting 1 to S, will   set Q to 1
+  Setting 1 to R, will reset Q to 0
+- Basically it remembers which one got a signal last.
+- Can be created using 2 NAND (or 2 NOR) gates
+- Truth table
+  |    IN |    IN |        OUT |        OUT | Function                   |
+  |-------+-------+------------+------------+----------------------------|
+  | not S | not R |          Q |      not Q |                            |
+  |     1 |     1 | NOT CHANGE | NOT CHANGE | Retains its current output |
+  |     0 |     1 |          1 |          0 | Set                        |
+  |     1 |     0 |          0 |          1 | Reset                      |
+  |     0 |     0 |          1 |          1 | Not Allowed                |
+***** D(data)
+- Input Data (D)
+  Input Clock (C), with a *rising edge* (aka when the clock goes from 0 to 1)
+  - The clocks interval highs and low have nothing to do, with the circuit's I/O
+- Outputs Q and (not Q)
+- Every time a rising edge passes, the input D (0 or 1) is copied directly into Q
+***** T(oggle)
+- Has only 1 Input (T)
+- The value of Q changes only when 1->0 (or in others when it goes from 0->1)
+- ~Counter circuit~: Chaining several T-flip-flops (of *falling edge*) you can make a circuit that counts (!)
+  - With 1 Input, and several outputs that must be read at the same time to get the binary counter output.
+  - Asynchronous counters, since not all flip-flops are connected to the same clock
+  - It is possible to make counters from D flip-flops too, OR count downs.
+** 3 CPU Architecture
+- ~Addresses~: the memory locations
+  - CPU has full control over this *address space*
+  - CPU refers to memory using memory address pointers
+- Read/Write: is an electrical operation in memory.
+  Load/Store: refers to the operations with *registers*
+- I/O ports connect *directly* to the cpu (not for usb or display)
+*** ~Data bus~:   <-> The BUS that transports data
+  - External: between memory and CPU (USB?????), indicate how much can be send.
+  - Internal: Inside the CPU, indicate how much can be processed.
+    - ~Multiplexer~ (MUX), switches that can change the flow of memory
+  - Buses are bundled ~signal pathways~ (lines that transmit 1s and 0s)
+    - A bus of 4 pathways, can represent 2^4 different numbers.
+    - Modern ALUs work with 64 bits, on (usually) 64-bits data buses.
+*** ~Address bus~: -> The BUS that transports this addresss pointers
+  - Determine the *address space size*
+    - 2³² give us 4.3Gb
+*** ~Control bus~: -> The BUS that conveys these control signals. Ex: READ
+*** Programs
+- A program is a chain of instructions.
+  - Opcode: What to do
+    Operands: On which (can be a memory addresses or registers)
+*** Registers
+- Accumulators: Uses for calculations and increasing values
+- General-Purpose: Used for all kind of things
+- Instruction: temporarily sore program instructions read from memory
+*** Classical Architecure
+- Fetch/Decode/Execute/Write
+  1. P.C. (Program Counter): has the address of the next intruction to be executed.
+     Address Register: Stores/Sends addresses to the Memory
+  2. I.R. (Instruction Register): Stores/Receives the Instruction from Memory that we are executing
+     Instruction Decoder: Interprets the instruction from Memory
+  3. ALU
+     Accumulator (Internal Shift Register): Result data.
+  4. Write: Is then stored in a registry or in Memory (if in memory it needs an address)
+- MMU (Memory Managment Unit): hardware that maps virtual memory to its physical counterparts
+*** Secondary Memory (Hard Drive)
+- The CPU can read directly form the primary memory, but not from the hard drive.
+  The CPU sends(writes?) control signals to piece of memory called ~i/o space~.
+  The disk interface then controls the disk itself.
+*** Address Space
+- Refers to ALL the memory outside the CPU that is *controlled* by the CPU
+  - RAM: R/W
+  - ROM: R (on the motherboard), where the program that runs when you power on the computer resides (the BIOS)
+  - I/O Space: small, in some systems is NOT part of the address space
+               GPUs have an exclusive I/O port
+*** Interrupts
+- They let you advance multiple task efficiently
+  - Ex: So while it might busy with something, a keyboard input will still be acknowledged
+**** The Stack and the Stack Pointer
+- Stack: a part of memory reseved for bookkeeping
+- Stack Pointer: points to the last stack address we worked with.
+- During and *interrupt* some data is saved into the stack to being able to return back from it.
+  - Data saved is:
+    * accumulators
+    * status registers
+    * program counter
+- Constantly calling for interruptions, can cause stack problems (?)
+  - With *interrupt masks* you can avoid interrupts (traps?)
+  - With *resets* you can override interrupt masks
+  - With *NMI* non-maskable interrupts we also can avoid interrupt masks, without issuing a reset
+  - With *timer interrupts* we can execute things at regular intervals
+*** Clock
+- Frequency
+  1. Measured in Hz, how many times the clock cycles in one second.
+     - 40MHz would be cycling 40 millon times per second
+  2. Everything that the CPU does, like instruction decoding and ALU operations, it does in synchonization with the clock.
+     The CPU can execute one action per clock cycle.
+- Generators:
+  - All components part of the clock generator, including crystal oscillator, capacitors and resistors. Contribute to the accuracy.
+  - Crystal oscillators, are small artificial crystal shards, cut very thing. Voltage makes the crystal warp.
+    It's possible to get a stable frequency from them.
+*** Timer Interrupts
+- Timer Interrupt Control INPUTS:
+  - RESET: to start the timer
+  - INT: used to send instructions
+- How:
+  1) By applying a prescaler (frequency divider) ot the *master clock*
+  2) We get a *timer basis clock* used along a decreasing timer.
+  3) When count reaches zero the Timer gets triggered and interrups the CPU.
+- Registers used:
+  1) Select: used to indicate the multiplication factor of the *frequency divider*
+  2) Initial Value: From which value to count.
+*** Reset Signals
+- To set the programs and internal circuits to their initial state.
+- While powering on, the *voltage* would fluctuate until stabilize.
+  - While this is happening the reset signal is hold. To protect the CPU.
+*** Performance
+- Measured in how quickly can perform calculation one after the another
+  - MIPS: Millions Instructions Per Second.
+    When computers only could do integer operations.
+  - MFLOPS: Million floationg-point Operations Per Second
+    Floating point operations with 15 significant digits.
+** 4 Operations
+*** Instruction Types
+- They are in machine language (0 and 1)
+- Calculation
+  1. Arithmetic: Add, Sub
+  2. Logic: And, Or, Not
+  3. Bit Shift: Performed in the accumulator
+- No Calculations
+  1. Data Transfer
+  2. Input and Output
+  3. Branching
+  4. Conditionals (comparisons)
+- Negative number: We use the two's complement to get the negative.
+  Ex: that's why 101 is 5 unsigned and -3 signed
+*** Binary Shifts
+- Direction:
+  - Right-shifting: dividing by 2^n
+  - Left-shifting: multiplying by 2^n
+- Types:
+  - Logical (no sign bit)
+    * we fill with zero always
+  - Arithmetic: (has sign bit)
+    * right-shift: we fill with the sign bit value
+    * left-shift: we fill with the sign bit value, but wle *overflow* and mark it so on a *overflow flag/bit* saying that it did
+- There are also *circular shifts*
+*** Data Transfer Instructions
+- For cpu-memory and register-register read/write.
+*** Input/Output Instructions
+- I/O Ports
+*** Branch Instructions
+- By Distance:
+  - Skip Instructions: can either, skip or not skip the next instruction.
+  - Branch Instructions: branch to addresses not far from the execution site
+  - Jump Instructions: jump to addreses farther away.
+- By Condition (see conditional instructions)
+  - Unconditional
+  - Conditional
+- Also: STOP and SLEEP
+*** Condition Evaluation
+- Using the STATUS Output bit of the ALU
+  - In reality, these are *status registers* or flags:
+    1. sign flag
+    2. carry flag
+*** Operands & Operations
+- Example:
+  #+begin_src asm
+LDA ADDRESS.1 // Loads address.1 into ACC
+ADD ADDRESS.2 // Adds  address.2 to   ACC
+STA ADDRESS.3 // Stores ACC into address.3
+  #+end_src
+- Operators Arity: 0, 1, 2
+  - 0: ex: "the set accumulator to 1 opcode"
+  - Many 0 or 1 work with what is on the accumulator.
+  - 2: usualy first argument is "source" and second is "destination"
+- Kinds
+  - Immediate value processing: is the value
+  - Address reference: external or internal addresses
+- Addressing modes: some OPCODES don't allow some
+  1) Absolute: the ~effective address~
+  2) Relative: result of current PC (or xx-register) and the value in the address provided (might be due long memory address)
+  3) Indirect: pointer
+  4) Address modification: when is the result of adding 2 values
+     - A value in the *modification register*
+     - A base value, either on pc, a register or immediate value.
+     like for indexing
+*** Structure of operations
+- 745181, made by Texas Instruments
+  745381, replace it later.
+- Capable of Arithmetic and Logic Operations
+  - 8 Input A, B, each of 4bits/4pins
+  - 4 Output pins
+  - 4 Select pins (select the operation)
+  - 1 Mode Pin (select between arithmetic and logic)
+  - 1 Carry Input (select carry or not carry operations)
+  - G? Cn+4? P? A=B?
+  - 2 GND/Vcc
+*** Some Basic Flags
+- Zero Flag (Z-Flag): If the result of the calculation is 0, might also be EQ-Flag (if the cpu doesn't have comparisons)
+- Sign Flag (S-Flag): Sign of the result
+- Carry Flag (C-Flag) or Overflow Flag (OV-Flag): carry or oveflow in addition or shift
+- Borrow Flag: On substractions.
+- GT,LT Flags
+- Odd Flag
+- Interrupt Mask: Set beforehand, determines what type of interrupts will occur. All 1's disable interrupts.
+- Interrup Flag: If an interrupt is in progress.
+*** Sleep Instruction
+- Puts the CPU in a slep state, reducing the period of the clock.
+** 5 Programs
+- The lenguages that use mnemonics are *Assembly Language*

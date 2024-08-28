@@ -5,10 +5,27 @@
 - https://en.wikipedia.org/wiki/Capacitor
 - https://www.inventable.eu/2012/09/15/como-se-leen-los-valores-de-los-capacitores/
 
-- *stores* energy in static form
+- *stores* electricity in ~static electricity~ form
 - are _conductors_ separated by an _insulator_
 
 - capacitance = ratio of charge to voltage
   1 couloumn/volt = 1 farad
 - Charge (Q) is proportional to Voltage (V)
   Q = C*V
+
+* Types
+
+|------------------------+----------------------------------+-------------------------------------------------------+-----------------------------|
+|                    <r> | Properties                       | insulator / dielectric                                | conductor                   |
+|------------------------+----------------------------------+-------------------------------------------------------+-----------------------------|
+|           Ceramic Disc | (-) low cost                     | a ceramic disc                                        | metal plates                |
+|                  Glass | (+) capacitance (surface area)   | layers of glass                                       | aluminium foil plates       |
+|     Multilayer Ceramic | (-) small size                   | layers of ceramic                                     | layers of deposited metal   |
+| Aluminium Electrolytic | (+) capacitance/space ratio      | rolled up oxidized long strip of aluminium            | metal can with electrolyte  |
+|                   Film | (+) quality?                     | long strips of plastic film                           |                             |
+|        Dipped Tantalum | (+) capacitance/space ratio      | porous (surface++) pellet of tantalum metal, anodized |                             |
+|  Polymer Tantalum Chip | (+) capacitance/space ratio      | oxidized slug of tantalum                             | layers of carbon and silver |
+|  Polymer Aluminum Chip | (+) low profile                  | oxidized aluminum foils laid flat                     | conductive polymer          |
+|  Three-Terminal Filter | filter, prevents wandering waves | ferrite beads                                         | copper wire                 |
+|------------------------+----------------------------------+-------------------------------------------------------+-----------------------------|
+- Dipped Tantalum has 1(one) correct direction, otherwise it will damage tehoxide layer.

@@ -1,8 +1,13 @@
 - has no effect on DC
-- stores energy in magnetic form
+- stores energy in ~magnetic field~
 
 - cannot have immediate changes of current
   [[https://eepower.com/uploads/articles/time-constant-and-energy-storage-in-dc-circuit-inductors-fig2.jpg]]
+
+- Usages
+  - in *power supplies* to convert voltages
+    - by alternately storing / releasing energy
+    - helping maximize battery life
 
 - =inductance= measured in henry, the higher the more resistance
   - nanohenry ones, will only filter high frequencies (+100Mhz)
@@ -13,7 +18,21 @@
     - in heavy power filters
     - in audio crossover filters
 
-- a ferrite magnetic core increases
-  - the magnetic field
-  - the energy stored
-  - the inductance
+- _ferrite_ = a ceramic filled with iron oxide
+- a _ferrite_ magnetic core increases
+  + the magnetic field
+  + the energy stored
+  + the inductance
+
+* Types
+
+|------------------+------------------------+----------------|
+|              <r> | insulated coil         | magnetic core  |
+|------------------+------------------------+----------------|
+|            Axial | copper wire            | ferrite bobbin |
+|    Surface-Mount | copper m/wire          | ferrite bobbin |
+| Sintered Ferrite | copper m/wire, 2 loops | ferrite        |
+|     Ferrite Bead | ferrite                | wire           |
+|------------------+------------------------+----------------|
+
+- m/wire = magnet wire (ME)

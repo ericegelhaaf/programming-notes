@@ -1,14 +1,15 @@
 - https://en.wikipedia.org/wiki/Analog_computer
 - https://www.analogmuseum.org/
 
+- They simulate real phenomens by creating a electrical representation of them.
+
+- 14 VIDEO Computing with Analog
+  - https://www.youtube.com/watch?v=1EHjaBjRvgQ&t=230s
 - 17 ARTICLE https://spectrum.ieee.org/not-your-fathers-analog-computer
 - 19 ARTICLE Analog computation, Part 1: What and why | Analog IC Tips
   - https://www.analogictips.com/analog-computation-part-1-what-and-why/
     - 0.1% to 1% precision
   - https://www.analogictips.com/analog-computation-part-2-when-and-how-faq/
-
-- 14 VIDEO Computing with Analog
-  - https://www.youtube.com/watch?v=1EHjaBjRvgQ&t=230s
 
 * 13 VIDEO Will Analog Computing and Neural Nets Power Innovation after Moore's Law?
   - https://www.youtube.com/watch?v=3tOA8Fo6b7A
