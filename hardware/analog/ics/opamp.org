@@ -12,13 +12,13 @@
 - https://mysite.du.edu/~etuttle/electron/elect3.htm
 
 - 1941 with vacuum tubes
-- 1963 first IC
+- 1963 first monolithic IC
 
 - Amplifies the difference between the inputs
   - aka V+ minus V-
-  - supports both DC and AC
-- High gains +100000x
-- impedance
+  - Supports both DC and AC
+  - High gains (+100000x)
+- Impedance
   - high INPUT (aka "no current can flow IN")
   - low OUTPUT (aka "we could draw as much current as we want")
 
@@ -28,7 +28,14 @@
      it does it with the output feedback
 
 * ICs
-** specs
+** spec(ifications)
+
+|------+-----------------------------+-------------------------------------------|
+| V    | Input Offset Voltage        | input that causes 0v output               |
+| db   | Common Mode Rejection Ratio | ability to reject signal in both inputs   |
+| Hz   | Bandwidth                   | functional range                          |
+| V/us | Slew Rate                   | rate of change of the output, when gain=1 |
+|------+-----------------------------+-------------------------------------------|
 
 - *Voff* = Offset voltage
   - output voltage when difference between inputs is zero
@@ -62,11 +69,16 @@
 
 ** power supply
 
+- Tips (forrest nims)
+  - never apply an input signal when the power supply is switched off
+  - keep the lines of the power supply short
+
+
 1) bipolar/split/dual: -12v,0v,+12v
    - used by hifi audio amplifiers
    - can return negative voltages
 
-2) simple: 0v,+5v
+2) simple/singlePolarity: 0v,+5v
    - Inverting
      - Vout = (2.5-Vin)*(Rf/R1)     + 2.5
    - Non-inverting
@@ -75,18 +87,22 @@
    - canNOT return negative voltages (chops it off)
 
 ** examples
-|---------+-----+---+----+-----+---------+---------------------|
-|         | DIP | n | pw | Vcc | GBP Mhz |                     |
-|---------+-----+---+----+-----+---------+---------------------|
-| LM324   |  14 | 4 | s  |  32 |       1 |                     |
-| LM358   |   8 | 2 | s  |  32 |     1.2 | high ESD protection |
-| CA3140  |   8 | 1 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi |
-| CA3240  |   8 | 2 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi |
-| MCP6002 |   8 | 2 | s  |   6 |       1 | rail-to-rail output |
-| MCP6022 |   8 | 2 | s  |   6 |      10 | rail-to-rail output |
-| NE5532  |   8 | 2 | d  |  15 |      10 | low noise           |
-| TL072   |   8 | 2 | d  |  20 |    5.25 | FET, low THD 0.0003 |
-|---------+-----+---+----+-----+---------+---------------------|
+|---------+-----+---+----+-----+---------+------------------------|
+|         | DIP | n | pw | Vcc | GBP Mhz |                        |
+|---------+-----+---+----+-----+---------+------------------------|
+| LM324   |  14 | 4 | s  |  32 |       1 |                        |
+| LM358   |   8 | 2 | s  |  32 |     1.2 | high ESD protection    |
+| CA3140  |   8 | 1 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi    |
+| CA3240  |   8 | 2 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi    |
+| MCP6002 |   8 | 2 | s  |   6 |       1 | rail-to-rail output    |
+| MCP6022 |   8 | 2 | s  |   6 |      10 | rail-to-rail output    |
+| NE5532  |   8 | 2 | d  |  15 |      10 | low noise              |
+| TL072   |   8 | 2 | d  |  20 |    5.25 | FET, low THD 0.0003    |
+| LM741   |   8 | 1 | d  |  18 |         | preamp?                |
+| LM1458  |   8 | 2 | d  |  18 |         |                        |
+| LM339   |  14 | 4 | sd |  18 |         | comparator             |
+| LM386   |   8 | 1 | s  |  15 |         | audio/power? amplifier |
+|---------+-----+---+----+-----+---------+------------------------|
 * use cases
 
 see https://www.electronics-tutorials.ws/opamp/opamp_1.html
@@ -95,28 +111,41 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - Dual power supply, DAC
 - voltage followers
 - summing
+  - eg: audio mixer, DAC
+  - Vout = - (V1 + V2 + V3)
   [[https://www.allaboutelectronics.org/wp-content/uploads/2020/10/Summing-Amplifier-1-768x308.png]]
-- integrators - Vout = - int(Vin*(dt/(Rin*C)))
+- integrators
+  - Vout = - int(Vin*(dt/(Rin*C)))
   - square -> triangle
   - triangle -> sine
+  - eg: ADC
   [[https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/opamp-opamp26.gif]]
-- differentiators - Vout = R3/R1 * (V2-V1)
-  [[https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/opamp-opamp18.gif]]
-- LPF
-- HPF
+- differentiator
+  - eg: LPF
+- differential
+  - Vout = R3/R1 * (V2-V1)
+  - has signals connected to both inputs
+  - eg: wheatstone bridge, sensor activated amplifier
 - Multivibrator
+  - eg: astable, monostable
 - constant current source/load
 - non/inverting differences
 - schmit trigger
 - logarithm
   - in rf carriers, nedded to dynamically adjust gain ans o maximize SNR over a wide dynamic range of received inputs on carriers at Mhz or GHz
+- transconductance
+  - voltage-to-current converter, outputs current proportional to the input voltage
+- transimpedance
+  - current-to-voltage converter
+  - eg: from a solar cell
 
-*   open loop
+*   open loop (mode)
 
 - gain is typically around 100k (not practical)
 - it's easy for the OUTPUT to get saturated
-  - as such it can be used as comparator (poor's man)
+  - as such it can be used as _comparator_ (poor's man)
   - to interface digital with digital electronics
+
 #+ATTR_ORG: :width 150
 [[https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Op-amp_open-loop_1.svg/255px-Op-amp_open-loop_1.svg.png]]
 
@@ -126,13 +155,13 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - We give it a ~negative feedback~
 - The higher Rf, the higher the gain
 
-** 1) (Unity Gain) Buffer
+** (Unity Gain) Buffer/Follower
 
 - aka "Voltage Follower"
 - tied Vout and V- input
 - special case of "non-inverting" with no resistance
 
-** 2) Non Inverting Amplifier
+** Non Inverting Amplifier
 
 - signal goes into V+
 - Vin = Vout + Ri/(Ri+Rf)
@@ -145,13 +174,23 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 #+ATTR_ORG: :width 200
 [[https://upload.wikimedia.org/wikipedia/commons/4/44/Op-Amp_Non-Inverting_Amplifier.svg]] [[https://pfnicholls.com/Electronics_Resources/Images/NonInvAmpAC.png]]
 
-** 3)     Inverting Amplifier
+** (Unity Gain) Inverter
+
+- special case of inverting amplifier
+- with 1k resistors
+- buffer to convert -Vout to +Vout
+- Vout = -Vin
+
+**     Inverting Amplifier
 
 - signal goes into V-
 - You are NEVER going to get a negative OUTPUT voltage
   - if you have a single supply power?
 - Creates a ~virtual ground~ after R1
 - GAIN = Av = Vout/Vin = -Rf/R1
+- Vout = -Vin * (Rf/R1)
+
+#+CAPTION: differential amplifier?
 #+ATTR_ORG: :width 200
 [[https://upload.wikimedia.org/wikipedia/commons/4/41/Op-Amp_Inverting_Amplifier.svg]] [[https://pfnicholls.com/Electronics_Resources/Images/InvAmpAC.png]]
 

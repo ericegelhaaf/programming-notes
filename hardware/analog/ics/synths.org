@@ -1,0 +1,62 @@
+- https://www.sequencer.de/synth/index.php/Chips_in_Synthesizers
+
+- CEM&SSM https://www.youtube.com/watch?v=ztu6OqnuKmU
+  - SSM unreliable/unstable at high temperatures
+
+- Coolaudio https://www.coolaudio.com/prod-coolaudio-semi.php
+  - V2044A VCF
+- Intersil
+  - ICL8038 VCO https://en.wikipedia.org/wiki/Intersil_ICL8038
+- Exar
+  - XR2206 VCO https://es.wikipedia.org/wiki/XR2206
+- Roland
+  - article https://plasmamusic.com/roland-ir3r03-vco
+  - IR-3R03 Roland VCO
+  - IR-3R05 Roland VCF/VCA
+
+* SSM (74)
+
+- wiki https://electronicmusic.fandom.com/wiki/SSM
+  - Solid State Music
+  - roots in the Homebrew Computer Lab
+
+|-------+----+--------------------|
+| SSM20 | 20 | VCA                |
+| SSM20 | 33 | VCO                |
+| SSM20 | 44 | VCF                |
+| SSM20 | 56 | Envelope Generator |
+| SSM21 | 64 | VCA                |
+|-------+----+--------------------|
+
+* CEM (79)
+
+- wiki https://electronicmusic.fandom.com/wiki/Curtis_Electromusic
+- wiki https://en.wikipedia.org/wiki/Doug_Curtis
+
+- by Doug Curtis
+- Curtis ElectroMusic Specialities
+- analog ICs
+- reissued in 2016 https://www.matrixsynth.com/2016/06/curtis-cem3340-vco-chips-re-issued.html
+
+- list of products https://web.archive.org/web/20080124170134/http://curtiselectromusic.com/Customers_and_Instruments.html
+
+|-------+----+---------------------|
+| CEM33 | 10 | EG                  |
+| CEM33 | 20 | VCF                 |
+| CEM33 | 28 | VCF                 |
+| CEM33 | 30 | Dual VCA            |
+| CEM33 | 40 | VCO                 |
+| CEM33 | 50 | Dual VCF            |
+| CEM33 | 60 | Dual VCA            |
+| CEM33 | 72 | VCF/VCA             |
+| CEM33 | 74 | Dual VCO            |
+| CEM33 | 78 | VC Signal Processor |
+| CEM33 | 79 | VC Signal Processor |
+| CEM33 | 82 | Dual Low Noise VCA  |
+| CEM33 | 89 | VC Signal Processor |
+| CEM33 | 94 | VC Synth            |
+| CEM33 | 96 | Dual Wave Processor |
+|       |    |                     |
+| CEM55 | 10 | Fast Sample/Hold    |
+| CEM55 | 30 | 30ch Sample/Hold    |
+|-------+----+---------------------|
