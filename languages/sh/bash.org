@@ -1,6 +1,7 @@
 - wiki https://en.wikipedia.org/wiki/Bash_(Unix_shell)
   - Author: Brian Fox
   - 1989-
+
 - article order of startup https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
 
 - PS1's
@@ -8,8 +9,6 @@
     - allows you to copy multiple commands (also on rc shell)
     - PS1='%(?.%(!.#.;).%F{6}%B;%b%f) '
 
-- https://en.wikipedia.org/wiki/ANSI_escape_code
-  https://www.ele.uva.es/~jesus/lpcVT100/term.html
 - https://github.com/onceupon/Bash-Oneliner
 - https://github.com/dylanaraps/writing-a-tui-in-bash
 
@@ -24,7 +23,6 @@
 - https://command-not-found.com/
 - https://www.mulle-kybernetik.com/modern-bash-scripting/
 - https://github.com/xwmx/bash-boilerplate
-- https://github.com/dylanaraps/pure-sh-bible
 - https://github.com/dylanaraps/pure-bash-bible
 - https://github.com/mrzool/bash-sensible
 - https://github.com/joseluisq/awesome-bash-commands
@@ -246,30 +244,30 @@ From man
 
 * Tutorial: Style https://google.github.io/styleguide/shellguide.html
 
-  - Don’t brace-delimit single character shell specials / positional parameters,
-    unless strictly necessary or avoiding deep confusion.
-  - Indentation: Indent 2 spaces. No tabs.
-  - Comment at the header
-    #+begin_src bash
-      #!/bin/bash
-      #
-      # Perform hot backups of Oracle databases.
-    #+end_src
-  - Redirect errors to STDERR
-    #+begin_src bash
-      err() {
-        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
-      }
-    #+end_src
-  - Do not put an extension on executables, only on libraries
-  - Guidelines
-    - When is ok
-      * mostly calling other utilities
-      * relatively little data manipulation
-    - When NOT use
-      * Scripts more than 100 lines long
-      * Using non-straightfoward control flow logic
-      * if performance matters
+- Don’t brace-delimit single character shell specials / positional parameters,
+  unless strictly necessary or avoiding deep confusion.
+- Indentation: Indent 2 spaces. No tabs.
+- Comment at the header
+  #+begin_src bash
+    #!/bin/bash
+    #
+    # Perform hot backups of Oracle databases.
+  #+end_src
+- Redirect errors to STDERR
+  #+begin_src bash
+    err() {
+      echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+    }
+  #+end_src
+- Do not put an extension on executables, only on libraries
+- Guidelines
+  - When is ok
+    * mostly calling other utilities
+    * relatively little data manipulation
+  - When NOT use
+    * Scripts more than 100 lines long
+    * Using non-straightfoward control flow logic
+    * if performance matters
 
 * Changelog
 
@@ -301,12 +299,12 @@ table of changes https://mywiki.wooledge.org/BashFAQ/061
 - web server https://github.com/dzove855/Bash-web-server
 - web framework https://github.com/emasaka/shails
 - web framework
-  https://github.com/cgsdev0/bash-stack/
-  https://bashsta.cc/0-index
+  - https://github.com/cgsdev0/bash-stack/
+  - https://bashsta.cc/0-index
 - minecraft server
-  https://sdomi.pl/weblog/15-witchcraft-minecraft-server-in-bash/
-  https://github.com/sdomi/witchcraft
-  https://news.ycombinator.com/item?id=30347501
+  - https://sdomi.pl/weblog/15-witchcraft-minecraft-server-in-bash/
+  - https://github.com/sdomi/witchcraft
+  - https://news.ycombinator.com/item?id=30347501
 
 * Snippets
 
@@ -399,3 +397,4 @@ https://www.youtube.com/watch?v=uqHjc7hlqd0
 
 - define and then call, being memtop a custom function defined by the user
   > $ sudo bahs -c "$(declare -f memtop); memtop"
+

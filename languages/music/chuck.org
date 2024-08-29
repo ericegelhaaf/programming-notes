@@ -20,15 +20,20 @@ reactive programming of Elm
 - video 2007 https://www.youtube.com/watch?v=2rpk461T6l4
 
 * Libraries
+
 - ChucK as a VST/AudioUnit https://github.com/mtiid/chuck-racks
 - Musical Simple Interface beta version https://github.com/essteban/CHmUsiCK
 - LiCK, Library for ChucK https://github.com/heuermh/lick
+
 * Performances/Songs
-- No screen - https://www.youtube.com/watch?v=aS0tZTb-rNM
-              https://mtiid.bandcamp.com/album/chuck-concert-2013
+
+- Chuck Concert 2013
+  - https://www.youtube.com/watch?v=aS0tZTb-rNM
+  - https://mtiid.bandcamp.com/album/chuck-concert-2013
 - Robotic Pianos https://vimeo.com/277785691
-- https://www.youtube.com/watch?v=ezmpolryqUE
-- https://soundcloud.com/sigint-trax/mutation-0x1337
+- ChucK livecoding. https://www.youtube.com/watch?v=ezmpolryqUE
+- mutation 0x1337 https://soundcloud.com/sigint-trax/mutation-0x1337
+
 * TODO Book: Programming for Musicians and Digital Artists
 ** 1 Basics: Sound waves and waveforms
 - "Sound consists of high and low pressure fluctuations (waves)"

@@ -1,0 +1,7 @@
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Optoisolator_Pinout.svg/250px-Optoisolator_Pinout.svg.png]]
+
+- https://en.wikipedia.org/wiki/Opto-isolator
+  - aka optocoupler, optoisolator, photocoupler, optical isolator
+  - has a led and a phototransistor inside
+  - isolates circuits
