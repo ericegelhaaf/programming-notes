@@ -441,4 +441,3 @@ https://www.youtube.com/playlist?list=PL3NQHgGj2vtsJkK6ZyTzogNUTqe4nFSWd
    https://github.com/goquiz/goquiz.github.io
 * Tools
 | errcheck | 23 | 2 | linter for checking for unchecked errors | https://github.com/kisielk/errcheck |
-

@@ -22,6 +22,10 @@
 
 ** Potentiometer
 
+- taper types
+  - A logarithmic (actually implemented linearly, but is not perceptible)
+  - B linear
+
 - can take different forms in a circuit, depending how many terminals you connect
   - a _variable voltage divider_, if you use all the 3
   - a _variable resistor_, if you use only 2

@@ -14,13 +14,14 @@
 - 1941 with vacuum tubes
 - 1963 first monolithic IC
 
-- Amplifies the difference between the inputs
-  - aka V+ minus V-
-  - Supports both DC and AC
-  - High gains (+100000x)
+- Is a Diferential Amplifier
+  - Amplifies the difference between the inputs (differential input)
+- aka V+ minus V-
+- Supports both DC and AC
+- High gains (+100000x)
 - Impedance
-  - high INPUT (aka "no current can flow IN")
-  - low OUTPUT (aka "we could draw as much current as we want")
+  - high INPUT (aka "no =current= can flow IN")
+  - low OUTPUT (aka "we could draw as much =current= as we want")
 
 - Rules
   1) no ~current~ flows IN or OUT of the inputs (V+, V-)
@@ -110,22 +111,8 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - DSP, signal conditioning
 - Dual power supply, DAC
 - voltage followers
-- summing
-  - eg: audio mixer, DAC
-  - Vout = - (V1 + V2 + V3)
-  [[https://www.allaboutelectronics.org/wp-content/uploads/2020/10/Summing-Amplifier-1-768x308.png]]
-- integrators
-  - Vout = - int(Vin*(dt/(Rin*C)))
-  - square -> triangle
-  - triangle -> sine
-  - eg: ADC
-  [[https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/opamp-opamp26.gif]]
 - differentiator
   - eg: LPF
-- differential
-  - Vout = R3/R1 * (V2-V1)
-  - has signals connected to both inputs
-  - eg: wheatstone bridge, sensor activated amplifier
 - Multivibrator
   - eg: astable, monostable
 - constant current source/load
@@ -139,11 +126,56 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
   - current-to-voltage converter
   - eg: from a solar cell
 
+** Clamper
+
+- add/lift offset to AC, without adding DC
+- by using a capacitor
+
+** Clipper
+
+- Chops off waveform
+- Eg: for a guitar effect, squaring a sine wave, for voltage protection (ESD?)
+#+ATTR_ORG: :width 200
+[[https://www.poriyaan.in/media/imgPori/images12/nPzB5PO.png]] [[https://www.poriyaan.in/media/imgPori/images12/SeR61MB.png]]
+
+** Differential
+
+- has signals connected to both inputs
+  - Vout = ((Rf+R1)*Rg/(Rg+R2)*R1)*V2 - (Rf/R1)*V1
+  - Vout = Rf/R1 * (V2-V1)
+    - if uses same resistor (R1 above) for both inputs
+    - if uses the same R2 for ground and feedback
+- eg: wheatstone bridge, sensor activated amplifier, subtract common noise from 2 signals
+#+ATTR_ORG: :width 300
+[[https://www.electronics-tutorials.ws/wp-content/uploads/2013/08/opamp18.gif]]
+
+** Summing/Mixer/Adder
+
+- eg: audio mixer, DAC
+- Vout = - (V1 + V2 + V3)
+- Vout = - ((Rf/R1)*V1 + (Rf/R2)*V2 + (Rf/R3)*V3)
+#+ATTR_ORG: :width 300
+[[https://www.allaboutelectronics.org/wp-content/uploads/2020/10/Summing-Amplifier-1-768x308.png]] [[https://www.researchgate.net/profile/Antoniu-Miclaus/publication/337831402/figure/fig4/AS:834126282240001@1575882611297/Summing-amplifier-waveforms.png]]
+
+** Integrators
+
+- Vout = - int(Vin*(dt/(Rin*C)))
+- square -> triangle
+- triangle -> sine
+- eg: ADC
+[[https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/opamp-opamp26.gif]]
+
+** Peak Detector
+
+- when you want to hold the peak for a while
+  #+ATTR_ORG: :width 200
+  [[https://www.electronics-tutorial.net/wp-content/uploads/2015/09/Peak_D2.png]] [[https://circuitdigest.com/sites/default/files/inlineimages/u/Op-amp-based-Peak-Detector-Circuit-Output-Waveform.png]]
+
 *   open loop (mode)
 
 - gain is typically around 100k (not practical)
 - it's easy for the OUTPUT to get saturated
-  - as such it can be used as _comparator_ (poor's man)
+  - with 2 inputs it can be used as _comparator_ (poor's man)
   - to interface digital with digital electronics
 
 #+ATTR_ORG: :width 150

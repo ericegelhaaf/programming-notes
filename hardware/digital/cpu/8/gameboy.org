@@ -1,0 +1,20 @@
+- https://en.wikipedia.org/wiki/Game_Boy_Color
+  - 4.194304 / 8.388608 MHz Sharp SM83
+    - custom Intel 8080/Zilog Z80 hybrid
+
+- Audio
+  - no poliphony
+  - Voices
+    - pulse wave
+    - pulse wave
+    - wave channel, custom wave
+    - noise
+
+- cartridge
+  - flasher https://www.jrodrigo.net/wiki/how-to-diy-a-gameboy-flash-cartridge-with-a-rom-adapter-board/
+
+- tool https://github.com/trash80/Arduinoboy
+  - allows to play 3 voices at the same time
+  - needs a cartridge
+  - needs a data cable
+  - video https://www.youtube.com/watch?v=3jxcKPoi5Kc

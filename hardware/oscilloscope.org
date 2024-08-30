@@ -1,0 +1,105 @@
+* math (on input signals)
+
+- add
+- subtract
+- multiply
+- fft
+
+* probe attenuation
+
+- x10
+  - attenuates 1/10 of the original signal
+  - for high freq signals
+  - avoids distortion
+
+- x1
+  - turns attenuation off
+  - direct connection
+  - for low amp signals
+  - capacitance can affect signal on higher frequencies
+
+* sweep modes
+
+- based on a =trigger= signal level is met
+  - auto: shows waves even if not triggered
+  - normal: displays every time it triggers
+  - single: displays only first trigger wave
+
+* trigger holdoff
+
+- how long to wait to retrigger
+- useful when looking at digital data packets
+
+* projects
+
+- 3KHz, Processing
+  - https://github.com/rogeriobego/oscilloscope-arduino-processing
+  - https://projecthub.arduino.cc/Veldekiaan/arduino-uno-library-for-a-sampling-scope-counter-751bf1
+- Nano+Oled+20Khz https://hackaday.io/project/183702/gallery#ffe05fb68daee5a5fbdfde10fd07383a
+
+- Arduino Oscilloscope (6-Channel)
+  - max 1 Hz?????
+  - Standalone Arduino 6-channel triggered oscilloscope with optional freeze frame.
+  - https://projecthub.arduino.cc/Meeker6751/arduino-oscilloscope-6-channel-8d0be8
+
+- Arduino Oscilloscope by EETechStuff
+  - https://www.youtube.com/playlist?list=PLGtyXSn57qnInTZngJuuPtx0tXbxurhtZ
+  - C#
+
+** Homemade Oscilloscope -  Arduino Uno and Unity - Simply Put
+
+*** 1) Sep 18 Intro
+
+- https://www.youtube.com/watch?v=SbviDLQEcu8
+- Sep 9, 2018
+- Unity
+- Using Usb->Serial communication
+- Nyquist??
+  - In order to sample a frequency accuratelly,
+    you have to sample at double the frequency.
+- Oscilloscope draws from left to right, erasing only what neccessary
+- ~100ms to read an analog value
+
+- How fast can you send data without getting MANY errors?
+  #+DESC: script to test the baseline
+  #+begin_src arduino
+    void setup() {
+      // the higher the more drifting can happen
+      // baud = bits per second
+      // 300 is the recommended baud baseline to double from (not hard limit)
+      //    9600  =   960 data bytes per second = 480 Hz
+      //  153600  = 15360 bps = 7680 Hz (real 7701 Hz)
+      //  500000 ~= 24900 Hz
+      // 1000000 ~= 37290 Hz (starts 1 error per sec)
+      Serial.begin(500000); // default to 8 data bits, no parity bit, 1 stop bit?
+      // pinMode(0, OUTPUT);   // for testing
+      // pinMode(1, OUTPUT);   // for testing
+      // digitalWrite(0,HIGH); // for testing
+      // digitalWrite(1,LOW);  // for testing
+    }
+    void loop() {
+      int Value = analogRead(0); // a data byte read is of 10 bits
+      Serial.write(highByte(Value)); // separated for later do error correction?
+      Serial.write(lowByte(Value));
+      /* int Value = 0; */
+      /* while (true) { */
+      /*   Serial.write(highByte(Value)); // separate for later do error correction? */
+      /*   Serial.write(lowByte(Value)); */
+      /*   if (Value == 1023) { */
+      /*     Value = 0; */
+      /*   } else { */
+      /*     Value++; */
+      /*   } */
+      /* } */
+    }
+  #+end_src
+
+*** 2) Sep 18 Download link
+
+https://www.youtube.com/watch?v=tH_jIedH_2c
+- download link https://drive.google.com/file/d/1TjVVjrxWDnyxGktV07938b4Di30IMwRH/view
+- arduino code is simple (3 lines?)
+- win10, 64 bit, 1920x1080 screen
+- unity package
+
+*** 3) Jan 19 https://www.youtube.com/watch?v=9W2BjgwCu_Q

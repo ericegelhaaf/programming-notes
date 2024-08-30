@@ -1,4 +1,14 @@
 - https://www.sequencer.de/synth/index.php/Chips_in_Synthesizers
+- http://www.synthechnics.com/contents/pt/d6_Integrated_Circuits.html
+
+- BDD
+  - http://www.synthechnics.com/contents/pt/d45_BBDs.html
+  - https://en.wikipedia.org/wiki/Bucket-brigade_device
+  - TDA1022 (1976) - bucket bridge delay line for analogue signals
+    - project
+      - flanger https://www.freestompboxes.org/viewtopic.php?t=28430
+      - flanger https://www.rivertronic.com/tienda_online/proyectos/flangervintage.php
+      - http://www.scaprile.com/oldsite/fxa.html
 
 - CEM&SSM https://www.youtube.com/watch?v=ztu6OqnuKmU
   - SSM unreliable/unstable at high temperatures
