@@ -19,6 +19,7 @@
 - aka V+ minus V-
 - Supports both DC and AC
 - High gains (+100000x)
+- VCVS = Voltage Controlled Voltage Source
 - Impedance
   - high INPUT (aka "no =current= can flow IN")
   - low OUTPUT (aka "we could draw as much =current= as we want")
@@ -120,9 +121,9 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - schmit trigger
 - logarithm
   - in rf carriers, nedded to dynamically adjust gain ans o maximize SNR over a wide dynamic range of received inputs on carriers at Mhz or GHz
-- transconductance
+- transconductance/VCCS
   - voltage-to-current converter, outputs current proportional to the input voltage
-- transimpedance
+- transimpedance/transresistance/CCVS
   - current-to-voltage converter
   - eg: from a solar cell
 
@@ -231,3 +232,10 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - 14 EEVblog  |  600 - OpAmps Tutorial - What is an Operational Amplifier? https://www.youtube.com/watch?v=7FYHt5XviKc
 - 21 EEVBlog  | 1436 - The TOP 5 Jellybean OPAMP's https://www.youtube.com/watch?v=uq1DMWtjL2U
 - 23 Dronebot |Op-Amps - Using Operational Amplifiers https://www.youtube.com/watch?v=_HHxV-7alwE
+
+* OTA (69)
+
+- Ideal infinite Zin (input impedance) and Zout (output impedance)
+- not operated in closed loop form
+- inputs diff have to be close to zero
+- apply current to the end to set the transconductance
