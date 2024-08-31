@@ -1,0 +1,103 @@
+- brief history https://www.reddit.com/r/FPGA/comments/uy4ce6/comment/ia37w7y/
+- https://mike42.me/blog/2021-10-programming-plds-with-open-source-software
+- https://en.wikipedia.org/wiki/Programmable_logic_device
+  - aka PLD
+  - Categories by complexity
+    1) SPLDs https://en.wikipedia.org/wiki/Simple_programmable_logic_device
+       - PLA(70) -> PAL(78) -> GAL(85)
+    2) CPLDs(88?)
+    3) FPGA(85?)
+
+* PAL  (78) - Programmable Array Logic
+
+https://en.wikipedia.org/wiki/Programmable_Array_Logic
+
+- by "Monolithic Memories" (MMI)
+
+[[https://upload.wikimedia.org/wikipedia/commons/f/f0/MMI_PAL_16R6.jpg]]
+
+- What?
+  - A small PROM core
+  - Output logic, used to implement desired logic functions
+- Variants: OTP, UV erasable, flash erasable
+- Smaller, cheaper, simpler, faster than FPLA
+- Programming languages
+  - PALASM (aka PAL assembler)
+    - by John Birkner
+    - written in FORTRAN IV
+    - free
+    - compilation steps
+      1) write the boolean equations in a .txt
+      2) convert it to a "fuse map" file
+    - "fuse map" can be synthesized from HDL like Verilog
+  - CUPL
+  - ABEL
+
+* GAL  (85) - Generic Array Logic
+
+https://en.wikipedia.org/wiki/Generic_Array_Logic
+
+- By "Lattice Semiconductors"
+
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Amiga_1000_-_memory_expansion_module_-_National_Semiconductor_GAL16V8-25LNC-7731.jpg/800px-Amiga_1000_-_memory_expansion_module_-_National_Semiconductor_GAL16V8-25LNC-7731.jpg]]
+
+- Could take the function of different type of PAL's
+- Erasable & Reprogrammable (electrically)
+- https://en.wikipedia.org/wiki/GAL22V10
+
+- https://hackaday.com/tag/galasm/
+- tool: asm? https://github.com/daveho/GALasm
+- tool: asm? https://github.com/simon-frankau/galette
+- tool: https://github.com/ChrisEAlfred/galparse
+- tool: hardware programmer
+  - new https://github.com/ole00/afterburner
+  - old https://github.com/ole00/afterburner/tree/version_4_legacy
+- tool: programmer gal http://www.armory.com/~rstevew/Public/Pgmrs/GAL/schema.gif
+- tool: programmer gal http://elm-chan.org/works/pgal/report_e.html http://elm-chan.org/works/pgal/pgal_e.png
+
+- #756 Basics: PAL GAL Programmable Logic
+  https://www.youtube.com/watch?v=fo_WlA-kVRc
+
+- Chip Tips #3: Generic Array Logic
+  https://www.youtube.com/watch?v=G856wm332PQ
+  - Needed for a "big" state machine.
+  - PAL was an array of AND and OR gates.
+    Followed by an array of invertors.
+    Which could get most combinatory logic needed.
+  - Uses GAL22V10
+
+* CPLD (88) - Complex Programmable Logic Device
+https://en.wikipedia.org/wiki/Complex_programmable_logic_device
+* FPGA (85) - Field Programmable Gate Array
+https://en.wikipedia.org/wiki/Field-programmable_gate_array
+- https://github.com/litex-hub/fpga_101
+- https://www.youtube.com/channel/UC4ls2cPrXHfEO_oTHZcCclA/videos
+** Videos
+*** Playlist
+- Building a CPU on an FPGA - Robert Baruch
+  https://www.youtube.com/playlist?list=PLEeZWGE3PwbZ44SUf1-vA-UuX9_J_pifB
+- FPGA-OBIJUAN
+  https://www.youtube.com/playlist?list=PLf-63rsbF9BsNeFj-j0THAPd3K_KoJDs3
+- Prof. Bruce Land lectures on FPGA
+  https://www.youtube.com/playlist?list=PLJ1LeUHJNHKhhKJQ-oFYcefHJ7e0TI8jn
+- FPGA Design - Intel FPGA
+  https://www.youtube.com/playlist?list=PL0pU5hg9yniZ2ka-XBXROXNR0pAEAEFCB
+- Digital Design VHDL - LBEbooks
+  https://www.youtube.com/playlist?list=PL7kkolCtIBKLukrBsEDwKRTE64JvaJDhM
+- Learn FPGA - Invent Box Tutorials
+  https://www.youtube.com/playlist?list=PL2935W76vRNGRtB09yXBytO6F3zSZFZGr
+- FPGAs 101 - Electronoobs
+  https://www.youtube.com/playlist?list=PLsR1AO4QH1AyT3b0pUERjFVShbzEelogi
+*** Channels
+- https://www.youtube.com/@ZeroToASICcourse/videos
+- "EEVeBlog"      https://www.youtube.com/user/EEVblog/videos
+- "Robert Baruch" https://www.youtube.com/channel/UCBcljXmuXPok9kT_VGA3adg
+- "Nandland"      https://www.youtube.com/c/Nandland/videos
+*** Video: Ben Heck's FPGA Dev Board Tutorial https://www.youtube.com/watch?v=0zrqYy369NQ
+- used for really low latency
+- a microcontroller is limited to the speed of his program loop
+- a microcontroller can use interrupts for better divide of speed
+- fpga real level logic > speed
+- fpga can use a crystal with a PLL (physic logic lock) for more speed
+- need a usbblaster or might be integrated
+- they are NOT CPLD
