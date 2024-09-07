@@ -32,6 +32,8 @@
 
 * projects
 
+- https://www.instructables.com/Girino-Fast-Arduino-Oscilloscope/
+
 - 3KHz, Processing
   - https://github.com/rogeriobego/oscilloscope-arduino-processing
   - https://projecthub.arduino.cc/Veldekiaan/arduino-uno-library-for-a-sampling-scope-counter-751bf1

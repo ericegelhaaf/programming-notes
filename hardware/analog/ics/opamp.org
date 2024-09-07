@@ -10,6 +10,7 @@
 
 - wiki https://en.wikipedia.org/wiki/Operational_amplifier
 - https://mysite.du.edu/~etuttle/electron/elect3.htm
+- http://www.muzines.co.uk/articles/adventures-with-op-amps/12923
 
 - 1941 with vacuum tubes
 - 1963 first monolithic IC
@@ -20,12 +21,15 @@
 - Supports both DC and AC
 - High gains (+100000x)
 - VCVS = Voltage Controlled Voltage Source
+
 - Impedance
   - high INPUT (aka "no =current= can flow IN")
   - low OUTPUT (aka "we could draw as much =current= as we want")
 
 - Rules
   1) no ~current~ flows IN or OUT of the inputs (V+, V-)
+     - think of the inputs like voltage sensors
+     - they will detect voltage without interfering
   2) tries to keep the inputs the same ~voltage~ (only for closed loop)
      it does it with the output feedback
 
@@ -89,22 +93,22 @@
    - canNOT return negative voltages (chops it off)
 
 ** examples
-|---------+-----+---+----+-----+---------+------------------------|
-|         | DIP | n | pw | Vcc | GBP Mhz |                        |
-|---------+-----+---+----+-----+---------+------------------------|
-| LM324   |  14 | 4 | s  |  32 |       1 |                        |
-| LM358   |   8 | 2 | s  |  32 |     1.2 | high ESD protection    |
-| CA3140  |   8 | 1 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi    |
-| CA3240  |   8 | 2 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi    |
-| MCP6002 |   8 | 2 | s  |   6 |       1 | rail-to-rail output    |
-| MCP6022 |   8 | 2 | s  |   6 |      10 | rail-to-rail output    |
-| NE5532  |   8 | 2 | d  |  15 |      10 | low noise              |
-| TL072   |   8 | 2 | d  |  20 |    5.25 | FET, low THD 0.0003    |
-| LM741   |   8 | 1 | d  |  18 |         | preamp?                |
-| LM1458  |   8 | 2 | d  |  18 |         |                        |
-| LM339   |  14 | 4 | sd |  18 |         | comparator             |
-| LM386   |   8 | 1 | s  |  15 |         | audio/power? amplifier |
-|---------+-----+---+----+-----+---------+------------------------|
+|---------+-----+---+----+-----+---------+----------------------------------------|
+|         | DIP | n | pw | Vcc | GBP Mhz |                                        |
+|---------+-----+---+----+-----+---------+----------------------------------------|
+| LM324   |  14 | 4 | s  |  32 |       1 |                                        |
+| LM358   |   8 | 2 | s  |  32 |     1.2 | high ESD protection                    |
+| CA3140  |   8 | 1 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi                    |
+| CA3240  |   8 | 2 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi                    |
+| MCP6002 |   8 | 2 | s  |   6 |       1 | rail-to-rail output                    |
+| MCP6022 |   8 | 2 | s  |   6 |      10 | rail-to-rail output                    |
+| NE5532  |   8 | 2 | d  |  15 |      10 | low noise                              |
+| TL072   |   8 | 2 | d  |  20 |    5.25 | FET, low THD 0.0003                    |
+| LM741   |   8 | 1 | d  |  18 |         | preamp?                                |
+| LM1458  |   8 | 2 | d  |  18 |         |                                        |
+| LM339   |  14 | 4 | sd |  18 |         | comparator                             |
+| LM386   |   8 | 1 | s  |  15 |         | audio/power? amplifier (high output W) |
+|---------+-----+---+----+-----+---------+----------------------------------------|
 * use cases
 
 see https://www.electronics-tutorials.ws/opamp/opamp_1.html
@@ -193,6 +197,9 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - aka "Voltage Follower"
 - tied Vout and V- input
 - special case of "non-inverting" with no resistance
+- "has very high input impedance"
+- "it prevents (can prevent) one stage imput impedance from loading the prior stage output impedance
+   which causes undesirable loss of signal transfer"
 
 ** Non Inverting Amplifier
 

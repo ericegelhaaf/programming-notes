@@ -1,0 +1,29 @@
+- https://en.wikipedia.org/wiki/Voltage_regulator
+- are ICs
+- are NOT transistors
+- are inefficient
+  Power = (Vin - Vout) * Iout
+- have a drop out voltage ~Vdrop~
+  - minimum input voltage to get a regulated output
+  - 1v or 2v above Vout
+  - aka the headroom
+- they have dozens of transistors
+- they have 3 pins
+
+#+CAPTION: unregulated(top) and regulated(bottom) voltage
+#+ATTR_ORG: :width 300
+[[https://europe1.discourse-cdn.com/arduino/optimized/4X/9/b/7/9b71f04d0e8c22b4ff58be5a051a707088b7cdc8_2_669x500.jpeg]]
+
+* Parts
+
+- LM317 - Adjustable Voltage Regulator
+  Vout = 1.25 * (1+(R2/R1)) + 50u * R2
+
+** 78xx / 79xx
+
+- https://en.wikipedia.org/wiki/78xx
+- https://www.inventable.eu/2023/05/17/reguladores-tension-78l/
+
+- 78xx - positive (linear) voltage regulators
+- 79xx - negative (linear) voltage regulators
+- xx = indicate the _output_ voltage

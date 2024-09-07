@@ -2,37 +2,73 @@
 [[https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Diode_symbol.svg/320px-Diode_symbol.svg.png]]
 
 - https://en.wikipedia.org/wiki/Diode
-- https://www.inventable.eu/2018/03/21/diodo-1n4148/
+
+- one-way valves for electricity
+- from anode to cathode (aka forward direction)
+  1) one carries current by electrons
+  2) another one through holes, where electrons are missing
+
+- Specs
+  - Forward Voltage: =Vf=
+  - Max Switching Speed: in ns (eg: 4ns ~100Khz)
 
 - ideal diodes will
   - acts as an _opencircuit_ any and all current in reverse
   - acts as a _shortcircuit_ (no resistance) when current is forward
+    - irl has a Vf (forward voltage drop) ~13% ~0.7v
+    - Power (in watts) = =Vf= (in Volts) * I (in amps)
+    - as such, is not reliable to put diodes in parallel (1 does all the work)
 
-#+ATTR_ORG: :width 300
-[[https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Diode_current_wiki.png/628px-Diode_current_wiki.png]]
+- don't conduct below a certain threshold input *voltage* (~0.7v)
+- operating regions of a diode
+  1) Forward: voltage is positive, greater than Vf, current run through
+  2) Reverse: =Vbr= > voltage > =Vf=
+  3) Breakdown: voltage is negative
+  #+ATTR_ORG: :width 300
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Diode_current_wiki.png/628px-Diode_current_wiki.png]]
 
-- Functions
-  - [[https://en.wikipedia.org/wiki/Snubber][snubber]] / [[https://en.wikipedia.org/wiki/Flyback_diode][flyback]] / commutating / freewheeling / supressor / clamp / catch
-    - to suppress transient voltages
-    - to eliminate flyback (aka sudden voltage spikes) of an inductor/motor
-    #+ATTR_ORG: :width 250
+* Functions / Setups
+
+1. to convert AC to DC, letting through only the positive voltage
+   - dumb with a diode+capacitor (provides half-way rectification)
+   - ~bridge rectifier~ (full-way rectification)
+     - allows using both negative and positive voltage
+     - no matter input polarity current will output in 1 direction
+     - add a capacitor and you have it rectified again
+     [[https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/ACtoDCpowersupply.png/320px-ACtoDCpowersupply.png]]
+
+2. [[https://en.wikipedia.org/wiki/Snubber][snubber]] / [[https://en.wikipedia.org/wiki/Flyback_diode][flyback]] / commutating / freewheeling / supressor / clamp / catch
+   - aka to suppress transient voltages
+   - aka reverse voltage protection
+   - to eliminate flyback (aka sudden voltage spikes) of an inductor/motor/solenoid (eg: when switching off)
+   #+ATTR_ORG: :width 250
     [[https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flyback_Diode.svg/1280px-Flyback_Diode.svg.png]]
+
+3. Voltage Clipper
+   - to remove either or both sides of a voltage
+   [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zener_Diode.svg/640px-Zener_Diode.svg.png]]
 
 * Types
 
-- 1N4002
-  - Epoxy Encapsulated
-  - one direction flow
-  - used in power supplies AC>>DC
-  - shape
-    - tiny chip of sillicon, called =DIE=
-    - with separate regions
-      1) one eltrical current is carried by electrons
-      2) another one with holes, where electrons are missing
-
-- Glass Encapsulated
-  - for low-powered applications
-  - shape of the DIE contact may vary
+- Small Signal: for low electrical current
+  - https://www.inventable.eu/2018/03/21/diodo-1n4148/
+  - 1N4148 (glass red, switching)
   - 1N5236B
   - 1N1100
   - 1N740
+- Rectifier: high electric current
+  - 1N4002 (epoxy, rectifier)
+- Schottky
+- Zener
+  - low breakdown voltage
+  - in reverse due "zener breakdown"
+  - maintains constant voltage
+  [[https://www.digikey.be/-/media/MakerIO/Images/blogs/zener-diode-basic-operation-fig5.JPG]]
+
+- PhotoVoltaic Cell
+  - have a thin N-type layer
+  - takes light in and produces electricity
+
+- LED
+  - have a thin P-type layer
+  - light is created at the junction

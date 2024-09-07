@@ -3,9 +3,13 @@
 
 - OTA = Operational Transductance Amplifiers
   - https://en.wikipedia.org/wiki/Operational_transconductance_amplifier
-  - LM13600N/LM13700N
-  - CA3080
-
+  - LM13600N/LM13700N (2 OTA/2Buffer)
+  - CA3080 (RCA) (1 OTA)
+  - CEM3320 (4 OTA/4Buffer)
+  - Dbs per Octave
+    - 1 OTA/stage  = 5db
+    - 2 OTA/stages = 12db
+    - 4 OTA/stages = 24db
 - BBD https://en.wikipedia.org/wiki/Bucket-brigade_device
   - http://www.synthechnics.com/contents/pt/d45_BBDs.html
   - TDA1022 (1976) - bucket bridge delay line for analogue signals
@@ -13,20 +17,21 @@
       - flanger https://www.freestompboxes.org/viewtopic.php?t=28430
       - flanger https://www.rivertronic.com/tienda_online/proyectos/flangervintage.php
       - http://www.scaprile.com/oldsite/fxa.html
+- VCO
+  - LM566
+  - ICL8038 Intersil https://en.wikipedia.org/wiki/Intersil_ICL8038
+  - XR2206 Exar https://es.wikipedia.org/wiki/XR2206
+
+- Roland
+  - article https://plasmamusic.com/roland-ir3r03-vco
+  - IR-3R03 Roland VCO
+  - IR-3R05 Roland VCF/VCA
 
 - CEM&SSM https://www.youtube.com/watch?v=ztu6OqnuKmU
   - SSM unreliable/unstable at high temperatures
 
 - Coolaudio https://www.coolaudio.com/prod-coolaudio-semi.php
   - V2044A VCF
-- Intersil
-  - ICL8038 VCO https://en.wikipedia.org/wiki/Intersil_ICL8038
-- Exar
-  - XR2206 VCO https://es.wikipedia.org/wiki/XR2206
-- Roland
-  - article https://plasmamusic.com/roland-ir3r03-vco
-  - IR-3R03 Roland VCO
-  - IR-3R05 Roland VCF/VCA
 
 * SSM (74)
 

@@ -2,8 +2,33 @@
 [[https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Resistor_symbol_America.svg/320px-Resistor_symbol_America.svg.png]]
 
 - https://en.wikipedia.org/wiki/Resistor
+- V-I curve of resistor
+  [[https://ohmlaw.com/wp-content/uploads/2018/03/ohms-law-overall-graph.jpg]]
 
-* Types
+* parallel resistors - aka Current divider
+
+- if tops and bottoms are absolute connected
+- same current through both of them
+- less resistance
+- 1/Rp = 1/R1 + 1/R2
+- if you put equal resistors, you get half of the resistance
+  - 1/Rp = 2/R
+      Rp = R/2
+
+* resistors in serie - aka Voltage divider
+
+- It divides the voltage *in proportion* to the resistance
+- If R? are both equal, voltage is half
+- If R2 is 0, no voltage
+- If R2>>R1, V2~=V
+- I = V / (R1 + R2)
+- V2 = I*R2
+     = (V/(R1+R2)) * R2
+     = (R2/R1+R2) * V
+#+ATTR_ORG: :width 150
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Resistive_divider2.svg/800px-Resistive_divider2.svg.png]]
+
+* Form Factors
 
 |---------------------+------------------------------+--------------------------------------------|
 |                 <r> | features                     | description                                |
@@ -21,6 +46,8 @@
   - termination resistors of a data bus
 
 ** Potentiometer
+
+[[https://www.digikey.com/-/media/Images/Article%20Library/TechZone%20Articles/2021/May/The%20Fundamentals%20of%20Digital%20Potentiometers%20and%20How%20to%20Use%20Them/article-2021may-the-fundamentals-of-digital-fig1.jpg]]
 
 - taper types
   - A logarithmic (actually implemented linearly, but is not perceptible)

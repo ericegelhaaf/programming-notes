@@ -44,8 +44,8 @@ https://www.youtube.com/watch?v=kRlSFm519Bo
 
 - 555 has inside:
   * 2 Comparators (2 inputs and 1 output, if input a<b output is on, if not is off)
-  * 1 Flip-Flip (aka RS Latch)
-  * 3 5k resitances, that made a =voltage divider=
+  * 1 Flip-Flip (aka SR Latch)
+  * 3 5k resitors, that made a =voltage divider=
   * 1 Transistor (on to discharge ~pin 7~ and to GND)
 
 - rate of charging and discharging times, will depend on:

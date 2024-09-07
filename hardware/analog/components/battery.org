@@ -1,0 +1,22 @@
+- longest is (+), shortest is (-)
+
+- different models have [[http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance][different internal resistance]] with same voltage
+  - the bigger, the less iR and can give more current
+  |-----+-------------+------------|
+  | 9-V | zinc carbon | 35Ω        |
+  | 9-V | lithium     | 16Ω to 18Ω |
+  | 9-V | alkaline    | 1Ω to 2Ω   |
+  | AA  | Alkaline    | 0.15Ω      |
+  | AA  | NiMH        | 0.02Ω      |
+  | D   | Alkaline    | 0.1Ω       |
+  | D   | NiCad       | 0.009Ω     |
+  | D   | SLA         | 0.006Ω     |
+  |-----+-------------+------------|
+
+- ideal battery
+  - maintains the same voltage regardless of current serving
+  - modeled by imagining an internal resistor inside it
+    - that represents the delay in chemical reactions
+    - the internal resistance increases as the battery gets old
+  - it forms a =voltage divider= with the outside load/resistance
+    [[https://slader-solution-uploads.s3.amazonaws.com/7ac459e3-99b6-430b-aa6a-d67b64279485-1672107598554093.png]]

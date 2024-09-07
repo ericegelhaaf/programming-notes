@@ -13,7 +13,23 @@
 - Charge (Q) is proportional to Voltage (V)
   Q = C*V
 
-* Types
+- =current= responds to the rate of change of =voltage=
+- =current= and =voltage= are NOT proportional
+- =current= leads the =voltage=
+#+CAPTION: voltage/current over time
+[[https://i.sstatic.net/Exhhp.gif]]
+
+- doesn't let the DC through, lets variations through
+- acts as a sort-of frequency-dependent resistor (1/freq)
+  - aka capacitance reactance
+  - high frequency, acts like short circuit
+  - low frequency, acts like open circuit
+- due above can function as
+  - a LPF, useful to clean high freq noise
+  - a HPF
+  - a band filter, by using both LPF+HPF
+
+* Form Factors
 
 |------------------------+----------------------------------+-------------------------------------------------------+-----------------------------|
 |                    <r> | Properties                       | insulator / dielectric                                | conductor                   |
