@@ -1,8 +1,12 @@
 - https://en.wikipedia.org/wiki/Voltage_regulator
+- they get rid input ~Vripple~
+- input more DC voltage than we need to output
 - are ICs
 - are NOT transistors
 - are inefficient
-  Power = (Vin - Vout) * Iout
+  #+begin_src
+    Power = (Vin - Vout) * Iout
+  #+end_src
 - have a drop out voltage ~Vdrop~
   - minimum input voltage to get a regulated output
   - 1v or 2v above Vout
@@ -14,10 +18,24 @@
 #+ATTR_ORG: :width 300
 [[https://europe1.discourse-cdn.com/arduino/optimized/4X/9/b/7/9b71f04d0e8c22b4ff58be5a051a707088b7cdc8_2_669x500.jpeg]]
 
+* Circuit
+
+the datasheet will tell you what capacitors you need for the IN/OUT
+#+ATTR_ORG: :width 400
+[[https://www.build-electronic-circuits.com/wp-content/uploads/2023/06/full_rectifier-1.png]]
+
 * Parts
 
+- Classes
+  - LDO: Low Dropout Regulators
+
+- TPS61070 - Efficient Synchronous Boost Converter
+- LM2596 - Step-Down Voltage Regulator
 - LM317 - Adjustable Voltage Regulator
-  Vout = 1.25 * (1+(R2/R1)) + 50u * R2
+  - Can be setup to adjust voltage based on potentiometer
+    - Vout = 1.25 * (1+(R2/R1)) + 50u * R2
+  - Can be also setup to provide a constant current source (while changing voltage)
+    - I = 1.2 / R1
 
 ** 78xx / 79xx
 
@@ -26,4 +44,4 @@
 
 - 78xx - positive (linear) voltage regulators
 - 79xx - negative (linear) voltage regulators
-- xx = indicate the _output_ voltage
+- where "xx" indicate the _output_ voltage

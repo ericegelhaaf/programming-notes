@@ -5,6 +5,58 @@
   - 120ohm resistor between 5v and reset pin (or 110-124)
   https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection/
 
+* How GPIO works?
+
+#+begin_src
+---------(V+)----------
+             |
+PE-----------< (Q1)
+             |
+             z
+      |\     z
+OE----| \____|
+O ----| /    |
+      |/     |---- GPIO
+I -----------|
+#+end_src
+
+- I  = Input
+- O  = Output
+- OE = Output enable (=OUTPUT= on pinMode())
+- PE = Pull-up resistor enable (=INPUT_PULLUP= on pinMode())
+- Q1 = MOSFET?, keeps input stable
+
+- analogRead()
+- analogWrite() - PWM Output
+  - produces a series of pulses
+  - changing the duration of the pulse
+  [[https://docs.arduino.cc/54ef6da144b4531dd9ada686a7e67c56/pwm.gif]]
+
+* Models
+
+- Arduino
+  - Leonardo
+    - chip has built in usb interface, can emulate keyboard or mouse
+  - Mega
+  - Nano
+  - Pro-mini (needs a programmer)
+
+- Compatible
+  - Teensy
+  - NodeMCU
+  - MonkMakesDuino
+
+** Uno
+#+ATTR_ORG: :width 400
+[[https://res.cloudinary.com/practicaldev/image/fetch/s--cCmipZlc--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/778713k4efamdbandco8.png]]
+
+- ATmega328p
+- USB to TTL
+- 2 voltage regulators: 5v and 3.3v
+- LM358: dual opamp
+  1) [[https://forum.arduino.cc/t/uno-rev-3-what-is-the-lm358-for/125822][as a voltage comparator]], between USB and Vin, to know the power source
+  2) buffers D13, removing the load created by the L LED and its current limiting resistor.
+
 * language
 https://www.arduino.cc/reference/en/
 ** types
@@ -67,7 +119,7 @@ https://www.arduino.cc/reference/en/
   https://patchwork.kernel.org/project/qemu-devel/patch/20200123000307.11541-15-richard.henderson@linaro.org/
   https://www.youtube.com/watch?v=3yP3QOT-h98
 
-* Course Arduino Lessons - Paul McWorther
+* Course: Arduino Lessons - Paul McWorther
 https://www.youtube.com/playlist?list=PLGs0VKk2DiYx6CMdOQR_hmJ2NbB4mZQn-
 * 3rd Projects
 - https://github.com/Lembed/Awesome-arduino

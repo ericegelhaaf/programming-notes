@@ -93,22 +93,33 @@
    - canNOT return negative voltages (chops it off)
 
 ** examples
-|---------+-----+---+----+-----+---------+----------------------------------------|
-|         | DIP | n | pw | Vcc | GBP Mhz |                                        |
-|---------+-----+---+----+-----+---------+----------------------------------------|
-| LM324   |  14 | 4 | s  |  32 |       1 |                                        |
-| LM358   |   8 | 2 | s  |  32 |     1.2 | high ESD protection                    |
-| CA3140  |   8 | 1 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi                    |
-| CA3240  |   8 | 2 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi                    |
-| MCP6002 |   8 | 2 | s  |   6 |       1 | rail-to-rail output                    |
-| MCP6022 |   8 | 2 | s  |   6 |      10 | rail-to-rail output                    |
-| NE5532  |   8 | 2 | d  |  15 |      10 | low noise                              |
-| TL072   |   8 | 2 | d  |  20 |    5.25 | FET, low THD 0.0003                    |
-| LM741   |   8 | 1 | d  |  18 |         | preamp?                                |
-| LM1458  |   8 | 2 | d  |  18 |         |                                        |
-| LM339   |  14 | 4 | sd |  18 |         | comparator                             |
-| LM386   |   8 | 1 | s  |  15 |         | audio/power? amplifier (high output W) |
-|---------+-----+---+----+-----+---------+----------------------------------------|
+|----------+-----+---+----+-----+---------+----------------------------------------|
+|          | DIP | n | pw | Vcc | GBP Mhz |                                        |
+|----------+-----+---+----+-----+---------+----------------------------------------|
+| LM324    |  14 | 4 | s  |  32 |       1 |                                        |
+| LM358    |   8 | 2 | s  |  32 |     1.2 | high ESD protection                    |
+| CA3140   |   8 | 1 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi                    |
+| CA3240   |   8 | 2 | d  |  18 |     4.5 | MOS+Bip ++Iimp ++Oi                    |
+| MCP6002  |   8 | 2 | s  |   6 |       1 | rail-to-rail output                    |
+| MCP6022  |   8 | 2 | s  |   6 |      10 | rail-to-rail output                    |
+| NE5532   |   8 | 2 | d  |  15 |      10 | BJT, low noise, hifi audio             |
+| NE5534   |     | 1 |    |     |         | BJT, lower distortion than 32          |
+| TL072    |   8 | 2 | d  |  20 |    5.25 | FET, low THD 0.0003                    |
+| TL074    |     |   |    |     |         | see TL084/2/1                          |
+| LM741    |   8 | 1 | d  |  18 |         | preamp?                                |
+| LM1458   |   8 | 2 | d  |  18 |         |                                        |
+| LM339    |  14 | 4 | sd |  18 |         | comparator                             |
+| LM386    |   8 | 1 | s  |  15 |         | audio/power? amplifier (high output W) |
+|----------+-----+---+----+-----+---------+----------------------------------------|
+| CA3080   |     |   |    |     |         | OTA                                    |
+| LM13700  |     |   |    |     |         | OTA                                    |
+| JRC13700 |     |   |    |     |         | OTA                                    |
+| JRC13600 |     |   |    |     |         | OTA                                    |
+|----------+-----+---+----+-----+---------+----------------------------------------|
+| LM359    |     |   |    |     |         | Norton (aka current difference)        |
+| LM2900   |     |   |    |     |         | Norton                                 |
+| LM3900   |     |   |    |     |         | Norton                                 |
+|----------+-----+---+----+-----+---------+----------------------------------------|
 * use cases
 
 see https://www.electronics-tutorials.ws/opamp/opamp_1.html
@@ -239,10 +250,11 @@ see https://www.electronics-tutorials.ws/opamp/opamp_1.html
 - 14 EEVblog  |  600 - OpAmps Tutorial - What is an Operational Amplifier? https://www.youtube.com/watch?v=7FYHt5XviKc
 - 21 EEVBlog  | 1436 - The TOP 5 Jellybean OPAMP's https://www.youtube.com/watch?v=uq1DMWtjL2U
 - 23 Dronebot |Op-Amps - Using Operational Amplifiers https://www.youtube.com/watch?v=_HHxV-7alwE
+- Aaron's Analog Chip Collection (ECE Design Fundamentals, Georgia Tech class) https://www.youtube.com/watch?v=fVFukSjWQjk
 
 * OTA (69)
 
 - Ideal infinite Zin (input impedance) and Zout (output impedance)
-- not operated in closed loop form
+- usually not operated in closed loop form (don't have wacky gains)
 - inputs diff have to be close to zero
 - apply current to the end to set the transconductance

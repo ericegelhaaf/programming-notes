@@ -5,13 +5,15 @@
 - https://en.wikipedia.org/wiki/Capacitor
 - https://www.inventable.eu/2012/09/15/como-se-leen-los-valores-de-los-capacitores/
 
-- *stores* electricity in ~static electricity~ form
-- are _conductors_ separated by an _insulator_
+- *stores* electricity in a ~electrostatic field~
+  - the field of force between 2 electrically charged bodies
+  - _conductors_ separated by an _insulator/dielectric_
 
-- capacitance = ratio of charge to voltage
-  1 couloumn/volt = 1 farad
-- Charge (Q) is proportional to Voltage (V)
-  Q = C*V
+- Specs
+  - capacitance = ratio of charge to voltage
+    1 couloumn/volt = 1 farad
+  - Charge (Q) is proportional to Voltage (V)
+    Q = C*V
 
 - =current= responds to the rate of change of =voltage=
 - =current= and =voltage= are NOT proportional

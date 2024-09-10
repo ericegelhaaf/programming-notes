@@ -6,3 +6,5 @@
     - DCE = data circuit-terminating equipement
       - eg: modem
   - Still used in short-range, point-to-point, low-speed  wired connections.
+
+- tool: http://kt8216.unixcab.org/elek/serterm.html

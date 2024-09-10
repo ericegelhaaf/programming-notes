@@ -10,5 +10,7 @@
     - SCL(lock)
     - SDA(ta)
 
+- smbus: python library
+- tool: i2c-tool - i2cdetect -y 1
 - eeprom i2c programming
   https://www.hackster.io/gatoninja236/how-to-use-i2c-eeprom-30767d

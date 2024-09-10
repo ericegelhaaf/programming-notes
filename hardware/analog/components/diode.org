@@ -4,22 +4,23 @@
 - https://en.wikipedia.org/wiki/Diode
 
 - one-way valves for electricity
-- from anode to cathode (aka forward direction)
+- from Anode to Cathode (aka forward direction/biased)
   1) one carries current by electrons
   2) another one through holes, where electrons are missing
 
 - Specs
   - Forward Voltage: =Vf=
   - Max Switching Speed: in ns (eg: 4ns ~100Khz)
+  - Breakdown: ~-50v
 
 - ideal diodes will
   - acts as an _opencircuit_ any and all current in reverse
   - acts as a _shortcircuit_ (no resistance) when current is forward
     - irl has a Vf (forward voltage drop) ~13% ~0.7v
+    - aka don't conduct below a certain threshold input *voltage* (~0.7v)
     - Power (in watts) = =Vf= (in Volts) * I (in amps)
     - as such, is not reliable to put diodes in parallel (1 does all the work)
 
-- don't conduct below a certain threshold input *voltage* (~0.7v)
 - operating regions of a diode
   1) Forward: voltage is positive, greater than Vf, current run through
   2) Reverse: =Vbr= > voltage > =Vf=
@@ -27,38 +28,93 @@
   #+ATTR_ORG: :width 300
   [[https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Diode_current_wiki.png/628px-Diode_current_wiki.png]]
 
-* Functions / Setups
+* Diode IV Equation (for positive voltage)
 
-1. to convert AC to DC, letting through only the positive voltage
-   - dumb with a diode+capacitor (provides half-way rectification)
-   - ~bridge rectifier~ (full-way rectification)
-     - allows using both negative and positive voltage
-     - no matter input polarity current will output in 1 direction
-     - add a capacitor and you have it rectified again
-     [[https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/ACtoDCpowersupply.png/320px-ACtoDCpowersupply.png]]
+#+begin_src
+  i = Is * (e^(q*Vd/kT) - 1))
+#+end_src
 
-2. [[https://en.wikipedia.org/wiki/Snubber][snubber]] / [[https://en.wikipedia.org/wiki/Flyback_diode][flyback]] / commutating / freewheeling / supressor / clamp / catch
-   - aka to suppress transient voltages
-   - aka reverse voltage protection
-   - to eliminate flyback (aka sudden voltage spikes) of an inductor/motor/solenoid (eg: when switching off)
-   #+ATTR_ORG: :width 250
-    [[https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flyback_Diode.svg/1280px-Flyback_Diode.svg.png]]
+- Is = saturation current, (eg: sillicon 10^-12 Amp, 1pA)
+- q  = charge of an electron = 1.602*10^-19 Coloumb
+- Vd = Voltage on the diode
+- k  = Voltzmann constant = 1.38*10^-23 Joules/Kelvin
+- T  = Temperature in Kelvin
 
-3. Voltage Clipper
-   - to remove either or both sides of a voltage
-   [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zener_Diode.svg/640px-Zener_Diode.svg.png]]
+* Circuits / Usages
+- Polarity Protection: for an upside-down battery
+- Battery Backup:
+  - with 2 diodes
+  - if power supply voltage > battery voltage
+  #+ATTR_ORG: :width 200
+  [[https://i.sstatic.net/yPLyU.png]]
+** AC-DC Convertor
+
+- to convert AC to DC, letting through only the positive voltage
+
+- half-way rectification
+  - dumb with a diode+capacitor
+  - ripple being the range of voltage variation under load X
+  - ripple causes the "humm" in audio
+  - Vripple = I/(2*f*C)
+    - f is frequency of AC
+    - C is capacitance
+
+- full-wave rectification:
+  - when transformer has center tapping (GND)
+  - needs 2 diodes
+  [[https://www.allaboutcircuits.com/uploads/articles/full-wave-center-tap-rectifier-schematic-diagram.jpg]]
+
+- full-wave rectification ~bridge rectifier~
+  - for when the transformer does NOT have center tapping (GND)
+  - needs 4 diodes
+  - allows using both negative and positive voltage
+  - no matter input polarity current will output in 1 direction
+  - add a capacitor and you have it rectified again
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/ACtoDCpowersupply.png/320px-ACtoDCpowersupply.png]]
+
+** [[https://en.wikipedia.org/wiki/Snubber][snubber]] / [[https://en.wikipedia.org/wiki/Flyback_diode][flyback]] / commutating / freewheeling / supressor / clamp / catch
+
+- aka to suppress transient voltages
+- aka reverse voltage protection
+- to eliminate flyback (aka sudden voltage spikes) of an inductor/motor/solenoid (eg: when switching off)
+#+ATTR_ORG: :width 250
+ [[https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flyback_Diode.svg/1280px-Flyback_Diode.svg.png]]
+
+** Voltage Clipper
+
+- to remove either or both sides of a voltage
+ [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zener_Diode.svg/640px-Zener_Diode.svg.png]]
+
+** DC-DC convertor
+
+- [[https://en.wikipedia.org/wiki/Buck_converter][buck convertor]] aka step-down convertor
+  - decreses voltage while increasing current
+  - switch is usually a transistor (MOSFET)
+  - but IRL an LM2596 is used instead
+  - more efficient than a linear voltage convertor
+  #+ATTR_ORG: :width 150
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Buck_operating.svg/320px-Buck_operating.svg.png]]
+
+- [[https://en.wikipedia.org/wiki/Boost_converter][boost convertor]] aka step-up convertor
+  - TPS61070
+  #+ATTR_ORG: :width 150
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Boost_operating.svg/229px-Boost_operating.svg.png]]
 
 * Types
 
 - Small Signal: for low electrical current
   - https://www.inventable.eu/2018/03/21/diodo-1n4148/
-  - 1N4148 (glass red, switching)
-  - 1N5236B
-  - 1N1100
   - 1N740
-- Rectifier: high electric current
-  - 1N4002 (epoxy, rectifier)
+  - 1N1100
+  - [[https://en.wikipedia.org/wiki/1N4148_signal_diode][1N4148]] (glass red, switching 4ns, 200mA, 100v)
+  - 1N5236B
+- Rectifier: epoxy, high electric current
+  - https://www.inventable.eu/2017/09/04/los-diodos-1n4000/
+  - https://en.wikipedia.org/wiki/1N400x_rectifier_diode
+  - 1N400x (1A, 30us)
+  - 1N54xx (3A)
 - Schottky
+  - [[https://en.wikipedia.org/wiki/List_of_1N58xx_Schottky_diodes][1N58xx]] (Vf=0.3v,10ns)
 - Zener
   - low breakdown voltage
   - in reverse due "zener breakdown"
@@ -72,3 +128,11 @@
 - LED
   - have a thin P-type layer
   - light is created at the junction
+  - ~20mA needed
+  |-----+--------------|
+  |  Vf | color        |
+  |-----+--------------|
+  | 1.6 | red          |
+  | 2.5 | yellow/green |
+  |   3 | blue/white   |
+  |-----+--------------|

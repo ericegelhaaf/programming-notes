@@ -1,0 +1,27 @@
+- https://en.wikipedia.org/wiki/ESP8266
+  - 2014
+  - CPU:
+    - 80Mhz
+    - [[https://en.wikipedia.org/wiki/Tensilica#Xtensa_configurable_cores][Tensilica]]
+    - Diamond Standard 106Micro
+    - aka L106
+    - RISC
+  - Memory: 32K instruction, 80K user data
+  - 16 GPIO
+  - 3.3v
+
+- Models
+  - ESP-01
+  - Adafruit Huzzah Feather
+  - Adafruit Huzzah Breakout
+  - NodeMCU
+    - based on the ESP8266-12E
+    - includes 4 Mbytes of Flash
+
+- Platforms
+  - http://www.ulisp.com/show?2CF9
+  - https://github.com/cnlohr/nosdk8266
+  - https://github.com/cnlohr/nosdk8266_example
+
+- Videos
+  - https://www.youtube.com/watch?v=AWT2w7v9szs

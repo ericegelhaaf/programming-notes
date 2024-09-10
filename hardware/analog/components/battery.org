@@ -1,17 +1,33 @@
 - longest is (+), shortest is (-)
-
+- capacity measured in ~mAh~ (milli Amper hour)
+  - eg: 2000mAh = 2A for an hour
+- in series, add the voltages
+- in parallel, DON'T, current will flow between batteries
 - different models have [[http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance][different internal resistance]] with same voltage
   - the bigger, the less iR and can give more current
-  |-----+-------------+------------|
-  | 9-V | zinc carbon | 35Ω        |
-  | 9-V | lithium     | 16Ω to 18Ω |
-  | 9-V | alkaline    | 1Ω to 2Ω   |
-  | AA  | Alkaline    | 0.15Ω      |
-  | AA  | NiMH        | 0.02Ω      |
-  | D   | Alkaline    | 0.1Ω       |
-  | D   | NiCad       | 0.009Ω     |
-  | D   | SLA         | 0.006Ω     |
-  |-----+-------------+------------|
+  |-----------+------+-------------+---------+----------|
+  |           |    V |             |     mAh |        Ω |
+  |-----------+------+-------------+---------+----------|
+  | button    |    3 | lithium     |     200 |          |
+  | PP3       |    9 | zinc carbon |         |       35 |
+  | PP3       |    9 | lithium     |    1200 | 16 to 18 |
+  | PP3       |    9 | Alkaline    |     500 |   1 to 2 |
+  | AAA       |  1.5 | Alkaline    |     800 |          |
+  | AAA       | 1.25 | NiMh        |     750 |          |
+  | AA        |  1.5 | Alkaline    |    2000 |     0.15 |
+  | AA        | 1.25 | NiMH        |    2000 |     0.02 |
+  | C         |  1.5 | Alkaline    |    6000 |          |
+  | D         |  1.5 | Alkaline    |   15000 |      0.1 |
+  | D         |      | NiCad       |         |    0.009 |
+  | D         |      | SLA         |         |    0.006 |
+  | flat cell |  3.7 | LiPo        | 50-8000 |          |
+  | SLA       |    6 |             |     600 |          |
+  | SLA       |   12 |             |    8000 |          |
+  |-----------+------+-------------+---------+----------|
+
+- charging
+  - tricke: doesn't work with LiPo
+  - MCP73831/2: for LiPo batteries
 
 - ideal battery
   - maintains the same voltage regardless of current serving

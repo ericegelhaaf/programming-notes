@@ -1,34 +1,24 @@
-- https://en.wikipedia.org/wiki/Transistor
-  - 1957 (first commercially available)
-  - based on semiconductors changes of conductivity
-
-- http://r-luis.xbot.es/edigital/qnpn_pnp.html
-
 #+CAPTION: case styles, 18, 92, 220...
 [[https://midwestsurplus.net/media/case.gif]]
 
-#+CAPTION: BJT symbols
+#+CAPTION: BJT, MOSFET, JFET
 #+ATTR_ORG: :width 150
 [[https://practicalee.com/wp-content/uploads/2019/04/symbols_bjts.jpg]]
+#+ATTR_ORG: :width 90
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/IGFET_N-Ch_Enh_Labelled.svg/240px-IGFET_N-Ch_Enh_Labelled.svg.png]] [[https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/JFET_N-Channel_Labelled.svg/240px-JFET_N-Channel_Labelled.svg.png]]
 
+- https://en.wikipedia.org/wiki/Transistor
+
+- 1957 (first commercially available)
+- based on semiconductors changes of conductivity
 - You can think of a transistors as
   - switches
   - current amplifiers
-  - a variable resistors.
-    - That varies trying to match the *current* in the base
-    - With the *current* in the collectorx100 (times one hundred)
-
-- There are 2 current that could flow through a transistor
-  - Base Current (Ib)
-  - Collector Current (Ic)
+  - a variable resistors
 
 - States
-  - Saturation: when there is current in base
-  - Cutoff: when there is no current in base
-
-- You can build 2 types of circuits, depending where the OUTPUT is placed (before or after transitor)
-  1) emitter follower (aka buffer)
-  2) inverter
+  - =Saturation=: when there is current in base
+  - =Cutoff=: when there is no current in base
 
 - Tutorial: How to design a transistor circuit that controls low-power devices
   https://www.youtube.com/watch?v=8DMZSxS-xVc
@@ -41,7 +31,7 @@
 - https://en.wikipedia.org/wiki/Field-effect_transistor
 - 1925/195-
 - aka "unipolar transistors"
-- voltage controlled
+- voltage controlled switch
 - Uses an ~electric field~ to control the flow of current in a semiconductor.
 - terminals/legs
   1) source
@@ -56,6 +46,10 @@
 
 *** MOSFET (Metal-Oxide-Semiconductor FET)
 
+- threshold voltage:
+  - generics 2-4v
+  - logic-level ones <2v
+- voltage based switching
 - a block of ~P-type~ with probes of ~N-type~ (in N-type transistors)
 - a metal gate layer above a insulating oxide layer
 - when a (+) is given to the gate,
@@ -67,12 +61,18 @@
 ** BJT (Bipolar Junction Transistors)
 
 - https://en.wikipedia.org/wiki/Bipolar_junction_transistor
+- http://r-luis.xbot.es/edigital/qnpn_pnp.html
 - The most common
 - Uses both *electrons* and *electron holes* as charge carriers.
-- Can work as a current controlled switch
+- current controlled switch
+- _voltage drop_ of 0.5v
 - Multiplies (~100x) current (the Betha)
 - Types: NPN, PNP
 - Legs: emitter, collector, base
+- There are 2 current that could flow through a transistor
+  - ~Ib~ Base Current
+  - ~Ic~ Collector Current
+- Allows ~Ic~ to flow, when a small ~Ib~ flows
 
 #+CAPTION: cross section NPN BJT
 #+ATTR_ORG: :width 200
@@ -84,8 +84,19 @@
 * Projects
 - https://www.inventable.eu/2010/08/03/calimaro-un-robot-old-style/
 
-
 * Models
+- P-Channel - MOSFET
+  - For power polarity protection
+  - Without much Vdrop
+- Phototransistor
+  - a BJT that instead of base has a light detector
+  - the more light, the more current will flow
+  - no cadmium, unlike photoresistors
+  - TEPT5600
+- Darlington
+  - has 2 transistors in 1 package
+  - with increases gain
+  - and more _voltage drop_ :(
 - BC327/BC337 https://www.inventable.eu/2018/04/18/los-transistores-bc327-y-bc337/
 ** BC548
 

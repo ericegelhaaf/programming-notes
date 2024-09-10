@@ -3,5 +3,5 @@
 
 - https://en.wikipedia.org/wiki/Opto-isolator
   - aka optocoupler, optoisolator, photocoupler, optical isolator
-  - has a led and a phototransistor inside
+  - led+phototransistor inside
   - isolates circuits
