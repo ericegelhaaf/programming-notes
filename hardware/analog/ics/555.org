@@ -13,6 +13,14 @@ https://en.wikipedia.org/wiki/555_timer_IC
   - pulse generator
   - oscillator
 
+- Recommendations:
+  - Sheet, put a 0.01uf =capacitor= from ~pin 5~ (CV) to GND, for no janky OUTPUT
+  - Sheet, lock/tying ~pin 4~ (RESET latch) to VCC
+  - Some other overshoot/spikes of output might be due noise in our cable *impedance*, try:
+    - reducing the size of the cable
+    - or putting a 0.1uf capacitor between GND and VCC pins (the closest to the chip the better)
+      - on circuits, chips usually do have capacitor near for this reason
+
 #+ATTR_ORG: :width 500
 [[https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/555_esquema.png/1024px-555_esquema.png]]
 
@@ -49,14 +57,6 @@ https://www.youtube.com/watch?v=kRlSFm519Bo
   - charging: 1k / 100k / 1uf
   - discharging: 100k
     - we can swap the 100k resistor for a variable resistor (with a serial resistor to provide a floor)
-
-- Recommendations:
-  - Sheet, put a 0.01uf =capacitor= from ~pin 5~ (CV) to GND, for no janky OUTPUT
-  - Sheet, lock/tying ~pin 4~ (RESET latch) to VCC
-  - Some other overshoot/spikes of output might be due noise in our cable *impedance*, try:
-    - reducing the size of the cable
-    - or putting a 0.1uf capacitor between GND and VCC pins (the closest to the chip the better)
-      - on circuits, chips usually do have capacitor near for this reason
 
 #+CAPTION: with recommendations
 #+ATTR_ORG: :width 400

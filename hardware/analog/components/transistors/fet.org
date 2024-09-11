@@ -1,0 +1,36 @@
+* FET (Field Effect Transistor)
+
+[[https://i.ytimg.com/vi/euXR2blqlDE/maxresdefault.jpg]]
+
+#+ATTR_ORG: :width 90
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/IGFET_N-Ch_Enh_Labelled.svg/240px-IGFET_N-Ch_Enh_Labelled.svg.png]] [[https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/JFET_N-Channel_Labelled.svg/240px-JFET_N-Channel_Labelled.svg.png]]
+
+- https://en.wikipedia.org/wiki/Field-effect_transistor
+- 1925/195-
+- aka "unipolar transistors"
+- voltage controlled switch
+- Uses an ~electric field~ to control the flow of current in a semiconductor.
+- terminals/legs
+  1) source
+  2) gate: control the flow of current by applying voltage here, which alters the conductivity
+  3) drain
+
+**   JFET (Junction FET)
+
+- in ~N-type~ applying negative voltage in gate would increase depletion region
+#+ATTR_ORG: :width 150
+[[https://eepower.com/uploads/articles/Fig1-An-overview-of-the-field-effect-transistor-fet.jpg]]
+
+** MOSFET (Metal-Oxide-Semiconductor FET)
+
+- threshold voltage:
+  - generics 2-4v
+  - logic-level ones <2v
+- voltage based switching
+- a block of ~P-type~ with probes of ~N-type~ (in N-type transistors)
+- a metal gate layer above a insulating oxide layer
+- when a (+) is given to the gate,
+  it pulls electrons making the whole middle section N-type
+  closing the circuit
+#+ATTR_ORG: :width 200
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Lateral_mosfet.svg/800px-Lateral_mosfet.svg.png]]

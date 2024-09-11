@@ -1,0 +1,20 @@
+- Circuit: switching higher voltages
+  - eg: using a MOSFET (logic level type)
+    - still might need a resistor a 1k, to avoid problem when doing PWM
+  - eg: using a BJT
+    - R = V/I = (5v-0.6v)/10mA = 440 ohm
+    - Vdrop = 0.6v
+    - having the transistor a gain of 100x
+    - we want a max current of 1A
+
+- Circuit: 5v -> 3.3v (Voltage divider)
+  - R1 1k omh
+  - R2 2k omh
+  #+ATTR_ORG: :width 200
+  [[https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2015/09/voltage-divider-circuit.png]]
+
+- Circuit: 5v <-> 3.3v [[http://jamgo.org.uk/electronics/BiDirectional_Logic_Level_Converter.note.html][Bi-directional Level Conversion]]
+  - Low side: 3.3v GPIO pin
+  - High side: 5v IO
+  - eg: needed for I2C
+  [[http://jamgo.org.uk/electronics/Bi-Directional_mosfet_level_converter.jpg]]

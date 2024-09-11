@@ -10,16 +10,9 @@
 - I2C
 - SPI
 - Serial
-
-- Circuit: Voltage divider 5v -> 3.3v
-  - R1 2.7k omh
-  - R2 4.7k omh
-
-- Circuit: [[http://jamgo.org.uk/electronics/BiDirectional_Logic_Level_Converter.note.html][Bi-directional Level Conversion]] 5v <-> 3.3v
-  - Low side: 3.3v GPIO pin
-  - High side: 5v IO
-  - eg: needed for I2C
-  [[http://jamgo.org.uk/electronics/Bi-Directional_mosfet_level_converter.jpg]]
+- GPIO: 3.3v, 18mA max
+  - you will likely need a transistor
+  - with a resistor in base calculated with Ohm's Law
 
 * Models
 

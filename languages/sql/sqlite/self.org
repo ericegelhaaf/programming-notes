@@ -7,7 +7,7 @@
 
 - Author: Richard Hipp
 - 2000- (db format released 2004)
-- embedded database
+- embedded database, a way to access a file, has no network access
 - Include a hidden "rowid" index column (uses the pkey if set)
 - Max database size 281 TB
 - Implements most of ~SQL-92~
@@ -316,6 +316,10 @@ https://www.sqlite.org/fts5.html
   - example
     - article https://mtlynch.io/litestream/
     - source https://github.com/mtlynch/logpaste
+
+- liteFS
+  - 22 https://fly.io/blog/introducing-litefs/
+  - https://fly.io/docs/litefs/
 
 * bindings
 - go https://github.com/mattn/go-sqlite3

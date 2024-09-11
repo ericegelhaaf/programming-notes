@@ -10,7 +10,6 @@
 - 23 https://www.epicweb.dev/why-you-should-probably-be-using-sqlite
 - 22 https://til.simonwillison.net/sqlite/one-line-csv-operations
 - 22 https://tailscale.com/blog/database-for-2022
-- 22 https://fly.io/blog/introducing-litefs/
 - 22 https://fly.io/blog/all-in-on-sqlite-litestream/
 - 22 https://www.twilio.com/en-us/blog/sqlite-postgresql-complicated
 - 22 https://muratbuffalo.blogspot.com/2022/09/sqlite-past-present-and-future.html

@@ -26,6 +26,7 @@ I -----------|
 - PE = Pull-up resistor enable (=INPUT_PULLUP= on pinMode())
 - Q1 = MOSFET?, keeps input stable
 
+- 5v, 40mA max
 - analogRead()
 - analogWrite() - PWM Output
   - produces a series of pulses

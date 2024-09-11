@@ -1,0 +1,60 @@
+#+CAPTION: case styles, 18, 92, 220...
+[[https://midwestsurplus.net/media/case.gif]]
+
+- https://en.wikipedia.org/wiki/Transistor
+
+- 1957 (first commercially available)
+- based on semiconductors changes of conductivity
+- You can think of a transistors as
+  - switches
+  - current amplifiers
+  - a variable resistors
+
+- States
+  - =Saturation=: when there is current in base
+  - =Cutoff=: when there is no current in base
+
+- Tutorial: How to design a transistor circuit that controls low-power devices
+  https://www.youtube.com/watch?v=8DMZSxS-xVc
+
+* Projects
+
+- https://www.inventable.eu/2010/08/03/calimaro-un-robot-old-style/
+
+* Models
+
+- P-Channel - MOSFET
+  - For power polarity protection
+  - Without much Vdrop
+- Phototransistor
+  - a BJT that instead of base has a light detector
+  - the more light, the more current will flow
+  - no cadmium, unlike photoresistors
+  - TEPT5600
+- Darlington
+  - has 2 transistors in 1 package
+  - with increases gain
+  - and more _voltage drop_ :(
+- BC327/BC337 https://www.inventable.eu/2018/04/18/los-transistores-bc327-y-bc337/
+
+** BC548
+
+- https://en.wikipedia.org/wiki/BC548
+- https://www.inventable.eu/2017/07/09/transistor-bc548/
+- https://www.radiomuseum.org/tubes/tube_bc548.html
+
+- NPN BJT
+- TO-92
+- Substitute and successor of BC108/148/238
+- GainGroups: A/B/C with 180/300/600 current gains repectively
+
+** 2N2222
+
+- https://en.wikipedia.org/wiki/2N2222
+- https://www.inventable.eu/2020/11/30/transistor-2n2222/
+
+- 1960
+- NPN BJT
+- TO-92 (TO-18 antes)
+- Equivalente a BC337/BC548
+- maximo 800mA corriente de colector

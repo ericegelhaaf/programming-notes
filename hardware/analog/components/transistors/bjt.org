@@ -1,0 +1,25 @@
+* BJT (Bipolar Junction Transistors)
+
+#+CAPTION: BJT types: NPN and PNP
+[[https://www.schoolphysics.co.uk/age16-19/Electronics/Transistors/text/Transistor_/images/1.png]]
+
+- https://en.wikipedia.org/wiki/Bipolar_junction_transistor
+- http://r-luis.xbot.es/edigital/qnpn_pnp.html
+- The most common
+- Uses both *electrons* and *electron holes* as charge carriers.
+- current controlled switch
+- _voltage drop_ of 0.5v
+- Multiplies (~100x) current (the Betha)
+- Most transistors operate at: 0mV < Vbe < 700mV
+- Legs: emitter, collector, base
+- There are 2 current that could flow through a transistor
+  - ~Ib~ Base Current
+  - ~Ic~ Collector Current
+- Allows ~Ic~ to flow, when a small ~Ib~ flows
+
+#+CAPTION: operating voltages
+#+ATTR_ORG: :width 400
+[[https://www.schoolphysics.co.uk/age16-19/Electronics/Transistors/text/Transistor_characteristics/images/2.png]]
+
+#+CAPTION: operating regions of BJT at different base currents Ib
+[[https://toshiba.semicon-storage.com/content/dam/toshiba-ss-v3/master/en/semiconductor/knowledge/faq/mosfet_brt/are-transistors-driven-by-current-or-voltage_1_en.jpg]]
