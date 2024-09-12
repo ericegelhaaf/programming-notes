@@ -24,6 +24,9 @@
   + the energy stored
   + the inductance
 
+- when un/plugged causes a spike in voltage (see diode)
+  [[https://global.discourse-cdn.com/business6/uploads/pimoroni/optimized/2X/3/31e988a1924259ae61309eb207f628b286d1aefa_2_690x310.jpeg]]
+
 * Types
 
 |------------------+------------------------+----------------|

@@ -11,6 +11,8 @@
 - wiki https://en.wikipedia.org/wiki/Operational_amplifier
 - https://mysite.du.edu/~etuttle/electron/elect3.htm
 - http://www.muzines.co.uk/articles/adventures-with-op-amps/12923
+- Op Amp Issues: Why are There so Many Types of Op Amps?
+  https://www.analog.com/en/resources/analog-dialogue/articles/opamp-issues-why-so-many-opamps.html
 
 - 1941 with vacuum tubes
 - 1963 first monolithic IC

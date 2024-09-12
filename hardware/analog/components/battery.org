@@ -35,4 +35,5 @@
     - that represents the delay in chemical reactions
     - the internal resistance increases as the battery gets old
   - it forms a =voltage divider= with the outside load/resistance
+    #+ATTR_ORG: :width 400
     [[https://slader-solution-uploads.s3.amazonaws.com/7ac459e3-99b6-430b-aa6a-d67b64279485-1672107598554093.png]]

@@ -1,0 +1,2 @@
+- https://en.wikipedia.org/wiki/Vacuum_tube
+- they couldn't handle high frequencies (300Mhz-30.000Mhz)
