@@ -1,0 +1,8 @@
+- 24 Gleam + Tauri
+  - https://www.wezm.net/v2/posts/2024/gleam-tauri/
+  - source https://forge.wezm.net/wezm/gleam-tauri-experiment
+- 24 https://erikarow.land/notes/using-use-gleam
+- 24 https://erikarow.land/notes/esgleam-embed
+- 23 https://erikarow.land/notes/gleam-vite
+- 23 https://erikarow.land/notes/gleam-favorite-feature
+- 23 https://erikarow.land/notes/gleam-syntax

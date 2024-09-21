@@ -1,0 +1,268 @@
+#+TITLE: Gleam
+#+DATE: <2024-09-18 mié>
+
+|-----------+------------------------------------------------------------|
+| wiki      | https://en.wikipedia.org/wiki/Gleam_(programming_language) |
+| home      | https://gleam.run/                                         |
+| search    | https://gloogle.run/                                       |
+| docs      | https://gleam.run/documentation/                           |
+| tutorial  | https://tour.gleam.run/everything/                         |
+| libraries | https://github.com/gleam-lang/awesome-gleam                |
+|-----------+------------------------------------------------------------|
+
+- by Loius Pilfold
+- 2016
+- gc
+- impure, statically typed, immutable objects
+- compiles to Erlang and JS
+- stdlib prefers ~Result~ over ~Option~
+- gleam add
+- packages in hex.pm
+
+* Language
+
+#+begin_src gleam
+  // random comment
+  /// to document what is below (types,functions)
+  //// to document a module
+  pub const answer: Int = 42 // top level constant, can be exported, must be literal values
+  let size = 50_000 // immutable, shadowable
+  let y = x * { x + 10 } // braces/blocks used to group expressions
+
+  @deprecated("use new_fucntion instead") // attribute
+  fn old_function() {
+    Nil
+  }
+#+end_src
+
+** style
+
+- function_name
+  - type annotations recommended
+- variable_name
+- Type
+- Constructor
+
+** types
+
+- type alias
+  #+begin_src gleam
+    pub type UserId =
+      Int
+  #+end_src
+
+*** Primitives
+
+- Nil
+  - a unit type
+  - used by functions that have nothing to return
+  - NOT a valid value of other type
+- Bool
+  - True False
+  - || && !
+- Int
+  - 1_000 0b00001111 0o17 0xF
+  - no max limit on erlang
+  - are 64-bit float in javascript
+- Float
+  - 7.0e7
+  - 3.0e-4
+- String
+  - UTF-8 binaries
+  - <> - concat
+  - string.append(to: "foo", suffix: "bar")
+  - string.concat([])
+  - \u{UNICODECODEPOINT}
+
+*** Complex
+
+**** List(Int)
+  - [1,2]
+  - [1, ..list]
+  - list.head
+
+**** Tuples
+
+  - #("foo",10)
+  - foo.0 foo.1
+  - supports destructuring
+
+**** dictionary
+
+- unordered
+- dict.from_list([#("key1","value1")])
+
+**** Custom Data Types
+  - Enum
+    - type Color { Red, Green, White }
+  - Record, aka custom data types
+    - type Person { Person(name: String), Anonymous }
+    - let p = Person(name: "Alice")
+    - p.name (has to exists on all varians and be on the same position/type)
+    - update syntax
+      Person(..person, name: "Bob")
+  - Result, gleam/result, aka a generic custom type
+    #+begin_src gleam
+      pub type Result(value, reason) {
+        Ok(value)
+        Error(reason)
+      }
+      use int_a_number <- try(parse_int("1")) // Ok(1) -> 1
+      use attempt_int <- try(parse_int("ouch")) // Error will be returned, code below won't run
+    #+end_src
+
+**** Bit arrays
+
+#+begin_src gleam
+  <<3>>
+  <<3:size(8)-little>>
+  <<"Hello, Joe!":utf8>>
+#+end_src
+
+- represents a sequence of 0's and 1's
+- options, they can be dash separated
+ |----------+---------------------------------------|
+ | size     | of segment in bits                    |
+ | unit     | number of bits, ~size~ is multiple of |
+ | bits     | nested bit array                      |
+ | bytes    | nested bit array, byte-aligned        |
+ | float    |                                       |
+ | int      | of default size of 8 bits             |
+ | big      | Big Endian                            |
+ | little   | Little Endian                         |
+ | native   | Native Endianness                     |
+ | utf8     | encoded text (also _codepoint)        |
+ | utf16    | encoded text (also _codepoint)        |
+ | utf32    | encoded text (also _codepoint)        |
+ | signed   |                                       |
+ | unsigned |                                       |
+ |----------+---------------------------------------|
+
+** functions
+
+#+begin_src gleam
+ pub fn sum(x: Int, y: Int) -> Int { // public
+   x + y
+ }
+#+end_src
+
+- High order functions: can be passed as arguments or assined to variables
+
+- Anonymous functions
+  #+begin_src
+   let mul = fn(x,y) { x * y }
+   mul(1,2)
+  #+end_src
+
+- =Function Capture= (shorthand for unary anonymous functions that pass its argument)
+  #+begin_src gleam
+    let add_one_v1 = fn(x) { add(1,x) }
+    let add_one_v2 = add(1,_)
+  #+end_src
+
+- Generic Functions (aka parametric polymorphism)
+  #+begin_src gleam
+    fn twice(argument: value, my_function: fn(value) -> value) -> value {
+      my_function(my_function(argument))
+    }
+  #+end_src
+
+- Labelled Arguments
+  #+begin_src
+   pub fn replace(inside string: String, each pattern: String, with replacement: String) {
+   pub fn replace(inside string        , each pattern        , with replacement) {
+     go(string, patter, replacement)
+   }
+   replace(each: ",", with: " ", inside: "A,B,C")
+  #+end_src
+
+** operators
+
+- +, +.
+- <>
+- == != (structural equality)
+- && ||
+- |>
+  - a |> b(1,2)
+    - b(a,1,2)
+    - b(1,2)(a)
+
+** externals
+
+#+begin_src gleam
+
+@external(erlang, "rand", "uniform")
+pub fn random_float() -> Float
+
+@external(erlang, "Elixir.IO", "inspect")
+pub fn inspect(a) -> a
+
+@external(javascript, "./my_package_ffi.mjs", "now") // via wrapper module
+pub fn now() -> Datetime
+
+#+end_src
+
+** control flow
+
+- no loops, only recursion, has TCO
+- case
+  - there is no if/else
+  - has exhaustiveness checks
+  #+begin_src gleam
+    type User {
+      LoggedIn(name: String, age: Int)
+      Guest
+    }
+    let user = Guest
+    case user,10 { // multiple subjects
+      // [1,..] -> "list starts with 1"
+      LoggedIn(name,..),_        -> name                                        // spread to discard others
+      "Tom" <> lastname,_ as usr -> "Hello " <> lastname <> " Tom..aka " <> usr // as
+      Guest,10 | Guest,11        -> "Guest user 10-ish"                         // alternative pattern
+      Guest,i if i > 20          -> "Guest user " <> int.to_string(i)           // guard, CANNOT call functions
+      Guest,_                    -> "Guest user"
+    }
+  #+end_src
+
+** modules (import/export)
+|------------------+--------------------------------------------------+------------------------|
+|              <r> |                                                  |                        |
+|------------------+--------------------------------------------------+------------------------|
+|       private fn | fn identity()                                    |                        |
+|        public fn | pub fn identity()                                |                        |
+|        qualified | import gleam/io                                  | io.println()           |
+|     as qualified | import gleam/string as ss                        | ss.reverse("abc")      |
+|      unqualified | import gleam/io.{println}                        | println()              |
+| type unqualified | import gleam/string_builder.{type StringBuilder} | let t: StringBuilder = |
+|------------------+--------------------------------------------------+------------------------|
+** stdlib
+|----------------+-----------------------------|
+| gleam/         |                             |
+|----------------+-----------------------------|
+| [[https://hexdocs.pm/gleam_stdlib/gleam/bit_array.html][bit_array]]      |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/bool.html][bool]]           | to_string to_int            |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/bytes_builder.html][bytes_builder]]  |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/dict.html][dict]]           | new from_list insert delete |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/dynamic.html][dynamic]]        |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/float.html][float]]          | max ceiling                 |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/function.html][function]]       |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/int.html][int]]            | max clamp random to_string  |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/io.html][io]]             | println debug               |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/iterator.html][iterator]]       |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/list.html][list]]           | map filter fold find        |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/option.html][option]]         | Option None Some            |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/order.html][order]]          |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/pair.html][pair]]           |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/queue.html][queue]]          |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/regex.html][regex]]          |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/result.html][result]]         | map try unwrap              |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/set.html][set]]            |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/string.html][string]]         | inspect, reverse, append    |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/string_builder.html][string_builder]] |                             |
+| [[https://hexdocs.pm/gleam_stdlib/gleam/uri.html][uri]]            |                             |
+|----------------+-----------------------------|
+
+- result
+  - map: takes fn -> value    (aka Functor?)
+  - try: takes fn -> Result() (aka Monad?)
+  - unwrap: extracts the Ok(success) value, or given default

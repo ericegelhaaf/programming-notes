@@ -1,0 +1,11 @@
+- @LouisPilfold https://www.youtube.com/@lpil/streams
+- @HayleighThompson https://www.youtube.com/@hayleigh-dot-dev/videos
+- @IsaacHarrisHolt https://www.youtube.com/playlist?list=PLfQNB9OHF3YCItiPw46-AMbOwbeYMwSNh
+- Louis Pilfold - Gleam: Past, Present, Future! https://www.youtube.com/watch?v=clsTrQUt-4M
+- Raul Chouza - Gleam https://www.youtube.com/watch?v=N4nJ7EK-e2s
+- Raul Chouza - Crossing boundaries https://www.youtube.com/watch?v=VCjxy_GihBc
+- Harry Bairstow - Gleam https://archive.fosdem.org/2023/schedule/event/beam_gleam_intro/
+- Hayleigh Thompson - Gleam https://vimeo.com/842230116
+- Hayleigh Thompson - Phantom Types https://www.youtube.com/watch?v=3lYHFctx2Ks
+- Hayleigh Thompson - End-to-end types https://www.youtube.com/watch?v=eVtkYQva0Ic
+- Hayleigh Thompson - Distributes music programming https://www.youtube.com/watch?v=L1zFNng9lH4
