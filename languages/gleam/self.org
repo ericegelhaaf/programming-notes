@@ -13,11 +13,19 @@
 - by Loius Pilfold
 - 2016
 - gc
-- impure, statically typed, immutable objects
+- statically typed, immutable objects, pattern matching, first class functions
+  - no pure, exceptions, macros, type classes, early returns
 - compiles to Erlang and JS
 - stdlib prefers ~Result~ over ~Option~
 - gleam add
 - packages in hex.pm
+- Releases
+  - 03/24 1.0
+  - 04/24 1.1
+  - 05/24 1.2
+  - 07/24 1.3
+  - 08/24 1.4
+  - 09/24 1.5
 
 * Language
 
@@ -33,6 +41,13 @@
   fn old_function() {
     Nil
   }
+
+  panic                 // program will crash
+  panic as "wut!?"      // program will crash with msg
+  todo                  // program will crash
+  todo as "Don't look!" // program will crash with msg
+
+  let assert [head,..] = items // program will crash if items==[]
 #+end_src
 
 ** style
@@ -187,7 +202,32 @@
     - b(a,1,2)
     - b(1,2)(a)
 
+** use
+
+- for using callbacks in an unindented style
+
+- before
+  #+begin_src gleam
+    result.try(get_username(), fn(username) {
+      result.try(get_password(), fn(password) {
+        result.map(log_in(username, password), fn(greeting){
+          greeting <> ", " <> username
+        })
+      })
+    })
+  #+end_src
+
+- after
+  #+begin_src gleam
+    use username <- result.try(get_username())
+    use password <- result.try(get_password())
+    use greeting <- result.map(log_in(username, password))
+    greeting <> ", " <> username
+  #+end_src
+
 ** externals
+
+erlang + elixir
 
 #+begin_src gleam
 
@@ -196,10 +236,27 @@ pub fn random_float() -> Float
 
 @external(erlang, "Elixir.IO", "inspect")
 pub fn inspect(a) -> a
+#+end_src
 
-@external(javascript, "./my_package_ffi.mjs", "now") // via wrapper module
+erlang + javascript
+
+#+begin_src gleam
+pub type Datetime
+
+@external(erlang, "calendar", "local_time")
+@external(javascript, "./my_package_ffi.mjs", "now") // export function now() { return new Date(); }
 pub fn now() -> Datetime
 
+now()
+#+end_src
+
+gleam + erlang
+
+#+begin_src gleam
+@external(erlang, "lists", "reverse")
+pub fn reverse_list(items: List(e)) -> List(e) {
+  tail_recursive_reverse(items, []) // gleam implementation
+}
 #+end_src
 
 ** control flow
@@ -225,16 +282,19 @@ pub fn now() -> Datetime
   #+end_src
 
 ** modules (import/export)
-|------------------+--------------------------------------------------+------------------------|
-|              <r> |                                                  |                        |
-|------------------+--------------------------------------------------+------------------------|
-|       private fn | fn identity()                                    |                        |
-|        public fn | pub fn identity()                                |                        |
-|        qualified | import gleam/io                                  | io.println()           |
-|     as qualified | import gleam/string as ss                        | ss.reverse("abc")      |
-|      unqualified | import gleam/io.{println}                        | println()              |
-| type unqualified | import gleam/string_builder.{type StringBuilder} | let t: StringBuilder = |
-|------------------+--------------------------------------------------+------------------------|
+|--------------------+--------------------------------------------------+-------------------------------|
+|                <r> |                                                  |                               |
+|--------------------+--------------------------------------------------+-------------------------------|
+| public opaque type | pub opaque type PosI { PosI(inn: Int) }          | constructors are NOT exported |
+|         private fn | fn identity()                                    |                               |
+|          public fn | pub fn identity()                                |                               |
+|          qualified | import gleam/io                                  | io.println()                  |
+|       as qualified | import gleam/string as ss                        | ss.reverse("abc")             |
+|        unqualified | import gleam/io.{println}                        | println()                     |
+|   type unqualified | import gleam/string_builder.{type StringBuilder} | let t: StringBuilder =        |
+|--------------------+--------------------------------------------------+-------------------------------|
+** gleam official libraries
+
 ** stdlib
 |----------------+-----------------------------|
 | gleam/         |                             |
@@ -266,3 +326,4 @@ pub fn now() -> Datetime
   - map: takes fn -> value    (aka Functor?)
   - try: takes fn -> Result() (aka Monad?)
   - unwrap: extracts the Ok(success) value, or given default
+
