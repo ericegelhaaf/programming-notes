@@ -50,6 +50,17 @@
 
 ** Types
 
+- =string=
+  #+begin_src c
+    char* foo = "hello" "world"; // "helloworld"
+
+    #define STR2(x)
+    #define STR(x) STR2(x)
+    #define WIDTH 300
+    #define HEIGHT 200
+    printf("%s\n", STR(WIDTH) "x" STR(HEIGHT)); // compile time int->string casting
+  #+end_src
+
 - =struct= intialization
   #+begin_src c
     typedef struct {

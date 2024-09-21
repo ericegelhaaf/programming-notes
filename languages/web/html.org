@@ -1,7 +1,142 @@
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/html/html-quiz.md
 - https://developer.mozilla.org/en-US/docs/Web/HTML
+- https://htmlreference.io/
+- https://picsum.photos/ Returns a random image
+  #+begin_src
+  https://picsum.photos/<SQUAREDIM>
+  https://picsum.photos/<WIDTH>/<HEIGHT>
+  #+end_src
 
-* type= (s) of <input>
+
+* DOCTYPE
+
+#+begin_src html
+  <!DOCTYPE html> <!-- for html5 -->
+#+end_src
+
+- in js, see *document.compatMode*
+- defines support for different tags https://www.w3schools.com/tags/ref_html_dtd.asp
+- if you do =NOT= fill it, browser will work in [[https://developer.mozilla.org/en-US/docs/Web/HTML/Quirks_Mode_and_Standards_Mode][quirks mode]]
+  - aka legacy mode
+
+* <html lang="en">
+
+used by search engines
+
+* <meta>
+- https://www.w3schools.com/tags/tag_meta.asp
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+- do not use ~name~ if ~http-equiv~ is set (?
+- viewport
+  - aka visible area of the page
+  - scale ~= initial zoom
+  - make width be the one of the device
+
+|------------+-------------------------+-----------------------------------------|
+|            |                         | content=                                |
+|------------+-------------------------+-----------------------------------------|
+| charset    | UTF-8                   | -                                       |
+|------------+-------------------------+-----------------------------------------|
+| [[https://www.w3schools.com/tags/att_meta_http_equiv.asp][http-equiv]] | refresh                 | aka seconds between auto-refresh        |
+|            | default-style           | ?                                       |
+|            | content-type            | "text/html; charset=UTF-8"              |
+|            | content-security-policy | "default-src 'self'"                    |
+|------------+-------------------------+-----------------------------------------|
+| [[https://www.w3schools.com/tags/att_meta_name.asp][name]]       | [[https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag][viewport]]                | "width=device-width, initial-scale=1.0" |
+|            | description             | SEO                                     |
+|            | keywords                | SEO (eg: "HTML, CSS")                   |
+|            | author                  |                                         |
+|            | application-name        |                                         |
+|            | generator               | for software generated pages            |
+|            | robots                  |                                         |
+|            | googlebot               | index,follow                            |
+|            | twitter:card            | eg: summary, summary_large_image        |
+|            | twitter:title           |                                         |
+|            | twitter:description     |                                         |
+|------------+-------------------------+-----------------------------------------|
+|            | twitter:site            | @foobar                                 |
+|            | twitter:creator         | @foobar                                 |
+|------------+-------------------------+-----------------------------------------|
+| property   | og                      | see [[https://ogp.me/][Open Graph protocol]]                 |
+|            | og:title                |                                         |
+|            | og:type                 | eg: website, video.movie                |
+|            | og:image                |                                         |
+|            | og:image:alt            |                                         |
+|            | og:image:type           |                                         |
+|            | og:image:width          |                                         |
+|            | og:image:height         |                                         |
+|            | og:url                  |                                         |
+|------------+-------------------------+-----------------------------------------|
+|            | og:audio                |                                         |
+|            | og:description          |                                         |
+|            | og:determiner           |                                         |
+|            | og:locale               | eg: en_US                               |
+|            | og:locale:alternate     |                                         |
+|            | og:site_name            |                                         |
+|            | og:video                |                                         |
+|------------+-------------------------+-----------------------------------------|
+
+* <link>
+- https://www.w3schools.com/tags/tag_link.asp
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
+- can occurr on <head> or <body>
+|----------------+----------------------------+---------------------|
+| crossorigin    |                            |                     |
+|                | anonymous                  |                     |
+|                | use-credentials            |                     |
+|----------------+----------------------------+---------------------|
+| href           |                            |                     |
+| hreflang       |                            |                     |
+| media          | eg: print, max-width:600px | only loaded if true |
+| sizes          |                            |                     |
+| title          |                            |                     |
+| type           |                            |                     |
+|----------------+----------------------------+---------------------|
+| referrerpolicy |                            |                     |
+|                | no-referrer                |                     |
+|                | no-referrer-when-downgrade |                     |
+|                | origin                     |                     |
+|                | origin-when-cross-origin   |                     |
+|                | unsafe-url                 |                     |
+|----------------+----------------------------+---------------------|
+| rel            |                            |                     |
+|                | alternate                  |                     |
+|                | author                     |                     |
+|                | dns-prefetch               |                     |
+|                | help                       |                     |
+|                | icon                       | a favicon           |
+|                | license                    |                     |
+|                | next                       |                     |
+|                | pinback                    |                     |
+|                | preconnect                 |                     |
+|                | prefetch                   |                     |
+|                | preload                    |                     |
+|                | prerender                  |                     |
+|                | prev                       |                     |
+|                | search                     |                     |
+|                | stylesheet                 |                     |
+|                | shortcut icon              |                     |
+|----------------+----------------------------+---------------------|
+* <form>
+|------------------------------+------------------------------------------|
+| fieldset                     | for legend/label/input                   |
+| fieldset>legend              | perfect for input[type="radio"] groups   |
+|------------------------------+------------------------------------------|
+| label[for="ID"]              | for input/select/progress/textarea/meter |
+|------------------------------+------------------------------------------|
+| input[aria-describedby="ID"] | can be used to link an error message     |
+|                              | div[id="ID"]>span[role="alert"]          |
+|------------------------------+------------------------------------------|
+| textarea                     |                                          |
+| select>option*N              |                                          |
+| select>optgroup>option*N     |                                          |
+| datalist>option*N            |                                          |
+|------------------------------+------------------------------------------|
+| output                       | to put JS output                         |
+| button                       | can contain an image, html or text       |
+|------------------------------+------------------------------------------|
+** =<input>= types
+
 |----------------+------------------------------------------------|
 | button         | displays value=                                |
 | checkbox       |                                                |
@@ -28,29 +163,19 @@
 | week           |                                                |
 |----------------+------------------------------------------------|
 - Those with /validation/ also enable keyboard special modes on mobile.
-* W3 Schools
-- HSL colors https://www.w3schools.com/colors/colors_hsl.asp
- | Hue        | (°) on color wheel (0-360) 0=red 120=green 240=blue |
- | Saturation | 0% gray - 100% full color                           |
- | Lightness  | 0% black - 100% white                               |
-- attribute, accesskey= adds a keyboard shortcut
-- href=mailto: can have a ?subject=
-- href=tel: to make phone calls?
-** Tags  https://www.w3schools.com/tags/tag_article.asp
-*** Tags
- | head>base | default target url for all links <a>/<img>/?  |
- | head>meta | metadata, name= content= charset= http-equiv= |
- | embed     | use img/iframe/video/audio instead            |
-*** div
 
-div's are mostly used as a wrapper to apply styling, have to inherit semantic? representation
+* Landmarks
 
-**** Landmarks https://en.wikipedia.org/wiki/HTML_landmarks
-|---------+-----------------------------------------------------------------------|
-| main    | unique, no parent of article/aside/footer/header/nav                  |
-| aside   | aka sidebar (can be removed?)                                         |
+- https://en.wikipedia.org/wiki/HTML_landmarks
+- https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role
+- https://developer.mozilla.org/en-US/blog/aria-accessibility-html-landmark-roles/
+
+[[https://manojbabubalaraman.wordpress.com/wp-content/uploads/2015/11/ariamap.png]]
+
 |---------+-----------------------------------------------------------------------|
 | header  | child of body, article, or section                                    |
+| main    | unique, NO parent of article/aside/footer/header/nav                  |
+| aside   | aka sidebar, ads (can be removed?)                                    |
 | footer  | child of body, article, or section                                    |
 |---------+-----------------------------------------------------------------------|
 | section | generic standalone, 99% should have a <h>eadeing                      |
@@ -59,51 +184,90 @@ div's are mostly used as a wrapper to apply styling, have to inherit semantic? r
 | article | selfcontained/independent (forum/blog/news post), eg: main>article*2  |
 | nav     | <a>'s container, not all, just the ones in a major navigation section |
 |---------+-----------------------------------------------------------------------|
-**** Other
- | span            | inline, to markup text              |
- | dialog          | open= middle of screen              |
- | address         | block/italic (contact info)         |
- | data            | to add metadata in ul/li attributes |
- | details>summary | open= toggable                      |
-*** Font
-|-
-| abbr         | title=                                             |
-| address      | block/italic (contact info)                        |
-| b            | bold (last resort after hN/em/strong/mark)         |
-| cite         | italic                                             |
-| del/ins      | line-through/underline                             |
-| s            | line-through                                       |
-| dfn          | italic                                             |
-| em           | italic                                             |
-| i            | italic (last resort after em/string/mark/cite/dfn) |
-| mark         | bg-yellow                                          |
-| pre          | preformatted, preserves spaces and line breaks     |
-| q/blockquote | short/long quotation                               |
-| small        | font size smaller                                  |
-| strong       | bold (important text)                              |
-| sub/sup      | small valign sub/sup                               |
-| time         | can also add machine readable datetime=            |
-| u            | misspelled (unarticulated)                         |
-| wbr          | word break opportunity                             |
-|-
-**** UI
+
+* Text
+|--------------+------------------------------------------------------|
+| b            | bold (last resort after hN/em/strong/mark)           |
+| strong       | bold (important text)                                |
+|--------------+------------------------------------------------------|
+| cite         | italic                                               |
+| dfn          | italic                                               |
+| i            | italic (last resort after em/string/mark/cite/dfn)   |
+| em           | italic                                               |
+| address      | block/italic (contact info)                          |
+|--------------+------------------------------------------------------|
+| del/ins      | underline/linethrough, text deleted/added aka a diff |
+| s            | line-through                                         |
+| u            | underline, misspelled (unarticulated)                |
+|--------------+------------------------------------------------------|
+| abbr         | title=                                               |
+| h?           | heading, where "?" could be 1 to 6                   |
+| mark         | bg-yellow                                            |
+| pre          | preformatted, preserves spaces and line breaks       |
+| q/blockquote | short/long quotation                                 |
+| small        | font size smaller                                    |
+| sub/sup      | small valign sub/sup                                 |
+| time         | can also add machine readable datetime=              |
+| wbr          | word break opportunity                               |
+|--------------+------------------------------------------------------|
+** UI
 |----------------+------------------------------|
 | template       | hidden content (JS showable) |
 | progress/meter | id= value= max= progress var |
 |----------------+------------------------------|
-**** Computer
+** Computer
 |------+---------------------------------|
 | kbd  | monospace                       |
 | code | monospace                       |
 | var  | variable                        |
 | samp | "sample output" computer output |
 |------+---------------------------------|
-**** Idiom
+** Idiom
 |------------+----------------------------------------------------------|
 | ruby/rt+rp | japanese                                                 |
 | bdi        | "bi-directional isolation", for lang with diff direction |
 | bdo        | "bi-directional override"                                |
 |------------+----------------------------------------------------------|
+* Lists
+|----------------+------------------|
+| ul>li*N        | un-ordered list  |
+|----------------+------------------|
+| ol>li*N        | ordered list     |
+|----------------+------------------|
+| (dl>(dt+dd))*N | description list |
+| dt             | a term           |
+| dd             | a description    |
+|----------------+------------------|
+* W3 Schools
+
+- HSL colors https://www.w3schools.com/colors/colors_hsl.asp
+ | Hue        | (°) on color wheel (0-360) 0=red 120=green 240=blue |
+ | Saturation | 0% gray - 100% full color                           |
+ | Lightness  | 0% black - 100% white                               |
+- attribute, accesskey= adds a keyboard shortcut
+- href=mailto: can have a ?subject=
+- href=tel: to make phone calls?
+
+** Tags  https://www.w3schools.com/tags/tag_article.asp
+*** Tags
+|-----------+-----------------------------------------------|
+| head>base | default target url for all links <a>/<img>/?  |
+| head>meta | metadata, name= content= charset= http-equiv= |
+| head>link |                                               |
+| embed     | use img/iframe/video/audio instead            |
+|-----------+-----------------------------------------------|
+*** div
+
+div's are mostly used as a wrapper to apply styling, have to inherit semantic? representation
+
+**** Other
+|-----------------+-------------------------------------|
+| span            | inline, to markup text              |
+| dialog          | open= middle of screen              |
+| address         | block/italic (contact info)         |
+| data            | to add metadata in ul/li attributes |
+| details>summary | open= toggable                      |
+|-----------------+-------------------------------------|
 *** media et all
 |--------------------------+--------------------------------------------|
 | img                      |                                            |
@@ -119,34 +283,6 @@ div's are mostly used as a wrapper to apply styling, have to inherit semantic? r
 | svg                      | circle/rect/polygon/ellipse/text           |
 | canvas                   |                                            |
 |--------------------------+--------------------------------------------|
-*** form
-|------------------------------+------------------------------------------|
-| fieldset                     | for legend/label/input                   |
-| fieldset>legend              | perfect for input[type="radio"] groups   |
-|------------------------------+------------------------------------------|
-| label[for="ID"]              | for input/select/progress/textarea/meter |
-|------------------------------+------------------------------------------|
-| input[aria-describedby="ID"] | can be used to link an error message     |
-|                              | div[id="ID"]>span[role="alert"]          |
-|------------------------------+------------------------------------------|
-| textarea                     |                                          |
-| select>option*N              |                                          |
-| select>optgroup>option*N     |                                          |
-| datalist>option*N            |                                          |
-|------------------------------+------------------------------------------|
-| output                       | to put JS output                         |
-| button                       | can contain an image, html or text       |
-|------------------------------+------------------------------------------|
-*** Lists
-|------------+------------------|
-| ul>li*N    | un-ordered list  |
-|------------+------------------|
-| ol>li*N    | ordered list     |
-|------------+------------------|
-| dl>dt+dd*N | description list |
-| dt         |                  |
-| dd         |                  |
-|------------+------------------|
 *** table>
 |---------------+------------------------|
 | >caption      | caption title          |

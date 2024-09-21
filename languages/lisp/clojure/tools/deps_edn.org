@@ -1,0 +1,13 @@
+|----------+-------------------------------------------------------+---|
+| :paths   | ["src"]                                               |   |
+| :deps    | [foo/bar {:mvn/version 1.1.1}]                        |   |
+| :aliases | {:dev {:extra-paths []}                               |   |
+|          | ______{:extra-deps {bar/foo {:mvn/version 2.1.1}}}    |   |
+|          | ______{:jvm-opts ["-XX:-OmitStackTraceInFastThrow"]}} |   |
+|----------+-------------------------------------------------------+---|
+
+- .dir-locals.el
+  #+begin_src elisp
+    ((nil
+      (cider-clojure-cli-global-options . "-A:dev")))
+  #+end_src

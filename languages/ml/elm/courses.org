@@ -906,9 +906,8 @@ receiveSessionFromJavascript toMsg =
 
 *** Module Boundaries / Opaque Types
 
-- use encapsulation to enforce *invariants*
-- by NOT *exposing/exporting* constructors of variants
-
+- using encapsulation to _enforce invariants_
+  - by _NOT exposing constructors_ of variants
 - instead you can export things that will keep the invariant
   #+begin_src elm
     module Email exposing (Email, fromString, toString)
@@ -920,7 +919,10 @@ receiveSessionFromJavascript toMsg =
     toString : Email -> String
   #+end_src
 
-- =Opaque Types=: means that other modules cannot see what's inside the types by themselves.
+- =Opaque Types=
+  - means that other modules can't see what's inside the types by themselves
+  - the _implementation details_ are hidden
+  - eg: Decoder, Html, Random.Generator
 
 - we can resort to defining a type, ~even when it doesn't have any data~
   just to enforce the invariant

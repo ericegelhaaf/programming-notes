@@ -1,2 +1,8 @@
+- MUS 171 - Computer Music I - SE [A00]
+  - by Miller S. Puckette
+  - https://podcast.ucsd.edu/watch/wi18/mus171_a00/1/audio
+  - https://podcast.ucsd.edu/watch/wi17/mus171_wi17
+- MUS 6 - Electronic Music - LE [A00]
+  https://podcast.ucsd.edu/watch/sp16/mus6sp16
 - https://github.com/cuinjune/PdWebParty
 - https://lucarda.com.ar/pd-tutorial/

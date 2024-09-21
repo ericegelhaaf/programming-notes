@@ -216,11 +216,17 @@ https://www.sqlite.org/fts5.html
   );
 #+end_src
 
+- has an implicit ~rowid~ field (you can reference it, insert into it)
+  - can be changed in vacuum
 - functions
   - highlight(table,colidx,leftstr,rightstr) - returns a copy of the text, matchs wrapped by leftstr and rightstr
   - bm25(table) - returns the accuracy of the current match (lower is better match)
     "ORDER BY bm25(table)"
   - snippet() - like highlight() but returns smaller part of the column text
+
+- 21 https://abdus.dev/posts/quick-full-text-search-using-sqlite/
+- 23 https://darksi.de/13.sqlite-fts5-structure/
+- 24 https://www.bytefish.de/blog/experimenting_with_sqlite_fts5.html
 
 #+begin_src sql
   select * from tb1

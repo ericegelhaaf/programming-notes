@@ -13,6 +13,9 @@
     - real time processing (DSPs)
     - low-power applications
 
+- ECE 165 - Digtl Integrated Circuit Desgn - LE [A00]
+  https://podcast.ucsd.edu/watch/sp16/ece165sp16/10
+
 - 1 bit
   - https://laughtonelectronics.com/oldsite/arcana/One-bit%20computer.html
   - 1-Bit Breadboard Computer
