@@ -5,6 +5,8 @@
 - Editor
   - Formatter https://github.com/whatsapp/erlfmt
   - LSP https://github.com/erlang-ls/erlang_ls
+- CI
+  - https://github.com/erlef/setup-beam/
 
 * rebar3
 - Docs https://rebar3.org/docs/

@@ -2,12 +2,12 @@
 | [[https://github.com/gleam-lang/otp][otp]]     |                                               |
 | [[https://github.com/gleam-lang/crypto][crypto]]  |                                               |
 |---------+-----------------------------------------------|
-| [[https://github.com/lustre-labs/lustre][lustre]]  | frontend                                      |
+| [[https://github.com/lustre-labs/lustre][lustre]]  | frontend framework (TEA)                      |
 | [[https://github.com/gleam-wisp/wisp][wisp]]    | web framework                                 |
 | [[https://github.com/rawhat/mist][mist]]    | http server                                   |
-| [[https://github.com/lpil/cgi][cgi]]     | cgi interface                                 |
 | [[https://github.com/gleam-lang/http][http]]    | common types and functions for client/servers |
 | [[https://github.com/gleam-lang/json][json]]    | d/encoding                                    |
+| [[https://github.com/lpil/cgi][cgi]]     | cgi interface                                 |
 |---------+-----------------------------------------------|
 | [[https://github.com/lpil/pgo][pgo]]     | postgresql connector                          |
 | [[https://github.com/lpil/sqlight][sqlight]] | sqlite connector                              |
@@ -25,11 +25,12 @@
 
 * lustre
 
+- https://hexdocs.pm/lustre/guide/01-quickstart.html
 - just like in Elm, it has a single piece of state for the entire webapp
   - or a model for each route
   - rather than breaking it down state in stateful components
 
-#+begin_src gleam
+#+begin_src gleam-ts
   type Msg {
     Incr
     Decr
@@ -52,7 +53,7 @@
 
 * wisp
 
-#+begin_src gleam
+#+begin_src gleam-ts
   pub fn handle_request(req: Request) -> Response {
     use form <- wisp.require_form(req)
     let result = {
@@ -68,7 +69,7 @@
 
 * otp
 
-#+begin_src gleam
+#+begin_src gleam-ts
   actor.start("init", fn(msg, state){
     case msg {
       Set(new_state) -> {

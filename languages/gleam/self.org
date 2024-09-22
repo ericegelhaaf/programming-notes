@@ -23,7 +23,7 @@
 
 * Language
 
-#+begin_src gleam
+#+begin_src gleam-ts
   // random comment
   /// to document what is below (types,functions)
   //// to document a module
@@ -55,7 +55,7 @@
 ** types
 
 - type alias
-  #+begin_src gleam
+  #+begin_src gleam-ts
     type UserId = Int
   #+end_src
 
@@ -110,7 +110,7 @@
     - update syntax
       Person(..person, name: "Bob")
   - Result, gleam/result, aka a generic custom type
-    #+begin_src gleam
+    #+begin_src gleam-ts
       pub type Result(value, reason) {
         Ok(value)
         Error(reason)
@@ -121,7 +121,7 @@
 
 **** Bit arrays
 
-#+begin_src gleam
+#+begin_src gleam-ts
   <<3>>
   <<3:size(8)-little>>
   <<"Hello, Joe!":utf8>>
@@ -148,7 +148,7 @@
 
 ** functions
 
-#+begin_src gleam
+#+begin_src gleam-ts
  pub fn sum(x: Int, y: Int) -> Int { // public
    x + y    // implicit return
  }
@@ -163,13 +163,13 @@
   #+end_src
 
 - =Function Capture= (shorthand for unary anonymous functions that pass its argument)
-  #+begin_src gleam
+  #+begin_src gleam-ts
     let add_one_v1 = fn(x) { add(1,x) }
     let add_one_v2 = add(1,_)
   #+end_src
 
 - Generic Functions (aka parametric polymorphism)
-  #+begin_src gleam
+  #+begin_src gleam-ts
     fn twice(argument: value, my_function: fn(value) -> value) -> value {
       my_function(my_function(argument))
     }
@@ -201,7 +201,7 @@
 - for using callbacks in an unindented style
 
 - before
-  #+begin_src gleam
+  #+begin_src gleam-ts
     result.try(get_username(), fn(username) {
       result.try(get_password(), fn(password) {
         result.map(log_in(username, password), fn(greeting){
@@ -212,7 +212,7 @@
   #+end_src
 
 - after
-  #+begin_src gleam
+  #+begin_src gleam-ts
     use username <- result.try(get_username())
     use password <- result.try(get_password())
     use greeting <- result.map(log_in(username, password))
@@ -223,7 +223,7 @@
 
 erlang + elixir
 
-#+begin_src gleam
+#+begin_src gleam-ts
 
 @external(erlang, "rand", "uniform")
 pub fn random_float() -> Float
@@ -234,7 +234,7 @@ pub fn inspect(a) -> a
 
 erlang + javascript
 
-#+begin_src gleam
+#+begin_src gleam-ts
 pub type Datetime
 
 @external(erlang, "calendar", "local_time")
@@ -246,7 +246,7 @@ now()
 
 gleam + erlang
 
-#+begin_src gleam
+#+begin_src gleam-ts
 @external(erlang, "lists", "reverse")
 pub fn reverse_list(items: List(e)) -> List(e) {
   tail_recursive_reverse(items, []) // gleam implementation
@@ -259,7 +259,7 @@ pub fn reverse_list(items: List(e)) -> List(e) {
 - case
   - there is no if/else
   - has exhaustiveness checks
-  #+begin_src gleam
+  #+begin_src gleam-ts
     type User {
       LoggedIn(name: String, age: Int)
       Guest
@@ -290,7 +290,7 @@ pub fn reverse_list(items: List(e)) -> List(e) {
 |--------------------+--------------------------------------------------+-------------------------------|
 ** stdlib
 |----------------+-----------------------------|
-| gleam/         |                             |
+| gleam/         | public functions/types      |
 |----------------+-----------------------------|
 | [[https://hexdocs.pm/gleam_stdlib/gleam/bit_array.html][bit_array]]      |                             |
 | [[https://hexdocs.pm/gleam_stdlib/gleam/bool.html][bool]]           | to_string to_int            |
@@ -337,6 +337,9 @@ pub fn reverse_list(items: List(e)) -> List(e) {
 - *needs inotify-tools for hotreload
 
 ** gleam.toml
+https://gleam.run/writing-gleam/gleam-toml/
+|--------------------+---------------------------------+------------------------|
+| field              | eg value                        | description            |
 |--------------------+---------------------------------+------------------------|
 | name               | ""                              |                        |
 | version            | "1.1.0"                         |                        |
@@ -350,7 +353,7 @@ pub fn reverse_list(items: List(e)) -> List(e) {
 | [dependencies]     |                                 |                        |
 | [dev-dependencies] |                                 |                        |
 |--------------------+---------------------------------+------------------------|
-** /build/
+** /build
 - /build/dev/javascript
   - module_name/
   - prelude.mjs
