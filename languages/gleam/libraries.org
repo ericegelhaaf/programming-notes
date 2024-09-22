@@ -1,0 +1,83 @@
+|---------+-----------------------------------------------|
+| [[https://github.com/gleam-lang/otp][otp]]     |                                               |
+| [[https://github.com/gleam-lang/crypto][crypto]]  |                                               |
+|---------+-----------------------------------------------|
+| [[https://github.com/lustre-labs/lustre][lustre]]  | frontend                                      |
+| [[https://github.com/gleam-wisp/wisp][wisp]]    | web framework                                 |
+| [[https://github.com/rawhat/mist][mist]]    | http server                                   |
+| [[https://github.com/lpil/cgi][cgi]]     | cgi interface                                 |
+| [[https://github.com/gleam-lang/http][http]]    | common types and functions for client/servers |
+| [[https://github.com/gleam-lang/json][json]]    | d/encoding                                    |
+|---------+-----------------------------------------------|
+| [[https://github.com/lpil/pgo][pgo]]     | postgresql connector                          |
+| [[https://github.com/lpil/sqlight][sqlight]] | sqlite connector                              |
+|---------+-----------------------------------------------|
+| [[https://github.com/lpil/snag][snag]]    | boiler-plate free ad-hoc error type           |
+|---------+-----------------------------------------------|
+
+- https://packages.gleam.run/
+- https://github.com/gleam-lang/awesome-gleam
+- lpil's https://github.com/lpil?tab=repositories&q=&type=source&language=gleam&sort=stargazers
+- gleam-lang
+  - erlang adapters: elli, cowboy, hackney, =httpc=
+  - elixir adapter: mix_gleam, hexpm
+  - javascript adapters: =fetch=
+
+* lustre
+
+- just like in Elm, it has a single piece of state for the entire webapp
+  - or a model for each route
+  - rather than breaking it down state in stateful components
+
+#+begin_src gleam
+  type Msg {
+    Incr
+    Decr
+  }
+  fn view(model) {
+    let count = int.to_string(model)
+    div([], [
+      button([on_click(Decr)], [text("-")]),
+      p([], [text(count)]),
+      button([on_click(Incr)], [text("+")])
+    ])
+  }
+  fn update(model, msg) {
+    case msg {
+      Incr -> model + 1
+      Decr -> model - 1
+    }
+  }
+#+end_src
+
+* wisp
+
+#+begin_src gleam
+  pub fn handle_request(req: Request) -> Response {
+    use form <- wisp.require_form(req)
+    let result = {
+      use name <- try(list.key_find(form.values, "name"))
+      Ok("<h1>hi, " <> wisp.escape_html(name) <> "!</h1>")
+    }
+    case result {
+      Ok()     -> wisp.html_response(from_string(content), 200)
+      Error(_) -> wisp.bad_request()
+    }
+  }
+#+end_src
+
+* otp
+
+#+begin_src gleam
+  actor.start("init", fn(msg, state){
+    case msg {
+      Set(new_state) -> {
+        actor.continue(new_state)
+      }
+      Get(caller) -> {
+        process.send(caller, state)
+        actor.continue(state)
+      }
+    }
+  })
+#+end_src

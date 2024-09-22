@@ -6,3 +6,4 @@
 - 23 https://erikarow.land/notes/gleam-vite
 - 23 https://erikarow.land/notes/gleam-favorite-feature
 - 23 https://erikarow.land/notes/gleam-syntax
+- 23 https://mckayla.blog/posts/all-you-need-is-data-and-functions.html

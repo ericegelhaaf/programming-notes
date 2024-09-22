@@ -7,7 +7,6 @@
 | search    | https://gloogle.run/                                       |
 | docs      | https://gleam.run/documentation/                           |
 | tutorial  | https://tour.gleam.run/everything/                         |
-| libraries | https://github.com/gleam-lang/awesome-gleam                |
 |-----------+------------------------------------------------------------|
 
 - by Loius Pilfold
@@ -17,14 +16,9 @@
   - no pure, exceptions, macros, type classes, early returns
 - compiles to Erlang and JS
 - stdlib prefers ~Result~ over ~Option~
-- gleam add
 - packages in hex.pm
-- Releases
+- Releases (monthly minor releases)
   - 03/24 1.0
-  - 04/24 1.1
-  - 05/24 1.2
-  - 07/24 1.3
-  - 08/24 1.4
   - 09/24 1.5
 
 * Language
@@ -62,8 +56,7 @@
 
 - type alias
   #+begin_src gleam
-    pub type UserId =
-      Int
+    type UserId = Int
   #+end_src
 
 *** Primitives
@@ -157,7 +150,7 @@
 
 #+begin_src gleam
  pub fn sum(x: Int, y: Int) -> Int { // public
-   x + y
+   x + y    // implicit return
  }
 #+end_src
 
@@ -195,8 +188,9 @@
 
 - +, +.
 - <>
-- == != (structural equality)
+- == != (structural equality, same for all types)
 - && ||
+- N / 0 (div by 0 returns 0)
 - |>
   - a |> b(1,2)
     - b(a,1,2)
@@ -288,13 +282,12 @@ pub fn reverse_list(items: List(e)) -> List(e) {
 | public opaque type | pub opaque type PosI { PosI(inn: Int) }          | constructors are NOT exported |
 |         private fn | fn identity()                                    |                               |
 |          public fn | pub fn identity()                                |                               |
+|          qualified | import mylibrary/mymod                           | src/mylibrary/mymod.gleam     |
 |          qualified | import gleam/io                                  | io.println()                  |
 |       as qualified | import gleam/string as ss                        | ss.reverse("abc")             |
 |        unqualified | import gleam/io.{println}                        | println()                     |
 |   type unqualified | import gleam/string_builder.{type StringBuilder} | let t: StringBuilder =        |
 |--------------------+--------------------------------------------------+-------------------------------|
-** gleam official libraries
-
 ** stdlib
 |----------------+-----------------------------|
 | gleam/         |                             |
@@ -327,3 +320,50 @@ pub fn reverse_list(items: List(e)) -> List(e) {
   - try: takes fn -> Result() (aka Monad?)
   - unwrap: extracts the Ok(success) value, or given default
 
+* Tools
+|--------+----------------------------|
+| gleam- | argument                   |
+|--------+----------------------------|
+| add    | <PACKAGE>                  |
+| add*   | --dev lustre_dev_tools     |
+| +init+ | +<PROJECT_NAME>+           |
+| new    | <PROJECT_NAME>             |
+| run    |                            |
+| run    | -m lustre/dev add tailwind |
+| build  | --target javascript        |
+| build  | --target erlang            |
+| export | erlang-shipment            |
+|--------+----------------------------|
+- *needs inotify-tools for hotreload
+
+** gleam.toml
+|--------------------+---------------------------------+------------------------|
+| name               | ""                              |                        |
+| version            | "1.1.0"                         |                        |
+| target             | "javascript"                    | default to all targets |
+|--------------------+---------------------------------+------------------------|
+| description        | ""                              | for Hex                |
+| licenses           | ["Apache-2.0"]                  | for Hex                |
+| repository         | {type="github",user="",repo=""} | for Hex                |
+| links              | [{title="",href=""}]            | for Hex                |
+|--------------------+---------------------------------+------------------------|
+| [dependencies]     |                                 |                        |
+| [dev-dependencies] |                                 |                        |
+|--------------------+---------------------------------+------------------------|
+** /build/
+- /build/dev/javascript
+  - module_name/
+  - prelude.mjs
+  - gleam.mjs
+- /build/dev/erlang
+  - gleam_stdlib
+  - module_name/ebin/*.beam
+* Codebases
+
+- https://github.com/gleam-lang/example-echo-server
+- https://github.com/gleam-lang/example-todomvc
+- https://github.com/gleam-lang/packages
+- https://github.com/gleam-lang/example-lisp-interpreter
+- https://github.com/gleam-lang/developer-survey
+- https://github.com/gleam-lang/cookbook?tab=readme-ov-file
+- language-tour
