@@ -16,6 +16,15 @@
   https://picsum.photos/<WIDTH>/<HEIGHT>
   #+end_src
 
+* href relative locations
+|-----------------+-----------------------------|
+|             <r> | domain.com/foo/             |
+|-----------------+-----------------------------|
+|    bar/file.png | domain.com/foo/bar/file.png |
+|  ./bar/file.png | domain.com/foo/bar/file.png |
+|   /bar/file.png | domain.com/bar/file.png     |
+| ../bar/file.png | domain.com/bar/file.png     |
+|-----------------+-----------------------------|
 * DOCTYPE
 
 #+begin_src html

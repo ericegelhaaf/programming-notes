@@ -61,63 +61,58 @@
 
 *** Primitives
 
+|--------+----------------+---------|
+|    <r> |            <r> |         |
+|--------+----------------+---------|
+|    Int | 1_000 0x 0b 0o | + -     |
+|  Float |          7.0e7 | +. -.   |
+| String | \u{123} "what" | <>      |
+|   Bool |     True False | && ! ¦¦ |
+|    Nil |            Nil |         |
+|--------+----------------+---------|
+
+- Int
+  - no max limit on erlang
+  - are 64-bit float in javascript
+- String
+  - UTF-8 binaries
 - Nil
   - a unit type
   - used by functions that have nothing to return
   - NOT a valid value of other type
-- Bool
-  - True False
-  - || && !
-- Int
-  - 1_000 0b00001111 0o17 0xF
-  - no max limit on erlang
-  - are 64-bit float in javascript
-- Float
-  - 7.0e7
-  - 3.0e-4
-- String
-  - UTF-8 binaries
-  - <> - concat
-  - string.append(to: "foo", suffix: "bar")
-  - string.concat([])
-  - \u{UNICODECODEPOINT}
 
 *** Complex
-
-**** List(Int)
-  - [1,2]
-  - [1, ..list]
-  - list.head
-
-**** Tuples
-
-  - #("foo",10)
-  - foo.0 foo.1
-  - supports destructuring
-
-**** dictionary
-
-- unordered
-- dict.from_list([#("key1","value1")])
-
+|------------+-----------------------+---------------+------------+-----------|
+|            |                   <r> |           <r> |        <r> |           |
+|------------+-----------------------+---------------+------------+-----------|
+| list       |                 [1,2] |       List(t) |  [hd,..tl] | list.head |
+| tuple      |             #("fo",2) | #(Int,String) | #(fst,snd) | foo.0     |
+| record     |          R(age: "fo") |               |       R(n) | r.age     |
+| bitarray   |              <<"hi">> |      BitArray |            |           |
+| dictionary | dict.from_list([#()]) | Dict(Int,Int) |            |           |
+|------------+-----------------------+---------------+------------+-----------|
+- dictionary are unordered
 **** Custom Data Types
-  - Enum
-    - type Color { Red, Green, White }
-  - Record, aka custom data types
-    - type Person { Person(name: String), Anonymous }
-    - let p = Person(name: "Alice")
-    - p.name (has to exists on all varians and be on the same position/type)
-    - update syntax
-      Person(..person, name: "Bob")
-  - Result, gleam/result, aka a generic custom type
-    #+begin_src gleam-ts
-      pub type Result(value, reason) {
-        Ok(value)
-        Error(reason)
-      }
-      use int_a_number <- try(parse_int("1")) // Ok(1) -> 1
-      use attempt_int <- try(parse_int("ouch")) // Error will be returned, code below won't run
-    #+end_src
+
+- Enum
+  - type Color { Red, Green, White }
+
+- Record, aka custom data types
+  - type Person { Person(name: String), Anonymous }
+  - let p = Person(name: "Alice")
+  - p.name (has to exists on all varians and be on the same position/type)
+  - update syntax
+    Person(..person, name: "Bob")
+
+- Result, gleam/result, aka a generic custom type
+  #+begin_src gleam-ts
+    pub type Result(value, reason) {
+      Ok(value)
+      Error(reason)
+    }
+    use int_a_number <- try(parse_int("1")) // Ok(1) -> 1
+    use attempt_int <- try(parse_int("ouch")) // Error will be returned, code below won't run
+  #+end_src
 
 **** Bit arrays
 
