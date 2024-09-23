@@ -1,12 +1,20 @@
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/html/html-quiz.md
 - https://developer.mozilla.org/en-US/docs/Web/HTML
 - https://htmlreference.io/
+
+- https://cataas.com/ returns a random cat image/gif
+  #+begin_src
+    /cat
+    /cat/gif
+    /cat/tag/<TAG>
+    /cat/says/<MSG>
+    /cat/<TAG>/says/<MSG>
+  #+end_src
 - https://picsum.photos/ Returns a random image
   #+begin_src
   https://picsum.photos/<SQUAREDIM>
   https://picsum.photos/<WIDTH>/<HEIGHT>
   #+end_src
-
 
 * DOCTYPE
 

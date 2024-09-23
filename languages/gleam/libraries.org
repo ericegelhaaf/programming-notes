@@ -25,10 +25,35 @@
 
 * lustre
 
-- https://hexdocs.pm/lustre/guide/01-quickstart.html
+- quickstart https://hexdocs.pm/lustre/guide/01-quickstart.html
+- examples https://github.com/lustre-labs/lustre/tree/main/examples
+
+- lustre.element(E)
+- lustre.simple(I,U,V)
+- lustre.application(I,U,V) // init and update now return #(Model,effect.Effect(Msg))
+
+- Naming convention for messages types
+  - Subject Verb    Object
+  - Who?    What?  <-What?
+  - Eg:
+    - User Selected Pokemon
+    - Api  Returned Error
+
+- Quickstart
+  #+begin_src
+    $ gleam new APP && cd APP
+    $ nano gleam.toml # add target = "javascript"
+    $ gleam add lustre
+    $ gleam add --dev lustre_dev_tools
+    $ gleam run -m lustre/dev start
+  #+end_src
+
+- OTP >= 26
 - just like in Elm, it has a single piece of state for the entire webapp
   - or a model for each route
   - rather than breaking it down state in stateful components
+
+** mvp
 
 #+begin_src gleam-ts
   type Msg {
@@ -49,6 +74,36 @@
       Decr -> model - 1
     }
   }
+#+end_src
+
+** architecture
+
+#+begin_src
+                                       +--------+
+                                       |        |
+                                       | update |
+                                       |        |
+                                       +--------+
+                                         ^    |
+                                         |    |
+                                     Msg |    | #(Model, Effect(msg))
+                                         |    |
+                                         |    v
++------+                         +------------------------+
+|      |  #(Model, Effect(msg))  |                        |
+| init |------------------------>|     Lustre Runtime     |
+|      |                         |                        |
++------+                         +------------------------+
+                                         ^    |
+                                         |    |
+                                     Msg |    | Model
+                                         |    |
+                                         |    v
+                                       +--------+
+                                       |        |
+                                       |  view  |
+                                       |        |
+                                       +--------+
 #+end_src
 
 * wisp
