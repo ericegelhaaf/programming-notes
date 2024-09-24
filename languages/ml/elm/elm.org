@@ -36,6 +36,13 @@
 
 - a "blank" html is "text """
 
+** style
+
+- functionName
+- fieldName
+- Type
+- Constructor
+
 ** model/view/update
 
 #+begin_src
@@ -284,7 +291,7 @@ Cmd.none
   - props    : length
 - =Tuples= have a 3 elements MAXIMUM
 - =Records=
-  - have a N element constructor, when defined as a type alias, the same name as the type
+  - have a N element ~constructor~, when defined as a type alias, the same name as the type
   - have a ".fieldname" function defined for each of the fields
   - can use ~extensible~ for function signature to receive any records with the specified field names
     #+begin_src elm

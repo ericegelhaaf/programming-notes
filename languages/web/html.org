@@ -2,21 +2,32 @@
 - https://developer.mozilla.org/en-US/docs/Web/HTML
 - https://htmlreference.io/
 
-- https://cataas.com/ returns a random cat image/gif
-  #+begin_src
-    /cat
-    /cat/gif
-    /cat/tag/<TAG>
-    /cat/says/<MSG>
-    /cat/<TAG>/says/<MSG>
-  #+end_src
-- https://picsum.photos/ Returns a random image
-  #+begin_src
-  https://picsum.photos/<SQUAREDIM>
-  https://picsum.photos/<WIDTH>/<HEIGHT>
-  #+end_src
+* resources
 
-* href relative locations
+- icons
+  - https://fontawesome.com/
+  - https://www.flaticon.com/
+- images
+  - https://unsplash.com/
+  - https://undraw.co/illustrations
+  - https://www.pexels.com/es-es/
+  - https://dummyimage.com/
+  - https://pravatar.cc/
+  - https://cataas.com/ returns a random cat image/gif
+    #+begin_src
+      /cat
+      /cat/gif
+      /cat/tag/<TAG>
+      /cat/says/<MSG>
+      /cat/<TAG>/says/<MSG>
+    #+end_src
+  - https://picsum.photos/ Returns a random image
+    #+begin_src
+    https://picsum.photos/<SQUAREDIM>
+    https://picsum.photos/<WIDTH>/<HEIGHT>
+    #+end_src
+
+* href= locations
 |-----------------+-----------------------------|
 |             <r> | domain.com/foo/             |
 |-----------------+-----------------------------|
@@ -207,10 +218,10 @@ used by search engines
 | b            | bold (last resort after hN/em/strong/mark)           |
 | strong       | bold (important text)                                |
 |--------------+------------------------------------------------------|
-| cite         | italic                                               |
-| dfn          | italic                                               |
-| i            | italic (last resort after em/string/mark/cite/dfn)   |
 | em           | italic                                               |
+| dfn          | italic                                               |
+| cite         | italic                                               |
+| i            | italic (last resort after em/string/mark/cite/dfn)   |
 | address      | block/italic (contact info)                          |
 |--------------+------------------------------------------------------|
 | del/ins      | underline/linethrough, text deleted/added aka a diff |

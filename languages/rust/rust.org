@@ -42,6 +42,7 @@
 
 * Language
 ** variables
+
 #+begin_src rust
   let x: u8 = 1;
   let mut x = 10; // ~mutability~, when a variable can be changed
@@ -141,14 +142,15 @@ struct ANamed {       // "named struct"
 |-------+-------+---------------|
 *** Compound
 |---------+----------------+-----------+--------------+-------------------|
-|         | create         | access    | match        | insert            |
+|     <r> |            <r> |           |          <r> |                   |
+|         |         create | access    |        match | insert            |
 |---------+----------------+-----------+--------------+-------------------|
-| Tuple   |                | .0        | (a,_b)       |                   |
-| struct  |                | .FIELD    |              |                   |
-| enum    |                |           | ENUM::Val(a) |                   |
-| HashMap | HashMap::new() | .get(key) | (key,val)    | .insert(key, val) |
-| Vector  | vec![]         |           |              |                   |
-| Array   | []             |           |              |                   |
+|   Tuple |                | .0        |       (a,_b) |                   |
+|  struct |                | .FIELD    |              |                   |
+|    enum |                |           | ENUM::Val(a) |                   |
+| HashMap | HashMap::new() | .get(key) |    (key,val) | .insert(key, val) |
+|  Vector |         vec![] |           |              |                   |
+|   Array |             [] |           |              |                   |
 |---------+----------------+-----------+--------------+-------------------|
 ** Standard Library
 

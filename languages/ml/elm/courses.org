@@ -684,18 +684,23 @@ searchResult : { name : String, stars : Int } -- record
 
 ** 08 Decoding JSON         | Decode
 
-- Records
-  - when creating a *type alias* of a record
-    it also creates a Nth argument ~constructor function~
-    for each Nth field
+- In JS you get a ~NaN~ (Not a Number) value on some operations
+  - eg: parseInt()
+
+- https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+  TypeScript’s type system allows certain operations that can’t be
+  known at compile-time to be safe.
+
+  (For example when decoding json we say that a field will be of a certain type, when in reality we can't possible know for sure)
+
+  When a type system has this property, it is said to NOT be “sound”.
 
 - Decoding
 
-  - decodeString : ? -> String -> Result ?
-    decodeString Json.Decode.int "3"
+  - decodeString : ? -> String -> Result ??
+  - decodeString Json.Decode.int "42"
 
-  - to decode actual jsons you need to declare a =Decoder=
-    that specifies the schema
+  - Example: to decode actual jsons you need to declare a =Decoder= that specifies the schema
     #+begin_src elm
       type alias User =
           { id : Int
@@ -714,12 +719,6 @@ searchResult : { name : String, stars : Int } -- record
   - You might prefer, to have an intermediate record type alias
     that will be "pessimistic" in considering all fields "nullable"
     and then solve those.
-
-- https://www.typescriptlang.org/docs/handbook/type-compatibility.html
-  TypeScript’s type system allows certain operations that can’t be
-  known at compile-time to be safe.
-
-  When a type system has this property, it is said to NOT be “sound”.
 
 ** 09 Talking to Servers    | Cmd, Http
 *** Commands & Randomness
@@ -906,9 +905,10 @@ receiveSessionFromJavascript toMsg =
 
 *** Module Boundaries / Opaque Types
 
-- using encapsulation to _enforce invariants_
-  - by _NOT exposing constructors_ of variants
-- instead you can export things that will keep the invariant
+- by using encapsulation to _enforce invariants_
+  - aka _NOT exposing constructors_ of variants
+
+- instead, you can export things that will keep the invariant
   #+begin_src elm
     module Email exposing (Email, fromString, toString)
 
@@ -1313,32 +1313,30 @@ Task.perform ViewportChanged getViewport
 
 *** Impossible States
 
-- Examples
+1) agreement where some piece of data lives
+   eg: some nested data that represents exactly the same that some other data nested elsewhere
+   #+begin_src elm
+     type alias Model =
+         { selectedTag : String
+         , theSelectedTag : String
+         , ...
+         }
+   #+end_src
 
-  1) agreement where some piece of data lives
-     eg: some nested data that represents exactly the same that some other data nested elsewhere
-     #+begin_src elm
-       type alias Model =
-           { selectedTag : String
-           , theSelectedTag : String
-           , ...
-           }
-     #+end_src
-
-  2) agreement where some piece of data lives
-     a list of "tabs" records that have a bool field "active" true in multiple
-     #+begin_src elm
-       -- bad
-       type alias Tab =
-           { name : String
-           , active : Bool
-           }
-       -- better
-       type Tab
-           = YourFeed
-           | GlobalFeed
-           | TagFeed Tag
-     #+end_src
+2) agreement where some piece of data lives
+   a list of "tabs" records that have a bool field "active" true in multiple
+   #+begin_src elm
+     -- bad
+     type alias Tab =
+         { name : String
+         , active : Bool
+         }
+     -- better
+     type Tab
+         = YourFeed
+         | GlobalFeed
+         | TagFeed Tag
+   #+end_src
 
 *** Derived Data
 
@@ -1358,19 +1356,26 @@ Database Timestamp
 - in localstorage, where localstorage is the only source of truth
 
 #+begin_src javascript
-var app = Elm.Main.init({flags: localStorage.session || null});
+  var app = Elm.Main.init({
+    flags: localStorage.session || null
+  });
 
-app.ports.storeSession.subscribe(function(session) {
-  localStorage.session = session;
-  setTimeout(function() { app.ports.onSessionChange.send(session); }, 0);
-});
+  app.ports.storeSession.subscribe(
+    function(session) {
+      localStorage.session = session;
+      setTimeout(() => app.ports.onSessionChange.send(session), 0);
+    }
+  );
 
-// when a different tab modifies localstorage for the same domain (eg: logout)
-window.addEventListener("storage", function(event) {
-  if (event.storageArea === localStorage && event.key === "session") {
-    app.ports.onSessionChange.send(event.newValue);
-  }
-}, false);
+  // when a different tab modifies localstorage for the same domain (eg: logout)
+  window.addEventListener(
+    "storage",
+    function(event) {
+      if (event.storageArea === localStorage && event.key === "session") {
+        app.ports.onSessionChange.send(event.newValue);
+      }},
+    false
+  );
 #+end_src
 
 *** Javascript
@@ -1379,33 +1384,33 @@ window.addEventListener("storage", function(event) {
 
 ** 08 Decoding
 
-*** Pipeline types
+*** Pipeline types (map3, succeed)
 
 #+begin_src elm
-Decode.map3
-    Instructor
+Decode.map3 Instructor
     (field "name" string)
     (field "courses" int)
     (field "active" bool) -- Decoder Instructor
 
 -- Decode.succeed : a -> Decoder a
 -- each "required" partially applies one argument
-
 Decode.succeed Instructor
     |> required "name" string
     |> required "courses" int
     |> required "active" bool
 #+end_src
 
-*** Decode.andThen
+*** Decode.andThen (map, andThen)
 
 - with map we "stay on the happy path"
 - with andThen we can potentially fail
 
+#+begin_src elm
 Decode.map     : (a -> b)         -> Decoder a -> Decoder b
 Decode.andThen : (a -> Decoder b) -> Decoder a -> Decoder b
+#+end_src
 
-*** Decoderizing
+*** Decoderizing (string, andThen)
 
 #+begin_src elm
 iso8601Decoder : Decoder Time.Posix

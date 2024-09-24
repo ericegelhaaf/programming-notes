@@ -1,4 +1,4 @@
-#+TITLE: Nim's reference
+#+TITLE: Nim
 #+DATE: <2022-12-23 vie>
 |-----------+----------------------------------------------------------|
 | home      | https://nim-lang.org/                                    |
