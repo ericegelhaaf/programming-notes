@@ -24,33 +24,33 @@
 * Language
 
 #+begin_src gleam-ts
-  // random comment
-  /// to document what is below (types,functions)
-  //// to document a module
-  pub const answer: Int = 42 // top level constant, can be exported, must be literal values
-  let size = 50_000 // immutable, shadowable
-  let y = x * { x + 10 } // braces/blocks used to group expressions
-
-  @deprecated("use new_fucntion instead") // attribute
-  fn old_function() {
-    Nil
-  }
-
   panic                 // program will crash
   panic as "wut!?"      // program will crash with msg
   todo                  // program will crash
   todo as "Don't look!" // program will crash with msg
-
-  let assert [head,..] = items // program will crash if items==[]
 #+end_src
 
 ** style
 
-- function_name
-  - type annotations recommended
+#+begin_src gleam-ts
+  //// to document a module
+  /// to document what is below (types,functions)
+  fn a_function_name(a: Int) -> Int {}
+  Constructor
+  type AType = Int // type alias
+#+end_src
+
 - variable_name
-- Type
 - Constructor
+
+** variables
+
+#+begin_src gleam-ts
+  pub const answer: Int = 42 // top level constant, can be exported, must be literal values
+  let size = 50_000 // immutable, shadowable
+  let y = x * { x + 10 } // braces/blocks used to group expressions
+  let assert [head,..] = items // program will crash if items==[]
+#+end_src
 
 ** types
 
@@ -171,12 +171,20 @@
   #+end_src
 
 - Labelled Arguments
-  #+begin_src
-   pub fn replace(inside string: String, each pattern: String, with replacement: String) {
+  #+begin_src gleam-ts
+   pub fn replace(inside string: String, each pattern: String, with replacement: String) {}
    pub fn replace(inside string        , each pattern        , with replacement) {
      go(string, patter, replacement)
    }
    replace(each: ",", with: " ", inside: "A,B,C")
+  #+end_src
+
+- deprecation
+  #+begin_src gleam-ts
+    @deprecated("use new_fucntion instead") // attribute
+    fn old_function() {
+      Nil
+    }
   #+end_src
 
 ** operators

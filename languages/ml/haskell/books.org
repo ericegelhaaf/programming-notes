@@ -569,18 +569,23 @@ ERRATA:
 - *case* expression,
   - serve similiar branching role as *if/then/else* but with much more generality.
   - allow behavior to branch on values other than booleans
-- ~polymorphic~ has a type variable, it can take many types.
-  ~monomorphic~ has NO type variables.
-- ~partial functions~ functions that do NOT handle all their /constructors/
-- ~total functions~ functions that handle all /constructors/
-- order of the *case/of* expression matter only when patterns are *overlapping*
+  - order of the *case/of* expression matter only when patterns are *overlapping*
+
+- functions
+  - ~polymorphic~ has a type variable, it can take many types.
+  - ~monomorphic~ has NO type variables.
+  - ~partial functions~ do NOT handle all their /constructors/
+  - ~total functions~ handle all /constructors/
+
 - ~sum types~ is having more than 1(one) constructor
   (aka: disjuntion, disjoint union, tagged union)
-- Bool type, a ~concrete type~
+
+- =Bool= type, is a ~concrete type~
   #+begin_src haskell
     data Bool = True | False -- 2 constructors
   #+end_src
-- Maybe type, a ~parametrized type~ aka *type constructor*
+
+- =Maybe= type, is a ~parametrized type~ aka *type constructor*
   #+begin_src haskell
     data Maybe a = Nothing | Just a
   #+end_src
