@@ -150,6 +150,7 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 
 |------------+--------------------+----------------------------------------------------------------------|
 |        <r> | <l>                |                                 <c>                                  |
+|     module | function           |                                                                      |
 |------------+--------------------+----------------------------------------------------------------------|
 |       Http |                    |                                                                      |
 |            | .get               |                   String -> Decoder a -> Request a                   |
@@ -220,7 +221,8 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 
 *** Primitive
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
-|    <r> |       |            |                                                                                            |
+|    <r> |   <r> |            |                                                                                            |
+|   type |    eg | fn reason  | fn                                                                                         |
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
 | String | "foo" | MANIPULATE | revert repeat  replace  append     concat    split, join, words, lines, cons, uncons, (++) |
 |        |       | SUBSTRING  | slice  left    right    dropLeft   dropRight                                               |
@@ -228,7 +230,7 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 |        |       | CONVERT    | toInt  fromInt toFloat  fromFloat  toList    fromList, fromChar                            |
 |        |       | HIGH-ORDER | map    filter  foldl    foldr      any       all                                           |
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
-|   Char | 'i'   | PREDICATE  | isUpper, isLower, isAlpha, isAlphaNum,                                                     |
+|   Char |   'i' | PREDICATE  | isUpper, isLower, isAlpha, isAlphaNum,                                                     |
 |        |       |            | toUpper, toLower, toLocaleUpper, toLocaleLower                                             |
 |        |       |            | toCode, fromCode                                                                           |
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
