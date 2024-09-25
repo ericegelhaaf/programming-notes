@@ -1,6 +1,8 @@
 #+TITLE: Elm
 #+DATE: <2023-04-09 dom>
 
+* language
+
 - https://en.wikipedia.org/wiki/Elm_(programming_language)
   - no higher kind polymorphism
     - no generic map, there is List.map and Set.map
@@ -14,8 +16,6 @@
   - (fork) https://gren-lang.org/
 
 - each file in Elm is a *module* and MUST have a module statement
-
-* language
 
 - to be consistent with stdlib, make the datastructure the last argument of your functions
   then you will be able to |> pipe freely
@@ -201,15 +201,18 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 - https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes
 - https://package.elm-lang.org/packages/elm/html/latest/Html-Events
 |-----------------------------+---------------------------------------------|
+|                             |                     <c>                     |
+| fn                          |                  signature                  |
+|-----------------------------+---------------------------------------------|
 | Html.Events.on              | String -> Decoder msg -> Html.Attribute msg |
-| Html.Events.onClick         | msg -> Attribute msg                        |
-| Html.Events.onInput         | (String -> msg) -> Attribute msg            |
+| Html.Events.onClick         |            msg -> Attribute msg             |
+| Html.Events.onInput         |      (String -> msg) -> Attribute msg       |
 |-----------------------------+---------------------------------------------|
-| Html.Attributes.placeholder | String -> Attribute msg                     |
-| Html.Attributes.value       | String -> Attribute msg                     |
-| Html.Attributes.class       | String -> Attribute msg                     |
+| Html.Attributes.placeholder |           String -> Attribute msg           |
+| Html.Attributes.value       |           String -> Attribute msg           |
+| Html.Attributes.class       |           String -> Attribute msg           |
 |-----------------------------+---------------------------------------------|
-| Browser.Events.onMouseMove  | Decoder msg -> Sub msg                      |
+| Browser.Events.onMouseMove  |           Decoder msg -> Sub msg            |
 |-----------------------------+---------------------------------------------|
 
 ** types
