@@ -1,7 +1,7 @@
 * DONE 16 | Elm Beyond the Basics
 code https://github.com/knowthen/elm-beyond-basics
 uses (20) library not supported by 0.19 https://package.elm-lang.org/packages/rluiten/elm-date-extra/latest
-** 4 The Elm Architecture Example
+**  4 The Elm Architecture Example
 
 - use this pattern when you are positive you needed
 
@@ -41,7 +41,7 @@ view model =
             ]
 #+end_src
 
-** 6 Effects Example, Chuck Norris App
+**  6 Effects Example, Chuck Norris App
 
 Http.getString someURL
 getString : String -> Request String
@@ -52,7 +52,7 @@ send : (Result Error a -> msg) -> Request a -> Cmd msg
 type Msg
   = Joke (Result Http.Error String)
 
-** 7 JSON decoding
+**  7 JSON decoding
 
 *** long way, using a decoder on a string with "at" and "decodeString"
 
@@ -120,7 +120,7 @@ responseDecoder =
         |> at ["value"]
 #+end_src
 
-** 8 Websockets time streaming example
+**  8 Websockets time streaming example
 
 ~the *subscriptions* functions gets called everytime the update function is called~
 
@@ -137,7 +137,7 @@ subscriptions model =
 
 send "ws://echo.websocket.org" "Hello!"
 
-** 9 Navigation SPA Routing
+**  9 Navigation SPA Routing
 
 - the Navigation package has a =program= function that can be used in place of *Html.program*
   first argument function is called everytime the Location changes
@@ -248,11 +248,15 @@ https://jwt.io/
 
 ** 16 Logging out
 
-port deleteToken : () -> Cmd msg
+#+begin_src elm
+  port deleteToken : () -> Cmd msg
+#+end_src
 
-app.ports.deleteToken.subscribe(() => {
-    localStorage.removeItem('token');
-})
+#+begin_src javascript
+  app.ports.deleteToken.subscribe(() => {
+      localStorage.removeItem('token');
+  })
+#+end_src
 
 ** 17 Access Control Locking Pages
 
@@ -682,7 +686,7 @@ searchResult : { name : String, stars : Int } -- record
   |> List.head
 #+end_src
 
-** 08 Decoding JSON         | Decode
+** 08 Decoding JSON         | Decode.Json
 
 - In JS you get a ~NaN~ (Not a Number) value on some operations
   - eg: parseInt()
@@ -704,7 +708,7 @@ searchResult : { name : String, stars : Int } -- record
     #+begin_src elm
       type alias User =
           { id : Int
-          , name : Maybe String
+          , name : Maybe String -- could have "null"
           , email : String
           }
 
@@ -712,8 +716,11 @@ searchResult : { name : String, stars : Int } -- record
       user =
           Json.Decode.succeed User
               |> required "user_id" int
-              |> required "name" (nullable string)
+              |> required "first_name" (nullable string)
               |> optional "email" string "me@foo.com"
+
+      users : Decoder (List User)
+      users = list user
     #+end_src
 
   - You might prefer, to have an intermediate record type alias
@@ -721,43 +728,23 @@ searchResult : { name : String, stars : Int } -- record
     and then solve those.
 
 ** 09 Talking to Servers    | Cmd, Http
-*** Commands & Randomness
-
- - Introduce a new capability to ~update~
-   A second thing that the *Elm Runtime* can say to ~update~
-   A "Cmd Msg" send from ~update~ to ER.
-   For which ~update~ will return a tuple (Cmd,Model)+
-   A description of something you want done. Not a side effect.
-
- - Example
-   #+begin_src elm
-     pickGreeting : List String -> Cmd Msg -- Command
-   #+end_src
-
 *** Elm functions
 
-  - are pure
-  - have no side-effects
-  - have ~managed effects~, any side-effect has to be done through commands
+- are pure
+- have no side-effects
+- have ~managed effects~, any side-effect has to be done through commands
+  - through "Cmd Msg" sent by *update*
 
 *** HTTP
 
-- Type
-  #+begin_src elm
-    type Msg
-        = SubmittedForm
-        | EnteredEmail String
-        | EnteredUsername String
-        | EnteredPassword String
-        | CompletedRegister (Result Http.Error Viewer)
-        | GotSession Session
-  #+end_src
-
 - GET - we need to get a Request and then convert it to a Cmd
-
   #+begin_src elm
-    Http.getString "/feed?tag=happiness"
-         |> Http.send CompletedLoadFeed
+    -- CompletedLoadFeed (Result Error String)
+    Http.getString "/feed?tag=happiness" -- build a Request
+         |> Http.send CompletedLoadFeed -- send Request and use custom Msg to receive response
+
+    -- CompletedLoadFeed (Result Error (List Article))
+    Http.get articlesDecoder url
   #+end_src
 
 - POST
@@ -1042,34 +1029,37 @@ requestUnfollow (FollowedAuthor uname _) cred =
 
 ** 03 Extensible Data
 
-*** Constraint Unification:
+*** Constraint Unification
 
-  - the process that the compiler uses to type check everything
-  - the process of
-    known facts
-    -> inferred facts
-    -> find (contradictory facts)/(type missmatch)
-  - Elm special constraint type variables, that have special constraints. Must begin with:
-    1) number
-    2) appendable
-    3) comparable
+- the process that the compiler uses to type check everything
+  1) from known facts (eg: types of literals)
+  2) inferred facts (eg: derived from ops on other known facts)
+  3) finds contradictory facts (type missmatch)
 
-*** Open and Closed =Record= (related to CU)
+- Elm special ~constraint type variables~, that have special constraints. Must begin with:
+  * number
+  * appendable
+  * comparable
+
+*** Open and Closed =Record=
 
  |--------+---------------------------------|
+ |    <r> |                                 |
  | closed | type alias Model = { ... }      |
- | open   | type alias Model r = { r ¦ ...} |
+ |   open | type alias Model r = { r ¦ ...} |
  |--------+---------------------------------|
 
+- Related to Constraint Unification
 - You CANNOT create an open record
-- The only way to get a type that has an open record is
-  1) a .function
+
+- The only ways to get an open record type are:
+  1) a ".function"
      #+begin_src elm
        rec.username -- { r | username : a } -> a
      #+end_src
   2) modify a record
      #+begin_src elm
-        (\record -> { record | name = "Li" })
+       (\record -> { record | name = "Li" })
        -- { r | name : String } -> { r | name : String }
      #+end_src
 
@@ -1077,41 +1067,41 @@ requestUnfollow (FollowedAuthor uname _) cred =
 
 1) type inference
    #+begin_src elm
-     getName : { a | name : String } -> String
-     getname record = record.name
+getName : { a | name : String } -> String
+getname record = record.name
    #+end_src
 
 2) to write functions that take an ~open record~
-   which means it take ANY record that has:
-   email, firstName, and lastName
+   - which means it take ANY record that has:
+   - email, firstName, and lastName
 
-     #+begin_src elm
+   #+begin_src elm
 validate : { r | email : String, firstName : String, lastName : String } -> Blah
 validate { email, firstName, lastName } = -- ...
-     #+end_src
+   #+end_src
 
-  3) to model data
-     Example: a record representing an Article, that can take different shapes
-     it could have a body, like when reading it
-     or a don't have a body, on the homepage listing of articles
+3) to model data
+   - Example: a record representing an Article, that can take different shapes
+     - it could have a body, like when reading it
+     - or a don't have a body, on the homepage listing of articles
 
-     #+begin_src elm
--- with open records
-type alias Article a =
-    { a | title : String
-    , tags : List String
-    }
--- can later add instantiate the missing field,
--- but is less recommended than in function inputs
-type alias Point a = { a | x : Int, y : Int }
-type alias Point3D = Point { z : Int }
--- with a type parameter
-type alias Article a =
-    { title : String
-    , tags : List String
-    , extraInfo : a -- !!
-    }
-     #+end_src
+   #+begin_src elm
+ -- with open records
+ type alias Article a =
+     { a | title : String
+     , tags : List String
+     }
+ -- can later add instantiate the missing field,
+ -- but is less recommended than in function inputs
+ type alias Point a = { a | x : Int, y : Int }
+ type alias Point3D = Point { z : Int }
+ -- with a type parameter
+ type alias Article a =
+ { title : String
+ , tags : List String
+ , extraInfo : a -- !!
+ }
+  #+end_src
 
 *** Extensible =Custom Types=
 

@@ -1,3 +1,5 @@
+#+DATE: <2020-05-01 vie>
+
 - https://www.simplehaskell.org/
 - https://github.com/Gabriella439/post-rfc/blob/main/sotu.md
 - https://lokathor.gitbooks.io/using-haskell/content/opengl/
@@ -93,7 +95,7 @@ https://wiki.haskell.org/Import
 | <¦> |       Control.Alternative | Alternative f | f a -> f a -> f a        |
 |-----+---------------------------+---------------+--------------------------|
 | <*> |                     apply | Applicative f | f (a -> b) -> f a -> f b |
-| *>  |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
+|  *> |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
 | <*  | right "facing bird"/shark | Applicative f | f a        -> f b -> f a |
 |-----+---------------------------+---------------+--------------------------|
 ** types primitives
@@ -108,6 +110,14 @@ https://wiki.haskell.org/Import
 | String  | "foo" | list characters                      |            |
 | Ratio   | 1 % 3 |                                      | Data.Ratio |
 |---------+-------+--------------------------------------+------------|
+
+- =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
+  Removed during compilation.
+  #+begin_src haskell
+    "Your password cannot be \
+    \longer than 20 characters."
+  #+end_src
+
 ** types complex
 | instancing    | possible definition        | name              | description                            |
 |---------------+----------------------------+-------------------+----------------------------------------|

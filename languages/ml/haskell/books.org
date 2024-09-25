@@ -628,7 +628,7 @@ ERRATA:
 
 - Solution in this capter
   - will use the bind operator (>>=)
-  - it won't tell you which of the validation rules failed
+  - it WON'T tell you which of the validation rules failed
 
 - INTERNET: https://stackoverflow.com/questions/62018158/string-concatenation-via-or
   - when concatenating strings you can use (++) or (<>)
@@ -641,8 +641,8 @@ ERRATA:
 
 - the (.) operator might help to only work with 1(one) list
   #+begin_src haskell
-    f  x = drop 2 (map toUpper (reverse x))
-    f' x = (drop 2 . map toUpper . reverse) x
+f  x =  drop 2  (map toUpper  (reverse x))
+f' x = (drop 2 . map toUpper . reverse) x
   #+end_src
 
 *** Enter the monad
@@ -654,23 +654,25 @@ ERRATA:
 
 - validatePassword without using case/of
   #+begin_src haskell
-    validatePassword' :: String -> Maybe String
-    validatePassword' password =
-      cleanWhitespace password
-        >>= requireAlphaNum
-        >>= checkPasswordLength''
+validatePassword' :: String -> Maybe String
+validatePassword' password =
+  cleanWhitespace password
+    >>= requireAlphaNum
+    >>= checkPasswordLength''
   #+end_src
 
 *** Classes and instances
 
 - Monad is a *typeclass*
 - A *typeclass* defines a set of /generic functions/ that work with a set of types.
-- A =class= declaration gives only the type signatures in their most polymorphic forms.
-- An =instance= declaration gives a /concrete implementation/
-  of the generic function of that class for a given
-  concrete type.
-- TIP: thinking about types as instances of a certain typeclass
-  allows you to focus on the similarities between the types.
+
+- A =class= declaration
+  - gives only the type signatures in their most polymorphic forms.
+- An =instance= declaration
+  - gives a /concrete implementation/ of the generic function of that *class* for a given concrete type.
+
+- TIP: thinking about types as instances of a certain typeclass.
+  Allows you to focus on the similarities between the types.
 
 *** TypeApplications (language extension)
 
@@ -698,21 +700,17 @@ ERRATA:
 
 *** Case and binds
 
-- A type can have /at most/ ONE instance of a typeclass
+- A type can have _at most_ ONE instance of a typeclass.
 
-- Using ~bind(>>=)~ and ~Maybe~ here means we lost the ability to
-  tell which *Nothing* we returned and,
-  thus, what our error is.
+- Using ~bind(>>=)~ and ~Maybe~ here means we lost the ability to tell which *Nothing* we returned and, thus, what our error is.
 
-- Haskell's =do= syntax is intended to allow something like
-  imperative-style programming that ignores the monadic
-  underpinnings.
+- Haskell's =do= syntax is intended to allow something like imperative-style programming that ignores the monadic underpinnings.
 
-- main from do to bind
+- main from do, to bind
   #+begin_src haskell
-    main :: IO ()
-      main = getLine >>= \password ->
-                           print (cleanWhitespace password)
+main :: IO ()
+main = getLine >>= \password ->
+                     print (cleanWhitespace password)
   #+end_src
 
 - main from do to bind, without explicit argument passing
@@ -730,21 +728,14 @@ ERRATA:
     validatePassword :: String -> String
   #+end_src
 
-- =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
-  Removed during compilation.
-  #+begin_src haskell
-    "Your password cannot be \
-    \longer than 20 characters."
-  #+end_src
-
 *** Introducing =Either=
 
 #+begin_src haskell
   data Either a b = Left a | Right b
 #+end_src
 
-- Where ~Right b~ is similar to ~Just a~ from =Maybe=
-  Where ~Left a~ can carry data unlike ~Nothing~ from =Maybe=
+- ~Right b~ is similar to ~Just a~ from =Maybe=
+- ~Left a~ can carry data unlike ~Nothing~ from =Maybe=
 
 *** The =Either= Monad
 
@@ -779,8 +770,7 @@ ERRATA:
 
 *** Using =Either=
 
-- the final ~validatePassword~ function using =Either= will be
-  the exact same as the one using =Maybe=
+- the final ~validatePassword~ function using =Either= will be the exact same as the one using =Maybe=
 
 *** Kinds
 
@@ -794,10 +784,12 @@ ERRATA:
 
 - Kinds of different types
  |------------------------+-------------+--------------------|
- | String                 | *           |                    |
- | []                     | * -> *      | *could* be a monad |
- | (,)                    | * -> * -> * |                    |
- | (,) Int                | * -> *      | *could* be a monad |
+ |                    <r> |             |                    |
+ |------------------------+-------------+--------------------|
+ |                 String | *           |                    |
+ |                     [] | * -> *      | *could* be a monad |
+ |                    (,) | * -> * -> * |                    |
+ |                (,) Int | * -> *      | *could* be a monad |
  | data Pair a = Pair a a | * -> *      | *could* be a monad |
  |------------------------+-------------+--------------------|
 
@@ -3885,7 +3877,7 @@ release      :: MonadIO m       => ReleaseKey     -> m ()
 
 * 23 | Learn Haskell by building a blogGenerator |          | Gil Mizrahi
 - 04 https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning
-** 02 - Hello World
+** 02 Hello World
 - The order in which we declare the binding does NOT matter
 ** 03 Building an HTML printer library
 #+begin_src haskell

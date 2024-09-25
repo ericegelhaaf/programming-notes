@@ -13,6 +13,9 @@
   - https://www.pexels.com/es-es/
   - https://dummyimage.com/
   - https://pravatar.cc/
+    #+begin_src
+      https://i.pravatar.cc/<SIZE>
+    #+end_src
   - https://cataas.com/ returns a random cat image/gif
     #+begin_src
       /cat
@@ -36,7 +39,7 @@
 |   /bar/file.png | domain.com/bar/file.png     |
 | ../bar/file.png | domain.com/bar/file.png     |
 |-----------------+-----------------------------|
-* DOCTYPE
+* <!DOCTYPE>
 
 #+begin_src html
   <!DOCTYPE html> <!-- for html5 -->

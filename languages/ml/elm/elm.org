@@ -22,10 +22,6 @@
 
 - comparing (==) 2 functions would throw a ~runtime exception~
 
-- comments
-  - --
-  - {- -}
-
 - a "blank" html is "text """
 
 ** style
@@ -38,8 +34,11 @@
 - fieldName
 - Type
 - Constructor
+- comments
+  - --
+  - {- -}
 
-** model/view/update
+** model / view / update
 
 #+begin_src
 subscription--(Msg)-> update --(Model)--> view
@@ -48,8 +47,8 @@ subscription--(Msg)-> update --(Model)--> view
    (Model)          (Msg)(Cmd Msg)     (Html Msg)
       ¦                ¦  ¦                ¦
       ¦                ¦  v                v
-=============================================
-                  RUNTIME
+===============================================
+                ELM RUNTIME
 #+end_src
 
 *** Browser
@@ -113,22 +112,22 @@ onUrlChange   : Url -> msg -- when the Url changes, msg goes to update
 https://package.elm-lang.org/packages/elm/core/latest/
 |--------------+-------------------------------|
 | [[https://package.elm-lang.org/packages/elm/core/latest/Array][Array]]        | indexedMap toIndexedList      |
-| [[https://package.elm-lang.org/packages/elm/core/latest/Basics][Basics]]       | "imported by default"         |
+| [[https://package.elm-lang.org/packages/elm/core/latest/Basics][Basics]]       | "things imported by default"  |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Bitwise][Bitwise]]      | complement shiftLeftBy        |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Char][Char]]         | toCode fromCode               |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Debug][Debug]]        | toString log todo             |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Dict][Dict]]         | merge union intersect diff    |
 | [[https://package.elm-lang.org/packages/elm/core/latest/List][List]]         | intersperse partition unzip   |
-| [[https://package.elm-lang.org/packages/elm/core/latest/Maybe][Maybe]]        |                               |
+| [[https://package.elm-lang.org/packages/elm/core/latest/Maybe][Maybe]]        | andThen                       |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Platform][Platform]]     | Program Task ProcessId Router |
-| [[https://package.elm-lang.org/packages/elm/core/latest/Platform-Cmd][Platform.Cmd]] |                               |
+| [[https://package.elm-lang.org/packages/elm/core/latest/Platform-Cmd][Platform.Cmd]] | none                          |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Platform-Sub][Platform.Sub]] | batch                         |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Process][Process]]      |                               |
-| [[https://package.elm-lang.org/packages/elm/core/latest/Result][Result]]       |                               |
-| [[https://package.elm-lang.org/packages/elm/core/latest/Set][Set]]          |                               |
+| [[https://package.elm-lang.org/packages/elm/core/latest/Result][Result]]       | andThen mapError              |
+| [[https://package.elm-lang.org/packages/elm/core/latest/Set][Set]]          | partition                     |
 | [[https://package.elm-lang.org/packages/elm/core/latest/String][String]]       |                               |
 | [[https://package.elm-lang.org/packages/elm/core/latest/Task][Task]]         |                               |
-| [[https://package.elm-lang.org/packages/elm/core/latest/Tuple][Tuple]]        |                               |
+| [[https://package.elm-lang.org/packages/elm/core/latest/Tuple][Tuple]]        | mapFirst mapSecond mapBoth    |
 |--------------+-------------------------------|
 https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%3Afalse+language%3Aelm+sort%3Aname-asc
 |------------------------+-----------------------------------|
@@ -149,41 +148,43 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 | [[https://package.elm-lang.org/packages/elm/url/latest/][url]]                    |                                   |
 |------------------------+-----------------------------------|
 
-|--------------------+-------------------------------------------------------------------------|
-| Http               |                                                                         |
-| .get               | String -> Decoder a -> Request a                                        |
-| .getString         | String -> Request String                                                |
-| .send              | (Result Error a -> msg) -> Request a -> Cmd msg                         |
-| .CompletedLoadFeed | Result Error String                                                     |
-| .post              | String -> Body -> Decoder a -> Request a                                |
-| .emptyBody         | Body                                                                    |
-| .stringBody        | String -> String -> Body                                                |
-| .request           | {method,header,url,body,expect,timeout,withCredentials} -> Request a    |
-|--------------------+-------------------------------------------------------------------------|
-| Random             |                                                                         |
-| .generate          | creates a generator, from the provided description                      |
-| .initialSeed       | creates a seed from a given integer                                     |
-| .step              | produces a new random value and a new seed, from a generator and a seed |
-| .constant          | generator                                                               |
-| .uniform           | generator, from a list                                                  |
-| .weighted          | generator, from a weighted list                                         |
-| .map               | generator, take an fn maps inside the random                            |
-| .andThen           | generator                                                               |
-| .int               | generator                                                               |
-| .float             | generator                                                               |
-| .list              | generator helper, take an N and a generator                             |
-| .pair              | generator helper, takes 2 generatos                                     |
-| .lazy              | generator, to create self-referencing generators, helps compiler        |
-|--------------------+-------------------------------------------------------------------------|
-| WebSocket          |                                                                         |
-| .listen            | String -> (String -> msg) -> Sub msg                                    |
-| .send              | String -> String -> Cmd msg                                             |
-|--------------------+-------------------------------------------------------------------------|
-| Navigation         |                                                                         |
-| .newUrl            | String -> Cmd msg                                                       |
-| .program           |                                                                         |
-| .programWithFlags  |                                                                         |
-|--------------------+-------------------------------------------------------------------------|
+|------------+--------------------+----------------------------------------------------------------------|
+|        <r> | <l>                |                                 <c>                                  |
+|------------+--------------------+----------------------------------------------------------------------|
+|       Http |                    |                                                                      |
+|            | .get               |                   String -> Decoder a -> Request a                   |
+|            | .getString         |                       String -> Request String                       |
+|            | .send              |           (Result Error a -> msg) -> Request a -> Cmd msg            |
+|            | .CompletedLoadFeed |                         Result Error String                          |
+|            | .post              |               String -> Body -> Decoder a -> Request a               |
+|            | .emptyBody         |                                 Body                                 |
+|            | .stringBody        |                       String -> String -> Body                       |
+|            | .request           | {method,header,url,body,expect,timeout,withCredentials} -> Request a |
+|------------+--------------------+----------------------------------------------------------------------|
+|     Random |                    |                                                                      |
+|            | .generate          |          creates a generator, from the provided description          |
+|            | .initialSeed       |                 creates a seed from a given integer                  |
+|            | .step              |        produces newRandomValue+newSeed, from a generator+seed        |
+|            | .constant          |                              generator                               |
+|            | .uniform           |                        generator, from a list                        |
+|            | .weighted          |                   generator, from a weighted list                    |
+|            | .map               |             generator, take an fn maps inside the random             |
+|            | .andThen           |                              generator                               |
+|            | .int               |                              generator                               |
+|            | .float             |                              generator                               |
+|            | .list              |             generator helper, take an N and a generator              |
+|            | .pair              |                 generator helper, takes 2 generatos                  |
+|            | .lazy              |   generator, to create self-referencing generators, helps compiler   |
+|------------+--------------------+----------------------------------------------------------------------|
+|  WebSocket |                    |                                                                      |
+|            | .listen            |                 String -> (String -> msg) -> Sub msg                 |
+|            | .send              |                     String -> String -> Cmd msg                      |
+|------------+--------------------+----------------------------------------------------------------------|
+| Navigation |                    |                                                                      |
+|            | .newUrl            |                          String -> Cmd msg                           |
+|            | .program           |                                                                      |
+|            | .programWithFlags  |                                                                      |
+|------------+--------------------+----------------------------------------------------------------------|
 ** operators
 |------+----------------------------------------+------------------------------------------------------------|
 | op   | signature                              | describes...                                               |
@@ -212,14 +213,12 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 
 ** types
 
-Cmd a
-Cmd.none
+- Elm special ~constraint type variables~, that have special constraints. Must begin with:
+  * number
+  * appendable (String, List)
+  * comparable (Int,Float,String?...7)
 
-#+begin_src elm
-  type Maybe a = Just a | Nothing
-  type Result a b = Ok a | Err b
-  type Never = OneMore Never -- even in the module where is defined, you cannot make one
-#+end_src
+*** Primitive
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
 |    <r> |       |            |                                                                                            |
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
@@ -239,26 +238,34 @@ Cmd.none
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
 |   Bool |       |            | &&, ¦¦, not                                                                                |
 |--------+-------+------------+--------------------------------------------------------------------------------------------|
+*** Compound
 
-** types complex
+|------------------+-------------------+-------------+----------------------+----------------------|
+|              <r> |               <r> |             |                      |                      |
+|      instantiate |              type | access      | update               | destructuring        |
+|------------------+-------------------+-------------+----------------------+----------------------|
+|          [1,2,3] |          List Int |             |                      | x :: xs              |
+|       (1, "foo") |   ( Int, String ) | Tuple.first |                      | ( foo, bar )         |
+|   Array.fromList |         Array Int | Array.get   | Array.set            |                      |
+|------------------+-------------------+-------------+----------------------+----------------------|
+| { name = "foo" } | { name : String } | rec.name    | { rec ¦ name = "Z" } | { name }             |
+|        { "foo" } |                   |             |                      | ({ name } as person) |
+|------------------+-------------------+-------------+----------------------+----------------------|
 
-|------------------+-------------------+-----------+------------------------+----------------------|
-|              <r> |                   |           |                        |                      |
-|      instantiate | type              | access    | update                 | destructuring        |
-|------------------+-------------------+-----------+------------------------+----------------------|
-|          [1,2,3] | List Int          |           |                        | x :: xs              |
-|       (1, "foo") | ( Int, String )   |           |                        | ( foo, bar )         |
-|   Array.fromList | Array Int         | Array.get | Array.set              |                      |
-|------------------+-------------------+-----------+------------------------+----------------------|
-| { name = "foo" } | { name : String } | rec.name  | { rec ¦ name = "bar" } | { foo, bar }         |
-|        { "foo" } |                   |           |                        | ({ name } as person) |
-|------------------+-------------------+-----------+------------------------+----------------------|
+#+begin_src elm
+type Maybe a = Just a | Nothing
+type Result a b = Ok a | Err b
+-- even in the module where is defined, you CANNOT make one
+type Never = OneMore Never
+-- example type representing a Model, without field names, like in a record
+type Model String Int (List Post)
+#+end_src
 
 - =Array=, immutable
   - defining : empty fromList repeat initialize
   - get/set  : get set push
   - props    : length
-- =Tuples= have a 3 elements MAXIMUM
+- =Tuples= max of 3 elements
 - =Records=
   - have a N element ~constructor~, when defined as a type alias, the same name as the type
   - have a ".fieldname" function defined for each of the fields
