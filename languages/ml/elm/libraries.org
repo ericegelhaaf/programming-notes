@@ -1,4 +1,6 @@
 - https://korban.net/elm/catalog/
+- https://github.com/sporto/awesome-elm
+- https://github.com/rofrol/awesome-elm-gamedev
 
 |---------------------------------+------------------------------------------------------|
 | alternative to regex            | https://github.com/elm/parser                        |

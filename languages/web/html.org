@@ -52,6 +52,7 @@
 used by search engines
 
 * <meta>
+
 - https://www.w3schools.com/tags/tag_meta.asp
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
 - do not use ~name~ if ~http-equiv~ is set (?
@@ -60,49 +61,54 @@ used by search engines
   - scale ~= initial zoom
   - make width be the one of the device
 
-|------------+-------------------------+-----------------------------------------|
-|            |                         | content=                                |
-|------------+-------------------------+-----------------------------------------|
-| charset    | UTF-8                   | -                                       |
-|------------+-------------------------+-----------------------------------------|
-| [[https://www.w3schools.com/tags/att_meta_http_equiv.asp][http-equiv]] | refresh                 | aka seconds between auto-refresh        |
-|            | default-style           | ?                                       |
-|            | content-type            | "text/html; charset=UTF-8"              |
-|            | content-security-policy | "default-src 'self'"                    |
-|------------+-------------------------+-----------------------------------------|
-| [[https://www.w3schools.com/tags/att_meta_name.asp][name]]       | [[https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag][viewport]]                | "width=device-width, initial-scale=1.0" |
-|            | description             | SEO                                     |
-|            | keywords                | SEO (eg: "HTML, CSS")                   |
-|            | author                  |                                         |
-|            | application-name        |                                         |
-|            | generator               | for software generated pages            |
-|            | robots                  |                                         |
-|            | googlebot               | index,follow                            |
-|            | twitter:card            | eg: summary, summary_large_image        |
-|            | twitter:title           |                                         |
-|            | twitter:description     |                                         |
-|------------+-------------------------+-----------------------------------------|
-|            | twitter:site            | @foobar                                 |
-|            | twitter:creator         | @foobar                                 |
-|------------+-------------------------+-----------------------------------------|
-| property   | og                      | see [[https://ogp.me/][Open Graph protocol]]                 |
-|            | og:title                |                                         |
-|            | og:type                 | eg: website, video.movie                |
-|            | og:image                |                                         |
-|            | og:image:alt            |                                         |
-|            | og:image:type           |                                         |
-|            | og:image:width          |                                         |
-|            | og:image:height         |                                         |
-|            | og:url                  |                                         |
-|------------+-------------------------+-----------------------------------------|
-|            | og:audio                |                                         |
-|            | og:description          |                                         |
-|            | og:determiner           |                                         |
-|            | og:locale               | eg: en_US                               |
-|            | og:locale:alternate     |                                         |
-|            | og:site_name            |                                         |
-|            | og:video                |                                         |
-|------------+-------------------------+-----------------------------------------|
+|------------+----------------------------+-----------------------------------------------------|
+|            |                            | content=                                            |
+|------------+----------------------------+-----------------------------------------------------|
+| charset    | UTF-8                      | -                                                   |
+|------------+----------------------------+-----------------------------------------------------|
+| [[https://www.w3schools.com/tags/att_meta_http_equiv.asp][http-equiv]] | refresh                    | aka seconds between auto-refresh                    |
+|            | default-style              | ?                                                   |
+|            | content-type               | "text/html; charset=UTF-8"                          |
+|            | content-security-policy    | "default-src 'self'"                                |
+|------------+----------------------------+-----------------------------------------------------|
+| [[https://www.w3schools.com/tags/att_meta_name.asp][name]]       | [[https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag][viewport]]                   | "width=device-width, initial-scale=1.0"             |
+|            | description                | SEO                                                 |
+|            | keywords                   | SEO (eg: "HTML, CSS")                               |
+|            | author                     |                                                     |
+|            | application-name           | eg: "State of Elm 2023"                             |
+|            | generator                  | for software generated pages                        |
+|            | robots                     |                                                     |
+|            | googlebot                  | index,follow                                        |
+|            | title                      | SEO eg: "State of Elm 2023"                         |
+|            | theme-color                | eg: "#ffffff"                                       |
+|            | apple-mobile-web-app-title | eg: "State of Elm 2023"                             |
+|------------+----------------------------+-----------------------------------------------------|
+|            | twitter:card               | eg: summary, summary_large_image                    |
+|            | twitter:title              | eg: "State of Elm 2023"                             |
+|            | twitter:description        | eg: "An Elm community survey"                       |
+|            | twitter:site               | optional eg: @foobar                                |
+|            | twitter:creator            | optional eg: @foobar                                |
+|            | twitter:url                | optional eg: "https://state-of-elm.com/"            |
+|            | twitter:image              | optional eg: "https://state-of-elm.com/favicon.png" |
+|------------+----------------------------+-----------------------------------------------------|
+| property   | og                         | see [[https://ogp.me/][Open Graph protocol]]                             |
+|            | og:title                   | "State of Elm 2023"                                 |
+|            | og:type                    | eg: website, video.movie                            |
+|            | og:image                   | "https://state-of-elm.com/favicon.png"              |
+|            | og:image:alt               |                                                     |
+|            | og:image:type              |                                                     |
+|            | og:image:width             |                                                     |
+|            | og:image:height            |                                                     |
+|            | og:url                     | "https://state-of-elm.com/"                         |
+|------------+----------------------------+-----------------------------------------------------|
+|            | og:audio                   |                                                     |
+|            | og:description             | "An Elm community survey"                           |
+|            | og:determiner              |                                                     |
+|            | og:locale                  | eg: en_US                                           |
+|            | og:locale:alternate        |                                                     |
+|            | og:site_name               |                                                     |
+|            | og:video                   |                                                     |
+|------------+----------------------------+-----------------------------------------------------|
 
 * <link>
 - https://www.w3schools.com/tags/tag_link.asp
