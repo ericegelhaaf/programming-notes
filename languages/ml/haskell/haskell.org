@@ -58,6 +58,8 @@
 ** imports
 https://wiki.haskell.org/Import
 |--------------+----------------------------------------+--------------------------------------|
+|              | example                                | description                          |
+|--------------+----------------------------------------+--------------------------------------|
 | import ALL   | import Data.List                       | brings everything in                 |
 | import       | import Data.List (intercalate)         | brings ONLY specific things          |
 | as           | import Data.ByteString as BS           | brings everything in AND into BS.    |
@@ -252,74 +254,76 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 *** base
 - https://hackage.haskell.org/package/base
 - https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#g:5
-|------------------------+------------------------------------------------------------|
-| Control.Applicative    |                                                            |
-| Control.Arrow          |                                                            |
-| Control.Category       |                                                            |
-| Control.Concurrent     |                                                            |
-| Control.Exception.Safe | tryAny :: IO a -> IO (Either SomeException a)              |
+|------------------------+-------------------------------------------------------------|
+| module                 | fn                                                          |
+|------------------------+-------------------------------------------------------------|
+| Control.Applicative    |                                                             |
+| Control.Arrow          |                                                             |
+| Control.Category       |                                                             |
+| Control.Concurrent     |                                                             |
+| Control.Exception.Safe | tryAny :: IO a -> IO (Either SomeException a)               |
 | Control.Monad          | sequence  :: (Traversable t, Monad m) => t (m a) -> m (t a) |
-|                        | sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()      |
-|                        | when      :: Applicative f => Bool -> f () -> f ()         |
-| Data.Bifoldable        |                                                            |
-| Data.Bifoldable1       |                                                            |
-| Data.Bifunctor         |                                                            |
-| Data.Bitraversable     |                                                            |
-| Data.Bits              |                                                            |
-| Data.Bool              |                                                            |
-| Data.Char              | isPrint                                                    |
-| Data.Coerce            |                                                            |
-| Data.Complex           |                                                            |
-| Data.Data              |                                                            |
-| Data.Dynamic           |                                                            |
-| Data.Either            |                                                            |
-| Data.Eq                |                                                            |
-| Data.Fixed             |                                                            |
-| Data.Foldable          |                                                            |
-| Data.Foldable1         |                                                            |
-| Data.Function          |                                                            |
-| Data.Functor           |                                                            |
-| Data.IORef             |                                                            |
-| Data.Int               |                                                            |
-| Data.Ix                |                                                            |
-| Data.Kind              |                                                            |
-| Data.List              | permutations                                               |
-| Data.Maybe             |                                                            |
-| Data.Monoid            |                                                            |
-| Data.Ord               |                                                            |
-| Data.Proxy             |                                                            |
-| Data.Ratio             |                                                            |
-| Data.STRef             |                                                            |
-| Data.Semigroup         |                                                            |
-| Data.String            |                                                            |
-| Data.Traversable       |                                                            |
-| Data.Tuple             |                                                            |
-| Data.Typeable          |                                                            |
-| Data.Unique            |                                                            |
-| Data.Version           |                                                            |
-| Data.Void              |                                                            |
-| Data.Word              |                                                            |
-| Foreign.*              |                                                            |
-| System.CPUTime         |                                                            |
-| System.Console         |                                                            |
-| System.Environment     | getArgs :: IO [String]                                     |
-| System.Exit            |                                                            |
-| System.IO              | openFile :: FilePath -> IOMode -> IO Handle                |
-|                        | hClose :: Handle -> IO ()                                  |
-|                        | hGetContents :: Handle -> IO String                        |
-|                        | hputStrLn :: Handle -> IO ()                               |
-|                        | putStrLn :: String -> IO ()                                |
-|                        | stdout :: Handle                                           |
-| System.Info            |                                                            |
-| System.Mem             |                                                            |
-| System.Posix           |                                                            |
-| System.Timeout         |                                                            |
-| Text.ParserCombinators |                                                            |
-|------------------------+------------------------------------------------------------|
-| Text                   |                                                            |
-| .pack                  | String -> Text                                             |
-| .append   (slow)       | Text -> Text -> Text                                       |
-|------------------------+------------------------------------------------------------|
+|                        | sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()       |
+|                        | when      :: Applicative f => Bool -> f () -> f ()          |
+| Data.Bifoldable        |                                                             |
+| Data.Bifoldable1       |                                                             |
+| Data.Bifunctor         |                                                             |
+| Data.Bitraversable     |                                                             |
+| Data.Bits              |                                                             |
+| Data.Bool              |                                                             |
+| Data.Char              | isPrint                                                     |
+| Data.Coerce            |                                                             |
+| Data.Complex           |                                                             |
+| Data.Data              |                                                             |
+| Data.Dynamic           |                                                             |
+| Data.Either            |                                                             |
+| Data.Eq                |                                                             |
+| Data.Fixed             |                                                             |
+| Data.Foldable          |                                                             |
+| Data.Foldable1         |                                                             |
+| Data.Function          |                                                             |
+| Data.Functor           |                                                             |
+| Data.IORef             |                                                             |
+| Data.Int               |                                                             |
+| Data.Ix                |                                                             |
+| Data.Kind              |                                                             |
+| Data.List              | permutations                                                |
+| Data.Maybe             |                                                             |
+| Data.Monoid            |                                                             |
+| Data.Ord               |                                                             |
+| Data.Proxy             |                                                             |
+| Data.Ratio             |                                                             |
+| Data.STRef             |                                                             |
+| Data.Semigroup         |                                                             |
+| Data.String            |                                                             |
+| Data.Traversable       |                                                             |
+| Data.Tuple             |                                                             |
+| Data.Typeable          |                                                             |
+| Data.Unique            |                                                             |
+| Data.Version           |                                                             |
+| Data.Void              |                                                             |
+| Data.Word              |                                                             |
+| Foreign.*              |                                                             |
+| System.CPUTime         |                                                             |
+| System.Console         |                                                             |
+| System.Environment     | getArgs :: IO [String]                                      |
+| System.Exit            |                                                             |
+| System.IO              | openFile :: FilePath -> IOMode -> IO Handle                 |
+|                        | hClose :: Handle -> IO ()                                   |
+|                        | hGetContents :: Handle -> IO String                         |
+|                        | hputStrLn :: Handle -> IO ()                                |
+|                        | putStrLn :: String -> IO ()                                 |
+|                        | stdout :: Handle                                            |
+| System.Info            |                                                             |
+| System.Mem             |                                                             |
+| System.Posix           |                                                             |
+| System.Timeout         |                                                             |
+| Text.ParserCombinators |                                                             |
+|------------------------+-------------------------------------------------------------|
+| Text                   |                                                             |
+| .pack                  | String -> Text                                              |
+| .append   (slow)       | Text -> Text -> Text                                        |
+|------------------------+-------------------------------------------------------------|
 *** non base
 |------------------+-----------------------------------+------------------------------------------------------|
 | array            | Data.Array                        | https://hackage.haskell.org/package/array            |
