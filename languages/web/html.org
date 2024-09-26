@@ -1,9 +1,13 @@
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/html/html-quiz.md
 - https://developer.mozilla.org/en-US/docs/Web/HTML
 - https://htmlreference.io/
+- editor: https://docs.emmet.io/cheat-sheet/
 
 * resources
 
+- forms
+  - https://formsubmit.co/
+  - https://formspree.io/
 - icons
   - https://fontawesome.com/
   - https://www.flaticon.com/

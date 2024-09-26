@@ -1,0 +1,32 @@
+|--------+------------------------------------------------|
+| home   | https://emmet.io/                              |
+| source | https://github.com/emmetio/emmet               |
+| wiki   | https://en.wikipedia.org/wiki/Emmet_(software) |
+|--------+------------------------------------------------|
+- by Vadim Makeev
+- Similar to CSS selectors
+- 2008
+* operators
+|-------------+------------------------------|
+|     <c>     |                              |
+|     op      |                              |
+|-------------+------------------------------|
+| [foo="bar"] | attribute foo="bar"          |
+|    [foo]    | attribute foo=""             |
+|      .      | attribute class              |
+|      #      | attribute id                 |
+|      >      | child of                     |
+|      +      | sibling of                   |
+|      *      | multiply by                  |
+|      $      | multiply instance var        |
+|     $@      | multiply instance var offset |
+|     { }     | grouping text content        |
+|     ( )     | grouping                     |
+|      ^      | climbing-up (?)              |
+|-------------+------------------------------|
+
+- form#search.wide
+- implicit class childs
+  - em>span
+  - ul>li
+  - table>tr>td
