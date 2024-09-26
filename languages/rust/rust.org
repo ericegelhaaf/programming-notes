@@ -1,46 +1,29 @@
-- Article: https://rauljordan.com/rust-concepts-i-wish-i-learned-earlier/
-- tutorial https://google.github.io/comprehensive-rust/
-- https://github.com/trickster0/OffensiveRust
-- https://fasterthanli.me/articles/the-curse-of-strong-typing
-- https://hirrolot.github.io/posts/rust-is-hard-or-the-misery-of-mainstream-programming.html
-- https://github.com/trickster0/OffensiveRust
-- RUST WASM https://www.reddit.com/r/rust/comments/tm10wi/media_i_made_a_website_to_demonstrate_performance/
-- https://matklad.github.io/2020/09/20/why-not-rust.html
-- https://fasterthanli.me/articles/some-mistakes-rust-doesnt-catch
-- vulkan https://github.com/sjb3d/caldera
-- libpthread.so needes for print!() https://github.com/rust-lang/rust/issues/43633
-- https://www.forrestthewoods.com/blog/learning-rust-via-advent-of-code/
-- https://www.forrestthewoods.com/blog/solving-advent-of-code-in-under-a-second/
-- https://lucumr.pocoo.org/2021/11/14/abusing-serde/
-- https://github.com/not-fl3/macroquad
-- https://github.com/martinszy/rustelbrot
-- https://docs.rs/nannou/latest/nannou/
-- https://github.com/glium/glium
-- https://github.com/not-fl3/macroquad
-- Ultimate Rust 2: Intermediate Concepts
-  https://github.com/CleanCut/ultimate_rust2
-- PNGme: An Intermediate Rust Project
-  https://picklenerd.github.io/pngme_book/
-- open source training *courses* about distributed database and distributed systemes
-  https://github.com/pingcap/talent-plan
-- "RustBelt: Logical Foundations for the Future of Safe Systems Programming".
-  https://plv.mpi-sws.org/rustbelt/
-- Developers Reveal Why Rust Programming Language Is Losing Popularity
-  https://fossbytes.com/developers-reveal-why-rust-programming-language-is-losing-popularity/
-- An interpreter for Rust's mid-level intermediate representation
-  https://github.com/rust-lang/miri
-- https://users.rust-lang.org/t/rust-cves-should-i-worry/59904/7
-- https://blog.akquinet.de/2021/01/03/haskell-is-faster-than-rust-wait-a-sec/
-- https://www.fpcomplete.com/blog/philosophies-rust-haskell/
-- http://technosophos.com/2019/08/07/writing-a-kubernetes-controller-in-rust.html
-- https://github.com/unknownue/vulkan-tutorial-rust
-- https://hackernoon.com/programming-in-rust-the-good-the-bad-the-ugly-d06f8d8b7738
-- Type on destructuring = instead of :
-- https://github.com/bevyengine/bevy
-- tut dns server https://github.com/EmilHernvall/dnsguide
-- https://research.mozilla.org/rust/
+#+TITLE: Rust
+#+DATE: <2020-01-01 mié>
+
+|----------+-----------------------------------------------------------|
+| home     | https://www.rust-lang.org/                                |
+| wiki     | https://en.wikipedia.org/wiki/Rust_(programming_language) |
+| research | https://research.mozilla.org/rust/                        |
+| gitorg   | https://github.com/Rust-Lang                              |
+| packages | https://crates.io/                                        |
+|----------+-----------------------------------------------------------|
 
 * Language
+
+- todo!()
+- unreachable!()
+- Rust, use range for loops
+  - 0..10
+  - 0..=10
+- [[https://doc.rust-lang.org/nightly/edition-guide/introduction.html][Editions]]
+  |------+------|
+  | 2015 | 1.00 |
+  | 2018 | 1.31 |
+  | 2021 | 1.56 |
+  | 2024 | 1.85 |
+  |------+------|
+
 ** variables
 
 #+begin_src rust
@@ -50,47 +33,60 @@
   let x = 10;
 #+end_src
 
+** import / export
+
+#+begin_src rust
+  use supper:**; // import all files on project
+#+end_src
+
 ** format
 |-------------------------------+-------------------------|
-| r#""raw"\tlines\n"#           |                         |
+|                           <r> |                         |
+|                 format string | description             |
+|-------------------------------+-------------------------|
+|           r#""raw"\tlines\n"# |                         |
 | b"this string of ASCII bytes" |                         |
-| \u{D589}                      | unicode printing        |
-| {:p}                          | pointer                 |
-| {:b} {:x} {:o}                | binary, hexa, and octal |
-| {0} {1}                       | order of arguments      |
-| {foo} {bar}                   | name of arguments       |
-| {} {:?} {:#?}                 | pretty printer          |
-| {var:pad align min.max}       |                         |
+|                      \u{D589} | unicode printing        |
+|                          {:p} | pointer                 |
+|                {:b} {:x} {:o} | binary, hexa, and octal |
+|                       {0} {1} | order of arguments      |
+|                   {foo} {bar} | name of arguments       |
+|                 {} {:?} {:#?} | pretty printer          |
+|       {var:pad align min.max} |                         |
 |-------------------------------+-------------------------|
 ** operator
 |----+---------------------------------|
 | -> | skinny arrow, on fn definitions |
 | {} | code blocks, return a value     |
 | !  | denote macro names              |
+| ?  | try operator                    |
 |----+---------------------------------|
 ** attributes #[]
 - derive(Debug)
-** functions
-- implicit return
-  #+begin_src rust
-    fn beta() -> i32 {
-      8 // without a ; it can be used like this, otherwise it would return ()
-      // return 8;  // Same but less idiomatic
-      // 8;         // It will return ()
-    }
-  #+end_src
+** functions (;)
+
+#+begin_src rust
+  fn beta(MyStruct {y,z,..}: MyStruct) -> i32 // struct destructuring
+  fn beta() -> i32 {
+    8 // without a ";" returns "8"
+    // return 8;  // Same but less idiomatic
+    // 8;         // with the ";" it will return ()
+  }
+#+end_src
 
 ** Style
-|----------------+----------------+------------|
-|                | UpperCamelCase | snake_case |
-|----------------+----------------+------------|
-| Implementation | YES            |            |
-| Struct         | YES            |            |
-| Enum           | YES            |            |
-|----------------+----------------+------------|
-| Variables      |                | YES        |
-| Functions      |                | YES        |
-|----------------+----------------+------------|
+https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/src
+- 4 spaces of identation
+|----------------+----------------+------------+-----------|
+|                | UpperCamelCase | snake_case | lowercase |
+|----------------+----------------+------------+-----------|
+| Implementation | YES            |            |           |
+| Struct         | YES            |            |           |
+| Enum           | YES            |            |           |
+| Variables      |                | YES        |           |
+| Functions      |                | YES        |           |
+| Native Types   |                |            | YES       |
+|----------------+----------------+------------+-----------|
 ** Types
 *** struct
 
@@ -125,33 +121,116 @@ struct ANamed {       // "named struct"
 
 *** Primitive
 - =as= used for casting
-- usize used for indexing
 - std::i8::MIN
 - std::i8::MAX
-|-------+-------+---------------|
-|       |   <r> | size          |
-|-------+-------+---------------|
-| u8    |   1u8 |               |
-| i32   | 1_000 |               |
-| i64   |     ? |               |
-| f32   |     ? |               |
-| f64   |    5. |               |
-| isize |    10 | arq dep       |
-| usize |    10 | arq dep       |
-| char  |   'a' | up to 4 bytes |
-|-------+-------+---------------|
+|-------+-------+-----------------------------|
+|   <r> |   <r> |                             |
+|       |       | size                        |
+|-------+-------+-----------------------------|
+|    u8 |   1u8 |                             |
+|   uNN |       |                             |
+|   i32 | 1_000 | default literal             |
+|   i64 |     ? |                             |
+|   f32 |     ? |                             |
+|   f64 |    5. | default literal             |
+| isize |    10 | arch dep                    |
+| usize |    10 | arch dep, used for indexing |
+|  char |   'a' | up to 4 bytes               |
+|-------+-------+-----------------------------|
 *** Compound
-|---------+----------------+-----------+--------------+-------------------|
-|     <r> |            <r> |           |          <r> |                   |
-|         |         create | access    |        match | insert            |
-|---------+----------------+-----------+--------------+-------------------|
-|   Tuple |                | .0        |       (a,_b) |                   |
-|  struct |                | .FIELD    |              |                   |
-|    enum |                |           | ENUM::Val(a) |                   |
-| HashMap | HashMap::new() | .get(key) |    (key,val) | .insert(key, val) |
-|  Vector |         vec![] |           |              |                   |
-|   Array |             [] |           |              |                   |
-|---------+----------------+-----------+--------------+-------------------|
+|---------+------------------+-------------+--------------+-------------------|
+|     <r> |              <r> |             |          <r> |                   |
+|    name |           create | access      |        match | insert            |
+|---------+------------------+-------------+--------------+-------------------|
+|   Tuple |            (5,2) | .0          |       (a,_b) |                   |
+|  struct |     SName{a: 10} | .FIELD      | SName{a, ..} |                   |
+|    enum |                  |             | ENUM::Val(a) |                   |
+| HashMap |   HashMap::new() | .get(key)   |    (key,val) | .insert(key, val) |
+|  Vector |           vec![] | [0] .get(0) |              | .push(23)         |
+|   Array |               [] |             |              |                   |
+|  String | String::from("") |             |              |                   |
+|    &str |          "asdas" |             |              |                   |
+|---------+------------------+-------------+--------------+-------------------|
+
+- String
+  - heap allocated
+  - mutable
+  - has: prt, len, cap
+- &str
+  - points to a squence of UTF-8 chars (a view into a String)
+  - immutable
+  - analogous to &[u8]
+  - has: ptr, len
+
+** control flow
+
+#+begin_src rust
+  while let Some(i) = optional {..} // alternative to loop+match
+  if let MyStruct { x, .. } = foostruct {..} // if-let, non exhaustive
+  loop{} // for infinite loop
+  match ptr {
+      Some(ptr) => ptr.g(),
+      None      => {}
+  }
+#+end_src
+
+** struct + impl(ementation)
+
+|-----------+-----------------|
+|       <r> |                 |
+|           | is sugar for... |
+|-----------+-----------------|
+|      self | self: Self      |
+|     &self | self: &Self     |
+| &mut self | self: &mut Self |
+|-----------+-----------------|
+
+#+begin_src rust
+  struct Foo {
+        x: usize
+    pub y: usize
+  }
+  impl Foo {
+          fn this()         //        static
+      pub fn this()         // public static
+          fn this(&self)    // instance method
+          fn this(&mut self)
+      pub fn this(self)     // takes the self itself
+  }
+  #+end_src
+
+** struct + impl + generic
+
+#+begin_src rust
+  struct MyVect<T> {
+      contents: T,
+  }
+  impl<T> MyVect<T> {
+      pub fn find<P>(&self, predicate: P) -> Option<&T>
+      where P: Fn(&T) -> bool {
+          for v in self {
+              if predicate(v) {
+                  return Some(v);
+              }
+          }
+          None
+      }
+  }
+#+end_src
+
+**  trait + impl
+
+a common method for multiple types
+
+#+begin_src rust
+  trait Foo { // like an interface
+      fn method(&self) -> retType;
+  }
+  impl Foo for MyStruct {
+      fn method(&self) -> retType {...}
+  }
+#+end_src
+
 ** Standard Library
 
 https://doc.rust-lang.org/std/#modules

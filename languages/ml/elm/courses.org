@@ -1027,7 +1027,7 @@ requestUnfollow (FollowedAuthor uname _) cred =
   type Cred = Cred Username String
 #+end_src
 
-** 03 Extensible Data
+** 03 Extensible Data (open records)
 
 *** Constraint Unification
 
@@ -1041,7 +1041,7 @@ requestUnfollow (FollowedAuthor uname _) cred =
   * appendable
   * comparable
 
-*** Open and Closed =Record=
+*** =Open= and =Closed= Record
 
  |--------+---------------------------------|
  |    <r> |                                 |
@@ -1063,7 +1063,7 @@ requestUnfollow (FollowedAuthor uname _) cred =
        -- { r | name : String } -> { r | name : String }
      #+end_src
 
-*** Why Open =Recods= exists?
+*** Why =Open Recods= exists?
 
 1) type inference
    #+begin_src elm
@@ -1103,7 +1103,7 @@ validate { email, firstName, lastName } = -- ...
  }
   #+end_src
 
-*** Extensible =Custom Types=
+*** Extensible =Custom Types= (usecase of O.R.)
 
 - There were talks of removing *Open Records*
   due their issues while compiling to WASM

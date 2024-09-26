@@ -3,6 +3,7 @@
 - https://www.youtube.com/c/timClicks/videos
 - Jon Gjengset https://www.youtube.com/channel/UC_iD0xppBwwsrM9DegC5cQQ/
 - Crazcalm's Tech Stack https://www.youtube.com/channel/UCfgXeSss8LaDtlK0ohwUX_w
+
 * 17 | Rust 101                                   | E. Dunham
 https://www.youtube.com/watch?v=FMqydRampuo
 - "Go is a SysAdmins programming language, Rust is language for system level programming."
@@ -59,7 +60,7 @@ https://www.youtube.com/watch?v=IYLf8lUqR40
 - No exceptions
 - Does NOT support inheritance
 - Use the *has a* not the *is a* model
-- OO - Binding a method to a structure
+- OO - impl: Binding a method to a structure
   #+begin_src rust
   struct Point {
     x: f64,
@@ -73,7 +74,7 @@ https://www.youtube.com/watch?v=IYLf8lUqR40
     fn to_string(&self) -> String { ... }
   }
   #+end_src
-- OO - Traits: A common method to multiple types
+- OO - trait: A common method to multiple types
   #+begin_src rust
   trait Hash {
     fn hash(&self) -> u64;
@@ -91,13 +92,15 @@ https://www.youtube.com/watch?v=IYLf8lUqR40
   #+end_src
 
 * 19 | All about rust                             | Microsoft Developer
-  https://www.youtube.com/watch?v=FYGS2q1bljE
+https://www.youtube.com/watch?v=FYGS2q1bljE
 - "Cost on the compiler"
 - linkerd "proxy" is written in Rust, the rest (cli, webservice) in Go
 - Libraries:
+  |-------+-----------------------------------------|
   | Tokio | async run-time (similar to getty in Go) |
   | Hyper | http library that uses Tokio            |
   | Tower | service framework                       |
+  |-------+-----------------------------------------|
 - Microsoft IOT does some rust: https://github.com/Azure/iotedge/
 * 19 | Build a cryptocurrency!                    | Geeklaunch
 ** Blockchain in Rust #01: Blocks & Hashing
@@ -112,9 +115,9 @@ https://www.youtube.com/watch?v=vJdT05zl6jk
 #+end_src
 - Create      [u8; 16]
   Instantiate [0; 16]
-- use supper:**;
 * 20 | Considering Rust                           | Jon Gjengset
-  https://www.youtube.com/watch?v=DnT-LUQgc7s
+
+https://www.youtube.com/watch?v=DnT-LUQgc7s
 - No GC, no runtime
 - Compiler guarantees
   - no data races
@@ -145,9 +148,11 @@ https://www.youtube.com/watch?v=vJdT05zl6jk
 - ? "try operator" a error match, catch error
 - FREE ffi calls, given _there is no interpreter_ that needs to be noticed of an external call
 - unsafe{} free compiler checks
-- bindgen  - generates rust code from C header
-  cbindgen - generates a header file that you can use from other languages
-- tools that work with rust: perf, gdb/lldb, valgrind, llvm sanitizers
+- tools
+  - bindgen  - generates rust code from C header
+  - cbindgen - generates a header file that you can use from other languages
+  - work with rust: perf, gdb/lldb, valgrind, llvm sanitizers
+
 * 20 | 12 Things to Help You Learn Rust           | Gary explains
 https://www.youtube.com/watch?v=a8abW3RlOn8
 - println!

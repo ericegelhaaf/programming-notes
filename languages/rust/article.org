@@ -1,7 +1,52 @@
+- https://tourofrust.com/
+- https://stevedonovan.github.io/rust-gentle-intro/
+- Article: https://rauljordan.com/rust-concepts-i-wish-i-learned-earlier/
+- tutorial https://google.github.io/comprehensive-rust/
+- https://github.com/trickster0/OffensiveRust
+- https://fasterthanli.me/articles/the-curse-of-strong-typing
+- https://hirrolot.github.io/posts/rust-is-hard-or-the-misery-of-mainstream-programming.html
+- https://github.com/trickster0/OffensiveRust
+- RUST WASM https://www.reddit.com/r/rust/comments/tm10wi/media_i_made_a_website_to_demonstrate_performance/
+- https://matklad.github.io/2020/09/20/why-not-rust.html
+- https://fasterthanli.me/articles/some-mistakes-rust-doesnt-catch
+- vulkan https://github.com/sjb3d/caldera
+- libpthread.so needes for print!() https://github.com/rust-lang/rust/issues/43633
+- https://www.forrestthewoods.com/blog/learning-rust-via-advent-of-code/
+- https://www.forrestthewoods.com/blog/solving-advent-of-code-in-under-a-second/
+- https://lucumr.pocoo.org/2021/11/14/abusing-serde/
+- https://github.com/not-fl3/macroquad
+- https://github.com/martinszy/rustelbrot
+- https://docs.rs/nannou/latest/nannou/
+- https://github.com/glium/glium
+- https://github.com/not-fl3/macroquad
+- Ultimate Rust 2: Intermediate Concepts
+  https://github.com/CleanCut/ultimate_rust2
+- PNGme: An Intermediate Rust Project
+  https://picklenerd.github.io/pngme_book/
+- open source training *courses* about distributed database and distributed systemes
+  https://github.com/pingcap/talent-plan
+- "RustBelt: Logical Foundations for the Future of Safe Systems Programming".
+  https://plv.mpi-sws.org/rustbelt/
+- Developers Reveal Why Rust Programming Language Is Losing Popularity
+  https://fossbytes.com/developers-reveal-why-rust-programming-language-is-losing-popularity/
+- An interpreter for Rust's mid-level intermediate representation
+  https://github.com/rust-lang/miri
+- https://users.rust-lang.org/t/rust-cves-should-i-worry/59904/7
+- https://blog.akquinet.de/2021/01/03/haskell-is-faster-than-rust-wait-a-sec/
+- https://www.fpcomplete.com/blog/philosophies-rust-haskell/
+- http://technosophos.com/2019/08/07/writing-a-kubernetes-controller-in-rust.html
+- https://github.com/unknownue/vulkan-tutorial-rust
+- https://hackernoon.com/programming-in-rust-the-good-the-bad-the-ugly-d06f8d8b7738
+- Type on destructuring = instead of :
+- https://github.com/bevyengine/bevy
+- tut dns server https://github.com/EmilHernvall/dnsguide
+
+
+
 - 24 https://loglog.games/blog/leaving-rust-gamedev/
-- 2016 https://transitiontech.ca/random/RIIR
-- 2023 https://monadical.com/posts/shades-of-rust-gui-library-list.html#
-- 2023 https://dmitryfrank.com/articles/rust_module_system_encourages_bad_practices
-  https://lobste.rs/s/vx8hbs/rust_module_system_encourages_poor
-* TODO Article: 2018 - You Can't Rust That
-  https://lucumr.pocoo.org/2018/3/31/you-cant-rust-that/
+- 23 https://monadical.com/posts/shades-of-rust-gui-library-list.html#
+- 23
+  - https://dmitryfrank.com/articles/rust_module_system_encourages_bad_practices
+  - https://lobste.rs/s/vx8hbs/rust_module_system_encourages_poor
+- 18 https://lucumr.pocoo.org/2018/3/31/you-cant-rust-that/
+- 16 https://transitiontech.ca/random/RIIR

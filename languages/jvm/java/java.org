@@ -34,12 +34,13 @@
 
 * Types
 |--------+--------+---------------------------+-----------|
-| name   | type   | declaration               | access    |
+|    <r> |        |                           |           |
+|   name | type   | declaration               | access    |
 |--------+--------+---------------------------+-----------|
 | Arrays | int[]  | new int[3]                | arr[0]    |
 |        |        | {0,1,2}                   |           |
 |--------+--------+---------------------------+-----------|
-| Enums  | Gender | enum Gender {MALE,FEMALE} | enum.MALE |
+|  Enums | Gender | enum Gender {MALE,FEMALE} | enum.MALE |
 |--------+--------+---------------------------+-----------|
 * Native Game
 - JavaFX https://openjfx.io/

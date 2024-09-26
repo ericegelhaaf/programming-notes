@@ -1,0 +1,2 @@
+- home https://rustup.rs/
+- source https://github.com/rust-lang/rustup

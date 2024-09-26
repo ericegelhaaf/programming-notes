@@ -1,13 +1,10 @@
-#+DATE: <2020-05-01 vie>
+#+TITLE: Haskell
+#+DATE: <2019-01-01 mar>
+
+* Language
 
 - https://www.simplehaskell.org/
-- https://github.com/Gabriella439/post-rfc/blob/main/sotu.md
-- https://lokathor.gitbooks.io/using-haskell/content/opengl/
-- https://evanrelf.com/haskell-libraries-i-love
 - Haskell Fan Site https://theory.stanford.edu/~blynn/haskell/
-- Styleguide
-  https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
-  https://kowainik.github.io/posts/naming-conventions
 - Mailing List https://mail.haskell.org/mailman/listinfo/haskell-cafe
 - https://www.schoolofhaskell.com/school/advanced-haskell/beautiful-concurrency/3-software-transactional-memory
 - https://github.com/prathyvsh/category-theory-resources
@@ -16,26 +13,23 @@
 - Usage Examples of Haskell https://homepages.inf.ed.ac.uk/wadler/realworld/
 - Memory Usage https://stackoverflow.com/questions/459725/how-to-reduce-memory-usage-in-a-haskell-app
 - FPGA Clash Talks https://unsafeperform.io/talks/
-- https://crypto.stanford.edu/~blynn/haskell/
-- http://www.cis.syr.edu/~sueo/cis252/emacs.html
 - https://hoogle.haskell.org/
 - https://github.com/graninas/software-design-in-haskell
 - https://en.wikipedia.org/wiki/Dependent_type
 - https://en.wikipedia.org/wiki/Generalized_algebraic_data_type
 
-* Language
-
 ** deriving - types that can be derived
 |---------+---------------------------------------|
-|         | for types that...                     |
+|     <r> |                                       |
+|    type | for types that...                     |
 |---------+---------------------------------------|
 | Bounded | with finite upper and lower *bounds*  |
-| Eq      | can be compared for *equality*        |
-| Ord     | have a total *ordering* (extends Eq)  |
-| Ix      | support indexing into a range         |
-| Read    | can be parsed from strings            |
-| Show    | can be converted into strings         |
-| Enum    | can be converted to and from integers |
+|      Eq | can be compared for *equality*        |
+|     Ord | have a total *ordering* (extends Eq)  |
+|      Ix | support indexing into a range         |
+|    Read | can be parsed from strings            |
+|    Show | can be converted into strings         |
+|    Enum | can be converted to and from integers |
 |---------+---------------------------------------|
 ** pragmas
 |----------+----------------------------------------------------------------------------------------------------|
@@ -98,17 +92,25 @@ https://wiki.haskell.org/Import
 |  *> |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
 | <*  | right "facing bird"/shark | Applicative f | f a        -> f b -> f a |
 |-----+---------------------------+---------------+--------------------------|
+** style
+
+- https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
+- https://kowainik.github.io/posts/naming-conventions
+
 ** types primitives
 |---------+-------+--------------------------------------+------------|
-| Bool    |  True | boolean, short-circuits due laziness |            |
+|     <r> |   <r> |                                      |            |
+|    type |    eg | description                          |            |
+|---------+-------+--------------------------------------+------------|
+|    Bool |  True | boolean, short-circuits due laziness |            |
 | Integer |     2 | signed integer, unbounded            |            |
-| Int     |     2 | signed integer, 32/64 bit            |            |
-| Word    |     2 | unsigned integer, 32/64 bit          |            |
-| Float   |   1.2 | IEEE single-precision floating-point |            |
-| Double  |   1.2 | IEEE double-precision floating-point |            |
-| Char    |   'A' | an unicode code point                | Data.Char  |
-| String  | "foo" | list characters                      |            |
-| Ratio   | 1 % 3 |                                      | Data.Ratio |
+|     Int |     2 | signed integer, 32/64 bit            |            |
+|    Word |     2 | unsigned integer, 32/64 bit          |            |
+|   Float |   1.2 | IEEE single-precision floating-point |            |
+|  Double |   1.2 | IEEE double-precision floating-point |            |
+|    Char |   'A' | an unicode code point                | Data.Char  |
+|  String | "foo" | list characters                      |            |
+|   Ratio | 1 % 3 |                                      | Data.Ratio |
 |---------+-------+--------------------------------------+------------|
 
 - =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
@@ -119,29 +121,31 @@ https://wiki.haskell.org/Import
   #+end_src
 
 ** types complex
-| instancing    | possible definition        | name              | description                            |
 |---------------+----------------------------+-------------------+----------------------------------------|
-| [1,2]         | [Int]                      | linked list       |                                        |
-| "foo"         | type A = String            | type alias        |                                        |
-| 0 :¦ [1,2]    | data NonEmpty a = a :¦ [a] | non empty list    | Data.List.NonEmpty                     |
+|           <r> |                            |                   |                                        |
+|    instancing | possible definition        | name              | description                            |
 |---------------+----------------------------+-------------------+----------------------------------------|
-| A "foo"       | newtype A = A String       | type "safe" alias | can have only 1 type                   |
+|         [1,2] | [Int]                      | linked list       |                                        |
+|         "foo" | type A = String            | type alias        |                                        |
+|    0 :¦ [1,2] | data NonEmpty a = a :¦ [a] | non empty list    | Data.List.NonEmpty                     |
+|---------------+----------------------------+-------------------+----------------------------------------|
+|       A "foo" | newtype A = A String       | type "safe" alias | can have only 1 type                   |
 |               |                            |                   | no alternatives                        |
 |---------------+----------------------------+-------------------+----------------------------------------|
-| C "foo"       | data A a                   | data              | can have >1 type per construct         |
+|       C "foo" | data A a                   | data              | can have >1 type per construct         |
 |               | = C String Int             |                   |                                        |
 |               | ¦ D a                      |                   | can have alternatives with ¦           |
 |---------------+----------------------------+-------------------+----------------------------------------|
-| C {foo = 1}   | data A = C { foo :: Int }  | data records      | automatically creates getters          |
+|   C {foo = 1} | data A = C { foo :: Int }  | data records      | automatically creates getters          |
 |               |                            |                   | avoid clashes by prefixing field names |
 |               |                            |                   | syntax to update a field               |
 |               |                            |                   | x1 {foo = 2}                           |
 |---------------+----------------------------+-------------------+----------------------------------------|
 | Tuple 2 "foo" | data Tuple a b = Tuple a b | data tuple        | we are able to plug differen types     |
-| (2, "foo")    |                            |                   | polymorphic definition                 |
+|    (2, "foo") |                            |                   | polymorphic definition                 |
 |---------------+----------------------------+-------------------+----------------------------------------|
-| Left "Hello"  | data Either a b            |                   | useful for modeling errors             |
-| Right 17      | = Left a                   |                   | Right = we got what we wanted          |
+|  Left "Hello" | data Either a b            |                   | useful for modeling errors             |
+|      Right 17 | = Left a                   |                   | Right = we got what we wanted          |
 |               | ¦ Right b                  |                   | Left  = we got an error                |
 |---------------+----------------------------+-------------------+----------------------------------------|
 #+TBLFM: $2=Left a
@@ -149,99 +153,101 @@ https://wiki.haskell.org/Import
 - https://packages.ubuntu.com/bionic/amd64/ghc/filelist
 *** Prelude.hs functions
 https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/tourofprelude.html#init
-| fn         | returns     | description                                                      |
 |------------+-------------+------------------------------------------------------------------|
-| all        | Bool        |                                                                  |
-| any        | Bool        |                                                                  |
-| concatMap  | [a]         | map + concat                                                     |
-| dropWhile  | [a]         | drops from head while fn is True                                 |
-| filter     | [a]         |                                                                  |
-| uncurry    | (a,b) -> c  | takes a fn that takes 2 args, and returns a fn that takes a pair |
-| curry      | a -> b -> c | takes a fn that takes a pair, and returns a fn that takes 2 args |
-| flip       | b -> a -> c | returns the same function with argumnts flipped                  |
-| foldl      | a           | folds left                                                       |
-| foldl1     | a           | folds left over NON EMPTY lists                                  |
-| foldr      | a           | folds right                                                      |
-| foldr1     | a           | folds right over NON EMPTY lists                                 |
-| iterate    | [a]         | returns the infinity list of applying [fn x, fn (fn x),...]      |
-| map        | [b]         |                                                                  |
-| span       | ([a],[a])   | split list into 2 tuple, pivot when fn returns False             |
-| break      | ([a],[a])   | split list into 2 tuple, pivot when fn returns True              |
-| takeWhile  | [a]         | returns elems from head, while fn returns True                   |
-| until      | [a]         | returns elems from head, until fn returns False                  |
-| zipWith    | [c]         | applies a binary function and two list                           |
+|        <r> |     <c>     |                                                                  |
+|         fn |   returns   | description                                                      |
 |------------+-------------+------------------------------------------------------------------|
-| repeat     | [a]         | repeats an infinite list of the value provided                   |
-| replicate  | [a]         | repeats N list of the value provided                             |
+|        all |    Bool     |                                                                  |
+|        any |    Bool     |                                                                  |
+|  concatMap |     [a]     | map + concat                                                     |
+|  dropWhile |     [a]     | drops from head while fn is True                                 |
+|     filter |     [a]     |                                                                  |
+|    uncurry | (a,b) -> c  | takes a fn that takes 2 args, and returns a fn that takes a pair |
+|      curry | a -> b -> c | takes a fn that takes a pair, and returns a fn that takes 2 args |
+|       flip | b -> a -> c | returns the same function with argumnts flipped                  |
+|      foldl |      a      | folds left                                                       |
+|     foldl1 |      a      | folds left over NON EMPTY lists                                  |
+|      foldr |      a      | folds right                                                      |
+|     foldr1 |      a      | folds right over NON EMPTY lists                                 |
+|    iterate |     [a]     | returns the infinity list of applying [fn x, fn (fn x),...]      |
+|        map |     [b]     |                                                                  |
+|       span |  ([a],[a])  | split list into 2 tuple, pivot when fn returns False             |
+|      break |  ([a],[a])  | split list into 2 tuple, pivot when fn returns True              |
+|  takeWhile |     [a]     | returns elems from head, while fn returns True                   |
+|      until |     [a]     | returns elems from head, until fn returns False                  |
+|    zipWith |     [c]     | applies a binary function and two list                           |
 |------------+-------------+------------------------------------------------------------------|
-| concat     | [a]         | flattens a list of lists                                         |
-| head       | a           | first element on a NON EMPTY list                                |
-| tail       | [a]         | aka cdr                                                          |
-| last       | a           | last element on a NON EMPTY list                                 |
-| init       | [a]         | aka butlast                                                      |
-| sort       | [a]         | sorts in ascending order                                         |
-| reverse    | [a]         | reverse a list                                                   |
-| maximum    | a           | returns max element on a NON EMPTY list                          |
-| minimum    | a           | returns min element on a NON EMPTY list                          |
-| length     | int         |                                                                  |
-| null       | Bool        | true if empty list                                               |
-| and        | Bool        | applied to a list of booleans                                    |
-| or         | Bool        | applied to a list of booleans                                    |
-| product    | int         | aka reduce #'*                                                   |
-| sum        | int         | aka reduce #'+                                                   |
+|     repeat |     [a]     | repeats an infinite list of the value provided                   |
+|  replicate |     [a]     | repeats N list of the value provided                             |
 |------------+-------------+------------------------------------------------------------------|
-| ++         | [a]         | append 2 lists                                                   |
-| zip        | [(a,b)]     | applied to 2 lists, returns a list of pairs                      |
+|     concat |     [a]     | flattens a list of lists                                         |
+|       head |      a      | first element on a NON EMPTY list                                |
+|       tail |     [a]     | aka cdr                                                          |
+|       last |      a      | last element on a NON EMPTY list                                 |
+|       init |     [a]     | aka butlast                                                      |
+|       sort |     [a]     | sorts in ascending order                                         |
+|    reverse |     [a]     | reverse a list                                                   |
+|    maximum |      a      | returns max element on a NON EMPTY list                          |
+|    minimum |      a      | returns min element on a NON EMPTY list                          |
+|     length |     int     |                                                                  |
+|       null |    Bool     | true if empty list                                               |
+|        and |    Bool     | applied to a list of booleans                                    |
+|         or |    Bool     | applied to a list of booleans                                    |
+|    product |     int     | aka reduce #'*                                                   |
+|        sum |     int     | aka reduce #'+                                                   |
 |------------+-------------+------------------------------------------------------------------|
-| elem       | Bool        | aka exists? on list                                              |
-| notElem    | Bool        | aka NOT exists? on list                                          |
-| !!         | a           | indexing a list                                                  |
-| splitAt    | ([a],[a])   | splits at index                                                  |
-| take       | a           | aka subseq 0 N                                                   |
-| drop       | [a]         | aka nthcdr                                                       |
+|         ++ |     [a]     | append 2 lists                                                   |
+|        zip |   [(a,b)]   | applied to 2 lists, returns a list of pairs                      |
 |------------+-------------+------------------------------------------------------------------|
-| lines      | [String]    | split String by new line                                         |
-| unlines    | String      | list of strings into string                                      |
-| words      | [String]    |                                                                  |
-| unwords    | String      |                                                                  |
-| digitToInt | Int         | char to int                                                      |
-| chr        | Char        | takes an integer                                                 |
-| ord        | Int         | ascii code for char                                              |
-| toLower    | Char        |                                                                  |
-| toUpper    | Char        |                                                                  |
-| compare    | Ordering    |                                                                  |
-| error      | a           | takes a string and errors                                        |
-| max        | a           | max between 2 elements                                           |
-| succ       | a           | next value on an Enum, error if last                             |
-| pred       | a           | previous value on an Enum, error if first                        |
+|       elem |    Bool     | aka exists? on list                                              |
+|    notElem |    Bool     | aka NOT exists? on list                                          |
+|         !! |      a      | indexing a list                                                  |
+|    splitAt |  ([a],[a])  | splits at index                                                  |
+|       take |      a      | aka subseq 0 N                                                   |
+|       drop |     [a]     | aka nthcdr                                                       |
 |------------+-------------+------------------------------------------------------------------|
-| fst        | a           | first element on a two element tuple                             |
-| snd        | b           | second element on a two element tuple                            |
+|      lines |  [String]   | split String by new line                                         |
+|    unlines |   String    | list of strings into string                                      |
+|      words |  [String]   |                                                                  |
+|    unwords |   String    |                                                                  |
+| digitToInt |     Int     | char to int                                                      |
+|        chr |    Char     | takes an integer                                                 |
+|        ord |     Int     | ascii code for char                                              |
+|    toLower |    Char     |                                                                  |
+|    toUpper |    Char     |                                                                  |
+|    compare |  Ordering   |                                                                  |
+|      error |      a      | takes a string and errors                                        |
+|        max |      a      | max between 2 elements                                           |
+|       succ |      a      | next value on an Enum, error if last                             |
+|       pred |      a      | previous value on an Enum, error if first                        |
 |------------+-------------+------------------------------------------------------------------|
-| maybe      | b           | applied fn to Maybe value, or the default value provided         |
+|        fst |      a      | first element on a two element tuple                             |
+|        snd |      b      | second element on a two element tuple                            |
 |------------+-------------+------------------------------------------------------------------|
-| print      | IO ()       | prints showable                                                  |
-| putStr     | IO ()       | prints string                                                    |
-| show       | String      |                                                                  |
+|      maybe |      b      | applied fn to Maybe value, or the default value provided         |
 |------------+-------------+------------------------------------------------------------------|
-| isSpace    | Bool        |                                                                  |
-| isAlpha    | Bool        | if char is alphabetic                                            |
-| isDigit    | Bool        | if char is a number                                              |
-| isLower    | Bool        |                                                                  |
-| isUpper    | Bool        |                                                                  |
+|      print |    IO ()    | prints showable                                                  |
+|     putStr |    IO ()    | prints string                                                    |
+|       show |   String    |                                                                  |
 |------------+-------------+------------------------------------------------------------------|
-| ceiling    |             | smallest integer, not less than argument                         |
-| floor      |             | greatest integer, not greater than argument                      |
-| round      |             | nearest integer                                                  |
-| truncate   |             | drops the fractional part                                        |
+|    isSpace |    Bool     |                                                                  |
+|    isAlpha |    Bool     | if char is alphabetic                                            |
+|    isDigit |    Bool     | if char is a number                                              |
+|    isLower |    Bool     |                                                                  |
+|    isUpper |    Bool     |                                                                  |
 |------------+-------------+------------------------------------------------------------------|
-| mod        |             |                                                                  |
-| quot       |             |                                                                  |
-| rem        |             |                                                                  |
+|    ceiling |             | smallest integer, not less than argument                         |
+|      floor |             | greatest integer, not greater than argument                      |
+|      round |             | nearest integer                                                  |
+|   truncate |             | drops the fractional part                                        |
 |------------+-------------+------------------------------------------------------------------|
-| **         | Floating    | raises, arguments must be Floating                               |
-| ^          | Num         | raises, Num by Integral                                          |
-| ^^         | Fractional  | raises, Fractional by Integral                                   |
+|        mod |             |                                                                  |
+|       quot |             |                                                                  |
+|        rem |             |                                                                  |
+|------------+-------------+------------------------------------------------------------------|
+|         ** |  Floating   | raises, arguments must be Floating                               |
+|          ^ |     Num     | raises, Num by Integral                                          |
+|         ^^ | Fractional  | raises, Fractional by Integral                                   |
 |------------+-------------+------------------------------------------------------------------|
 *** base
 - https://hackage.haskell.org/package/base
@@ -426,6 +432,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 
 * Emacs Setup
 
+- http://www.cis.syr.edu/~sueo/cis252/emacs.html
 - Emacs: lsp-mode, lsp-ui, lsp-haskell
 - https://github.com/haskell/haskell-ide-engine
 - https://github.com/soupi/minimal-haskell-emacs (setup)

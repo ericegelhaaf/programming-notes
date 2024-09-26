@@ -310,14 +310,14 @@ instance Show Color where
 * 10 | Seven Languages in 7 weeks                | PragProg | Bruce A. Tate
 
 - "In Haskell, indentation is significant." (?
-- on Haskell, IF is a function, not a control structure, it returns a value.
+- on Haskell, ~if~ is a function, NOT a control structure, it returns a value.
 - "." for function composition
   second = head . tail
 - On ghci console
   > :set +t
 - A partial applied function is called ~section~
 - ~where~ on function definition can define local functions too
-- every function does have 1(one) parameter
+- ~every~ function does have 1(one) parameter
   - the process of reducing a function of N parameters to N of 1 param is ~currying~
 
 #+NAME: single-line vs multi-line pattern-matching vs guards

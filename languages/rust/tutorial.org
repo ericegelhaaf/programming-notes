@@ -24,10 +24,10 @@ let some_number  /*: i16*/ = 100;
   - .chars().count()
 ** Type inference
 #+begin_src rust
-let a = 100_000; // default to i32
-let b = 5.;      // default to f64 ... but depending of context used it might choose f32...
-let c: u8 = 1;
-let d = 1u8;     // uses type u8
+  let a = 100_000; // default to i32
+  let b = 5.;      // default to f64 ... but depending of context used it might choose f32...
+  let c: u8 = 1;
+  let d = 1u8;     // uses type u8
 #+end_src
 *** Floats
 - Can't add f32 and f64 directly
@@ -837,27 +837,33 @@ Alternative to loop+match
 
 ** 9 Functions
 *** 9.1 Methods
-   - Associated methods are called using ~::~ double colons
-   - Methods are called using the ~.~ dot operator
-   ~self~ is sugar for ~self: Self~
-   ~&self~ is sugar for ~self: &Self~
-   ~&mut self~ is sugar for ~self: &mut Self~
+- Associated methods are called using ~::~ double colons
+- Methods are called using the ~.~ dot operator
+|-----------+-----------------|
+|       <r> |                 |
+|           | sugar for       |
+|-----------+-----------------|
+|      self | self: Self      |
+|     &self | self: &Self     |
+| &mut self | self: &mut Self |
+|-----------+-----------------|
 *** 9.2 Closures
-    - I/O arguments type is infered, {} enclosure is optional
-    - Capture the environment
-      - (about ownership) They will do what the closure requires without anotation.
-    - Can explicitly use ~move~ to take ownership of captured variables
-      #+begin_src rust
-      let haystack = vec![1, 2, 3];
-      let contains = move |needle| haystack.contains(needle);
-      println!("{}", contains(&1));
-      println!("{}", contains(&4));
-      #+end_src
-    - They MUST be annotated when used as function arguments.
-      Using generics and picking one of:
-      * Fn     -     &T
-      * FnMut  - &mut T
-      * FnOnce -      T
+
+- I/O arguments type is infered, {} enclosure is optional
+- Capture the environment
+  - (about ownership) They will do what the closure requires without anotation.
+- Can explicitly use ~move~ to take ownership of captured variables
+  #+begin_src rust
+  let haystack = vec![1, 2, 3];
+  let contains = move |needle| haystack.contains(needle);
+  println!("{}", contains(&1));
+  println!("{}", contains(&4));
+  #+end_src
+- They MUST be annotated when used as function arguments.
+  Using generics and picking one of:
+  * Fn     -     &T
+  * FnMut  - &mut T
+  * FnOnce -      T
 
 ** 10 Modules
 *** 10.2 Structures

@@ -247,7 +247,7 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 
 |------------------+-------------------+-------------+----------------------+----------------------|
 |              <r> |               <r> |             |                      |                      |
-|      instantiate |              type | access      | update               | destructuring        |
+|           create |              type | access      | update               | match                |
 |------------------+-------------------+-------------+----------------------+----------------------|
 |          [1,2,3] |          List Int |             |                      | x :: xs              |
 |       (1, "foo") |   ( Int, String ) | Tuple.first |                      | ( foo, bar )         |
@@ -256,10 +256,14 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 | { name = "foo" } | { name : String } | rec.name    | { rec ¦ name = "Z" } | { name }             |
 |        { "foo" } |                   |             |                      | ({ name } as person) |
 |------------------+-------------------+-------------+----------------------+----------------------|
+|           Just a |           Maybe a |             |                      |                      |
+|          Nothing |                   |             |                      |                      |
+|------------------+-------------------+-------------+----------------------+----------------------|
+|             Ok a |        Result a b |             |                      |                      |
+|            Err b |                   |             |                      |                      |
+|------------------+-------------------+-------------+----------------------+----------------------|
 
 #+begin_src elm
-type Maybe a = Just a | Nothing
-type Result a b = Ok a | Err b
 -- even in the module where is defined, you CANNOT make one
 type Never = OneMore Never
 -- example type representing a Model, without field names, like in a record

@@ -133,4 +133,3 @@ https://github.com/i-am-tom/haskell-exercises
 
 - "21?" column stands for GHC2021 and means,
   if the extension is enabled by default on that version of Haskell (aka GHC 9.4)
-
