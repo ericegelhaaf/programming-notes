@@ -11,15 +11,17 @@
 
 * Language
 |-------------------------------+----------------------------|
-| "foo"                         | grouping                   |
-| {foo}                         | literal grouping           |
-| [print 1]                     | command substitution       |
-| $foo                          | variable substitution      |
+|              <c>              |                            |
 |-------------------------------+----------------------------|
-| [list foo 1]                  | lists, are just strings    |
-| [expr 1+2]                    |                            |
-| [expr 1 + 2]                  |                            |
-| [expr {1 + 2}]                |                            |
+|             "foo"             | grouping                   |
+|            { foo }            | literal grouping           |
+|          [ print 1 ]          | command substitution       |
+|             $foo              | variable substitution      |
+|-------------------------------+----------------------------|
+|         [list foo 1]          | lists, are just strings    |
+|          [expr 1+2]           |                            |
+|         [expr 1 + 2]          |                            |
+|        [expr {1 + 2}]         |                            |
 | proc + {a b} { expr {$a+$b} } | procedure, implicit return |
 |-------------------------------+----------------------------|
 ** Standard Library

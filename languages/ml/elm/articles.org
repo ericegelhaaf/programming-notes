@@ -1,3 +1,4 @@
+- https://www.gizra.com/content/elm-port-alternatives/
 - https://mixandgo.com/learn/elm/chrome-extension-elm
 - https://nais.io/blog/posts/elm/
 - http://markwunsch.com/thinkpiece/2017/01/hive_city_retrospective.html
@@ -16,6 +17,7 @@
 * 18 | A Short Guide to Function Operators in Elm (|>, <|, >>, <<)
   https://harfangk.github.io/2018/01/27/elm-function-operators.html
 
+|------+----------------------------------+------------------------------------------------------------|
 | op   | signature                        | describes...                                               |
 |------+----------------------------------+------------------------------------------------------------|
 | (¦>) | a -> (a -> b) -> b               | the _flow of data_, main advantage over nested parentheses |

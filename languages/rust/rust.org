@@ -119,10 +119,26 @@ struct ANamed {       // "named struct"
   }
 #+end_src
 
+*** Option & Result
+
+#+begin_src rust
+  enum Option<T> {
+    Some(T),
+    None,
+  }
+#+end_src
+
+#+begin_src rust
+  enum Result<T,E> {
+    Ok(T),
+    Err(E),
+  }
+#+end_src
+
 *** Primitive
-- =as= used for casting
-- std::i8::MIN
-- std::i8::MAX
+- =as= is used for casting
+- ~std::i8::MIN~ or ~i8::MIN~
+- ~std::i8::MAX~ or ~i8::MAX~
 |-------+-------+-----------------------------|
 |   <r> |   <r> |                             |
 |       |       | size                        |
@@ -232,43 +248,74 @@ a common method for multiple types
 #+end_src
 
 ** Standard Library
-
 https://doc.rust-lang.org/std/#modules
-
-#+begin_src rust
-  enum Option<T> {
-    Some(T),
-    None,
-  }
-#+end_src
-
-#+begin_src rust
-  enum Result<T,E> {
-    Ok(T),
-    Err(E),
-  }
-#+end_src
-
+|-------------+-----------------------------------------------------------------------------------------------------------------|
+|         <r> |                                                                                                                 |
+|      MODULE | DESCRIPTION                                                                                                     |
+|-------------+-----------------------------------------------------------------------------------------------------------------|
+|       [[https://doc.rust-lang.org/std/array/index.html][array]] | Utilities for the array primitive type.                                                                         |
+|        [[https://doc.rust-lang.org/std/char/index.html][char]] | Utilities for the char primitive type.                                                                          |
+|         [[https://doc.rust-lang.org/std/f32/index.html][f32]] | Constants for the f32 single-precision floating point type.                                                     |
+|         [[https://doc.rust-lang.org/std/f64/index.html][f64]] | Constants for the f64 double-precision floating point type.                                                     |
+|       [[https://doc.rust-lang.org/std/slice/index.html][slice]] | Utilities for the slice primitive type.                                                                         |
+|         [[https://doc.rust-lang.org/std/str/index.html][str]] | Utilities for the str primitive type.                                                                           |
+|      [[https://doc.rust-lang.org/std/string/index.html][string]] | A UTF-8–encoded, growable string.                                                                               |
+|-------------+-----------------------------------------------------------------------------------------------------------------|
+|       [[https://doc.rust-lang.org/std/alloc/index.html][alloc]] | Memory allocation APIs.                                                                                         |
+|         [[https://doc.rust-lang.org/std/any/index.html][any]] | Utilities for dynamic typing or type ~reflection.~                                                              |
+|        [[https://doc.rust-lang.org/std/arch/index.html][arch]] | ~SIMD~ and vendor intrinsics module.                                                                            |
+|       [[https://doc.rust-lang.org/std/ascii/index.html][ascii]] | Operations on ASCII strings and characters.                                                                     |
+|   [[https://doc.rust-lang.org/std/backtrace/index.html][backtrace]] | Support for capturing a stack backtrace of an OS thread                                                         |
+|      [[https://doc.rust-lang.org/std/borrow/index.html][borrow]] | A module for working with borrowed data.                                                                        |
+|       [[https://doc.rust-lang.org/std/boxed/index.html][boxed]] | The Box<T> type for heap allocation.                                                                            |
+|        [[https://doc.rust-lang.org/std/cell/index.html][cell]] | Shareable mutable containers.                                                                                   |
+|       [[https://doc.rust-lang.org/std/clone/index.html][clone]] | The Clone trait for types that cannot be ‘implicitly copied’.                                                   |
+|         [[https://doc.rust-lang.org/std/cmp/index.html][cmp]] | Utilities for comparing and ordering values.                                                                    |
+| [[https://doc.rust-lang.org/std/collections/index.html][collections]] | Collection types.                                                                                               |
+|     [[https://doc.rust-lang.org/std/convert/index.html][convert]] | Traits for conversions between types.                                                                           |
+|     [[https://doc.rust-lang.org/std/default/index.html][default]] | The Default trait for types with a default value.                                                               |
+|         [[https://doc.rust-lang.org/std/env/index.html][env]] | Inspection and manipulation of the process’s environment.                                                       |
+|       [[https://doc.rust-lang.org/std/error/index.html][error]] | Interfaces for working with Errors.                                                                             |
+|         [[https://doc.rust-lang.org/std/ffi/index.html][ffi]] | Utilities related to FFI bindings.                                                                              |
+|         [[https://doc.rust-lang.org/std/fmt/index.html][fmt]] | Utilities for formatting and printing Strings.                                                                  |
+|          [[https://doc.rust-lang.org/std/fs/index.html][fs]] | Filesystem manipulation operations.                                                                             |
+|      [[https://doc.rust-lang.org/std/future/index.html][future]] | Asynchronous basic functionality.                                                                               |
+|        [[https://doc.rust-lang.org/std/hash/index.html][hash]] | Generic hashing support.                                                                                        |
+|        [[https://doc.rust-lang.org/std/hint/index.html][hint]] | Hints to compiler that affects how code should be emitted or optimized. Hints may be compile time or runtime.   |
+|          [[https://doc.rust-lang.org/std/io/index.html][io]] | Traits, helpers, and type definitions for core I/O functionality.                                               |
+|        [[https://doc.rust-lang.org/std/iter/index.html][iter]] | Composable external iteration.                                                                                  |
+|      [[https://doc.rust-lang.org/std/marker/index.html][marker]] | Primitive traits and types representing basic properties of types.                                              |
+|         [[https://doc.rust-lang.org/std/mem/index.html][mem]] | Basic functions for dealing with memory.                                                                        |
+|         [[https://doc.rust-lang.org/std/net/index.html][net]] | Networking primitives for TCP/UDP communication.                                                                |
+|         [[https://doc.rust-lang.org/std/num/index.html][num]] | Additional functionality for numerics.                                                                          |
+|         [[https://doc.rust-lang.org/std/ops/index.html][ops]] | Overloadable operators.                                                                                         |
+|      [[https://doc.rust-lang.org/std/option/index.html][option]] | Optional values.                                                                                                |
+|          [[https://doc.rust-lang.org/std/os/index.html][os]] | OS-specific functionality.                                                                                      |
+|       [[https://doc.rust-lang.org/std/panic/index.html][panic]] | Panic support in the standard library.                                                                          |
+|        [[https://doc.rust-lang.org/std/path/index.html][path]] | Cross-platform path manipulation.                                                                               |
+|         [[https://doc.rust-lang.org/std/pin/index.html][pin]] | Types that pin data to a location in memory.                                                                    |
+|     [[https://doc.rust-lang.org/std/prelude/index.html][prelude]] | The Rust Prelude                                                                                                |
+|   [[https://doc.rust-lang.org/std/primitive/index.html][primitive]] | This module reexports the primitive types to allow usage that is not possibly shadowed by other declared types. |
+|     [[https://doc.rust-lang.org/std/process/index.html][process]] | A module for working with processes.                                                                            |
+|         [[https://doc.rust-lang.org/std/ptr/index.html][ptr]] | Manually manage memory through raw pointers.                                                                    |
+|          [[https://doc.rust-lang.org/std/rc/index.html][rc]] | Single-threaded reference-counting pointers. ‘Rc’ stands for ‘Reference Counted’.                               |
+|      [[https://doc.rust-lang.org/std/result/index.html][result]] | Error handling with the Result type.                                                                            |
+|        [[https://doc.rust-lang.org/std/sync/index.html][sync]] | Useful synchronization primitives.                                                                              |
+|        [[https://doc.rust-lang.org/std/task/index.html][task]] | Types and Traits for working with asynchronous tasks.                                                           |
+|      [[https://doc.rust-lang.org/std/thread/index.html][thread]] | Native threads.                                                                                                 |
+|        [[https://doc.rust-lang.org/std/time/index.html][time]] | Temporal quantification.                                                                                        |
+|         [[https://doc.rust-lang.org/std/vec/index.html][vec]] | A contiguous growable array type with heap-allocated contents, written Vec<T>.                                  |
+|-------------+-----------------------------------------------------------------------------------------------------------------|
+** Experimental Modules
+|----------------+---------------------------------------------------------------|
+| assert_matches | Unstable module containing the unstable assert_matches macro. |
+| async_iter     | Composable asynchronous iteration.                            |
+| f16            | Constants for the f16 double-precision floating point type.   |
+| f128           | Constants for the f128 double-precision floating point type.  |
+| intrinsics     | Compiler intrinsics.                                          |
+| pat            | Helper module for exporting the pattern_type macro            |
+| simd           | Portable SIMD module.                                         |
+|----------------+---------------------------------------------------------------|
 
 * Codebases
 - https://github.com/pop-os/system76-power
-* Learn
-- https://github.com/sger/RustBooks
-- https://github.com/mre/idiomatic-rust
-- https://rams3s.github.io/rust-ebookshelf/
-- https://github.com/ctjhoa/rust-learning
-- examples https://github.com/rust-lang/rust-by-example
-           https://doc.rust-lang.org/stable/rust-by-example/
-- examples https://github.com/rust-lang-nursery/rust-cookbook
-** Medium
-- https://doc.rust-lang.org/nightly/nomicon/
-- https://rust-unofficial.github.io/too-many-lists/
-- https://os.phil-opp.com/
-- https://github.com/dtolnay/proc-macro-workshop
-** Algorithms
-- Common data structures and algorithms in Rust
-  https://github.com/EbTech/rust-algorithms
-- Small exercises to get you used to reading and writing Rust code!
-  https://github.com/rust-lang/rustlings
-- Implementing Rosetta Code problems in Rust.
-  https://github.com/rust-rosetta/rust-rosetta

@@ -1,3 +1,23 @@
+- https://github.com/sger/RustBooks
+- https://github.com/mre/idiomatic-rust
+- https://rams3s.github.io/rust-ebookshelf/
+- https://github.com/ctjhoa/rust-learning
+- examples https://github.com/rust-lang/rust-by-example
+           https://doc.rust-lang.org/stable/rust-by-example/
+- examples https://github.com/rust-lang-nursery/rust-cookbook
+** Medium
+- https://doc.rust-lang.org/nightly/nomicon/
+- https://rust-unofficial.github.io/too-many-lists/
+- https://os.phil-opp.com/
+- https://github.com/dtolnay/proc-macro-workshop
+** Algorithms
+- Common data structures and algorithms in Rust
+  https://github.com/EbTech/rust-algorithms
+- Small exercises to get you used to reading and writing Rust code!
+  https://github.com/rust-lang/rustlings
+- Implementing Rosetta Code problems in Rust.
+  https://github.com/rust-rosetta/rust-rosetta
+
 - https://google.github.io/comprehensive-rust/welcome.html
 * Tutorial: EasyRust
 https://github.com/Dhghomon/easy_rust

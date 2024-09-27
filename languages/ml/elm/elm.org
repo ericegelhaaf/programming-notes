@@ -187,15 +187,15 @@ https://github.com/orgs/elm/repositories?q=mirror%3Afalse+fork%3Afalse+archived%
 |            | .programWithFlags  |                                                                      |
 |------------+--------------------+----------------------------------------------------------------------|
 ** operators
-|------+----------------------------------------+------------------------------------------------------------|
-| op   | signature                              | describes...                                               |
-|------+----------------------------------------+------------------------------------------------------------|
-| (¦>) | a          -> (a -> b)   -> b          | the _flow of data_, main advantage over nested parentheses |
-| (<¦) | (a -> b)   ->    a       -> b          | second argument INTO the first                             |
-| (>>) | (b -> c)   -> (a -> b)   -> (a -> c)   | _function compositions_, indepedent of the data flow       |
-| (<<) | (a -> b)   -> (b -> c)   -> (a -> c)   |                                                            |
-| (++) | appendable -> appendable -> appendable |                                                            |
-|------+----------------------------------------+------------------------------------------------------------|
+|----+----------------------------------------+------------------------------------------------------------|
+| op | signature                              | describes...                                               |
+|----+----------------------------------------+------------------------------------------------------------|
+| ¦> | a          -> (a -> b)   -> b          | the _flow of data_, main advantage over nested parentheses |
+| <¦ | (a -> b)   ->    a       -> b          | second argument INTO the first                             |
+| >> | (b -> c)   -> (a -> b)   -> (a -> c)   | _function compositions_, indepedent of the data flow       |
+| << | (a -> b)   -> (b -> c)   -> (a -> c)   |                                                            |
+| ++ | appendable -> appendable -> appendable |                                                            |
+|----+----------------------------------------+------------------------------------------------------------|
 ** attributes/events (1st argument)
 
 - https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes

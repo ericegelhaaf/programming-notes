@@ -69,26 +69,27 @@ used by search engines
   - make width be the one of the device
 
 |------------+----------------------------+-----------------------------------------------------|
-|            |                            | content=                                            |
+|        <r> |                            | content=                                            |
 |------------+----------------------------+-----------------------------------------------------|
-| charset    | UTF-8                      | -                                                   |
+|    charset | UTF-8                      | -                                                   |
 |------------+----------------------------+-----------------------------------------------------|
 | [[https://www.w3schools.com/tags/att_meta_http_equiv.asp][http-equiv]] | refresh                    | aka seconds between auto-refresh                    |
 |            | default-style              | ?                                                   |
 |            | content-type               | "text/html; charset=UTF-8"                          |
 |            | content-security-policy    | "default-src 'self'"                                |
 |------------+----------------------------+-----------------------------------------------------|
-| [[https://www.w3schools.com/tags/att_meta_name.asp][name]]       | [[https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag][viewport]]                   | "width=device-width, initial-scale=1.0"             |
-|            | description                | SEO                                                 |
-|            | keywords                   | SEO (eg: "HTML, CSS")                               |
-|            | author                     |                                                     |
+|       [[https://www.w3schools.com/tags/att_meta_name.asp][name]] |                            |                                                     |
 |            | application-name           | eg: "State of Elm 2023"                             |
+|            | apple-mobile-web-app-title | eg: "State of Elm 2023"                             |
+|            | author                     |                                                     |
+|            | description                | SEO                                                 |
 |            | generator                  | for software generated pages                        |
-|            | robots                     |                                                     |
 |            | googlebot                  | index,follow                                        |
+|            | keywords                   | SEO (eg: "HTML, CSS")                               |
+|            | robots                     |                                                     |
 |            | title                      | SEO eg: "State of Elm 2023"                         |
 |            | theme-color                | eg: "#ffffff"                                       |
-|            | apple-mobile-web-app-title | eg: "State of Elm 2023"                             |
+|            | [[https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag][viewport]]                   | "width=device-width, initial-scale=1.0"             |
 |------------+----------------------------+-----------------------------------------------------|
 |            | twitter:card               | eg: summary, summary_large_image                    |
 |            | twitter:title              | eg: "State of Elm 2023"                             |
@@ -98,7 +99,7 @@ used by search engines
 |            | twitter:url                | optional eg: "https://state-of-elm.com/"            |
 |            | twitter:image              | optional eg: "https://state-of-elm.com/favicon.png" |
 |------------+----------------------------+-----------------------------------------------------|
-| property   | og                         | see [[https://ogp.me/][Open Graph protocol]]                             |
+|   property | og                         | see [[https://ogp.me/][Open Graph protocol]]                             |
 |            | og:title                   | "State of Elm 2023"                                 |
 |            | og:type                    | eg: website, video.movie                            |
 |            | og:image                   | "https://state-of-elm.com/favicon.png"              |
@@ -122,16 +123,19 @@ used by search engines
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
 - can occurr on <head> or <body>
 |----------------+----------------------------+---------------------|
-| crossorigin    |                            |                     |
+|            <r> |                            |                     |
+|      attribute | value                      | description         |
+|----------------+----------------------------+---------------------|
+|    crossorigin |                            |                     |
 |                | anonymous                  |                     |
 |                | use-credentials            |                     |
 |----------------+----------------------------+---------------------|
-| href           |                            |                     |
-| hreflang       |                            |                     |
-| media          | eg: print, max-width:600px | only loaded if true |
-| sizes          |                            |                     |
-| title          |                            |                     |
-| type           |                            |                     |
+|           href |                            |                     |
+|       hreflang |                            |                     |
+|          media | eg: print, max-width:600px | only loaded if true |
+|          sizes |                            |                     |
+|          title |                            |                     |
+|           type |                            |                     |
 |----------------+----------------------------+---------------------|
 | referrerpolicy |                            |                     |
 |                | no-referrer                |                     |
@@ -140,8 +144,9 @@ used by search engines
 |                | origin-when-cross-origin   |                     |
 |                | unsafe-url                 |                     |
 |----------------+----------------------------+---------------------|
-| rel            |                            |                     |
+|            rel |                            |                     |
 |                | alternate                  |                     |
+|                | apple-touch-icon           |                     |
 |                | author                     |                     |
 |                | dns-prefetch               |                     |
 |                | help                       |                     |
