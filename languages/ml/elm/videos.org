@@ -1,10 +1,11 @@
 - Channels
-  https://www.youtube.com/@rhg_dev
-  https://www.youtube.com/@ElmEurope
-  https://www.youtube.com/@elmonlinemeetup
-  https://www.youtube.com/@elmtownpodcast
-  https://www.youtube.com/@ElmForReactDevs
-  https://www.youtube.com/@elmconf
+  - https://www.youtube.com/@rhg_dev
+  - https://www.youtube.com/@ElmEurope
+  - https://www.youtube.com/@elmonlinemeetup
+  - https://www.youtube.com/@elmtownpodcast
+  - https://www.youtube.com/@ElmForReactDevs
+  - https://www.youtube.com/@elmconf
+  - https://www.youtube.com/@EvanCzaplicki/videos
 
 - 16 | Live Coding an Instagram Clone Using Elm https://www.youtube.com/watch?v=C4LU4_heFrs
 - 18 | Elm Crash Course https://www.youtube.com/watch?v=kEitFAY7Gc8
@@ -196,3 +197,33 @@ video https://www.youtube.com/watch?v=ZPVGK2OSTog
     node: document.querySelector("#app"),
   });
 #+end_src
+* TODO 23 | Elm in the Backend | Evan Czaplicki
+
+https://vimeo.com/829416451
+
+- TODO: 12:47
+- in JS is hard to do dead-code-elimination on an impure language.
+- ME: a typesystem is like a protobuf across different components
+- Goals
+  - Typesafe from database to browser
+  - No need for XML, JSON or Protobuf
+  - Store custom types on database
+  - Simple and reliable =db migrations=
+  - Fast
+- ORM that is just Elm code
+  #+begin_src elm
+    access : Table user row -> user -> Rows row
+
+    map    : (a -> b)    -> Rows a -> Rows b
+    filter : (a -> Bool) -> Rows a -> Rows b
+
+    intersect : (a -> Key) -> (b -> Key) -> Rows a -> Rows b -> Rows (key, a, b)
+    diff      : (a -> Key) -> (b -> Key) -> Rows a -> Rows b -> Rows (key, a, Maybe b)
+    union     : (a -> Key) -> (b -> Key) -> Rows a -> Rows b -> Rows (key, a, Union a b)
+
+    type Union a b =
+        = Left a
+        | Right b
+        | Both a b
+  #+end_src
+

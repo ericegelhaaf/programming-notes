@@ -1,4 +1,37 @@
-* Video: Rust for TypeScript Devs / ThePrimeagen
+* 21 Rust Programming Language / Richard Feldman
+
+** 1 Introduction
+
+- Main reason to use rust is for speed/performance
+  - Traditionally an area dominated by C
+
+- Why NOT use Rust?
+  - a is a big language.
+  - slower iteration cycle than most languages
+  - tests can take a while to build
+  - safer than C, less than pure FP
+
+** 2 Primitives
+
+- IEE float point numbers
+  - binary operations
+    - lead to some weird numbers
+      #+begin_src rust
+        let x = 1.1;
+        let y = 2.2;
+        println!("{}", x * y); // 2.4200000000000004
+      #+end_src
+- No crosscompiler at the time of video.
+- No higher kinded types
+- rust-analyzer>rls (vscode extension)
+
+** 3 Collections
+** 4 Pattern Matching
+- ME: rust-analyzer is pretty through with dead code elimination
+  - unused enum variants
+  - unused struct fields
+** 5 Vectors
+* 23 Rust for TypeScript Devs / ThePrimeagen
 ** 1
 |------------------+--------------------|
 | Typescript       | Rust               |
