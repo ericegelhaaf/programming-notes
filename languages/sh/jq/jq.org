@@ -91,8 +91,6 @@
 - booleans
   - falsy values: null, false
 
-- empty, it's own type
-
 |---------+------------------------------|
 | type    | example                      |
 |---------+------------------------------|
@@ -102,6 +100,7 @@
 | array   | [1, "2", {"foo": "bar"}]     |
 | object  | {"foo": 2}                   |
 | null    | null                         |
+| empty   |                              |
 |---------+------------------------------|
 
 ** modules
@@ -146,14 +145,12 @@
 | .foo?    | does NOT error when input is NOT an object                 |
 |----------+------------------------------------------------------------|
 ** generators?
-
 |---+-------------------------------------------------+--------------+--------------------------------------|
 | 1 | while(.<30; .*2)                                | [1,2,4,8,16] |                                      |
 | 1 | repeat(.*2; error)?                             | [2]          | repeats filter until error is raised |
 | 4 | [.,1]¦until(.[0] < 1; [.[0]-1, .[1]*.[0]])¦.[1] | 24           |                                      |
 |   | recurse???                                      |              |                                      |
 |---+-------------------------------------------------+--------------+--------------------------------------|
-
 ** format & escape strings
 |---------+------------------------------------|
 | @text   | just calls tostring                |
@@ -165,15 +162,34 @@
 | @sh     | escaped suitable for POSIX shell   |
 | @base64 | as specified by RFC 4648           |
 |---------+------------------------------------|
-
-
-** casting functions
+** stdlib functions
+*** general
+|-------------------+----------------------------------------------|
+| filter            | description                                  |
+|-------------------+----------------------------------------------|
+| debug             | like (.) but it prints to stderr too         |
+| range(TO)         |                                              |
+| range(FROM;TO)    |                                              |
+| range(FROM;TO;BY) | produces a stream of numbers                 |
+| empty             | returns empty                                |
+|-------------------+----------------------------------------------|
+| input             | outputs 1 NEW input                          |
+| inputs            | outputs all *remaining* inputs, one by one   |
+|-------------------+----------------------------------------------|
+| halt              | exit                                         |
+| halt_error/0      | exit                 AND prints input        |
+| halt_error/1      | exit with given code AND prints input        |
+|-------------------+----------------------------------------------|
+| error/0           | returns an error, can be catched (try/catch) |
+| error/1           | with message given                           |
+|-------------------+----------------------------------------------|
+*** casting
 |-------------+----------+---------------+---|
 | [1,"1"]     | tonumber | 1,1           |   |
 | [1,"1",[1]] | tostring | "1","1","[1]" |   |
 | 0           | type     | "number"      |   |
 |-------------+----------+---------------+---|
-**     date functions
+***    date
 |                        |                  <c>                  |                          |
 |------------------------+---------------------------------------+--------------------------|
 | 1425599507             |                todate                 |   "2015-03-05T23:51:47Z" |
@@ -183,12 +199,12 @@
 | -                      |                  now                  |        1716057777.153488 |
 | 1425599507             |         strftime("%H:%M:%S")          |               "23:51:47" |
 |------------------------+---------------------------------------+--------------------------|
-**  stream functions
+***  stream
 |------------+-----------+-------------------+---|
 | 86, 99, 13 | . + 1     | 87, 100, 14       |   |
 | 86, 99, 13 | [ . + 1 ] | [87], [100], [14] |   |
 |------------+-----------+-------------------+---|
-**   regex functions
+***   regex
 
 - https://jqlang.github.io/jq/manual/v1.7/#regular-expressions
 - compatible with Perl v5.8 regexes
@@ -249,27 +265,7 @@
 |                  | ;    "\(.tla ¦ ascii_upcase)")                 |                                                    |                                            |
 |------------------+------------------------------------------------+----------------------------------------------------+--------------------------------------------|
 
-** general functions
-|-------------------+----------------------------------------------|
-| filter            | description                                  |
-|-------------------+----------------------------------------------|
-| debug             | like (.) but it prints to stderr too         |
-| range(TO)         |                                              |
-| range(FROM;TO)    |                                              |
-| range(FROM;TO;BY) | produces a stream of numbers                 |
-| empty             | returns empty                                |
-|-------------------+----------------------------------------------|
-| input             | outputs 1 NEW input                          |
-| inputs            | outputs all *remaining* inputs, one by one   |
-|-------------------+----------------------------------------------|
-| halt              | exit                                         |
-| halt_error/0      | exit                 AND prints input        |
-| halt_error/1      | exit with given code AND prints input        |
-|-------------------+----------------------------------------------|
-| error/0           | returns an error, can be catched (try/catch) |
-| error/1           | with message given                           |
-|-------------------+----------------------------------------------|
-**   array functions
+***   array
 |-------------------------+---------------------------------+-------------------------|
 |           <c>           |               <c>               |           <c>           |
 |           in            |             filter              |           out           |
@@ -335,7 +331,7 @@
   - (.) is the accumulator
   - if you need to reduce the input, store it in a variable
 
-**  string functions
+***  string
 
 =being "Hello!" the INPUT=
 
@@ -366,7 +362,7 @@
 | trim/ltrim/rtrim     | "Hello!"                | trims whitespace           |
 |----------------------+-------------------------+----------------------------|
 
-**    math functions
+***    math
 
 https://jqlang.github.io/jq/manual/v1.7/#math
 
@@ -384,7 +380,7 @@ https://jqlang.github.io/jq/manual/v1.7/#math
 - 3-input:
   - fma
 
-**  object functions
+***  object
 |----------------------------+--------------------------------------------------+-----------------------------+-------------------------------|
 |                            |                       <c>                        |                             |                               |
 |                            |                      filter                      | out                         |                               |
