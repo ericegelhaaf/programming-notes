@@ -1,0 +1,383 @@
+- Calculator of case+power+$$$ https://modulargrid.net/
+- argentino https://www.gsmusic.com.ar/productos/apollo1.html
+
+** Pedals
+
+- https://www.youtube.com/watch?v=otkW_q0_VIU
+- Cheap:
+  - M-vave Chocolate
+  - M-Vave Tank-G
+  - M-Vave Cube-Baby
+- 82Hz lowest note on guitar
+- distortion based pedal, from less to high
+  - distortion > overdrive > fuzz
+- others
+  - noise gate
+  - chorus
+  - phaser
+  - tremolo
+  - delay: analog, tape delay, ping pong, jewel
+  - reverb: hall room spring
+
+** Projects
+
+- https://sdiy.info/wiki/CatGirl_Synth
+- Electronics Demonstrations http://www.falstad.com/circuit/e-index.html
+- The Audio Pages - Elliott Sound Products https://sound-au.com/articles/index.htm
+- https://github.com/oficinadesonido/miPrimerModular
+  https://www.oficinadesonido.org/
+  https://www.kickstarter.com/projects/oficinadesonido/my-first-modular
+
+- Casing http://www.muzines.co.uk/articles/putting-on-the-style/7938
+- project: vco+vcf https://ccrma.stanford.edu/~nando/el_dinosaurio/
+- project: arduino https://note.com/solder_state/
+
+- Analog Equipment Design http://www.muzines.co.uk/articles/analogue-equipment-design/8426
+
+- Chip Parade http://www.muzines.co.uk/articles/chip-parade/3143
+  - 1
+    - A LPF/HPF can be done with just a _capacitor_ and a _resistor_
+      - _capacitor_ being a difficult path for low frequencies
+      - it has a fixed cutoff
+      - or controlled by a _potentiometer_ instead of a _resistor_
+    - However a voltage/current controlled one would be preffered
+      - OTA = Operational Transductance Amplifiers
+      - https://en.wikipedia.org/wiki/Operational_transconductance_amplifier
+      - https://en.wikipedia.org/wiki/Voltage-controlled_resistor
+
+- Soldering On http://www.muzines.co.uk/articles/soldering-on/3135
+- Starting point http://www.muzines.co.uk/articles/starting-point/2563
+
+- http://www.muzines.co.uk/articles/test-tone-oscillator/11578
+- Moog https://moogfoundation.org/bob-moog-schematics-release-1-for-our-8th-anniversary/
+- LFO https://www.elby-designs.com/webtek/cgs/cgs03/cgs03_psycho_lfo.html
+- CMOS Synth https://web.archive.org/web/20150206051357/http://beavisaudio.com/Projects/CMOS_Synthesizers/
+
+- Mixer
+  - Mixer+Eq http://www.muzines.co.uk/articles/the-synthmix/7964
+  - Mixer http://www.muzines.co.uk/articles/destiny-modular-mixer/2785
+  - 4 Channel Stero Mix http://www.muzines.co.uk/articles/4-channel-stereo-mixer/3245
+- LFO
+  - http://www.muzines.co.uk/articles/multi-waveform-lfo/7909
+- Osc
+  - https://musicfromouterspace.com/index.php?CATPARTNO=&PROJARG=ELECTRONICS%2Fbookstore.html&MAINTAB=SYNTHDIY&SONGID=NONE&VPW=1588&VPH=622
+  - Sine VCO http://www.muzines.co.uk/articles/sine-vco/3335
+- Noise
+  - http://www.muzines.co.uk/articles/dynamic-noise-filter/1260
+  - Noise Gate http://www.muzines.co.uk/articles/noise-gate/3556
+  - Keyed Noise Gate http://www.muzines.co.uk/articles/keyed-noise-gate/3206
+  - Noise Reduction Unit http://www.muzines.co.uk/articles/noise-reduction-unit/2622
+- Clock
+  - http://www.muzines.co.uk/articles/tap-tempo/6091
+  - http://www.muzines.co.uk/articles/the-time-machine/1881
+- Filter
+  - http://www.muzines.co.uk/articles/the-shaper/5948
+- Effects
+  - http://www.muzines.co.uk/articles/modular-effects-rack-project/4210
+  - http://www.muzines.co.uk/articles/the-transpozer/4455
+  - Compressor / Limiter http://www.muzines.co.uk/articles/compressor-limiter-project/6299
+  - Compressor / Limiter http://www.muzines.co.uk/articles/comp-lim/4371
+  - Compressor / Expander http://www.muzines.co.uk/articles/compressor-expander/3182
+  - http://www.muzines.co.uk/articles/multi-delay-project/6358
+  - http://www.muzines.co.uk/articles/modulation-oscillator/6379
+  - http://www.muzines.co.uk/articles/parametric-equaliser-project/6342
+- Amp
+  - Pre http://www.muzines.co.uk/articles/balanced-microphone-preamp-project/4117
+  - Headphone http://www.muzines.co.uk/articles/headphone-amplification-system/4089
+  - Mosfet Amplifier http://www.muzines.co.uk/articles/mosfet-amplifier/2651
+  - Monitor Amp http://www.muzines.co.uk/articles/monitor-amp/3229
+  - Dual Mic Amp http://www.muzines.co.uk/articles/dual-mic-pre-amp/3297
+  - Fader Pan http://www.muzines.co.uk/articles/fader-panner-project/11595
+  - Attenuator http://www.muzines.co.uk/articles/4-channel-attenuator-project/4064
+  - Fader
+    - http://www.muzines.co.uk/articles/hsr-stereo-autofader-project/4191
+    - http://www.muzines.co.uk/articles/hsr-autofader-update/4202
+  - Amp http://www.muzines.co.uk/articles/canjak/4461
+  - http://www.muzines.co.uk/articles/how-to-calm-hysterics-in-op-amps/11513
+- Sampler
+  - http://www.muzines.co.uk/articles/a-i-sampler/3441
+  - Digital Sampler http://www.muzines.co.uk/articles/digital-sampler-delay/11515
+- Power Supply
+  - http://www.muzines.co.uk/articles/power-supply/3276
+  - http://www.muzines.co.uk/articles/twinpak/4372
+  - http://www.muzines.co.uk/articles/the-rackpack/7936
+  - Phantom power (for mic) http://www.muzines.co.uk/articles/phantom-power-module/11492
+  - Phantom power supply http://www.muzines.co.uk/articles/phantom-power-supply/4166
+
+- Pedals
+  - Damper http://www.muzines.co.uk/articles/the-string-damper/7881
+  - Driver http://www.muzines.co.uk/articles/the-valve-driver/6239
+  - Wah Tone Pedal http://www.muzines.co.uk/articles/wah-tone-pedal/3174
+
+- Audio Meter http://www.muzines.co.uk/articles/audio-level-meter/2761
+- Equalizer http://www.muzines.co.uk/articles/sweep-equaliser/4431
+- The Syntom Drum Synthesiser http://www.muzines.co.uk/articles/the-syntom-drum-synthesiser/2593
+- Direct Inject Box http://www.muzines.co.uk/articles/direct-inject-box/2599
+- Guitar Tuner http://www.muzines.co.uk/articles/guitar-tuner/2656
+- Discotek http://www.muzines.co.uk/articles/discotek/2664
+- Hexdrum http://www.muzines.co.uk/articles/hexadrum/2709
+- Chorus Effect Unit http://www.muzines.co.uk/articles/chorus-effects-unit/3134
+- MicroBass Synth http://www.muzines.co.uk/articles/micro-bass-synth/3196
+- ZX81 Sequencer http://www.muzines.co.uk/articles/zx81-sequencer/3220
+- ADSR Envelope Generator http://www.muzines.co.uk/articles/adsr-envelope-generator/3251
+- Phaser http://www.muzines.co.uk/articles/phaser-module/3263
+- MIDI http://www.muzines.co.uk/articles/short-circuit/1885
+- MIDI: Sequencer http://www.muzines.co.uk/articles/midi-sequencer-project/3845
+- MIDI: The Codebreaker http://www.muzines.co.uk/articles/the-codebreaker/3887
+- Sequencer http://www.muzines.co.uk/articles/step-by-step/3412
+- Dual Tracker http://www.muzines.co.uk/articles/effects-module-2-dual-tracker/3346
+- Meter Reader http://www.muzines.co.uk/articles/meter-reader/3315
+- Breath Control http://www.muzines.co.uk/articles/the-miniblo/7963
+
+
+- Pa Signal Processor
+  - http://www.muzines.co.uk/articles/pa-signal-processor/2706
+  - http://www.muzines.co.uk/articles/pa-signal-processor/3557
+- Hi-Fi
+  - http://www.muzines.co.uk/articles/hi-fi/2699
+  - http://www.muzines.co.uk/articles/hi-fi/2726
+  - http://www.muzines.co.uk/articles/hi-fi/3562
+- The Matinee Organ
+  - http://www.muzines.co.uk/articles/the-matinee-organ/2560
+  - http://www.muzines.co.uk/articles/the-matinee-organ/2601
+  - http://www.muzines.co.uk/articles/the-matinee-organ/2625
+  - http://www.muzines.co.uk/articles/the-matinee-organ/2653
+  - http://www.muzines.co.uk/articles/the-matinee-organ/2710
+- ICs for electro music
+  - http://www.muzines.co.uk/articles/ics-for-electro-music/2561
+  - http://www.muzines.co.uk/articles/ics-for-electro-music/2596
+- Spectum Syntesizer
+  - http://www.muzines.co.uk/articles/the-spectrum-synthesiser/2562
+  - http://www.muzines.co.uk/articles/the-spectrum-synthesiser/2595
+  - http://www.muzines.co.uk/articles/the-spectrum-synthesiser/2624
+- Vero Project
+  - Tone http://www.muzines.co.uk/articles/vero-project-1-tone-generator/2626
+  - Amp http://www.muzines.co.uk/articles/vero-project-2-test-amplifier/2627
+  - Metronome http://www.muzines.co.uk/articles/vero-project-3-metronome/2628
+  - Mixer http://www.muzines.co.uk/articles/vero-project-4-signal-mixer/2629
+  - Filter http://www.muzines.co.uk/articles/vero-project-5-scratch-filter/2630
+  - http://www.muzines.co.uk/images_mag/scans/emm/emm_81_05/l/emm_81_05-42.jpg
+    http://www.muzines.co.uk/images_mag/scans/emm/emm_81_05/l/emm_81_05-43.jpg
+
+*** CMOS Synth - Logic Noise - Hackaday
+
+- https://hackaday.com/2015/02/04/logic-noise-sweet-sweet-oscillator-sounds/
+  - using logic not gates (40106) with hysteresis
+    [[https://hackaday.com/wp-content/uploads/2015/01/hysteresis2.png]]
+- https://hackaday.com/2015/02/17/logic-noise-8-bits-of-glorious-sounds/
+- https://hackaday.com/2015/02/23/logic-noise-the-switching-sequencer/
+- https://hackaday.com/2015/03/09/logic-noise-sawing-away-with-analog-waveforms/
+- https://hackaday.com/2015/03/25/logic-noise-filters-and-drums/
+- https://hackaday.com/2015/04/10/logic-noise-more-cmos-cowbell/
+- https://hackaday.com/2015/04/24/logic-noise-sequencing-in-silicon/
+- https://hackaday.com/2015/05/04/logic-noise-taming-the-wild-shift-register/
+- https://hackaday.com/2015/07/02/logic-noise-ping-pong-stereo-mixers-and-more/
+- https://hackaday.com/2015/08/07/logic-noise-4046-voltage-controlled-oscillator-part-one/
+- https://hackaday.com/2015/09/11/logic-noise-playing-in-tune-with-an-exponential-vco/
+- https://hackaday.com/2015/11/05/logic-noise-digital-to-analog-with-an-r-2r-dac/
+
+** Form Factors
+
+- Dimensions
+  - 1" = 1 inch
+  - 2.5" to 3" hex screws to mounts in eurorack
+    - add a washer to prevent scratches
+  - Width in HP, from the minimal space between screws in *threaded strip*
+    - 1 HP = 0.2"
+  - U = Height in rack U(nits), from the minimal spacing in an 1.75inch rack
+  - Depth 10cm
+
+- Categories
+  - Normalized switching scheme (eg: mini-moog, arp odyssey)
+  - Hybrids (arp 2600)
+  - Modules with patchcords
+    - Modular Synthesizer Comparison Chart
+      http://web.archive.org/web/20021010010941/http://www.modularsynth.com:80/chart.html
+    - Power Supply
+      - Bus Board
+      - Flying Bus (just a ribbon cable)
+    - 5U Moog Units (MU)
+      - 8.75" tall
+      - 1/4" jacks
+    - 4U Serge & Buchla formats
+    - 3U Eurorack - Bus Board
+      - 5.25" tall
+      - 3.5mm jack
+      - Gate (like a patch cable)
+      - CV (like a patch cable)
+      - +5v
+      - +12v
+      - GND
+      - GND
+      - GND
+      - -12v (red stripe)
+
+** Types
+
+- Offset Generators: add or subtract
+- Effects
+  - Phase
+  - Delay http://www.muzines.co.uk/articles/delay-technology/4113
+- Utilities
+  - Mixers
+  - Multiples: creates copies of a signal
+    - passive
+      - do not use electricity
+      - not have a bus connection
+      - 1 input many outputs
+      - drop a bit of voltage
+    - buffered
+      - use electricity from the bus board
+      - no voltage drop
+
+- propabilistic sequencers
+- boolean logic
+- trigger skipping
+- burst generator
+- slewing
+- step random
+- smooth random
+- LPG = Low Pass Gate
+- Waveshaper/Wavefolders
+
+*** Clocks
+
+- Can be
+  - Gates
+  - Triggers
+
+- clock division
+- clock multiplication
+- Gate Delay
+
+- Form Factors
+  - Midi-to-CV module, can convert MIDI's clock
+  - Clock generator module
+  - Square LFO/VCO
+    - can have a "manual" trigger button
+  - "Expert sleepers" DAW -> EuroRack (?
+  - Clock divider/multiplier module
+
+*** Sample&Hold
+
+- Inputs
+  1) changing signal
+  2) trigger signal
+- Outputs: holds value read at 1, until the next clock
+
+*** CV&Gate Sequencer
+
+- INPUT: clock
+- OUTPUT: voltage pitch of that step of the sequence
+
+- will cycle through outputs through clocks
+- has a *sequencer reset* signal
+- some have pitch/voltage quantizers
+- type:
+  - triggered sequencer: for drums
+  - cv sequencer: for melodies
+
+*** CVP = Control Voltage Processor
+
+- Generators?
+- Airtenuators, between cables attenuator
+- Amplifiers & Attenuators: offset/increase or reduce a signal
+- Polarizers/Attenuverters: offset/reduce and invert a signal
+- Inverters
+- Glide: aka slow+smooth?
+- has a 2 color led to indicate positive and negative voltage output
+
+*** LFO = Low Frequency Oscillator
+
+- input voltage controls the frequency
+- switch for frequency range (low,med,high)
+- create slow periodic wave forms
+- waveshapes: square, triangle, saw, reverse saw, sine
+- Uses: wawa, pwm
+- Examples:
+  - =Vibrato= (pitch)
+    - you might want to enable
+      - *sync* to play notes in sync
+      - *delay* to fade-in lfo effect
+  - =Tremolo= (Volume)
+    - you have hook it through 1 intermediate vca (2 in total)
+    - you have to offset the lfo
+  - =Gate= (any)
+  - AutoFilter(cutoff)
+
+***  EG = Envelope Generator
+
+- adsr/ad/ar
+
+*** VCO = Voltage Controlled Oscillator
+
+- aka tone generator
+- 20Hz-20kHz (audible)
+- CV
+  - frequency
+    - exponential CV (1V per octave)
+    - linear CV
+  - pulse width
+  - sync
+- Manual
+  - knobs: coarse freq, fine freq, pulse width
+  - switch: octaves
+
+- Noise types
+  [[https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/The_Colors_of_Noise.svg/576px-The_Colors_of_Noise.svg.png]]
+
+- Can be *Sync* with another VCO, reset after sync finish a cycle.
+  1) Hard: core ramp is *reset* to zero
+  2) Soft: triangle ramp direction is *reversed*
+
+- Core wave types, from which other waves can be generated, either:
+  1) Ramp
+  2) Triangle
+
+*** VCF = Voltage Controlled Filter
+
+- Inputs
+  - (key) exponential CV (1v per octave)
+  - (key) linear CV
+  - (Audio) Signal IN
+- Outputs: LPF/HPF/BPF
+- CV controls
+  - resonance
+  - COF = cutoff frequency
+    - fine
+    - coarse
+
+*** VCA = Voltage Controlled Amplifier
+
+- input voltage controls the amplitude
+- aka loudness shaper
+- has a red led to indicate overdrive (distortion added)
+
+*** MIDI to CV&Gate converter
+
+- Creates a *gate* signal when we press a midi key.
+- Creates a pitch cv
+
+*** IO Modules
+
+- audio common formats
+  - typical module
+    - 10v+ peak to peak
+    - +11/+20dBv
+    - unbalanced
+  - -10dBv reference "line level"
+    - consumer grade stereo
+    - 0.895v peak to peak
+    - unbalanced: 2 wires
+  - +4dBu reference "pro level"
+    - professional
+    - 3.474v peak to peak
+    - balanced: 3 wires
+
+- Input
+  - aka external effects module
+  - to handle the different peak to peak audio conversion
+
+- Output Module
+  - to not worry about clipping
+

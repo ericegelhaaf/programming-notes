@@ -1,0 +1,13 @@
+- https://en.wikipedia.org/wiki/Music_Mouse
+  - algorithm music
+- https://en.wikipedia.org/wiki/Digital_Performer
+  - sequencer then DAW
+- VCV Rack
+  - https://vcvrack.com/
+  - https://github.com/VCVRack
+- Softube Modular https://www.softube.com/modular
+- Reaktor: Blocks
+  - https://en.wikipedia.org/wiki/Reaktor
+  - https://www.native-instruments.com/en/products/komplete/synths/reaktor-6/
+- Voltage Modular
+  - https://cherryaudio.com/products/voltage-modular

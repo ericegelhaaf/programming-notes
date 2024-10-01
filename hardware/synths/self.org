@@ -1,0 +1,50 @@
+- korg kaossilator mod https://kaossilator.wordpress.com/
+
+- Mid-60
+- Books https://sdiy.info/wiki/Synthesizer_books
+- Magazines
+  - https://sdiy.info/wiki/Magazines
+  - http://www.muzines.co.uk/mags
+
+- https://southplug.com/los-sintetizadores-modulares-en-la-contemporaneidad-una-mirada-desde-latinoamerica/
+
+- Types of =Control= voltage signals (-12v,12v)
+  - Gate     (0v or 10v, 0v or 5v)
+  - Trigger  (0v or 10v) a sort of "instant gate"
+  - Pitch CV
+    - between 0v and 5v, 1v per octave
+      - same Voltage as clocks?
+    - or? between -+5V
+  - Oscillators, LFO, ADSR, Offset, invertor (-12v,12v)
+
+- Let your system warm up to make sure voltages are stable before using it.
+
+- Names
+  - Paul White: articles circuits
+  - David Strange: articles circuits
+  - Paul Williams: articles circuits
+  - Ben Duncan: articles circuits
+
+* reddit links
+- http://www.nicolascollins.com/handmade.htm
+  https://www.youtube.com/playlist?list=PLyFW-rnLqSeGxwsL0FL160g8y6XmdHZcQ
+** I
+- http://www.axoloti.com/
+- https://aisynthesis.com/diy-electronics-tools-you-need/
+- http://fluxwithit.com/synth-diy-project-series-part-1-getting-into-synth-diy/
+- https://hackaday.com/2008/05/01/how-to-make-a-digital-synthesizer/
+- http://www.milkcrate.com.au/_other/sea-moss/
+** II
+- https://web.archive.org/web/20190920111738/http://dlbelectronics.com/lunetta/
+- http://electronotes.netfirms.com/free.htm
+- http://www.openmusiclabs.com/
+- http://musicfromouterspace.com/
+- https://www.muffwiggler.com/forum/viewforum.php?f=17
+- http://electro-music.com/wiki/pmwiki.php?n=Schematics.Schematics
+- http://www.experimentalistsanonymous.com/diy/index.php?dir=Schematics
+- https://web.archive.org/web/20150216224546/http://www.jhaible.com/additional_schemos.html
+- http://www.cgs.synth.net/
+  - http://www.synthpanel.com/
+  - https://www.elby-designs.com/webtek/cgs/cgs.htm
+  - https://sdiy.info/wiki/CatGirl_Synth
+  - https://web.archive.org/web/20180821111259/http://www.cgs.synth.net/

@@ -87,55 +87,59 @@
 *** Core
 https://www.sqlite.org/lang_corefunc.html
 |-------------+-------------+-----------------------------------------------------|
-| char        | uc1,uc2,... | build a string of unicode codes passed as ints      |
-| concat      | x  ,...     | concatenates non-null args                          |
-| concat_ws   | sep, x, ... | concatenates non-null args with SEP                 |
-| format      | fmt,...     | aka printf()                                        |
-| instr       | x  ,y       | position of y in x                                  |
-| length      | x           |                                                     |
-| lower       | x           | ascii only by default, load ICU extension for other |
-| upper       | x           | ascii only                                          |
-| ltrim       | x[,y]       |                                                     |
-| rtrim       | x[,y]       |                                                     |
-| trim        | x[,y]       |                                                     |
-| replace     | x ,y ,z     | replaces y by z in x                                |
-| substr[ing] | x ,y[,z]    | starting at y for z length                          |
-| unicode     | x           | unicode for first char in x                         |
+|         <r> |             |                                                     |
+|    FUNCTION | ARGS        | DESCRIPTION                                         |
 |-------------+-------------+-----------------------------------------------------|
-| glob        | pat,col     | like GLOB, which is like LIKE, but globbing         |
-| like        | x  ,y       |                                                     |
+|        char | uc1,uc2,... | build a string of unicode codes passed as ints      |
+|      concat | x  ,...     | concatenates non-null args                          |
+|   concat_ws | sep, x, ... | concatenates non-null args with SEP                 |
+|      format | fmt,...     | aka printf()                                        |
+|       instr | x  ,y       | position of y in x                                  |
+|      length | x           |                                                     |
+|       lower | x           | ascii only by default, load ICU extension for other |
+|       upper | x           | ascii only                                          |
+|       ltrim | x[,y]       |                                                     |
+|       rtrim | x[,y]       |                                                     |
+|        trim | x[,y]       |                                                     |
+|     replace | x ,y ,z     | replaces y by z in x                                |
+| substr[ing] | x ,y[,z]    | starting at y for z length                          |
+|     unicode | x           | unicode for first char in x                         |
+|-------------+-------------+-----------------------------------------------------|
+|        glob | pat,col     | like GLOB, which is like LIKE, but globbing         |
+|        like | x  ,y       |                                                     |
 |             | x  ,y  ,z   |                                                     |
 |-------------+-------------+-----------------------------------------------------|
-| coalesce    | x,y,...     | returns first non-null arg (ME: lisp or)            |
-| ifnull      | x,y         | returns first non-null arg                          |
-| iif         | x,y,z       | "ternary operator", like CASE expression            |
-| nullif      | x,y         | returns X if x!=y, otherwise returns NULL           |
+|    coalesce | x,y,...     | returns first non-null arg (ME: lisp or)            |
+|      ifnull | x,y         | returns first non-null arg                          |
+|         iif | x,y,z       | "ternary operator", like CASE expression            |
+|      nullif | x,y         | returns X if x!=y, otherwise returns NULL           |
 |-------------+-------------+-----------------------------------------------------|
 *** Math
 - https://www.sqlite.org/lang_mathfunc.html
 - [a][cos|sin|tan][h],log[2|10]
 |-----------+-------------+--------------------------------------------------|
-|           | arguments   | description                                      |
+|       <r> |             |                                                  |
+|           | ARGS        | DESCRIPTION                                      |
 |-----------+-------------+--------------------------------------------------|
-| abs       | n           | returns the absolute value,                      |
-| max       | x  ,y  ,... |                                                  |
-| min       | x  ,y  ,... |                                                  |
-| random    | -           | pseudo-random integer                            |
-| sign      | x           | return -1,0 or +1 for negative, zero or positive |
-| exp       | x           | e^x                                              |
-| ln        | x           | natural logarithm                                |
-| mod       | x,y         | remainder of x/y                                 |
-| pi        | -           |                                                  |
-| pow[er]   | x,y         | x^y                                              |
-| sqrt      | x           |                                                  |
+|       abs | n           | returns the absolute value,                      |
+|       max | x  ,y  ,... |                                                  |
+|       min | x  ,y  ,... |                                                  |
+|    random | -           | pseudo-random integer                            |
+|      sign | x           | return -1,0 or +1 for negative, zero or positive |
+|       exp | x           | e^x                                              |
+|        ln | x           | natural logarithm                                |
+|       mod | x,y         | remainder of x/y                                 |
+|        pi | -           |                                                  |
+|   pow[er] | x,y         | x^y                                              |
+|      sqrt | x           |                                                  |
 |-----------+-------------+--------------------------------------------------|
-| degrees   | x           | radians -> degrees                               |
-| radians   | x           | degrees -> radians                               |
+|   degrees | x           | radians -> degrees                               |
+|   radians | x           | degrees -> radians                               |
 |-----------+-------------+--------------------------------------------------|
-| round     | x [,y]      | round float by y digits, default y=0             |
+|     round | x [,y]      | round float by y digits, default y=0             |
 | ceil[ing] | x           | rounding                                         |
-| floor     | x           | rounding down                                    |
-| trunc     | x           | rounding                                         |
+|     floor | x           | rounding down                                    |
+|     trunc | x           | rounding                                         |
 |-----------+-------------+--------------------------------------------------|
 *** Date and Time
 https://www.sqlite.org/lang_datefunc.html
@@ -156,32 +160,34 @@ https://www.sqlite.org/lang_datefunc.html
 | timediff  | fn added on 3.43 (2023-08)     |
 |-----------+--------------------------------|
 *** BLOB
+|          <r> |       |                 |
 |--------------+-------+-----------------|
-| hex          | x     | blob -> string  |
-| unhex        | x[,y] | ?    -> blob    |
-| instr        | x,y   |                 |
-| length       | x     | length in bytes |
+|          hex | x     | blob -> string  |
+|        unhex | x[,y] | ?    -> blob    |
+|        instr | x,y   |                 |
+|       length | x     | length in bytes |
 | octet_length | x     |                 |
-| randomblob   | n     | n-byte blob     |
-| substr[ing]  | x,y   |                 |
-| zeroblob     | n     | n-bytes of 0x00 |
+|   randomblob | n     | n-byte blob     |
+|  substr[ing] | x,y   |                 |
+|     zeroblob | n     | n-bytes of 0x00 |
 |--------------+-------+-----------------|
 *** Aggregate
 https://www.sqlite.org/lang_aggfunc.html
 |--------------+---------+-------------------------------------------------------|
+|          <r> |         |                                                       |
 |              | args    | description                                           |
 |--------------+---------+-------------------------------------------------------|
-| avg          | x       | interprets string/blob values as zero, floating point |
-| count        | x       | number of times that x is not-null                    |
+|          avg | x       | interprets string/blob values as zero, floating point |
+|        count | x       | number of times that x is not-null                    |
 |              | *       | total number of rows in a group                       |
-| max          | x       | -                                                     |
-| min          | x       | -                                                     |
-| sum          | x       | -                                                     |
-| decimal_sum  | x       | same as sum(), for floats sum, avoids imprecisions    |
-| total        | x       | same as sum(), but returns 0.0 if all values are null |
+|          max | x       | -                                                     |
+|          min | x       | -                                                     |
+|          sum | x       | -                                                     |
+|  decimal_sum | x       | same as sum(), for floats sum, avoids imprecisions    |
+|        total | x       | same as sum(), but returns 0.0 if all values are null |
 |--------------+---------+-------------------------------------------------------|
 | group_concat | x[,sep] | "," is used if sep(arator) is ommited                 |
-| string_agg   | x ,sep  | alias of group_concat(x,sep)                          |
+|   string_agg | x ,sep  | alias of group_concat(x,sep)                          |
 |--------------+---------+-------------------------------------------------------|
 ** Foreign Keys
 https://www.sqlite.org/foreignkeys.html

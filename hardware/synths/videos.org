@@ -1,0 +1,502 @@
+- EE - Razavi Electronics
+  - 1 https://www.youtube.com/playlist?list=PLiDoPUX9nLkJ8dnPgKoVEOiAb8BfulKRR
+  - 2 https://www.youtube.com/playlist?list=PLiDoPUX9nLkIw9EnIv_3K19wlcyJ6msYd
+
+- VCV Rack (Español)
+  1) https://vimeo.com/672190794
+  2) https://vimeo.com/622066492
+  3) https://vimeo.com/634641557
+  4) https://vimeo.com/638478649
+  5) https://vimeo.com/641227346
+  6) https://vimeo.com/643748616
+  7) https://vimeo.com/646270695
+  8) https://vimeo.com/651376028
+
+- 🎤 Clases Maestras en el Ciam | Episodio 3: Ernesto Romeo
+  https://www.youtube.com/watch?v=KB9aSWCZBSs
+
+- Exploring Modular Synths - Beginner's Mind Series
+  https://www.youtube.com/playlist?list=PLYGoKqoE6u-g8Z1KazSasHAVIB0cY1xdc
+
+- MakeNoise Modular Synthesis Workshop
+  - https://vimeo.com/63407413
+  - https://vimeo.com/63417793
+
+- Channel:
+  - https://www.youtube.com/@TheAudioPhool/videos
+    - Synths from scratch https://www.youtube.com/playlist?list=PLKCm-R1LUpqO8eFJhw_XrKjUX2HlBGuYd
+  - https://www.youtube.com/@LearningModular/playlists
+  - Making Sound Machines https://www.youtube.com/channel/UCaStxtipBIAGkup1ZgqR_3A
+  - https://www.youtube.com/c/Musicfromouterspace/videos
+  - https://www.youtube.com/@Sarahbuildsstepsequencers/videos
+  - Modular Synth Basics - Synthesizer Tutorials https://www.youtube.com/playlist?list=PLa9Em_H8Xs_al-r_90xYiuiz-3N8HZyf_
+  - https://www.youtube.com/@MoritzKlein0/videos
+
+- Bastl Instruments Modular Synthesis Tutorials / get a good grip on analog synthesis
+  https://www.youtube.com/playlist?list=PLBF4KYAe97cQrjiV0ezS6mC-QSsUKNcSq
+
+- Videos
+  - Building A Whole Analog Synthesizer voice From Start To Finish On Breadboard https://www.youtube.com/watch?v=GsTGu2V7tcU
+
+- NOVARS: matinee with sam weaver https://vimeo.com/111806587
+
+- NOVARS: Hordijk Masterclass at sines and squares
+  - https://vimeo.com/111131227
+  - https://vimeo.com/111250081
+
+* Lantertronics
+
+- Superposition with Dependent Sources https://www.youtube.com/playlist?list=PLOunECWxELQQZROtya37L3EkisfVlgqy7
+- ECE Design Fundamentals https://www.youtube.com/playlist?list=PLOunECWxELQTn3DQYYB4qaEC9KRK5mHNK
+
+- Guitar Amplification & Effects
+  https://www.youtube.com/playlist?list=PLOunECWxELQS7JV_KeeTJJpgGjOftoaAH
+
+- ECE3400 Analog Electronics - Lantertronics - Aaron Lanterman
+  https://www.youtube.com/playlist?list=PLOunECWxELQSbOv3ekzuwC4K8ygV-Jkiy
+
+- ECE3084 Signals and Systems - Lantertronics - Aaron Lanterman
+  https://www.youtube.com/playlist?list=PLOunECWxELQRYwsuj4BL4Hu1nvj9dxRQ6
+
+- ECE4450 Analog Circuits for Music Synthesis - Lantertronics - Aaron Lanterman
+  https://www.youtube.com/playlist?list=PLOunECWxELQS5bMdWo9VhmZtsCjhjYNcV
+
+* TODO Course: Syntorial
+- This is for subtractive synths (most are)
+** Order to figure out a synth
+  1) Amp Envelope (Attack/Release)
+  2) CutOff/Env ammount
+  3) Filter Envelope
+  4) OSC Mix 50/50
+  5) OSC Semitones
+  6) OSC Wave
+  7) OSC Mix
+  8) Main Volume
+** Instruments Examples
+  Bass: low cutoff, zero amp attack, square
+  Lead: bright(high cutoff), zero amp atack
+  Pad: soft attack, long release, low cutoff
+  Design Pads:
+  - Soft texture
+  - Lower cutoff, and raise the amp+release
+  - Filter env for "movement"
+** Wine
+
+http://www.verona.se/2015/07/17/syntorial-on-fedora/
+#+begin_src
+In order to get synth sound to work, you need to use Wine 1.4, which
+is a pretty old version compared to Wine 1.7 which was the Fedora
+version. I used PlayOnLinux to get this old Wine version. The problem
+has something to do with how Wine emulates the Windows sound API. You
+also need to set Wine emulation to Windows 7 or higher.
+#+end_src
+
+**  1 OSC and Pulse Width
+
+- Two basic OSCs forms:
+  1) saw
+     * bright, edgy
+     * thing&buzzy on the lower notes
+  2) pulse
+     * more "bassy", "videogame", "artificial"
+     * heavier on the lower notes
+
+- Pulse Widths (sometimes called simmetry): thin, medium, square
+  - on high notes medium (or thin) make both OSCs sound similar
+  - has no effect on Saw (?)
+
+**  2 LFO
+
+- LFO, Low Pass Filter, determines brightness
+  - =Cutoff=: < rounder and darker, "bass" sound, harder to recoignize wave
+              > brighter and edgier
+  - Side-effect: affects volume
+
+**  3 Amp Envelope: AR
+
+- to "modulate" means to "change"
+- =Attack=: silence to full volume time
+  - Long - gooddd for Pads or Ambient in the background
+  - Short - attack, string attack kind of a "reverse" attack /effect
+- =Release=: a.k.a "fadeout"
+  - Long - for pads, ambient
+  - Short - tail, reverb
+  - Good to default to 15ms
+
+**  4 2nd OSC
+
+- Second OSC
+  - makes it "taller", more range
+  - Mix Volume, to "glue it" better
+  - Semitone wheel pitch of OSC
+    - 12 semitones = octave
+    -  7 semitones = fifth
+
+**  5 Filter Envelope: AR
+
+- An alternative to *filter envelope* is a *MODulation envelope*
+
+- =Env Ammount= Knob:
+  - max brightness, aka distance from cutoff
+  - If you move the cutoff it will "move" the env ammount
+- =Cutoff=:
+  - min brightness
+  - controls the darkest it can sound
+
+- =Attack=:
+  - from cutoff to env ammount
+  - gradually makes the sound brighter
+  - small gives a "horn like attack"
+- =Release=:
+  - from env ammount to cutoff
+  - tip: if amp release is short, you won't ear it
+
+**  6 Delay
+
+- Delay Mix:
+  - Balance between
+    - original sound (~dry~ signal)
+    - and echoes (~wet~ signal)
+  - At 0%  - 100% dry -  0%wet
+  - At 13% -  87% dry - 13%wet
+  - You "don't want" to have it higher than %50
+  - It lowers the original, and in the end all audio
+  - Creates "space" almost like a reverb
+
+- Delay Time:
+  - makes it closer or farther apart
+  - expressed in rhythm values
+    - 1/4 is 1 beat
+
+- Delay Feedback:
+  - how many echos are created
+    - 1.0 is infinite delays
+    - 0.0 is One fast echo (aka "slapback" delay)
+
+- Delay Spread:
+  - panning
+  - dry on the middle and echos on the sides
+  - Makes it big and wide.
+  - Used for leads.
+
+- Delay Sync: button to keep them on beat
+- Mix, time, feedback, general volume
+- Used: rhythm patterns, create a "space" in the sound, almost like a reverb
+- Rule: No delay on Bass patches. Low range should be sound clean.
+
+**  7 Amp Envelope: DS
+
+- Amplitude envelope
+  - =Decay=: how fast it goes from Attack to Sustain
+  - =Sustain=: volume while the key is pressed
+- "Attack Transient" a burst, aggresive short Attack
+
+**  8 OSC pitch detunning
+
+- =Fine Tune Wheel=
+  - changed by cents
+  - ~1 semitone = 100 cents~
+  - do NOT change just one, it will sound out of pitch
+  - Detuning in different directions on equal ammounts,
+    creates a smearing-pulsating effect.
+  - If you move only 1 (one) move it 1 cent
+
+- =Oscillator start=
+  ON  aggressive attack, consistent pulsation (when detuning)
+  OFF softer attack, varying pulsation
+
+**  9 Filter Envelope: DS
+
+- AR - time based
+- D  - time based
+  - create the attack transient
+- S  - ammount based
+  - 0%  is the "darkest" sound (cutoff)
+  - 100% is the "brightest" sound (env ammount)
+
+** 10 Sub OSC
+
+- Sub Oscillator
+  - Is a 3rd oscillator
+  - Has a fixed ~pitch~ 1 Octave below 1st OSC
+  - Only Controls
+    - Volume controls
+    - Wave
+      - Pulse = Bright
+      - Triangle = Round (subtle low end)
+        - tip: If pops add small Attack amp
+  - Adds bottom end and weight
+
+- Common with 2, both detuned(cents)
+- Common with 2, same OSCs, 1 transposed an octave above
+- tip: If used on BASS patches, place the BASS 1 Octave higher
+
+** 11 LFO
+
+- Used to create *repeating movement* on controls/knobs
+  - using a wave (including random = sample&hold) for PWM
+  - using the current value as middle
+  - Destination Examples:
+    - Vibrato(pitch)
+    - Tremolo(volume)
+    - Gate(any)
+    - AutoFilter(cutoff)
+    - Pan
+    - Pulse Width Modulation
+
+- LFO knobs
+  - =Ammount= : the ammount of effect it has
+  - =Rate=    : speed up or down
+
+- Saw/Square is common with Volume/Cutoff (aka *gate effect*)
+
+** 12 Filter Resonance
+
+- Boosts your sound near his "brightess" point.
+- Changes the "top" of the sound
+- Thight, Focus, adds 'point' to the sound, juicy
+- Used in wah pedals with a LFO controlled cutoff
+- at MAX makes a ringing sound (aka self-oscilation) only on some synts.
+
+- LFO: Can be used directly or indirectly (with the cutoff)
+
+- tip: interesting? effect
+  - lfo: sample&hold on cutoff
+  - full filter resonance
+
+** 13 Voice Modes
+
+- How many voices/notes can be played at once.
+- With 1, synth would steal the voice of the earliest to keep his Voice count.
+
+- =Mono=
+  - Forces single-note playing
+  - avoids slides, overlaps
+  - useful for basses and leads
+  - bad for long releases (pads)
+- =Poly=
+  - if you use a long release and you want to ear it.
+  - Common on Pads or Leads (avoid on bass)
+
+** 14 Unison
+
+- Takes the idea of "doubling" and "detuning" and magnifies it.
+- A way to get a "big" sound
+- Aggressive
+
+- Unison Controls
+  - =Voice Count=: adds more voices and detunes them
+  - =Detune=: the distance between each unison voice
+  - =Spread/Pan=: takes all the unison voices and pan them
+    - 0.0, in he middle
+    - 0.5, middle, left and right
+    - MAX, left and right, they don't overlap (loses pulsation)
+
+- tip: OSC Start button, plays a role here too
+
+** 15 Reverb
+
+- Dry = Original sound
+- Wet = Reverb / Room sound
+
+- =Reverb Mix=
+  - balance between Dry/Wet
+  - the more Wet, the farther "away" you are from the sound
+- =Reverb Size/Length/Time=
+  - determines the "room size"
+
+- tip: Can be combined with delay (aka the discrete echoes).
+- tip: Careful with Bass patches
+
+** 16 Voice Modes: Legato, Portamento
+
+- =Legato= Voice Mode
+  - Affects amplitude
+  - The Envelope carries through 2 notes touches sequentially.
+  - "Smoothing Connecting Play"
+  - Holds the Sustain, before falling on the decay
+
+- =Portamento= Voice Mode
+  - bends each not ~Pitch~ to the next note ~Pitch~
+  - knob measured in time
+  - in legato mode (with portament auto mode)
+    - only applies to connected notes
+    - smoother
+
+** 17 OSC mixing
+
+- Triange + Saw   (Mix 70/30)
+- Triange + Pulse (Mix 70/30)
+- Bump amp attack if needed
+
+** 18 Chorus
+
+- Pulsates, smears and widens/pans sound
+- Softer, more subtle than Unison
+- =Chorus Rate=: multiplier of speed
+- =Chorus Mix=: % between Dry and Mix
+- eg: on pads, don't over do it on basses
+
+** 19 Mod Envelope: Pitch
+
+- Modulation Envelope
+  - you can pick the =destination= (eg: pitch of either OSC)
+  - can have only =AD= controls
+    - A = D = 0, nothing happens
+    - A starts at pitch, to above it
+    - D starts above pitch, down to it
+  - =Ammount= knob, how high is modulated too
+
+** 20 OSC Sync
+
+- =OSC1= acts as master, *mutates* ~OSC2~ slave
+- You don't need to hear =OSC1=
+- Change ~OSC2~ semitone knobe to hear the effect
+  - Avoid octaves(12) and fifths(7), they won't give you grinding
+  - +9 semitones
+  - works well with Mod Envelope or LFO
+
+** 21 HPF/BPF
+
+- LPF = cuts the highs above cutoff, roundness
+- HPF = cuts the lows below cutoff, thin
+- BPF = cuts high and lows around cutoff, thin+round
+
+- Filter Slope: how sharp cuts sound
+  - in synthorial 24dB on LPF and 12dB with HPF/BPF
+
+** 22 FM - Frequency Modulation
+
+- There is a knob =ammount= control
+  - making your sound metallic
+
+- OSC2(modulator) mutates OSC1(carrier)
+  - muted OSC2
+  - detuned OSC2
+  - can be the same wave
+  - can be target of =Mod Envelope=
+    - eg: transient of bass
+
+** 23 Noise
+
+- noise volume knob, white noise, no pitch
+- commonly used with a resonant filter envelope
+
+** TODO 24 HPF Envelope
+** TODO 25 Dirtying Up Your Sound            |
+** TODO 26 A Different Kind of Metallic      |
+** TODO 27 Trippy Swirl                      |
+** TODO 28 Repeating with More Control       |
+** TODO 29 The Mod Wheel                     |
+** TODO 30 Balancing Brightness              |
+** TODO 31 How Hard You Hit The Key          |
+** TODO 32 The Pitch Wheel                   |
+** TODO 33 Final Challenges                  |
+
+* TODO Video: Sound Theory and Minimalist Modular Exploration (VCO+VCF+SEQ+KASTLE)for Modul@rnice
+
+https://www.youtube.com/watch?v=Ow2ZmBmDaNo&t=79s
+
+- Sound is Air Particles
+- A speaker, moves those particles to be more compressed or less
+- Properties of sound: Pitch, Volume, Timbre
+- Timbre: has different ammount of frequencies
+- Connecting the output sine wave to the "CV input"
+  - Generates a "saw wave"
+  - Which ALSO adds more frequencies to the sound
+    - *Harmonics*, or more generally *Partials*
+    - While the SINE wave had only 1 frequency
+- Waves
+  - Square
+    - Has odd Harmonics, louder on odd ones
+  - Triangle
+    - Has very vew harmonics
+- Filter
+  - Cutoff: Can be used to remove Harmonics or Isolate them
+  - Resonance Control: makes the filter resonate following the input signal
+    You control more or less, the frequency that will resonate to,
+    so you can walk through the harmonics and the fundamental
+- Harmonics=Overtones
+- The resonance sweep of a filter, can be though as an arpeggio,
+  due the distance between the frequencies.
+- Additive synthesis: you add Harmonics
+- Substractive syntesis: you remove Harmonics from a complex audio
+- Wavefolder:
+  48:00
+
+* 17 Rob Hordijk @NOVARS
+
+1) https://vimeo.com/233841864
+   - sound first approach to instrument design
+   - think about sound in space, not in a 2d screen
+2) https://vimeo.com/233843000
+   #+CAPTION: "first syntesizer" by Helmholtz
+   [[https://i0.wp.com/120years-net.stackstaging.com/wp-content/uploads/image-1024x714.jpeg]]
+   - it took 50+ years after Fourier
+   - to realize that
+     - sound is a sum of waveforms
+     - sound is energy
+     - by Helmholtz, Hermann Von
+3) https://vimeo.com/233843353
+   - tldr: synth modules are analog computers that compute a specific algorithm
+   - *functions* that you want on you synth module to do with soundwaves:
+     1) generating
+     2) processing
+     3) mixing
+   - what you want is a well balanced set of *functions*
+   - that will give you an instrument
+   - for every *function* there is an **algorithm**
+     - aka "a way to do something"
+     - they will process soundwaves
+     - they do a =computation=, digitally or analogically
+       #+CAPTION: X-15, analog computer
+       [[https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/X-15_Analog_computer.jpg/320px-X-15_Analog_computer.jpg]]
+4) https://vimeo.com/233845954
+   - analog computing
+     - you can process continuosly
+     - parallel processing, even feeding back without delay
+   - digital computing
+     - chopping in bytes to process
+     - serial processing, timing issues for parallel
+5) https://vimeo.com/233847449
+   - sound properties: based on the physical model "resonator model"
+     1) pitch (the osc, the energy source)
+     2) amplitude/loudness
+     3) timbre
+   - =modulation= is the change of sound properties over time
+6) https://vimeo.com/234514050
+   - recursion can be used in algorithms with feedback
+   - in DSPs you don't have recursion (?
+   - brigthness knob
+   - 5Khz = air, sounds in acoustics and voice
+     - you don't want to mask it with synths
+   - his VCO
+     - has only 2 osc, sine and cosine
+     - derives others
+     - has a "add harmonics" knob, from sine to saw
+7) https://vimeo.com/233851883
+   - sawtooth, tension at 1 moment, good for a "kick"
+   - https://vimeo.com/233852319
+   - https://vimeo.com/233852401
+8) https://vimeo.com/240797806
+9) https://vimeo.com/240797280
+10) https://vimeo.com/240797369
+11) https://vimeo.com/236208519
+12) https://vimeo.com/236211771
+    - https://vimeo.com/236208596
+    - https://vimeo.com/237376191
+13) https://vimeo.com/236208781
+14) https://vimeo.com/239786705
+15) https://vimeo.com/237385725
+16) https://vimeo.com/237377895
+17) https://vimeo.com/237383113
+18) https://vimeo.com/240798045
+19) https://vimeo.com/239777322
+20) https://vimeo.com/240972569
+21) https://vimeo.com/239777619
+    - https://vimeo.com/239778379
+22) https://vimeo.com/239778379
+23) https://vimeo.com/239778502
+    - https://vimeo.com/241000808
+    - https://vimeo.com/243854392
+    - https://vimeo.com/240970814

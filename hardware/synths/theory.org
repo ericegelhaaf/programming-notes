@@ -1,0 +1,70 @@
+[[https://blog.andertons.co.uk/wp-content/uploads/2019/03/1880x600-blog-inline-image-analogue-v-digital.jpg]]
+
+- https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+- http://www.muzines.co.uk/articles/making-the-most-of/6369
+- http://www.muzines.co.uk/articles/advanced-music-synthesis/2576
+- http://www.muzines.co.uk/articles/advanced-music-synthesis/2612
+- http://www.muzines.co.uk/articles/advanced-music-synthesis/2700
+- http://www.muzines.co.uk/articles/guide-to-electronic-music-techniques/2608
+- http://www.muzines.co.uk/articles/guide-to-electronic-music-techniques/2640
+- http://www.muzines.co.uk/articles/guide-to-electronic-music-techniques/2666
+- http://www.muzines.co.uk/articles/guide-to-electronic-music-techniques/2694
+- http://www.muzines.co.uk/articles/electronic-music-techniques/3568
+
+- subtractive
+  - osc -> filter -> amp
+    lfo    adsr      adsr
+
+* Envelope
+
+- ADSR/AD/AR/DADSR
+
+- output types
+  - linear to control CV
+  - exponential to control pitch/loudness
+
+- they shape a gate signal
+  [[https://7deadlysynths.wordpress.com/wp-content/uploads/2015/05/adsr_diagram.png]]
+
+* Filters
+
+#+ATTR_ORG: :width 200
+#+CAPTION: LPF cutoff curve, resonance
+[[https://synthesizeracademy.com/wp-content/uploads/vcf-lp-filter-response-graph-no-resonance.gif]] [[https://synthesizeracademy.com/wp-content/uploads/vcf-lp-filter-response-graph-with-resonance.gif]]
+
+- aka tone modifier (removes some of the harmonics)
+- Slope = how strong it filters, in decibel per octave (db/oct)
+  - aka "nr of poles"
+  - 1 pole = 6db/oct
+  - 4 pole = 24db/oct
+  - more poles = more steep
+
+- resonance
+  - boosts frequencies around cutoff frequency
+  - generated frequency peak width is called Q
+  - maximum resonance would create a sine wave (ish)
+
+- Filter Types/Modes
+  - Notch = blocks freq around cutoff
+  - HPF = passes freq above cutoff
+  - BPF = passes freq around cutoff
+  - LPF = passes freq below cutoff
+
+* Oscillators
+
+#+CAPTION: harmonics of different analog oscillators
+#+ATTR_ORG: :width 200
+[[https://i.sstatic.net/zSiJD.jpg]]
+
+- Ramp = Sawtooth mirrored
+- Rectangle/Pulse = Square with non 50% duty cycle
+- Sine
+  - has 1 harmonic, the fundamental
+  - makes it good for frequency/amplitude modulation
+  - difficult to produce by analog synths
+    - ?you can get one by applying a LFO to a square wave?
+- In tonal sounds, the harmonics have a fixed integer relationship to the fundamental
+- Formant = a group of harmonics that are boosted by resonance
+- Digital Wavetable
+  - stored in memory are the shapes of many different types of waves
+  - can crossfade between them (sequentially or in a predefined order)
