@@ -1,3 +1,6 @@
+#+TITLE: SQLite
+#+DATE: <2024-03-16 sáb>
+
 |------------+------------------------------------------------|
 | home       | https://sqlite.org/                            |
 | source (C) | https://www.sqlite.org/src/doc/trunk/README.md |
@@ -56,6 +59,20 @@
 - BLOBs are 35% faster than file system access
   https://www.sqlite.org/fasterthanfs.html
 
+** Types
+|---------+-----------------------------------------------|
+|     <r> |                                               |
+| INTEGER | includes literals true/false which map to 1/0 |
+|    REAL | floating point numbers                        |
+|    TEXT | readable text                                 |
+|    BLOB | binary data                                   |
+|    NULL | no data                                       |
+|---------+-----------------------------------------------|
+** Command
+
+- CREATE [TEMP]   TABLE                     [IF NOT EXISTS] tname
+- CREATE [UNIQUE] INDEX                     [IF NOT EXISTS] iname ON tname
+- DROP           [INDEX|TABLE|TRIGGER|VIEW] [IF     EXISTS]  name
 - INSERT
   - conflict resolution https://www.sqlite.org/lang_conflict.html
     - rollback
@@ -66,21 +83,8 @@
   - INSERT OR IGNORE           - UNIQUE
   - INSERT ON CONFLICT IGNORE  - UNIQUE+NULL
 
-** Types
-
-- INTEGER: also includes literals true/false which map to 1/0
-- REAL: floating point numbers
-- TEXT: readable text
-- BLOB: binary data
-- NULL: no data
-
-** Command
-
-- CREATE [TEMP]   TABLE                     [IF NOT EXISTS] tname
-- CREATE [UNIQUE] INDEX                     [IF NOT EXISTS] iname ON tname
-- DROP           [INDEX|TABLE|TRIGGER|VIEW] [IF     EXISTS]  name
-
-** Functions
+** Stdlib Functions
+*** Core
 https://www.sqlite.org/lang_corefunc.html
 |-------------+-------------+-----------------------------------------------------|
 | char        | uc1,uc2,... | build a string of unicode codes passed as ints      |
@@ -107,7 +111,7 @@ https://www.sqlite.org/lang_corefunc.html
 | iif         | x,y,z       | "ternary operator", like CASE expression            |
 | nullif      | x,y         | returns X if x!=y, otherwise returns NULL           |
 |-------------+-------------+-----------------------------------------------------|
-** Numeric       Functions
+*** Math
 - https://www.sqlite.org/lang_mathfunc.html
 - [a][cos|sin|tan][h],log[2|10]
 |-----------+-------------+--------------------------------------------------|
@@ -133,7 +137,7 @@ https://www.sqlite.org/lang_corefunc.html
 | floor     | x           | rounding down                                    |
 | trunc     | x           | rounding                                         |
 |-----------+-------------+--------------------------------------------------|
-** Date and Time Functions
+*** Date and Time
 https://www.sqlite.org/lang_datefunc.html
 - all functions can take no arguments to return the current time in FN format
 - all functions can take an optional ~modifier~
@@ -151,7 +155,7 @@ https://www.sqlite.org/lang_datefunc.html
 | srtftime  |                                |
 | timediff  | fn added on 3.43 (2023-08)     |
 |-----------+--------------------------------|
-** BLOB          Functions
+*** BLOB
 |--------------+-------+-----------------|
 | hex          | x     | blob -> string  |
 | unhex        | x[,y] | ?    -> blob    |
@@ -162,7 +166,7 @@ https://www.sqlite.org/lang_datefunc.html
 | substr[ing]  | x,y   |                 |
 | zeroblob     | n     | n-bytes of 0x00 |
 |--------------+-------+-----------------|
-** Aggregate     Functions
+*** Aggregate
 https://www.sqlite.org/lang_aggfunc.html
 |--------------+---------+-------------------------------------------------------|
 |              | args    | description                                           |
@@ -237,7 +241,7 @@ https://www.sqlite.org/fts5.html
 - $ sqlite3 :memory: # or just not pass any argument
 - cli getting started https://www.sqlite.org/cli.html (TODO 6)
 |------------+-------------------+---------------------------------------------------|
-|            | argument          | description                                       |
+|            | ARGUMENT          | DESCRIPTION                                       |
 |------------+-------------------+---------------------------------------------------|
 | .bail      | on/off            | exits on error (also -bail)                       |
 | .dump      | [TABLEPAT]        | sql dump whole db or table                        |
@@ -264,9 +268,9 @@ https://www.sqlite.org/fts5.html
 |            | html              | html <table> code                                 |
 |            | markdown          |                                                   |
 |            | ascii             | ??? broken ???                                    |
-|            | line              | human? vertical, one column per line              |
+|            | =line=            | human? vertical, one column per line              |
 |            | column            | human readable, ascii table                       |
-|            | box               | human readable, utf8 table                        |
+|            | =box=             | human readable, utf8 table                        |
 |            | --wrap N          | some modes accept a max length to wrap, default 0 |
 |------------+-------------------+---------------------------------------------------|
 | PRAGMA     | compile_options;  | show sqlite's compile options                     |
