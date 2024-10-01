@@ -6,12 +6,20 @@
 | wiki | https://en.wikipedia.org/wiki/Python_(programming_language) |
 |------+-------------------------------------------------------------|
 
+* Language
+
+#+begin_src python
+  #!/usr/bin/env python3
+  def main():
+      print("Hello World!")
+
+  if __name__ == '__main__':
+      main()
+#+end_src
+
 - 1991-
 - Author: Guido van Rossum
 - PEP - Python Enhancement Proposals
-
-* Language
-
 - .format() https://pyformat.info/
 - f"string" https://fstring.help/
 

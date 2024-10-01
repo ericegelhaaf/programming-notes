@@ -45,6 +45,15 @@
   > strip -x
 
 * Language
+
+#+begin_src go
+  package main
+  import "fmt"
+  func main() {
+      fmt.Println("Hello, World!")
+  }
+#+end_src
+
 ** Imports
 |-----------------+-----------------------------|
 | dirname/main.go | package dirname             |

@@ -9,14 +9,17 @@
 | wiki       | https://en.wikipedia.org/wiki/Sed                |
 |------------+--------------------------------------------------|
 
+* language
+
+#+begin_src sed
+  #!/bin/sed -f
+  s/Hello/Hell/g
+#+end_src
+
 - "Stream EDitor"
 - Author: Lee E. McMahon
 - 1974-
 - _line-oriented_ text processing utility
-- #!/bin/sed -f
-
-* language
-
 - reads text, line by line, into a temporary *buffer* called ~pattern space~
 - each line read starts a =cycle=
 - there is a special buffer called ~hold space~ used by some commands

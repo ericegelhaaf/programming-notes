@@ -9,15 +9,19 @@
 | doc       | https://www.gnu.org/software/gawk/manual/html_node/index.html |
 |-----------+---------------------------------------------------------------|
 
-- #!/usr/bin/awk -f
+* language
+
+#+begin_src awk
+  #!/usr/bin/awk -f
+  END { print "Hello, World!"; }
+#+end_src
+
 - Authors
   - Aho Alfred Vaino
   - Weinberger Peter Jay
   - Kernighan Brian Wilson
 - 2023
   - --csv, supports fields surrounded by double quotes
-
-* language
 
 - https://www.gnu.org/software/gawk/manual/html_node/Conversion
   gawk always uses the period (.) as the decimal point

@@ -9,18 +9,23 @@
 | wiki | https://en.wikibooks.org/wiki/Ruby_Programming            |
 |------+-----------------------------------------------------------|
 
+* Language
+
+#+begin_src ruby
+  #!/usr/bin/env ruby
+  if $PROGRAM_NAME == __FILE__
+    puts "Hello, World!"
+  end
+#+end_src
+
 - Author: Yukihiro Matsumoto (matz)
 - 1995-
 - Written in C
 - Author wanted an OO language.
   Didn't like Python, because it wasn't true OO.
 
-- #!/usr/bin/env ruby
-
 - challenges
   - https://www.rubykoans.com/
-
-* Language
 
 - Typing: duck, dynamic, strong
 - Everything is an object (including primitive data types)
@@ -77,6 +82,7 @@
 | $POSTMATCH               | $' | regex op, to the right of last match                 |
 | $LAST_PAREN_MATCH        | $+ | regex op, the last group                             |
 |                          | $N | regex op, where N is a number of the nth match       |
+|                          | $0 | aka $PROGRAM_NAME                                    |
 |--------------------------+----+------------------------------------------------------|
 ** testing
 

@@ -14,7 +14,10 @@
 
 * language
 
-- #!/usr/bin/jq -f
+#+begin_src jq
+  #!/usr/bin/jq -f
+#+end_src
+
 - jq -n # to quickly test snippets without input
 - jq sources ~/.jq automatically
 - First written in Haskell, but early rewritten in C for performance (?)

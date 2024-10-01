@@ -3,6 +3,14 @@
 
 * Language
 
+#+CMD: $ runhaskell hello-world.hs
+#+begin_src haskell
+  module Main (main) where
+  import qualified System.IO as IO
+  main :: IO ()
+  main = IO.putStr "Hello, World!"
+#+end_src
+
 - https://www.simplehaskell.org/
 - Haskell Fan Site https://theory.stanford.edu/~blynn/haskell/
 - Mailing List https://mail.haskell.org/mailman/listinfo/haskell-cafe
@@ -474,13 +482,4 @@ https://theory.stanford.edu/~blynn/c2go/
     where
       f [] = "y"
       f xs = unwords xs
-#+end_src
-
-** Hello World
-
-#+CMD: $ runhaskell hello-world.hs
-#+begin_src haskell
-  module Main (main) where
-  import qualified System.IO as IO
-  main = IO.putSTrLn "hello world!"
 #+end_src
