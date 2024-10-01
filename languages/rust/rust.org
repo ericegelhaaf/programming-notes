@@ -104,17 +104,6 @@ https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/src
 | Native Types   |                |            | YES       |
 |----------------+----------------+------------+-----------|
 ** Types
-*** struct
-
-#+begin_src rust
-struct AUnit;         // "unit struct"
-struct ATuple(i8,i8); // "tuple struct" or "unnamed struct"
-struct ANamed {       // "named struct"
-    size: u32,
-    color: ATuple,
-} // DO NOT add a semicolon after, "there is whole block of code after it"
-#+end_src
-
 *** Option & Result
 
 #+begin_src rust
@@ -168,18 +157,20 @@ struct ANamed {       // "named struct"
   - analogous to &[u8]
   - has: ptr, len
 *** Compound
-|---------+----------------+-------------+--------------+-------------------+--------------------|
-|     <r> |      <c>       |     <c>     |     <c>      |        <c>        |        <c>         |
-|    name |     create     |   access    | destructure  |      insert       |        type        |
-|---------+----------------+-------------+--------------+-------------------+--------------------|
-|    unit |       ()       |     NO      |      ()      |        NO         |         ()         |
-|   tuple |     (5,2)      |     .0      |    (a,_b)    |        NO         |     (i64,i64)      |
-|  struct |  SName{a: 10}  |   .FIELD    | SName{a, ..} |        NO         | struct SN {x: i64} |
-|   array |     [1,2]      |     [0]     |   [a,_,_]    |        NO         |    [i32;LENGTH]    |
-|     Vec |   vec![1,2]    | [0] .get(0) |              |     .push(23)     |      Vec<i32>      |
-| HashMap | HashMap::new() |  .get(key)  |  (key,val)   | .insert(key, val) |                    |
-|---------+----------------+-------------+--------------+-------------------+--------------------|
-- stucts
+|--------------+-----------------+-------------+--------------+-------------------+--------------------|
+|          <r> |       <c>       |     <c>     |     <c>      |        <c>        |        <c>         |
+|         name |     create      |   access    | destructure  |      insert       |        type        |
+|--------------+-----------------+-------------+--------------+-------------------+--------------------|
+|         unit | (any statement) |     NO      |      ()      |        NO         |         ()         |
+|        tuple |      (5,2)      |     .0      |    (a,_b)    |        NO         |     (i64,i64)      |
+|  unit struct |      SName      |     NO      |      NO      |        NO         |     struct SN      |
+| tuple struct |   SName(1,2)    |     .0      |  SName(a,b)  |        NO         |  struct SN(i8,i8)  |
+| named struct |  SName{a: 10}   |   .FIELD    | SName{a, ..} |        NO         | struct SN {x: i64} |
+|        array |      [1,2]      |     [0]     |   [a,_,_]    |        NO         |    [i32;LENGTH]    |
+|          Vec |    vec![1,2]    | [0] .get(0) |              |     .push(23)     |      Vec<i32>      |
+|      HashMap | HashMap::new()  |  .get(key)  |  (key,val)   | .insert(key, val) |                    |
+|--------------+-----------------+-------------+--------------+-------------------+--------------------|
+- structs
   - support punning on creation
 - no memory overhead for tuple/array/struct
 - unit
