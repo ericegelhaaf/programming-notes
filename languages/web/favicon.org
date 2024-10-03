@@ -1,0 +1,59 @@
+* html
+
+#+begin_src html
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <!-- NOT USED ANYMORE https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel -->
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+#+end_src
+
+* .ico - imagemagick initials generator
+
+https://imagemagick.org/Usage/text/
+
+#+begin_src sh
+  convert -size 128x128 xc:lightblue -kerning -15 \
+          -pointsize 100 -fill black \
+          -undercolor none -annotate +5+100 'NP' \
+          -define icon:auto-resize=64,48,32,16 favicon.ico
+#+end_src
+
+** makefile
+
+#+begin_src makefile
+public/favicon.ico public/apple-touch-icon.png:
+	convert -size 1024x1024 \
+		-undercolor none xc:'hsl(24,10%,5%)' \
+		-font FreeSerif-Bold-Italic \
+		-kerning 0 -pointsize 840 \
+		-fill 'hsl(24,100%,98%)' -annotate  +15+800 'N' \
+		-fill 'hsl(24,90%,80%)'  -annotate +475+800 'P' \
+		\( -clone 0 -resize 180x180 -write public/apple-touch-icon.png \) \
+		\( -clone 0 -define icon:auto-resize=64,48,32,16 -write public/favicon.ico \) \
+		null:
+#+end_src
+
+** Random font
+
+#+begin_src sh
+  while 1; do
+      convert -font "$(convert -list font | awk '/Font:/{ print $2 }' | shuf -n1 | tee /dev/stderr)" \
+              -size 128x128 xc:lightblue \
+              -kerning -15 -pointsize 100 -fill black \
+              -undercolor none \
+              -annotate +5+100 'NP' \
+              -define icon:auto-resize=64,48,32,16 a.ico
+  done
+#+end_src
+
+* png -> .ico
+https://www.jvt.me/posts/2022/02/07/favicon-cli/
+#+begin_src sh
+  convert profile.png -define icon:auto-resize=64,48,32,16 favicon.ico
+  convert profile.png -bordercolor white -border 0 \
+        \( -clone 0 -resize 16x16 \) \
+        \( -clone 0 -resize 32x32 \) \
+        \( -clone 0 -resize 48x48 \) \
+        \( -clone 0 -resize 64x64 \) \
+        -delete 0 -alpha off -colors 256 \
+        favicon.ico
+#+end_src

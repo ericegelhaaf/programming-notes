@@ -1,0 +1,28 @@
+- forms
+  - https://formsubmit.co/
+  - https://formspree.io/
+- icons
+  - https://fontawesome.com/
+  - https://www.flaticon.com/
+- images
+  - https://unsplash.com/
+  - https://undraw.co/illustrations
+  - https://www.pexels.com/es-es/
+  - https://dummyimage.com/
+  - https://pravatar.cc/
+    #+begin_src
+      https://i.pravatar.cc/<SIZE>
+    #+end_src
+  - https://cataas.com/ returns a random cat image/gif
+    #+begin_src
+      /cat
+      /cat/gif
+      /cat/tag/<TAG>
+      /cat/says/<MSG>
+      /cat/<TAG>/says/<MSG>
+    #+end_src
+  - https://picsum.photos/ Returns a random image
+    #+begin_src
+    https://picsum.photos/<SQUAREDIM>
+    https://picsum.photos/<WIDTH>/<HEIGHT>
+    #+end_src

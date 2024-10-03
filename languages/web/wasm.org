@@ -1,3 +1,4 @@
+- is a 32bit architecture
 - home https://webassembly.org/
 - wiki https://en.wikipedia.org/wiki/WebAssembly
   - 2017-

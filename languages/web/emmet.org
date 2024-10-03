@@ -2,6 +2,7 @@
 | home   | https://emmet.io/                              |
 | source | https://github.com/emmetio/emmet               |
 | wiki   | https://en.wikipedia.org/wiki/Emmet_(software) |
+| docs   | https://docs.emmet.io/cheat-sheet/                                               |
 |--------+------------------------------------------------|
 - by Vadim Makeev
 - Similar to CSS selectors

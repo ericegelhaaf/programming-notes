@@ -1,38 +1,13 @@
 - https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes/blob/main/html/html-quiz.md
 - https://developer.mozilla.org/en-US/docs/Web/HTML
 - https://htmlreference.io/
-- editor: https://docs.emmet.io/cheat-sheet/
+- https://www.w3schools.com/tags/tag_article.asp
 
-* resources
-
-- forms
-  - https://formsubmit.co/
-  - https://formspree.io/
-- icons
-  - https://fontawesome.com/
-  - https://www.flaticon.com/
-- images
-  - https://unsplash.com/
-  - https://undraw.co/illustrations
-  - https://www.pexels.com/es-es/
-  - https://dummyimage.com/
-  - https://pravatar.cc/
-    #+begin_src
-      https://i.pravatar.cc/<SIZE>
-    #+end_src
-  - https://cataas.com/ returns a random cat image/gif
-    #+begin_src
-      /cat
-      /cat/gif
-      /cat/tag/<TAG>
-      /cat/says/<MSG>
-      /cat/<TAG>/says/<MSG>
-    #+end_src
-  - https://picsum.photos/ Returns a random image
-    #+begin_src
-    https://picsum.photos/<SQUAREDIM>
-    https://picsum.photos/<WIDTH>/<HEIGHT>
-    #+end_src
+- HSL colors https://www.w3schools.com/colors/colors_hsl.asp
+ | Hue        | (°) on color wheel (0-360) 0=red 120=green 240=blue |
+ | Saturation | 0% gray - 100% full color                           |
+ | Lightness  | 0% black - 100% white                               |
+- attribute, accesskey= adds a keyboard shortcut
 
 * href= locations
 |-----------------+-----------------------------|
@@ -42,6 +17,8 @@
 |  ./bar/file.png | domain.com/foo/bar/file.png |
 |   /bar/file.png | domain.com/bar/file.png     |
 | ../bar/file.png | domain.com/bar/file.png     |
+|  mailto:a@a.com |                             |
+| tel:1231123+123 |                             |
 |-----------------+-----------------------------|
 * <!DOCTYPE>
 
@@ -58,7 +35,48 @@
 
 used by search engines
 
-* <meta>
+* <head>
+- <style id type>
+- <script id type async data-cfasync src>
+- <base> default target url for al links a/img
+** Apple
+
+- https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW6
+- https://webhint.io/docs/user-guide/hints/hint-apple-touch-icons/
+- https://codershigh.github.io/guidelines/ios/human-interface-guidelines/graphics/app-icon/index.html
+
+#+begin_src sh
+$ identify apple-touch-icon-57x57.png
+apple-touch-icon-57x57.png PNG 57x57 57x57+0+0 8-bit sRGB 2682B 0.000u 0:00.001
+#+end_src
+
+#+begin_src html
+<link rel="apple-touch-icon"                 href="touch-icon-iphone.png">
+<link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad.png">
+<link rel="apple-touch-icon" sizes="167x167" href="touch-icon-ipad-retina.png">
+<link rel="apple-touch-icon" sizes="180x180" href="touch-icon-iphone-retina.png">
+#+end_src
+
+
+#+begin_src html
+ <link rel="apple-touch-icon" sizes="57x57" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-57x57.png">
+ <link rel="apple-touch-icon" sizes="60x60" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-60x60.png">
+ <link rel="apple-touch-icon" sizes="72x72" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-72x72.png">
+ <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-76x76.png">
+ <link rel="apple-touch-icon" sizes="114x114" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-114x114.png">
+ <link rel="apple-touch-icon" sizes="120x120" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-120x120.png">
+ <link rel="apple-touch-icon" sizes="144x144" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-144x144.png">
+ <link rel="apple-touch-icon" sizes="152x152" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-152x152.png">
+ <link rel="apple-touch-icon" sizes="167x167" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-167x167.png">
+ <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-180x180.png">
+ <link rel="apple-touch-icon" sizes="1024x1024" href="https://cdn.destiny.gg/img/favicon/apple-touch-icon-1024x1024.png">
+
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="Destiny.gg">
+#+end_src
+
+** <meta>
 
 - https://www.w3schools.com/tags/tag_meta.asp
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
@@ -69,7 +87,8 @@ used by search engines
   - make width be the one of the device
 
 |------------+----------------------------+-----------------------------------------------------|
-|        <r> |                            | content=                                            |
+|        <r> |                            |                                                     |
+|       attr | attr value                 | content=                                            |
 |------------+----------------------------+-----------------------------------------------------|
 |    charset | UTF-8                      | -                                                   |
 |------------+----------------------------+-----------------------------------------------------|
@@ -78,15 +97,17 @@ used by search engines
 |            | content-type               | "text/html; charset=UTF-8"                          |
 |            | content-security-policy    | "default-src 'self'"                                |
 |------------+----------------------------+-----------------------------------------------------|
-|       [[https://www.w3schools.com/tags/att_meta_name.asp][name]] |                            |                                                     |
-|            | application-name           | eg: "State of Elm 2023"                             |
+|       [[https://www.w3schools.com/tags/att_meta_name.asp][name]] | application-name           | eg: "State of Elm 2023"                             |
 |            | apple-mobile-web-app-title | eg: "State of Elm 2023"                             |
+|            | article-id                 |                                                     |
 |            | author                     |                                                     |
+|            | csrf                       | id+content(with token)                          |
+|            | copyright                  | eg: "© 2006 MDC"                                    |
 |            | description                | SEO                                                 |
 |            | generator                  | for software generated pages                        |
 |            | googlebot                  | index,follow                                        |
 |            | keywords                   | SEO (eg: "HTML, CSS")                               |
-|            | robots                     |                                                     |
+|            | robots                     | eg: max-image-preview:large, follow, index          |
 |            | title                      | SEO eg: "State of Elm 2023"                         |
 |            | theme-color                | eg: "#ffffff"                                       |
 |            | [[https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag][viewport]]                   | "width=device-width, initial-scale=1.0"             |
@@ -99,6 +120,8 @@ used by search engines
 |            | twitter:url                | optional eg: "https://state-of-elm.com/"            |
 |            | twitter:image              | optional eg: "https://state-of-elm.com/favicon.png" |
 |------------+----------------------------+-----------------------------------------------------|
+|            | fb:admins                  |                                                     |
+|------------+----------------------------+-----------------------------------------------------|
 |   property | og                         | see [[https://ogp.me/][Open Graph protocol]]                             |
 |            | og:title                   | "State of Elm 2023"                                 |
 |            | og:type                    | eg: website, video.movie                            |
@@ -108,7 +131,6 @@ used by search engines
 |            | og:image:width             |                                                     |
 |            | og:image:height            |                                                     |
 |            | og:url                     | "https://state-of-elm.com/"                         |
-|------------+----------------------------+-----------------------------------------------------|
 |            | og:audio                   |                                                     |
 |            | og:description             | "An Elm community survey"                           |
 |            | og:determiner              |                                                     |
@@ -117,53 +139,72 @@ used by search engines
 |            | og:site_name               |                                                     |
 |            | og:video                   |                                                     |
 |------------+----------------------------+-----------------------------------------------------|
-
-* <link>
+|            | article:published_time     | eg: "2024-10-01T00:00:00.000Z"                      |
+|------------+----------------------------+-----------------------------------------------------|
+** <link>
 - https://www.w3schools.com/tags/tag_link.asp
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
 - can occurr on <head> or <body>
-|----------------+----------------------------+---------------------|
-|            <r> |                            |                     |
-|      attribute | value                      | description         |
-|----------------+----------------------------+---------------------|
-|    crossorigin |                            |                     |
-|                | anonymous                  |                     |
-|                | use-credentials            |                     |
-|----------------+----------------------------+---------------------|
-|           href |                            |                     |
-|       hreflang |                            |                     |
-|          media | eg: print, max-width:600px | only loaded if true |
-|          sizes |                            |                     |
-|          title |                            |                     |
-|           type |                            |                     |
-|----------------+----------------------------+---------------------|
-| referrerpolicy |                            |                     |
-|                | no-referrer                |                     |
-|                | no-referrer-when-downgrade |                     |
-|                | origin                     |                     |
-|                | origin-when-cross-origin   |                     |
-|                | unsafe-url                 |                     |
-|----------------+----------------------------+---------------------|
-|            rel |                            |                     |
-|                | alternate                  |                     |
-|                | apple-touch-icon           |                     |
-|                | author                     |                     |
-|                | dns-prefetch               |                     |
-|                | help                       |                     |
-|                | icon                       | a favicon           |
-|                | license                    |                     |
-|                | next                       |                     |
-|                | pinback                    |                     |
-|                | preconnect                 |                     |
-|                | prefetch                   |                     |
-|                | preload                    |                     |
-|                | prerender                  |                     |
-|                | prev                       |                     |
-|                | search                     |                     |
-|                | stylesheet                 |                     |
-|                | shortcut icon              |                     |
-|----------------+----------------------------+---------------------|
+|----------------+----------------------------+-------------------------------------------------|
+|            <r> |                            |                                                 |
+|      ATTRIBUTE | VALUE                      | DESCRIPTION                                     |
+|----------------+----------------------------+-------------------------------------------------|
+|    crossorigin |                            |                                                 |
+|                | anonymous                  |                                                 |
+|                | use-credentials            |                                                 |
+|----------------+----------------------------+-------------------------------------------------|
+|           href |                            |                                                 |
+|       hreflang |                            |                                                 |
+|          media |                            | only loaded if true                             |
+|                | max-width: 600px           |                                                 |
+|                | print                      |                                                 |
+|                | all                        |                                                 |
+|          sizes |                            |                                                 |
+|          title |                            |                                                 |
+|           type |                            |                                                 |
+|                | application/json+oembed    | title+href                                      |
+|                | application/atom+xml       | title+href                                      |
+|                | application/ld+json        |                                                 |
+|                | application/rss+xml        | title+href                                      |
+|                | image/svg+xml              |                                                 |
+|                | image/x-icon               | href                                            |
+|                | text/css                   |                                                 |
+|                | text/xml+oembed            | title href                                      |
+|----------------+----------------------------+-------------------------------------------------|
+| referrerpolicy |                            |                                                 |
+|                | no-referrer                |                                                 |
+|                | no-referrer-when-downgrade |                                                 |
+|                | origin                     |                                                 |
+|                | origin-when-cross-origin   |                                                 |
+|                | unsafe-url                 |                                                 |
+|----------------+----------------------------+-------------------------------------------------|
+|            [[https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel][rel]] |                            |                                                 |
+|                | alternate                  |                                                 |
+|                | apple-touch-icon           | href+sizes (a favicon), [[https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW6][iOS]] does NOT use "icon" |
+|                | apple-touch-startup-image  | href                                            |
+|                | icon                       | href+sizes+type (a favicon) png?                |
+|                | +shortcut icon+            | +type+sizes+href (a favicon)+ DEPRECATED        |
+|                | author                     |                                                 |
+|                | canonical                  | href                                            |
+|                | dns-prefetch               |                                                 |
+|                | help                       |                                                 |
+|                | license                    |                                                 |
+|                | next                       |                                                 |
+|                | pinback                    | href                                            |
+|                | preconnect                 | href+crossorigin                                |
+|                | prefetch                   | href+as                                         |
+|                | preload                    |                                                 |
+|                | prerender                  |                                                 |
+|                | prev                       |                                                 |
+|                | profile                    | href                                            |
+|                | search                     |                                                 |
+|                | stylesheet                 |                                                 |
+|                | shortcut icon              |                                                 |
+|----------------+----------------------------+-------------------------------------------------|
+
 * <form>
+|------------------------------+------------------------------------------|
+| TAG                          | DESCRIPTION                              |
 |------------------------------+------------------------------------------|
 | fieldset                     | for legend/label/input                   |
 | fieldset>legend              | perfect for input[type="radio"] groups   |
@@ -210,6 +251,31 @@ used by search engines
 |----------------+------------------------------------------------|
 - Those with /validation/ also enable keyboard special modes on mobile.
 
+* <table>
+- https://www.w3schools.com/html/html_tables.asp
+- https://www.w3schools.com/tags/tag_table.asp
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table
+|--------------+------------------------+-----------------------|
+| SUBTAG       | DESCRIPTION            | ATTRIBUTES            |
+|--------------+------------------------+-----------------------|
+| caption      | caption title          |                       |
+| colgroup     | to style groups of col |                       |
+| colgroup>col |                        | span style            |
+| tr           | row                    |                       |
+| th           | header                 | colspan rowspan scope |
+| td           | data                   | colspan rowspan       |
+| thead>tr>[[https://www.w3schools.com/tags/tag_th.asp][th]]  |                        |                       |
+| tbody>tr>td  |                        |                       |
+| tfoot>tr>td  |                        |                       |
+|--------------+------------------------+-----------------------|
+- thead/tbody/tfoot: used for scrolling of the body independently of the header/footer.
+- css
+  - border[-spacing,-collapse],
+  - display:
+    - table
+    - table-cell
+    - table-header-group
+    - table-column-group
 * Landmarks
 
 - https://en.wikipedia.org/wiki/HTML_landmarks
@@ -233,28 +299,31 @@ used by search engines
 
 * Text
 |--------------+------------------------------------------------------|
-| b            | bold (last resort after hN/em/strong/mark)           |
-| strong       | bold (important text)                                |
+|          <r> |                                                      |
+|          TAG | DESCRIPTION                                          |
 |--------------+------------------------------------------------------|
-| em           | italic                                               |
-| dfn          | italic                                               |
-| cite         | italic                                               |
-| i            | italic (last resort after em/string/mark/cite/dfn)   |
-| address      | block/italic (contact info)                          |
+|            b | bold (last resort after hN/em/strong/mark)           |
+|       strong | bold (important text)                                |
 |--------------+------------------------------------------------------|
-| del/ins      | underline/linethrough, text deleted/added aka a diff |
-| s            | line-through                                         |
-| u            | underline, misspelled (unarticulated)                |
+|           em | italic                                               |
+|          dfn | italic                                               |
+|         cite | italic                                               |
+|            i | italic (last resort after em/string/mark/cite/dfn)   |
+|      address | block/italic (contact info)                          |
 |--------------+------------------------------------------------------|
-| abbr         | title=                                               |
-| h?           | heading, where "?" could be 1 to 6                   |
-| mark         | bg-yellow                                            |
-| pre          | preformatted, preserves spaces and line breaks       |
+|      del/ins | underline/linethrough, text deleted/added aka a diff |
+|            s | line-through                                         |
+|            u | underline, misspelled (unarticulated)                |
+|--------------+------------------------------------------------------|
+|         abbr | title=                                               |
+|           h? | heading, where "?" could be 1 to 6                   |
+|         mark | bg-yellow                                            |
+|          pre | preformatted, preserves spaces and line breaks       |
 | q/blockquote | short/long quotation                                 |
-| small        | font size smaller                                    |
-| sub/sup      | small valign sub/sup                                 |
-| time         | can also add machine readable datetime=              |
-| wbr          | word break opportunity                               |
+|        small | font size smaller                                    |
+|      sub/sup | small valign sub/sup                                 |
+|         time | can also add machine readable datetime=              |
+|          wbr | word break opportunity                               |
 |--------------+------------------------------------------------------|
 ** UI
 |----------------+------------------------------|
@@ -277,71 +346,40 @@ used by search engines
 * Lists
 |----------------+------------------|
 | ul>li*N        | un-ordered list  |
-|----------------+------------------|
 | ol>li*N        | ordered list     |
-|----------------+------------------|
 | (dl>(dt+dd))*N | description list |
 | dt             | a term           |
 | dd             | a description    |
 |----------------+------------------|
-* W3 Schools
+* media (img/audio/video)
+|--------------------------+--------------------------------------------|
+|           <c>            |                                            |
+|           TAG            | DESCRIPTION                                |
+|--------------------------+--------------------------------------------|
+|           [[https://www.w3schools.com/tags/tag_img.asp][img]]            |                                            |
+|  picture>(img+source*N)  | sets different images for different widths |
+| figure>(img+figcaption)  |                                            |
+|     img+(map>area*N)     | defines a clickable are on an img          |
+|--------------------------+--------------------------------------------|
+|          audio           | content will be the "alt"                  |
+|          video           |                                            |
+|    video/audio>source    | media source in different format           |
+| video/audio>source+track | .vtt subtitles tracks                      |
+|--------------------------+--------------------------------------------|
+|           svg            | circle/rect/polygon/ellipse/text           |
+|          canvas          |                                            |
+|--------------------------+--------------------------------------------|
 
-- HSL colors https://www.w3schools.com/colors/colors_hsl.asp
- | Hue        | (°) on color wheel (0-360) 0=red 120=green 240=blue |
- | Saturation | 0% gray - 100% full color                           |
- | Lightness  | 0% black - 100% white                               |
-- attribute, accesskey= adds a keyboard shortcut
-- href=mailto: can have a ?subject=
-- href=tel: to make phone calls?
-
-** Tags  https://www.w3schools.com/tags/tag_article.asp
-*** Tags
-|-----------+-----------------------------------------------|
-| head>base | default target url for all links <a>/<img>/?  |
-| head>meta | metadata, name= content= charset= http-equiv= |
-| head>link |                                               |
-| embed     | use img/iframe/video/audio instead            |
-|-----------+-----------------------------------------------|
-*** div
+* div
 
 div's are mostly used as a wrapper to apply styling, have to inherit semantic? representation
 
-**** Other
+* Other
 |-----------------+-------------------------------------|
-| span            | inline, to markup text              |
-| dialog          | open= middle of screen              |
 | address         | block/italic (contact info)         |
 | data            | to add metadata in ul/li attributes |
 | details>summary | open= toggable                      |
+| dialog          | open= middle of screen              |
+| embed           | use img/iframe/video/audio instead  |
+| span            | inline, to markup text              |
 |-----------------+-------------------------------------|
-*** media et all
-|--------------------------+--------------------------------------------|
-| img                      |                                            |
-| picture>img+source*N     | sets different images for different widths |
-| figure>img+figcaption    |                                            |
-| imp+map>area*N           | defines a clickable are on an img          |
-|--------------------------+--------------------------------------------|
-| audio                    | content will be the "alt"                  |
-| video                    |                                            |
-| video/audio>source       | media source in different format           |
-| video/audio>source+track | .vtt subtitles tracks                      |
-|--------------------------+--------------------------------------------|
-| svg                      | circle/rect/polygon/ellipse/text           |
-| canvas                   |                                            |
-|--------------------------+--------------------------------------------|
-*** table>
-|---------------+------------------------|
-| >caption      | caption title          |
-|---------------+------------------------|
-| >thead>tr>th  | header                 |
-| >tr>th        |                        |
-|---------------+------------------------|
-| >tbody>tr>td  |                        |
-|---------------+------------------------|
-| >tfoot>tr>td  |                        |
-|---------------+------------------------|
-| >tr>td        |                        |
-|---------------+------------------------|
-| >colgroup     | to style groups of col |
-| >colgroup>col |                        |
-|---------------+------------------------|

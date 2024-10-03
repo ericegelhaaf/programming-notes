@@ -58,78 +58,81 @@ https://www.erlang.org/doc/apps/parsetools/parsetools.pdf
 
 *** Singleton Types
 
-|--------------+--------------|
-| spec         | create       |
-|--------------+--------------|
-| 42           | 42           |
-| [], {}, <<>> | [], {}, <<>> |
-| 'some atom'  | 'some atom'  |
-| 'foobar'     | 'foobar'     |
-|--------------+--------------|
+Their ~spec~ is equal to their ~creation~
+
+|--------------|
+|     <c>      |
+| spec/create  |
+|--------------|
+|      42      |
+| [], {}, <<>> |
+| 'some atom'  |
+|   'foobar'   |
+|--------------|
 
 *** Built-in Types
-
 |--------------------------------+----------------------+------------------------------------------------------------------|
-| spec                           | create               |                                                                  |
+|                            <r> |         <c>          |                                                                  |
+|                           spec |       examples       |                                                                  |
 |--------------------------------+----------------------+------------------------------------------------------------------|
-| any()                          |                      |                                                                  |
-| none()                         |                      |                                                                  |
-| pid()                          | self()  spawn()      |                                                                  |
-| port()                         | open_port()          |                                                                  |
-| reference()                    | make_ref()           |                                                                  |
+|                          any() |                      |                                                                  |
+|                         none() |                      |                                                                  |
+|                          pid() |   self()  spawn()    |                                                                  |
+|                         port() |     open_port()      |                                                                  |
+|                    reference() |      make_ref()      |                                                                  |
 |--------------------------------+----------------------+------------------------------------------------------------------|
-| binary()                       | <<10,20>>            |                                                                  |
-| <<_:Integer>>                  |                      | a binary of known length                                         |
-| <<_:_*Integer>>                |                      | a binary with *unit size* but unspecified length                 |
+|                       binary() |      <<10,20>>       |                                                                  |
+|                  <<_:Integer>> |                      | a binary of known length                                         |
+|                <<_:_*Integer>> |                      | a binary with *unit size* but unspecified length                 |
 | <<_:Integer,_:_*OtherInteger>> |                      | a binary that can have a minimum length                          |
 |--------------------------------+----------------------+------------------------------------------------------------------|
-| integer()                      | 23 1_337 2#101 16#1f |                                                                  |
-| 1..12                          | 3                    |                                                                  |
-| non_neg_integer()              | 0                    | integers >= 0                                                    |
-| pos_integer()                  | 2                    | integers >  0                                                    |
-| neg_integer()                  | -2                   | integers <  0                                                    |
-| float()                        | 3.14                 |                                                                  |
+|                      integer() | 23 1_337 2#101 16#1f |                                                                  |
+|                          1..12 |          3           |                                                                  |
+|              non_neg_integer() |          0           | integers >= 0                                                    |
+|                  pos_integer() |          2           | integers >  0                                                    |
+|                  neg_integer() |          -2          | integers <  0                                                    |
+|                        float() |         3.14         |                                                                  |
 |--------------------------------+----------------------+------------------------------------------------------------------|
-| fun()                          |                      | any kind of function                                             |
-| fun(() -> Type)                |                      | an anonymous function that takes no arguments, that returns Type |
-| fun((...) -> Type)             |                      | an anonymous function of any arity, that returns Type            |
-| fun((TypeA,TypeB) -> Type)     |                      | an anonymous function                                            |
+|                          fun() |                      | any kind of function                                             |
+|                fun(() -> Type) |                      | an anonymous function that takes no arguments, that returns Type |
+|             fun((...) -> Type) |                      | an anonymous function of any arity, that returns Type            |
+|     fun((TypeA,TypeB) -> Type) |                      | an anonymous function                                            |
 |--------------------------------+----------------------+------------------------------------------------------------------|
-| term()                         |                      | equivalent to any()                                              |
-| boolean()                      | 'false'              | 'true' ¦ 'false'                                                 |
-| byte()                         | 42                   | 0..255                                                           |
-| char()                         | $A  $\n              | 0..16#10ffff                                                     |
-| number()                       | 23  3.14             | integer() ¦ float()                                              |
-| string()                       | "foo"                | [char()]                                                         |
-| non_empty_string()             |                      | [char(),...]                                                     |
-| bitstring()                    | <<"ABC">>            |                                                                  |
-| atom()                         | foo 'foo'            |                                                                  |
-| nil or []                      | []                   |                                                                  |
-| timeout()                      |                      | non_neg_integer() ¦ 'infinity'                                   |
-| node()                         |                      | erlang node name                                                 |
-| no_return()                    |                      | equivalent to none(), things that loop forever                   |
+|                         term() |                      | equivalent to any()                                              |
+|                      boolean() |       'false'        | 'true' ¦ 'false'                                                 |
+|                         byte() |          42          | 0..255                                                           |
+|                         char() |       $A  $\n        | 0..16#10ffff                                                     |
+|                       number() |       23  3.14       | integer() ¦ float()                                              |
+|                       string() |        "foo"         | [char()]                                                         |
+|             non_empty_string() |                      | [char(),...]                                                     |
+|                    bitstring() |      <<"ABC">>       |                                                                  |
+|                         atom() |      foo 'foo'       |                                                                  |
+|                      nil or [] |          []          |                                                                  |
+|                      timeout() |                      | non_neg_integer() ¦ 'infinity'                                   |
+|                         node() |                      | erlang node name                                                 |
+|                    no_return() |                      | equivalent to none(), things that loop forever                   |
 |--------------------------------+----------------------+------------------------------------------------------------------|
-
 *** Compound types
 |--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
-| type                     | creating    | p.matching     | accessing               | updating                 | spec    |
+|           <c>            |     <c>     |      <c>       |                         |                          |         |
+|           type           |  creating   |   p.matching   | accessing               | updating                 | spec    |
 |--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
-| map #{TList}             | #{a => 1}   | #{a := Value}  | maps:get(K,M)           | maps:update(K,V,M)       | map()   |
+|       map #{TList}       |  #{a => 1}  | #{a := Value}  | maps:get(K,M)           | maps:update(K,V,M)       | map()   |
 |                          |             |                |                         | M#{key => 1}             |         |
 |                          |             |                |                         | M#{key := 1}             |         |
 |--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
-| list(Type)               | [], [1]     | [A,B¦C]        | lists:nth(N,L)          |                          | list()  |
-| [Type]                   |             |                |                         |                          |         |
-| [Type,...]               | [1]         |                |                         |                          |         |
-| improper_list(T,TEnd)    |             |                |                         |                          |         |
-| maybe_improper_list()    |             |                |                         |                          |         |
-| maybe_improper_list(T)   |             |                |                         |                          |         |
+|        list(Type)        |   [] [23]   |    [A,B¦C]     | lists:nth(N,L)          |                          | list()  |
+|          [Type]          |             |                |                         |                          |         |
+|        [Type,...]        |    [23]     |                |                         |                          |         |
+|  improper_list(T,TEnd)   |             |                |                         |                          |         |
+|  maybe_improper_list()   |             |                |                         |                          |         |
+|  maybe_improper_list(T)  |             |                |                         |                          |         |
 | maybe_improper_list(T,T) |             |                |                         |                          |         |
 |--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
-| tuple(TList?)            | {a,1}       | {A,B}          | erlang:element(K,T)     | erlang:setelement(K,V,T) | {T1,T2} |
-| tuple()                  |             |                |                         |                          |         |
+|      tuple(TList?)       |    {a,1}    |     {A,B}      | erlang:element(K,T)     | erlang:setelement(K,V,T) | {T1,T2} |
+|         tuple()          |             |                |                         |                          |         |
 |--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
-| record                   | #name{a=23} | #name{a=Value} | Rec#r1.field            | Rec#name{field = 23}     | #name{} |
+|          record          | #name{a=23} | #name{a=Value} | Rec#r1.field            | Rec#name{field = 23}     | #name{} |
 |                          |             |                | Rec#r1.field1#r2.field2 |                          |         |
 |--------------------------+-------------+----------------+-------------------------+--------------------------+---------|
 - List ops
