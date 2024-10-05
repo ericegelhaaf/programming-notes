@@ -1,0 +1,16 @@
+|----------+----------------------------------------------------------------------|
+| home     | https://www.roc-lang.org/                                            |
+| howto    | https://www.roc-lang.org/tutorial                                    |
+|          | https://www.roc-lang.org/abilities                                   |
+|          | https://www.roc-lang.org/platforms                                   |
+|          | https://roc-lang.github.io/book-of-examples/                                                                     |
+|          | https://github.com/roc-lang/roc/blob/main/roc-for-elm-programmers.md |
+| examples | https://www.roc-lang.org/examples                                    |
+| faq      | https://www.roc-lang.org/faq.html                                    |
+| source   | https://github.com/roc-lang/roc                                      |
+|----------+----------------------------------------------------------------------|
+
+- stdlib https://www.roc-lang.org/builtins
+- platforms
+  - https://github.com/roc-lang/basic-cli
+  - https://github.com/roc-lang/basic-webserver

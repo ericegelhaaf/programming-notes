@@ -1,3 +1,10 @@
+- favicon
+  - https://www.flaticon.es/
+- fonts
+  - https://fonts.google.com/
+  - https://fonts.adobe.com/ (needs account)
+- tables
+  - https://datatables.net/
 - forms
   - https://formsubmit.co/
   - https://formspree.io/

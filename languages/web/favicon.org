@@ -9,6 +9,8 @@
 * .ico - imagemagick initials generator
 
 https://imagemagick.org/Usage/text/
+https://imagemagick.org/Usage/draw/
+https://imagemagick.org/Usage/quantize/
 
 #+begin_src sh
   convert -size 128x128 xc:lightblue -kerning -15 \
@@ -16,6 +18,10 @@ https://imagemagick.org/Usage/text/
           -undercolor none -annotate +5+100 'NP' \
           -define icon:auto-resize=64,48,32,16 favicon.ico
 #+end_src
+** 3rd party examples
+
+- 512x512 -> icons
+  - https://github.com/harttle/liquidjs/blob/master/bin/build-icons.sh
 
 ** makefile
 

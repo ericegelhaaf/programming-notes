@@ -1,3 +1,56 @@
+- CSS = Casacading Style Sheets
+
+#+begin_src css
+  h1 { /* selector / declaration block */
+      color: blue; /* property: value */
+      font-size: 24px;
+  }
+#+end_src
+
+
+- https://getbem.com/
+
+- classes and ids with ~snake-case~
+
+- color
+  - name
+  - hexa
+  - rgb
+  - rgba
+  - hsl
+
+- style precedence
+  1) element inline
+  2) <style>
+  3) <link rel="stylesheet" />
+
+- selector precedence
+  1) !important
+  2) inline
+  3) id
+  4) clase
+  5) etiqueta
+  6) universal
+
+- selector
+  - :root (aka <html>)
+  - * (aka selector universal)
+
+- medidas
+  - absolutas: px cm mm pt in pc
+    - border
+    - screen size
+  - relativas: % em rem ex ch
+    - % elements
+    - em rem fonts
+  - flexibles: vw vh
+
+- font
+  - size: px, em, rem
+  - style: normal, italic, oblique
+  - family: arial, helvetica, sans-serif, ...
+  - weight: bold(er), 100, 200, ... , 900
+
 - default css https://www.w3schools.com/cssref/css_default_values.php
 - https://css-tricks.com/examples/nth-child-tester/
 - https://www.matuzo.at/blog/2022/100-days-of-more-or-less-modern-css/
@@ -10,7 +63,6 @@
 - CSS Grid https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/CSS_Grid_Layout_and_Accessibility
 - CSS Grid examples and patterns https://gridbyexample.com/
 - Logical Properties https://www.youtube.com/watch?v=cnwOfaE5GEk
-
 
 * Book: 18 | Learning Web Design | Jennifer Robbins | O'Reilly
 https://learningwebdesign.com/5e/materials/

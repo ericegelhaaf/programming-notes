@@ -255,6 +255,8 @@ apple-touch-icon-57x57.png PNG 57x57 57x57+0+0 8-bit sRGB 2682B 0.000u 0:00.001
 - https://www.w3schools.com/html/html_tables.asp
 - https://www.w3schools.com/tags/tag_table.asp
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table
+- "bad for responsive design"
+- js interactivity https://datatables.net/
 |--------------+------------------------+-----------------------|
 | SUBTAG       | DESCRIPTION            | ATTRIBUTES            |
 |--------------+------------------------+-----------------------|
