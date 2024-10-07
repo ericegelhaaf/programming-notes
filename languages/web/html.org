@@ -8,6 +8,7 @@
  | Saturation | 0% gray - 100% full color                           |
  | Lightness  | 0% black - 100% white                               |
 - attribute, accesskey= adds a keyboard shortcut
+- div's are mostly used as a wrapper to apply styling, have to inherit semantic? representation
 
 * href= locations
 |-----------------+-----------------------------|
@@ -327,11 +328,6 @@ apple-touch-icon-57x57.png PNG 57x57 57x57+0+0 8-bit sRGB 2682B 0.000u 0:00.001
 |         time | can also add machine readable datetime=              |
 |          wbr | word break opportunity                               |
 |--------------+------------------------------------------------------|
-** UI
-|----------------+------------------------------|
-| template       | hidden content (JS showable) |
-| progress/meter | id= value= max= progress var |
-|----------------+------------------------------|
 ** Computer
 |------+---------------------------------|
 | kbd  | monospace                       |
@@ -345,6 +341,20 @@ apple-touch-icon-57x57.png PNG 57x57 57x57+0+0 8-bit sRGB 2682B 0.000u 0:00.001
 | bdi        | "bi-directional isolation", for lang with diff direction |
 | bdo        | "bi-directional override"                                |
 |------------+----------------------------------------------------------|
+** Other
+|-----------------+-------------------------------------|
+| address         | block/italic (contact info)         |
+| data            | to add metadata in ul/li attributes |
+| details>summary | open= toggable                      |
+| dialog          | open= middle of screen              |
+| embed           | use img/iframe/video/audio instead  |
+| span            | inline, to markup text              |
+|-----------------+-------------------------------------|
+** UI
+|----------------+------------------------------|
+| template       | hidden content (JS showable) |
+| progress/meter | id= value= max= progress var |
+|----------------+------------------------------|
 * Lists
 |----------------+------------------|
 | ul>li*N        | un-ordered list  |
@@ -371,17 +381,3 @@ apple-touch-icon-57x57.png PNG 57x57 57x57+0+0 8-bit sRGB 2682B 0.000u 0:00.001
 |           svg            | circle/rect/polygon/ellipse/text           |
 |          canvas          |                                            |
 |--------------------------+--------------------------------------------|
-
-* div
-
-div's are mostly used as a wrapper to apply styling, have to inherit semantic? representation
-
-* Other
-|-----------------+-------------------------------------|
-| address         | block/italic (contact info)         |
-| data            | to add metadata in ul/li attributes |
-| details>summary | open= toggable                      |
-| dialog          | open= middle of screen              |
-| embed           | use img/iframe/video/audio instead  |
-| span            | inline, to markup text              |
-|-----------------+-------------------------------------|

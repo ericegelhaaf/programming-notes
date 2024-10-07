@@ -1,10 +1,121 @@
+|----------+------------------------------------------------|
+| wiki     | https://en.wikipedia.org/wiki/Perl             |
+| wiki     | https://en.wikibooks.org/wiki/Perl_Programming |
+| home     | https://www.perl.org/                          |
+| packages | https://metacpan.org/                          |
+| packages | https://github.com/hachiojipm/awesome-perl     |
+| monks    | https://www.perlmonks.org/                     |
+|----------+------------------------------------------------|
+- 1987-
+- Creator: Larry Wall
+- Versions
+  - 5.4  1994
+  - 5.10 2009
+  - 5.20 2015
+  - 5.30 2020
+  - 5.40 2024
+
+- articles https://lobste.rs/t/perl
 - article: 96 https://www.foo.be/docs/tpj/issues/vol1_2/tpj0102-0001.html
-- video: Day 2: Pirum Theatre: Mark Fowler - The Perl Advent Calendar 2017 Redux https://www.youtube.com/watch?v=vSAzNMJM9-o
 - book: https://learnbyexample.github.io/learn_perl_oneliners/cover.html
-- exercises: https://perladvent.org/archives.html
-- channel https://www.youtube.com/@YAPCNA
-- Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
-- codebase https://github.com/trizen/youtube-viewer
-- codebase https://github.com/prsquee/irssi-scripts
+- exercises:
+  - https://perladvent.org/archives.html
+  - https://exercism.org/tracks/perl5
 - community:
   - foro español http://perlenespanol.com/foro/
+
+* language
+
+#+begin_src perl
+  #!/usr/bin/env perl
+  use strict;
+  $world = "Earth";
+  print "Hello ${world}!";
+#+end_src
+
+- control flow
+  - if () {} elsif {} else {}
+  - print if(m/^root:/)
+
+- loop
+  - for ($inicio=1; $inicio <= 10; $inicio++) {}
+  - foreach(@passwords) {  }
+  - while ()
+
+- variables
+  - <STDIN>
+  - $ scalars, can only have objects
+  - %hash ("root", 0, "wheel", 99)
+    - $ahash{"root"}
+  - @arrays (1,2), ("a","b")
+    - [0]
+    - [2..5]
+    - ($a,$b,$c) = @array
+
+- operators
+  - . concatenation
+  - qw() for quoting
+
+- stdlib
+  - reverse die system open
+  - Net::Ping
+    - new("icmp", 1, 64)->ping($ipaddr)
+
+- functions
+  #+begin_src perl
+    sub mifn{
+        my $flag = shift;
+        print "mi argumento fue $flag";
+    }
+    mifn();
+    &mifn(); # ??????
+    &mifn;
+  #+end_src
+
+* codebases
+
+- google auth https://github.com/elpop/ga_cli
+- github stats
+  - https://github.com/elpop/github_stats
+  - https://x.com/El_Pop/status/1802832111654855166/photo/1
+- Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
+- https://github.com/trizen/youtube-viewer
+- https://github.com/prsquee/irssi-scripts
+
+* videos
+
+- TODO 7:00 https://www.youtube.com/watch?v=EbH9jLi6v2g&list=PL8qgaJWZ7bGJPlIvAFbq8fKrFogUEJ3AJ&index=12
+- channels
+  - https://www.youtube.com/@YAPCNA
+  - https://www.youtube.com/@TorontoPerlMongers/streams
+- Day 2: Pirum Theatre: Mark Fowler - The Perl Advent Calendar 2017 Redux https://www.youtube.com/watch?v=vSAzNMJM9-o
+- Perl in 100 Seconds https://www.youtube.com/watch?v=74_7LrRe5DI&pp=ygUEcGVybA%3D%3D
+- Perl tutorial - Erik Banas https://www.youtube.com/watch?v=74_7LrRe5DI
+- Good Reasons to use Perl in 2021 - rwxrob https://www.youtube.com/watch?v=AGoLnnOFBoc
+- Perl Programming Course for Beginners  - FreeCodeCamp https://www.youtube.com/watch?v=_DFa26ep-h4
+- https://www.youtube.com/playlist?list=PLTmR6HsT7005r9J50_HCOGkyGc8dDYu7J
+
+* tools
+- deploy
+  - par/pp
+    - https://metacpan.org/pod/PAR
+    - https://metacpan.org/pod/pp
+  - AppPerl
+    - https://metacpan.org/pod/Perl::Dist::APPerl
+    - https://computoid.com/posts/Perl-is-Actually-Portable.html
+    - https://computoid.com/APPerl/
+    - https://www.youtube.com/watch?v=H3dITR0np54
+- editor
+  - emacs package
+    - https://github.com/vividsnow/perl-live
+    - https://www.youtube.com/watch?v=BCUtu4urY9w
+
+* snippets
+** reading file
+#+begin_src perl
+  use strict;
+  open(DICT, "<", "palabras.txt");
+  while(<DICT>) {
+      print if (m/([a-z])\1\1/);
+  }
+#+end_src

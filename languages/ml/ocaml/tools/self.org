@@ -1,3 +1,4 @@
+- cosmopolitan libc https://github.com/dinosaure/esperanto
 - profiling https://github.com/ocaml-bench/notes/blob/master/profiling_notes.md
 - profiler https://github.com/imandra-ai/ocaml-tracy
 - Github Action: build docs

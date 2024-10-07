@@ -1,3 +1,4 @@
+- https://bodil.lol/parser-combinators/
 - https://tourofrust.com/
 - https://stevedonovan.github.io/rust-gentle-intro/
 - Article: https://rauljordan.com/rust-concepts-i-wish-i-learned-earlier/

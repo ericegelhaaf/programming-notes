@@ -1,5 +1,19 @@
-- Video 18: PureScript's Typesystem | Phil Freeman https://www.youtube.com/watch?v=SPpIbiZFPRY
+- 23: PureScript with a chance of Free Monads. Anton Kotenko. https://www.youtube.com/watch?v=RkqyrUbueTk
+- 23: John Cinnamond
+  1) https://www.youtube.com/watch?v=mIAze-NZx3k
+  2) https://www.youtube.com/watch?v=cTjnFUnK7Qw
+  3) https://www.youtube.com/watch?v=NKyQN_8kkAE
+  4) https://www.youtube.com/watch?v=YyWZjd_nGDI
+- 22: Purescript for Haskellers https://www.youtube.com/watch?v=Ng1YPjveaWg
+- 20: Introduction to Purescript https://www.youtube.com/watch?v=G-pi6xeXMZs
+- 18: PureScript's Typesystem | Phil Freeman https://www.youtube.com/watch?v=SPpIbiZFPRY
+- 18: Introduction to Purescript https://www.youtube.com/watch?v=He7gQ56vl4M
+- 17: Building Single Page Web Applications with Purescript and ... https://www.youtube.com/watch?v=HQkxm2P2xbY
+- 16: A Whilwind of PureScript https://www.youtube.com/watch?v=HycbuV6hUfI
+- 15: Learn Functional Programming with PureScript John A De Goes https://www.youtube.com/watch?v=LqYfdmb0eUU
+- 14: PureScript (Maybe This Time We Get JavaScript Right) https://www.youtube.com/watch?v=yIlDBPiMb0o
 - Videos: Branium https://www.youtube.com/playlist?list=PLCbbPAsJ9DaJE5Er9txmPfdCMPV7CnWOv
+- Videos: 17 Purescript+Halogen - Hardy Jones https://www.youtube.com/playlist?list=PLV1Z_haBGowAsBACegk20zVyUT1OzIrdV
 - Videos: Impure Pics https://www.youtube.com/playlist?list=PLxn_Aq3QlOQd3nyoe9vv72qQwP2qAfP6r
 - Channel: https://www.youtube.com/@PhilFreeman/videos
 - Channel: https://www.youtube.com/@PureScriptCommunity/videos

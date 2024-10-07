@@ -1,7 +1,7 @@
 - home https://www.purescript.org/
 
 - https://en.wikipedia.org/wiki/PureScript
-  - Author: Phil Freeman
+  - Author: =Phil Freeman=
   - strict language (not lazy)
   - transpiles to JavaScript, C++11, Erlang, and Go
   - has "row polymorphism"
@@ -9,6 +9,7 @@
 
 - https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md
 - https://github.com/alpacaaa/elm-to-purescript-cheatsheet
+- article: Why You Should Use PureScript https://gist.github.com/paf31/adfd15fbb1ac8b99fc68be2c9aca8427
 
 - libraries
   - https://github.com/passy/awesome-purescript
