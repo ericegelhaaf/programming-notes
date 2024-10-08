@@ -1,3 +1,4 @@
+- https://blog.drewolson.org/gleam-is-pragmatic/
 - 24 Gleam + Tauri
   - https://www.wezm.net/v2/posts/2024/gleam-tauri/
   - source https://forge.wezm.net/wezm/gleam-tauri-experiment

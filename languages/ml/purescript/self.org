@@ -2,7 +2,7 @@
 
 - https://en.wikipedia.org/wiki/PureScript
   - Author: =Phil Freeman=
-  - strict language (not lazy)
+  - strict language (NOT lazy)
   - transpiles to JavaScript, C++11, Erlang, and Go
   - has "row polymorphism"
   - has "extensible records"
@@ -20,3 +20,64 @@
   - erlang  https://github.com/purerl/purerl
   - node.js https://github.com/purescript-node
   - native  https://github.com/andyarvanitis/purescript-native
+
+* language
+
+#+begin_src haskell
+  module Main where
+  import Prelude
+  import Control.Monad.Eff.Console (logShow)
+  import TryPureScript (render, withConsole)
+  main = render =<< withConsole do
+    logShow $ "Hello World"
+#+end_src
+
+- types
+  - Int
+  - Number
+  - String
+  - Boolean
+  - Array
+
+- record
+  #+begin_src haskell
+    type PersonRec = { name :: String
+                     , age :: Int
+                     }
+  #+end_src
+
+- data
+  #+begin_src haskell
+    data Foo = Foo | Bar String
+  #+end_src
+
+- instance
+  #+begin_src haskell
+    data Person = PersonA PersonRec
+    instance showPerson :: Show Person where
+      show (PersonA { name, age }) =
+        "PersonA { name: " <> show name
+        <> ", age: " <> show age <> "})"
+  #+end_src
+
+- operators
+  - =<<
+  - <> concatenation
+  - <<< fn compose
+
+- typeclass
+  #+begin_src haskell
+isEmpty :: forall a. Array a -> Boolean
+isEmpty [] = true
+isEmpty _ = false
+  #+end_src
+
+- stdlib
+  - Prelude
+    - show
+  - Control.Monad.Eff.Console (log)
+  - Data.Array (null, concat, concatMap)
+  - Data.Array.Partial (tail)
+  - Data.List ((:), List(..), reverse, filter, concat, concatMap)
+  - Data.Maybe (Maybe(..))
+  - Partial.Unsafe (unsafePartial)

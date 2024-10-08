@@ -56,14 +56,17 @@
 
 ** Imports
 |-----------------+-----------------------------|
+|       <c>       |                             |
+|    FILENAME     | CODE                        |
+|-----------------+-----------------------------|
 | dirname/main.go | package dirname             |
 |-----------------+-----------------------------|
-| go.mod          | module modname              |
+|     go.mod      | module modname              |
 |-----------------+-----------------------------|
-| main.go         | import "modname/dirname"    |
+|     main.go     | import "modname/dirname"    |
 |                 | dirname.Fn(2)               |
 |-----------------+-----------------------------|
-| main.go         | import dn "modname/dirname" |
+|     main.go     | import dn "modname/dirname" |
 |                 | dn.Fn(2)                    |
 |-----------------+-----------------------------|
 ** Types

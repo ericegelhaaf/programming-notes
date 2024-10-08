@@ -9,20 +9,24 @@
 - Tutorial: https://www.youtube.com/playlist?list=PLJbE2Yu2zumCe9cO3SIyragJ8pLmVv0z9
 - /r/golang/ favorite go conference talks https://www.reddit.com/r/golang/comments/ei54kv/what_are_your_favorite_go_conference_talks/
 - /r/golang/ youtube.com https://www.reddit.com/r/golang/search?q=site%3Ayoutube.com&restrict_sr=1&sort=top
+
 * Channels
-- GopherCon UK https://www.youtube.com/c/GopherConUK/videos
-- Learn To Code https://www.youtube.com/c/toddmcleod-learn-to-code/videos
+- ArdanLabs https://www.youtube.com/channel/UCCgGRKeRM1b0LTDqqb4NqjA/videos
+- Anthony GG https://www.youtube.com/@anthonygg_
 - Go Class https://www.youtube.com/channel/UCC2ot8w_U6yQsq7jdpbECvQ/videos
-- Justforfunc https://www.youtube.com/c/JustForFunc/videos
-- Microservices: https://www.youtube.com/c/NicJackson/videos
-- The Go Programming Language https://www.youtube.com/c/golang/videos
 - Gopher Academy https://www.youtube.com/channel/UCx9QVEApa5BKLw9r8cnOFEA
 - GopherCon Europe https://www.youtube.com/channel/UCxm3-iHEMy7IkU0_gwDVGAQ
+- GopherCon UK https://www.youtube.com/c/GopherConUK/videos
 - GopherCon UK https://www.youtube.com/channel/UC9ZNrGdT2aAdrNbX78lbNlQ
 - Gophercon Israel https://www.youtube.com/channel/UCV_ox3kVvV5HrUz4JOuZpdQ
 - Gophercon Russia https://www.youtube.com/channel/UCq-OB01F8YnS-FJpeJRCvMQ/videos
+- Flo Weolki https://www.youtube.com/@FloWoelki
+- Justforfunc https://www.youtube.com/c/JustForFunc/videos
+- Learn To Code https://www.youtube.com/c/toddmcleod-learn-to-code/videos
+- Microservices: https://www.youtube.com/c/NicJackson/videos
+- package main https://www.youtube.com/@packagemain
 - Singapore Gophers https://www.youtube.com/channel/UCazkIMpjghmT8fugD1WF_DQ
-- ArdanLabs https://www.youtube.com/channel/UCCgGRKeRM1b0LTDqqb4NqjA/videos
+- The Go Programming Language https://www.youtube.com/c/golang/videos
 * 12 | Rob Pike - Go Concurrency Patterns
 Channels are first class values
 ** Generator - 15:52

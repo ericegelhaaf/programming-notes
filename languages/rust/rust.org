@@ -147,6 +147,11 @@ https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/src
 |  String | String::from("foo") | .pop()                           |
 |    &str |        "foo"        |                                  |
 |---------+---------------------+----------------------------------|
+- tuple, array
+  - stack (aka size known at compile time)
+- vector
+  - heap
+  - address/length/capacity (usize x3)
 - String
   - heap allocated
   - mutable
@@ -157,19 +162,23 @@ https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/src
   - analogous to &[u8]
   - has: ptr, len
 *** Compound
-|--------------+-----------------+-------------+--------------+-------------------+--------------------|
-|          <r> |       <c>       |     <c>     |     <c>      |        <c>        |        <c>         |
-|         name |     create      |   access    | destructure  |      insert       |        type        |
-|--------------+-----------------+-------------+--------------+-------------------+--------------------|
-|         unit | (any statement) |     NO      |      ()      |        NO         |         ()         |
-|        tuple |      (5,2)      |     .0      |    (a,_b)    |        NO         |     (i64,i64)      |
-|  unit struct |      SName      |     NO      |      NO      |        NO         |     struct SN      |
-| tuple struct |   SName(1,2)    |     .0      |  SName(a,b)  |        NO         |  struct SN(i8,i8)  |
-| named struct |  SName{a: 10}   |   .FIELD    | SName{a, ..} |        NO         | struct SN {x: i64} |
-|        array |      [1,2]      |     [0]     |   [a,_,_]    |        NO         |    [i32;LENGTH]    |
-|    vec(tors) |    vec![1,2]    | [0] .get(0) |              |     .push(23)     |      Vec<i32>      |
-|      HashMap | HashMap::new()  |  .get(key)  |  (key,val)   | .insert(key, val) |                    |
-|--------------+-----------------+-------------+--------------+-------------------+--------------------|
+|--------------+-----------------------+-------------+--------------+-------------------+--------------------|
+|          <r> |          <c>          |     <c>     |     <c>      |        <c>        |        <c>         |
+|         name |        create         |   access    | destructure  |      insert       |        type        |
+|--------------+-----------------------+-------------+--------------+-------------------+--------------------|
+|         unit |    (any statement)    |     NO      |      ()      |        NO         |         ()         |
+|        tuple |         (5,2)         |     .0      |    (a,_b)    |        NO         |     (i64,i64)      |
+|  unit struct |         SName         |     NO      |      NO      |        NO         |     struct SN      |
+| tuple struct |      SName(1,2)       |     .0      |  SName(a,b)  |        NO         |  struct SN(i8,i8)  |
+| named struct |     SName{a: 10}      |   .FIELD    | SName{a, ..} |        NO         | struct SN {x: i64} |
+|      HashMap |    HashMap::new()     |  .get(key)  |  (key,val)   | .insert(key, val) |                    |
+|        array |         [1,2]         |     [0]     |   [a,_,_]    |        NO         |    [i32;LENGTH]    |
+|--------------+-----------------------+-------------+--------------+-------------------+--------------------|
+|    vec(tors) |       vec![1,2]       | [0] .get(0) |              |     .push(23)     |      Vec<i32>      |
+|              |      Vec::new()       |             |              |                   |                    |
+|              |   Vec::from([1,2])    |             |              |                   |                    |
+|              | Vec::with_capacity(N) |             |              |                   |                    |
+|--------------+-----------------------+-------------+--------------+-------------------+--------------------|
 - structs
   - support punning on creation
 - no memory overhead for tuple/array/struct
@@ -194,15 +203,21 @@ https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/src
 ** control flow
 
 #+begin_src rust
-  while let Some(i) = optional {..} // alternative to loop+match
   if foo > 1 {} else if foo < 0 {} else {} // expression
   if let MyStruct { x, .. } = foostruct {..} // if-let, non exhaustive
-  loop{} // for infinite loop
   match ptr {
       Some(ptr) => ptr.g(),
       None      => {}
       // _ => println!("catch all pattern")
   }
+#+end_src
+
+** loops
+
+#+begin_src rust
+  for num in nums {}
+  while let Some(i) = optional {..} // alternative to loop+match
+  loop{} // for infinite loop
 #+end_src
 
 ** struct + impl(ementation) (aka methods)

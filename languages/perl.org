@@ -6,6 +6,7 @@
 | packages | https://github.com/hachiojipm/awesome-perl     |
 | monks    | https://www.perlmonks.org/                     |
 |----------+------------------------------------------------|
+
 - 1987-
 - Creator: Larry Wall
 - Versions
@@ -72,16 +73,6 @@
     &mifn;
   #+end_src
 
-* codebases
-
-- google auth https://github.com/elpop/ga_cli
-- github stats
-  - https://github.com/elpop/github_stats
-  - https://x.com/El_Pop/status/1802832111654855166/photo/1
-- Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
-- https://github.com/trizen/youtube-viewer
-- https://github.com/prsquee/irssi-scripts
-
 * videos
 
 - TODO 7:00 https://www.youtube.com/watch?v=EbH9jLi6v2g&list=PL8qgaJWZ7bGJPlIvAFbq8fKrFogUEJ3AJ&index=12
@@ -109,6 +100,16 @@
   - emacs package
     - https://github.com/vividsnow/perl-live
     - https://www.youtube.com/watch?v=BCUtu4urY9w
+
+* codebases
+
+- google auth https://github.com/elpop/ga_cli
+- github stats
+  - https://github.com/elpop/github_stats
+  - https://x.com/El_Pop/status/1802832111654855166/photo/1
+- Perl Web server http://tuxgraphics.org/~guido/scripts/wwwperl.txt
+- https://github.com/trizen/youtube-viewer
+- https://github.com/prsquee/irssi-scripts
 
 * snippets
 ** reading file
