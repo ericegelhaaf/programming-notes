@@ -1,7 +1,7 @@
 - GHC(i) Manual
-  https://downloads.haskell.org/ghc/latest/docs/users_guide/
-  https://downloads.haskell.org/ghc/latest/docs/users_guide/index.html
-  https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html
+  - https://downloads.haskell.org/ghc/latest/docs/users_guide/
+  - https://downloads.haskell.org/ghc/latest/docs/users_guide/index.html
+  - https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html
 
 - GHCI https://wiki.haskell.org/GHC/GHCi
 
@@ -49,6 +49,7 @@
 | -fdefer-typed-holes        | allows ~typed holes~, aka to type (_) in place of an expression      |
 | -fforce-recomp             |                                                                      |
 |----------------------------+----------------------------------------------------------------------|
+
 * language extensions
 
 old https://downloads.haskell.org/~ghc/8.6.1/docs/html/libraries/Cabal-2.4.0.1/Language-Haskell-Extension.html

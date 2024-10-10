@@ -1,3 +1,4 @@
+- 24 https://world-playground-deceit.net/blog/2024/why_tcl.html
 - https://wiki.tcl-lang.org/page/Articles
 - TCL/Tk Hello world https://wiki.tcl-lang.org/page/The+Hello+World+program+as+implemented+in+Tcl%2FTk
 - TCL/Ruby/Perl/Python https://tkdocs.com/tutorial/firstexample.html

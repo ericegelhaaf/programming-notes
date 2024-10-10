@@ -1,3 +1,5 @@
+- browser API
+  - https://web.dev/baseline
 - favicon
   - https://www.flaticon.es/
 - fonts

@@ -4274,6 +4274,8 @@ ERRATA:
 ghc error refers to "Show Password" a type that was never declared before
 259
 typo: on type constructor for "AdminUser" is "Adminuser" instead
+289
+typo+incoherent: With the withArgs function function will help you with both (!?) of those problems
 ** DONE Introduction
 - 1990 First version of Haskell
   - 1 year before Python
@@ -4634,12 +4636,10 @@ fibs = 0 : 1 : helper fibs (tail fibs)
   data CustomerInfo = CustomerInfo String String Int Int
 #+end_src
 
-- Resume: You'll learn how to create your own types
-  that accurately represent the structure of your data.
+- Resume: You'll learn how to create your own types that accurately represent the structure of your data.
 
 - =Value Constructor=
-  A special function that lets us create a new value
-  of a certain type.
+  - Is a special function that lets us create a new value of a certain type.
 
 - *pattern matching* out fields of a type
   - Works well for /small/ types, as you might want to access all or most fields
@@ -4651,20 +4651,19 @@ fibs = 0 : 1 : helper fibs (tail fibs)
   are those types which increases multiplicatively,
   based on the number of inhabitants of each parameter to the *value constructor*
 
-- Whenever you find yourself wanting to work with
-  a fixed number of operation, a ~sum type~ is a good
-  first thing to start thinking about.
+- Whenever you find yourself wanting to work with a fixed number of operation, a ~sum type~ is a good first thing to start thinking about.
 
-- Data.List.splitAt
 - Text.Read.readEither
 
-*** Records aka product types
+*** Records aka =product types=
+
 - are product types with named parameters
 - ~field selectors~ are automatically created
 - try *RecordWildCards*
 - when you have conflicting field names in >1 record
   - separate them in different modules or
   - use a naming convetion, prefix the field name, with the record type name
+
 #+begin_src haskell
   data CustomerInfo = CustomerInfo
     { firstName :: String
@@ -4688,7 +4687,8 @@ fibs = 0 : 1 : helper fibs (tail fibs)
              , balance = 0
              }
 #+end_src
-*** Enums - aka sum types
+
+*** Enums - aka =sum types=
 #+begin_src haskell
   data Bool = True | False
   data Direction = North | South | East | West
@@ -5040,38 +5040,22 @@ run expr =
 
 ** DONE 05 Creating And Structuring Haskell Projects
 *** cabal
+
+- Is a:
   - package manager
   - dependency manager
   - builder
   - runner
 
-- Cabal follows the Haskell PVP (Package Versioning Policy)
-  - a four-part numbering system: generation.major.minor.patch
-    | generation | large, philosophical, api changes              |
-    | major      | backwards-incompatible changes                 |
-    | minor      | backards-compatble changes, features, bugfixes |
-    | patch      | only bugfixes                                  |
-
 - When writting an executable is common use the ~Library and Executable~ option
-  having a small /executable/ code
-  and most of the code on the /library/
-  makes testing easier
+  - having a small /executable/ code
+  - and most of the code on the /library/
+  - makes testing easier
 
-- =App.hs= is also a common name for the main module of an executable
+- =App.hs= is also a common name for the *main module* of an executable
 
 - mostopen source Haskell code uses =BSD-3= license
 - uses SPDX license indentifiers
-
-- Directory path convention
-  setup.hs
-  /app/Main.hs
-  /src/MyLib.hs
-  /test/MyLibTest.hs
-
-- .cabal file is divided in
-  * some top-level package propertiers
-  * some buils target ~stanzas~ (eg: stanza-type name)
-    - and target level fields
 
 *** imports/modules
 
@@ -5100,7 +5084,7 @@ run expr =
     countNonPrintableCharactersInText :: T.Text -> Int -- !!
   #+end_src
 
-- Import list might help compile times.
+- Import lists might help compile times.
   Since GHC attempts to only recompile code that has changed,
   using an *import list* may allow you to avoid some extra work.
 
@@ -5108,7 +5092,7 @@ run expr =
   - each file contains a module
   - each module is defined by a single file
   - names follow the directory hierachy name, relative to the source directory
-    src/Examples/ExampleOne.hs -> Examples.ExampleOne
+    - src/Examples/ExampleOne.hs -> Examples.ExampleOne
   - by default is exported
     - everything defined at top-level
     - types
@@ -5116,11 +5100,11 @@ run expr =
 - ~Language extensions~ are NOT enabled through imports
 
 - on ghci> :load
-  everything is imported, regardless if it was exported or not
+  - everything is imported, regardless if it was exported or not
 
 - =smart constructors=
-  an ordinary function that lets you construct a value
-  can include some aditional logic over a regular constructor
+  - an ordinary function that lets you construct a value
+  - can include some aditional logic over a regular constructor
 
 *** Example: exporting ~smart constructors~
 
@@ -5168,6 +5152,7 @@ In this case, is to make sure the list ALWAYS has at least 1(one) element.
 
   import Data.List (find)
 #+end_src
+
 #+name: types = record + phantom types
 #+begin_src haskell
   -- the PHANTOM TYPES
@@ -5184,6 +5169,7 @@ In this case, is to make sure the list ALWAYS has at least 1(one) element.
     , userEmailAddress :: String
     }
 #+end_src
+
 #+name: users examples
 #+begin_src haskell
   users :: [User a]
@@ -5202,6 +5188,7 @@ In this case, is to make sure the list ALWAYS has at least 1(one) element.
         , userEmailAddress = "woofwoof@example.com2
         }
 #+end_src
+
 #+name: api
 #+begin_src haskell
 lookupUser :: String -> Maybe (User Unauthenticated) -- we want it to be unauth
@@ -5226,9 +5213,9 @@ authenticate User{..} password =
 
 *** Re-exporting code from other modules
 
-- A _common pattern_ in haskell codebases is that
-  you'll have several small independent *modules*
-  along with a parent module that re-exports all or most relevant parts
+- A _common pattern_ in haskell codebases is that:
+  - you'll have several small independent *modules*
+  - along with a parent module that re-exports all or most relevant parts
 
 #+name: src/HaskellBook/Examples.hs
 #+begin_src haskell
@@ -5833,8 +5820,7 @@ class Semigroup a => Monoid a where
              } deriving (Eq, Show, Ord)
 #+end_src
 
-- when *deriving* a record,
-  all the types within the record must also have instances of the typeclass you are trying to derive
+- when *deriving* a record, all the types within the record must also have instances of the typeclass you are trying to derive
 
   #+begin_src haskell
     newtype Name = Name String
@@ -6064,7 +6050,7 @@ class Semigroup a => Monoid a where
 
 - stock, newtype, anyclass, via
 
-** 07 Understanding =IO=
+** DONE 07 Understanding =IO=
 
 - general IO vs IO actions vs IO type
 
@@ -6082,10 +6068,9 @@ class Semigroup a => Monoid a where
     We need a way to combine/sequence IO actions.
     Letting us represent them as a single larger IO action.
 
-*** (>>=)
+*** (>>=) andThen / bind
 
-- This "sequencing" is directly represented by the type system.
-  That is the type of the hole.
+- This "sequencing" is directly represented by the type system. That is the type of the hole.
   #+begin_src haskell
     copyFile :: FilePath -> FilePath -> IO ()
     copyFile src dst =
@@ -6111,8 +6096,7 @@ class Semigroup a => Monoid a where
     newIO = return
   #+end_src
 
-- we can write functions that will take a pure value and turn into impure IO action
-  and then combine it with bind (>>=)
+- we can write functions that will take a pure value and turn into impure IO action and then combine it with bind (>>=)
   #+begin_src haskell
     ioRead :: String -> IO Int
     ioRead sumString = return $ read sumString
@@ -6132,7 +6116,8 @@ class Semigroup a => Monoid a where
       >>= \contents -> putStrLn contents
       >>= \_ -> hClose handle
   #+end_src
-*** (>>)
+
+*** (>>) thenCall
 
 - This still leaves unsolved, what if we only care about sequencing and do NOT care about the returned values?
  #+begin_src haskell
@@ -6149,10 +6134,9 @@ class Semigroup a => Monoid a where
     --thenCall = (>>)
   #+end_src
 
-*** fmap (<$>)
+*** (<$>) fmap
 
-- the answer to,
-  what to do when you have a function that doesn't know or care about IO?
+- the answer to, what to do when you have a function that doesn't know or care about IO?
 
 - Whenever we see a ~return~ used with (>>=) it's a sign that you might want to refactor your code
 
@@ -6162,9 +6146,7 @@ class Semigroup a => Monoid a where
       getArgs >>= return . sumArgs >>= print
   #+end_src
 
-- ~fmap~ comes from the *Functor* type class and it helps us solve this problem
-  giving us a way to apply pure functions to values inside an =IO action=
-  without having to use (>>=).
+- ~fmap~ comes from the *Functor* type class and it helps us solve this problem giving us a way to apply pure functions to values inside an =IO action= without having to use (>>=).
 
 - Works just like *map*, but for all instances of *Functor*
   #+begin_src haskell
@@ -6186,15 +6168,18 @@ class Semigroup a => Monoid a where
     import Text.Read (readMaybe)
     sumArgs :: [String] -> Maybe Int
     sumArgs strArgs =
-      let intArgs = mapM readMaybe strArgs
-      in fmap sum intArgs
+      let intArgs = mapM readMaybe strArgs in
+        fmap sum intArgs
   #+end_src
 
-- where ~mapM~ is a function that converts
-  | [Maybe a] | Maybe [a] |
-  | [IO a]    | IO [a]    |
+- where ~mapM~ is a function that converts, a "list of monads" into a "monad of lists"
+  |-----------+----+-----------|
+  |       <r> |    |           |
+  | [Maybe a] | -> | Maybe [a] |
+  |    [IO a] | -> | IO [a]    |
+  |-----------+----+-----------|
 
-*** TODO Running IO in real applications
+*** Running IO in real applications (mapM, mapM_)
 
 - TOPIC: =IO actions= impact on performance and stability
 
@@ -6206,8 +6191,7 @@ class Semigroup a => Monoid a where
       in 12
   #+end_src
 
-- this code will also compile and run, returning (), but NOT printing anything
-  as the IO of putStrLn wil never become part of the history of the real world we are returning
+- this code will also compile and run, returning (), but NOT printing anything. As the IO of _putStrLn_ wil never become part of the history of the real world we are returning.
   #+begin_src haskell
     ignoreUnevaluatedIO :: IO ()
     ignoreUnevaluatedIO =
@@ -6215,7 +6199,120 @@ class Semigroup a => Monoid a where
       in return ()
   #+end_src
 
+- so will this, not raising the exception, but it will print the sideffect before >>
+  #+begin_src haskell
+    lazyIODemo :: IO ()
+    lazyIODemo =
+      let sayHello :: IO ()
+          sayHello = putStrLn "Hello"
+          raiseAMathError :: IO Int
+          raiseAMathError = putStrLn "I'm part of raiseMathError" -- this gets evaluated
+                            >> return (1 `div` 0) -- this does NOT
+      in sayHello
+      >> raiseAMathError
+      >> sayHello
+  #+end_src
+
+- this won't work, due lazyness, since the program will run out of available OS file descriptors
+  #+begin_src haskell
+    makeAndReadFile :: Int -> IO String
+    makeAndReadFile fnumber =
+      let fname = "/tmp/test/" <> show fnumber
+      in writeFile fname fname >> readFile fname -- will create the thunk, but won't read the file
+
+    unsafe :: IO ()
+    unsafe =
+      let files = mapM makeAndReadFile [1..50000] :: IO [String]
+      in files >>= (putStrLn . show) -- tries to run all the readFile's at once
+  #+end_src
+
+- we can make it work by
+  - putting the make+print into his own helper function
+    #+begin_src haskell
+      makeAndShow :: Int -> IO
+      makeAndShow n =
+        makeAndReadFile n >> putStrLn
+    #+end_src
+  - changing the signature to IO [()] (CODE SMELL!!!)
+    #+begin_src haskell
+      safe :: IO [()]
+      safe =
+        mapM makeAndShow [1..500]
+    #+end_src
+  - or better
+    #+begin_src haskell
+      safe :: IO ()
+      safe =
+        foldl (\io id ->
+                  io >> makeAndShow id
+              ) (return ()) [1..500]
+    #+end_src
+  - or using the equivalent ~mapM_~
+    #+begin_src haskell
+      safe :: IO ()
+      safe = mapM_ makeAndShow [1..500]
+    #+end_src
+
 ** 08 Working with the Local System
+
+- ABOUT: Ways to interact with the outside world.
+
+*** Procedural Shell, Functional Core
+
+- In traditional programming languages
+  - you can do IO at any time, so programs do IO as needed
+  - encapsulating the implementation details of what type of IO a function is doing means that the user doesn't need to know, or think about, any of those dtails.
+
+- In Haskell this approach to designing applications can become a problem.
+  - Once introduced some IO we can't go back to the world of normal pure functions
+  - each call to IO is a potential failure scenario
+
+- The solution is a "Procedural Shell" (aka on the outside), with a "Functional Core"
+  - It also allows for modules that themselves have the same PSFC
+
+*** Creating a Pager
+
+src/Hcat.hs
+app/main.hs
+
+#+begin_src sh
+cabal-version:  2.4
+name:           hcat
+version:        0.1.0.0
+
+library
+  hs-source-dirs:     src
+  exposed-modules:    HCat
+  build-depends:      base
+                    , bytestring
+                    , text
+                    , process
+                    , directory
+                    , time
+  default-language:   Haskell2010
+
+executable hcat
+  hs-source-dirs:     app
+  main-is:            Main.hs
+  build-depends:      base, hcat
+  default-language:   Haskell2010
+#+end_src
+
+*** Viewing the Contents of an ASCII or UTF8 Encoded Text File
+
+
+
+#+begin_src haskell
+import qualified System.Environment as Env
+
+handleArgs :: IO FilePath -- FilePath is an alias for String
+handleArgs =
+  head <$> Env.getArgs
+#+end_src
+
+*** Viewing Text One Page at a Time
+*** Adding a Status Line with Metadata
+*** Showing the Status Bar and Refactoring runHCat
 ** 09 Introducing =Monads=
 ** 10 Mutable Data in Real World
 ** 11 Serializing   Heterogenuos Data

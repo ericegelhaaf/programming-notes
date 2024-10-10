@@ -44,39 +44,47 @@
 | LANGUAGE | to enable language extensions                                                                      |
 | MINIMAL  | to define the minimal functions that should be defined on a *class*, comma separated, supports (¦) |
 |----------+----------------------------------------------------------------------------------------------------|
-** module
+** module (and exports)
+- each file contains a module
+- the basic unit of organization in Haskell
+- src/Examples/ExampleOne.hs -> Examples.ExampleOne
 |--------------------------------------+---------------------------------------------|
-| module ModuleName where              | exports all                                 |
+|                                  <r> |                                             |
+|                                 CODE | DESCRIPTION                                 |
 |--------------------------------------+---------------------------------------------|
-| module ModuleName (                  | exports foo                                 |
-| foo                                  |                                             |
+|              module ModuleName where | by default, exports ALL                     |
+|--------------------------------------+---------------------------------------------|
+|                  module ModuleName ( | exports foo                                 |
+|                                  foo |                                             |
 | TypeFoo(TypeFooConst, fieldSelector) |                                             |
-| ) where                              |                                             |
+|                              ) where |                                             |
 |--------------------------------------+---------------------------------------------|
-| module ModuleName (                  | exports all constructors and fieldselectors |
-| TypeFoo(..)                          | of TypeFoo                                  |
-| ) where                              |                                             |
+|                  module ModuleName ( | exports all constructors and fieldselectors |
+|                          TypeFoo(..) | of TypeFoo                                  |
+|                              ) where |                                             |
 |--------------------------------------+---------------------------------------------|
-| module ModFoo                        | re-exporting ModBar,                        |
-| ( module Baz                         | using the local alias "Baz"                 |
-| )                                    | could have used the full name instead       |
-| where                                |                                             |
-| import Other.ModBar as Baz           |                                             |
+|                        module ModFoo | re-exporting ModBar,                        |
+|                         ( module Baz | using the local alias "Baz"                 |
+|                                    ) | could have used the original name instead   |
+|                                where |                                             |
+|           import Other.ModBar as Baz |                                             |
 |--------------------------------------+---------------------------------------------|
 ** imports
-https://wiki.haskell.org/Import
+- https://wiki.haskell.org/Import
 |--------------+----------------------------------------+--------------------------------------|
+|          <r> |                                        |                                      |
 |              | example                                | description                          |
 |--------------+----------------------------------------+--------------------------------------|
-| import ALL   | import Data.List                       | brings everything in                 |
-| import       | import Data.List (intercalate)         | brings ONLY specific things          |
-| as           | import Data.ByteString as BS           | brings everything in AND into BS.    |
+|   import ALL | import Data.List                       | brings everything in                 |
+|    import () | import Data.List (intercalate)         | brings ONLY specific things          |
+|           as | import Data.ByteString as BS           | brings everything in AND into BS.    |
 | as qualified | import qualified Data.ByteString as BS | brings into BS.                      |
-| hiding       | import Prelude hiding (foldl, foldr)   | import all except ...                |
+|       hiding | import Prelude hiding (foldl, foldr)   | import all except ...                |
 |--------------+----------------------------------------+--------------------------------------|
-| type import  | import Data.Text (Text)                | to use Text type identifier directly |
-| + qualified  | import qualified Data.Text as T        |                                      |
+|  type import | import Data.Text (Text)                | to use Text type identifier directly |
+|  + qualified | import qualified Data.Text as T        |                                      |
 |--------------+----------------------------------------+--------------------------------------|
+- you can assign the same import (as) alias to different modules
 ** operators
 *** simples
 |------+---------------------------+--------------------+--------------+-------------------|
@@ -296,7 +304,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | [[https://hackage.haskell.org/package/base/docs/Data-Int.html][Data.Int]]               |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Ix.html][Data.Ix]]                |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Kind.html][Data.Kind]]              |                                                             |
-| [[https://hackage.haskell.org/package/base/docs/Data-List.html][Data.List]]              | permutations                                                |
+| [[https://hackage.haskell.org/package/base/docs/Data-List.html][Data.List]]              | permutations splitAt                                        |
 | [[https://hackage.haskell.org/package/base/docs/Data-Maybe.html][Data.Maybe]]             |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Monoid.html][Data.Monoid]]            |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Ord.html][Data.Ord]]               |                                                             |
@@ -312,26 +320,23 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | [[https://hackage.haskell.org/package/base/docs/Data-Version.html][Data.Version]]           |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Void.html][Data.Void]]              |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Word.html][Data.Word]]              |                                                             |
+| [[https://hackage.haskell.org/package/base/docs/Foreign.html][Foreign]]                | interfacing with another programming language               |
 | [[https://hackage.haskell.org/package/base/docs/System-CPUTime.html][System.CPUTime]]         |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/System-Console.html][System.Console]]         |                                                             |
-| [[https://hackage.haskell.org/package/base/docs/System-Environment.html][System.Environment]]     | getArgs :: IO [String]                                      |
+| [[https://hackage.haskell.org/package/base/docs/System-Environment.html][System.Environment]]     | getArgs  :: IO [String]                                     |
+|                        | withArgs :: [String] -> IO a -> IO a                        |
 | [[https://hackage.haskell.org/package/base/docs/System-Exit.html][System.Exit]]            |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/System-Info.html][System.Info]]            |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/System-Mem.html][System.Mem]]             |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/System-Posix.html][System.Posix]]           |                                                             |
 | [[https://hackage.haskell.org/package/base/docs/System-Timeout.html][System.Timeout]]         |                                                             |
-| [[https://hackage.haskell.org/package/base/docs/System-IO.html][System.IO]]              | openFile :: FilePath -> IOMode -> IO Handle                 |
-|                        | hClose :: Handle -> IO ()                                   |
+| [[https://hackage.haskell.org/package/base/docs/System-IO.html][System.IO]]              | openFile     :: FilePath -> IOMode -> IO Handle             |
+|                        | hClose       :: Handle -> IO ()                             |
 |                        | hGetContents :: Handle -> IO String                         |
-|                        | hputStrLn :: Handle -> IO ()                                |
-|                        | putStrLn :: String -> IO ()                                 |
-|                        | stdout :: Handle                                            |
+|                        | hputStrLn    :: Handle -> IO ()                             |
+|                        | putStrLn     :: String -> IO ()                             |
+|                        | stdout       :: Handle                                      |
 | [[https://hackage.haskell.org/package/base/docs/Text-ParserCombinators.html][Text.ParserCombinators]] |                                                             |
-| Foreign.*              |                                                             |
-|------------------------+-------------------------------------------------------------|
-| Text                   |                                                             |
-| .pack                  | String -> Text                                              |
-| .append   (slow)       | Text -> Text -> Text                                        |
 |------------------------+-------------------------------------------------------------|
 *** non base
 https://haskell-containers.readthedocs.io/en/latest/
@@ -365,6 +370,7 @@ https://haskell-containers.readthedocs.io/en/latest/
 |                  | Control.Monad.State               |
 |                  | Control.Monad.Trans               |
 |                  | Control.Monad.Writer              |
+| [[https://hackage.haskell.org/package/network][network]]          | Network.Socket                    |
 | [[https://hackage.haskell.org/package/parsec][parsec]]           | Text.Parsec                       |
 |                  | Text.ParserCombinators.Parsec     |
 | [[https://hackage.haskell.org/package/pretty][pretty]]           | Text.PrettyPrint                  |
@@ -384,21 +390,45 @@ https://haskell-containers.readthedocs.io/en/latest/
 |------------------+-----------------------------------|
 ** typeclasses
 
+[[https://www.adit.io/imgs/functors/recap.png]]
+
+- https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html#monads
+- https://wiki.haskell.org/All_About_Monads
+- https://learnyouahaskell.com/a-fistful-of-monads
+
+*** lift(s)
+
+#+begin_src haskell
+  class (Monad m) => MonadIO m where
+    liftIO :: IO a -> m a
+#+end_src
+
+**** liftM (aka bind)
+**** liftA2
+
+#+begin_src haskell
+  > (*) <$> Just 5 <*> Just 3
+    Just 15
+  > liftA2 (*) (Just 5) (Just 3)
+    Just 15
+#+end_src
+
 *** Shipped
 |-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
-|             | MINIMAL            | description                               | extras                                                 |
+|         <r> |        <c>         |                                           |                                                        |
+|             |      MINIMAL       | description                               | extras                                                 |
 |-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
-| Foldable    | foldr foldMap      | data structure that can be folded         | foldr foldl null length sum product maximum minim elem |
-| Show        | show               | conversion of values to readable String's |                                                        |
-| Eq          | (==) (=/)          | equality and inequality                   |                                                        |
-| Ord         | compare (<=)       |                                           | max min < > <= >=                                      |
-| Enum        | toEnum, fromEnum   | can be enumerated by the *Int* value      | [Foo..Bar]                                             |
-| Bounded     | minBound, maxBound | with minimum and maximum bounds           |                                                        |
-| Functor     | fmap (<$>)         | can be mapped over                        |                                                        |
-| Semigroup   | (<>)               | associative binary op                     | sconcat stimes                                         |
-| Monoid      | mempty             | associative binary op with identity       | mconcat mappend (<>)                                   |
-| Applicative | pure (<*>)         | a functor, sequence and combine ops       |                                                        |
-| Monad       | bind (>>=)         |                                           | do                                                     |
+|    Foldable |   foldr foldMap    | data structure that can be folded         | foldr foldl null length sum product maximum minim elem |
+|        Show |        show        | conversion of values to readable String's |                                                        |
+|          Eq |     (==) (=/)      | equality and inequality                   |                                                        |
+|         Ord |    compare (<=)    |                                           | max min < > <= >=                                      |
+|        Enum |  toEnum, fromEnum  | can be enumerated by the *Int* value      | [Foo..Bar]                                             |
+|     Bounded | minBound, maxBound | with minimum and maximum bounds           |                                                        |
+|     Functor |     fmap (<$>)     | can be mapped over                        |                                                        |
+|   Semigroup |        (<>)        | associative binary op                     | sconcat stimes                                         |
+|      Monoid |       mempty       | associative binary op with identity       | mconcat mappend (<>)                                   |
+| Applicative |     pure (<*>)     | a functor, sequence and combine ops       |                                                        |
+|       Monad |     bind (>>=)     |                                           | do                                                     |
 |-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
 **** definitions
 
@@ -417,7 +447,7 @@ https://haskell-containers.readthedocs.io/en/latest/
 
   class (Functor f) => Applicative f where -- class constraint
     pure  :: a -> f a
-    (<*>) :: f (a -> b) -> f a -> f b
+    (<*>) :: f (a -> b) -> f a -> f b -- (ME: apply a wrapped function to a wrapped value)
 
   class Foldable t where
     foldMap :: Monoid m => (a -> m) -> t a -> m
@@ -428,6 +458,9 @@ https://haskell-containers.readthedocs.io/en/latest/
     foldl'  :: (a -> b -> a) -> a -> t b -> a
     foldr1  :: (a -> a -> a) -> t a -> a
     foldl1  :: (a -> a -> a) -> t a -> a
+
+  class Monad m where -- 🪠
+    (>>=) :: m a -> (a -> m b) -> m b -- (ME: apply a function that returns a wrapped value to a wrapped value)
 #+end_src
 
 *** Declaring
@@ -455,6 +488,9 @@ https://haskell-containers.readthedocs.io/en/latest/
 
 * Codebases
 
+- https://wiki.haskell.org/Implement_a_chat_server
+- https://wiki.haskell.org/Roll_your_own_IRC_bot
+- http://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/
 - https://github.com/jwiegley/git-all/blob/master/Main.hs
 - shell like library https://github.com/luke-clifton/shh
 - https://github.com/omelkonian/AlgoRhythm (music)
@@ -476,11 +512,13 @@ https://haskell-containers.readthedocs.io/en/latest/
 
 https://theory.stanford.edu/~blynn/c2go/
 #+begin_src haskell
-  import Control.Monad
-  import System.Environment
+import Control.Monad
+import System.Environment
 
-  main = getArgs >>= forever . putStrLn . f
-    where
-      f [] = "y"
-      f xs = unwords xs
+main :: IO ()
+main =
+  getArgs >>= forever . putStrLn . f
+  where
+    f [] = "y"
+    f xs = unwords xs
 #+end_src

@@ -31,6 +31,20 @@
   - unused enum variants
   - unused struct fields
 ** 5 Vectors
+
+- stack space needs to be known at compile time
+  - tuple, array
+- heaps allows dynamic size DS
+  - vectors
+
+** 6 Ownership
+
+- vec! calls alloc(N)
+  - to find unused heap N bytes in a row
+  - and mark them as in-use
+
+** 7 Borrowing
+** 8 Lifetime
 * 23 Rust for TypeScript Devs / ThePrimeagen
 ** 1
 |------------------+--------------------|

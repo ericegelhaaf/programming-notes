@@ -7,8 +7,25 @@
   - IF you use the cabal commands starting with ~new-~ you use sandboxes
     They must run in a folder in which a .cabal file exists
 
+- Cabal follows the [[https://pvp.haskell.org/][Haskell PVP]] (Package Versioning Policy)
+  - a four-part numbering system: generation.major.minor.patch
+    |------------+------------------------------------------------|
+    |        <r> |                                                |
+    | generation | large, philosophical, api changes              |
+    |      major | backwards-incompatible changes                 |
+    |      minor | backards-compatble changes, features, bugfixes |
+    |      patch | only bugfixes                                  |
+    |------------+------------------------------------------------|
+
+- Directory path convention
+  setup.hs
+  /app/Main.hs
+  /src/MyLib.hs
+  /test/MyLibTest.hs
+
 ** cmd
 
+- $ mkdir MYAPPNAME; cd MYAPPNAME/
 - $ cabal init --is-libandexe --license=BSD3
 - $ cabal init --is-executable -n -m -l BSD3
 
@@ -16,97 +33,112 @@
 - cabal v2-repl exe:CABALPKGNAME -- give a ghci shell with all deps loaded
 - ~/.cabal/bin
 
-|------------------------------------+---------------------------------------------------------------|
-| init -n -m -l BSD3 --is-executable | -n --non-interactive                                          |
-| init -n -m -l BSD3 --is-libandexe  | -m --minimal                                                  |
-| init -n -m -l BSD3 --is-library    | -l --license=??                                               |
-|------------------------------------+---------------------------------------------------------------|
-| build                              | fetch deps, and builds all targets                            |
-| build NAME                         | target name                                                   |
-| build exe:NAME                     | disambiguation if lib/exe are named the same                  |
-| build lib:NAME                     | disambiguation if lib/exe are named the same                  |
-|------------------------------------+---------------------------------------------------------------|
-| exec NAME                          | run it                                                        |
-| exec -- which NAME                 | prints the path of the compiled NAME                          |
-| run -v0                            |                                                               |
-| run                                | compile and run executable                                    |
-| run NAME -- ARGS                   | compile and run executable                                    |
-|------------------------------------+---------------------------------------------------------------|
-| install BIN                        | downloads, compiles and installs BIN in ~/.cabal/bin          |
-| install --lib LIB                  | downloads, compiles and installs LIB in ~/.cabal              |
-|------------------------------------+---------------------------------------------------------------|
-| repl --build-depends PKG           |                                                               |
-| repl LIB                           | loads repl, with project loaded                               |
-| repl                               | loads repl, with project loaded                               |
-|------------------------------------+---------------------------------------------------------------|
-| clean                              | cleans build artifacts                                        |
-| configure --enable-profiling       | download profiling information for all your dependencies      |
-| freeze                             | generate file with packages versions and build flags          |
-| gen-bounds                         | generate version bounds for packages                          |
-| sdist                              | bundle project in a tarball, which can be uploaded to hackage |
-| update                             | updates package cache, ~package list~ from haskell            |
-| haddock                            | generates html documentation of our project                   |
-| test  [PROJECT]                    |                                                               |
-| bench [PROJECT]                    |                                                               |
-|------------------------------------+---------------------------------------------------------------|
+|------------+-------------------------------+---------------------------------------------------------------|
+|        <r> |              <c>              |                                                               |
+|        CMD |             ARGS              | DESCRIPTION                                                   |
+|------------+-------------------------------+---------------------------------------------------------------|
+|       init | -n -m -l BSD3 --is-executable | -n --non-interactive                                          |
+|       init | -n -m -l BSD3 --is-libandexe  | -m --minimal                                                  |
+|       init |  -n -m -l BSD3 --is-library   | -l --license=??                                               |
+|------------+-------------------------------+---------------------------------------------------------------|
+|      build |                               | fetch deps, and builds all targets                            |
+|      build |             NAME              | target name                                                   |
+|      build |           exe:NAME            | disambiguation if lib/exe are named the same                  |
+|      build |           lib:NAME            | disambiguation if lib/exe are named the same                  |
+|------------+-------------------------------+---------------------------------------------------------------|
+|       exec |             NAME              | run it                                                        |
+|       exec |         -- which NAME         | prints the path of the compiled NAME                          |
+|        run |              -v0              |                                                               |
+|        run |                               | compile and run executable                                    |
+|        run |       NAME -- CMD_ARGS        | compile and run executable                                    |
+|------------+-------------------------------+---------------------------------------------------------------|
+|    install |              BIN              | downloads, compiles and installs BIN in ~/.cabal/bin          |
+|    install |           --lib LIB           | downloads, compiles and installs LIB in ~/.cabal              |
+|------------+-------------------------------+---------------------------------------------------------------|
+|       repl |      --build-depends PKG      |                                                               |
+|       repl |          LIB/lib:BIN          | loads repl, with project loaded                               |
+|       repl |                               | loads repl, with project loaded                               |
+|------------+-------------------------------+---------------------------------------------------------------|
+|      clean |                               | cleans build artifacts                                        |
+|  configure |      --enable-profiling       | download profiling information for all your dependencies      |
+|     freeze |                               | generate file with packages versions and build flags          |
+| gen-bounds |                               | generate version bounds for packages                          |
+|      sdist |                               | bundle project in a tarball, which can be uploaded to hackage |
+|     update |                               | updates package cache, ~package list~ from haskell            |
+|    haddock |                               | generates html documentation of our project                   |
+|       test |           [PROJECT]           |                                                               |
+|      bench |           [PROJECT]           |                                                               |
+|------------+-------------------------------+---------------------------------------------------------------|
 
 ** .cabal
 
-- comments can't trail any other expresion
+- comments CANNOT trail any other expresion
 
 - package names are case sensitive (!!!)
 
 - base version ~operators~
   - > < >= <=
   - &&
-  - carrot operators: limits to packages that should be compatible per PVP guidelines
-    eg: base ^> 4.13.0.0
+  - carrot operators: limits to packages that should be compatible per [[https://pvp.haskell.org/][PVP]] guidelines
+    - eg: base ^> 4.13.0.0
 
-|------------------------+--------------------+-----------------------------------------|
-| top-level/stanza       | property           | value OR description                    |
-|------------------------+--------------------+-----------------------------------------|
-| cabal-version          |                    |                                         |
-| name                   |                    | REQUIRED                                |
-| version                |                    | REQUIRED                                |
-| category               |                    |                                         |
-| copyright              |                    | 2022 Mission Valley Software LLC        |
-| license                |                    | Apache-2.0                              |
-| license-file           |                    | license.txt                             |
-| author                 |                    |                                         |
-| maintainer             |                    |                                         |
-| description            |                    |                                         |
-| synopsis               |                    | one line? description                   |
-| extra-source-files     |                    | Changelog.md                            |
-| data-files             |                    | **/*.txt                                |
-| homepage               |                    | https://github.com/azimut/foobar        |
-| bug-reports            |                    | https://github.com/azimut/foobar/issues |
-|------------------------+--------------------+-----------------------------------------|
-| common base            |                    |                                         |
-|                        | default-language   | Haskell2010                             |
-|                        | default-extensions | entire project *language extensions*    |
-|                        | ghc-options        |                                         |
-|                        | build-depends      | base                                    |
-|                        | hs-source-dirs     |                                         |
-|                        | reexported-modules |                                         |
-|------------------------+--------------------+-----------------------------------------|
-| library                | -                  | name defaults to the package name       |
-|                        | exposed-modules    | public to all consumers                 |
-|                        | other-modules      | private to the library                  |
-|                        | other-extensions   | on target *language extensions*         |
-|                        | hs-source-dirs     | src                                     |
-|------------------------+--------------------+-----------------------------------------|
-| executable             |                    |                                         |
-|                        | main-is            | name of Main.hs                         |
-|                        | build-depends      | base + library name                     |
-|                        | hs-source-dirs     | app                                     |
-|                        | ghc-options        | -O1 -threaded -rtsopts -with-rtsopts=-N |
-|------------------------+--------------------+-----------------------------------------|
-| test-suite             |                    |                                         |
-|                        | hs-source-dirs     | test                                    |
-|                        | main-is            | MyLibTest.hs                            |
-|                        | type               | exitcode-stdio-1.0                      |
-|------------------------+--------------------+-----------------------------------------|
-| source-repository head |                    |                                         |
-|                        | type               | git                                     |
-|                        | location           | git://...git url                        |
-|------------------------+--------------------+-----------------------------------------|
+- Divided in
+  1) some top-level package properties
+  2) some buils target ~stanzas~ (eg: stanza-type name)
+     - and target level fields
+
+*** top-level
+|--------------------+-----------------------------------------|
+|                <r> |                                         |
+|          TOP-LEVEL | VALUE or DESCRIPTION                    |
+|--------------------+-----------------------------------------|
+|             author |                                         |
+|        bug-reports | https://github.com/azimut/foobar/issues |
+|      cabal-version |                                         |
+|           category |                                         |
+|          copyright | 2022 Mission Valley Software LLC        |
+|         data-files | **/*.txt                                |
+|        description |                                         |
+| extra-source-files | Changelog.md                            |
+|           homepage | https://github.com/azimut/foobar        |
+|            license | Apache-2.0                              |
+|       license-file | license.txt                             |
+|         maintainer |                                         |
+|               name | REQUIRED                                |
+|           synopsis | one line? description                   |
+|            version | REQUIRED                                |
+|--------------------+-----------------------------------------|
+*** stanzas
+|-------------------+--------------------+-----------------------------------------|
+|               <r> |        <c>         |                                         |
+|           STANZAS |     PROPERTIES     |                                         |
+|-------------------+--------------------+-----------------------------------------|
+|       common base |                    |                                         |
+|                   |  default-language  | Haskell2010                             |
+|                   | default-extensions | entire project *language extensions*    |
+|                   |    ghc-options     |                                         |
+|                   |   build-depends    | base                                    |
+|                   |   hs-source-dirs   |                                         |
+|                   | reexported-modules |                                         |
+|-------------------+--------------------+-----------------------------------------|
+|           library |         -          | name defaults to the package name       |
+|                   |  exposed-modules   | public to all consumers                 |
+|                   |   other-modules    | private to the library                  |
+|                   |  other-extensions  | on target *language extensions*         |
+|                   |   hs-source-dirs   | src                                     |
+|-------------------+--------------------+-----------------------------------------|
+|        executable |                    |                                         |
+|                   |      main-is       | name of Main.hs                         |
+|                   |   build-depends    | base + library name                     |
+|                   |   hs-source-dirs   | app                                     |
+|                   |    ghc-options     | -O1 -threaded -rtsopts -with-rtsopts=-N |
+|-------------------+--------------------+-----------------------------------------|
+|        test-suite |                    |                                         |
+|                   |   hs-source-dirs   | test                                    |
+|                   |      main-is       | MyLibTest.hs                            |
+|                   |        type        | exitcode-stdio-1.0                      |
+|-------------------+--------------------+-----------------------------------------|
+| source-repository |        head        |                                         |
+|                   |        type        | git                                     |
+|                   |      location      | git://...git url                        |
+|-------------------+--------------------+-----------------------------------------|

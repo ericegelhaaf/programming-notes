@@ -200,6 +200,7 @@ https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/src
 | enum Color { Red, Custom{ r:u8,g:u8 }} | Color::Custom {r: 8, g: 2} | Color::Custom {r, g} |
 | enum Color { Red, Custom(u8,u8) }      |    Color::Custom(10,20)    |  Color::Custom(a,b)  |
 |----------------------------------------+----------------------------+----------------------|
+** Ownership
 ** control flow
 
 #+begin_src rust

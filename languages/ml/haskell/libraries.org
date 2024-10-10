@@ -55,14 +55,14 @@
 - =StdGen= type, a standard random-number generator, implements =RandomGen=
 
 * text/cli
-|-------------+----+-----+------------------------------------+-------------------------------------------------------------------------|
-| optparse    | 22 | 0.8 | parses CLI options                 | https://github.com/pcapriotti/optparse-applicative                      |
-| fmt         | 21 | 0.0 | text formatting (text-format fast) | https://github.com/cdornan/fmt                                          |
-| text-format | 23 | 0.0 | text formatting (fastest)          | https://github.com/haskell/text-format                                  |
-| template    | 18 | 0.0 | text formatting                    | https://github.com/tibbe/template                                       |
-| formatting  | 22 | 0.2 | text formatting                    | https://github.com/AJChapman/formatting                                 |
-| printf      |    |     | text formatting (slow)             | https://hackage.haskell.org/package/base-4.19.1.0/docs/Text-Printf.html |
-|-------------+----+-----+------------------------------------+-------------------------------------------------------------------------|
+|-------------+----+-----+------------------------------------|
+| [[https://github.com/pcapriotti/optparse-applicative][optparse]]    | 22 | 0.8 | parses CLI options                 |
+| [[https://github.com/cdornan/fmt][fmt]]         | 21 | 0.0 | text formatting (text-format fast) |
+| [[https://github.com/haskell/text-format][text-format]] | 23 | 0.0 | text formatting (fastest)          |
+| [[https://github.com/tibbe/template][template]]    | 18 | 0.0 | text formatting                    |
+| [[https://github.com/AJChapman/formatting][formatting]]  | 22 | 0.2 | text formatting                    |
+| [[https://hackage.haskell.org/package/base-4.19.1.0/docs/Text-Printf.html][printf]]      |    |     | text formatting (slow)             |
+|-------------+----+-----+------------------------------------|
 - optparse https://github.com/pcapriotti/optparse-applicative/blob/master/README.md
 * database
 |-----------------+----+-----+--------------------+-------------------------------------------------|

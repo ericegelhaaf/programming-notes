@@ -1,5 +1,11 @@
-- Channel https://www.youtube.com/@mainframecorner/playlists
-- Channel https://www.youtube.com/@Coboloco052/playlists
+- Channels
+  - https://www.youtube.com/@moshixmainframechannel/videos
+  - https://www.youtube.com/@billskycomputerguy
+  - https://www.youtube.com/@mainframecorner/playlists
+  - https://www.youtube.com/@MatthewMainframes/videos
+  - https://www.youtube.com/@Coboloco052/playlists
+    - COBOL https://www.youtube.com/playlist?list=PLdG1SnrYXH0EmUqQWol39Fd6VHcr-FbwS
+    - MAINFRAME https://www.youtube.com/playlist?list=PLdG1SnrYXH0EidVWFSqqANP7jRZh_5Tg7
 - 20 COBOL Course https://www.youtube.com/watch?v=RdMAEdGvtLA
 - 20 COBOL Tutorial : Learn COBOL in One Video https://www.youtube.com/watch?v=TBs7HXI76yU
 - 23 Using gnuCOBOL to make a video game! https://www.youtube.com/watch?v=8-kazxQBolM
