@@ -112,3 +112,11 @@
   - 17 https://mmhaskell.com/blog/2017/6/5/flexible-data-with-aeson
   - 15 https://web.archive.org/web/20201121162141mp_/https://artyom.me/aeson
   - 15 https://www.schoolofhaskell.com/school/starting-with-haskell/libraries-and-frameworks/text-manipulation/json
+
+* lens
+- https://chrispenner.ca/posts/advent-of-optics-01
+- https://chrispenner.ca/posts/advent-of-optics-02
+- https://chrispenner.ca/posts/advent-of-optics-03
+- https://chrispenner.ca/posts/advent-of-optics-04
+- https://chrispenner.ca/posts/algebraic
+- https://chrispenner.ca/posts/kaleidoscopes

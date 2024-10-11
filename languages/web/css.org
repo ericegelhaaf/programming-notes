@@ -7,9 +7,6 @@
   }
 #+end_src
 
-
-- https://getbem.com/
-
 - classes and ids with ~snake-case~
 
 - color
@@ -51,6 +48,48 @@
   - family: arial, helvetica, sans-serif, ...
   - weight: bold(er), 100, 200, ... , 900
 
+- box-sizing
+  - content-box: consider only content (default)
+  - border-box: consider all
+
+- border
+  - style
+  - style, color
+  - width, style
+  - width, style, color
+
+- margin/border/padding
+  |------+----+---+---|
+  |  <r> |    |   |   |
+  |------+----+---+---|
+  | TBRL | -  | - | - |
+  |   TB | RL | - | - |
+  |    T | RL | B | - |
+  |    T | R  | B | L |
+  |------+----+---+---|
+
+- flex
+  - align-items (secondary axis)
+    - flex-start (by default)
+    - flex-end
+    - stretch
+  - align-content (for multiline)
+    - flex-start (by default)
+  - align-self (for items)
+  - justify-content
+    - flex-start (by default)
+    - flex-end
+    - center
+    - space-between (maximize space between)
+    - space-around (smaller at start-end)
+    - space-evenly (equal at start-end)
+  - direction:
+    - row (by default)
+    - row-reverse
+    - column
+    - column-reverse
+
+- https://getbem.com/
 - default css https://www.w3schools.com/cssref/css_default_values.php
 - https://css-tricks.com/examples/nth-child-tester/
 - https://www.matuzo.at/blog/2022/100-days-of-more-or-less-modern-css/

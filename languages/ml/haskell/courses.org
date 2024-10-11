@@ -1,6 +1,21 @@
+- Video
+  - Haskell for Dilettantes by Tea Leaves https://www.youtube.com/playlist?list=PLu6SHDdOToSe7ZOw-mR55j2GEjkNTQgrd
+  - Haskell Course by IOG Academy https://www.youtube.com/playlist?list=PLNEK_Ejlx3x1D9Vq5kqeC3ZDEP7in4dqb
+  - David Ogborn - 2018 Haskell School in the Networked Imagination Laboratory https://www.youtube.com/playlist?list=PLyEzdf4cdMMHGqVnAzLV8eDXn6Ajj46JA
+    1) https://www.youtube.com/watch?v=kGbelVBCWDk
+    2) https://www.youtube.com/watch?v=QgELJc0n_kI
+    3) https://www.youtube.com/watch?v=qcLLcpajp7M
+    4) Monad Transformers https://www.youtube.com/watch?v=YCUYMNEfjb8
+    5) https://www.youtube.com/watch?v=0DQrZ_CVNPc
+  - Haskel for imperative programmers https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
+  - MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
+  - Haskell beginners 2022 https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c
+  - Theory for Programmers https://www.youtube.com/watch?v=SmXB2K_5lcA
+  - https://github.com/AndrasKovacs/elaboration-zoo
+    https://www.youtube.com/playlist?list=PL2ZpyLROj5FOt99f_KCxARvd1hDqKns5b
+
+- https://github.com/soupi/haskell-study-plan?tab=readme-ov-file#project-ideas
 - https://www.scs.stanford.edu/14sp-cs240h/
-- https://github.com/AndrasKovacs/elaboration-zoo
-  https://www.youtube.com/playlist?list=PL2ZpyLROj5FOt99f_KCxARvd1hDqKns5b
 - http://learn.hfm.io/
 - Haskell via Sokoban - Tutorial - https://haskell-via-sokoban.nomeata.de/
 - https://github.com/kowainik/learn4haskell
@@ -17,16 +32,10 @@
   CS240 2016 http://www.scs.stanford.edu/16wi-cs240h/
   CS240 2014 http://www.scs.stanford.edu/14sp-cs240h/
   CS240 code https://github.com/Chouffe/cs240
-- Course: MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
-- Course: 2018 Haskell School in the Networked Imagination Laboratory
-  David Ogborn
-  https://www.youtube.com/playlist?list=PLyEzdf4cdMMHGqVnAzLV8eDXn6Ajj46JA
-- Videos: Haskell beginners 2022 https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c
-- Category Theory for Programmers https://www.youtube.com/watch?v=SmXB2K_5lcA
 - Haskell MOOC University of Helsinki
   https://haskell.mooc.fi/material/
   https://github.com/moocfi/haskell-mooc
-- Haskel for imperative programmers https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
+
 * 11 | Functional Programming       |
 ** 01 - Introduction
 - Functional Programming
@@ -992,6 +1001,7 @@ safeSqrt sx =
   type Z a = (a, Void)    -- a * 0 = 0, you can never create this type
 #+end_src
 ** DONE 4-1 => Recursion https://www.youtube.com/watch?v=F-nAAIH4e2s
+
 - -- l(a) = l + a . l(a)
 - A ~power series~, translates into a ~Algebraic Data Type~ as
   [ () | a | (a,a) | (a,a,a) | ...
@@ -1004,9 +1014,11 @@ safeSqrt sx =
   [0..4]       => [0,1,2,3,4]
   take 4 [0..] => [0,1,2,3]
 - the code for a recursive *len* function gets converted by the compiler into a loop
+
 ** DONE 4-2 => Functors
+
 - ~Induction~ in mathematics, recursive proofs
-  ~Structural Induction~ when there is some kind of ordering, partial or not, example in list
+- ~Structural Induction~ when there is some kind of ordering, partial or not, example in list
 
 - A ~Functor~ is sorta like a container of a's
   - (data) Has a shape
@@ -1030,40 +1042,59 @@ safeSqrt sx =
      fmap g . fmap f = fmap (g . f)
 
 *** Example: Binary tree definition
-  #+begin_src haskell
-data Tree a = Empty | Node (Tree a) a (Tree a)
-instance Functor Tree where -- NOT "Tree a"
+
+#+begin_src haskell
+  data Tree a
+    = Empty
+    | Node (Tree a) a (Tree a)
+
+  instance Functor Tree where -- NOT "Tree a"
   --fmap = mapT
-  fmap f Empty = Empty
-  fmap f (Node l v r) = Node l (f v) r
-  #+end_src
+    fmap f Empty = Empty
+    fmap f (Node l v r) = Node l (f v) r
+#+end_src
+
 *** Example: ~Maybe~ is a functor
-  #+begin_src haskell
-data Maybe a = Nothing | Just a
-mapm f Nothing  = Nothing
-mapm f (Just x) = Just (f x)
-    #+end_src
+
+#+begin_src haskell
+  data Maybe a
+    = Nothing
+    | Just a
+
+  instance Functor Tree where -- NOT "Tree a"
+    fmap f Nothing  = Nothing
+    fmap f (Just x) = Just (f x)
+#+end_src
+
 *** Example: Identity Functor, is also a monad, without side-effects
-  #+begin_src haskell
-data I a = I a
-instance Functor I where
-  fmap f (I x) = I (f x)
-  #+end_src
+
+#+begin_src haskell
+  data I a = I a
+
+  instance Functor I where
+    fmap f (I x) = I (f x)
+#+end_src
+
 *** Example: Function container
-  #+begin_src haskell
-    -- e for environment
-    -- a is the free-variable
-    data Reader e a = Reader (e -> a)
-    instance Functor (Reader e) where
-      fmap g (Reader f) = Reader (g . f)
-  #+end_src
+
+#+begin_src haskell
+  -- e for environment
+  -- a is the free-variable
+  data Reader e a = Reader (e -> a)
+  instance Functor (Reader e) where
+    fmap g (Reader f) = Reader (g . f)
+#+end_src
+
 ** DONE 5-1 => Monads
+
 - Monads
-  - They are not impure, they do not encapsulate side effects
+  - They are NOT impure, they do NOT encapsulate side effects
   - They are useful when dealing with side effects, but they don't deal with it themselves
+
 - "Kleisli arrows", side-effects solved by it
   a -> m b
   m :: * -> *
+
 *** Example: a functor with state and his proof
   #+begin_src haskell
 data State s a = State (s -> (a,s))
@@ -1078,25 +1109,31 @@ instance Functor (State s) where
   -- f' is (s -> (b,s))
   #+end_src
 *** >=> "fish operator"
+
 - A more general composition of functions, for "Kleisi arrows"
 - Needed to represent a common boilerplate with less work
+
 - Signature
   (.)   :: (b->  c) -> (a->  b) -> (a->  c)
   (>=>) :: (a->m b) -> (b->m c) -> (a->m c)
-- Example:
-  (a -> [b]) -> (b -> [c]) -> (a -> [c])
-    #+begin_src haskell
-f >=> g = \a -> let  bs = f a
-                    css = fmap g bs
-                in concat css
-f >=> g = concat . fmap g . f -- Note: it has to be Functor
+
+- Example: (a -> [b]) -> (b -> [c]) -> (a -> [c])
+  #+begin_src haskell
+    f >=> g = \a -> let  bs = f a
+                        css = fmap g bs
+                    in concat css
+    f >=> g = concat . fmap g . f -- Note: it has to be Functor
   #+end_src
+
 *** MONAD is
+
 The essence of monads is >=> and composition
   - a type constructor (m)
   - a fish operator (>=>)
   - and return
+
 *** ~return~ The equivalent of the "id" function for the (.) operator
+
 #+begin_src haskell
 return :: a -> m a
 return >=> f = f
@@ -1104,6 +1141,7 @@ return >=> f = f
 f >=> return = f
 (f >=> g) >=> h = f >=> (g >=> h) -- associativity
 #+end_src
+
 ** DONE 5-2 => The Monad Class (continuations)
 - Tetris, is how working with types in haskell is described
 - (>>=) ~bind~, "just give me the result, don't give me the whole function"

@@ -3880,45 +3880,87 @@ release      :: MonadIO m       => ReleaseKey     -> m ()
 ** 02 Hello World
 - The order in which we declare the binding does NOT matter
 ** 03 Building an HTML printer library
-#+begin_src haskell
-wrapHtml content = "<html><body>" <> content <> "</body></html>"
-#+end_src
-- operators ~fixity~ (left or right)
-  operators ~precedence~ (a number between 0 and 10)
-- (<>) has right fixity
-- =referential transparency= is pretty unique to haskell
-  allows to /substitute/ two sided of an equal sign with another.
+
+- operators
+  - ~fixity~: left or right
+  - ~precedence~: a number between 0 and 10
+  - (<>) has right fixity
+
+- =referential transparency=
+  - pretty unique to haskell
+  - allows to /substitute/ two sided of an equal sign with another.
+
 - multiple argument lambda
   \num1 -> \num2 -> num1 + num2
   \num1     num2 -> num1 + num2
+
 - =combinator pattern= used in Haskell by many EDSLs (embedded domain specific language)
   - ~primitives~ basic building block of the language
   - ~combinators~ functions that combine primitves
+
+*** Final Code
+
+#+begin_src haskell
+myHtml :: String
+myHtml =
+  makeHtml
+    "Hello title"
+    (h1_ "hello, world!" <> p_ "Let's learn about haskell")
+
+makeHtml :: String -> String -> String
+makeHtml title content =
+  html_ (head_ (title_ title) <> body_ content)
+
+wrapHtml :: String -> String
+wrapHtml content = "<html><body>" <> content <> "</body></html>"
+
+html_ :: String -> String
+html_ = el "html"
+
+body_ :: String -> String
+body_ = el "body"
+
+title :: String -> String
+title content = el "title"
+
+el :: String -> String -> String
+el tag content =
+  "<" <> tag <> ">" <> content <> "</>" <> tag <> ">"
+
+escape :: String -> String
+escape = concat . map escapeChar
+  where
+    escapeChar c =
+      case c of
+        '<'  -> "&lt;"
+        '>'  -> "&gt;"
+        '&'  -> "&amp;"
+        '"'  -> "&quot;"
+        '\'' -> "&#39;"
+        _    -> [c]
+#+end_src
+
 *** Safe HTML construction with types
+
 - =newtype=
   - to define a new distinct type for an *existing* type
   - wrapping/unwrapping has not performance cost
-- =type= we reference the type name directly without a constructor, just a name alias
+- =type= we reference the type name directly without a constructor, just _a name alias_
 - =data= kind of a struct+enum chimera, where we can define multiple constructs to a type
-- composition
-  (.) f g x = f (g x)
+- composition: (.) f g x = f (g x)
+
 *** Preventing incorrect use with modules
-#+begin_src haskell
-  module ModuleName where                     -- Exports ALL
-  module ModuleName ( <export-list> ) where
-  module ModuleName ( Type(TypeConstructor) ) -- Export 1 constructor of type
-  module ModuleName ( Type(..) )              -- Export all constructors for type
-#+end_src
-- same name as the source file
-- sub-directories should also be par tof the name, we use (.) to denote a subdirectory
-- except the module ~Main~ that defines *main*, can have any filename
+
+- the module ~Main~ that defines *main*, can have any filename
 - Linked Lists
   - not particularly space efficient
   - slow for appending
   - slow for random access
-- What HTML characteprs to escape: https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html
+- What HTML characters to escape: https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html
   &<>"'
+
 *** Exposing internal functionality (Internal Modules)
+
 - We can expose some ~Internal Modules~ to provide some flexibility to external users.
 - It's a common design pattern or idiom in Haskell.
 - *<something>.Internal* which exports all of the functionality and implementation details of the module.
@@ -3926,14 +3968,20 @@ wrapHtml content = "<html><body>" <> content <> "</body></html>"
 - hello.hs
   Html.hs
   Html/Internal.hs
+
 ** 04 Custom Markup Language
+
 - Features
-  | Headings        | prefix by a number of * characters              |
-  | Paragraphs      | a group of lines without empty lines in between |
-  | Unordered lists | a group of lines each prefix with -             |
-  | Ordered lists   | a group of lines each prefix with #             |
-  | Code blocks     | a group of lines each prefix with >             |
+|-----------------+-------------------------------------------------|
+| Headings        | prefix by a number of * characters              |
+| Paragraphs      | a group of lines without empty lines in between |
+| Unordered lists | a group of lines each prefix with -             |
+| Ordered lists   | a group of lines each prefix with #             |
+| Code blocks     | a group of lines each prefix with >             |
+|-----------------+-------------------------------------------------|
+
 *** Representing the markup language as a haskell data type
+
 #+begin_src haskell
   type Document = [Structure]
   data Structure
@@ -3943,12 +3991,15 @@ wrapHtml content = "<html><body>" <> content <> "</body></html>"
     | OrderedList [String]
     | CodeBlock [String]
 #+end_src
+
 - We represent the markup as a type, instead of a String for *flexibility* and *modularity*
 - If the /parsing/ was *coupled* with /HTML generation/, we would lose the ability to pre-process the markup document.
   - For example:
     - Take only a small part of the document, and present it
     - Or create a ToC from headings
+
 *** Parsing markup part 01 - Recursion
+
 - split by lines, and group by paragraphs (which are separated by empty lines)
 - Lazy *vs* Strict - Evaluation Strategy
   - *Evaluation Strategy*: refers to /when/ do we evaluate a computation
@@ -3962,40 +4013,47 @@ wrapHtml content = "<html><body>" <> content <> "</body></html>"
 - ~mutual recursion~ instead of directly calling ourselves in a function,
   we call another function that will eventually call ourselves back.
   #+begin_src haskell
-even' :: Int -> Bool
-even' 0 = True
-even' n = odd (n - 1)
+    even' :: Int -> Bool
+    even' 0 = True
+    even' n = odd (n - 1)
 
-odd' :: Int -> Bool
-odd' 0 = False
-odd' n = even' (n - 1)
+      odd' :: Int -> Bool
+    odd' 0 = False
+    odd' n = even' (n - 1)
   #+end_src
 - ~partial function~ a function that NOT returns for some value
   either due not terminating, or returning an error
 - =Numeric.Natural= type throws an exception if you try to assign it a negative number
 - =Data.List.NonEmpty= type promises that the list has at least 1 element
+
 *** Displaying the parsing results (type classes)
+
 #+begin_src haskell
   class Semigroup a where
     (<>) :: a -> a -> a
+
   instance Semigroup [a] where
     (<>) = (++)
 #+end_src
+
 - *print* works by calling show
   #+begin_src haskell
-print' :: Show a => a IO ()
-print' = putStrLn . show
+    print' :: Show a => a IO ()
+    print' = putStrLn . show
   #+end_src
-- defining an instance of the class ~Show~, aka providing an implemenation for the interface of a specific type
-  can be done by just *deriving*
+
+- defining an instance of the class ~Show~, aka providing an implemenation for the interface of a specific type can be done by just *deriving*
+
 - ~typeclasses~
   - are often just interface with laws (aka expected behaviours)
   - can be used to create abstractions, were we don't actually care about concrete details, just their API
-- ~typeclasses~ can provide rules or laws that the instances should satisfy
-  example:
-  - can combine two values in some way, and (<>) should b e associativce
-  - which Haskell type system cannot "prove"
+  - can provide rules or laws that the instances should satisfy
+    - example:
+      - can combine two values in some way, and (<>) should be associativce
+      - _which Haskell type system CANNOT PROVE_
+
 *** Parsing markup part 02 - Pattern Matching
+
 - Author encourages to NOT use the multiple function definitions in favor of *case/of*
   - https://twitter.com/_gilmi/status/1257225601079029760
   - Reasons: (ME: 4 is the strongest)
@@ -4004,14 +4062,14 @@ print' = putStrLn . show
     3) More effort to add another argument
     4) For longer functions, harder to tell where it stars and where it ends (identation)
     5) Especially when you want to remove clutter by adding new lines between cases
-- =Data.Maybe.listToMaybe= aka safeHead
-  =Data.Maybe.maybeToList=
+
 - ~Maybe~ a way to avoid writing *partial functions*
   #+begin_src haskell
     data Maybe a = Nothing | Just a
   #+end_src
-- sometimes, to avoid dealing with strings and unword'in in the middle of algorithm
-  we could create a new data type with the correct structure
+- =Data.Maybe.(listToMaybe,maybeToList)= aka safeHead
+
+- sometimes, to avoid dealing with strings and unword'in in the middle of algorithm we could create a new data type with the correct structure.
   #+begin_src haskell
     data Context
       = CtxHeading Natural String
@@ -4020,21 +4078,27 @@ print' = putStrLn . show
       | CtxOrderedList [String]
       | CtxCodeBlock [String]
   #+end_src
+
 **** ~Data.Maybe.maybe~
+
 - takes
   - a default value
   - a function to apply to 3rd value if not Nothing
   - a Maybe value
+
 - We use it here to return a partially applied (:) function or (id)
   #+begin_src haskell
     -- parseLines :: ... -> [Structure]
     -- context :: Maybe Structure
     maybe id (:) context (parseLines Nothing rest)
   #+end_src
+
 - ME: maybe is like a .OrValue() type of function in java/rust,
       but here we also use it with partial application
+
 ** 05 Gluing things together
 *** Converting Markup to HTML
+
 - notice how each module Markup and Html have their own ~Structure~ data type
 - Convert.hs
   #+begin_src haskell
@@ -4079,6 +4143,7 @@ concatStructure list =
 convert :: Html.Title -> Markup.Document -> Html.Html
 convert title = Html.html_ title . foldMap convertStructure
   #+end_src
+
 *** Working with IO
 - We are goint to support different use cases
   1) If the user calls the program without arguments, reads/writes to stdin/stdout
@@ -4255,16 +4320,16 @@ useful when we want ot do some uneffectul computation that depnds on IO
 #+end_src
 - combining <*> and <$> allow us to apply a function with many argument instead of just 2(two)
   - both associate to the left
-** 06 Handing errors and multiple files
+** TODO 06 Handing errors and multiple files
 *** Handing errors with Either
 *** Either with IO
 *** Exceptions
 *** Lets code already!
 *** Summary
-** 07 Passing and Environment
-** 08 Writing tests
-** 09 Generating documentation
-** 10 Recap
+** TODO 07 Passing and Environment
+** TODO 08 Writing tests
+** TODO 09 Generating documentation
+** TODO 10 Recap
 * 23 | Effective Haskell                         | PragProg | Rebecca Skinner
 ERRATA:
 192
@@ -4276,6 +4341,8 @@ ghc error refers to "Show Password" a type that was never declared before
 typo: on type constructor for "AdminUser" is "Adminuser" instead
 289
 typo+incoherent: With the withArgs function function will help you with both (!?) of those problems
+301
+typo: "When we put all of this togther..."
 ** DONE Introduction
 - 1990 First version of Haskell
   - 1 year before Python
@@ -6275,7 +6342,7 @@ class Semigroup a => Monoid a where
 src/Hcat.hs
 app/main.hs
 
-#+begin_src sh
+#+begin_src haskell-cabal
 cabal-version:  2.4
 name:           hcat
 version:        0.1.0.0
@@ -6299,18 +6366,147 @@ executable hcat
 #+end_src
 
 *** Viewing the Contents of an ASCII or UTF8 Encoded Text File
-
-
+**** get the filename from CLI arguments
 
 #+begin_src haskell
 import qualified System.Environment as Env
 
 handleArgs :: IO FilePath -- FilePath is an alias for String
 handleArgs =
-  head <$> Env.getArgs
+  head <$> Env.getArgs -- head is a partial function, crashes with []
+#+end_src
+
+Safe way to get the arguments, we separate the pure and impure part with *where*.
+
+#+begin_src haskell
+handleArgs' :: IO (Either String FilePath)
+handleArgs' =
+  parseArgs <$> Env.getArgs
+  where
+    parseArgs argumentList =
+      case argumentList of
+        [arg] -> Right arg
+        [] -> Left "no filename provided!"
+        (_ : _) -> Left "too many arguments!"
+#+end_src
+
+We pretty print our Either
+
+#+begin_src haskell
+runHCat :: IO ()
+runHCat =
+  handleArgs' >>= displayMessage
+  where
+    displayMessage parsedArgument =
+      case parsedArgument of
+        Left errMessage -> putStrLn $ "Error: " <> errMessage
+        Right filename -> putStrLn $ "Opening file: " <> filename
+#+end_src
+
+**** reading the contents of the file (IOError)
+
+replace on runHCat
+
+#+begin_src haskell
+Right filename -> readFile filename >>= putStrLn
+#+end_src
+
+handle IOError exception, by printing a friendlier msg
+
+#+begin_src haskell
+import qualified Control.Exception as Exception
+import qualified System.IO.Error as IOError
+
+runHCat :: IO ()
+runHCat =
+  Exception.catch (handleArgs' >>= displayMessage) handleErr
+  where
+    handleErr :: IOError -> IO () -- MANDATORY signature, compiler needs to know which one we capture
+    handleErr e = putStrLn "I ran into an error: " >> print e
+-- ...
+#+end_src
+
+alternative refactor, to keep the function focused on the main logic
+
+#+begin_src haskell
+runHCat :: IO ()
+runHCat =
+  withErrorHandling $
+    handleArgs' >>= displayMessage
+  where
+    withErrorHandling :: IO () -> IO ()
+    withErrorHandling ioAction = Exception.catch ioAction handleErr
+-- ...
+#+end_src
+
+alternative refactor, converting Either to IOError and throwing/raising it
+(calls to *throw* might not always evaluate predictable when dealing with IO actions)
+
+#+begin_src haskell
+eitherToErr :: (Show a) => Either a b -> IO b
+eitherToErr (Right a) = return a
+eitherToErr (Left e) =
+  Exception.throwIO . IOError.userError $ show e -- OR
+  IOError.ioError . Exception.userError $ show e
+#+end_src
+
+then we could just add it OR refactor to pipe through Either's
+
+#+begin_src haskell
+{-# LANGUAGE TypeApplications #-}
+
+runHCat :: IO ()
+runHCat =
+  handleIOError $
+    handleArgs'
+      >>= eitherToErr
+      >>= readFile
+      >>= putStrLn
+  where
+    handleIOError :: IO () -> IO ()
+    handleIOError ioAction =
+      Exception.catch ioAction $
+        \e -> putStrLn "I ran into an error: " >> print @IOError e
+#+end_src
+
+**** reading the contents of the file (Text)
+
+- functions in *bytestring* and *text* packages behave that the ones in System.IO but with Text and ByteString
+
+#+begin_src haskell
+{-# LANGUAGE TypeApplications #-}
+import qualified Data.Text.IO as TextIO
+
+runHCat :: IO ()
+runHCat =
+  handleIOError $
+    handleArgs'
+      >>= eitherToErr
+      >>= TextIO.readFile -- !!!
+      >>= TextIO.putStrLn -- !!!
+  where
+    handleIOError :: IO () -> IO ()
+    handleIOError ioAction =
+      Exception.catch ioAction $
+        \e -> putStrLn "I ran into an error: " >> print @IOError e
 #+end_src
 
 *** Viewing Text One Page at a Time
+
+forward pagination + keyboad control + line wrapping?
+
+we get a helper that will help us to go from lines of text to pagination
+
+#+begin_src haskell
+-- polymorphic enough to work with String and Text
+-- we could return a "Maybe [[a]]" to handle "groupsOf 0" which will be infinite otherwise
+groupsOf :: Int -> [a] -> [[a]]
+groupsOf _ [] = []
+groupsOf n elements =
+  let (hd, tl) = splitAt n elements
+   in hd : groupsOf n tl
+#+end_src
+
 *** Adding a Status Line with Metadata
 *** Showing the Status Bar and Refactoring runHCat
 ** 09 Introducing =Monads=

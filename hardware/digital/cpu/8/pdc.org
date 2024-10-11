@@ -1,4 +1,8 @@
 - Author: Roberto Gudiño, Pablo Cayuela
+  - https://www.youtube.com/@robertogudino1919
+  - @HermandadSinclair https://www.youtube.com/watch?v=yOVubsOpu4g
+  - @Cybercirujas https://www.youtube.com/watch?v=yW-8bYEdY10
+  - @Nerdearla https://www.youtube.com/watch?v=5pEH8uZnK8Y
 - a super cool post-apocalyptic computer built
   from scratch using recycled TTL chips.
 - PDC8, PDC32

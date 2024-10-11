@@ -1,0 +1,9 @@
+* Emacs Setup
+
+- http://www.cis.syr.edu/~sueo/cis252/emacs.html
+- Emacs: lsp-mode, lsp-ui, lsp-haskell
+- https://github.com/haskell/haskell-ide-engine
+- https://github.com/soupi/minimal-haskell-emacs (setup)
+- https://github.com/ndmitchell/ghcid "flymake"
+- https://github.com/ndmitchell/hlint "flycheck"
+- https://github.com/chrisdone/hindent "gofmt"
