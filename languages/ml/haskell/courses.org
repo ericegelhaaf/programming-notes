@@ -1,12 +1,6 @@
 - Video
   - Haskell for Dilettantes by Tea Leaves https://www.youtube.com/playlist?list=PLu6SHDdOToSe7ZOw-mR55j2GEjkNTQgrd
   - Haskell Course by IOG Academy https://www.youtube.com/playlist?list=PLNEK_Ejlx3x1D9Vq5kqeC3ZDEP7in4dqb
-  - David Ogborn - 2018 Haskell School in the Networked Imagination Laboratory https://www.youtube.com/playlist?list=PLyEzdf4cdMMHGqVnAzLV8eDXn6Ajj46JA
-    1) https://www.youtube.com/watch?v=kGbelVBCWDk
-    2) https://www.youtube.com/watch?v=QgELJc0n_kI
-    3) https://www.youtube.com/watch?v=qcLLcpajp7M
-    4) Monad Transformers https://www.youtube.com/watch?v=YCUYMNEfjb8
-    5) https://www.youtube.com/watch?v=0DQrZ_CVNPc
   - Haskel for imperative programmers https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
   - MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
   - Haskell beginners 2022 https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c
@@ -1339,6 +1333,96 @@ seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
 *** 00:27:00 you """can""" implement foldr with foldl but it won't do the right thing with infinity
   since foldr is _replacing constructors_ is has lazy support
   this means that the foldr on Haskell is different than the one on Javascript
+* 18 | 2018 Haskell School in NIL   | David Ogborn
+
+https://www.youtube.com/playlist?list=PLyEzdf4cdMMHGqVnAzLV8eDXn6Ajj46JA
+
+1) https://www.youtube.com/watch?v=kGbelVBCWDk
+2) https://www.youtube.com/watch?v=QgELJc0n_kI
+3) https://www.youtube.com/watch?v=qcLLcpajp7M
+
+** 4) Monad Transformers & Reflex
+
+https://www.youtube.com/watch?v=YCUYMNEfjb8
+
+- recap ends at 27:20
+- break ends at 1:26:55
+
+- What if we wanted to use IO to get some data in. But keep the Either attribute of failing with Left.
+  #+begin_src haskell
+    myComputation :: Either String Int
+    myComputation = do
+      x <- Left "Sorry doesn't work"
+      y <- Right 8
+      return (x+y)
+  #+end_src
+
+- We would want them something like this. See the wrapped monads. (TODO 37:54)
+  #+begin_src haskell
+  myDbLookup1 :: IO (Either String Int)
+  myDbLookup1 = return $ return $ 7
+  --
+  myDbLookup2 :: IO (Either String Int)
+  myDbLookup2 = Left "woops"
+  --
+  myProgram :: IO ()
+  myProgram = do
+    putStrLn "Welcome to main"
+    x <- myDbLookup1 -- x :: Either String Int
+    y <- myDbLookup2 -- y :: Either String Int
+    -- return (x+y) -- won't work
+    return $ addTwoEithers x y
+  --
+  addTwoEithers :: Either String Int -> Either String Int -> Either String Int
+  addTwoEithers (Left x) _ = Left x
+  addTwoEithers _ (Left x) = Left x
+  addTwoEithers (Right x, Right y) = Right (x+y)
+  #+end_src
+
+- We could use instead a different Monad a =Monad Transformer=
+- Control.Monad.Trans.Except.ExceptT:
+  - adds exceptions to other monads
+  - here "exception" means Either
+  - ExceptT (m (Either e a))
+  #+begin_src haskell
+    myDbLookup1 :: ExceptT String IO Int -- m int
+    myDbLookup1 = return 7 -- does the type wrapping job
+    --
+    myDbLookup2 :: ExceptT String IO Int -- m int
+    myDbLookup2 = ExceptT $ return (Left "oops!")
+    myDbLookup2 = fail "oops!"
+    myDbLookup2 = throwE "oops"
+  #+end_src
+
+- We can type alias it
+  #+begin_src haskell
+    type DatabaseIO
+      = ExceptT String IO
+    myDbLookup1 :: DatabaseIO Int
+    myDbLookup2 :: DatabaseIO Int
+  #+end_src
+
+- to finally use it with ~runExceptT~ to get a ~IO (Either String Int)~
+  aka the unwrapping of the monad transformer
+  #+begin_src haskell
+    myDbProgram :: IO ()
+    myDbProgram = do
+      z <- runExceptT $ do -- z :: Either String String
+        x <- myDbLookup1
+        y <- myDbLookup2
+        return $ "operation successful: " ++ show (x+y)
+      -- case z of
+      --   Left  e -> putStrLn $ "uhoh" <> e
+      --   Right a -> putStrLn $ "ok! " <> show a
+      Either.either id id z
+  #+end_src
+
+** 5) Parsers & Projects
+
+https://www.youtube.com/watch?v=0DQrZ_CVNPc
+
+- recap ends at
+
 * 19 | Haskell 10X                  | Antoine Leblanc
 repo: https://github.com/google/haskell-trainings
 ** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw

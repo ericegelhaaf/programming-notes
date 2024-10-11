@@ -1,3 +1,4 @@
+- Abstractions in Context lihttps://williamyaoh.gumroad.com/l/CLyzT
 - Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
   https://unsafeperform.io/retroclash/
 - https://lokathor.gitbooks.io/using-haskell/content/
@@ -633,7 +634,7 @@ ERRATA:
 - INTERNET: https://stackoverflow.com/questions/62018158/string-concatenation-via-or
   - when concatenating strings you can use (++) or (<>)
   - but (<>) is preferable because it works with ~Text~ types other than ~Prelude.String~
-  - but it might become ambiguos due polymorphism and when using *-XOverloadedStrings*
+  - but it might become ambiguous due polymorphism and when using *-XOverloadedStrings*
 
 - ~infix operators~
   - the reader has to know the /associativity/ of the operator.
@@ -674,7 +675,7 @@ validatePassword' password =
 - TIP: thinking about types as instances of a certain typeclass.
   Allows you to focus on the similarities between the types.
 
-*** TypeApplications (language extension)
+*** ~TypeApplications~ (a language extension)
 
 - Allows you to specify
   - what type you will apply a polymorphic function to
@@ -689,11 +690,11 @@ validatePassword' password =
   (>>=) @Maybe
     :: Maybe a -> (a -> Maybe b) -> Maybe b
 
-  ,*Main> :type (>>=) @Maybe @String
+  >>> :type (>>=) @Maybe @String
   (>>=) @Maybe @String
     :: Maybe String -> (String -> Maybe b) -> Maybe b
 
-  ,*Main> :type (>>=) @Maybe @String @String
+  >>> :type (>>=) @Maybe @String @String
   (>>=) @Maybe @String @String
     :: Maybe String -> (String -> Maybe String) -> Maybe String
 #+end_src
@@ -706,14 +707,14 @@ validatePassword' password =
 
 - Haskell's =do= syntax is intended to allow something like imperative-style programming that ignores the monadic underpinnings.
 
-- main from do, to bind
+- Example: main from _do_ to bind
   #+begin_src haskell
 main :: IO ()
 main = getLine >>= \password ->
                      print (cleanWhitespace password)
   #+end_src
 
-- main from do to bind, without explicit argument passing
+- Example: main from _do_ to bind, without explicit argument passing
   #+begin_src haskell
     main :: IO ()
     main = getLine >>= (print . cleanWhitespace)
@@ -722,8 +723,7 @@ main = getLine >>= \password ->
 ** 5 Refactoring with =Either=
 *** Adding error messages
 
-- We can have ~validatePassword~ return a =String= with an error message if it fails.
-  It becomes again a sequence of case/of
+- We can have ~validatePassword~ return a =String= with an error message if it fails. It becomes again a sequence of case/of
   #+begin_src haskell
     validatePassword :: String -> String
   #+end_src
@@ -745,17 +745,16 @@ main = getLine >>= \password ->
       Nothing >>= _ = Nothing
       Just x  >>= f = f x
 
-  instance Monad (Either e) -- leftmost type parameter is fixed, whatever type it is, it cannot be transformed
+  instance Monad (Either e) -- leftmost type parameter is fixed, whatever type it is, it CANNOT be transformed
     where
       Left  l >>= _ = Left l
       Right r >>= f = f r
 #+end_src
 
 - In Haskell, a ~Monad~ must be a unary *type constructor*.
-  So in order to use bind(>>=) you need to partially apply ~Either~ to its leftmost parameter.
+- In order to use bind(>>=) you need to partially apply ~Either~ to its leftmost parameter.
 
-- Showing it with TypeApplications, with String or _
-
+#+CAPTION: Showing it with *TypeApplications*, with String or _
 #+begin_src haskell
   > :type (>>=) @(Either String)
   (>>=) @(Either String) ::
@@ -775,12 +774,13 @@ main = getLine >>= \password ->
 *** Kinds
 
 - In haskell, we use a notation called ~kinds~ to talk about the /arity of a type constructor/.
-  Kinds are sometimes also defined as "the types of types"
- |--------------------+-------------------+---------------------------|
- | :kind Bool         | Bool :: *         |                           |
- | :kind Maybe        | Maybe :: * -> *   | all monads have this kind |
- | :kind Maybe String | Maybe String :: * |                           |
- |--------------------+-------------------+---------------------------|
+- Kinds are sometimes also defined as "the types of types"
+
+|--------------------+-------------------+---------------------------|
+| :kind Bool         | Bool :: *         |                           |
+| :kind Maybe        | Maybe :: * -> *   | all monads have this kind |
+| :kind Maybe String | Maybe String :: * |                           |
+|--------------------+-------------------+---------------------------|
 
 - Kinds of different types
  |------------------------+-------------+--------------------|
@@ -796,12 +796,12 @@ main = getLine >>= \password ->
 ** 6 Working with =newtype=
 *** Introducing
 
-- ~type aliases~ do NOT offer *safety*, it only gives you another name for the same type
-  we can accidentally provide a =Password= to a function that expects a =Username=
-  #+begin_src haskell
-    type Password = String
-    type Username = String
-  #+end_src
+- ~type aliases~ do NOT offer *safety*, it only gives you another name for the same type.
+  - Example: We could accidentally provide a =Password= to a function that expects a =Username=
+    #+begin_src haskell
+      type Password = String
+      type Username = String
+    #+end_src
 
 - ~newtype~ has a *data constructor* that is named differently from the underlying typed constructor
   #+begin_src haskell
@@ -809,13 +809,12 @@ main = getLine >>= \password ->
       deriving Show
   #+end_src
 
-- differences of *newtype* with *data*
-  1) /newtype/ may only have a single unary constructor
-  2) /newtype/ has optimizations due 1)
-  3) /newtype/ offers a cheap coercion, between the /newtype/ and the underlying type,
-     /data/ does NOT
-  4) ~GeneralizedNewtypeDeriving~ language extension (?)
-  5) /newtype/ and /data/ have different behavior on non-strictness
+- differences of ~newtype~ with ~data~
+  1. /newtype/ may only have a _ONE unary constructor_
+  2. /newtype/ has optimizations due 1)
+  3. /newtype/ offers a cheap coercion, between the /newtype/ and the underlying type, /data/ does NOT
+  4. ~GeneralizedNewtypeDeriving~ language extension (?)
+  5. /newtype/ and /data/ have different behavior on non-strictness
 
 *** Declaring
 
@@ -888,8 +887,7 @@ main = getLine >>= \password ->
         print (validatePassword (Password password))
   #+end_src
 
-- fmap(<$>)
-  will apply the =Password= constructor *inside* the IO, changing from an ~IO String~ to an ~IO Password~
+- fmap(<$>), will apply the =Password= constructor *inside* the IO, changing from an ~IO String~ to an ~IO Password~
   #+begin_src haskell
     main :: IO ()
     main =
@@ -946,40 +944,43 @@ main = getLine >>= \password ->
   #+end_src
 
 - =Applicative= typeclass operator (<*>), aka ~tie-fighter~ or ~apply~ or ~app~
-  Allows for /function application/ in the presence of some outer type structure (aka context)
-  Unlike "bind" there is nothing that would force us to "short-circuit" on an error value.
+  - Allows for /function application/ in the presence of some outer type structure (aka context)
+  - Unlike "bind" there is NOTHING that would force us to "short-circuit" on an error value.
   #+begin_src haskell
     (<*>) :: Applicative f => f (a -> b) -> f a -> f b
   #+end_src
 
 *** Constructors are functions
 
-- We are constructing a functions *inside* and applicative type ~Either~
-  #+begin_src haskell
-    validateUsername :: Username -> Either Error Username
-    validateUsername (Username username) =
-      cleanWhitespace username
-      >>= requireAlphanum
-      >>= checkUsernameLength
+- We are constructing a functions *inside* an Applicative type ~Either~
+- Right is the function that we needs to be passed to <*>
 
-    > :type (validateUsername (Username "name"))
-      :: Either Error Username
-    > :type (User <$> (validateUsername (Username "name")))
-      :: Either Error (Password -> User)
-         -- Right is the function that we needs to be passed to <*>
-         -- We're constructing a function inside an applicative type (Either)
-  #+end_src
+#+begin_src haskell
+  validateUsername :: Username -> Either Error Username
+  validateUsername (Username username) =
+    cleanWhitespace username
+    >>= requireAlphanum
+    >>= checkUsernameLength
 
-*** Using Applicative
+  > :type (validateUsername (Username "name"))
+    :: Either Error Username
+  > :type (User <$> (validateUsername (Username "name")))
+    :: Either Error (Password -> User)
+#+end_src
 
-- we introduce a =makeUser= function that unlike =User= introduces a possibility of failure
-  #+begin_src haskell
-    -- User  :: Username -> Password -> User
-    makeUser :: Username -> Password -> Either Error User
-    makeUser name password =
-      User <$> validateUsername name
-           <*> validatePassword password
-  #+end_src
+*** Using Applicative (makeUser)
+
+=makeUser= unlike =User=, has the possibility of failure
+
+#+begin_src haskell
+  -- validateUsername :: Username -> Either Error Username
+  -- validatePassword :: Password -> Either Error Password
+  --  User :: Username -> Password -> User
+  makeUser :: Username -> Password -> Either Error User
+  makeUser name password =
+    User <$> validateUsername name
+         <*> validatePassword password
+#+end_src
 
 *** Example: Using Applicative with checkAnagram
 
@@ -1001,7 +1002,8 @@ main = getLine >>= \password ->
   main :: IO ()
   main =
     do
-      result <- checkAnagram <$> promptWord1 <*> promptWord2
+      result <- checkAnagram <$> promptWord1
+                             <*> promptWord2
       print result
 #+end_src
 
@@ -1010,7 +1012,8 @@ main = getLine >>= \password ->
 - refactor from =Either= to =Validation=
   - from the package https://github.com/system-f/validation
   - both types are ~isomorphic~, we can convert back and forth between them
-  - their =Applicative= instances are different, we can accumulate errores on the Left1
+  - their =Applicative= instances are different
+    - on =Validation= we can accumulate errores on the ~Left1~
   - uses the typeclass =Semigruop=
   - depends on *lens* library
 
@@ -1026,8 +1029,8 @@ main = getLine >>= \password ->
        | Success a
   #+end_src
 
-- Validation is NOT a =Monad=,
-  - if it were a monad, it would have to "short circuit" and lose the accumulation on the left values.
+- Validation is NOT a =Monad=
+  - if it were, it would have to "short circuit" and lose the accumulation on the left values.
   - reminder: Monads are Applicatives
 
 - Since functions chained together with *applicative* (<*>) can be evaluated independently:
@@ -1046,7 +1049,7 @@ main = getLine >>= \password ->
 
 *** Add .cabal dependency
 
-#+begin_src yaml
+#+begin_src haskell-cabal
   executable validation
     hs-source-dirs:   src
     main-is:          Main.hs
@@ -1057,11 +1060,12 @@ main = getLine >>= \password ->
 
 *** Nominal refactoring
 
-- Change the =~Error= type
-  #+begin_src haskell
-    newtype Error = Error [String]
-      deriving (Show)
-  #+end_src
+Change the =Error= type
+
+#+begin_src haskell
+  newtype Error = Error [String]
+     deriving (Show)
+#+end_src
 
 *** Interpreting the errors
 
@@ -1071,10 +1075,10 @@ main = getLine >>= \password ->
      - we knew since, Validation is NOT an instance of Monad
 
   2) "No instance for (Semigroup Error) arising from a use of <*>"
-     - =Error= must have a =Semigroup= instance, in order to know how to accumulate errors
+     - =Error= must have a =Semigroup= instance, in order to know how to accumulate errors.
      - while =Error= is /representationally equivalent/ to [String], it is NOT the same (new)type.
 
-*** An Error semigroup
+*** 2) define Semigroup for new Error
 
 - fixes error 2)
 
@@ -1086,8 +1090,7 @@ main = getLine >>= \password ->
 - alternatively using ~GeneralizedNewTypeDeriving~ language extension
   - can only be used with /newtype/, not /data/ declarations
   - we could have just "derived" Semigroup
-  - deriving means you get the standard instance for the underlying type,
-    that the new type is isomorphic to
+  - deriving means you get the standard instance for the underlying type, that the new type is isomorphic to
 
   #+begin_src haskell
     {-# LANGUAGE GeneralisedNewtypeDeriving #-}
@@ -1095,15 +1098,15 @@ main = getLine >>= \password ->
       deriving (Semigroup, Show)
   #+end_src
 
-*** Using Applicative
+*** 1) Using Applicative
 
 - fixes 1)
 
 - We use the =Applicative= operators
 
-  - they let you sequence /function applications/
-  - discarding either the first or second value respectly
-  - they do NOT eay any effects that are part of /f/
+  1) they let you sequence /function applications/
+  2) discarding either the first or second value/operand respectly
+  3) they do NOT eay any effects that are part of /f/
   |----+-----------------------------+---------------+-------------------|
   | *> | left "facing bird"/"shark"  | Applicative f | f a -> f b -> f b |
   | <* | right "facing bird"/"shark" | Applicative f | f a -> f b -> f a |
@@ -1129,6 +1132,7 @@ main = getLine >>= \password ->
            Success password2 -> requireAlphaNum password2 *>
                                 checkPasswordLength password2
   #+end_src
+
 *** Exercises
 
 1) we could use Applicative for =Either= since is a =Monad=, and as such is an =Applicative=
@@ -3489,10 +3493,12 @@ Write Foldable for Maybe and Binary Trees. See 4-9 restrictions.
 *** Strictness annotations
 * 22 | Sockets & Pipes                           | JoyH     | Chris Martin
 
-| deps library   | https://github.com/joyofhaskell/sockets-and-pipes |
+|----------------+-------------------------------------------------------------------|
+| deps library   | https://github.com/joyofhaskell/sockets-and-pipes                 |
 | anon code      | https://github.com/brhutchins/sockets-and-pipes/blob/main/Book.hs |
-| http semantics | https://www.rfc-editor.org/rfc/rfc9110.html       |
-| http 1.1       | https://www.rfc-editor.org/rfc/rfc9112.html       |
+| http semantics | https://www.rfc-editor.org/rfc/rfc9110.html                       |
+| http 1.1       | https://www.rfc-editor.org/rfc/rfc9112.html                       |
+|----------------+-------------------------------------------------------------------|
 
 ERRATA: 10 - "A typical running computer contains multitudes" add "of processes" at the end?
 
@@ -3504,9 +3510,10 @@ ERRATA: 10 - "A typical running computer contains multitudes" add "of processes"
   - bytestring, text
   - sockets, network
   - attoparsec (from bytestring to http messages)
-- Monad Transformers: ResourceT, ListT, ExceptT
-- We use =ResourceT= to deal with files/sockets without resource leaks
-- We use =ExceptT= to deal with different errors
+- from *Monad Transformers* we use:
+  - =ResourceT= to deal with files/sockets without resource leaks
+  - =ExceptT= to deal with different errors
+  - =ListT=
 
 ** 0 Setup
 
@@ -3515,7 +3522,7 @@ ERRATA: 10 - "A typical running computer contains multitudes" add "of processes"
 *** book.cabal
 
 old book version
-#+begin_src yaml
+#+begin_src haskell-cabal
   common base
     default-language:   Haskell2010
     default-extensions: BlockArguments
@@ -3526,7 +3533,7 @@ old book version
 #+end_src
 
 
-#+begin_src yaml
+#+begin_src haskell-cabal
   cabal-version: 3.0 # NECESSARY
   name: book         # NECESSARY
   version: 0.0.0.0   # NECESSARY
@@ -3548,29 +3555,29 @@ old book version
 
 *** sockets-and-pipes - dependencies
 
-  - ascii
-  - aeson
-  - async
-  - attoparsec
-  - attoparsec-run
-  - base
-  - blaze-html
-  - bytestring
-  - containers
-  - directory
-  - filepath
-  - hash-addressed
-  - mtl
-  - network
-  - network-simple
-  - pipes
-  - relude
-  - resourcet
-  - safe-exceptions
-  - stm
-  - text
-  - time
-  - unfork
+- ascii
+- aeson
+- async
+- attoparsec
+- attoparsec-run
+- base
+- blaze-html
+- bytestring
+- containers
+- directory
+- filepath
+- hash-addressed
+- mtl
+- network
+- network-simple
+- pipes
+- relude
+- resourcet
+- safe-exceptions
+- stm
+- text
+- time
+- unfork
 
 *** sockets-and-pipes - reexported-modules
 
@@ -3691,7 +3698,6 @@ getDataDir = do
   "/home/sendai/.local/share/sockets-and-pipes"
 
 ** 1 Handles
-
 *** The Necessity of indirection
 
 - ~multiplexing~ is allowing many "tenants" to /share/ the same facilities without interfering with each other.
@@ -3762,7 +3768,6 @@ getDataDir = do
      An action can receive an exception at any time, like when the it is "killed".
      Catching them should be left to dedicated libraries that know what they are doing.
      eg: someone throws an interrupt with ~Control.Exception.throwTo~
-
 
 *** Diligent cleanup
 
@@ -3847,7 +3852,6 @@ runResourceT ::                    ResourceT IO a -> IO a
 release      :: MonadIO m       => ReleaseKey     -> m ()
 #+end_src
 
-
 *** writeGreetingFile - handle-closing reliably
 
 #+begin_src haskell
@@ -3864,14 +3868,12 @@ release      :: MonadIO m       => ReleaseKey     -> m ()
     liftIO (IO.hPutStrLn h "world")
 #+end_src
 
-
 *** MonadIO
 **** =MonadIO= class - programmer's relationship to it
 
 - when introducing a new *monad transformer* like ~ResourceT~ into an ~IO~ sequence,
   every line under the ~do~ whose type is not already of type ~ResourceT IO~
   will have to be lift into it using *liftIO*
-
 
 *** Exercises
 

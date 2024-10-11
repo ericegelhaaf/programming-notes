@@ -7,6 +7,7 @@
 #+begin_src haskell
   module Main (main) where
   import qualified System.IO as IO
+
   main :: IO ()
   main = IO.putStr "Hello, World!"
 #+end_src
@@ -116,7 +117,13 @@
 - https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
 - https://kowainik.github.io/posts/naming-conventions
 
-** types primitives
+** types
+
+- type: a type alias
+- newtype: can only have ONE contructor with ONE argument
+- data
+
+*** types primitives
 |---------+-------+--------------------------------------+------------|
 |     <r> |   <r> |                                      |            |
 |    type |    eg | description                          |            |
@@ -139,7 +146,7 @@
     \longer than 20 characters."
   #+end_src
 
-** types complex
+*** types complex
 |---------------+----------------------------+-------------------+----------------------------------------|
 |           <r> |                            |                   |                                        |
 |    instancing | possible definition        | name              | description                            |
@@ -167,7 +174,7 @@
 |      Right 17 | = Left a                   |                   | Right = we got what we wanted          |
 |               | ¦ Right b                  |                   | Left  = we got an error                |
 |---------------+----------------------------+-------------------+----------------------------------------|
-#+TBLFM: $2=Left a
+- tuples (aka anonymous products)
 ** Standard Library
 - https://packages.ubuntu.com/bionic/amd64/ghc/filelist
 *** Prelude.hs functions
@@ -402,6 +409,9 @@ https://haskell-containers.readthedocs.io/en/latest/
 
 [[https://www.adit.io/imgs/functors/recap.png]]
 
+- A type can have _at most_ ONE instance of a typeclass.
+- In Haskell, a ~Monad~ must be a unary *type constructor*.
+  - aka kind of "* -> *"
 - https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html#monads
 - https://wiki.haskell.org/All_About_Monads
 - https://learnyouahaskell.com/a-fistful-of-monads
@@ -422,6 +432,19 @@ https://haskell-containers.readthedocs.io/en/latest/
   > liftA2 (*) (Just 5) (Just 3)
     Just 15
 #+end_src
+
+*** do
+
+- When to use (>>=) and when use do?
+  1) if it seems like you're writing way *Too Many Lambdas* use ~do~
+  2) *Too many variables* that get introduced on one line, only to get used on the next, use (>>=)
+  3) Or use both
+     #+begin_src haskell
+       do
+         x1 <- a1 >>= f1 >>= f2
+         x2 <- a2 >>= f3 >>= f4
+         f5 x1 x2
+     #+end_src
 
 *** Shipped
 |-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
