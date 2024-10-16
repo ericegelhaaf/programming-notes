@@ -1,5 +1,6 @@
 manual https://haskell-haddock.readthedocs.io/en/latest/
 source https://github.com/haskell/haddock
+https://kowainik.github.io/posts/haddock-tips
 
 - by default it generates 1 html file per module
 

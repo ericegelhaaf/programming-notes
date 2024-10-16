@@ -2,6 +2,7 @@
 - Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
   https://unsafeperform.io/retroclash/
 - https://lokathor.gitbooks.io/using-haskell/content/
+- https://lotz84.github.io/haskellbyexample/
 - https://leanpub.com/simple-haskell-book/read - build a CI
   official source https://github.com/alpacaaa/quad-ci
   unofficial source https://github.com/jturner/quad-ci
@@ -1705,6 +1706,21 @@ Change the =Error= type
 
 *** TODO The =Validate= class
 *** TODO Exercises
+* 21 | Almost Standard Library                   |          | Alejandro Serrano Mena
+
+** 3 Utilities
+
+- =extra= package
+- Control.Monad
+  #+begin_src haskell
+    guard :: Alternative f => Bool -> f ()
+    validatePerson first last age = do
+      guard $ not (null first)
+      guard $ not (null last)
+      guard $ (age >= 0)
+      -- ...
+  #+end_src
+
 * 21 | Haskell in Depth                          | Manning  | Vitaly Bragilevsky
 
 - source https://github.com/bravit/hid-examples
@@ -3500,7 +3516,9 @@ Write Foldable for Maybe and Binary Trees. See 4-9 restrictions.
 | http 1.1       | https://www.rfc-editor.org/rfc/rfc9112.html                       |
 |----------------+-------------------------------------------------------------------|
 
-ERRATA: 10 - "A typical running computer contains multitudes" add "of processes" at the end?
+ERRATA:
+10 - "A typical running computer contains multitudes" add "of processes" at the end?
+51 - "The first argument to addrInfo" should have been getAddrInfo
 
 ** Preface
 
@@ -3510,10 +3528,12 @@ ERRATA: 10 - "A typical running computer contains multitudes" add "of processes"
   - bytestring, text
   - sockets, network
   - attoparsec (from bytestring to http messages)
-- from *Monad Transformers* we use:
-  - =ResourceT= to deal with files/sockets without resource leaks
-  - =ExceptT= to deal with different errors
-  - =ListT=
+  - mtl (aka Monad Transformers):
+    - =ResourceT= to deal with files/sockets without resource leaks
+    - =ExceptT= to deal with different errors
+    - =ListT=
+    - Producer
+    - ReaderT
 
 ** 0 Setup
 
@@ -3683,7 +3703,6 @@ module Book where
 import Prelude () -- not needed withNoImplicitPrelude?
 import Relude
 import qualified System.Directory as Dir
-import System.FilePath ((</>))
 
 getDataDir :: IO FilePath
 getDataDir = do
@@ -3693,190 +3712,668 @@ getDataDir = do
 #+end_src
 
 - once you have the file:
+  #+begin_src haskell
   $ cabal repl
   ghci> getDataDir
   "/home/sendai/.local/share/sockets-and-pipes"
+  #+end_src
 
 ** 1 Handles
 *** The Necessity of indirection
 
-- ~multiplexing~ is allowing many "tenants" to /share/ the same facilities without interfering with each other.
+- a ~process~
+  - is an instance of a program that is running
+  - it performs an _action_ when interacts with physical resources
+  - mediated by the OS through /system calls/
+    - $ man 2 syscalls
+
+
+- ~multiplexing~
+  - Is allowing many "tenants" to /share/ the same facilities without interfering with each other.
   - This is the job of the *OS*, to coordinate shared use of (limited) physical resources.
-  - When we say that the program performs an /action/,
-    we are usually talking about interacting with physical resources.
+  - When we say that the program performs an /action/, we are usually talking about interacting with physical resources.
 
-- =IO= /system calls/ to the OS
-  - $ man 2 syscalls
+*** Writing to a file (hPutStrLn,hClose)
 
-*** Writing to a file
-
-- A ~handle~ is the identifier for the OS<->Process conversation
+- A ~handle~ is a _identifier_ for the OS<->Process conversation
   - Windows: file handle
   - Linux:   file descriptor (aka fd)
+  - a temporary means of grabbing onto a resource it, like the handhold provided by an ice climber's axe.
 
-- A ~handle~ on a resource is a temporary means of grabbing onto it,
-  like the handhold provided by an ice climber's axe.
-
-- ~System.IO.putStrLn~ is a specialization of the more general ~System.IO.hPutStrLn~
+- System.IO
+  - ~putStrLn~ is a specialization of the more general ~hPutStrLn~ with *stdout* as his handle parameter
+  - it is ok to call ~hClose~ more than once on the same handle
 
 - Example: handle used to write into a file
   #+begin_src haskell
+    import System.FilePath ((</>))
     import qualified System.IO as IO
 
     writeGreetingFile :: IO ()
     writeGreetingFile = do
-      dir <- getDataDir
-      h   <- IO.openFile (dir </> "greeting.txt") WriteMode -- ReadMode|AppendMode|ReadWriteMode
+      dir <- getDataDir -- getDataDir :: IO FilePath
+      h   <- IO.openFile (dir </> "greeting.txt") WriteMode -- data IOMode = ReadMode|AppendMode|ReadWriteMode
       IO.hPutStrLn h "hello"
       IO.hPutStrLn h "world"
       IO.hClose h
   #+end_src
 
-- it is ok to call ~IO.hClose~ more than once on the same handle
+*** Exceptions (tryAny)
 
-*** Exceptions
-
+- tryAny is from =safe-exceptions= package
 - What can fail on our example?
+  - ~putStrLn~ - storage is full (when stdout is redirected outside the program to a file?)
   - ~openFile~ - insufficient file permissions
-  - ~putStrLn~ - storage is full
 
 - use ~Control.Exception.Safe.tryAny~ to change the default /halt action/ that happens when an exception happens
   #+begin_src haskell
     tryAny :: IO a -> IO (Either SomeException a)
   #+end_src
 
-- Example: custom error message on ~openFile~ error
-  #+begin_src haskell
-    writeGreetingTry :: IO ()
-    writeGreetingTry = do
-      dir <- getDataDir
-      IO.hPutStrLn IO.stderr "About to open the file :/"
-      openResult <- tryAny $ IO.openFile (dir </> "greeting.txt") WriteMode
-      case openResult of
-           Left _ -> IO.hPutStrLn IO.stderr "Cannot open file to write :("
-           Right h -> do
-             IO.hPutStrLn h "hello"
-             IO.hPutStrLn h "world"
-             IO.hClose h
-             IO.hPutStrLn IO.stderr "Done :)"
-  #+end_src
-
 - What could go wrong?
   1) IO Exceptions: eg: disk is full
   2) Asynchronous exceptions:
-     NOT captured by ~tryAny~
-     An action can receive an exception at any time, like when the it is "killed".
-     Catching them should be left to dedicated libraries that know what they are doing.
-     eg: someone throws an interrupt with ~Control.Exception.throwTo~
+     - NOT captured by ~tryAny~
+     - An action can receive an exception at _any time_
+     - Catching them should be left to dedicated libraries that know what they are doing.
+     - eg: when received a kill signal (^C)
+     - eg: one thread throws an exception to another with ~Control.Exception.throwTo~
 
-*** Diligent cleanup
+**** Example: custom error message on ~openFile~ error
+#+begin_src haskell
+  writeGreetingTry :: IO ()
+  writeGreetingTry = do
+    dir <- getDataDir
+    IO.hPutStrLn IO.stderr "About to open the file :/"
+    openResult <- tryAny $ IO.openFile (dir </> "greeting.txt") WriteMode
+    case openResult of
+        Left _ -> IO.hPutStrLn IO.stderr "Cannot open file to write :("
+        Right h -> do
+          IO.hPutStrLn h "hello"
+          IO.hPutStrLn h "world"
+          IO.hClose h
+          IO.hPutStrLn IO.stderr "Done :)"
+#+end_src
 
-- Using ~tryAny~ to attempt to cleanup the handle on error.
-  Still, does NOT capture asynchronous exceptions.
+*** Diligent cleanup (ResourceT IO, allocate, liftIO)
+
+- from =resourcet= package
+- Using ~tryAny~ to make sure the handle is closed on exceptions. Still, does NOT capture asynchronous exceptions.
   #+begin_src haskell
     writeGreetingSafeAttempt :: IO ()
     writeGreetingSafeAttempt = do
       dir <- getDataDir
       h   <- IO.openFile (dir </> "greeting.txt") WriteMode
-      _   <- tryAny do -- !!
+      _   <- tryAny do -- <<<<<<<<<<HERE<<<<<<<<<<
         IO.hPutStrLn h "hello"
         IO.hPutStrLn h "world"
       IO.hClose h
   #+end_src
 
-- We will use =ResourceT= from the ~resourcet~ library
-  - the ~T~ at the end of a type stands for *transformer*
-  - is a monad transformer
+- Instead, we will use =ResourceT m a= from the ~resourcet~ library
+  - the ~T~ at the end of a type stands for *transformer* (it is one)
+  - if ~m~ is a monad, then "ResourceT m" is a monad too
   #+begin_src haskell
-    import Control.Monad.Trans.Resouce (ReleaseKey, ResourceT, allocate, runResourceT)
+    {-# LANGUAGE TypeApplications #-}
+    import Control.Monad.Trans.Resource ( ReleaseKey
+                                        , ResourceT
+                                        , allocate
+                                        , runResourceT)
+    -- signature is not needed due @IO's TypeApplication
+    writeGreetingSafe :: IO ()
     writeGreetingSafe = runResourceT @IO do -- ResourceT IO ()
-      dir <- liftIO getDataDir
-      (_releaseKey, h) <-
-        allocate (IO.openFile (dir </> "greeting.txt") WriteMode)
-                  IO.hClose
-      liftIO (IO.hPutStrLn h "hello")
-      liftIO (IO.hPutStrLn h "world")
+        dir <- liftIO getDataDir -- getDataDir :: IO FilePath
+        (_releaseKey, h) <-
+            allocate (IO.openFile (dir </> "greeting.txt") IO.WriteMode)
+                      IO.hClose
+        liftIO (IO.hPutStrLn h "hello") -- IO () to ResourceT IO ()
+        liftIO (IO.hPutStrLn h "world") -- IO () to ResourceT IO ()
   #+end_src
 
 - ~ResourceT IO~
-  - represents the concept of ~IO~ that has been /transformed or modified/ by adding a certain *safety* feature.
-  - much like an ~IO~ action, but it is augmented with a register of /resources/ that are guarenteed to be closed.
+  - represents the concept of ~IO~ that has been _transformed or modified_ by adding a certain *safety* feature.
+  - much like an ~IO~ action, but it is _augmented_ with a register of *resources* that are guarenteed to be closed.
   - anything that you can do in ~IO~ can also be done in ~ResourceT IO~
 
-- new used functions
+- new functions used and their specializations
   #+begin_src haskell
-    liftIO       :: MonadIO m       => IO a -> m a
-    allocate     :: MonadResource m => IO a ->(a -> IO ()) -> m (ReleaseKey, a)
-    runResourceT :: MonadUnliftIO m => ResourceT m a -> m a
+    liftIO       :: MonadIO m       => IO a           -> m a
+    liftIO       ::                    IO a           -> ResourceT IO a
+
+    allocate     :: MonadResource m => IO a           -> (a -> IO ()) -> m         (ReleaseKey, a)
+    allocate     ::                    IO a           -> (a -> IO ()) -> ResourceT (ReleaseKey, a)
+
+    runResourceT :: MonadUnliftIO m => ResourceT m  a -> m  a
+    runResourceT ::                    ResourceT IO a -> IO a
+
+    release      :: MonadIO m       => ReleaseKey     -> m () -- when you can release early
   #+end_src
 
-- whenever learning about a new type, pay attention to:
-  1) Introduction: which functions introduce that type (eg: liftIO, allocate)
-  2) Elimination: which functions eliminate it (eg: runResource)
+- Whenever learning about a new type, pay attention to:
+  1) Introduction: which functions _introduce that type_ (eg: liftIO, allocate)
+  2) Elimination: which functions _eliminate it_ (eg: runResource)
 
 - This tell us what is the general structure of a program using the type will look like.
 
 **** =ResourceT= classes
 
 - ~MonadIO~
-  describes any (m)onad that an ~IO~ action can be lifted into.
-  sole method is:
-  liftIO :: MonadIO m => IO a -> m a
-  classes that belong to it; ResourceT IO, IO
+  - classes that belong to it: ResourceT IO, IO
+  - describes any Monad that an ~IO~ action can be lifted into.
+    #+begin_src haskell
+      class (Monad m) => MonadIO m where
+        liftIO :: IO a -> m a
+    #+end_src
+
 - ~MonadUnliftIO~
-  you don't need to know ... every constraint in a polymorphic type signature means
+  - "you don't need to know..."
+  - every constraint in a polymorphic type signature means
+
 - ~MonadResource~
-  class describes the safety augmentation of IO
-  exists because ~ResourceT IO~ can have further monad transformers applied to it
+  - class describes the special safety augmentation of ~IO~
+  - ~ResourceT IO~ belongs to it
+    - can have further monad transformers applied to it
 
-**** =ResourceT= functions type signatures AND specialization in the example
+*** MonadIO programmer's relationship to it
 
-- ~allocate~, takes 2 parameters
-  1) IO a      - creates/opens/adquires a resource
-  2) a -> IO a - an action that destroys/closes/releases a resource
-- ~release~
-  - for the cases when you know you can close the resource early,
-  - takes a *ReleaseKey* as parameter
-  - it is tidier to use *release* intead of applying IO.hClose directly,
-    because the *release* also releases the behind the scene record kept by *ResourceT*
-#+begin_src haskell
-liftIO       :: MonadIO m       => IO a           -> m a
-liftIO       ::                    IO a           -> ResourceT IO a
+- when introducing a new *monad transformer* like ~ResourceT~ into an ~IO~ sequence, every line under the ~do~ whose type is not already of type ~ResourceT IO~ will have to be lift into it using *liftIO*
 
-allocate     :: MonadResource m => IO a           -> (a -> IO ()) -> m         (ReleaseKey, a)
-allocate     ::                    IO a           -> (a -> IO ()) -> ResourceT (ReleaseKey, a)
-
-runResourceT :: MonadUnliftIO m => ResourceT m  a -> m  a
-runResourceT ::                    ResourceT IO a -> IO a
-
-release      :: MonadIO m       => ReleaseKey     -> m ()
-#+end_src
-
-*** writeGreetingFile - handle-closing reliably
-
-#+begin_src haskell
-  import Control.Monad.Trans.Resource
-      (ReleaseKey, ResourceT, allocate, runResourceT) -- Types are not redundant to import
-
-  writeGreetingSafe :: IO ()
-  writeGreetingSafe = runResourceT @IO do
-    dir <- liftIO getDataDir
-    (_releaseKey, h) <- allocate
-      (IO.openFile (dir </> "greeting.txt") WriteMode)
-      IO.hClose
-    liftIO (IO.hPutStrLn h "hello")
-    liftIO (IO.hPutStrLn h "world")
-#+end_src
-
-*** MonadIO
-**** =MonadIO= class - programmer's relationship to it
-
-- when introducing a new *monad transformer* like ~ResourceT~ into an ~IO~ sequence,
-  every line under the ~do~ whose type is not already of type ~ResourceT IO~
-  will have to be lift into it using *liftIO*
+- if we choose to add the class to our function, it will make the output liftable
+  #+begin_src haskell
+    helloWorld :: MonadIO m => m ()
+    helloWorld = liftIO (IO.putStrLn "hello world!")
+  #+end_src
 
 *** Exercises
 
+#+begin_src haskell
+fileResource :: FilePath -> IO.IOMode -> ResourceT IO (ReleaseKey, IO.Handle)
+fileResource file mode = do
+  allocate (IO.openFile file mode) IO.hClose
+#+end_src
+
+#+begin_src haskell
+main :: IO ()
+main = do
+  h <- IO.openFile filename IO.ReadMode
+  s <- IO.hShow h
+  IO.putStrLn s -- {loc=/home/sendai/testfield/what.sh, type=readable, buffering=block (2048)}
+  IO.hClose h
+  where
+    filename = "/home/sendai/testfield/what.sh"
+#+end_src
+
+#+begin_src haskell
+howManyHandles :: IO ()
+howManyHandles = runResourceT do
+  hs <- openManyHandles
+  liftIO $ putStrLn ("Opened " <> show (length hs) <> " handles")
+
+openManyHandles :: ResourceT IO [IO.Handle]
+openManyHandles = go []
+  where
+    go :: [IO.Handle] -> ResourceT IO [IO.Handle]
+    go hs = do
+      r <- fileResourceMaybe -- r :: Maybe IO.Handle
+      case r of
+        Nothing -> return hs
+        Just h -> go (h : hs)
+
+fileResourceMaybe :: ResourceT IO (Maybe IO.Handle)
+fileResourceMaybe = do
+  dir <- liftIO getDataDir
+  result <- tryAny do
+    (_, h) <- fileResource (dir </> "greetings.txt") IO.ReadMode
+    return $ Just h
+  case result of
+    Right x -> return x
+    Left e -> do
+      liftIO $ print (displayException e)
+      return Nothing
+
+main :: IO ()
+main = howManyHandles
+#+end_src
+
+"/home/sendai/.local/share/sockets-and-pipes/greetings.txt: openFile: resource exhausted (Too many open files)"
+Opened 1020 handles
+
+** 2 Chunks
+
+#+begin_src haskell
+  import qualified Data.Text as T
+  import qualified Data.Text.IO as T
+  import qualified Data.Char as Char
+#+end_src
+
+*** Packed characters (T.pack and strictness)
+
+- T.pack
+- T.hPutStrLn
+- Text is packed in memory, unlike String(s) which are Linked Lists and sparse in
+- Text is ~strict~
+  - Values are evaluated "in one go"
+  - You CANNOT rely on lazy evaluation to compute a part of a Text sequence
+    #+begin_src haskell
+      T.take 10 (T.pack (cycle "abc")) -- runs out of memory
+    #+end_src
+
+*** Reading from a file
+
+#+begin_src haskell
+  T.hGetChunk :: Handle -> IO Text
+#+end_src
+
+- chunk to not choke
+- around thousands characters per chunk
+- empty chunk when done
+
+**** Example: Reading chunks from a handle
+#+begin_src haskell
+  printFileContentsUpperCase :: IO ()
+  printFileContentsUpperCase = runResourceT do
+    dir <- liftIO getDataDir
+    (_, h) <- fileResource (dir </> "greetings.txt") IO.ReadMode
+    liftIO $ printCapitalizedText h
+
+  printCapitalizedText :: IO.Handle -> IO ()
+  printCapitalizedText h = proceed
+    where
+      proceed = do
+        chunk <- T.hGetChunk h
+        if T.null chunk
+          then
+            return ()
+          else do
+            T.putStrLn (T.toUpper chunk)
+            proceed -- loop
+#+end_src
+
+**** Example: code abstraction for iteration
+#+begin_src haskell
+repeatUntilIO ::
+  IO chunk            -- producer of chunks
+  -> (chunk -> Bool)  -- does chunk indicate the end of file?
+  -> (chunk -> IO ()) -- what to do with each chunk?
+  -> IO ()
+repeatUntioIO getChunk isEnd f = proceed
+  where
+    proceed :: IO ()
+    proceed = do
+      chunk <- getChunk
+      if (isEnd chunk)
+      then return ()
+      else do
+        f chunk
+        proceed
+#+end_src
+
+**** Example: refactor using the abstraction
+#+begin_src haskell
+  printFileContentsUpperCase :: IO ()
+  printFileContentsUpperCase = runResourceT do
+    dir <- liftIO getDataDir
+    (_,h) <- fileResource (dir </> "greetings.txt") IO.ReadMode
+    liftIO $ repeatUntilIO (T.hGetChunk h) T.null \chunk ->
+      T.putStr (T.toUpper chunk)
+#+end_src
+
+*** TODO Exercises
+
+#+begin_src haskell
+-- find the numbers
+digitsOnly :: T.Text -> T.Text
+digitsOnly = T.filter Char.isNumber
+-- capitalize the last
+capitalizeLast :: T.Text -> T.Text
+capitalizeLast =
+  T.unwords . map (T.reverse . T.toTitle . T.reverse) . T.words
+capitalizeLast' :: T.Text -> T.Text
+capitalizeLast' t =
+  case T.unsnoc t of -- snoc <-> cons
+    Nothing -> T.empty
+    Just (t', c) -> T.snoc t' (Char.toUpper c)
+-- paren removal
+unParen :: T.Text -> Maybe T.Text
+unParen t =
+  if T.last t == ')' && T.head t == '('
+    then Just $ T.take (T.length t - 2) $ T.takeEnd (T.length t - 1) t
+    else Nothing
+unParen' :: T.Text -> Maybe T.Text
+unParen' t =
+  case T.stripSuffix (T.pack ")") t of
+    Nothing -> Nothing
+    Just t' -> T.stripPrefix (T.pack "(") t'
+unParen'' :: T.Text -> Maybe T.Text
+unParen'' =
+  T.stripPrefix (T.pack "(")
+    >=> T.stripSuffix (T.pack ")")
+
+-- character count
+characterCount' :: FilePath -> IO Int
+characterCount' fp = runResourceT do
+  (_, h) <- fileResource fp IO.ReadMode
+  liftIO $ handleCharacterCount h
+
+handleCharacterCount :: IO.Handle -> IO Int
+handleCharacterCount handle =
+  proceed 0
+  where
+    proceed :: Int -> IO Int
+    proceed total = do
+      chunk <- T.hGetChunk handle
+      if T.null chunk
+        then
+          return total
+        else
+          proceed (T.length chunk + total)
+-- beyond IO
+repeatUntil :: (Monad m) => m chunk -> (chunk -> Bool) -> (chunk -> m ()) -> m ()
+repeatUntil getChunk isEnd f = do
+  chunk <- getChunk
+  if isEnd chunk
+    then
+      return ()
+    else do
+      f chunk
+      repeatUntil getChunk isEnd f
+-- when and unless
+#+end_src
+
+** 3 Bytes
+*** Packed octets (bytestream, ByteString)
+
+from =bytestream= package
+
+#+begin_src haskell
+import qualified Data.ByteString as BS
+#+end_src
+
+- ~Data.Word~ module provides Word8/16/32/64 types
+  - =Word8= type represents a byte (octect)
+
+#+DESC: in BS package
+#+begin_src haskell
+pack   :: [Word8] -> ByteString
+unpack :: ByteString -> [Word8]
+null   :: ByteString -> Bool
+#+end_src
+
+*** Copying a file (hPut, hGetSome)
+
+#+DESC: in BS package
+#+begin_src haskell
+hPut     :: Handle     -> ByteString -> IO ()
+hGetSome :: Handle     -> Int        -> IO ByteString -- input max chunk size to get
+#+end_src
+
+reading from a file, and writting to another one
+
+#+begin_src haskell
+  copyGreetingFile :: IO ()
+  copyGreetingFile = runResourceT do
+#+end_src
+
+*** Characters encodings (encodeUtf8,decodeUtf8')
+
+- =Much of the HTTP protocol uses ASCII=
+
+- To WRITE text as a byte string, you must choose an encoding.
+- To READ a byte string as text, you must know how it was encodes.
+
+- Text vs ByteString
+  - There is no single pair of functions to convert between
+  - Conversions can fail, depending on the encoding
+    - ASCII bytes 128-255 are invalid
+    - UTF-8
+      - encoding never fails
+      - decoding can fail
+
+- [Char] vs [Word8]
+  - when we do both
+    - writting in natural language
+    - and writting to a file
+  - we need a way to map between them
+
+|--------+------------+----------|
+|    <r> |    <c>     |   <c>    |
+|        | bytes/char |  width   |
+|--------+------------+----------|
+|  ASCII |     1      |  fixed   |
+|  UTF-8 |    1-4     | variable |
+| UTF-16 |    2-4     | variable |
+| UTF-32 |     4      |  fixed   |
+|--------+------------+----------|
+*** Dangerous classes (IsString)
+
+- =Show=
+  - exists for the sake of GHCi and for testing, not for real use in applications
+  - we recommend never allowing the behavior of your program to depend on the ~show~ function
+
+- =IsString= defined in Data.String
+  - for String=>ByteString relies on pack, which crudely truncates UTF chars
+  - related to OverloadedStrings: implicitly runs ~fromString~ when a "string" is found
+  #+begin_src haskell
+    class IsString a where
+      fromString :: String -> a
+  #+end_src
+
+*** Avoiding system defaults (hSetBinaryMode)
+
+- hPutStrLn and others rely on the OS defaults to choose
+  1) string encodings
+  2) line termination
+
+- to disable System.IO defaults detection
+  #+begin_src haskell
+    hSetBinaryMode :: Handle -> Bool -> IO ()
+  #+end_src
+
+**** Example: Hello world with no defaults
+
+#+begin_src haskell
+  helloByteString :: IO ()
+  helloByteString = do
+    IO.hSetBinaryMode stdout True
+    BS.hPut stdout (BS.pack helloBytes)
+    BS.hPut stdout (T.encodeUtf8 (T.pack "hello world!\n"))
+
+  helloBytes = [
+    104, 101, 108, 108, 111,    -- hello
+    32,                         -- space
+    119, 111, 114, 108, 100, 33 -- world!
+    10 ]                        -- \n
+#+end_src
+
+*** Exercises
+A character encoding bug
+Byte manipulation
+
+#+begin_src haskell
+asciiUpper :: BS.ByteString -> BS.ByteString
+asciiUpper = BS.map convert
+  where
+    convert :: Word8 -> Word8
+    convert w
+      | w > 96 && w < 123 = w - 32
+      | otherwise = w
+#+end_src
+
+** 4 Sockets
+
+- The OS interface for sending/receiving data from the internet.
+- There are still *handles* (aka socket handles). An OS identifier for the conversation.
+- Chapter uses =network= library
+
+#+begin_src haskell
+  import Network.Socket (Socket)
+  import qualified Network.Socket as S
+  import qualified Network.Socket.ByteString as S
+#+end_src
+
+*** Open up and connect (socket, connect, recv, sendAll)
+
+#+begin_src haskell
+makeFriend :: S.SockAddr -> IO ()
+makeFriend address = do
+  s <- S.socket S.AF_INET S.Stream S.defaultProtocol -- open socket
+  S.connect s address                                -- connect to address
+  S.sendAll s $ T.encodeUtf8 $ T.pack "Hello friend" -- send msg
+  repeatUntil (S.recv s 1024) BS.null BS.putStr      -- listen for reply and print it
+#+end_src
+
+*** Extra details (gracefulClose, close, setSocketOption)
+
+#+begin_src haskell
+makeFriendSafely :: S.SockAddr -> IO ()
+makeFriendSafely address = runResourceT do
+  (_, s) <- allocate (S.socket S.AF_INET S.Stream S.defaultProtocol) S.close
+  liftIO do
+    S.setSocketOption s S.UserTimeout 1000
+    S.connect s address -- connect to address
+    S.sendAll s $ T.encodeUtf8 $ T.pack "Hello friend" -- send msg
+    repeatUntil (S.recv s 1024) BS.null BS.putStr -- listen for reply and print it
+    S.gracefulClose s 1000 -- normal close
+#+end_src
+
+- socket closing functions: it's ok to run both on the same ~Socket~ handle
+  - ~gracefulClose~: under normal circumstances, we wait a bit for the other side to cleanup
+  - ~close~: when the OS demands a prompt clean up, or in an exception abrustly ending the communication is desired
+
+*** Names and addresses (tupleToHostAddress, SockAddr constructors)
+
+#+begin_src haskell
+data SockAddr -- as defined in Network.Socket
+  = SockAddrInet PortNumber HostAddr
+  | SockAddrInet6 PortNumber FlowInfo HostAddress6 ScopeID
+  | SockAddrUnix String
+#+end_src
+
+#+begin_src haskell
+tupleToHostAddress :: (Word8,Word8,Word8,Word8) -> HostAddress
+makeFriendSafely $ S.SockAddrInet 80 $ S.tupleToHostAddress (147,75,67,13)
+#+end_src
+
+*** Address information (getAddrInfo, openSocket)
+
+- AddrInfo = SockAddr + "all the information about the protocol that you need to construct"
+- getAddrInfo function is the Hasekll equivalent to the *host* command
+  #+begin_src haskell
+    getAddrInfo
+      :: Maybe AddrInfo    -- hint eg: Just (S.defaultHints{ S.addrFamily = AF_INET6 })
+      -> Maybe HostName    -- eg: Just "www.haskell.org"
+      -> Maybe ServiceName -- eg: Just "http"
+      -> IO [AddrInfo]
+  #+end_src
+
+#+begin_src haskell
+  Data.Foldable.traverse_ print
+    =<< S.getAddrInfo (Just S.defaultHints{ S.addrFamily = S.AF_INET })
+                      (Just "www.haskell.org")
+                      (Just "http")
+#+end_src
+
+#+begin_src haskell
+findHaskellWebsite :: IO S.AddrInfo
+findHaskellWebsite = do
+  addrInfos <-
+    S.getAddrInfo
+      (Just S.defaultHints {S.addrSocketType = S.Stream})
+      (Just "www.haskell.org")
+      (Just "http")
+  case addrInfos of
+    [] -> fail "getAddrInfo returned []"
+    x : _ -> return x
+#+end_src
+
+=openSocket= is more convenient when we have a ~AddrInfo~ instead of a ~SockAddr~
+
+#+begin_src haskell
+makeFriendAddrInfo :: S.AddrInfo -> IO ()
+makeFriendAddrInfo addressInfo = runResourceT do
+  (_, s) <- allocate (S.openSocket addressInfo) S.close -- openSocket
+  liftIO do
+    S.setSocketOption s S.UserTimeout 1000
+    S.connect s (S.addrAddress addressInfo) -- using addrAddress to get the field from AddrInfo
+    S.sendAll $ T.encodeUtf8 $ T.pack "Hello, friend"
+    repeatUntil (S.recv s 1024) BS.null BS.putStr
+    S.gracefulClose s 1000
+#+end_src
+
+*** Exercises
+
+improper ResourceT allocation: since ~connect~ can throw it should go outside ~allocate~
+
+#+begin_src haskell
+openAndConnect' :: S.AddrInfo -> ResourceT IO (ReleaseKey, Socket)
+openAndConnect' addressInfo = do
+  (rk, s) <- allocate (S.openSocket addressInfo) S.close
+  liftIO do
+    S.setSocketOption s S.UserTimeout 1000
+    S.connect s (S.addrAddress addressInfo)
+  return (rk, s)
+#+end_src
+
+explore gopherspace: Gopher serves the same purpose than the HTTP protocol
+
+#+begin_src haskell
+helloGopher :: IO ()
+helloGopher = do
+  addr <- findHaskellWebsite'
+  runResourceT do -- once ran his life cycle is done and anything returned done for
+    (_, s) <- openAndConnect addr
+    liftIO do
+      S.sendAll s $ T.encodeUtf8 $ T.pack "\r\n"
+      repeatUntil (S.recv s 1024) BS.null BS.putStr
+      S.gracefulClose s 1000
+#+end_src
+
+address resolution
+
+#+begin_src haskell
+resolve :: S.ServiceName -> S.HostName -> IO S.AddrInfo
+resolve service hostname = do
+  addrInfos <-
+    S.getAddrInfo
+      (Just S.defaultHints {S.addrSocketType = S.Stream})
+      (Just hostname)
+      (Just service)
+  case addrInfos of
+    [] -> fail "getAddrInfo returned []"
+    x : _ -> return x
+#+end_src
+
+** 5 HTTP
+
+- New (2022) HTTP features
+  1) a client can send documents
+  2) the documents can be of any kind of data
+  3) requests/responses can contain additional metadata
+  4) is possible to make multiple requests over a single connection
+
+- Versions
+  |-----+----+------|
+  | ver | yy |  RFC |
+  |-----+----+------|
+  | 0.9 | 91 |    - |
+  | 1.0 | 96 | 1945 |
+  | 1.1 | 97 | 2068 |
+  |     | 99 | 2616 |
+  |     | 14 | 7230 |
+  |     | 14 | 7231 |
+  |     | 22 | 9110 |
+  |     | 22 | 9112 |
+  |-----+----+------|
+
+*** The specification
+*** HTTP requests
+*** ASCII strings
+*** HTTP responses
+*** Serving others
+*** Exercises
+repeat until nothing
+make an http request
+test the hello server
 * 23 | Learn Haskell by building a blogGenerator |          | Gil Mizrahi
 - 04 https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning
 ** 02 Hello World
@@ -6399,6 +6896,7 @@ runHCat :: IO ()
 runHCat =
   handleArgs' >>= displayMessage
   where
+    displayMessage :: Either String Filename
     displayMessage parsedArgument =
       case parsedArgument of
         Left errMessage -> putStrLn $ "Error: " <> errMessage
@@ -6446,22 +6944,23 @@ alternative refactor, converting Either to IOError and throwing/raising it
 
 #+begin_src haskell
 eitherToErr :: (Show a) => Either a b -> IO b
-eitherToErr (Right a) = return a
-eitherToErr (Left e) =
-  Exception.throwIO . IOError.userError $ show e -- OR
-  IOError.ioError . Exception.userError $ show e
+eitherToErr either =
+  case either of
+    Right a -> return a
+    Left e  -> IOError.ioerror . Exception.userError $ show e
+-- OR          Exception.throwIO . Exception.userError $ show e
 #+end_src
 
 then we could just add it OR refactor to pipe through Either's
 
 #+begin_src haskell
 {-# LANGUAGE TypeApplications #-}
-
+eitherToErr :: Show a => Either a b -> IO b
 runHCat :: IO ()
 runHCat =
-  handleIOError $
-    handleArgs'
-      >>= eitherToErr
+  handleIOError $ -- handleIOError :: IO () -> IO ()
+    handleArgs' -- handleArgs' :: IO (Either String FilePath)
+      >>= eitherToErr -- eitherToErr :: Show a => Either a b -> IO b
       >>= readFile
       >>= putStrLn
   where
@@ -6478,24 +6977,21 @@ runHCat =
 #+begin_src haskell
 {-# LANGUAGE TypeApplications #-}
 import qualified Data.Text.IO as TextIO
-
 runHCat :: IO ()
 runHCat =
-  handleIOError $
-    handleArgs'
-      >>= eitherToErr
+  handleIOError $ -- handleIOError :: IO () -> IO ()
+    handleArgs' -- handleArgs' :: IO (Either String FilePath)
+      >>= eitherToErr -- eitherToErr :: Show a => Either a b -> IO b
       >>= TextIO.readFile -- !!!
       >>= TextIO.putStrLn -- !!!
-  where
-    handleIOError :: IO () -> IO ()
-    handleIOError ioAction =
-      Exception.catch ioAction $
-        \e -> putStrLn "I ran into an error: " >> print @IOError e
+  where -- ...
 #+end_src
 
 *** Viewing Text One Page at a Time
 
-forward pagination + keyboad control + line wrapping?
+SUMMARY: forward pagination + keyboad control + line wrapping?
+
+**** line wrapping
 
 we get a helper that will help us to go from lines of text to pagination
 
@@ -6507,6 +7003,57 @@ groupsOf _ [] = []
 groupsOf n elements =
   let (hd, tl) = splitAt n elements
    in hd : groupsOf n tl
+#+end_src
+
+=wordWrap= takes the maximum width of a line, and will return a list of rows of text, each at most that length
+
+#+begin_src haskell
+  wordWrap :: Int -> Text.Text -> [Text.Text]
+  wordWrap lineLength lineText
+    | Text.length lineText <= lineLength = [lineText] -- base case
+    | otherwise =  -- hardwrapping
+      let (wrapped, unwrapped) = Text.splitAt lineLength lineText
+      in wrapped : wordWrap lineLength unwrapped
+#+end_src
+
+improved algorithm
+
+#+begin_src haskell
+  wordWrap :: Int -> Text.Text -> [Text.Text]
+  wordWrap lineLength lineText
+    | Text.length lineText <= lineLength = [lineText] -- base case
+    | otherwise =  -- soft wrapping
+        let
+          (candidate, nextLines) = Text.splitAt lineLength lineText
+          (firstLine, overflow) = softWrap candidate (Text.length candidate - 1)
+        in
+          firstLine : wordWrap lineLength (overflow <> nextLines)
+    where
+      softWrap hardwrappedText textIndex
+        | textIndex <= 0 = (hardwrappedText,Text.empty) -- base case
+        | Text.index hardwrappedText textIndex == ' ' = -- can we softwrap?
+          let (wrappedLine, rest) = Text.splitAt textIndex hardwrappedText
+          in (wrappedLine, Text.tail rest) -- Text.tail to drop the space
+        | otherwise = softWrap hardwrappedText (textIndex - 1)
+
+#+end_src
+
+**** handling terminal dimensions
+
+#+begin_src haskell
+  data ScreenDimensions = ScreenDimensions
+    { screenRows :: Int
+    , screenColumns :: Int
+    } deriving Show
+
+  paginate :: ScreenDimensions -> Text.Text -> [Text.Text]
+  paginate (ScreenDimensions rows cols) text =
+    let
+      unwrappedLines = Text.lines text
+      wrappedLines = concatMap (wordWrap cols) unwrappedLines
+      pageLines = groupsOf rows wrappedLines
+    in
+      map Text.unlines pageLines
 #+end_src
 
 *** Adding a Status Line with Metadata

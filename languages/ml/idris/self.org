@@ -1,0 +1,11 @@
+- wiki https://en.wikipedia.org/wiki/Idris_(programming_language)
+- home https://www.idris-lang.org/
+
+- pure, dependant types, optional lazy, totality checker
+- Versions
+  - Idris1 2007
+  - Idris2 2020
+    - 0.1.0 04/20
+    - 0.6.0 10/22
+
+- 14 video Idris by Brian McKenna https://www.youtube.com/playlist?list=PLly9WMAVMrax8L4gY_YxPlz2eN7Xcbf5w

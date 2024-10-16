@@ -12,6 +12,7 @@
 - 16: A Whilwind of PureScript https://www.youtube.com/watch?v=HycbuV6hUfI
 - 15: Learn Functional Programming with PureScript John A De Goes https://www.youtube.com/watch?v=LqYfdmb0eUU
 - 14: PureScript (Maybe This Time We Get JavaScript Right) https://www.youtube.com/watch?v=yIlDBPiMb0o
+- Playing with #PureScript libraries for teaching https://www.youtube.com/watch?v=ac9NU7iZ5fI
 - Videos: Branium https://www.youtube.com/playlist?list=PLCbbPAsJ9DaJE5Er9txmPfdCMPV7CnWOv
 - Videos: 17 Purescript+Halogen - Hardy Jones https://www.youtube.com/playlist?list=PLV1Z_haBGowAsBACegk20zVyUT1OzIrdV
 - Videos: Impure Pics https://www.youtube.com/playlist?list=PLxn_Aq3QlOQd3nyoe9vv72qQwP2qAfP6r

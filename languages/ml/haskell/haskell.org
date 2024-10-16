@@ -104,14 +104,16 @@
 | <$> |                      fmap | Functor f     | (a -> b) -> f a -> f b   |
 |-----+---------------------------+---------------+--------------------------|
 | >>= |                      bind | Monad m       | m a -> (a -> m b) -> m b |
+| =<< |              flipped bind | Monad m       | (a -> m b) -> m a -> m b |
 | >>  |                      then | Monad m       | m a ->       m b  -> m b |
 |-----+---------------------------+---------------+--------------------------|
 | <¦> |       Control.Alternative | Alternative f | f a -> f a -> f a        |
 |-----+---------------------------+---------------+--------------------------|
 | <*> |                     apply | Applicative f | f (a -> b) -> f a -> f b |
-|  *> |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
+| *>  |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
 | <*  | right "facing bird"/shark | Applicative f | f a        -> f b -> f a |
 |-----+---------------------------+---------------+--------------------------|
+#+TBLFM: $1=<<
 ** style
 
 - https://github.com/tibbe/haskell-style-guide/blob/master/haskell-style.md
@@ -124,35 +126,39 @@
 - data
 
 *** types primitives
-|---------+-------+--------------------------------------+------------|
-|     <r> |   <r> |                                      |            |
-|    type |    eg | description                          |            |
-|---------+-------+--------------------------------------+------------|
-|    Bool |  True | boolean, short-circuits due laziness |            |
-| Integer |     2 | signed integer, unbounded            |            |
-|     Int |     2 | signed integer, 32/64 bit            |            |
-|    Word |     2 | unsigned integer, 32/64 bit          |            |
-|   Float |   1.2 | IEEE single-precision floating-point |            |
-|  Double |   1.2 | IEEE double-precision floating-point |            |
-|    Char |   'A' | an unicode code point                | Data.Char  |
-|  String | "foo" | list characters                      |            |
-|   Ratio | 1 % 3 |                                      | Data.Ratio |
-|---------+-------+--------------------------------------+------------|
+|---------+---------+--------------------------------------+------------|
+|     <r> |     <r> |                                      |            |
+|    type |      eg | description                          |            |
+|---------+---------+--------------------------------------+------------|
+|    Bool |    True | boolean, short-circuits due laziness |            |
+| Integer |       2 | signed integer, unbounded            |            |
+|     Int |       2 | signed integer, 32/64 bit            |            |
+|    Word |       2 | unsigned integer, 32/64 bit          |            |
+|   Float |     1.2 | IEEE single-precision floating-point |            |
+|  Double |     1.2 | IEEE double-precision floating-point |            |
+|    Char |     'A' | an unicode code point                | Data.Char  |
+|         | '\9835' |                                      |            |
+|  String |   "foo" | list characters                      |            |
+|   Ratio |   1 % 3 |                                      | Data.Ratio |
+|---------+---------+--------------------------------------+------------|
 
-- =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
-  Removed during compilation.
-  #+begin_src haskell
-    "Your password cannot be \
-    \longer than 20 characters."
-  #+end_src
+- String
+  - =string gaps= within a string literal, two backslashes with a whitespace between them form a *gap* in the string.
+    Removed during compilation.
+    #+begin_src haskell
+      "Your password cannot be \
+      \longer than 20 characters."
+    #+end_src
 
 *** types complex
 |---------------+----------------------------+-------------------+----------------------------------------|
 |           <r> |                            |                   |                                        |
 |    instancing | possible definition        | name              | description                            |
 |---------------+----------------------------+-------------------+----------------------------------------|
-|         [1,2] | [Int]                      | linked list       |                                        |
+|         [1,2] | [Int]                      | (linked) list     |                                        |
+|---------------+----------------------------+-------------------+----------------------------------------|
 |         "foo" | type A = String            | type alias        |                                        |
+|---------------+----------------------------+-------------------+----------------------------------------|
 |    0 :¦ [1,2] | data NonEmpty a = a :¦ [a] | non empty list    | Data.List.NonEmpty                     |
 |---------------+----------------------------+-------------------+----------------------------------------|
 |       A "foo" | newtype A = A String       | type "safe" alias | can have only 1 type                   |
@@ -294,6 +300,8 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 |                        | sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()            |
 |                        | forever   :: Applicative f => f a  -> f b                        |
 |                        | when      :: Applicative f => Bool -> f () -> f ()               |
+|                        | guard     :: Alternative f => Bool -> f ()                       |
+| [[https://hackage.haskell.org/package/base/docs/Control-Monad-Fail.html][Control.Monad.Fail]]     | fail      :: MonadFail m   => String -> m a                      |
 | [[https://hackage.haskell.org/package/base/docs/Data-Bifoldable.html][Data.Bifoldable]]        |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Bifoldable1.html][Data.Bifoldable1]]       |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Bifunctor.html][Data.Bifunctor]]         |                                                                  |
@@ -301,6 +309,8 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | [[https://hackage.haskell.org/package/base/docs/Data-Bits.html][Data.Bits]]              |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Bool.html][Data.Bool]]              |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Char.html][Data.Char]]              | isPrint                                                          |
+|                        | ord :: Char -> Int                                               |
+|                        | chr :: Int  -> Char                                              |
 | [[https://hackage.haskell.org/package/base/docs/Data-Coerce.html][Data.Coerce]]            |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Complex.html][Data.Complex]]           |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Data.html][Data.Data]]              |                                                                  |
@@ -313,11 +323,12 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | [[https://hackage.haskell.org/package/base/docs/Data-Function.html][Data.Function]]          |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Functor.html][Data.Functor]]           |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-IORef.html][Data.IORef]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Int.html][Data.Int]]               |                                                                  |
+| [[https://hackage.haskell.org/package/base/docs/Data-Int.html][Data.Int]]               | Int8/64                                                          |
 | [[https://hackage.haskell.org/package/base/docs/Data-Ix.html][Data.Ix]]                |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Kind.html][Data.Kind]]              |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-List.html][Data.List]]              | permutations splitAt                                             |
 | [[https://hackage.haskell.org/package/base/docs/Data-Maybe.html][Data.Maybe]]             | maybe listToMaybe maybeToList                                    |
+|                        | mapMaybe :: (a -> Maybe b) -> [a] -> [b]                         |
 | [[https://hackage.haskell.org/package/base/docs/Data-Monoid.html][Data.Monoid]]            |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Ord.html][Data.Ord]]               |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/Data-Proxy.html][Data.Proxy]]             |                                                                  |
@@ -342,73 +353,103 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 | [[https://hackage.haskell.org/package/base/docs/System-Mem.html][System.Mem]]             |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/System-Posix.html][System.Posix]]           |                                                                  |
 | [[https://hackage.haskell.org/package/base/docs/System-Timeout.html][System.Timeout]]         |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-IO.html][System.IO]]              | openFile     :: FilePath -> IOMode -> IO Handle                  |
-|                        | hClose       :: Handle -> IO ()                                  |
-|                        | hGetContents :: Handle -> IO String                              |
-|                        | hputStrLn    :: Handle -> IO ()                                  |
-|                        | putStrLn     :: String -> IO ()                                  |
-|                        | stdout       :: Handle                                           |
-| [[https://hackage.haskell.org/package/base/docs/System-IO-Error.html][System.IO.Error]]        | userError    :: String -> IOError                                |
+| [[https://hackage.haskell.org/package/base/docs/System-IO.html][System.IO]]              | openFile       :: FilePath -> IOMode -> IO Handle                |
+|                        | openBinaryFile :: FilePath -> IOMode -> IO Handle                |
+|                        | hSetBinaryMode :: Handle -> Bool -> IO ()                        |
+|                        | hClose         :: Handle -> IO ()                                |
+|                        | hGetContents   :: Handle -> IO String                            |
+|                        | hputStrLn      :: Handle -> IO ()                                |
+|                        | putStrLn       :: String -> IO ()                                |
+|                        | stdout         :: Handle                                         |
+| [[https://hackage.haskell.org/package/base/docs/System-IO-Error.html][System.IO.Error]]        | userError :: String -> IOError                                   |
 | [[https://hackage.haskell.org/package/base/docs/Text-ParserCombinators.html][Text.ParserCombinators]] |                                                                  |
 |------------------------+------------------------------------------------------------------|
 *** non base
 https://haskell-containers.readthedocs.io/en/latest/
-|------------------+-------------------------------+--------------------------------------|
-|              <r> |              <c>              | <l>                                  |
-|            [[https://hackage.haskell.org/package/array][array]] |          Data.Array           |                                      |
-|       [[https://hackage.haskell.org/package/containers][containers]] |          Data.Graph           |                                      |
-|                  |          Data.IntMap          |                                      |
-|                  |          Data.IntSet          |                                      |
-|                  |           Data.Map            |                                      |
-|                  |         Data.Sequence         |                                      |
-|                  |           Data.Set            |                                      |
-|                  |           Data.Tree           |                                      |
-|           [[https://hackage.haskell.org/package/binary][binary]] |          Data.Binary          |                                      |
-|       [[https://hackage.haskell.org/package/bytestring][bytestring]] |        Data.ByteString        | efficiently dealing with files       |
-|                  |     Data.ByteString.Lazy      | fromStrict toStrict                  |
-|                  |     Data.ByteString.Char8     | instead of Word8                     |
-|          [[https://hackage.haskell.org/package/deepseq][deepseq]] |        Control.DeepSeq        |                                      |
-|        [[https://hackage.haskell.org/package/directory][directory]] |       System.Directory        |                                      |
-|       [[https://hackage.haskell.org/package/exceptions][exceptions]] |      Control.Monad.Catch      |                                      |
-|         [[https://hackage.haskell.org/package/filepath][filepath]] |        System.FilePath        |                                      |
-|                  |         System.OsPath         |                                      |
-|                  |        System.OsString        |                                      |
-|        [[https://hackage.haskell.org/package/haskeline][haskeline]] |        System.Console         |                                      |
-|            [[https://hackage.haskell.org/package/hoopl][hoopl]] |        Compiler.Hoopl         |                                      |
-|              [[https://hackage.haskell.org/package/hpc][hpc]] |           Trace.Hpc           |                                      |
-|      [[https://hackage.haskell.org/package/integer-gmp][integer-gmp]] |        GHC.Integer.GMP        |                                      |
-|         [[https://hackage.haskell.org/package/libiserv][libiserv]] |                               |                                      |
-|              [[https://hackage.haskell.org/package/mtl][mtl]] |      Control.Monad.Accum      |                                      |
-|                  |      Control.Monad.Cont       |                                      |
-|                  |     Control.Monad.Except      |                                      |
-|                  |    Control.Monad.Identity     |                                      |
-|                  |       Control.Monad.RWS       |                                      |
-|                  |     Control.Monad.Reader      |                                      |
-|                  |     Control.Monad.Select      |                                      |
-|                  |      Control.Monad.State      |                                      |
-|                  |      Control.Monad.Trans      |                                      |
-|                  |     Control.Monad.Writer      |                                      |
-|          [[https://hackage.haskell.org/package/network][network]] |        Network.Socket         |                                      |
-|           [[https://hackage.haskell.org/package/parsec][parsec]] |          Text.Parsec          |                                      |
-|                  | Text.ParserCombinators.Parsec |                                      |
-|           [[https://hackage.haskell.org/package/pretty][pretty]] |       Text.PrettyPrint        |                                      |
-|          [[https://hackage.haskell.org/package/process][process]] |          System.Cmd           |                                      |
-|                  |        System.Process         |                                      |
-|         [[https://hackage.haskell.org/package/terminfo][terminfo]] |    System.Console.Terminfo    |                                      |
-| [[https://hackage.haskell.org/package/template-haskell][template-haskell]] |      Language.Haskell.TH      |                                      |
-|             [[https://hackage.haskell.org/package/text][text]] |           Data.Text           | +efficient String and unicode (pack) |
-|                  |      Data.Text.Encoding       | d/encodeUtf8 - to/from ByteString    |
-|             [[https://hackage.haskell.org/package/time][time]] |           Data.Time           |                                      |
-|     [[https://hackage.haskell.org/package/transformers][transformers]] |      Control.Monad.Trans      |                                      |
-|              [[https://hackage.haskell.org/package/stm][stm]] |    Control.Concurrent.STM     |                                      |
-|                  |       Control.Monad.STM       |                                      |
-|             [[https://hackage.haskell.org/package/unix][unix]] |         System.Posix          |                                      |
-|            [[https://hackage.haskell.org/package/xhtml][xhtml]] |          Text.XHtml           |                                      |
-|------------------+-------------------------------+--------------------------------------|
+|------------------+-------------------------------+---------------------------------------------------------------------------------------|
+|              <r> |              <c>              | <l>                                                                                   |
+|            [[https://hackage.haskell.org/package/array][array]] |          Data.Array           |                                                                                       |
+|       [[https://hackage.haskell.org/package/containers][containers]] |          Data.Graph           |                                                                                       |
+|                  |          Data.IntMap          |                                                                                       |
+|                  |          Data.IntSet          |                                                                                       |
+|                  |           Data.Map            |                                                                                       |
+|                  |         Data.Sequence         |                                                                                       |
+|                  |           Data.Set            |                                                                                       |
+|                  |           Data.Tree           |                                                                                       |
+|           [[https://hackage.haskell.org/package/binary][binary]] |          Data.Binary          |                                                                                       |
+|       [[https://hackage.haskell.org/package/bytestring][bytestring]] |        Data.ByteString        | efficiently dealing with files                                                        |
+|                  |                               | hPut     :: Handle     -> ByteString -> IO ()                                         |
+|                  |                               | hGetSome :: Handle     -> Int        -> IO ByteString                                 |
+|                  |                               | null     :: ByteString -> Bool                                                        |
+|                  |                               | pack     :: [Word8]    -> ByteString                                                  |
+|                  |                               | unpack   :: ByteString -> [Word8]                                                     |
+|                  |     Data.ByteString.Lazy      | fromStrict toStrict                                                                   |
+|                  |     Data.ByteString.Char8     | instead of Word8                                                                      |
+|          [[https://hackage.haskell.org/package/deepseq][deepseq]] |        Control.DeepSeq        |                                                                                       |
+|        [[https://hackage.haskell.org/package/directory][directory]] |       System.Directory        |                                                                                       |
+|       [[https://hackage.haskell.org/package/exceptions][exceptions]] |      Control.Monad.Catch      |                                                                                       |
+|         [[https://hackage.haskell.org/package/filepath][filepath]] |        System.FilePath        |                                                                                       |
+|                  |         System.OsPath         |                                                                                       |
+|                  |        System.OsString        |                                                                                       |
+|        [[https://hackage.haskell.org/package/haskeline][haskeline]] |        System.Console         |                                                                                       |
+|            [[https://hackage.haskell.org/package/hoopl][hoopl]] |        Compiler.Hoopl         |                                                                                       |
+|              [[https://hackage.haskell.org/package/hpc][hpc]] |           Trace.Hpc           |                                                                                       |
+|      [[https://hackage.haskell.org/package/integer-gmp][integer-gmp]] |        GHC.Integer.GMP        |                                                                                       |
+|         [[https://hackage.haskell.org/package/libiserv][libiserv]] |                               |                                                                                       |
+|              [[https://hackage.haskell.org/package/mtl][mtl]] |      Control.Monad.Accum      |                                                                                       |
+|                  |      Control.Monad.Cont       |                                                                                       |
+|                  |     Control.Monad.Except      |                                                                                       |
+|                  |    Control.Monad.Identity     |                                                                                       |
+|                  |       Control.Monad.RWS       |                                                                                       |
+|                  |     Control.Monad.Reader      |                                                                                       |
+|                  |     Control.Monad.Select      |                                                                                       |
+|                  |      Control.Monad.State      |                                                                                       |
+|                  |      Control.Monad.Trans      |                                                                                       |
+|                  |     Control.Monad.Writer      |                                                                                       |
+|          [[https://hackage.haskell.org/package/network][network]] |        Network.Socket         | socket :: Family -> SocketType -> ProtocolNumber -> IO Socket                         |
+|                  |                               | getAddrInfo :: Maybe AddrInfo -> Maybe HostName -> Maybe ServiceName -> IO [AddrInfo] |
+|                  |                               | tupleToHostAddress :: (Word8,Word8,Word8,Word8) -> HostAddress                        |
+|                  |                               | connect         :: Socket -> SockAddr -> IO ()                                        |
+|                  |                               | gracefulClose   :: Socket -> Int -> IO ()                                             |
+|                  |                               | setSocketOption :: Socket -> SocketOption -> Int -> IO ()                             |
+|                  |   Network.Socket.ByteString   |                                                                                       |
+|                  |                               | sendAll         :: Socket -> ByteString -> IO ()                                      |
+|                  |                               | recv            :: Socket -> Int -> IO ByteString                                     |
+|           [[https://hackage.haskell.org/package/parsec][parsec]] |          Text.Parsec          |                                                                                       |
+|                  | Text.ParserCombinators.Parsec |                                                                                       |
+|           [[https://hackage.haskell.org/package/pretty][pretty]] |       Text.PrettyPrint        |                                                                                       |
+|          [[https://hackage.haskell.org/package/process][process]] |          System.Cmd           |                                                                                       |
+|                  |        System.Process         |                                                                                       |
+|         [[https://hackage.haskell.org/package/terminfo][terminfo]] |    System.Console.Terminfo    |                                                                                       |
+| [[https://hackage.haskell.org/package/template-haskell][template-haskell]] |      Language.Haskell.TH      |                                                                                       |
+|             [[https://hackage.haskell.org/package/text][text]] |           Data.Text           | efficient/strict String unicode++                                                     |
+|                  |                               | pack :: String -> Text                                                                |
+|                  |                               | unpack :: Text -> String                                                              |
+|                  |                               | hGetChunk :: Handle -> IO Text                                                        |
+|                  |                               | hGetLine                                                                              |
+|                  |                               | null :: Text -> Bool                                                                  |
+|                  |                               | uncons :: Text -> Maybe (Char, Text)                                                  |
+|                  |                               | unsnoc :: Text -> Maybe (Text, Char)                                                  |
+|                  |                               | snoc :: Text -> Char -> Text                                                          |
+|                  |                               | cons :: Char -> Text -> Text                                                          |
+|                  |         Data.Text.IO          | hPutStrLn :: Handle -> Text -> IO ()                                                  |
+|                  |      Data.Text.Encoding       | d/encodeUtf8 - to/from ByteString                                                     |
+|             [[https://hackage.haskell.org/package/time][time]] |           Data.Time           |                                                                                       |
+|     [[https://hackage.haskell.org/package/transformers][transformers]] |      Control.Monad.Trans      |                                                                                       |
+|              [[https://hackage.haskell.org/package/stm][stm]] |    Control.Concurrent.STM     |                                                                                       |
+|                  |       Control.Monad.STM       |                                                                                       |
+|             [[https://hackage.haskell.org/package/unix][unix]] |         System.Posix          |                                                                                       |
+|            [[https://hackage.haskell.org/package/xhtml][xhtml]] |          Text.XHtml           |                                                                                       |
+|------------------+-------------------------------+---------------------------------------------------------------------------------------|
 ** typeclasses
 
 [[https://www.adit.io/imgs/functors/recap.png]]
 
+- Type Variable
+  - a,b = is the free-variable
+  - e   = for environment
+  - m   = monad
+  - f   = function
 - A type can have _at most_ ONE instance of a typeclass.
 - In Haskell, a ~Monad~ must be a unary *type constructor*.
   - aka kind of "* -> *"
@@ -418,14 +459,13 @@ https://haskell-containers.readthedocs.io/en/latest/
 
 *** lift(s)
 
-#+begin_src haskell
-  class (Monad m) => MonadIO m where
-    liftIO :: IO a -> m a
-#+end_src
-
-**** liftM (aka bind)
-**** liftA2
-
+- liftM (aka bind)
+- liftIO - Control.Monad.IO.Class
+  #+begin_src haskell
+    class (Monad m) => MonadIO m where -- aka any Monad that an IO can be lifted INTO
+      liftIO :: IO a -> m a
+  #+end_src
+- liftA2
 #+begin_src haskell
   > (*) <$> Just 5 <*> Just 3
     Just 15
@@ -461,8 +501,13 @@ https://haskell-containers.readthedocs.io/en/latest/
 |   Semigroup |        (<>)        | associative binary op                     | sconcat stimes                                         |
 |      Monoid |       mempty       | associative binary op with identity       | mconcat mappend (<>)                                   |
 | Applicative |     pure (<*>)     | a functor, sequence and combine ops       |                                                        |
-|       Monad |     bind (>>=)     |                                           | do                                                     |
+|       Monad |     bind (>>=)     |                                           | do (=<<)                                               |
+|    IsString |     fromString     | OverloadedStrings implicitly runs it      | -                                                      |
 |-------------+--------------------+-------------------------------------------+--------------------------------------------------------|
+- =IsString= defined in Data.String
+- =Show=
+  - exists for the sake of GHCi and for testing, not for real use in applications
+  - we recommend never allowing the behavior of your program to depend on the ~show~ function
 **** definitions
 
 #+begin_src haskell
@@ -494,6 +539,9 @@ https://haskell-containers.readthedocs.io/en/latest/
 
   class Monad m where -- 🪠
     (>>=) :: m a -> (a -> m b) -> m b -- (ME: apply a function that returns a wrapped value to a wrapped value)
+
+  class IsString a where
+    fromString :: String -> a
 #+end_src
 
 *** Declaring
@@ -511,6 +559,10 @@ https://haskell-containers.readthedocs.io/en/latest/
 
 * Codebases
 
+- https://lotz84.github.io/haskellbyexample/
+- 30:00  Haskell The Legend of DSLs - Alejandro Serrano | ZuriHac 2022 https://www.youtube.com/watch?v=kdkWhtpX1BA
+- Haskell Adventures in IO - Alejandro Serrano | ZuriHac 2022  https://www.youtube.com/watch?v=Gt6OeWxkcEI
+- Sonic 2 https://www.youtube.com/playlist?list=PLly9WMAVMrazvDoyEu9rM7v5IZJ6Hp91u
 - https://learn-haskell.blog/
 - https://howistart.org/posts/haskell/1/
 - Silly job interview questions in Haskell https://chrispenner.ca/posts/interview
@@ -551,4 +603,31 @@ main =
   where
     f [] = "y"
     f xs = unwords xs
+#+end_src
+
+** reading a file + system + aeson
+
+https://haskell-works.github.io/posts/2018-07-25-problem-of-parsing-large-datasets.html
+
+#+begin_src haskell
+import Control.Monad
+import Data.Aeson
+import GHC.Stats
+import System.Posix.Process
+import System.Process
+
+import qualified Data.ByteString.Lazy as BS
+import qualified System.Environment   as IO
+
+main :: IO ()
+main = do
+  pid <- getProcessID
+  (filename:_) <- IO.getArgs
+  bs <- BS.readFile filename
+  let !maybeJson = decode bs :: Maybe Value
+
+  system $ "ps aux | grep " <> show pid <> " | grep -v grep"
+
+  forM_ maybeJson $ \_ ->
+    putStrLn "Done"
 #+end_src

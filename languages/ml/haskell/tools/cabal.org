@@ -1,11 +1,28 @@
+- Common Architecture for Building Applications and Libraries
 - manual https://cabal.readthedocs.io/en/3.4/index.html
 
 - Cabal keeps a Hackage indexes locally
 - Cabal mutability landscape changed with the introduction of =sandboxes=
-  - Packages were installed globally
+  - Packages used to be installed globally
   - Used to be an opt-in feature
   - IF you use the cabal commands starting with ~new-~ you use sandboxes
     They must run in a folder in which a .cabal file exists
+
+- Directory path convention
+  setup.hs
+  /app/Main.hs
+  /src/MyLib.hs
+  /test/MyLibTest.hs
+
+** versions
+
+- operators
+  - ^>= from the latest minor, to the next major release
+    #+begin_src haskell-cabal
+      library
+      build-depends:
+              base ^>= 4.14, aeson ^> 2.0
+    #+end_src
 
 - Cabal follows the [[https://pvp.haskell.org/][Haskell PVP]] (Package Versioning Policy)
   - a four-part numbering system: generation.major.minor.patch
@@ -16,12 +33,6 @@
     |      minor | backards-compatble changes, features, bugfixes |
     |      patch | only bugfixes                                  |
     |------------+------------------------------------------------|
-
-- Directory path convention
-  setup.hs
-  /app/Main.hs
-  /src/MyLib.hs
-  /test/MyLibTest.hs
 
 ** cmd
 
@@ -94,7 +105,7 @@
 |--------------------+-----------------------------------------|
 |             author |                                         |
 |        bug-reports | https://github.com/azimut/foobar/issues |
-|      cabal-version |                                         |
+|    =cabal-version= |                                         |
 |           category |                                         |
 |          copyright | 2022 Mission Valley Software LLC        |
 |         data-files | **/*.txt                                |
@@ -104,41 +115,41 @@
 |            license | Apache-2.0                              |
 |       license-file | license.txt                             |
 |         maintainer |                                         |
-|               name | REQUIRED                                |
+|             =name= | REQUIRED                                |
 |           synopsis | one line? description                   |
-|            version | REQUIRED                                |
+|          =version= | REQUIRED                                |
 |--------------------+-----------------------------------------|
 *** stanzas
-|-------------------+--------------------+-----------------------------------------|
-|               <r> |        <c>         |                                         |
-|           STANZAS |     PROPERTIES     |                                         |
-|-------------------+--------------------+-----------------------------------------|
-|       common base |                    |                                         |
-|                   |  default-language  | Haskell2010                             |
-|                   | default-extensions | entire project *language extensions*    |
-|                   |    ghc-options     |                                         |
-|                   |   build-depends    | base                                    |
-|                   |   hs-source-dirs   |                                         |
-|                   | reexported-modules |                                         |
-|-------------------+--------------------+-----------------------------------------|
-|           library |         -          | name defaults to the package name       |
-|                   |  exposed-modules   | public to all consumers                 |
-|                   |   other-modules    | private to the library                  |
-|                   |  other-extensions  | on target *language extensions*         |
-|                   |   hs-source-dirs   | src                                     |
-|-------------------+--------------------+-----------------------------------------|
-|        executable |                    |                                         |
-|                   |      main-is       | name of Main.hs                         |
-|                   |   build-depends    | base + library name                     |
-|                   |   hs-source-dirs   | app                                     |
-|                   |    ghc-options     | -O1 -threaded -rtsopts -with-rtsopts=-N |
-|-------------------+--------------------+-----------------------------------------|
-|        test-suite |                    |                                         |
-|                   |   hs-source-dirs   | test                                    |
-|                   |      main-is       | MyLibTest.hs                            |
-|                   |        type        | exitcode-stdio-1.0                      |
-|-------------------+--------------------+-----------------------------------------|
-| source-repository |        head        |                                         |
-|                   |        type        | git                                     |
-|                   |      location      | git://...git url                        |
-|-------------------+--------------------+-----------------------------------------|
+|-------------------+--------------------+--------------------------------------|
+|               <r> |        <c>         |                                      |
+|           STANZAS |     PROPERTIES     |                                      |
+|-------------------+--------------------+--------------------------------------|
+|            common |        base        |                                      |
+|                   |  default-language  | Haskell2010, GHC2021                 |
+|                   | default-extensions | entire project *language extensions* |
+|                   |    ghc-options     | -Wall -fdefer-typed-holes            |
+|                   |   hs-source-dirs   |                                      |
+|                   | reexported-modules |                                      |
+|-------------------+--------------------+--------------------------------------|
+|           library |         -          | name defaults to the package name    |
+|                   |   build-depends    | baseor, list, of, packages           |
+|                   |  exposed-modules   | public to all consumers              |
+|                   |   other-modules    | private to the library               |
+|                   |  other-extensions  | on target *language extensions*      |
+|                   |   hs-source-dirs   | src                                  |
+|                   |       import       | base                                 |
+|-------------------+--------------------+--------------------------------------|
+|        executable |                    |                                      |
+|                   |      main-is       | name of Main.hs                      |
+|                   |   build-depends    | baseor, list, of, packages           |
+|                   |   hs-source-dirs   | app                                  |
+|-------------------+--------------------+--------------------------------------|
+|        test-suite |                    |                                      |
+|                   |   hs-source-dirs   | test                                 |
+|                   |      main-is       | MyLibTest.hs                         |
+|                   |        type        | exitcode-stdio-1.0                   |
+|-------------------+--------------------+--------------------------------------|
+| source-repository |        head        |                                      |
+|                   |        type        | git                                  |
+|                   |      location      | git://...git url                     |
+|-------------------+--------------------+--------------------------------------|

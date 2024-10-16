@@ -1,3 +1,7 @@
+- https://mmhaskell.com/blog/2021/10/11/why-haskell
+- https://mmhaskell.com/blog/2021/10/18/using-io-without-the-io-monad
+
+
 - 24 https://hasufell.github.io/posts/2024-05-07-ultimate-string-guide.html
 - https://medium.com/twelve-days-of-monad
 - https://yannesposito.com/Scratch/en/blog/Haskell-the-Hard-Way/

@@ -1,26 +1,40 @@
 - https://evanrelf.com/haskell-libraries-i-love
 - https://www.mmhaskell.com/production-checklist
-- regex-tdfa https://www.williamyaoh.com/posts/2019-04-11-cheatsheet-to-regexes-in-haskell.html
+- utils
+  - safe: prelude safe variants
+    - https://github.com/ndmitchell/safe#readme
+    - https://hackage.haskell.org/package/safe
+    - headMay headDef
+  - split
+    - https://github.com/byorgey/split
+    - https://hackage.haskell.org/package/split
+    - divvy
+  - extra
+    - https://github.com/ndmitchell/extra
+    - https://hackage.haskell.org/package/extra
+    - takeEnd dropEnd breakEnd
+- regex
+  - regex-base: the common-api of each implementation
+  - regex-tdfa https://www.williamyaoh.com/posts/2019-04-11-cheatsheet-to-regexes-in-haskell.html
+  - regex-pcre
+  - regex-parsec
 - time https://www.williamyaoh.com/posts/2019-09-16-time-cheatsheet.html
 - generics https://markkarpov.com/tutorial/generics
 - exceptions https://markkarpov.com/tutorial/exceptions
 - template haskell https://markkarpov.com/tutorial/th.html
 - megaparsec https://markkarpov.com/tutorial/megaparsec
 
-- rio https://www.fpcomplete.com/haskell/library/rio/
 - terminfo https://github.com/tanakh/cless/blob/master/src/Main.hs
 - euterpea
   - example http://donyaquick.com/interesting-music-in-four-lines-of-code/
   - quickstart https://github.com/madjestic/nu/blob/02eb3957f9ba5d0f0fbac7cd260f7142227a7008/Projects/blogs/turtlesturtlesturtles/posts/2018-11-29-a-quick-start-with-Euterpea.md
   - Interactive-Haskell with Literate-Haskell https://github.com/lfborjas/distractions/blob/a6b6bcd09270fa73233b05f3afb1800b977da9c3/haskell_school_of_music/README.md
 - https://hackage.haskell.org/package/turtle-1.5.21/docs/Turtle-Tutorial.html
-- conduit: is a framework for dealing with streaming data, such as reading raw bytes from a file, parsing a CSV response body from an HTTP request, or performing an action on all files in a directory tree. 
+- conduit: is a framework for dealing with streaming data, such as reading raw bytes from a file, parsing a CSV response body from an HTTP request, or performing an action on all files in a directory tree.
 - parsec: It is defined as a monad transformer that can be stacked on arbitrary monads, and it is also parametric in the input stream type.
 - State of the Haskell ecosystem https://github.com/Gabriella439/post-rfc/blob/main/sotu.md https://github.com/Gabriel439/post-rfc/blob/main/sotu.md
 
 |------------+----+-----+--------------------------------------------------+------------------------------------------------|
-| relude     | 23 | 0.6 | Prelude alternative                              | https://github.com/kowainik/relude             |
-| rio        | 23 | 0.8 | Prelude alternative                              | https://github.com/commercialhaskell/rio       |
 | lens       | 23 | 1.9 | Lenses, Folds and Traversals                     | https://github.com/ekmett/lens/                |
 | singletons | 24 | 0.3 | Fake dependent types in Haskell using singletons | https://github.com/goldfirere/singletons       |
 | vector     | 23 | 349 | indexed arrays                                   | https://github.com/haskell/vector              |
@@ -44,6 +58,20 @@
 | conduit    | 22 | 0.8 | Streaming data lib                               | https://github.com/snoyberg/conduit            |
 | resourcet  |  * |   * | alloc and free of scarce resources               | *                                              |
 |------------+----+-----+--------------------------------------------------+------------------------------------------------|
+* prelude
+|----------------+-----+-----------------------------|
+|            <r> |     |                             |
+|            [[https://github.com/commercialhaskell/rio][rio]] | 0.8 |                             |
+|         [[https://github.com/kowainik/relude][relude]] | 0.6 | focus on type-safety        |
+|      [[https://github.com/protolude/protolude][protolude]] | 0.4 | light and useful            |
+| [[https://github.com/snoyberg/mono-traversable/tree/master/classy-prelude#readme][classy-prelude]] | 0.1 | adds additional typeclasses |
+|----------------+-----+-----------------------------|
+- rio https://www.fpcomplete.com/haskell/library/rio/
+- relude
+  - provides MonadIO variants of many of Prelude functions.
+    - Making it more convenient for users of mtl. since they won't need to liftIO it later.
+    - can weaken type inference, requiring type annotations/applications
+    - can introduce more complicated error messages
 * random
 
 - https://github.com/haskell/random
@@ -77,6 +105,7 @@
 |-----------------+----+-----+--------------------+-------------------------------------------------|
 * graphics
 - reanimate-svg
+  - https://reanimate.github.io/
   - https://www.williamyaoh.com/posts/2020-05-10-reanimate-an-experience-report.html
   - https://www.williamyaoh.com/posts/2020-05-31-reanimate-nqueens-tutorial.html
 - opengl https://lokathor.gitbooks.io/using-haskell/content/opengl/
@@ -98,17 +127,24 @@
 - https://www.williamyaoh.com/posts/2019-11-16-a-dead-simple-web-stack.html
 - REST - A family of combinators for defining webservices APIs and serving them
   https://hackage.haskell.org/package/servant
+- Spock
+  - talk
+    - https://www.youtube.com/watch?v=GobPiGL9jJ4
+    - code+mongodb https://gist.github.com/jasonzoladz/2c266c03571485a8479d
 - A fast, light-weight web server for WAI applications.
   https://hackage.haskell.org/package/warp
   https://hackage.haskell.org/package/wai
 |-------------------+----+-----+-----------------------+----------------------------------------------|
-| feed              | 23 | 0.0 | RSS parser, generator | https://github.com/haskell-party/feed        |
+|               <r> |    |     |                       |                                              |
+|              feed | 23 | 0.0 | RSS parser, generator | https://github.com/haskell-party/feed        |
 | base64-bytestring | 23 |  45 | base64 de/encoding    | https://github.com/haskell/base64-bytestring |
-| aeson             | 24 | 1.2 | JSON parser           | https://github.com/haskell/aeson             |
-| yesod             | 23 | 2.5 | Webframework          | https://github.com/yesodweb/yesod            |
-| servant           | 24 | 1.8 | building webservers   | https://github.com/haskell-servant/servant   |
-| http              | 24 | 0.3 | http client           | https://github.com/mrkkrp/req                |
-| blaze-html        | 24 | 0.2 | html DSL              | https://github.com/jaspervdj/blaze-html      |
+|             aeson | 24 | 1.2 | JSON parser           | https://github.com/haskell/aeson             |
+|             yesod | 23 | 2.5 | Webframework          | https://github.com/yesodweb/yesod            |
+|             spock | 22 | 0.6 | Webframework          | https://github.com/agrafix/Spock             |
+|           servant | 24 | 1.8 | building webservers   | https://github.com/haskell-servant/servant   |
+|              http | 24 | 0.3 | http client           | https://github.com/mrkkrp/req                |
+|        blaze-html | 24 | 0.2 | html DSL              | https://github.com/jaspervdj/blaze-html      |
+|             lucid | 24 | 0.2 | html DSL              | https://github.com/chrisdone/lucid           |
 |-------------------+----+-----+-----------------------+----------------------------------------------|
 ** aeson
 

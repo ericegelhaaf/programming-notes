@@ -4,6 +4,7 @@
   - [[https://downloads.haskell.org/ghc/latest/docs/users_guide/flags.html][flags]]
   - [[https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html][warnings]]
 
+- $ ghc --make Main.hs
 - -I0, -Iw
 - +RTS,-RTS
 - -rtsopts to ghc-options in .cabal
@@ -37,25 +38,27 @@
 - https://wiki.haskell.org/GHC/GHCi
 - use ":{" and ":}" for multi-line blocks on ghci
 
-|-----------+------------------+------------------|
-|       <r> |       <c>        |                  |
-|       CMD |       ARG        | DESCRIPTION      |
-|-----------+------------------+------------------|
-|        :? |                  |                  |
-|   :(h)elp |                  |                  |
-|     :quit |                  |                  |
-|      :doc |    fn / type     | documentation    |
-| :(m)odule |    ModuleName    |                  |
-|   :(t)ype |       mean       |                  |
-|   :(i)nfo |        fn        |                  |
-|   :(k)ind | type constructor |                  |
-|     :show |                  |                  |
-|           |       args       |                  |
-|           |     bindings     | session bindings |
-|           |     imports      | session imports  |
-|           |      linker      | loaded packages  |
-|           |     language     | version          |
-|-----------+------------------+------------------|
+|-----------+---------------------+------------------|
+|       <r> |         <c>         |                  |
+|       CMD |         ARG         | DESCRIPTION      |
+|-----------+---------------------+------------------|
+|        :? |                     |                  |
+|   :(h)elp |                     |                  |
+|     :quit |                     |                  |
+|      :doc |      fn / type      | documentation    |
+| :(m)odule |     ModuleName      |                  |
+|   :(t)ype |        mean         |                  |
+|   :(i)nfo |         fn          |                  |
+|   :(k)ind |  type constructor   |                  |
+| :(r)eload |                     |                  |
+|      :set | -fdefer-typed-holes |                  |
+|     :show |                     |                  |
+|           |        args         |                  |
+|           |      bindings       | session bindings |
+|           |       imports       | session imports  |
+|           |       linker        | loaded packages  |
+|           |      language       | version          |
+|-----------+---------------------+------------------|
 
 * language extensions
 

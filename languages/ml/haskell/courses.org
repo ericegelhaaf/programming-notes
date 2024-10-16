@@ -1,6 +1,8 @@
 - Video
-  - Haskell for Dilettantes by Tea Leaves https://www.youtube.com/playlist?list=PLu6SHDdOToSe7ZOw-mR55j2GEjkNTQgrd
-  - Haskell Course by IOG Academy https://www.youtube.com/playlist?list=PLNEK_Ejlx3x1D9Vq5kqeC3ZDEP7in4dqb
+  - [[https://www.youtube.com/playlist?list=PLD8gywOEY4HauPWPfH0pJPIYUWqi0Gg10][Introduction to Haskell]] by Well-Typed
+  - [[https://www.youtube.com/playlist?list=PLD8gywOEY4HaG5VSrKVnHxCptlJv2GAn7][Haskell Unfolder]] by Well-Typed
+  - [[https://www.youtube.com/playlist?list=PLu6SHDdOToSe7ZOw-mR55j2GEjkNTQgrd][Haskell for Dilettantes]] by Tea Leaves
+  - [[https://www.youtube.com/playlist?list=PLNEK_Ejlx3x1D9Vq5kqeC3ZDEP7in4dqb][Haskell Course]] by IOG Academy
   - Haskel for imperative programmers https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
   - MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
   - Haskell beginners 2022 https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c
@@ -788,12 +790,13 @@ instance MonadPlus Maybe where
 ** 10.1: Monads
 ** 10.2: Monoid in the category of endofunctors
 * 16 | Haskell                      | Bartosz Milewski
-  playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
-** DONE 1-1 => Why Haskell? https://www.youtube.com/watch?v=N6sOMGYsvFA
+playlist: https://www.youtube.com/playlist?list=PL0pwx9zqJ9IamHxRXTf34dC3JeQ2oYmfJ
+** DONE 1-1 => Why Haskell?
+https://www.youtube.com/watch?v=N6sOMGYsvFA
 - "Web programming is horrible-cheap imitation of programming"
 - Course based on "Parallel and concurrent programming" Oreilly book
 - Based on math, Lambda Calculus
-- Lists are the core DS while in other langs would be an array
+- Lists are the core DS, while in other langs would be an array
 - There are different "languages"/syntax in haskell
   - do
   - functions
@@ -802,7 +805,8 @@ instance MonadPlus Maybe where
 - Pure Functions
   1) Equational Reasoning: Let us reason about programs, *you can inline them*
   2) Concurrent Programming: Reproducible
-** DONE 1-2 => Functions https://www.youtube.com/watch?v=ybba5tcOeEY
+** DONE 1-2 => Functions
+https://www.youtube.com/watch?v=ybba5tcOeEY
 - usually *show* produces a string that can be parsec back by *read*
 - haskell keeps the more reocurring thing simple
   - in morse code the letter "e" is just a dot
@@ -874,7 +878,8 @@ dist = sqrt . sqDist -- Point free notation + composition
       while still maintaining full static type-safety."
       ex: map function
   2) adhoc: different behaviour, for different types of arguments
-** DONE 2-2 => Product data types https://www.youtube.com/watch?v=a6IkhX1zgXI
+** DONE 2-2 => Product data types
+https://www.youtube.com/watch?v=a6IkhX1zgXI
 - ELM isn't lazy evaluated
 - partial application of an operator is called ~operator section~
   #+begin_src haskell
@@ -906,7 +911,8 @@ inc   = (+ 1)    -- "x" cancells out
   - ~type constructor~ is Product, used in type declarations
   - ~data constructor~ is P, used in destructoring and constructing new type instance
 - When you have >2 components, you are better using a ~record~ where fields are named
-** DONE 3-1 => Laziness https://www.youtube.com/watch?v=jWrRs-l8C1U
+** DONE 3-1 => Laziness
+https://www.youtube.com/watch?v=jWrRs-l8C1U
 :set -Wall
 :set -fforce-recomp
 :k <TYPE_CONSTRUCTOR>
@@ -954,7 +960,8 @@ inc   = (+ 1)    -- "x" cancells out
   > :sprint z
    z = _
 #+end_src
-** DONE 3-2 => Sum types https://www.youtube.com/watch?v=MagayXbH4oY
+** DONE 3-2 => Sum types
+https://www.youtube.com/watch?v=MagayXbH4oY
 - In product types, we have projections
   In sum     types, we have injections
 - Unlike product types, on ~sum types~ we can have *either* from a or b
@@ -994,8 +1001,8 @@ safeSqrt sx =
   type Y a = (a, ())      -- a * 1 = a, equivalent or isomorphic a = (a,())
   type Z a = (a, Void)    -- a * 0 = 0, you can never create this type
 #+end_src
-** DONE 4-1 => Recursion https://www.youtube.com/watch?v=F-nAAIH4e2s
-
+** DONE 4-1 => Recursion
+https://www.youtube.com/watch?v=F-nAAIH4e2s
 - -- l(a) = l + a . l(a)
 - A ~power series~, translates into a ~Algebraic Data Type~ as
   [ () | a | (a,a) | (a,a,a) | ...
@@ -1011,86 +1018,107 @@ safeSqrt sx =
 
 ** DONE 4-2 => Functors
 
-- ~Induction~ in mathematics, recursive proofs
-- ~Structural Induction~ when there is some kind of ordering, partial or not, example in list
+- sum,product,foldr definitions
+- =Foldable= a typeclass for things that can be fold
+  - the easiest way to know if something could be one is, if it can be converted to a list
+  - they have a _toList_ function
 
-- A ~Functor~ is sorta like a container of a's
-  - (data) Has a shape
+- ~Induction~ in mathematics, are recursive proofs.
+- ~Structural Induction~ when there is some kind of ordering, partial or not, example in list.
+
+*** Functor
+
+- is sorta like a _container_ of a's
+  - Has a shape/data
   - Has contents, values or can be a function
-  - (type constructor) It has to be polimorphic on his type
-  - (map) There has to be a way to modify uniformly the content of it
-
-- A functor is a class of types
+- (type constructor) It has to be polimorphic on his type
+- (map) There has to be a way to modify uniformly the content of it
+- is a class of types
   #+begin_src haskell
     -- Functor is the "class name"
-    -- f is a "type constructor"
-    -- fmod is a generalization of functors, a method of the functor
+    --       f is a "type constructor"
+    --    fmod is a generalization of functors, a method of the functor
     class Functor f where
       fmod :: (a -> b) -> f a -> f b
   #+end_src
-
-- Axioms
+- Axioms (cannot be proven with haskell)
   1) Needs to be proven on each case for the container:
      fmap id = id
   2) It follows that: "Fusion Law"
      fmap g . fmap f = fmap (g . f)
 
-*** Example: Binary tree definition
+*** Example: Functor Binary Tree
 
 #+begin_src haskell
-  data Tree a
-    = Empty
-    | Node (Tree a) a (Tree a)
+data Tree a
+  = Empty
+  | Node (Tree a) a (Tree a)
 
-  instance Functor Tree where -- NOT "Tree a"
-  --fmap = mapT
-    fmap f Empty = Empty
-    fmap f (Node l v r) = Node l (f v) r
+instance Functor Tree where -- NOT "Tree a"
+--fmap = mapT
+  fmap f Empty = Empty
+  fmap f (Node l v r) = Node l (f v) r
 #+end_src
 
-*** Example: ~Maybe~ is a functor
+*** Example: Functor Maybe
 
 #+begin_src haskell
-  data Maybe a
-    = Nothing
-    | Just a
+data Maybe a
+  = Nothing
+  | Just a
 
-  instance Functor Tree where -- NOT "Tree a"
-    fmap f Nothing  = Nothing
-    fmap f (Just x) = Just (f x)
+instance Functor Tree where -- NOT "Tree a"
+  fmap f Nothing  = Nothing
+  fmap f (Just x) = Just (f x)
 #+end_src
 
-*** Example: Identity Functor, is also a monad, without side-effects
+*** Example: Functor Identity
+
+- is also a monad, without side-effects
+- an "id" of types
 
 #+begin_src haskell
-  data I a = I a
+data I a = I a
 
-  instance Functor I where
-    fmap f (I x) = I (f x)
+instance Functor I where
+  fmap f (I x) = I (f x)
 #+end_src
 
-*** Example: Function container
+*** Example: Functor "function container"
 
 #+begin_src haskell
-  -- e for environment
-  -- a is the free-variable
-  data Reader e a = Reader (e -> a)
-  instance Functor (Reader e) where
-    fmap g (Reader f) = Reader (g . f)
+data Reader e a = Reader (e -> a)
+instance Functor (Reader e) where
+  fmap g (Reader f) = Reader (g . f)
 #+end_src
 
 ** DONE 5-1 => Monads
 
+#+begin_src haskell
+a -> m b -- m :: * -> *
+#+end_src
+
 - Monads
-  - They are NOT impure, they do NOT encapsulate side effects
-  - They are useful when dealing with side effects, but they don't deal with it themselves
+  - a generic type that allows you to amplify the ability of another type
+  - are NOT impure, they do NOT encapsulate side effects
+  - are useful when dealing with side effects, but they DO NOT deal with it themselves
 
 - "Kleisli arrows", side-effects solved by it
-  a -> m b
-  m :: * -> *
+
+*** TODO Example: Functor State
+
+#+begin_src haskell
+  data State s a = State (s -> a)
+  instance Functor (State s) where
+    fmap g (State f) = State f'
+    f' = \st -> ()
+    -- g  :: a -> b
+    -- f  :: s -> (a,s)
+    -- f' :: s -> (b,s)
+#+end_src
 
 *** Example: a functor with state and his proof
-  #+begin_src haskell
+#+begin_src haskell
 data State s a = State (s -> (a,s))
 
 instance Functor (State s) where
@@ -1101,22 +1129,27 @@ instance Functor (State s) where
   -- g  is (a -> b)
   -- f  is (s -> (a,s))
   -- f' is (s -> (b,s))
-  #+end_src
+#+end_src
+
 *** >=> "fish operator"
 
 - A more general composition of functions, for "Kleisi arrows"
 - Needed to represent a common boilerplate with less work
 
 - Signature
-  (.)   :: (b->  c) -> (a->  b) -> (a->  c)
-  (>=>) :: (a->m b) -> (b->m c) -> (a->m c)
+  #+begin_src haskell
+   (.)  :: (b ->   c) -> (a ->   b) -> (a ->   c)
+  (>=>) :: (a -> m b) -> (b -> m c) -> (a -> m c)
+  #+end_src
 
 - Example: (a -> [b]) -> (b -> [c]) -> (a -> [c])
   #+begin_src haskell
-    f >=> g = \a -> let  bs = f a
-                        css = fmap g bs
-                    in concat css
-    f >=> g = concat . fmap g . f -- Note: it has to be Functor
+  f >=> g =
+    concat . fmap g . f -- Note: it has to be Functor
+  f >=> g =
+    \a -> let  bs = f a
+              css = fmap g bs
+          in concat css
   #+end_src
 
 *** MONAD is
@@ -1126,13 +1159,15 @@ The essence of monads is >=> and composition
   - a fish operator (>=>)
   - and return
 
-*** ~return~ The equivalent of the "id" function for the (.) operator
+*** ~return~ is
+
+the equivalent of the "id" function for the (.) operator
 
 #+begin_src haskell
 return :: a -> m a
 return >=> f = f
 
-f >=> return = f
+ f >=> return = f
 (f >=> g) >=> h = f >=> (g >=> h) -- associativity
 #+end_src
 
@@ -1267,20 +1302,23 @@ runEval $ do
 ** 8-1 => Concurrent Haskell, MVars
 ** 8-2 => Software Transactional Memory
 * 18 | Data61 fp-course             | Brian McKenna
+playlist https://www.youtube.com/playlist?list=PLly9WMAVMrayYo2c-1E_rIRwBXG_FbLBW
 code https://github.com/system-f/fp-course
 authors works at marketplace.atlassian.com, which is made in Scala
 pointfree https://hackage.haskell.org/package/pointfree
 pointful https://hackage.haskell.org/package/pointful
 https://wiki.haskell.org/Pointfree
 ** Part #1: syntax, Optional, List
+
 https://www.youtube.com/watch?v=NzIZzvbplSM
+
 #+begin_src haskell
-headOr = foldRight const
-length = foldRight (const (1 +)) 0
-map f = foldRight ((:.) . f) Nil
-filter p = foldRight (\a as -> if p a then a :. as else as) Nil
-(++) = flip (foldRight (:.))
-flatten = foldRight (++) Nil
+headOr       = foldRight const
+length       = foldRight (const (1 +)) 0
+map f        = foldRight ((:.) . f) Nil
+filter p     = foldRight (\a as -> if p a then a :. as else as) Nil
+(++)         = flip (foldRight (:.))
+flatten      = foldRight (++) Nil
 flatMap f xs = flatten (map f xs)
 flatMap f xs = (flatten . map f) xs
 flatMap f    =  flatten . map f
@@ -1289,6 +1327,7 @@ flatMap      = (flatten .) . map
 flattenAgain = flatMap id
 seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
 #+end_src
+
 *** 00:09:11 In haskell all functions take 1 argument.
   Right associative.
   f :: Int -> (Int -> Int)
@@ -1296,16 +1335,11 @@ seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
   Is good for learning trampoline.
   Which fixes the stack overflow problem.
   You have to do workarounds.
-*** 00:33:07 ghci
-  :info Z
-  :type x
-  :set -fderer-type-errors
-  :reload
-*** 00:57:00
+*** 00:57:00 Typing Holes
   Using =typing holes= to "find" the implementation based on types, and the errors returned by GHCI.
-  1) Return a typed hole variable eg: "_todo"
-  2) Look the "Found hole" section
-  3) Look at the "Relevant bindings include" section
+  1) Return a typed hole variable eg: ~_todo~
+  2) Look the *Found hole* section
+  3) Look at the *Relevant bindings include* section
 *** 01:15:00 foldr
   is *constructor replacement*, don't think "I am folding from the right"
   where the function it takes is the constructor we are going to use to replace
@@ -1320,14 +1354,14 @@ seqOptional  = foldRight (twiceOptional (:.)) (Full Nil)
 *** 01:37:00 function *const a b* returns the first argument (a)
 ** Part #2: List, Functor, Applicative
 #+begin_src haskell
-  find p = foldRight _todo Empty
-  find p = foldRight (\a o -> _todo) Empty
-  find p = foldRight (\a o -> if p a then Full a else o) Empty
-  lengthGT4 (_ :. _ :. _ :. _ :. _ :. _) = True
-  lengthGT4 _                            = False
-  reverse = foldLeft (\as b -> b :. as) Nil
-  reverse = foldLeft (flip (:.)) Nil
-  produce f x = x :. produce f (f x)
+find p = foldRight _todo Empty
+find p = foldRight (\a o -> _todo) Empty
+find p = foldRight (\a o -> if p a then Full a else o) Empty
+lengthGT4 (_ :. _ :. _ :. _ :. _ :. _) = True
+lengthGT4 _ = False
+reverse = foldLeft (\as b -> b :. as) Nil
+reverse = foldLeft (flip (:.)) Nil
+produce f x = x :. produce f (f x)
 #+end_src
 *** 00:11:23 twiceOptional, is a function that takes 1 function and puts them into optional
 *** 00:27:00 you """can""" implement foldr with foldl but it won't do the right thing with infinity

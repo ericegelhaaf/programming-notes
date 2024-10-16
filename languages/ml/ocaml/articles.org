@@ -22,8 +22,12 @@
 - 19 https://tarides.com/blog/2019-05-09-an-introduction-to-ocaml-ppx-ecosystem
 - 20 https://medium.com/darklang/leaving-ocaml-fce7049a2a40
 - 21 https://discuss.ocaml.org/t/plans-to-choose-an-official-package-project-manager/8620
-- 22 Roguelike with effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
-- 22 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
+- Algebraic Effects
+  - f# https://dev.to/shimmer/why-algebraic-effects-matter-in-f-3m7g
+  - https://antelang.org/blog/effects_ownership_and_borrowing/
+  - https://ocaml.org/manual/5.2/effects.html
+  - 22 Roguelike with effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/BJBZ7TMeq
+  - 22 Scopes and effect handlers https://hackmd.io/@yF_ntUhmRvKUt15g7m1uGw/Bk-5NXh15
 - 22 https://justabluddyblog.wordpress.com/2022/05/01/remaking-an-old-game-in-ocaml/
 - 22 https://linoscope.github.io/writing-a-game-boy-emulator-in-ocaml/
 - 23 https://borretti.me/article/two-years-ocaml

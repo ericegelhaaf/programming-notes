@@ -1,6 +1,10 @@
 - ~/.stack/config.yml
 - source https://github.com/commercialhaskell/stack
 - doc https://docs.haskellstack.org/en/stable/
+- instead of each time figuring out a build plan
+  - it fixes the version of an entire set of libraries
+  - with snapshots
+  - updated in bulk
 - tool: get a dependency DOT graph
   https://stackoverflow.com/questions/69270620/generating-haskell-module-dependency-tree
   https://docs.haskellstack.org/en/stable/dependency_visualization/
