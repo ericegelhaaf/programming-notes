@@ -410,6 +410,8 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 https://haskell-containers.readthedocs.io/en/latest/
 |------------------+-------------------------------+---------------------------------------------------------------------------------------|
 |              <r> |              <c>              | <l>                                                                                   |
+|          package |            module             | functions                                                                          |
+|------------------+-------------------------------+---------------------------------------------------------------------------------------|
 |            [[https://hackage.haskell.org/package/array][array]] |          Data.Array           |                                                                                       |
 |       [[https://hackage.haskell.org/package/containers][containers]] |          Data.Graph           |                                                                                       |
 |                  |          Data.IntMap          |                                                                                       |
