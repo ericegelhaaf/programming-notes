@@ -1,16 +1,19 @@
 - Video
+  - [[https://www.youtube.com/playlist?list=PLxj9UAX4Em-Lz5btngxMVZxf_B44GETVz][Haskell Deconstructed]] by jekor
+  - [[https://www.youtube.com/playlist?list=PL_xuff3BkASMwjdTdsqWn5j4VcLGG5jem][Project Euler solutions in Haskell]] by Daniel Silverstone (Kinnison)
   - [[https://www.youtube.com/playlist?list=PLD8gywOEY4HauPWPfH0pJPIYUWqi0Gg10][Introduction to Haskell]] by Well-Typed
   - [[https://www.youtube.com/playlist?list=PLD8gywOEY4HaG5VSrKVnHxCptlJv2GAn7][Haskell Unfolder]] by Well-Typed
   - [[https://www.youtube.com/playlist?list=PLu6SHDdOToSe7ZOw-mR55j2GEjkNTQgrd][Haskell for Dilettantes]] by Tea Leaves
   - [[https://www.youtube.com/playlist?list=PLNEK_Ejlx3x1D9Vq5kqeC3ZDEP7in4dqb][Haskell Course]] by IOG Academy
-  - Haskel for imperative programmers https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV
-  - MOOC Erik Meijer https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk
-  - Haskell beginners 2022 https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c
-  - Theory for Programmers https://www.youtube.com/watch?v=SmXB2K_5lcA
-  - https://github.com/AndrasKovacs/elaboration-zoo
-    https://www.youtube.com/playlist?list=PL2ZpyLROj5FOt99f_KCxARvd1hDqKns5b
+  - [[https://www.youtube.com/playlist?list=PL_xuff3BkASMOzBr0hKVKLuSnU4UIinKx][Adventures in Haskell]] by Daniel Silverstone (Kinnison)
+  - [[https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV][Haskel for imperative programmers]] by Philipp Hagenlocher
+  - [[https://www.youtube.com/playlist?list=PL2ZpyLROj5FOt99f_KCxARvd1hDqKns5b][Type theory elaboration implementation]] by András Kovács
+    - https://github.com/AndrasKovacs/elaboration-zoo
+  - [[https://www.youtube.com/playlist?list=PLphMJRtThhgS_8Psjv5aw-0ex8cT8Y-Sk][MOOC Functional Programming]] by Erik Meijer
+  - [[https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c][Haskell beginners 2022]] by chshersh
+  - [[https://www.youtube.com/playlist?list=PLVFrD1dmDdvcjCQDPhExqP56jqxp0Ssn_][Theory for Programmers]] by code_report
 
-- https://github.com/soupi/haskell-study-plan?tab=readme-ov-file#project-ideas
+- https://github.com/soupi/haskell-study-plan
 - https://www.scs.stanford.edu/14sp-cs240h/
 - http://learn.hfm.io/
 - Haskell via Sokoban - Tutorial - https://haskell-via-sokoban.nomeata.de/
@@ -385,7 +388,7 @@ filter p (x:xs)
 ** 11 - Countdown Problem
 ** 12 - Lazy Evaluation
 ** 13 - Equational Reasoning
-* 16 | Functional Programming in Haskell: Supercharge Your Coding
+* 16 | FP in Haskell: Supercharge Your Coding
 Source: https://github.com/wimvanderbauwhede/HaskellMOOC
 ** 1 Haskell First Steps
 - Pure functional programming languages do NOT have any statements,
@@ -710,22 +713,22 @@ instance MonadPlus Maybe where
 
 - Testing
   #+begin_src haskell
-    import Test.Hspec
-    main :: IO ()
-    main = hspec $ do
-      describe "how to write a test" $ do
-        it "should be able to run tests" $ do
-          someFunc `Shouldbe` "someFunc"
+  import Test.Hspec
+  main :: IO ()
+  main = hspec $ do
+    describe "how to write a test" $ do
+      it "should be able to run tests" $ do
+        someFunc `Shouldbe` "someFunc"
   #+end_src
 
 - Functions that take 2 arguments, of the same type, can be used as operators with ``
 
 - Function definition, Point-free style
   #+begin_src haskell
-    add a b = a + b
-    add a b = (+) a b
-    add a   = (+) a
-    add     = (+)
+     add a b = a + b
+     add a b = (+) a b
+     add a   = (+) a
+     add     = (+)
   #+end_src
 
 - List monad
@@ -755,11 +758,11 @@ instance MonadPlus Maybe where
 
 - zipWith
   #+begin_src haskell
-    cols = repeat [0..]
-    rows = map repeat [0..]
+    cols    = repeat [0..]
+    rows    = map repeat [0..]
     repeat8 = take 8 . repeat
-    cols8 = repeat8 [0..7]
-    rows8 = map repeat8 [0..7]
+    cols8   = repeat8 [0..7]
+    rows8   = map repeat8 [0..7]
     coords4 = zipWith zip rows8 cols8
   #+end_src
 
@@ -1459,7 +1462,9 @@ https://www.youtube.com/watch?v=0DQrZ_CVNPc
 
 * 19 | Haskell 10X                  | Antoine Leblanc
 repo: https://github.com/google/haskell-trainings
-** DONE Haskell 101 https://www.youtube.com/watch?v=cTN1Qar4HSw
+** DONE Haskell 101
+
+https://www.youtube.com/watch?v=cTN1Qar4HSw
 - EXTRA: https://ucsd-progsys.github.io/liquidhaskell-blog/
   - Allows you to place constraints on the values
 - Everything is a function
@@ -1475,6 +1480,7 @@ repo: https://github.com/google/haskell-trainings
   your logic/module is completely independent, knows nothing about the outside world
   your outer layer connect it to the rest of the world by connecting its dependencies
 - difference with DI is that this in enforced by the compiler
+
 *** Lazyness (18:00)
 - Reductions steps:
   - Strict evaluation: inner to outer evaluation
@@ -1564,16 +1570,16 @@ repo: https://github.com/google/haskell-trainings
 TODO 00:46:00
 - 00:06:40 end of recap
 - If a library has 2 versions of a function, with (') is read as "f prime".
-  The one with the (') is ~eager~
-  The one without it is ~lazy~
+  - The one with the (') is ~eager~
+  - The one without it is ~lazy~
 - Problems to solve with our current knowledge gap
   1) Extend data types, ex: to show or compare
   2) Type Constraints, are sometimes mandatory to declare some functions
   3) Cascading Maybe's, might be solved with nested case's
   4) IO
-     Can't apply regular functions on it
-     Can't get values out of it, BUT can operate while keeping it on IO
-     Can't pattern match on it
+     - Can't apply regular functions on it
+     - Can't get values out of it, BUT can operate while keeping it on IO
+     - Can't pattern match on it
 - ~read~ function is partial, eg: trying to read "0" as a Color it will panic
 *** 1 ) How to extend our types
 - Declaring the type and implementing it
@@ -1649,7 +1655,8 @@ TODO 00:46:00
       enumFromThenTo :: a -> a ->
 #+end_src
 *** 3 ) How to chain contextual functions (25:10)
-| Type Class  |     | fun  |    |                            |
+|-------------+-----+------+----+----------------------------|
+| TypeClass   |     | fun  |    |                            |
 |-------------+-----+------+----+----------------------------|
 | Functor     | <$> | fmap | :: | __(a ->   b) -> C a -> C b |
 | Applicative | <*> | ap   | :: | C (a ->   b) -> C a -> C b |

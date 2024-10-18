@@ -436,6 +436,7 @@ source/slides https://github.com/mzero/haskell-amuse-bouche
   #+end_src
 
 * 13 | Sed implementation in Haskell | nixcasts
+playlist https://www.youtube.com/playlist?list=PLUQzXLQ6jvHL_k3QOMKXehVoZdk-sKtHd
 source https://github.com/connermcd/sed
 ** 1
 

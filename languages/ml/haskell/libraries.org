@@ -1,5 +1,7 @@
 - https://evanrelf.com/haskell-libraries-i-love
 - https://www.mmhaskell.com/production-checklist
+- ascii https://hackage.haskell.org/package/ascii
+  - provides a quasi-quote (compile time literal strings check)
 - utils
   - safe: prelude safe variants
     - https://github.com/ndmitchell/safe#readme
@@ -13,6 +15,9 @@
     - https://github.com/ndmitchell/extra
     - https://hackage.haskell.org/package/extra
     - takeEnd dropEnd breakEnd
+- network-simple for servers
+  - https://hackage.haskell.org/package/network-simple
+  - https://github.com/k0001/network-simple
 - regex
   - regex-base: the common-api of each implementation
   - regex-tdfa https://www.williamyaoh.com/posts/2019-04-11-cheatsheet-to-regexes-in-haskell.html
@@ -21,6 +26,8 @@
 - time https://www.williamyaoh.com/posts/2019-09-16-time-cheatsheet.html
 - generics https://markkarpov.com/tutorial/generics
 - exceptions https://markkarpov.com/tutorial/exceptions
+  - safe-exceptions https://hackage.haskell.org/package/safe-exceptions
+  - unliftio https://hackage.haskell.org/package/unliftio
 - template haskell https://markkarpov.com/tutorial/th.html
 - megaparsec https://markkarpov.com/tutorial/megaparsec
 
@@ -34,29 +41,31 @@
 - parsec: It is defined as a monad transformer that can be stacked on arbitrary monads, and it is also parametric in the input stream type.
 - State of the Haskell ecosystem https://github.com/Gabriella439/post-rfc/blob/main/sotu.md https://github.com/Gabriel439/post-rfc/blob/main/sotu.md
 
+|        <r> |    |     |                                                  |                                                |
 |------------+----+-----+--------------------------------------------------+------------------------------------------------|
-| lens       | 23 | 1.9 | Lenses, Folds and Traversals                     | https://github.com/ekmett/lens/                |
+|       lens | 23 | 1.9 | Lenses, Folds and Traversals                     | https://github.com/ekmett/lens/                |
 | singletons | 24 | 0.3 | Fake dependent types in Haskell using singletons | https://github.com/goldfirere/singletons       |
-| vector     | 23 | 349 | indexed arrays                                   | https://github.com/haskell/vector              |
+|     vector | 23 | 349 | indexed arrays                                   | https://github.com/haskell/vector              |
 | containers | 23 | 0.3 | data types                                       | https://github.com/haskell/containers          |
-| mtl        | 23 | 0.3 | monad transformer                                | https://github.com/haskell/mtl                 |
+|        mtl | 23 | 0.3 | monad transformer                                | https://github.com/haskell/mtl                 |
 | accelerate | 24 | 0.9 | array processing (GPU)                           | https://github.com/AccelerateHS/accelerate/    |
-| frames     | 23 | 0.3 | data frames                                      | https://github.com/acowley/Frames              |
+|     frames | 23 | 0.3 | data frames                                      | https://github.com/acowley/Frames              |
 |------------+----+-----+--------------------------------------------------+------------------------------------------------|
-| haskellR   | 24 | 0.6 | R bindings                                       | https://github.com/tweag/HaskellR              |
-| cassava    | 24 | 0.2 | CSV parsing                                      | https://github.com/haskell-hvr/cassava         |
-| parsec     | 23 | 0.8 | Parser lib                                       | https://github.com/haskell/parsec              |
+|   haskellR | 24 | 0.6 | R bindings                                       | https://github.com/tweag/HaskellR              |
+|    cassava | 24 | 0.2 | CSV parsing                                      | https://github.com/haskell-hvr/cassava         |
+|     parsec | 23 | 0.8 | Parser lib                                       | https://github.com/haskell/parsec              |
 | attoparsec | 24 | 0.5 | ByteString parser                                | https://github.com/haskell/attoparsec          |
-| cereal     | 22 | 0.0 | binary serialization                             | https://github.com/GaloisInc/cereal            |
-| network    | 23 | 0.2 | low level network lib                            | https://github.com/haskell/network             |
-| hip        | 23 | 0.1 | image processing                                 | https://github.com/lehins/hip                  |
-| amazonka   | 24 | 0.6 | amazon SDK                                       | https://github.com/brendanhay/amazonka         |
+|     cereal | 22 | 0.0 | binary serialization                             | https://github.com/GaloisInc/cereal            |
+|    network | 23 | 0.2 | low level network lib                            | https://github.com/haskell/network             |
+|        hip | 23 | 0.1 | image processing                                 | https://github.com/lehins/hip                  |
+|   amazonka | 24 | 0.6 | amazon SDK                                       | https://github.com/brendanhay/amazonka         |
 |------------+----+-----+--------------------------------------------------+------------------------------------------------|
-| async      | 23 | 0.3 | for concurrent programming                       | https://github.com/simonmar/async              |
+|      async | 23 | 0.3 | for concurrent programming                       | https://github.com/simonmar/async              |
 | validation | 21 | 0.1 | Like Either but acc Applicative                  | https://github.com/system-f/validation         |
-| streaming  | 23 | 0.1 | streaming                                        | https://github.com/haskell-streaming/streaming |
-| conduit    | 22 | 0.8 | Streaming data lib                               | https://github.com/snoyberg/conduit            |
-| resourcet  |  * |   * | alloc and free of scarce resources               | *                                              |
+|  streaming | 23 | 0.1 | streaming                                        | https://github.com/haskell-streaming/streaming |
+|    conduit | 22 | 0.8 | Streaming data lib                               | https://github.com/snoyberg/conduit            |
+|  resourcet |  * |   * | alloc and free of scarce resources               | *                                              |
+|    managed |    |     | alloc and free of scarce resources               | https://github.com/Gabriella439/managed        |
 |------------+----+-----+--------------------------------------------------+------------------------------------------------|
 * prelude
 |----------------+-----+-----------------------------|
@@ -94,6 +103,7 @@
 | [[https://hackage.haskell.org/package/base-4.19.1.0/docs/Text-Printf.html][printf]]      |    |     | text formatting (slow)             |
 |-------------+----+-----+------------------------------------|
 - optparse https://github.com/pcapriotti/optparse-applicative/blob/master/README.md
+- readline https://hackage.haskell.org/package/readline
 * database
 |-----------------+----+-----+--------------------+-------------------------------------------------|
 | opaleye         | 24 | 0.6 | postgres SQL's DSL | https://github.com/tomjaguarpaw/haskell-opaleye |
@@ -105,9 +115,21 @@
 |-----------------+----+-----+--------------------+-------------------------------------------------|
 * graphics
 - reanimate-svg
-  - https://reanimate.github.io/
-  - https://www.williamyaoh.com/posts/2020-05-10-reanimate-an-experience-report.html
-  - https://www.williamyaoh.com/posts/2020-05-31-reanimate-nqueens-tutorial.html
+  - source https://github.com/reanimate/reanimate
+  - home https://reanimate.github.io/
+  - package https://hackage.haskell.org/package/reanimate-1.1.6.0/docs/Reanimate.html
+  - 20 https://www.williamyaoh.com/posts/2020-05-10-reanimate-an-experience-report.html
+    - source https://gitlab.com/williamyaoh/nqueens
+      - https://gitlab.com/williamyaoh/nqueens/-/blob/master/src/bin/nqueens.hs
+      - https://gitlab.com/williamyaoh/nqueens/-/blob/master/src/bin/anim.hs
+    - The (1, 1) vector goes UP and to the RIGHT, not down and to the right.
+    - rotation in degrees
+    - 16x9 canvas
+      - ( 0, 0)   CENTER
+      - ( 8, 4.5) TR
+      - (-8,-4.5) BL
+  - 20 https://www.williamyaoh.com/posts/2020-05-31-reanimate-nqueens-tutorial.html
+    - Time goes from 0 to 1
 - opengl https://lokathor.gitbooks.io/using-haskell/content/opengl/
 - opengl https://github.com/madjestic/Haskell-OpenGL-Tutorial
 - gtk autogenerated https://hackage.haskell.org/package/gi-gtk

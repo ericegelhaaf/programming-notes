@@ -1,3 +1,4 @@
+- https://kowainik.github.io/books/do-pure-haskell-interview
 - Abstractions in Context lihttps://williamyaoh.gumroad.com/l/CLyzT
 - Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
   https://unsafeperform.io/retroclash/
@@ -257,6 +258,10 @@ sierpinskiTri w x y size
 - Updated code version https://github.com/tssm/up-to-date-real-world-haskell/
 - Real World Haskell outdated parts https://stackoverflow.com/questions/23727768/which-parts-of-real-world-haskell-are-now-obsolete-or-considered-bad-practice
 - Online http://book.realworldhaskell.org/read/
+
+System.Cmd -> System.Process
+System.Time -> Data.Time (Calendar/Clock/Format/LocalTime)
+
 ** 6 Using Typeclasses
 *** Defining
 - Different implementation depending on the type of data given.
@@ -308,6 +313,207 @@ instance Show Color where
   show Green = "verde"
   show Blue = "azul"
     #+end_src
+** TODO 20 Systems Programming in Haskell
+
+ME: backticks allows us to "flip" notElem
+#+begin_src haskell
+> SD.getDirectoryContents  "/" >>= return . filter (`notElem` [".",".."])
+["sys","sbin","tmp","mnt","srv","opt","var","home","dev","lib64","media","lib32","libx32","bin","usr","snap","run","etc","proc","root","cdrom","boot","lib"]
+#+end_src
+
+Piping...
+
+** TODO 24 Concurrent and MultiCore Programming
+
+- Concurrent
+  - possible unrelated tasks
+  - at the same time
+  - IO interactions are common
+
+- Parallel
+  - same task/problem
+  - IO interactions are rare
+
+- Threads are nondeterministic
+
+- =MVar= is a _synchronization variable_
+  - his state is either *full* or *empty*
+  - thread is put to _sleep_ if either
+    1) put into a full MVar
+    2) take from an empty MVar
+  - in lue of the lack of a way for a thread to know the state of another thread. That would have made Haskell threads heavier.
+  - examples: a notification, or provide mutual exclusion (semaphore?)
+
+*** Example: compressing on a thread AND handling input at the same time (forkIO, readline, zlib)
+
+#+begin_src haskell
+  import Control.Concurrent (forkIO)
+  import Control.Exception (handle)
+  import Control.Monad (forever)
+  import qualified Data.ByteString.Lazy as L
+  import Sytem.Console.ReadLine (readline)  -- readline package
+  import Codec.Compression.GZip (compress) -- zlib package
+
+  main :: IO ()
+  main = do
+    maybeLine <- readLine "Enter a file to compress> "
+    case maybeLine of
+         Nothing -> return ()
+         Just "" -> return ()
+         Just name -> do
+           handle print $ do
+             content <- L.readFile name -- open file
+             forkIO (compressFile name content) -- reading/compression happens on the thread
+             return ()
+           main
+    where
+      compressfile path = L.writeFile (path ++ ".gz") . compress
+#+end_src
+
+*** TODO Example: a library to wait for child treads to complete (MVar, containers)
+
+#+begin_src haskell
+import Control.Concurrent
+import Control.Exception (Exception, try)
+import qualified Data.Map as M -- from containers package
+
+newtype ThreadManager
+  = Mgr (MVar (M.map ThreadId (MVar ThreadStatus)))
+  deriving (Eq)
+
+data ThreadStatus
+  = Running
+  | Finished -- terminated normally
+  | Threw Exception -- killed by an uncaugh exception
+  deriving (Eq, Show)
+#+end_src
+
+#+begin_src  haskell
+forkManaged :: ThreadManager -> IO () -> IO ThreadId
+forkManaged (Mgr mgr) body =
+  modifyMVar mgr $ \m -> do
+    state <- newEmptyVar
+    tid <- forkIO $ do
+      result <- try body
+      putMVar state (either Threw (const Finished) result)
+    return (M.insert tid state, tid) -- (newvalue, returnvalue)
+
+getStatus :: ThreadManager -> ThreadId -> IO (Maybe ThreadStatus)
+getStatus (Mgr mgr) tid =
+  modifyMVar mgr $ \m -> case M.lookup tid m of
+                           Nothing -> return (m, Nothing) -- no managed, immediately returns
+                           Just st -> tryTakeMVar st >>= \mst -> case mst of -- managed
+                                                                   Nothing -> return (m, Just Running) -- no blocking
+                                                                   Just sth -> return (M.delete tid m, Just sth)
+#+end_src
+
+#+begin_src haskell
+  waitFor :: ThreadManager -> ThreadId -> IO (Maybe ThreadStatus) -- block on id
+  waitFor (Mgr mgr) tid = do
+    maybeDone <- modifyMVar mgr $ \m ->
+                                    return $ case M.updateLookupWithKey (\_ _ -> Nothing) tid m of
+                                                  (Nothing, _) -> (m, Nothing)
+                                                  (done, m') -> (m', done)
+    case maybeDone of
+      Nothing -> return Nothing
+      Just st -> Just `fmap` takeMVar st
+#+end_src
+
+#+begin_src haskell
+newManager  :: IO ThreadManager
+waitAll     :: ThreadManager -> IO () -- block on all
+#+end_src
+
+*** Example: how modifyMVar code looks like
+
+#+begin_src haskell
+  import Control.Concurrent (MVar, putMVar, takeMVar)
+  import Control.Exception (block, catch, throw, unblock)
+  import Prelude hiding (catch)
+  modifyMVar :: MVar a -> (a -> IO (a,b)) -> IO b
+  modifyMVar m io =
+    block $ do
+      a <- takeMVar m
+      (b,r) <- unblock (io a) `catch` \e -> putMVar m a >> throw e
+      putMVar m b
+      return r
+#+end_src
+
+*** Example:
+- reads block until there is a value to read
+- writes never block
+#+begin_src haskell
+  import Control.Concurrent
+  import Control.Concurrent.Chan
+  chanExample = do
+    ch <- newChan
+    forkIO $ do
+      writeChan ch "hello world"
+      writeChan ch "now i quit"
+    readChan ch
+    readChan ch
+#+end_src
+
+** TODO 28 STM Software Transactional Memory
+
+|-----------------+----------------------------|
+|             <r> |                            |
+|   MVar problems | due...                     |
+|-----------------+----------------------------|
+| race conditions | forgotten locks            |
+|       deadlocks | inconsistent lock ordering |
+|      corruption | uncaught exceptions        |
+|    lost wakeups | ommited notifications      |
+|-----------------+----------------------------|
+
+With STM we executa a block of actions as a transaction using the =atomically= combinator.
+Automatically restarting the transactin on failure.
+
+*** Example: mmorpg
+
+#+begin_src haskell
+  {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+  import Control.Concurrent.STM
+  import Control.Monad
+
+  data Item
+    = Scroll
+    | Wand
+    | Banjo deriving (Eq, Ord, Show)
+
+  newtype Gold = Gold Int
+    deriving (Eq, Ord, Show, Num)
+  newtype HitPoint = HitPoint Int
+    deriving (Eq, Ord, Show, Num)
+
+  type Inventory = TVar [Item]
+  type Health = TVar HitPoint
+  type Balance = TVar Gold
+
+  data Player = Player {
+    balance :: Balance,
+    health :: Health,
+    inventory :: Inventory
+    }
+#+end_src
+
+#+begin_src haskell
+basicTransfer :: Gold -> Balance -> Balance -> STM ()
+basicTransfer qty fromBal toBal =
+  fromQty <- readTVar fromBal
+  toQty   <- readTVar toBal
+  writeTVar fromBal (fromQty - qty)
+  writeTVar   toBal (  toQty + qty)
+
+transferTest :: STM (Gold,Gold)
+transferTest = do
+  alice <- newTVar 12
+  bob   <- newTVar 4
+  basicTransfer 3 alice bob
+  liftM2 (,) (readTVar alice) (readTVar bob)
+#+end_src
+
+> atomically transferTest
 
 * 10 | Seven Languages in 7 weeks                | PragProg | Bruce A. Tate
 
@@ -2218,16 +2424,14 @@ source https://github.com/Apress/practical-haskell
   2) Purity, separates code with side-effects
      - Expressions in haskell cannot have side effects by defaults. Are called pure.
      - Referential Transparency: https://en.wikipedia.org/wiki/Referential_transparency
-       If it can be replaced with their corresponding value (and vice-versa) without changing the program's behavior.
-       Requires a function to be pure.
+       - If code can be replaced with their corresponding value (and vice-versa) without changing the program's behavior.
+       - Requires a function to be pure.
   3) Laziness, *evaluation model*
   4) Statically Checked
-     - Java and C#, need to perform extra type checking at runtime
+     - Java and C#, need to perform extra _type checking at runtime_
      - Haskell, no more type checks are done once the program has been compiled. Increases Performance.
-     - Type-Oriented Programming:
-       programmers know the type of the functions they are developing and have a broad idea of the structure of the code
-       then they fill the holes with expressions from the surrounding environment
-  5) Polimorphism,
+     - Type-Oriented Programming: programmers know the type of the functions they are developing and have a broad idea of the structure of the code then they fill the holes with expressions from the surrounding environment
+  5) Polimorphism
      - based on *parametricity* (like generics in Java and C#) (templates on c++?)
      - and *type classes* which groups different types witha common interface
 - 1980 - Miranda was one of the most important lazy functional programming languages
@@ -2238,8 +2442,7 @@ source https://github.com/Apress/practical-haskell
 *** Characters, Numbers and Lists
 
 - Data: Clients, Machines and Orders
-- "Sometimes, ADTs and pattern matching lead to code that's not clear enough.
-   Records introduce some syntactic forms that make values easier to create and modify"
+- "Sometimes, ADTs and pattern matching lead to code that's not clear enough. Records introduce some syntactic forms that make values easier to create and modify"
 - Haskell does not make numeric constants of a specific type.
   Uses =Num= and =Fractional=. Which are polymorphic.
 - Like in most functional languages, lists in Haskell are *linked lists*
@@ -2263,7 +2466,7 @@ source https://github.com/Apress/practical-haskell
   - similar to packages in Java or namespaces in C#
   - each modulo defined on his own file
   -        Chapter2.Section2.Example goes in
-      path Chapter2/Section2/Example.hs
+  -   path Chapter2/Section2/Example.hs
   - module Chapter2.Section2.Example where
 
 *** Defining Simple Functions
@@ -4351,7 +4554,9 @@ resolve service hostname = do
   3) requests/responses can contain additional metadata
   4) is possible to make multiple requests over a single connection
 
-- Versions
+*** The specification
+
+- v1 revisions
   |-----+----+------|
   | ver | yy |  RFC |
   |-----+----+------|
@@ -4365,15 +4570,443 @@ resolve service hostname = do
   |     | 22 | 9112 |
   |-----+----+------|
 
-*** The specification
 *** HTTP requests
-*** ASCII strings
+
+- the first line is called ~request line~
+  - request method
+  - resource
+  - protocol version
+
+- then come the ~fields~
+
+*** ASCII strings (ascii package)
+
+#+begin_src haskell
+line :: BS.ByteString -> BS.ByteString
+line x = x <> fromString "\r\n"
+
+helloRequestString :: BS.ByteString
+helloRequestString =
+  line (fromString "GET /hello.txt HTTP/1.1")
+    <> line (fromString "User-Agent: curl/7.64.1")
+    <> line (fromString "Accept-Language: en, mi")
+    <> line (fromString "")
+#+end_src
+
+using the =ascii= package
+
+#+begin_src haskell
+{-# LANGUAGE QuasiQuotes #-}
+import qualified ASCII as A
+import qualified ASCII.Char as A
+
+helloRequestString' :: BS.ByteString
+helloRequestString' =
+  line' [A.string|Get /hello.txt HTTP/1.1|]
+    <> line' [A.string|User-Agent: curl/7.64.1|]
+    <> line' [A.string|Accept-Language: en, mi|]
+    <> line' [A.string||]
+
+crlf :: [A.Char]
+crlf = [A.CarriageReturn, A.LineFeed]
+
+line' :: BS.ByteString -> BS.ByteString
+line' x = x <> A.fromCharList crlf
+#+end_src
+
 *** HTTP responses
-*** Serving others
+
+- the first response line is the ~status line~
+  - protocol version
+  - status code
+
+- Content-Type: aka the MIME type
+- Content-Length:
+  - in bytes, without considering the header
+  - to let the client know for how long it should read
+
+#+begin_src haskell
+helloResponseString :: BS.ByteString
+helloResponseString =
+  line' [A.string|HTTP/1.1 200 OK|]
+    <> line' [A.string|Content-Type: text/plain; charset=us-ascii|]
+    <> line' [A.string|Content-Lenght: 6|]
+    <> line' [A.string||]
+    <> [A.string|Hello!|]
+#+end_src
+
+*** Serving others (network-simple package, send, recv, serve)
+
+- network-simple package
+  - https://hackage.haskell.org/package/network-simple
+  - https://github.com/k0001/network-simple
+
+#+begin_src haskell
+  import Network.Simple.TCP (serve, HostPreference (..))
+  import qualified Network.Simple.TCP as Net
+#+end_src
+
+- Net.send instead of ~S.sendAll~
+  - output is polymorphic "m a" with MonadIO, instead of "IO a"
+  - sparing you a liftIO in a ResourceT context
+- Net.recv instead of ~S.recv~
+  - output is polymorphic "m (Maybe ByteString)"
+  - instead of relying on an null/empty output to signal the end
+- Net.serve
+  - we do NOT need to worry about closing the socket
+  - connections are handled concurrently, one per thread
+  #+begin_src haskell
+    serve :: MonadIO m
+          => HostPreference               -- eg: HostAny
+          -> ServiceName                  -- eg: "http", "8000"
+          -> ((Socket,SockAddr) -> IO ()) -- handler/callback
+          -> m a
+  #+end_src
+
+**** Example: Net.serve
+#+begin_src haskell
+ourFirstServer :: IO ()
+ourFirstServer =
+  Net.serve HostAny "8000" go
+  where
+    go :: (Socket, S.SockAddr) -> IO ()
+    go (s, a) = do
+      putStrLn ("New connection from: " <> show a)
+      Net.send s helloResponseString
+#+end_src
+
 *** Exercises
 repeat until nothing
+
+#+begin_src haskell
+repeatUntilNothing :: (Monad m) => m (Maybe chunk) -> (chunk -> m ()) -> m ()
+repeatUntilNothing getMChunk f = do
+  mChunk <- getMChunk
+  case mChunk of
+    Nothing -> return ()
+    Just chunk ->
+      f chunk >> repeatUntilNothing getMChunk f
+#+end_src
+
 make an http request
+
+#+begin_src haskell
+helloHaskellClose :: BS.ByteString
+helloHaskellClose =
+  line' [A.string|GET / HTTP/1.1|]
+    <> line' [A.string|Host: haskell.org|]
+    <> line' [A.string|Connection: close|]
+    <> line' [A.string||]
+
+myGetHaskellClose :: IO ()
+myGetHaskellClose = runResourceT do
+  addr <- liftIO $ resolve "http" "haskell.org"
+  (_, s) <- openAndConnect addr
+  liftIO do
+    S.sendAll s helloHaskellClose
+    repeatUntilNothing (Net.recv s 1024) BS.putStr
+    S.gracefulClose s 1000
+#+end_src
+
 test the hello server
+
+** 6 HTTP types
+
+#+begin_src haskell
+  import ASCII (ASCII)
+  import ASCII.Decimal (Digit (..))
+  import qualified Data.ByteString.Lazy as LBS
+
+  data Version = Version Digit Digit
+
+  data Request = Request RequestLine [Field] (Maybe Body)
+  data RequestLine = RequestLine Method RequestTarget Version
+  data Method = Get | Post -- | Head | Put | Delete | Connect | Options | Trace
+  data Method = Method (ASCII ByteString)
+  data RequestTarget = RequestTarget (ASCII ByteString)
+
+  data Response = Response StatusLine [Field] (Maybe Body)
+  data StatusLine = StatusLine Version StatusCode (Maybe ReasonPhrase)
+  data StatusCode = StatusCode Digit Digit Digit
+  data ReasonPhrase = ReasonPhrase (ASCII ByteString)
+
+  data Field = Field FieldName FieldValue
+  data FieldName = FieldName (ASCII ByteString) -- RFC says you can make up your own field name
+  data FieldValue = FieldValue (ASCII ByteString)
+
+  data Body = Body (ASCII LBS.ByteString) -- LByteString in "relude"
+#+end_src
+
+*** The ASCII type
+
+#+begin_src haskell
+  import ASCII (ASCII)
+  -- when we know for a fact that a string is valid ASCII, we use the constructor
+  newtype ASCII string = ASCII string
+  -- or manual conversion
+  convertStringMaybe :: ByteString -> Maybe (ASCII ByteString)
+  lift :: ASCII ByteString -> ByteString
+  -- otherwise, we can use the quasiquotes
+  http :: ASCII ByteString
+  http = [A.string|HTTP|]
+#+end_src
+
+*** Body (Data.ByteString.Lazy module)
+
+you can think of a lazy bytestring as a [bytestring], a list of strict bytestrings
+
+#+NAME: fns defined on Data.ByteString.Lazy
+#+begin_src haskell
+  fromChunks ::   [ByteString] -> LBS.ByteString
+  toChunks   :: LBS.ByteString -> [ByteString]
+  fromStrict ::     ByteString -> LBS.ByteString
+  toStrict   :: LBS.ByteString -> ByteString
+#+end_src
+
+*** Exercises
+
+construct some values
+
+#+begin_src haskell
+helloRequest :: Request
+helloRequest =
+  Request start [host, lang] Nothing
+  where
+    start = RequestLine (Method [A.string|GET|]) (RequestTarget [A.string|/hello.txt|]) (Version Digit1 Digit1)
+    host = Field (FieldName [A.string|Host|]) (FieldValue [A.string|www.example.com|])
+    lang = Field (FieldName [A.string|Accept-Language|]) (FieldValue [A.string|en, mi|])
+
+helloResponse :: Response
+helloResponse =
+  Response (StatusLine version code Nothing) fields body
+  where
+    code = StatusCode Digit4 Digit0 Digit4
+    version = Version Digit1 Digit1
+    fields =
+      [ Field (FieldName [A.string|Content-Type|]) (FieldValue [A.string|text/plain; charset=us-ascii|]),
+        Field (FieldName [A.string|Content-Length|]) (FieldValue [A.string|6|])
+      ]
+    body = Just $ Body [A.string|Hello!|]
+#+end_src
+
+infinite byte strings (create one and "take" some of it without blowing up)
+
+** 7 Encoding
+
+from Response to ByteString
+
+#+begin_src haskell
+  import qualified Data.ByteString.Builder as BSB
+  import qualified Data.Text.Lazy.Builder as TB
+  import qualified Data.Text.Lazy as LT
+  import qualified Data.Text.Lazy.IO as LT -- putStrLn
+#+end_src
+
+*** String builders (Builder,LText)
+
+- they support _efficient_ concatenation
+
+- from
+  #+begin_src haskell
+sayHello :: Text -> Text
+sayHello name = T.pack "hello, " <> name <> T.pack "!"
+  #+end_src
+
+- to
+  #+begin_src haskell
+sayHelloWithBuilder :: Text -> Text
+sayHelloWithBuilder name =
+  LT.toStrict -- optional: get it into a contiguos area of memory
+  $ TB.toLazyText
+  $ TB.fromString "Hello " <> TB.fromText name <> TB.fromString "!"
+  #+end_src
+
+- each piece of data is wrapped in the builder type of Data.Text.Lazy.Builder
+  #+begin_src haskell
+fromText     :: Text    -> Builder
+fromLazyText :: LText   -> Builder
+fromString   :: String  -> Builder
+toLazyText   :: Builder -> LText   -- once we joined all the little builders
+  #+end_src
+
+*** Measuring time (aka benchmarking) (time package)
+
+aka poor's man benchmarking, using =time= package
+
+#+begin_src haskell
+  import qualified Data.Time as Time
+
+  time :: IO () -> IO ()
+  time action = do
+    a <- Time.getCurrentTime
+    action
+    b <- Time.getCurrentTime
+    print (Time.diffUTCTime b a)
+#+end_src
+
+we use fold+replicate create
+
+#+begin_src haskell
+  concatWithStrict :: Int -> Text
+  concatWithStrict numberOfTimes =
+    fold $ replicate numberOfTimes $ T.pack "a"
+
+  concatWithBuilder :: Int -> Text
+  concatWithBuilder numberOfTimes = LT.toStrict $ TB.toLazyText $ -- avoid lazyness for a more fair test
+    fold $ replicate numberOfTimes $ TB.fromString "a"
+
+  concatSpeedTest :: Int -> IO ()
+  concatSpeedTest n = do
+    dir <- getDataDir
+    time $ T.writeFile (dir </> "strict.txt") (concatWithStrict n) -- 50000 = 2.46s
+    time $ T.writeFile (dir </> "builder.txt") (concatWithBuilder n) -- 50000 =  0.004s
+#+end_src
+
+*** High-order encoding
+
+#+begin_src haskell
+repeatedlyEncode :: (a -> BSB.Builder) -> [a] -> BSB.Builder
+repeatedlyEncode = foldMap
+
+optionallyEncode :: (a -> BSB.Builder) -> Maybe a -> BSB.Builder
+optionallyEncode = maybe mempty -- could have been foldMap too since Maybe is Foldable
+#+end_src
+
+*** The start line (encodeRequestLine, encodeStatusLine
+
+- ASCII - lift Space fromCharList fromDigitList
+- BSB - Builder byteString
+
+#+begin_src
+HTTP-version = HTTP-name "/" DIGIT "." DIGIT
+HTTP-name    = %s"HTTP"
+#+end_src
+
+#+begin_src haskell
+encodeVersion :: Version -> BSB.Builder
+encodeVersion (Version x y) = [A.string|HTTP/|] <> A.fromDigitList [x] <> [A.string|.|] <> A.fromDigitList [y]
+#+end_src
+
+#+begin_src
+request-line = method SP request-target SP HTTP-version CRLF
+#+end_src
+
+#+begin_src haskell
+encodeRequestLine :: RequestLine -> BSB.Builder
+encodeRequestLine (RequestLine method target version) =
+  encodeMethod method
+    <> space
+    <> encodeRequestTarget target
+    <> space
+    <> encodeVersion version
+    <> encodeLineEnd
+  where
+    space = A.fromCharList [A.Space]
+    encodeMethod (Method x) = BSB.byteString $ A.lift x
+    encodeRequestTarget (RequestTarget x) = BSB.byteString $ A.lift x
+#+end_src
+
+#+begin_src
+status-line   = HTTP-version SP status-code SP [ reason-phrase ] CRLF
+status-code   = 3DIGIT
+reason-phrase = 1*( HTAB / SP / VCHAR )
+#+end_src
+
+#+begin_src haskell
+encodeStatusLine :: StatusLine -> BSB.Builder
+encodeStatusLine (StatusLine version code reason) =
+  encodeVersion version
+    <> space
+    <> encodeStatusCode code
+    <> space
+    <> optionallyEncode encodeReasonPhrase reason
+    <> encodeLineEnd
+  where
+    space = A.fromCharList [A.Space]
+    encodeStatusCode (StatusCode x y z) = A.fromDigitList [x, y, z]
+    encodeReasonPhrase (ReasonPhrase s) = BSB.byteString $ A.lift s
+#+end_src
+
+*** Exercises
+
+field encoding
+#+begin_src haskell
+encodeField :: Field -> BSB.Builder
+encodeField (Field (FieldName name) (FieldValue value)) =
+  BSB.byteString (A.lift name) <> [A.string|: |] <> BSB.byteString (A.lift value)
+#+end_src
+
+message body encoding
+#+begin_src haskell
+encodeBody :: Body -> BSB.Builder
+encodeBody (Body body) = BSB.lazyByteString (A.lift body)
+#+end_src
+
+encoding test
+
+#+begin_src
+ghci> encodeRequest $ helloRequest
+"GET /hello.txt HTTP/1.1\r\nHost: www.example.com\r\nAccept-Language: en, mi\r\n"
+ghci> encodeResponse $ helloResponse
+"HTTP/1.1 404 \r\nContent-Type: text/plain; charset=us-ascii\r\nContent-Length: 6\r\n\r\nHello!"
+#+end_src
+
+** 8 Responding
+
+goal: create a hit counter
+
+*** A measure of success
+
+ASCII - showIntegralDecimal
+
+#+begin_src haskell
+import Numeric.Natural (Natural)
+countHelloAscii :: Natural -> ASCII LBS.ByteString
+countHelloAscii count =
+  [A.string|Hello!|] <> A.fromCharList crlf <> case count of
+    0 -> [A.string|This page has never been viewed|]
+    1 -> [A.string|This page has been viewed 1 time.|]
+    _ ->
+      [A.string|This page has been viewed |]
+        <> A.showIntegralDecimal count
+        <> [A.string| times.|]
+#+end_src
+
+*** Response-building utilities
+
+see the =http-types= package for more
+
+#+begin_src haskell
+data Status = Status StatusCode (Maybe ReasonPhrase)
+
+ok :: Status
+ok = Status code phrase
+  where
+    code = StatusCode Digit2 Digit0 Digit0
+    phrase = Just (ReasonPhrase [A.string|OK|])
+
+status :: Status -> StatusLine
+status (Status code phrase) =
+  StatusLine http_1_1 code phrase
+
+http_1_1 :: Version
+http_1_1 = Version Digit1 Digit1
+
+contentType :: FieldName
+contentType = FieldName [A.string|Content-Type|]
+
+plainAscii :: FieldValue
+plainAscii = FieldValue [A.string|text/plain; charset=us-ascii|]
+
+contentLength :: FieldName
+contentLength = FieldName [A.string|Content-Length|]
+#+end_src
+
+*** Integers
+*** Response transmission
+*** Exercises
+read the header
+overflow
 * 23 | Learn Haskell by building a blogGenerator |          | Gil Mizrahi
 - 04 https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning
 ** 02 Hello World

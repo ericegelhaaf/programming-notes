@@ -46,7 +46,8 @@
   - size: px, em, rem
   - style: normal, italic, oblique
   - family: arial, helvetica, sans-serif, ...
-  - weight: bold(er), 100, 200, ... , 900
+  - weight: bold(er), 10
+    0, 200, ... , 900
 
 - box-sizing
   - content-box: consider only content (default)
@@ -68,6 +69,46 @@
   |    T | R  | B | L |
   |------+----+---+---|
 
+- grid
+  - two dimensions
+  - parts
+    [[https://static.platzi.com/media/user_upload/1-dd5c265b-bf7b-494a-b939-04d7866194a7.jpg]]
+    - track (aka col/row)
+    - cell
+    - line
+    - area
+  - props
+    - item
+      - grid-column
+        - 2 / 4 (start / end)
+        - 2 / span 2 (start / span LEN)
+      - grid-column-end
+      - grid-column-start (changes start cell nr)
+        - 1
+    - container
+      - align-content (alto, when there is extra size in container)
+      - justify-content (ancho, when there is extra size in container)
+        - space-between
+        - space-around
+        - space-evenly
+        - end
+        - start
+      - column-gap
+      - row-gap
+      - gap
+      - display: grid/inline-grid
+      - grid-template-areas
+        - "header header" "main aside" "footer footer"
+      - grid-auto-flow: row (default)
+      - grid-template-=columns=
+        - 100px 50% 2em
+        - 100px auto 2em
+        - 100px 50px
+        - 1fr 2fr 0.5fr (fractions)
+        - repeat(3, 1fr)
+      - grid-template-=rows=
+        - 100px auto 50px
+
 - flex
   - align-items (secondary axis)
     - flex-start (by default)
@@ -88,6 +129,9 @@
     - row-reverse
     - column
     - column-reverse
+
+- media queries
+  - 
 
 - https://getbem.com/
 - default css https://www.w3schools.com/cssref/css_default_values.php

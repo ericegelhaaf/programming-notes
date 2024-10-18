@@ -1,4 +1,4 @@
-* ghc compiler flags
+* GHC
 
 - https://downloads.haskell.org/ghc/latest/docs/users_guide/
   - [[https://downloads.haskell.org/ghc/latest/docs/users_guide/flags.html][flags]]
@@ -22,17 +22,17 @@
 | -prof                          | enables profiling information, needs P.I. from each lib         |
 |--------------------------------+-----------------------------------------------------------------|
 
-** usage
+** setup
 
-|--------+-------------------------------------------|
-|    <r> |                    <c>                    |
-| .cabal | library\nghc-options: -fdefer-typed-holes |
-|   ghci |         :set -fdefer-typed-holes          |
-|    ghc |            -fdefer-typed-holes            |
-|    .hs |  {-# OPTIONS_GHC -fdefer-typed-holes #-}  |
-|--------+-------------------------------------------|
+|--------+-----------------------------------------|
+|    <r> |                   <c>                   |
+| .cabal |    ghc-options: -fdefer-typed-holes     |
+|   ghci |        :set -fdefer-typed-holes         |
+|    ghc |           -fdefer-typed-holes           |
+|    .hs | {-# OPTIONS_GHC -fdefer-typed-holes #-} |
+|--------+-----------------------------------------|
 
-* ghci repl
+* GHCi
 
 - https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html
 - https://wiki.haskell.org/GHC/GHCi
@@ -66,12 +66,14 @@
 - https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts.html
 - https://www.simplehaskell.org/language-extensions.html
 - https://github.com/i-am-tom/haskell-exercises
+- https://impurepics.com/posts/2019-08-01-haskell-extensions.html
+- https://limperg.de/ghc-extensions/
 
 - NOTE: some extensions are better enabled globally or prohibited altogether
   - enabling some extensions on a module-by-module basis can end up causing maintenance burden on the application long term
   - since applications that use it need to be careful.
 
-** usage
+** setup
 |--------+-----------------------------------|
 |    <r> |                <c>                |
 | .cabal |        default-extensions:        |
@@ -91,56 +93,56 @@
 | [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/view_patterns.html][ViewPatterns]]    | x |   | (f -> PATTERN) applies "f" to value and then matches the result, on function pattern matching |
 |-----------------+---+---+-----------------------------------------------------------------------------------------------|
 ** others
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----+---|
-|                            |                                                                                                       | 21  | R |
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----+---|
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/ambiguous_types.html][AllowAmbiguousTypes]]        |                                                                                                       | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/strict.html?highlight=bangpatterns#extension-BangPatterns][BangPatterns]]               | makes pattern matching and let bindings strict, instead of lazy, by adding a (!) before the varname   | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/constraint_kind.html][ConstraintKinds]]            |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/data_kinds.html][DataKinds]]                  |                                                                                                       | -   | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/default_signatures.html][DefaultSignatures]]          | allow us to add a *type signature* to the default implementation of function in a type class          | -   | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_any_class.html][DeriveAnyClass]]             | to use any typeclass (with no methods), to be used on a "derive", it will create the no-body instance | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/deriving_strategies.html][DerivingStrategies]]         | helps resolve conflicts when different derivings extension are enabled stock/anyclass/newtype         | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/deriving_via.html][DerivingVia]]                | to use newtype's as a template for how to define a typeclass for other types                          | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/existential_quantification.html][ExistentialQuantification]]  |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/explicit_forall.html][ExplicitForAll]]             | allows us to make explicit use of *forall*                                                            | yes | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/flexible_contexts.html][FlexibleContexts]]           |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/instances.html?highlight=flexibleinstances#extension-FlexibleInstances][FlexibleInstances]]          |                                                                                                       | yes | x |
-| +AutoDeriveTypeable+       |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/functional_dependencies.html][FunctionalDependencies]]     |                                                                                                       | -   | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/gad_ts.html][GADTs]]                      |                                                                                                       | -   | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/generalized_newtype_deriving.html][GeneralizedNewtypeDeriving]] | to derive typeclass instance based on the underlying type                                             | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/kind_signatures.html][KindSignatures]]             | allows us to write the kind signatures for types in our type annotations                              | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/multi_param_type_classes.html][MultiParamTypeClasses]]      |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/overloaded_strings.html][OverloadedStrings]]          | replaces every string litearal, with a call to ~fromString~ on that literal                           | -   | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/poly_kinds.html][PolyKinds]]                  |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/quantified_constraints.html][QuantifiedConstraints]]      |                                                                                                       | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/rank_n_types.html][RankNTypes]]                 |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/scoped_type_variables.html][ScopedTypeVariables]]        | allows type applications to refer to type variables rather that ONLY the concrete type                | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/tuple_sections.html][TupleSections]]              |                                                                                                       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_applications.html][TypeApplications]]           | (@TYPE) to specify a type argument for polymorphic functions                                          | yes | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_families.html][TypeFamilies]]               |                                                                                                       | -   | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_operators.html][TypeOperators]]              |                                                                                                       | yes | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/undecidable_instances.html][UndecidableInstances]]       |                                                                                                       | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/no_star_is_type.html][NoStarIsType]]               |                                                                                                       | -   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/standalone_deriving.html][StandaloneDeriving]]         | allows us to write stand-alone "deriving instance Read? SomeType" declarations, useful for GHCI       | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/applicative_do.html][ApplicativeDo]]              | allows us to use "do notation" for non Monads and use it for Applicative                              | ?   | - |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/no_implicit_prelude.html][NoImplicitPrelude]]          | signals we would not be making use of the standard ~Prelude~ module from the ~base~ package           |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/binary_literals.html][BinaryLiterals]]             | using "0b110100101" will be desugared in "fromInteger 201"                                            | yes | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_data_typeable.html][DeriveDataTypeable]]         |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_foldable.html][DeriveFoldable]]             |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_functor.html][DeriveFunctor]]              |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_generic.html][DeriveGeneric]]              |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_traversable.html][DeriveTraversable]]          |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/do_and_if_then_else.html][DoAndIfThenElse]]            |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/empty_data_decls.html][EmptyDataDecls]]             |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/instance_sigs.html][InstanceSigs]]               |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/monad_fail_desugaring.html][MonadFailDesugaring]]        |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/multi_way_if.html][MultiWayIf]]                 |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/partial_type_signatures.html][PartialTypeSignatures]]      |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/pattern_guards.html][PatternGuards]]              |                                                                                                       |     | x |
-| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_synonym_instances.html][TypeSynonymInstances]]       |                                                                                                       |     | x |
-|----------------------------+-------------------------------------------------------------------------------------------------------+-----+---|
+|----------------------------+----+-------------------------------------------------------------------------------------------------------+---|
+|                            | 21 |                                                                                                       | R |
+|----------------------------+----+-------------------------------------------------------------------------------------------------------+---|
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/ambiguous_types.html][AllowAmbiguousTypes]]        | -  |                                                                                                       | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/strict.html?highlight=bangpatterns#extension-BangPatterns][BangPatterns]]               | y  | makes pattern matching and let bindings strict, instead of lazy, by adding a (!) before the varname   | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/constraint_kind.html][ConstraintKinds]]            | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/data_kinds.html][DataKinds]]                  | -  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/default_signatures.html][DefaultSignatures]]          | -  | allow us to add a *type signature* to the default implementation of function in a type class          | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_any_class.html][DeriveAnyClass]]             | -  | to use any typeclass (with no methods), to be used on a "derive", it will create the no-body instance | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/deriving_strategies.html][DerivingStrategies]]         | -  | helps resolve conflicts when different derivings extension are enabled stock/anyclass/newtype         | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/deriving_via.html][DerivingVia]]                | -  | to use newtype's as a template for how to define a typeclass for other types                          | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/existential_quantification.html][ExistentialQuantification]]  | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/explicit_forall.html][ExplicitForAll]]             | y  | allows us to make explicit use of *forall*                                                            | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/flexible_contexts.html][FlexibleContexts]]           | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/instances.html?highlight=flexibleinstances#extension-FlexibleInstances][FlexibleInstances]]          | y  |                                                                                                       | x |
+| +AutoDeriveTypeable+       |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/functional_dependencies.html][FunctionalDependencies]]     | -  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/gad_ts.html][GADTs]]                      | -  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/generalized_newtype_deriving.html][GeneralizedNewtypeDeriving]] | y  | to derive typeclass instance based on the underlying type                                             | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/kind_signatures.html][KindSignatures]]             | y  | allows us to write the kind signatures for types in our type annotations                              | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/multi_param_type_classes.html][MultiParamTypeClasses]]      | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/overloaded_strings.html][OverloadedStrings]]          | -  | replaces every string litearal, with a call to ~fromString~ on that literal                           | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/poly_kinds.html][PolyKinds]]                  | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/quantified_constraints.html][QuantifiedConstraints]]      | -  |                                                                                                       | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/rank_n_types.html][RankNTypes]]                 | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/scoped_type_variables.html][ScopedTypeVariables]]        | y  | allows type applications to refer to type variables rather that ONLY the concrete type                | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/tuple_sections.html][TupleSections]]              | y  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_applications.html][TypeApplications]]           | y  | (@TYPE) to specify a type argument for polymorphic functions                                          | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_families.html][TypeFamilies]]               | -  |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_operators.html][TypeOperators]]              | y  |                                                                                                       | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/undecidable_instances.html][UndecidableInstances]]       | -  |                                                                                                       | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/no_star_is_type.html][NoStarIsType]]               | -  |                                                                                                       | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/standalone_deriving.html][StandaloneDeriving]]         | y  | allows us to write stand-alone "deriving instance Read? SomeType" declarations, useful for GHCI       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/applicative_do.html][ApplicativeDo]]              | ?  | allows us to use "do notation" for non Monads and use it for Applicative                              | - |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/no_implicit_prelude.html][NoImplicitPrelude]]          |    | signals we would not be making use of the standard ~Prelude~ module from the ~base~ package           | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/binary_literals.html][BinaryLiterals]]             | y  | using "0b110100101" will be desugared in "fromInteger 201"                                            | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_data_typeable.html][DeriveDataTypeable]]         |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_foldable.html][DeriveFoldable]]             |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_functor.html][DeriveFunctor]]              |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_generic.html][DeriveGeneric]]              |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/derive_traversable.html][DeriveTraversable]]          |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/do_and_if_then_else.html][DoAndIfThenElse]]            |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/empty_data_decls.html][EmptyDataDecls]]             |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/instance_sigs.html][InstanceSigs]]               |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/monad_fail_desugaring.html][MonadFailDesugaring]]        |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/multi_way_if.html][MultiWayIf]]                 |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/partial_type_signatures.html][PartialTypeSignatures]]      |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/pattern_guards.html][PatternGuards]]              |    |                                                                                                       | x |
+| [[https://downloads.haskell.org/~ghc/latest/docs/users_guide/exts/type_synonym_instances.html][TypeSynonymInstances]]       |    |                                                                                                       | x |
+|----------------------------+----+-------------------------------------------------------------------------------------------------------+---|
 
 - "21?" column stands for GHC2021 and means,
   if the extension is enabled by default on that version of Haskell (aka GHC 9.4)

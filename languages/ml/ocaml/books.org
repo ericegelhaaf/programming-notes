@@ -1497,9 +1497,11 @@ For smaller examples (like the ones showed here, direct match of Option is gener
   - Code using them (like functions) NEEDs extra type annotation when used
     Because OCaml does NOT instantiate ordinary type variables in different ways in the body of the same function.
   - Fixed by adding a =Locally Abstract Type=
+
 - Inference of GATDs does NOT play well with recursive calls
 - When we want a _type parameter_ to be populated in different ways in different tags.
   And so depend on non-trivial ways on the types of the data asocciated with each tag.
+
 *** Example: A typed expression language, mixing arithmetic and boolean expressions
 **** 1) Variant approach, a lot of work left to runtime typechecks
 #+begin_src ocaml

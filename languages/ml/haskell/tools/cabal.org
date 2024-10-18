@@ -85,6 +85,7 @@
 
 - comments CANNOT trail any other expresion
 
+- property names are case INsensitive
 - package names are case sensitive (!!!)
 
 - base version ~operators~

@@ -1,4 +1,6 @@
 - HTTP https://en.wikipedia.org/wiki/HTTP
+- ASCII only protocol
+- Each line must end with "\r\n" (CRLF)
 - HTTP v1
   |-----+----+------|
   | ver | yy |  RFC |
@@ -12,3 +14,28 @@
   |     | 22 | 9110 |
   |     |    | 9112 |
   |-----+----+------|
+
+- Request
+  - Request Line
+- Response
+  - Status Line
+- Fields
+  - Content-Type: aka the MIME type
+  - Content-Length:
+    - in bytes, without considering the header
+    - to let the client know for how long it should read
+
+* HTTP Format
+#+DESCRIPTION: from RFC 9112, in ABNF format
+#+begin_src
+HTTP-message = start-line
+               *( field-line CRLF )
+               CRLF
+               [ message-body ]
+
+request-line = method SP request-target SP HTTP-version CRLF
+
+status-line   = HTTP-version SP status-code SP [ reason-phrase ] CRLF
+status-code   = 3DIGIT
+reason-phrase = 1*( HTAB / SP / VCHAR )
+#+end_src
