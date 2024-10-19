@@ -23,6 +23,7 @@
   - regex-tdfa https://www.williamyaoh.com/posts/2019-04-11-cheatsheet-to-regexes-in-haskell.html
   - regex-pcre
   - regex-parsec
+- temporary: Portable temporary file and directory support https://hackage.haskell.org/package/temporary
 - time https://www.williamyaoh.com/posts/2019-09-16-time-cheatsheet.html
 - generics https://markkarpov.com/tutorial/generics
 - exceptions https://markkarpov.com/tutorial/exceptions

@@ -14,7 +14,26 @@
 - Framework: Play Framework.
   Conocimientos deseables: Slick, Monix Task.
 - https://en.wikipedia.org/wiki/Scala_(programming_language)
+
 * Language
+
+- haskell typeclasses (FROM: book of monads)
+  #+begin_src scala
+    trait Eq[a] {
+      def eq(x: A, y: A): Boolean
+    }
+  #+end_src
+  - implicits (Scala 2) aka type class pattern aka traits
+    #+begin_src scala
+      def eqList[A](xs: List[A], ys: List[A])(implicit eq: Eq[A])
+          : Boolean = ???
+    #+end_src
+  - givens (Scala 3) aka contextual abstractions aka clauses
+    #+begin_src scala
+      def eqList[A](xs: List[A], ys: List[A])(using eq: Eq[A])
+          : Boolean = ???
+    #+end_src
+
 ** Standard Library
 - https://www.scala-lang.org/api/current/
 ** Binary Compatibility

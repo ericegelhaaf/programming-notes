@@ -90,29 +90,34 @@
 ** operators
 *** simples
 |------+---------------------------+--------------------+--------------+-------------------|
-| ($)  | function application      | map ($ 10) [(+ 1)] |              |                   |
-| (.)  | function composition      | printLn . show     |              |                   |
-| (++) | append lists              | [1,2] ++ [3,4]     |              | [a] -> [a] -> [a] |
-| (<>) | append strings (mappend)  | "foo" <> "bar"     |              | m   -> m   -> m   |
-| (!!) | list indexing             | [1,2] !! 0         |              |                   |
-| (:)  | list consing, preppending | 1 : [2, 3]         | [1,2,3] : [] |                   |
+|  <r> |                       <r> |        <c>         |     <c>      |        <c>        |
+|  ($) |      function application | map ($ 10) [(+ 1)] |              |                   |
+|  (.) |      function composition |   printLn . show   |              |                   |
+| (++) |              append lists |   [1,2] ++ [3,4]   |              | [a] -> [a] -> [a] |
+| (<>) |  append strings (mappend) |   "foo" <> "bar"   |              |  m  -> m   -> m   |
+| (!!) |             list indexing |     [1,2] !! 0     |              |                   |
+|  (:) | list consing, preppending |     1 : [2, 3]     | [1,2,3] : [] |                   |
 |------+---------------------------+--------------------+--------------+-------------------|
 *** typeclasses
-|-----+---------------------------+---------------+--------------------------|
-|     |                       <r> |               |                          |
-|-----+---------------------------+---------------+--------------------------|
-| <$> |                      fmap | Functor f     | (a -> b) -> f a -> f b   |
-|-----+---------------------------+---------------+--------------------------|
-| >>= |                      bind | Monad m       | m a -> (a -> m b) -> m b |
-| =<< |              flipped bind | Monad m       | (a -> m b) -> m a -> m b |
-| >>  |                      then | Monad m       | m a ->       m b  -> m b |
-|-----+---------------------------+---------------+--------------------------|
-| <¦> |       Control.Alternative | Alternative f | f a -> f a -> f a        |
-|-----+---------------------------+---------------+--------------------------|
-| <*> |                     apply | Applicative f | f (a -> b) -> f a -> f b |
-| *>  |  left "facing bird"/shark | Applicative f | f a        -> f b -> f b |
-| <*  | right "facing bird"/shark | Applicative f | f a        -> f b -> f a |
-|-----+---------------------------+---------------+--------------------------|
+|-----+------------------------------+---------------+--------------------------------------|
+|     |                          <r> |               |                                      |
+|-----+------------------------------+---------------+--------------------------------------|
+| <>  |                      mappend | Semigroup a   | a -> a -> a                          |
+| <$> |                         fmap | Functor f     | (a -> b) -> f a -> f b               |
+|-----+------------------------------+---------------+--------------------------------------|
+| >>= |                         bind | Monad m       | m a -> (a -> m b) -> m b             |
+| =<< |                 flipped bind | Monad m       | (a -> m b) -> m a -> m b             |
+| >>  |                         then | Monad m       | m a ->       m b  -> m b             |
+| >=> | monadic composition, fish op | Monad m       | (a -> m b) -> (b -> m c) -> a -> m c |
+| <=< |                              | Monad m       | (b -> m c) -> (a -> m b) -> a -> m c |
+| <$  |                              | Functor f     | a -> f b -> f a                      |
+|-----+------------------------------+---------------+--------------------------------------|
+| <¦> |          Control.Alternative | Alternative f | f a -> f a -> f a                    |
+|-----+------------------------------+---------------+--------------------------------------|
+| <*> |                        apply | Applicative f | f (a -> b) -> f a -> f b             |
+| *>  |     left "facing bird"/shark | Applicative f | f a        -> f b -> f b             |
+| <*  |    right "facing bird"/shark | Applicative f | f a        -> f b -> f a             |
+|-----+------------------------------+---------------+--------------------------------------|
 #+TBLFM: $1=<<
 ** style
 
@@ -122,7 +127,9 @@
 ** types
 
 - type: a type alias
-- newtype: can only have ONE contructor with ONE argument
+- newtype:
+  - can only have ONE contructor with ONE argument
+  - can be made an instance
 - data
 
 *** types primitives
@@ -259,7 +266,8 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 |------------+-------------+------------------------------------------------------------------|
 |      maybe |      b      | applied fn to Maybe value, or the default value provided         |
 |------------+-------------+------------------------------------------------------------------|
-|      print |    IO ()    | prints showable                                                  |
+|      print |    IO ()    | putStrLn . show                                                  |
+|    putChar |    IO ()    |                                                                  |
 |     putStr |    IO ()    | prints string                                                    |
 |       show |   String    |                                                                  |
 |------------+-------------+------------------------------------------------------------------|
@@ -285,111 +293,133 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 *** base
 - https://hackage.haskell.org/package/base
 - https://hackage.haskell.org/package/base/docs/Prelude.html
-|-------------------------+------------------------------------------------------------------|
-| module                  | fn                                                               |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Applicative.html][Control.Applicative]]     |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Control-Arrow.html][Control.Arrow]]           |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Control-Category.html][Control.Category]]        |                                                                  |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Concurrent.html][Control.Concurrent]]      |                                                                  |
-|                         | forkIO :: IO () -> IO ThreadedId                                 |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Concurrent-MVar.html][Control.Concurrent.MVar]] | MVar is a synchronization variable (mutex?)                      |
-|                         | newMVar      :: IO (MVar a)                                      |
-|                         | newEmptyMVar :: IO (MVar a)                                      |
-|                         | readMVar     :: MVar a -> IO a                                   |
-|                         | +takeMVar+   :: MVar a -> IO a                                   |
-|                         | +putMvar+    :: MVar a -> a -> IO ()                             |
-|                         | tryReadMVar  :: MVar a -> IO (Maybe a)                           |
-|                         | tryTakeMVar  :: MVar a -> IO (Maybe a)                           |
-|                         | modifyMVar   :: MVar a -> (a -> IO (a,b)) -> IO b                |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Concurrent-Chan.html][Control.Concurrent.Chan]] | newChan   :: IO (Chan a)                                         |
-|                         | writeChan :: Chan a -> a -> IO ()                                |
-|                         | readChan  :: Chan a -> IO a                                      |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Exception.html][Control.Exception]]       | catch   :: Exception e => IO a        -> (e -> IO a) -> IO a     |
-|                         | handle  :: Exception e => (e -> IO a) -> IO a -> IO a            |
-|                         | ioError ::                IOError     -> IO a                    |
-|                         | throw   :: Exception e => e           -> a                       |
-|                         | throwIO :: Exception e => e           -> IO a                    |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Exception-Safe.html][Control.Exception.Safe]]  | tryAny :: IO a -> IO (Either SomeException a)                    |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Monad.html][Control.Monad]]           | sequence  :: (Traversable t, Monad m) => t (m a) -> m (t a)      |
-|                         | sequence_ :: (Foldable t, Monad m)    => t (m a) -> m ()         |
-|                         | forever   :: Applicative f            => f a  -> f b             |
-|                         | when      :: Applicative f            => Bool -> f () -> f ()    |
-|                         | guard     :: Alternative f            => Bool -> f ()            |
-|-------------------------+------------------------------------------------------------------|
-| [[https://hackage.haskell.org/package/base/docs/Control-Monad-Fail.html][Control.Monad.Fail]]      | fail      :: MonadFail m              => String -> m a           |
-| [[https://hackage.haskell.org/package/base/docs/Data-Bifoldable.html][Data.Bifoldable]]         |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Bifoldable1.html][Data.Bifoldable1]]        |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Bifunctor.html][Data.Bifunctor]]          |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Bitraversable.html][Data.Bitraversable]]      |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Bits.html][Data.Bits]]               |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Bool.html][Data.Bool]]               |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Char.html][Data.Char]]               | isPrint                                                          |
-|                         | ord :: Char -> Int                                               |
-|                         | chr :: Int  -> Char                                              |
-| [[https://hackage.haskell.org/package/base/docs/Data-Coerce.html][Data.Coerce]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Complex.html][Data.Complex]]            |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Data.html][Data.Data]]               |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Dynamic.html][Data.Dynamic]]            |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Either.html][Data.Either]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Eq.html][Data.Eq]]                 |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Fixed.html][Data.Fixed]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Foldable.html][Data.Foldable]]           | for_ :: (Foldable t, Applicative f) => t a -> (a -> f b) -> f () |
-| [[https://hackage.haskell.org/package/base/docs/Data-Foldable1.html][Data.Foldable1]]          |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Function.html][Data.Function]]           |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Functor.html][Data.Functor]]            |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-IORef.html][Data.IORef]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Int.html][Data.Int]]                | Int8/64                                                          |
-| [[https://hackage.haskell.org/package/base/docs/Data-Ix.html][Data.Ix]]                 |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Kind.html][Data.Kind]]               |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-List.html][Data.List]]               | permutations splitAt                                             |
-| [[https://hackage.haskell.org/package/base/docs/Data-Maybe.html][Data.Maybe]]              | maybe listToMaybe maybeToList                                    |
-|                         | mapMaybe :: (a -> Maybe b) -> [a] -> [b]                         |
-| [[https://hackage.haskell.org/package/base/docs/Data-Monoid.html][Data.Monoid]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Ord.html][Data.Ord]]                |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Proxy.html][Data.Proxy]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Ratio.html][Data.Ratio]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-STRef.html][Data.STRef]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Semigroup.html][Data.Semigroup]]          |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-String.html][Data.String]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Traversable.html][Data.Traversable]]        |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Tuple.html][Data.Tuple]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Typeable.html][Data.Typeable]]           |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Unique.html][Data.Unique]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Version.html][Data.Version]]            |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Void.html][Data.Void]]               |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Data-Word.html][Data.Word]]               |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/Foreign.html][Foreign]]                 | interfacing with another programming language                    |
-| [[https://hackage.haskell.org/package/base/docs/Numeric-Natural.html][Numeric.Natural]]         | Natural is a type of non negative number                         |
-|                         | minusNaturalMaybe :: Natural -> Natural -> Maybe Natural         |
-| [[https://hackage.haskell.org/package/base/docs/System-CPUTime.html][System.CPUTime]]          |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-Console.html][System.Console]]          |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-Environment.html][System.Environment]]      | getArgs  :: IO [String]                                          |
-|                         | withArgs :: [String] -> IO a -> IO a                             |
-| [[https://hackage.haskell.org/package/base/docs/System-Exit.html][System.Exit]]             |                                                                  |
-|                         | data ExitCode = ExitSuccess ¦ ExitFailure Int                    |
-|                         | exitWith :: ExitCode -> IO a                                     |
-| [[https://hackage.haskell.org/package/base/docs/System-Info.html][System.Info]]             |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-Mem.html][System.Mem]]              |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-Posix.html][System.Posix]]            |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-Timeout.html][System.Timeout]]          |                                                                  |
-| [[https://hackage.haskell.org/package/base/docs/System-IO.html][System.IO]]               | openFile       :: FilePath -> IOMode -> IO Handle                |
-|                         | openBinaryFile :: FilePath -> IOMode -> IO Handle                |
-|                         | hSetBinaryMode :: Handle -> Bool -> IO ()                        |
-|                         | hClose         :: Handle -> IO ()                                |
-|                         | hGetContents   :: Handle -> IO String                            |
-|                         | hputStrLn      :: Handle -> IO ()                                |
-|                         | putStrLn       :: String -> IO ()                                |
-|                         | stdout         :: Handle                                         |
-| [[https://hackage.haskell.org/package/base/docs/System-IO-Error.html][System.IO.Error]]         | userError :: String -> IOError                                   |
-| [[https://hackage.haskell.org/package/base/docs/Text-ParserCombinators.html][Text.ParserCombinators]]  |                                                                  |
-|-------------------------+------------------------------------------------------------------|
+|-------------------------+-------------------+-----------------------------------------------------------|
+|                         |               <r> |                                                           |
+| module / description    |                fn |                                                           |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Applicative.html][Control.Applicative]]     |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Control-Arrow.html][Control.Arrow]]           |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Control-Category.html][Control.Category]]        |                   |                                                           |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Concurrent.html][Control.Concurrent]]      |                   |                                                           |
+|                         |            forkIO | IO () -> IO ThreadedId                                    |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Concurrent-MVar.html][Control.Concurrent.MVar]] |                   | a synchronization variable (mutex?)                       |
+|                         |           newMVar | IO (MVar a)                                               |
+|                         |      newEmptyMVar | IO (MVar a)                                               |
+|                         |          readMVar | MVar a -> IO a                                            |
+|                         |        +takeMVar+ | MVar a -> IO a                                            |
+|                         |         +putMvar+ | MVar a -> a -> IO ()                                      |
+|                         |       tryReadMVar | MVar a -> IO (Maybe a)                                    |
+|                         |       tryTakeMVar | MVar a -> IO (Maybe a)                                    |
+|                         |        modifyMVar | MVar a -> (a -> IO (a,b)) -> IO b                         |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Concurrent-Chan.html][Control.Concurrent.Chan]] |           newChan | IO (Chan a)                                               |
+|                         |         writeChan | Chan a -> a -> IO ()                                      |
+|                         |          readChan | Chan a -> IO a                                            |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Exception.html][Control.Exception]]       |             catch | Exception e => IO a        -> (e -> IO a) -> IO a         |
+|                         |            handle | Exception e => (e -> IO a) -> IO a -> IO a                |
+|                         |           ioError | IOError     -> IO a                                       |
+|                         |             throw | Exception e => e           -> a                           |
+|                         |           throwIO | Exception e => e           -> IO a                        |
+| acq,rel,use of resource |           bracket | IO r -> (r -> IO b) -> (r -> IO a) -> IO a                |
+|                         |          bracket_ | IO a -> IO b -> IO c -> IO c                              |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Exception-Safe.html][Control.Exception.Safe]]  |            tryAny | IO a -> IO (Either SomeException a)                       |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Monad.html][Control.Monad]]           |                   |                                                           |
+| "flattens" a monad      |              join | Monad m => m (m a) -> m a                                 |
+| monadic composition     |               >=> | Monad m => (a -> m b) -> (b -> m c) -> a -> m c           |
+|                         |               <=< | Monad m => (b -> m c) -> (a -> m b) -> a -> m c           |
+|                         |                <$ | Functor f => a -> f b -> f a                              |
+| repeats input IO ()     |           forever | Applicative f            => f a  -> f b                   |
+| could take  IO ()       |              when | Applicative f            => Bool -> f () -> f ()          |
+|                         |             guard | Alternative f            => Bool -> f ()                  |
+| could take [IO ()]      |          sequence | (Monad m, Traversable t) => t (m a) -> m (t a)            |
+|                         |         sequence_ | (Monad m, Foldable t)    => t (m a) -> m ()               |
+| sequence $ map f        |              mapM | (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)  |
+| same but no return      |             mapM_ | (Monad m, Foldable t   ) => (a -> m b) -> t a -> m ()     |
+| flipped mapM            |              forM | (Monad m, Traversable t) => t a -> (a -> m b) -> m (t b)  |
+|                         |             forM_ | (Monad m, Foldable t   ) => t a -> (a -> m b) -> m ()     |
+| aka fmap                |             liftM | Monad m                  => (a -> b) -> m a -> m b        |
+| aka <$> (applicative)   |                ap | Monad m                  => m (a -> b) -> m a -> m b      |
+|                         |           filterM | Monad m                  => (a -> m Bool) -> [a] -> m [a] |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Control-Monad-IO-Class.html][Control.Monad.IO.Class]]  |            liftIO | IO a -> m a                                               |
+| [[https://hackage.haskell.org/package/base/docs/Control-Monad-Fail.html][Control.Monad.Fail]]      |              fail | MonadFail m => String -> m a                              |
+| [[https://hackage.haskell.org/package/base/docs/Data-Bifoldable.html][Data.Bifoldable]]         |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Bifoldable1.html][Data.Bifoldable1]]        |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Bifunctor.html][Data.Bifunctor]]          |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Bitraversable.html][Data.Bitraversable]]      |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Bits.html][Data.Bits]]               |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Bool.html][Data.Bool]]               |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Char.html][Data.Char]]               |           isPrint |                                                           |
+|                         |               ord | Char -> Int                                               |
+|                         |               chr | Int  -> Char                                              |
+| [[https://hackage.haskell.org/package/base/docs/Data-Coerce.html][Data.Coerce]]             |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Complex.html][Data.Complex]]            |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Data.html][Data.Data]]               |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Dynamic.html][Data.Dynamic]]            |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Either.html][Data.Either]]             |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Eq.html][Data.Eq]]                 |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Fixed.html][Data.Fixed]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Foldable.html][Data.Foldable]]           |              for_ | (Foldable t, Applicative f) => t a -> (a -> f b) -> f ()  |
+| [[https://hackage.haskell.org/package/base/docs/Data-Foldable1.html][Data.Foldable1]]          |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Function.html][Data.Function]]           |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Functor.html][Data.Functor]]            |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-IORef.html][Data.IORef]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Int.html][Data.Int]]                |                   | Int8/64                                                   |
+| [[https://hackage.haskell.org/package/base/docs/Data-Ix.html][Data.Ix]]                 |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Kind.html][Data.Kind]]               |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-List.html][Data.List]]               |                   | permutations splitAt                                      |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Data-Maybe.html][Data.Maybe]]              |                   |                                                           |
+| apply f, with default b |             maybe | b              -> (a -> b) -> Maybe a -> b                |
+|                         |          mapMaybe | (a -> Maybe b) -> [a]      -> [b]                         |
+|                         |       listToMaybe | [a]            -> Maybe a                                 |
+|                         |       maybeToList | Maybe a        -> [a]                                     |
+|-------------------------+-------------------+-----------------------------------------------------------|
+| [[https://hackage.haskell.org/package/base/docs/Data-Monoid.html][Data.Monoid]]             |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Ord.html][Data.Ord]]                |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Proxy.html][Data.Proxy]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Ratio.html][Data.Ratio]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-STRef.html][Data.STRef]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Semigroup.html][Data.Semigroup]]          |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-String.html][Data.String]]             |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Traversable.html][Data.Traversable]]        |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Tuple.html][Data.Tuple]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Typeable.html][Data.Typeable]]           |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Unique.html][Data.Unique]]             |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Version.html][Data.Version]]            |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Void.html][Data.Void]]               |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Data-Word.html][Data.Word]]               |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/Foreign.html][Foreign]]                 |                   | interfacing with another programming language             |
+| [[https://hackage.haskell.org/package/base/docs/Numeric-Natural.html][Numeric.Natural]]         |           Natural | a type of non negative number                             |
+|                         | minusNaturalMaybe | Natural -> Natural -> Maybe Natural                       |
+| [[https://hackage.haskell.org/package/base/docs/System-CPUTime.html][System.CPUTime]]          |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/System-Console.html][System.Console]]          |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/System-Environment.html][System.Environment]]      |           getArgs | IO [String]                                               |
+|                         |          withArgs | [String] -> IO a -> IO a                                  |
+| [[https://hackage.haskell.org/package/base/docs/System-Exit.html][System.Exit]]             |                   |                                                           |
+|                         |                   | data ExitCode = ExitSuccess ¦ ExitFailure Int             |
+|                         |          exitWith | ExitCode -> IO a                                          |
+| [[https://hackage.haskell.org/package/base/docs/System-Info.html][System.Info]]             |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/System-Mem.html][System.Mem]]              |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/System-Posix.html][System.Posix]]            |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/System-Timeout.html][System.Timeout]]          |                   |                                                           |
+| [[https://hackage.haskell.org/package/base/docs/System-IO.html][System.IO]]               |          openFile | FilePath -> IOMode -> IO Handle                           |
+|                         |          withFile | FilePath -> IOMode -> (Handle -> IO r) -> IO r            |
+|                         |    openBinaryFile | FilePath -> IOMode -> IO Handle                           |
+|                         |    hSetBinaryMode | Handle -> Bool -> IO ()                                   |
+|                         |            hClose | Handle -> IO ()                                           |
+|                         |      hGetContents | Handle -> IO String                                       |
+|                         |         hputStrLn | Handle -> IO ()                                           |
+|                         |          putStrLn | String -> IO ()                                           |
+|                         |            stdout | Handle                                                    |
+| [[https://hackage.haskell.org/package/base/docs/System-IO-Error.html][System.IO.Error]]         |         userError | String -> IOError                                         |
+| [[https://hackage.haskell.org/package/base/docs/Text-ParserCombinators.html][Text.ParserCombinators]]  |                   |                                                           |
+|-------------------------+-------------------+-----------------------------------------------------------|
 
 - Control.Concurrrent.MVar
   |-----------------+----------------------------|
@@ -410,7 +440,7 @@ https://www.cse.chalmers.se/edu/year/2018/course/TDA452_Functional_Programming/t
 https://haskell-containers.readthedocs.io/en/latest/
 |------------------+-------------------------------+---------------------------------------------------------------------------------------|
 |              <r> |              <c>              | <l>                                                                                   |
-|          package |            module             | functions                                                                          |
+|          package |            module             | functions                                                                             |
 |------------------+-------------------------------+---------------------------------------------------------------------------------------|
 |            [[https://hackage.haskell.org/package/array][array]] |          Data.Array           |                                                                                       |
 |       [[https://hackage.haskell.org/package/containers][containers]] |          Data.Graph           |                                                                                       |
@@ -535,19 +565,22 @@ https://haskell-containers.readthedocs.io/en/latest/
 
 *** lift(s)
 
-- liftM (aka bind)
-- liftIO - Control.Monad.IO.Class
+- liftM (aka monadic fmap, bind??) =Control.Monad=
+  #+begin_src haskell
+    liftM :: Monad m => (a -> b) -> m a -> m b
+  #+end_src
+- liftIO - =Control.Monad.IO.Class=
   #+begin_src haskell
     class (Monad m) => MonadIO m where -- aka any Monad that an IO can be lifted INTO
       liftIO :: IO a -> m a
   #+end_src
-- liftA2
-#+begin_src haskell
-  > (*) <$> Just 5 <*> Just 3
-    Just 15
-  > liftA2 (*) (Just 5) (Just 3)
-    Just 15
-#+end_src
+- liftA2 - =Control.Applicative=
+  - apply a function between several functor values
+  - aka takes a normal binary function and promotes it to a function that operates on two applicatives
+  #+begin_src haskell
+    liftA2 :: (Applicative f) => (a -> b -> c) -> (f a -> f b -> f c)
+    liftA2 f a b = f <$> a <*> b
+  #+end_src
 
 *** do
 
@@ -584,9 +617,13 @@ https://haskell-containers.readthedocs.io/en/latest/
 - =Show=
   - exists for the sake of GHCi and for testing, not for real use in applications
   - we recommend never allowing the behavior of your program to depend on the ~show~ function
+
 **** definitions
 
 #+begin_src haskell
+  class Eq a where
+    (==) :: a -> a -> Bool
+
   class Monoid a where
     mempty  :: a           -- neutral element
     mappend :: a -> a -> a -- associative binary operation

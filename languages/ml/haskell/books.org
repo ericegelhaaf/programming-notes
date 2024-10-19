@@ -1,5 +1,8 @@
 - https://kowainik.github.io/books/do-pure-haskell-interview
 - Abstractions in Context lihttps://williamyaoh.gumroad.com/l/CLyzT
+- Book:
+  - https://atypeofprogramming.com/
+  - https://x.com/atopbook
 - Book: Retrocomputing with Clash: Haskell for FPGA Hardware Design
   https://unsafeperform.io/retroclash/
 - https://lokathor.gitbooks.io/using-haskell/content/
@@ -1912,7 +1915,67 @@ Change the =Error= type
 
 *** TODO The =Validate= class
 *** TODO Exercises
-* 21 | Almost Standard Library                   |          | Alejandro Serrano Mena
+* 21 | Book Of Monads                            | LeanPub  | Alejandro Serrano Mena
+
+ERRATA:
+119 in "String -> (Result -> IO ()) -> IO ()" Result should be Response
+
+** 9 Resource Managment and Continuations
+
+- the operations provided by these monads can be understood as particular cases of =continuations=
+- for _resources_ that require a certain "protocol" (ME: ceremony) to be accessed
+  - eg: files
+
+*** 9.1 The Bracket Idiom
+
+- States of a system _resource_
+  1) acquisition
+  2) use
+  3) release
+
+- =Control.Exception=
+  #+begin_src haskell
+    bracket :: IO r -> (r -> IO b) -> (r -> IO a) -> IO a
+            --  v       v              v
+            -- acq.   release         use
+  #+end_src
+
+- Similar pattern used in System.IO.withFile and System.IO.Temp (from =temporary= package)
+
+*** TODO 9.2 Nicer code with continuations
+
+- we want to avoid nested code on multiple resources
+  Example: (imagine mooore resources...)
+  #+begin_src haskell
+    withFile inFile ReadMode $ \inHandle ->
+      withFile outFile WriteMode $ \outHandle ->
+        doWork inHandle outHandle
+  #+end_src
+
+- solution: using the ~Managed~ monad, from the =managed= package
+  #+begin_src haskell
+    runManaged $ do                                     -- block in the Managed monad
+      inHandle <- managed (withFile inFile ReadMode)    -- bracket variant
+      outHandle <- managed (withFile outFile WriteMode) -- bracket variant
+      liftIO $ doWork inHandle outHandle                -- IO -> Managed
+  #+end_src
+
+- callbacks are =continuations=
+  - you do not get to see the resulting value
+  - instead you provide a function that consumes the value
+
+*** 9.3 Early Release
+
+- resource management with ~bracket~ also _imposes a sever restriction_, on *when* release takes place
+  - it's only _AFTER_ the whole computation has finished
+
+- however, there are times were we might want to release one of many resources before the end of *runManaged*
+
+- resource management packages that support early release (=managed= package does not support this)
+  - =resourcet= via the Resource monad
+  - =pipes-safe= via the Safe monad
+
+* 21 | Almost Standard Library                   | LeanPub  | Alejandro Serrano Mena
 
 ** 3 Utilities
 
